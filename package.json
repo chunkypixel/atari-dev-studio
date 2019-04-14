@@ -1,0 +1,122 @@
+{
+    "name": "atari-dev-studio",
+    "displayName": "Atari Dev Studio",
+    "description": "Game creation for the Atari 8-bit consoles",
+    "version": "0.0.1",
+    "preview": true,
+    "publisher": "chunkypixel",
+    "homepage": "https://github.com/chunkypixel/atari-dev-studio",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chunkypixel/atari-dev-studio.git"
+    },
+    "engines": {
+        "vscode": "^1.33.0"
+    },
+    "categories": [
+        "Programming Languages",
+        "Snippets",
+        "Other"
+    ],
+    "keywords": [
+        "AtariAge",
+        "batari Basic",
+        "7800basic",
+        "assembly",
+        "dasm",
+        "atari",
+        "vcs",
+        "2600",
+        "7800",
+        "6507"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "bb",
+                "aliases": [
+                    "batari Basic",
+                    "bb"
+                ],
+                "extensions": [
+                    ".bas",
+                    ".bb"
+                ],
+                "configuration": "./languages/bb.language-configuration.json"
+            },
+            {
+                "id": "78b",
+                "aliases": [
+                    "7800basic",
+                    "78b"
+                ],
+                "extensions": [
+                    ".bas",
+                    ".78b"
+                ],
+                "configuration": "./languages/78b.language-configuration.json"
+            },
+            {
+                "id": "dasm",
+                "aliases": [
+                    "dasm",
+                    "Assembly",
+                    "6502"
+                ],
+                "extensions": [
+                    ".dasm",
+                    ".asm",
+                    ".a",
+                    ".h"
+                ],
+                "configuration": "./languages/dasm.language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "bb",
+                "scopeName": "source.bb",
+                "path": "./syntaxes/bb.tmLanguage.json"
+            },
+            {
+                "language": "78b",
+                "scopeName": "source.78b",
+                "path": "./syntaxes/78b.tmLanguage.json"
+            },
+            {
+                "language": "dasm",
+                "scopeName": "source.dasm",
+                "path": "./syntaxes/dasm.tmLanguage.json"
+            }
+        ],
+        "commands": [
+            {
+                "command": "extension.openWelcomePage",
+                "title": "Open the Welcome page",
+                "category": "atari"
+            }
+        ]
+    },
+    "activationEvents": [
+        "onCommand:extension.openWelcomePage"
+    ],
+    "main": "./out/extension.js",
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "dependencies": {
+        "open": "^6.1.0",
+        "tree-kill": "^1.2.1"
+    },
+    "devDependencies": {
+        "@types/mocha": "^5.2.6",
+        "@types/node": "^11.13.4",
+        "@types/open": "^6.1.0",
+        "typescript": "^3.4.3",
+        "vscode": "^1.1.33"
+    }
+}

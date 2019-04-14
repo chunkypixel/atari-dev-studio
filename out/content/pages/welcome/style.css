@@ -1,0 +1,248 @@
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-size: 11px;
+    user-select: none;
+}
+
+h1 {
+    display: block;
+    font-size: 2em;
+    -webkit-margin-before: 0.67em;
+    -webkit-margin-after: 0.67em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    font-weight: bold;
+}
+
+h2 {
+    display: block;
+    font-size: 1.5em;
+    -webkit-margin-before: 0.83em;
+    -webkit-margin-after: 0.83em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    font-weight: bold;
+}
+
+h3 {
+    display: block;
+    font-size: 1.17em;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:active {
+    color: inherit;
+    background-color: inherit;
+}
+
+p {
+    display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
+
+ul, menu, dir {
+    display: block;
+    list-style-type: disc;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 40px;
+}
+
+.welcomePageInstance {
+    outline-style: none;
+    overflow: hidden;
+    height: 950px;
+    margin: 3em;
+}
+
+.welcomePageContainer {
+    /* align-items: center; */
+    display: flex;
+    justify-content: center;
+    min-width: 100%;
+    min-height: 100%;
+    line-height: 1.5em;
+}
+
+.welcomePage {
+    width: 90%;
+    max-width: 1200px;
+    font-size: 10px;
+}
+
+.welcomePage p {
+    font-size: 1.3em;
+}
+
+.welcomePage .title {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    flex: 1 100%;
+}
+
+.welcomePage .caption {
+    color: #cccccc;
+}
+
+.welcomePage h1 {
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-weight: 400;
+    font-size: 3.6em;
+    white-space: nowrap;
+}
+
+.welcomePage .detail {
+    color: rgba(204, 204, 204, 0.7);
+}
+
+.welcomePage .subtitle {
+    margin-top: .8em;
+    margin-bottom: .3em;
+    font-size: 2.6em;
+    display: block;
+}
+
+.welcomePage .release {
+    font-size: 1.2em;
+    display: block;
+}
+
+.welcomePage .row {
+    display: flex;
+    flex-flow: row;
+}
+
+.welcomePage .row .splash, .welcomePage .row .section, .welcomePage .row .commands {
+    overflow: hidden;
+}
+
+.welcomePage .commands, .welcomePage .splash {
+    flex: 1 1 0;
+}
+
+.welcomePage .commands .list {
+    list-style: none;
+    padding: 0;
+}
+
+.welcomePage .commands .item {
+    margin: 7px 0;
+}
+
+.welcomePage .splash .section {
+    margin-bottom: 5em;
+}
+
+.welcomePage .caption {
+    color: #cccccc;
+}
+
+.welcomePage h2 {
+    font-weight: 200;
+    margin-top: 17px;
+    margin-bottom: 5px;
+    font-size: 1.9em;
+    line-height: normal;
+}
+
+.welcomePage .splash ul {
+    margin: 0;
+    font-size: 1.4em;
+    list-style: none;
+    padding: 0;
+}
+
+.welcomePage .splash li {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.welcomePage a {
+    color: #3794ff;
+}
+
+.welcomePage a {
+    text-decoration: none;
+}
+
+.welcomePage a:focus {
+    outline-color: rgba(14, 99, 156, 0.8);
+}
+
+.welcomePage a:hover, .welcomePage a:active {
+    color: #3794ff;
+}
+
+.welcomePage a:focus {
+    outline: 1px solid -webkit-focus-ring-color;
+    outline-offset: -1px;
+}
+
+.welcomePage .commands .item {
+    margin: 7px 0;
+}
+
+.welcomePage .commands .item button {
+    background: rgba(0, 0, 0, .2);
+}
+
+.welcomePage .commands .item button {
+    border: none;
+}
+
+.welcomePage .commands .item button {
+    margin: 1px;
+    padding: 12px 10px;
+    width: calc(100% - 2px);
+    height: 5em;
+    font-size: 1.3em;
+    text-align: left;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.welcomePage .commands .item button:hover {
+    background: rgba(200, 235, 255, .072);
+}
+
+.welcomePage .commands .item button h3 {
+    font-weight: 400;
+    font-size: 1em;
+    margin: 0;
+    margin-bottom: .25em;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.welcomePage .commands .item button>span {
+    display: inline-block;
+    width: 100%;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

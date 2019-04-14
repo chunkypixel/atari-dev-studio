@@ -1,0 +1,123 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "dasm",
+    "scopeName": "source.dasm",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#constants"
+		},
+		{
+			"include": "#labels"
+		},
+		{
+			"include": "#operators"
+		},
+		{
+			"include": "#pseudoops"
+		},
+		{
+			"include": "#instructions"
+		},
+		{
+			"include": "#registers"
+		}
+	],
+	"repository": {
+		"labels": {
+			"patterns": [
+				{
+					"name": "keyword.control.label.dasm",
+					"match": "^[a-zA-Z0-9]+\\b\\s*[^=]",
+					"comment": "Label"
+				}
+			]
+		},
+		"pseudoops": {
+			"patterns": [
+				{
+					"name": "keyword.directives.dasm",
+					"match": "(?i)[\\s]*\\b(include|incdir|seg|seg\\.u|dc|dc\\.bwl|dv|dv\\.bwl|hex|org|rorg|rend|align|subroutine|equ|=|eqm|set|mac|endm|mexit|ifconst|ifnconst|if|else|endif|eif|repeat|repend|list\\s+on|list\\soff|processor)\\b"
+				}
+			]
+		},
+		"instructions": {
+			"patterns": [
+				{
+					"name": "keyword.instructions.dasm",
+					"match": "(?i)[\\s]*\\b(adc|and|asl|bcc|bcs|beq|bit|bmi|bne|bpl|brk|bvc|bvs|clc|cld|cli|clv|cmp|cpx|cpy|dec|dex|dey|eor|inc|inx|iny|jmp|jsr|lda|ldx|ldy|lsr|nop|ora|pha|php|pla|plp|rol|ror|rti|rts|sbc|sec|sed|sei|sta|stx|sty|tax|tay|tsx|txa|txs|tya)\\b"
+				}
+			]
+		},
+		"registers": {
+			"patterns": [
+				{
+					"name": "keyword.registers.dasm",
+					"match": "(?i)\\b(pc|ac|x|y|sr|sp)\\b"
+				}
+			]
+		},
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.semicolon.dasm",
+					"begin": ";",
+					"end": "$",
+					"comment": "Single line comment"
+				}
+			]
+		},
+		"constants": {
+			"patterns": [
+				{
+					"include": "#constants-numeric"
+				},
+				{
+					"include": "#constants-string"
+				}
+			]
+		},
+		"constants-numeric": {
+			"patterns": [
+				{
+					"name": "constant.numeric.binary.dasm",
+					"match": "\\%[0-1]+\\b",
+					"comment": "Integer literal (binary)"
+				},
+				{
+					"name": "constant.numeric.hexadecimal.dasm",
+					"match": "\\$[0-9a-fA-F]+\\b",
+					"comment": "Integer literal (hexa)"
+				},
+				{
+					"name": "constant.numeric.octal.dasm",
+					"match": "\\b0[0-7]+\\b",
+					"comment": "Integer literal (octal)"
+				},
+				{
+					"name": "constant.numeric.integer.decimal.dasm",
+					"match": "\\b[0-9]+\\b",
+					"comment": "Integer literal (decimal)"
+				}
+			]
+		},
+		"constant-string": {
+            "patterns": [{
+                "name": "string.quoted.double.dasm",
+                "begin": "\"",
+                "end": "\""
+            }]
+		},
+		"operators": {
+			"patterns": [
+				{
+					"name": "keyword.operator.dasm",
+					"match": "(?i)(\\*|\\/|%|\\+|-|<<|>>|>|>=|<|<=|==|=|!=|\\&|\\^|\\||\\&\\&|\\|\\||\\?|\\[|\\]|,)",
+					"comment": "Binary operators"
+				}
+			]
+		}
+	}
+}

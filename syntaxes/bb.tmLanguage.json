@@ -1,0 +1,204 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "batari Basic",
+	"scopeName": "source.bb",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#numerics"
+		},
+		{
+			"include" : "#operators"
+		},
+		{
+			"include" : "#assembly"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+			{
+				"name": "keyword.control.bb",
+				"match": "\\b(asm|callmacro|collision|const|dec|def|dim|else|end|for|gosub|goto|if|include|includesfile|inline|let|macro|next|on|pop|rand|reboot|return|sdata|set|sread|step|then|to|vblank)\\b",
+				"comment": "control keywords"
+			},
+			{
+				"name": "keyword.other.bb",
+				"match": "\\b(COLUBK|COLUP0|COLUP1|COLUPF|AUDC0|AUDC1|AUDF0|AUDF1|AUDV0|AUDV1|NUSIZ0|NUSIZ1|REFP0|REFP1|CTRLPF|PF0|joy0down|joy0fire|joy0left|joy0right|joy0up|joy1down|joy1fire|joy1left|joy1right|joy1up|switchbw|switchleftb|switchreset|switchrightb|switchselect)\\b",
+				"comment": "other keywords"
+			},
+			{
+				"name": "keyword.other.playerandmissile.bb",
+				"match": "\\b(player0|player0x|player0y|player0color|player0height|player1|player1x|player1y|player1color|player1height|missile0|missile0x|missile0y|missile1|missile1x|missile1y)\\b",
+				"comment": "player and missile keywords"
+			},		
+			{
+				"name": "keyword.other.playfield.bb",
+				"match": "\\b(pflcear|pfhline|pfpixel|pfread|pfscroll|pfscore1|pfscore2|pfvline|playfield|pfcolors|bkcolors|scorecolors)\\b",
+				"comment": "playfield keywords"
+			},
+			{
+				"name": "keyword.other.bank.bb",
+				"match": "\\b(bank|bank1|bank2|bank3|bank4|bank5|bank6|bank7|bank8|otherbank|thisbank)\\b",
+				"comment": "bank keywords"
+			},
+			{
+				"name": "keyword.other.variable.bb",
+				"match": "\\b(pfscore1|pfscore2|score|scorecolor|temp1|temp2|temp3|temp4|temp5|temp6|var0|var1|var2|var3|var4|var5|var6|var7|var8|var9)\\b",
+				"comment": "variable keywords"
+			},
+			{
+				"name": "keyword.other.constant.bb",
+				"match": "\\b(font|noscore|pfscore|scorefade|left|right|up|down|upup|downdown|on|off|ntsc|pal|2k|4k|8k|16k|32k|DPC+|multisprite|8kSC|16kSC|32kSC|speed|size|noninlinedata|inlinerand)\\b",
+				"comment": "constant keywords"
+			},
+			{
+				"name": "keyword.other.constant.standardkernel.bb",
+				"match": "\\b(readpaddle|player1colors|playercolors|no_blank_lines|pfheights|background)\\b",
+				"comment": "constant (standard kernel) keywords"
+			},
+			{
+				"name": "keyword.other.directive.bb",
+				"match": "\\b(smartbranching|tv|romsize|optimization|kernel|kernel_options|debug|legacy)\\b",
+				"comment": "directive keywords"
+			},
+			{
+				"name": "keyword.other.tia.bb",
+				"match": "\\b(CXBLPF|CXCLR|CXM0FB|CXM0P|CXM1FB|CXM1P|CXP0FB|CXP1FB|CXPPMM|ENABL|ENAM0|ENAM1|GRP0|GRP1|HMBL|HMCLR|HMM0|HMM1|HMOVE|HMP0|HMP1|INPT0|INPT1|INPT2|INPT3|INPT4|INPT5|PF1|PF2|RESBL|RESM0|RESM1|RESMP0|RESMP1|RESP0|RESP1|RSYNC|SWACNT|SWBCNT|SWCHA|SWCHB|T1024T|TIA_BASE_ADDRESS|TIA_BASE_READ_ADDRESS|TIA_BASE_WRITE_ADDRESS|TIM1T|TIM64T|TIM8T|VBLANK|VDELBL|VDELP0|VDELP1|VERSION_VCS|VSYNC|WSYNC)\\b",
+				"comment" : "TIA registers"
+			},
+			{
+				"name": "keyword.control.dpc.bb",
+				"match": "\\b(pull|push|stack|vblank)\\b",
+				"comment": "control (DPC+) keywords"
+			},
+			{
+				"name": "keyword.other.register.sdpc.bb",
+				"match": "\\b(_NUSIZ1|NUSIZ2|NUSIZ3|NUSIZ4|NUSIZ5|NUSIZ6|NUSIZ7|NUSIZ8|NUSIZ9)\\b",
+				"comment": "other (DPC+) registers"
+			},
+			{
+				"name": "keyword.other.playerandmissile.dpc.bb",
+				"match": "\\b(player2|player2x|player2y|player2color|player2height|player3|player3x|player3y|player3color|player3height|player4|player4x|player4y|player4color|player4height|player5|player5x|player5y|player5color|player5height|player6|player6x|player6y|player6color|player6height|player7|player7x|player7y|player7color|player7height|player8|player8x|player8y|player8color|player8height|player9|player9x|player9y|player9color|player9height)\\b",
+				"comment": "player and missile (DPC+) keywords"
+			},
+			{
+				"name": "keyword.other.variable.dpc.bb",
+				"match": "\\b(dpcspritemax)\\b",
+				"comment": "variable (DPC+) keywords"
+			},
+			{
+				"name": "keyword.other.playfield.dpc.bb",
+				"match": "\\b(DF0FRACINC|DF1FRACINC|DF2FRACINC|DF3FRACINC|DF4FRACINC|DF6FRACINC)\\b",
+				"comment": "playfield (DPC+) registers"				
+			}]
+		},
+		"strings": {
+			"name": "string.quoted.double.bb",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.bb",
+					"match": "\\\\."
+				}
+			]
+		},
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.semicolon.bb",
+					"begin": ";",
+					"end": "$",
+					"comment": "single line comment"
+				},
+				{
+					"name": "comment.line.rem.bb",
+					"begin": "rem",
+					"end": "$",
+					"comment": "single line comment"
+				},
+				{
+					"name": "comment.block.bb",
+					"begin": "/\\*",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.comment.bb"
+						}
+					},
+					"end": "\\*/",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.comment.bb"
+						}
+					}
+				}
+			]
+		},
+		"numerics": {
+			"patterns": [{
+				"name": "keyword.numeric.hexadecimal.bb",
+				"match": "\\$[0-9a-fA-F]+\\b",
+				"comment": "hexadecimal number"
+			},
+			{
+				"name": "keyword.numeric.integer.bb",
+				"match": "\\b[0-9]+\\b",
+				"comment": "integer number"				
+			},
+			{
+				"name": "keyword.numeric.binary.bb",
+				"match": "\\%[0-1]+\\b",
+				"comment": "binary number"	
+			}]
+		},
+		"operators" : {
+			"patterns":[{
+				"name": "keyword.operator.assignment.bb",
+				"match": "\\=",
+				"comment": "assignment operators"
+			},
+			{
+				"name": "keyword.operator.arithmetic.bb",
+				"match": "\\*|/|-|\\+",
+				"comment": "arithmetic operators"				
+			},
+			{
+				"name": "keyword.operator.logical.bb",
+				"match": "\\!|&&",
+				"comment": "logical operators"				
+			},
+			{
+				"name": "keyword.operator.bitwise.bb",
+				"match": "\\^",
+				"comment": "bitwise operators"				
+			},
+			{
+				"name": "keyword.operator.relational.bb",
+				"match": "<=|>=|<|>",
+				"comment": "relational operators"				
+			}
+		]
+		},
+		"assembly" : {
+			"patterns":[{
+				"name": "keyword.instuctions.asm.bb",
+				"match": "(?i)[\\s]*\\b(adc|and|asl|bcc|bcs|beq|bit|bmi|bne|bpl|brk|bvc|bvs|clc|cld|cli|clv|cmp|cpx|cpy|dec|dex|dey|eor|inc|inx|iny|jmp|jsr|lda|ldx|ldy|lsr|nop|ora|pha|php|pla|plp|rol|ror|rti|rts|sbc|sec|sed|sei|sta|stx|sty|tax|tay|tsx|txa|txs|tya)\\b",
+				"comment": "assembly instructions"
+			},
+			{
+				"name": "keyword.registers.asm.bb",
+				"match": "(?i)\\b(pc|ac|x|y|sr|sp)\\b",
+				"comment": "assembly registers"
+			}]
+		}
+	}
+}
