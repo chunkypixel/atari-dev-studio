@@ -75,7 +75,7 @@ export function GetFileStats(path: string): Promise<fs.Stats> {
     
     return new Promise((resolve, reject) => {
         fs.stat(path, (err, stats) => {
-            if (!err) resolve(stats);
+            if (!err) return resolve(stats);
             resolve(undefined);
         });
     });     

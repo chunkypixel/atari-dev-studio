@@ -70,26 +70,27 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Already running?
         if (this.IsRunning) {
             // Notify
-            this.notify(`The compiler is already running! If you want to cancel the compilation activate the Stop/Kill command.`);
+            this.notify(`The ${this.Name} compiler is already running! If you want to cancel the compilation activate the Stop/Kill command.`);
+            return false;
         }
 
         // Configuration
         if (!await this.LoadConfiguration()) return false;
 
         // Activate output window?
-        if (!this.configuration.get<boolean>(`${application.Id}.editor.preserveCodeEditorFocus`))  {
+        if (!this.configuration.get<boolean>(`${application.Name}.editor.preserveCodeEditorFocus`))  {
             this.outputChannel.show();
         }
 
         // Clear output content?
-        if (this.configuration.get<boolean>(`${application.Id}.editor.clearPreviousOutput`))  {
+        if (this.configuration.get<boolean>(`${application.Name}.editor.clearPreviousOutput`))  {
             this.outputChannel.clear();
         }
 
         // Save files?
-        if (this.configuration.get<boolean>(`${application.Id}.editor.saveAllFilesBeforeRun`))  {
+        if (this.configuration.get<boolean>(`${application.Name}.editor.saveAllFilesBeforeRun`))  {
             vscode.workspace.saveAll();
-        } else if (this.configuration.get<boolean>(`${application.Id}.editor.saveFileBeforeRun`)) {
+        } else if (this.configuration.get<boolean>(`${application.Name}.editor.saveFileBeforeRun`)) {
             if (this.Document) this.Document.save();
         }
 
@@ -112,7 +113,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         this.Verboseness = "";
 
         // Compiler
-        let userCompilerFolder = this.configuration.get<string>(`${application.Id}.${this.Id}.compilerFolder`);
+        let userCompilerFolder = this.configuration.get<string>(`${application.Name}.${this.Id}.compilerFolder`);
         if (userCompilerFolder) {
             // Validate (user provided)
             if (!filesystem.FolderExists(userCompilerFolder)) {
@@ -126,13 +127,13 @@ export abstract class CompilerBase implements vscode.Disposable {
             this.CustomFolderOrPath = true;
         }
         // Compiler (other)
-        this.Args = this.configuration.get<string>(`${application.Id}.${this.Id}.compilerArgs`,"");
-        this.Format = this.configuration.get<string>(`${application.Id}.${this.Id}.compilerFormat`,"");
-        this.Verboseness = this.configuration.get<string>(`${application.Id}.${this.Id}.compilerVerboseness`,"");
+        this.Args = this.configuration.get<string>(`${application.Name}.${this.Id}.compilerArgs`,"");
+        this.Format = this.configuration.get<string>(`${application.Name}.${this.Id}.compilerFormat`,"");
+        this.Verboseness = this.configuration.get<string>(`${application.Name}.${this.Id}.compilerVerboseness`,"");
     
         // Compilation
-        this.GenerateDebuggerFiles = this.configuration.get<boolean>(`${application.Id}.compilation.generateDebuggerFiles`, true);
-        this.CleanUpCompilationFiles = this.configuration.get<boolean>(`${application.Id}.compilation.cleanupCompilationFiles`, true);
+        this.GenerateDebuggerFiles = this.configuration.get<boolean>(`${application.Name}.compilation.generateDebuggerFiles`, true);
+        this.CleanUpCompilationFiles = this.configuration.get<boolean>(`${application.Name}.compilation.cleanupCompilationFiles`, true);
 
         // System
         this.WorkspaceFolder = this.getWorkspaceFolder();

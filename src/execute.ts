@@ -1,8 +1,7 @@
 "use strict";
-import { Writable } from 'stream';
 const cp = require("child_process");
 
-export function ExecuteCommand(output: Writable, command:string, args:string[], env: { [key: string]: string | null }, cwd: string) : Promise<boolean> {
+export function Spawn(command:string, args:string[], env: { [key: string]: string | null }, cwd: string, stdout:any, stderr:any) : Promise<boolean> {
     console.log('debugger:execute.ExecuteCommand');
 
     // Process
@@ -16,8 +15,6 @@ export function ExecuteCommand(output: Writable, command:string, args:string[], 
             env: env,
             cwd: cwd
         });
-
-        output.addListener('pipe',ca);
        
         // TODO: need to break out these out to parent class so we don't list all compilers here
 
@@ -25,7 +22,12 @@ export function ExecuteCommand(output: Writable, command:string, args:string[], 
         ca.stdout.on('data', (data: { toString: () => ""; }) => {
             // Prepare
             let message = data.toString();
+            
+            // Send out
+            var result = stdout(message);
+            if (!result) receivedError = true;
 
+            // Notify
             console.log('- stdout ');
             console.log(message);
         });
@@ -33,6 +35,11 @@ export function ExecuteCommand(output: Writable, command:string, args:string[], 
             // Prepare
             let message = data.toString();
 
+            // Send out
+            var result = stderr(message);
+            if (!result) receivedError = true;
+
+            // Notify
             console.log('- stderr ');
             console.log(message);
         });
@@ -40,7 +47,6 @@ export function ExecuteCommand(output: Writable, command:string, args:string[], 
         // Error?
         ca.on('error', (err: any) => {
             console.log(`- error '${err}'`);
-            output.removeAllListeners();
             return resolve(false);
         });
 
@@ -49,8 +55,6 @@ export function ExecuteCommand(output: Writable, command:string, args:string[], 
             // Validate
             let result = e;
             if (receivedError && result === 0) { result = 1; }
-            
-            output.removeAllListeners();
 
             // Finalise and exit
             return resolve(result === 0);

@@ -2,7 +2,9 @@
 import * as path from 'path';
 import * as application from '../application';
 import * as filesystem from '../filesystem';
+import * as execute from '../execute';
 import { CompilerBase } from "./compilerBase";
+
 
 export class DasmCompiler extends CompilerBase {
 
@@ -23,25 +25,46 @@ export class DasmCompiler extends CompilerBase {
             `-o${this.CompiledFileName}`
         ];
         // Format
-        args.push(`${"-f"}${this.Format}`);
+        if (this.Format) args.push(`${"-f"}${this.Format}`);
         // Verboseness
-        args.push(`${"-v"}${this.Verboseness}`);
-        // Debugger
+        if (this.Verboseness) args.push(`${"-v"}${this.Verboseness}`);
+        // Args
         if (this.GenerateDebuggerFiles)  {
             // Process
             this.DebuggerExtensions.forEach((extension: string, arg: string) => {
                 args.push(`${arg}${this.FileName}${extension}`);
             });
         }
-        // Optional
         if (this.Args) { args.push(`${this.Args}`); }
+        // Env
+        let env : { [key: string]: string | null } = {};
 
         // Process
         this.outputChannel.appendLine(`Building '${this.FileName}'...`); 
 
-        // TODO: Actual compile
+        // Compile
         this.IsRunning = true;
+        let executeResult = await execute.Spawn(command, args, env, this.WorkspaceFolder,
+            (stdout: string) => {
+                // Prepare
+                let result = true;
+
+                // Result
+                this.outputChannel.append('' + stdout);
+                return result;
+            },
+            (stderr: string) => {
+                // Prepare
+                let result = true;
+
+                // Result
+                this.outputChannel.append('' + stderr);
+                return result;
+            });
         this.IsRunning = false;
+
+        // Validate
+        if (!executeResult) return false;
 
         // Verify file size
         if (await !this.VerifyCompiledFileSizeAsync()) return false;
@@ -62,7 +85,7 @@ export class DasmCompiler extends CompilerBase {
         // Compiler
         // We use a path instead of a folder for dasm for added flexibility
         this.CustomFolderOrPath = false;
-        let userCompilerPath = this.configuration.get<string>(`${application.Id}.${this.Id}.compilerPath`);
+        let userCompilerPath = this.configuration.get<string>(`${application.Name}.${this.Id}.compilerPath`);
         if (userCompilerPath) {
             // Validate (user provided)
             if (!filesystem.FileExists(userCompilerPath)) {
@@ -111,6 +134,12 @@ export class DasmCompiler extends CompilerBase {
     //     console.log('debugger:DasmCompiler.RemoveCompilationFiles');
 
     //     // Debugger files (from workspace not bin)
-    //     return await super.RemoveCompilationFilesAsync();
+    //     await super.RemoveCompilationFilesAsync();
+
+    //     // Notify
+    //     this.notify(`Cleaned up files generated during compilation...`);
+
+    //     // Result
+    //     return true;
     // }
 }

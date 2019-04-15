@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const cp = require("child_process");
-function ExecuteCommand(output, command, args, env, cwd) {
+function Spawn(command, args, env, cwd, stdout, stderr) {
     console.log('debugger:execute.ExecuteCommand');
     // Process
     return new Promise((resolve, reject) => {
@@ -13,25 +13,33 @@ function ExecuteCommand(output, command, args, env, cwd) {
             env: env,
             cwd: cwd
         });
-        output.addListener('pipe', ca);
         // TODO: need to break out these out to parent class so we don't list all compilers here
         // Capture output
         ca.stdout.on('data', (data) => {
             // Prepare
             let message = data.toString();
+            // Send out
+            var result = stdout(message);
+            if (!result)
+                receivedError = true;
+            // Notify
             console.log('- stdout ');
             console.log(message);
         });
         ca.stderr.on('data', (data) => {
             // Prepare
             let message = data.toString();
+            // Send out
+            var result = stderr(message);
+            if (!result)
+                receivedError = true;
+            // Notify
             console.log('- stderr ');
             console.log(message);
         });
         // Error?
         ca.on('error', (err) => {
             console.log(`- error '${err}'`);
-            output.removeAllListeners();
             return resolve(false);
         });
         // Complete
@@ -41,11 +49,10 @@ function ExecuteCommand(output, command, args, env, cwd) {
             if (receivedError && result === 0) {
                 result = 1;
             }
-            output.removeAllListeners();
             // Finalise and exit
             return resolve(result === 0);
         });
     });
 }
-exports.ExecuteCommand = ExecuteCommand;
+exports.Spawn = Spawn;
 //# sourceMappingURL=execute.js.map

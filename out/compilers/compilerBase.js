@@ -68,24 +68,25 @@ class CompilerBase {
             // Already running?
             if (this.IsRunning) {
                 // Notify
-                this.notify(`The compiler is already running! If you want to cancel the compilation activate the Stop/Kill command.`);
+                this.notify(`The ${this.Name} compiler is already running! If you want to cancel the compilation activate the Stop/Kill command.`);
+                return false;
             }
             // Configuration
             if (!(yield this.LoadConfiguration()))
                 return false;
             // Activate output window?
-            if (!this.configuration.get(`${application.Id}.editor.preserveCodeEditorFocus`)) {
+            if (!this.configuration.get(`${application.Name}.editor.preserveCodeEditorFocus`)) {
                 this.outputChannel.show();
             }
             // Clear output content?
-            if (this.configuration.get(`${application.Id}.editor.clearPreviousOutput`)) {
+            if (this.configuration.get(`${application.Name}.editor.clearPreviousOutput`)) {
                 this.outputChannel.clear();
             }
             // Save files?
-            if (this.configuration.get(`${application.Id}.editor.saveAllFilesBeforeRun`)) {
+            if (this.configuration.get(`${application.Name}.editor.saveAllFilesBeforeRun`)) {
                 vscode.workspace.saveAll();
             }
-            else if (this.configuration.get(`${application.Id}.editor.saveFileBeforeRun`)) {
+            else if (this.configuration.get(`${application.Name}.editor.saveFileBeforeRun`)) {
                 if (this.Document)
                     this.Document.save();
             }
@@ -107,7 +108,7 @@ class CompilerBase {
         this.Format = "";
         this.Verboseness = "";
         // Compiler
-        let userCompilerFolder = this.configuration.get(`${application.Id}.${this.Id}.compilerFolder`);
+        let userCompilerFolder = this.configuration.get(`${application.Name}.${this.Id}.compilerFolder`);
         if (userCompilerFolder) {
             // Validate (user provided)
             if (!filesystem.FolderExists(userCompilerFolder)) {
@@ -120,12 +121,12 @@ class CompilerBase {
             this.CustomFolderOrPath = true;
         }
         // Compiler (other)
-        this.Args = this.configuration.get(`${application.Id}.${this.Id}.compilerArgs`, "");
-        this.Format = this.configuration.get(`${application.Id}.${this.Id}.compilerFormat`, "");
-        this.Verboseness = this.configuration.get(`${application.Id}.${this.Id}.compilerVerboseness`, "");
+        this.Args = this.configuration.get(`${application.Name}.${this.Id}.compilerArgs`, "");
+        this.Format = this.configuration.get(`${application.Name}.${this.Id}.compilerFormat`, "");
+        this.Verboseness = this.configuration.get(`${application.Name}.${this.Id}.compilerVerboseness`, "");
         // Compilation
-        this.GenerateDebuggerFiles = this.configuration.get(`${application.Id}.compilation.generateDebuggerFiles`, true);
-        this.CleanUpCompilationFiles = this.configuration.get(`${application.Id}.compilation.cleanupCompilationFiles`, true);
+        this.GenerateDebuggerFiles = this.configuration.get(`${application.Name}.compilation.generateDebuggerFiles`, true);
+        this.CleanUpCompilationFiles = this.configuration.get(`${application.Name}.compilation.cleanupCompilationFiles`, true);
         // System
         this.WorkspaceFolder = this.getWorkspaceFolder();
         this.FileName = path.basename(this.Document.fileName);

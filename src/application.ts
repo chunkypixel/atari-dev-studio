@@ -9,8 +9,9 @@ import { SeventyEightHundredBasicCompiler } from './compilers/seventyEightHundre
 import { DasmCompiler } from './compilers/dasmCompiler';
 
 export const Id = "chunkypixel.atari-dev-studio";
-
 export const Path: string = vscode.extensions.getExtension(Id)!.extensionPath;
+export const Name: string = vscode.extensions.getExtension(Id)!.packageJSON.name;
+export const Publisher: string = vscode.extensions.getExtension(Id)!.packageJSON.publisher;
 export const Version: string = vscode.extensions.getExtension(Id)!.packageJSON.version;
 export const DisplayName: string = vscode.extensions.getExtension(Id)!.packageJSON.displayName;
 export const Description: string = vscode.extensions.getExtension(Id)!.packageJSON.description;
@@ -28,13 +29,13 @@ export const Compilers:CompilerBase[] = [
 // -------------------------------------------------------------------------------------
 // Operating System
 // -------------------------------------------------------------------------------------
-export function OSPlatform() { return os.platform(); }
-export function OsArch() { return os.arch(); }
-export function IsWindows() { return os.platform() === 'win32'; }
-export function IsLinux() { return os.platform() === 'linux'; }
-export function IsMacOS() { return os.platform() === 'darwin'; }
-export function Is32Bit() { return os.arch() === 'x32'; }
-export function Is64Bit() { return os.arch() === 'x64'; }
+export const OSPlatform: any = os.platform();
+export const OsArch: any = os.arch();
+export const IsWindows: boolean = (os.platform() === 'win32');
+export const IsLinux: boolean = (os.platform() === 'linux');
+export const IsMacOS: boolean = (os.platform() === 'darwin');
+export const Is32Bit: boolean = (os.arch() === 'x32');
+export const Is64Bit: boolean = (os.arch() === 'x64');
 
 // -------------------------------------------------------------------------------------
 // Functions
