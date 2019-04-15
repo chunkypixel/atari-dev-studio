@@ -8,12 +8,12 @@ import { BatariBasicCompiler } from './compilers/batariBasicCompiler';
 import { SeventyEightHundredBasicCompiler } from './compilers/seventyEightHundredBasicCompiler';
 import { DasmCompiler } from './compilers/dasmCompiler';
 
-export const ExtensionId = "chunkypixel.atari-dev-studio";
+export const Id = "chunkypixel.atari-dev-studio";
 
-export const Path: string = vscode.extensions.getExtension(ExtensionId)!.extensionPath;
-export const Version: string = vscode.extensions.getExtension(ExtensionId)!.packageJSON.version;
-export const DisplayName: string = vscode.extensions.getExtension(ExtensionId)!.packageJSON.displayName;
-export const Description: string = vscode.extensions.getExtension(ExtensionId)!.packageJSON.description;
+export const Path: string = vscode.extensions.getExtension(Id)!.extensionPath;
+export const Version: string = vscode.extensions.getExtension(Id)!.packageJSON.version;
+export const DisplayName: string = vscode.extensions.getExtension(Id)!.packageJSON.displayName;
+export const Description: string = vscode.extensions.getExtension(Id)!.packageJSON.description;
 
 // -------------------------------------------------------------------------------------
 // Compilers
@@ -47,7 +47,7 @@ export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
 	// Find compiler
 	let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
 	for (const compiler of Compilers) {
-		if (compiler.CompilerExtensions.includes(fileExtension)) {
+		if (compiler.Extensions.includes(fileExtension)) {
 			return await compiler.BuildGameAsync(document);
 		}
 	}
@@ -67,7 +67,7 @@ export async function BuildGameAndRunAsync(fileUri: vscode.Uri): Promise<boolean
 	// Find compiler
 	let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
 	for (const compiler of Compilers) {
-		if (compiler.CompilerExtensions.includes(fileExtension)) {
+		if (compiler.Extensions.includes(fileExtension)) {
 			return await compiler.BuildGameAndRunAsync(document);
 		}
 	}

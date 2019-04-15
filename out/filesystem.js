@@ -71,6 +71,35 @@ function FileExists(path) {
     });
 }
 exports.FileExists = FileExists;
+function RenameFile(oldName, newName) {
+    console.log('debugger:filesystem.RenameFile');
+    return new Promise((resolve, reject) => {
+        fs.rename(oldName, newName, err => {
+            resolve(!err);
+        });
+    });
+}
+exports.RenameFile = RenameFile;
+function GetFileStats(path) {
+    console.log('debugger:filesystem.GetFileStats');
+    return new Promise((resolve, reject) => {
+        fs.stat(path, (err, stats) => {
+            if (!err)
+                resolve(stats);
+            resolve(undefined);
+        });
+    });
+}
+exports.GetFileStats = GetFileStats;
+function RemoveFile(path) {
+    console.log('debugger:filesystem.RemoveFile');
+    return new Promise((resolve, reject) => {
+        fs.unlink(path, err => {
+            resolve(!err);
+        });
+    });
+}
+exports.RemoveFile = RemoveFile;
 function FolderExists(folder) {
     console.log('debugger:filesystem.FolderExists');
     return new Promise((resolve, reject) => {
@@ -80,6 +109,15 @@ function FolderExists(folder) {
     });
 }
 exports.FolderExists = FolderExists;
+function MakeDir(folder) {
+    console.log('debugger:filesystem.MakeDir');
+    return new Promise((resolve, reject) => {
+        fs.mkdir(folder, err => {
+            resolve(!err);
+        });
+    });
+}
+exports.MakeDir = MakeDir;
 function SetChMod(path, mode = '777') {
     console.log('debugger:filesystem.SetChMod');
     return new Promise((resolve, reject) => {

@@ -15,11 +15,11 @@ const os = require("os");
 const batariBasicCompiler_1 = require("./compilers/batariBasicCompiler");
 const seventyEightHundredBasicCompiler_1 = require("./compilers/seventyEightHundredBasicCompiler");
 const dasmCompiler_1 = require("./compilers/dasmCompiler");
-exports.ExtensionId = "chunkypixel.atari-dev-studio";
-exports.Path = vscode.extensions.getExtension(exports.ExtensionId).extensionPath;
-exports.Version = vscode.extensions.getExtension(exports.ExtensionId).packageJSON.version;
-exports.DisplayName = vscode.extensions.getExtension(exports.ExtensionId).packageJSON.displayName;
-exports.Description = vscode.extensions.getExtension(exports.ExtensionId).packageJSON.description;
+exports.Id = "chunkypixel.atari-dev-studio";
+exports.Path = vscode.extensions.getExtension(exports.Id).extensionPath;
+exports.Version = vscode.extensions.getExtension(exports.Id).packageJSON.version;
+exports.DisplayName = vscode.extensions.getExtension(exports.Id).packageJSON.displayName;
+exports.Description = vscode.extensions.getExtension(exports.Id).packageJSON.description;
 // -------------------------------------------------------------------------------------
 // Compilers
 // Register compilers here and in order of preference
@@ -58,7 +58,7 @@ function BuildGameAsync(fileUri) {
         // Find compiler
         let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
         for (const compiler of exports.Compilers) {
-            if (compiler.CompilerExtensions.includes(fileExtension)) {
+            if (compiler.Extensions.includes(fileExtension)) {
                 return yield compiler.BuildGameAsync(document);
             }
         }
@@ -79,7 +79,7 @@ function BuildGameAndRunAsync(fileUri) {
         // Find compiler
         let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
         for (const compiler of exports.Compilers) {
-            if (compiler.CompilerExtensions.includes(fileExtension)) {
+            if (compiler.Extensions.includes(fileExtension)) {
                 return yield compiler.BuildGameAndRunAsync(document);
             }
         }

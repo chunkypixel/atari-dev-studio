@@ -1,7 +1,5 @@
 "use strict";
-import * as fs from 'fs';
 import * as path from 'path';
-import * as vscode from 'vscode';
 import * as application from '../application';
 import * as filesystem from '../filesystem';
 import { CompilerBase } from "./compilerBase";
@@ -9,7 +7,7 @@ import { CompilerBase } from "./compilerBase";
 export class SeventyEightHundredBasicCompiler extends CompilerBase {
 
     constructor() {
-        super("7800basic", [".bas",".78b"], path.join(application.Path,"out","bin","7800basic"));
+        super("7800basic","7800basic",[".bas",".78b"],path.join(application.Path,"out","bin","7800basic"));
     }
     
     protected async ExecuteCompilerAsync(): Promise<boolean> {
@@ -18,58 +16,106 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         // Premissions
         await this.RepairFilePermissionsAsync();
 
-        // Result
-        return true;
-    }
-
-    protected LoadConfiguration(): boolean {
-        console.log('debugger:SeventyEightHundredBasicCompiler.LoadConfiguration');  
-
-        // Base
-        if (!super.LoadConfiguration()) return false;
-
-        // Compiler
-        let userCompilerFolder = this.configuration.get<string>("7800basic.compilerFolder");
-        if (userCompilerFolder) {
-            // Validate (user provided)
-            if (!filesystem.FolderExists(userCompilerFolder)) {
-                let message = `ERROR: Cannot locate your chosen 7800basic compiler folder '${userCompilerFolder}'`;
-                this.outputChannel.appendLine(message);
-                console.log(`debugger:${message}`);
-                return false;
-            }
-
-            // Set
-            this.CompilerFolder = userCompilerFolder;
-            this.CustomCompilerFolder = true;
+        // Compiler options
+        let commandName = "7800bas.bat";
+        if (application.IsLinux || application.IsMacOS) {
+            // Linux or MacOS
+            commandName = "./7800basic.sh";
         }
-        let userCompilerArgs = this.configuration.get<string>("7800basic.compilerArgs");
-        if (userCompilerArgs) this.CompilerArgs = userCompilerArgs;
+        
+        // Compiler options
+        let command = path.join(this.FolderOrPath, commandName);
+        let args = [
+            `"${this.FileName}"`,
+            this.Args
+        ];
+
+        // Compiler environment
+        let env : { [key: string]: string | null } = {};
+        env["PATH"] = this.FolderOrPath;
+        if (application.IsLinux || application.IsMacOS) {
+            // Additional for Linux or MacOS
+            env["PATH"] = ":/bin:/usr/bin:" + env["PATH"];
+        }
+        env["bB"] = this.FolderOrPath;
+
+        // Process
+        this.outputChannel.appendLine(`Building '${this.FileName}'...`);
+
+        // TODO: Actual compile
+        this.IsRunning = true;
+        this.IsRunning = false;
+
+        // Verify file size
+        if (await !this.VerifyCompiledFileSizeAsync()) return false;
+
+        // Move file(s) to Bin folder
+        if (await !this.MoveFilesToBinFolderAsync()) return false;
+
+        // Clean up file(s) creating during compilation
+        if (await !this.RemoveCompilationFilesAsync()) return false;
 
         // Result
         return true;
     }
+
+    // protected LoadConfiguration(): boolean {
+    //     console.log('debugger:SeventyEightHundredBasicCompiler.LoadConfiguration');  
+
+    //     // Base
+    //     if (!super.LoadConfiguration()) return false;
+
+    //     // Result
+    //     return true;
+    // }
 
     protected async RepairFilePermissionsAsync(): Promise<boolean> {
         console.log('debugger:SeventyEightHundredBasicCompiler.RepairFilePermissionsAsync'); 
 
         // Validate
-        if (this.CustomCompilerFolder || application.IsWindows) return true;
+        if (this.CustomFolderOrPath || application.IsWindows) return true;
 
         // Prepare
         let architecture = "Linux";
         if (application.IsMacOS) architecture = "Darwin";
 
         // Process
-        let result = await filesystem.SetChMod(path.join(this.CompilerFolder,'7800basic.sh'));
-        if (result) result = await filesystem.SetChMod(path.join(this.CompilerFolder,`7800basic.${architecture}.x86`));
-        if (result) result = await filesystem.SetChMod(path.join(this.CompilerFolder,`7800filter.${architecture}.x86`));
-        if (result) result = await filesystem.SetChMod(path.join(this.CompilerFolder,`7800header.${architecture}.x86`));
-        if (result) result = await filesystem.SetChMod(path.join(this.CompilerFolder,`7800optimize.${architecture}.x86`));
-        if (result) result = await filesystem.SetChMod(path.join(this.CompilerFolder,`7800postprocess.${architecture}.x86`));
-        if (result) result = await filesystem.SetChMod(path.join(this.CompilerFolder,`7800preprocess.${architecture}.x86`));
-        if (result) result = await filesystem.SetChMod(path.join(this.CompilerFolder,`dasm.${architecture}.x86`));
-        if (result) result = await filesystem.SetChMod(path.join(this.CompilerFolder,`distella.${architecture}.x86`));
+        let result = await filesystem.SetChMod(path.join(this.FolderOrPath,'7800basic.sh'));
+        if (result) result = await filesystem.SetChMod(path.join(this.FolderOrPath,`7800basic.${architecture}.x86`));
+        if (result) result = await filesystem.SetChMod(path.join(this.FolderOrPath,`7800filter.${architecture}.x86`));
+        if (result) result = await filesystem.SetChMod(path.join(this.FolderOrPath,`7800header.${architecture}.x86`));
+        if (result) result = await filesystem.SetChMod(path.join(this.FolderOrPath,`7800optimize.${architecture}.x86`));
+        if (result) result = await filesystem.SetChMod(path.join(this.FolderOrPath,`7800postprocess.${architecture}.x86`));
+        if (result) result = await filesystem.SetChMod(path.join(this.FolderOrPath,`7800preprocess.${architecture}.x86`));
+        if (result) result = await filesystem.SetChMod(path.join(this.FolderOrPath,`dasm.${architecture}.x86`));
+        if (result) result = await filesystem.SetChMod(path.join(this.FolderOrPath,`distella.${architecture}.x86`));
         return result;
+    }
+
+    protected async RemoveCompilationFilesAsync(): Promise<boolean> {
+        console.log('debugger:SeventyEightHundredBasicCompiler.RemoveCompilationFiles');
+
+        // // Language specific files
+        // if (this.CleanUpCompilationFiles)  {
+        //     // Process
+        //     try {
+        //         fs.unlinkSync(path.join(this.WorkspaceFolder,`${this.FileName}.asm`));
+        //         fs.unlinkSync(path.join(this.WorkspaceFolder,`bB.asm`));
+        //         fs.unlinkSync(path.join(this.WorkspaceFolder,`includes.bB`));
+        //         fs.unlinkSync(path.join(this.WorkspaceFolder,`2600basic_variable_redefs.h`));
+        
+        //         // Notify
+        //         this.notify(`Cleaned up files generated during compilation...`);
+
+        //     } catch (error) {
+        //         // Notify
+        //         this.notify(`ERROR: Failed to clean up files generated during compilation (error: ${error})`);
+        //         return false;         
+        //     }
+        // }
+
+        // Debugger files (from workspace not bin)
+        // Note: Remove if option is turned off as they are generated by bB (cannot change I believe)
+        return await super.RemoveCompilationFilesAsync();
     }
 }

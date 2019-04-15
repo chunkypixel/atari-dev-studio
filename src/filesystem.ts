@@ -60,6 +60,37 @@ export function FileExists(path: string): Promise<boolean> {
     });
 }
 
+export function RenameFile(oldName: string, newName: string): Promise<boolean> {
+    console.log('debugger:filesystem.RenameFile');
+    
+    return new Promise((resolve, reject) => {
+        fs.rename(oldName, newName, err => {
+            resolve(!err);
+        });
+    }); 
+}
+
+export function GetFileStats(path: string): Promise<fs.Stats> {
+    console.log('debugger:filesystem.GetFileStats');
+    
+    return new Promise((resolve, reject) => {
+        fs.stat(path, (err, stats) => {
+            if (!err) resolve(stats);
+            resolve(undefined);
+        });
+    });     
+}
+
+export function RemoveFile(path: string): Promise<boolean> {
+    console.log('debugger:filesystem.RemoveFile');
+
+    return new Promise((resolve, reject) => {
+        fs.unlink(path, err => {
+            resolve(!err);
+        });
+    });
+}
+
 export function FolderExists(folder: string): Promise<boolean> {
     console.log('debugger:filesystem.FolderExists');
 
@@ -68,6 +99,16 @@ export function FolderExists(folder: string): Promise<boolean> {
             resolve(!err);
         });
     });        
+}
+
+export function MakeDir(folder: string): Promise<boolean> {
+    console.log('debugger:filesystem.MakeDir');
+    
+    return new Promise((resolve, reject) => {
+        fs.mkdir(folder, err => {
+            resolve(!err);
+        });
+    }); 
 }
 
 export function SetChMod(path: string, mode: string = '777'): Promise<boolean> {

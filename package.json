@@ -105,7 +105,113 @@
                 "title": "Compile source code and run in emulator",
                 "category": "ads"
             }
-        ]
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Atari Dev Studio",
+            "properties": {
+                "atari-dev-studio.editor.saveFileBeforeRun": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether to save the active file before build is triggered.",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.editor.saveAllFilesBeforeRun": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether to save all files before build is triggered.",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.editor.preserveCodeEditorFocus": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether to preserve focus on the code editor after build is triggered.",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.editor.clearPreviousOutput": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether to clear the previous output window before build is triggered.",
+                    "scope": "resource"
+                },
+
+                "atari-dev-studio.compilation.cleanupCompilationFiles": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether to clean up compilation files after build is complete.",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.compilation.generateDebuggerFiles": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether to generate debugger files on compilation.",
+                    "scope": "resource"
+                },
+
+                "atari-dev-studio.batariBasic.compilerArgs": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Specify (optional) command line arguments, ie. -O (Optimizer).",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.batariBasic.compilerFolder": {
+                  "type": "string",
+                  "default": "",
+                  "description": "Don't wish to use the included version of the batari Basic compiler? Specify the folder location of your compiler:",
+                  "scope": "resource"
+                },
+
+                "atari-dev-studio.7800basic.compilerArgs": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Specify (optional) command line arguments.",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.7800basic.compilerFolder": {
+                  "type": "string",
+                  "default": "",
+                  "description": "Don't wish to use the included version of the 7800basic compiler? Specify the folder location of your compiler:",
+                  "scope": "resource"
+                },
+
+                "atari-dev-studio.dasm.compilerArgs": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Specify (optional) command line arguments:",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.dasm.compilerPath": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Don't wish to use the included version of the dasm compiler? Specify the full path (including filename) of your dasm compiler:",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.dasm.compilerFormat": {
+                    "type": "string",
+                    "enum": [
+                      "1",
+                      "2",
+                      "3"
+                    ],
+                    "default": "3",
+                    "description": "Specify the output format of the dasm compiler (1-3):",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.dasm.compilerVerboseness": {
+                    "type": "string",
+                    "enum": [
+                      "0",
+                      "1",
+                      "2",
+                      "3",
+                      "4"
+                    ],
+                    "default": "0",
+                    "description": "Specify the verboseness of the dasm compiler (0-4):",
+                    "scope": "resource"
+                }
+            }
+        }
     },
     "activationEvents": [
         "onCommand:extension.openWelcomePage",
