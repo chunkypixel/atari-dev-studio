@@ -48,7 +48,7 @@ function BuildGameAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
         // Get document
         let document = yield filesystem.GetDocumentAsync(fileUri);
-        if (!document)
+        if (!document || document.uri.scheme != "file")
             return false;
         // Find compiler
         let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
@@ -58,7 +58,7 @@ function BuildGameAsync(fileUri) {
             }
         }
         // Not found
-        let message = `Unable to find a compiler for extension ${fileExtension}.`;
+        let message = `Unable to find a compiler for extension '${fileExtension}'.`;
         vscode.window.showErrorMessage(message);
         console.log(message);
         return false;
@@ -69,7 +69,7 @@ function BuildGameAndRunAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
         // Get document
         let document = yield filesystem.GetDocumentAsync(fileUri);
-        if (!document)
+        if (!document || document.uri.scheme != "file")
             return false;
         // Find compiler
         let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
@@ -79,7 +79,7 @@ function BuildGameAndRunAsync(fileUri) {
             }
         }
         // Not found
-        let message = `Unable to find a compiler for extension ${fileExtension}.`;
+        let message = `Unable to find a compiler for extension '${fileExtension}'.`;
         vscode.window.showErrorMessage(message);
         console.log(message);
         return false;

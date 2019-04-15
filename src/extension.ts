@@ -29,6 +29,8 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	// Build
+	// Note: apparently the fileUri can be supplied via the command line but we are not going to use it
+	//       as it can make it hard to determine if we have a document or something else like the settings
 	const buildGame = vscode.commands.registerCommand('extension.buildGame', async (fileUri: vscode.Uri) => {
 		console.log('User activated command "extension.buildGame"');
 		await application.BuildGameAsync(fileUri);

@@ -5,7 +5,6 @@ import * as filesystem from '../filesystem';
 import * as execute from '../execute';
 import { CompilerBase } from "./compilerBase";
 
-
 export class DasmCompiler extends CompilerBase {
 
     constructor() {
@@ -85,7 +84,7 @@ export class DasmCompiler extends CompilerBase {
         // Compiler
         // We use a path instead of a folder for dasm for added flexibility
         this.CustomFolderOrPath = false;
-        let userCompilerPath = this.configuration.get<string>(`${application.Name}.${this.Id}.compilerPath`);
+        let userCompilerPath = this.Configuration!.get<string>(`${this.Id}.compilerPath`);
         if (userCompilerPath) {
             // Validate (user provided)
             if (!filesystem.FileExists(userCompilerPath)) {
@@ -134,7 +133,7 @@ export class DasmCompiler extends CompilerBase {
     //     console.log('debugger:DasmCompiler.RemoveCompilationFiles');
 
     //     // Debugger files (from workspace not bin)
-    //     await super.RemoveCompilationFilesAsync();
+    //     await this.RemoveCompilationFilesAsync();
 
     //     // Notify
     //     this.notify(`Cleaned up files generated during compilation...`);

@@ -25,7 +25,6 @@ class CompilerBase {
         this.Verboseness = "";
         this.channelName = "compiler";
         this.outputChannel = vscode.window.createOutputChannel(this.channelName);
-        this.configuration = vscode.workspace.getConfiguration(application.Id, null);
         this.FileName = "";
         this.CompiledFileName = "";
         this.CompiledSubFolder = "";
@@ -75,21 +74,23 @@ class CompilerBase {
             if (!(yield this.LoadConfiguration()))
                 return false;
             // Activate output window?
-            if (!this.configuration.get(`${application.Name}.editor.preserveCodeEditorFocus`)) {
+            if (!this.Configuration.get(`editor.preserveCodeEditorFocus`)) {
                 this.outputChannel.show();
             }
             // Clear output content?
-            if (this.configuration.get(`${application.Name}.editor.clearPreviousOutput`)) {
+            if (this.Configuration.get(`editor.clearPreviousOutput`)) {
                 this.outputChannel.clear();
             }
             // Save files?
-            if (this.configuration.get(`${application.Name}.editor.saveAllFilesBeforeRun`)) {
+            if (this.Configuration.get(`editor.saveAllFilesBeforeRun`)) {
                 vscode.workspace.saveAll();
             }
-            else if (this.configuration.get(`${application.Name}.editor.saveFileBeforeRun`)) {
+            else if (this.Configuration.get(`editor.saveFileBeforeRun`)) {
                 if (this.Document)
                     this.Document.save();
             }
+            // Remove old debugger file before build
+            yield this.RemoveDebuggerFilesAsync(this.CompiledSubFolder);
             // Result
             return true;
         });
@@ -107,8 +108,11 @@ class CompilerBase {
         this.Args = "";
         this.Format = "";
         this.Verboseness = "";
+        // (Re)load
+        // It appears you need to reload this each time incase of change
+        this.Configuration = vscode.workspace.getConfiguration(application.Name, null);
         // Compiler
-        let userCompilerFolder = this.configuration.get(`${application.Name}.${this.Id}.compilerFolder`);
+        let userCompilerFolder = this.Configuration.get(`${this.Id}.compilerFolder`);
         if (userCompilerFolder) {
             // Validate (user provided)
             if (!filesystem.FolderExists(userCompilerFolder)) {
@@ -121,12 +125,12 @@ class CompilerBase {
             this.CustomFolderOrPath = true;
         }
         // Compiler (other)
-        this.Args = this.configuration.get(`${application.Name}.${this.Id}.compilerArgs`, "");
-        this.Format = this.configuration.get(`${application.Name}.${this.Id}.compilerFormat`, "");
-        this.Verboseness = this.configuration.get(`${application.Name}.${this.Id}.compilerVerboseness`, "");
+        this.Args = this.Configuration.get(`${this.Id}.compilerArgs`, "");
+        this.Format = this.Configuration.get(`${this.Id}.compilerFormat`, "3");
+        this.Verboseness = this.Configuration.get(`${this.Id}.compilerVerboseness`, "0");
         // Compilation
-        this.GenerateDebuggerFiles = this.configuration.get(`${application.Name}.compilation.generateDebuggerFiles`, true);
-        this.CleanUpCompilationFiles = this.configuration.get(`${application.Name}.compilation.cleanupCompilationFiles`, true);
+        this.GenerateDebuggerFiles = this.Configuration.get(`compilation.generateDebuggerFiles`, true);
+        this.CleanUpCompilationFiles = this.Configuration.get(`compilation.cleanupCompilationFiles`, true);
         // System
         this.WorkspaceFolder = this.getWorkspaceFolder();
         this.FileName = path.basename(this.Document.fileName);
@@ -151,6 +155,7 @@ class CompilerBase {
                 this.notify(`ERROR: Failed to create compiled file '${this.CompiledFileName}'. The file size is 0 bytes...`);
             }
             // Failed
+            this.notify(`ERROR: Failed to create compiled file '${this.CompiledFileName}'.`);
             return false;
         });
     }
@@ -164,6 +169,8 @@ class CompilerBase {
                 this.notify(`ERROR: Failed to create folder '${this.CompiledSubFolderName}'`);
                 return false;
             }
+            // Notify
+            this.notify(`Moving compiled file '${this.CompiledFileName}' to '${this.CompiledSubFolderName}' folder...`);
             // Prepare
             let oldPath = path.join(this.WorkspaceFolder, this.CompiledFileName);
             let newPath = path.join(this.CompiledSubFolder, this.CompiledFileName);
@@ -173,45 +180,36 @@ class CompilerBase {
                 this.notify(`ERROR: Failed to move file from '${this.CompiledFileName}' to ${this.CompiledSubFolderName} folder`);
                 return false;
             }
-            // Notify
-            this.notify(`Moved compiled file '${this.CompiledFileName}' to ${this.CompiledSubFolderName} folder...`);
             // Move all debugger files?
             if (this.GenerateDebuggerFiles) {
-                var debuggerFile = "";
+                // Notify
+                this.notify(`Moving debugger files to '${this.CompiledSubFolderName}' folder...`);
                 // Process
                 this.DebuggerExtensions.forEach((extension, arg) => __awaiter(this, void 0, void 0, function* () {
                     // Prepare
-                    debuggerFile = `${this.FileName}${extension}`;
+                    let debuggerFile = `${this.FileName}${extension}`;
                     let oldPath = path.join(this.WorkspaceFolder, debuggerFile);
                     let newPath = path.join(this.CompiledSubFolder, debuggerFile);
                     // Move compiled file
                     if (yield !filesystem.RenameFile(oldPath, newPath)) {
                         // Notify            
-                        let message = `ERROR: Failed to move file '${debuggerFile}' to ${this.CompiledSubFolderName} folder`;
-                        this.outputChannel.appendLine(message);
-                        console.log(`debugger:${message}`);
+                        this.notify(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);
                     }
                     ;
-                    // Notify
-                    this.notify(`Moved debugger files to ${this.CompiledSubFolderName} folder...`);
                 }));
             }
             // Return
             return true;
         });
     }
-    RemoveCompilationFilesAsync() {
+    RemoveDebuggerFilesAsync(folder) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:CompilerBase.RemoveCompilationFilesAsync');
-            // Override to language specific items
-            // Make sure to callback here for the debugger stuff
-            // Debugger files
-            var debuggerFile = "";
+            console.log('debugger:CompilerBase.RemoveDebuggerFilesAsync');
             // Process
             this.DebuggerExtensions.forEach((extension, arg) => __awaiter(this, void 0, void 0, function* () {
                 // Prepare
-                debuggerFile = `${this.FileName}${extension}`;
-                let debuggerFilePath = path.join(this.WorkspaceFolder, debuggerFile);
+                let debuggerFile = `${this.FileName}${extension}`;
+                let debuggerFilePath = path.join(folder, debuggerFile);
                 // Process
                 yield filesystem.RemoveFile(debuggerFilePath);
             }));

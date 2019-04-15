@@ -43,7 +43,7 @@ export const Is64Bit: boolean = (os.arch() === 'x64');
 export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
 	// Get document
 	let document = await filesystem.GetDocumentAsync(fileUri);
-	if (!document) return false;
+	if (!document || document!.uri.scheme != "file") return false;
 
 	// Find compiler
 	let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
@@ -54,7 +54,7 @@ export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
 	}
 
 	// Not found
-	let message = `Unable to find a compiler for extension ${fileExtension}.`;
+	let message = `Unable to find a compiler for extension '${fileExtension}'.`;
 	vscode.window.showErrorMessage(message);
 	console.log(message)
 	return false;
@@ -63,7 +63,7 @@ export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
 export async function BuildGameAndRunAsync(fileUri: vscode.Uri): Promise<boolean> {
 	// Get document
 	let document = await filesystem.GetDocumentAsync(fileUri);
-	if (!document) return false;
+	if (!document || document!.uri.scheme != "file") return false;
 
 	// Find compiler
 	let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
@@ -74,7 +74,7 @@ export async function BuildGameAndRunAsync(fileUri: vscode.Uri): Promise<boolean
 	}
 
 	// Not found
-	let message = `Unable to find a compiler for extension ${fileExtension}.`;
+	let message = `Unable to find a compiler for extension '${fileExtension}'.`;
 	vscode.window.showErrorMessage(message);
 	console.log(message)
 	return false;

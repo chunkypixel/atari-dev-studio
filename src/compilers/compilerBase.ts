@@ -22,7 +22,7 @@ export abstract class CompilerBase implements vscode.Disposable {
     public Verboseness: string = "";
     readonly channelName: string = "compiler";
     readonly outputChannel: vscode.OutputChannel = vscode.window.createOutputChannel(this.channelName);
-    readonly configuration: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration(application.Id, null);
+    protected Configuration: vscode.WorkspaceConfiguration | undefined;
     public Document: vscode.TextDocument | undefined;
 
     public FileName: string = "";
@@ -78,21 +78,24 @@ export abstract class CompilerBase implements vscode.Disposable {
         if (!await this.LoadConfiguration()) return false;
 
         // Activate output window?
-        if (!this.configuration.get<boolean>(`${application.Name}.editor.preserveCodeEditorFocus`))  {
+        if (!this.Configuration!.get<boolean>(`editor.preserveCodeEditorFocus`))  {
             this.outputChannel.show();
         }
 
         // Clear output content?
-        if (this.configuration.get<boolean>(`${application.Name}.editor.clearPreviousOutput`))  {
+        if (this.Configuration!.get<boolean>(`editor.clearPreviousOutput`))  {
             this.outputChannel.clear();
         }
 
         // Save files?
-        if (this.configuration.get<boolean>(`${application.Name}.editor.saveAllFilesBeforeRun`))  {
+        if (this.Configuration!.get<boolean>(`editor.saveAllFilesBeforeRun`))  {
             vscode.workspace.saveAll();
-        } else if (this.configuration.get<boolean>(`${application.Name}.editor.saveFileBeforeRun`)) {
+        } else if (this.Configuration!.get<boolean>(`editor.saveFileBeforeRun`)) {
             if (this.Document) this.Document.save();
         }
+
+        // Remove old debugger file before build
+        await this.RemoveDebuggerFilesAsync(this.CompiledSubFolder);
 
          // Result
         return true;
@@ -112,8 +115,12 @@ export abstract class CompilerBase implements vscode.Disposable {
         this.Format = "";
         this.Verboseness = "";
 
+        // (Re)load
+        // It appears you need to reload this each time incase of change
+        this.Configuration = vscode.workspace.getConfiguration(application.Name, null);
+
         // Compiler
-        let userCompilerFolder = this.configuration.get<string>(`${application.Name}.${this.Id}.compilerFolder`);
+        let userCompilerFolder = this.Configuration.get<string>(`${this.Id}.compilerFolder`);
         if (userCompilerFolder) {
             // Validate (user provided)
             if (!filesystem.FolderExists(userCompilerFolder)) {
@@ -127,13 +134,13 @@ export abstract class CompilerBase implements vscode.Disposable {
             this.CustomFolderOrPath = true;
         }
         // Compiler (other)
-        this.Args = this.configuration.get<string>(`${application.Name}.${this.Id}.compilerArgs`,"");
-        this.Format = this.configuration.get<string>(`${application.Name}.${this.Id}.compilerFormat`,"");
-        this.Verboseness = this.configuration.get<string>(`${application.Name}.${this.Id}.compilerVerboseness`,"");
+        this.Args = this.Configuration.get<string>(`${this.Id}.compilerArgs`,"");
+        this.Format = this.Configuration.get<string>(`${this.Id}.compilerFormat`,"3");
+        this.Verboseness = this.Configuration.get<string>(`${this.Id}.compilerVerboseness`,"0");
     
         // Compilation
-        this.GenerateDebuggerFiles = this.configuration.get<boolean>(`${application.Name}.compilation.generateDebuggerFiles`, true);
-        this.CleanUpCompilationFiles = this.configuration.get<boolean>(`${application.Name}.compilation.cleanupCompilationFiles`, true);
+        this.GenerateDebuggerFiles = this.Configuration.get<boolean>(`compilation.generateDebuggerFiles`, true);
+        this.CleanUpCompilationFiles = this.Configuration.get<boolean>(`compilation.cleanupCompilationFiles`, true);
 
         // System
         this.WorkspaceFolder = this.getWorkspaceFolder();
@@ -162,6 +169,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         }
 
         // Failed
+        this.notify(`ERROR: Failed to create compiled file '${this.CompiledFileName}'.`);     
         return false;
     }
 
@@ -176,6 +184,9 @@ export abstract class CompilerBase implements vscode.Disposable {
             return false;         
         }
 
+        // Notify
+        this.notify(`Moving compiled file '${this.CompiledFileName}' to '${this.CompiledSubFolderName}' folder...`);
+
         // Prepare
         let oldPath = path.join(this.WorkspaceFolder, this.CompiledFileName);
         let newPath = path.join(this.CompiledSubFolder, this.CompiledFileName);
@@ -187,30 +198,23 @@ export abstract class CompilerBase implements vscode.Disposable {
             return false;            
         }
 
-        // Notify
-        this.notify(`Moved compiled file '${this.CompiledFileName}' to ${this.CompiledSubFolderName} folder...`);
-
         // Move all debugger files?
-        if (this.GenerateDebuggerFiles)  {
-            var debuggerFile: string = "";
+        if (this.GenerateDebuggerFiles)  {          
+            // Notify
+            this.notify(`Moving debugger files to '${this.CompiledSubFolderName}' folder...`);
 
             // Process
             this.DebuggerExtensions.forEach(async (extension: string, arg: string) => {
                 // Prepare
-                debuggerFile = `${this.FileName}${extension}`;
+                let debuggerFile: string = `${this.FileName}${extension}`;
                 let oldPath = path.join(this.WorkspaceFolder, debuggerFile);
                 let newPath = path.join(this.CompiledSubFolder, debuggerFile);
 
                 // Move compiled file
                 if (await !filesystem.RenameFile(oldPath, newPath)) {
                     // Notify            
-                    let message = `ERROR: Failed to move file '${debuggerFile}' to ${this.CompiledSubFolderName} folder`;
-                    this.outputChannel.appendLine(message);
-                    console.log(`debugger:${message}`);                
+                    this.notify(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);          
                 };
-
-                // Notify
-                this.notify(`Moved debugger files to ${this.CompiledSubFolderName} folder...`);
             });
         }
         
@@ -218,20 +222,14 @@ export abstract class CompilerBase implements vscode.Disposable {
         return true;
     }
 
-    protected async RemoveCompilationFilesAsync(): Promise<boolean> {
-        console.log('debugger:CompilerBase.RemoveCompilationFilesAsync');
-
-        // Override to language specific items
-        // Make sure to callback here for the debugger stuff
-
-        // Debugger files
-        var debuggerFile: string = "";
+    protected async RemoveDebuggerFilesAsync(folder: string): Promise<boolean> {
+        console.log('debugger:CompilerBase.RemoveDebuggerFilesAsync');
 
         // Process
         this.DebuggerExtensions.forEach(async (extension: string, arg: string) => {
             // Prepare
-            debuggerFile = `${this.FileName}${extension}`;
-            let debuggerFilePath = path.join(this.WorkspaceFolder, debuggerFile);
+            let debuggerFile: string = `${this.FileName}${extension}`;
+            let debuggerFilePath = path.join(folder, debuggerFile);
 
             // Process
             await filesystem.RemoveFile(debuggerFilePath);

@@ -85,7 +85,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
         // Compiler
         // We use a path instead of a folder for dasm for added flexibility
         this.CustomFolderOrPath = false;
-        let userCompilerPath = this.configuration.get(`${application.Name}.${this.Id}.compilerPath`);
+        let userCompilerPath = this.Configuration.get(`${this.Id}.compilerPath`);
         if (userCompilerPath) {
             // Validate (user provided)
             if (!filesystem.FileExists(userCompilerPath)) {
