@@ -2,7 +2,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 
-export async function GetFileUri(fileUri: vscode.Uri): Promise<vscode.Uri> {
+export async function GetFileUriAsync(fileUri: vscode.Uri): Promise<vscode.Uri> {
 	// Validate
 	if (fileUri) return fileUri;
 
@@ -20,6 +20,34 @@ export async function GetFileUri(fileUri: vscode.Uri): Promise<vscode.Uri> {
 
 	// Result
 	return document!.uri;
+}
+
+export async function GetDocumentAsync(fileUri: vscode.Uri): Promise<vscode.TextDocument | null> {
+    // Validate
+    if (IsRunFromExplorer(fileUri)) {
+        // Make sure document exists
+        if (FileExists(fileUri.fsPath)) return await vscode.workspace.openTextDocument(fileUri);
+        vscode.window.showInformationMessage("Error: File cannot be found");
+    }
+
+	// Try current document
+    let editor = vscode.window.activeTextEditor
+    if (editor) return editor.document;
+    return null;
+}
+
+export function IsRunFromExplorer(fileUri: vscode.Uri): boolean {
+    let editor = vscode.window.activeTextEditor;
+    if (!fileUri || !fileUri.fsPath) {
+        return false;
+    }
+    if (!editor) {
+        return true;
+    }
+    if (fileUri.fsPath === editor.document.uri.fsPath) {
+        return false;
+    }
+    return true;
 }
 
 export function FileExists(path: string): Promise<boolean> {

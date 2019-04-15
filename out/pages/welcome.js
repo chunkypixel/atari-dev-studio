@@ -49,9 +49,9 @@ class WelcomePage {
                 let styleCssPath = vscode.Uri.file(path.join(contentPath.toString(), 'style.css'));
                 let styleCssUri = styleCssPath.with({ scheme: 'vscode-resource' });
                 // Update tags in content
-                content = this.replaceContentTag(content, "APPDISPLAYNAME", Application.DisplayName());
-                content = this.replaceContentTag(content, "APPDESCRIPTION", Application.Description());
-                content = this.replaceContentTag(content, "APPVERSION", Application.Version());
+                content = this.replaceContentTag(content, "APPDISPLAYNAME", Application.DisplayName);
+                content = this.replaceContentTag(content, "APPDESCRIPTION", Application.Description);
+                content = this.replaceContentTag(content, "APPVERSION", Application.Version);
                 content = this.replaceContentTag(content, "NONCE", nonce);
                 content = this.replaceContentTag(content, "SCRIPTJSURI", scriptJsUri);
                 content = this.replaceContentTag(content, "STYLECSSURI", styleCssUri);

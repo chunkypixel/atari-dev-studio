@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
 const fs = require("fs");
-function GetFileUri(fileUri) {
+function GetFileUriAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
         // Validate
         if (fileUri)
@@ -30,7 +30,38 @@ function GetFileUri(fileUri) {
         return document.uri;
     });
 }
-exports.GetFileUri = GetFileUri;
+exports.GetFileUriAsync = GetFileUriAsync;
+function GetDocumentAsync(fileUri) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Validate
+        if (IsRunFromExplorer(fileUri)) {
+            // Make sure document exists
+            if (FileExists(fileUri.fsPath))
+                return yield vscode.workspace.openTextDocument(fileUri);
+            vscode.window.showInformationMessage("Error: File cannot be found");
+        }
+        // Try current document
+        let editor = vscode.window.activeTextEditor;
+        if (editor)
+            return editor.document;
+        return null;
+    });
+}
+exports.GetDocumentAsync = GetDocumentAsync;
+function IsRunFromExplorer(fileUri) {
+    let editor = vscode.window.activeTextEditor;
+    if (!fileUri || !fileUri.fsPath) {
+        return false;
+    }
+    if (!editor) {
+        return true;
+    }
+    if (fileUri.fsPath === editor.document.uri.fsPath) {
+        return false;
+    }
+    return true;
+}
+exports.IsRunFromExplorer = IsRunFromExplorer;
 function FileExists(path) {
     console.log('debugger:filesystem.FileExists');
     return new Promise((resolve, reject) => {

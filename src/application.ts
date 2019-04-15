@@ -8,6 +8,12 @@ import { BatariBasicCompiler } from './compilers/batariBasicCompiler';
 import { SeventyEightHundredBasicCompiler } from './compilers/seventyEightHundredBasicCompiler';
 import { DasmCompiler } from './compilers/dasmCompiler';
 
+export const ExtensionId = "chunkypixel.atari-dev-studio";
+
+export const Path: string = vscode.extensions.getExtension(ExtensionId)!.extensionPath;
+export const Version: string = vscode.extensions.getExtension(ExtensionId)!.packageJSON.version;
+export const DisplayName: string = vscode.extensions.getExtension(ExtensionId)!.packageJSON.displayName;
+export const Description: string = vscode.extensions.getExtension(ExtensionId)!.packageJSON.description;
 
 // -------------------------------------------------------------------------------------
 // Compilers
@@ -31,56 +37,18 @@ export function Is32Bit() { return os.arch() === 'x32'; }
 export function Is64Bit() { return os.arch() === 'x64'; }
 
 // -------------------------------------------------------------------------------------
-// Extension
+// Functions
 // -------------------------------------------------------------------------------------
-export const ExtensionId = "chunkypixel.atari-dev-studio";
-
-export function Path(): string {
-	// Attempt to read
-	try {
-		return vscode.extensions.getExtension(ExtensionId)!.extensionPath;
-	} catch (error) {
-	} 
-	return "unknown";
-}
-
-export function Version() {
-	// Attempt to read
-	try {
-		return `v${vscode.extensions.getExtension(ExtensionId)!.packageJSON.version}`;
-	} catch (error) {
-	}	
-	return "unknown";
-}
-
-export function DisplayName(): string {
-	// Attempt to read
-	try {
-		return vscode.extensions.getExtension(ExtensionId)!.packageJSON.displayName;
-	} catch (error) {
-	} 
-	return "unknown";
-}
-
-export function Description(): string {
-	// Attempt to read
-	try {
-		return vscode.extensions.getExtension(ExtensionId)!.packageJSON.description;
-	} catch (error) {
-	}  
-	return "unknown";
-}
-
 export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
-	// Get file extension to determine compiler
-	fileUri = await filesystem.GetFileUri(fileUri);
-	if (!fileUri) return false;
+	// Get document
+	let document = await filesystem.GetDocumentAsync(fileUri);
+	if (!document) return false;
 
 	// Find compiler
-	let fileExtension = path.extname(fileUri.fsPath).toLowerCase();
+	let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
 	for (const compiler of Compilers) {
 		if (compiler.CompilerExtensions.includes(fileExtension)) {
-			return await compiler.BuildGameAsync(fileUri);
+			return await compiler.BuildGameAsync(document);
 		}
 	}
 
@@ -92,15 +60,15 @@ export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
 }
 
 export async function BuildGameAndRunAsync(fileUri: vscode.Uri): Promise<boolean> {
-	// Get file extension to determine compiler
-	fileUri = await filesystem.GetFileUri(fileUri);
-	if (!fileUri) return false;
+	// Get document
+	let document = await filesystem.GetDocumentAsync(fileUri);
+	if (!document) return false;
 
 	// Find compiler
-	let fileExtension = path.extname(fileUri.fsPath).toLowerCase();
+	let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
 	for (const compiler of Compilers) {
 		if (compiler.CompilerExtensions.includes(fileExtension)) {
-			return await compiler.BuildGameAndRunAsync(fileUri);
+			return await compiler.BuildGameAndRunAsync(document);
 		}
 	}
 

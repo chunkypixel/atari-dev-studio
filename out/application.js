@@ -15,6 +15,11 @@ const os = require("os");
 const batariBasicCompiler_1 = require("./compilers/batariBasicCompiler");
 const seventyEightHundredBasicCompiler_1 = require("./compilers/seventyEightHundredBasicCompiler");
 const dasmCompiler_1 = require("./compilers/dasmCompiler");
+exports.ExtensionId = "chunkypixel.atari-dev-studio";
+exports.Path = vscode.extensions.getExtension(exports.ExtensionId).extensionPath;
+exports.Version = vscode.extensions.getExtension(exports.ExtensionId).packageJSON.version;
+exports.DisplayName = vscode.extensions.getExtension(exports.ExtensionId).packageJSON.displayName;
+exports.Description = vscode.extensions.getExtension(exports.ExtensionId).packageJSON.description;
 // -------------------------------------------------------------------------------------
 // Compilers
 // Register compilers here and in order of preference
@@ -42,60 +47,19 @@ exports.Is32Bit = Is32Bit;
 function Is64Bit() { return os.arch() === 'x64'; }
 exports.Is64Bit = Is64Bit;
 // -------------------------------------------------------------------------------------
-// Extension
+// Functions
 // -------------------------------------------------------------------------------------
-exports.ExtensionId = "chunkypixel.atari-dev-studio";
-function Path() {
-    // Attempt to read
-    try {
-        return vscode.extensions.getExtension(exports.ExtensionId).extensionPath;
-    }
-    catch (error) {
-    }
-    return "unknown";
-}
-exports.Path = Path;
-function Version() {
-    // Attempt to read
-    try {
-        return `v${vscode.extensions.getExtension(exports.ExtensionId).packageJSON.version}`;
-    }
-    catch (error) {
-    }
-    return "unknown";
-}
-exports.Version = Version;
-function DisplayName() {
-    // Attempt to read
-    try {
-        return vscode.extensions.getExtension(exports.ExtensionId).packageJSON.displayName;
-    }
-    catch (error) {
-    }
-    return "unknown";
-}
-exports.DisplayName = DisplayName;
-function Description() {
-    // Attempt to read
-    try {
-        return vscode.extensions.getExtension(exports.ExtensionId).packageJSON.description;
-    }
-    catch (error) {
-    }
-    return "unknown";
-}
-exports.Description = Description;
 function BuildGameAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
-        // Get file extension to determine compiler
-        fileUri = yield filesystem.GetFileUri(fileUri);
-        if (!fileUri)
+        // Get document
+        let document = yield filesystem.GetDocumentAsync(fileUri);
+        if (!document)
             return false;
         // Find compiler
-        let fileExtension = path.extname(fileUri.fsPath).toLowerCase();
+        let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
         for (const compiler of exports.Compilers) {
             if (compiler.CompilerExtensions.includes(fileExtension)) {
-                return yield compiler.BuildGameAsync(fileUri);
+                return yield compiler.BuildGameAsync(document);
             }
         }
         // Not found
@@ -108,15 +72,15 @@ function BuildGameAsync(fileUri) {
 exports.BuildGameAsync = BuildGameAsync;
 function BuildGameAndRunAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
-        // Get file extension to determine compiler
-        fileUri = yield filesystem.GetFileUri(fileUri);
-        if (!fileUri)
+        // Get document
+        let document = yield filesystem.GetDocumentAsync(fileUri);
+        if (!document)
             return false;
         // Find compiler
-        let fileExtension = path.extname(fileUri.fsPath).toLowerCase();
+        let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
         for (const compiler of exports.Compilers) {
             if (compiler.CompilerExtensions.includes(fileExtension)) {
-                return yield compiler.BuildGameAndRunAsync(fileUri);
+                return yield compiler.BuildGameAndRunAsync(document);
             }
         }
         // Not found
