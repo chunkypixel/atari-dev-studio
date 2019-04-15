@@ -1,0 +1,10 @@
+#!/bin/sh
+./make_dasm_Linux_x86.sh
+./make_dasm_OSX_x86.sh
+./make_dasm_Windows_x86.sh
+./make_distella_Linux_x86.sh
+./make_distella_OSX_x86.sh
+./make_distella_Windows_x86.sh
+./make_libaries_Linux_x86_static.sh
+./make_libraries_OSX_x86_static.sh
+./make_libraries_Win32_x86_static.sh

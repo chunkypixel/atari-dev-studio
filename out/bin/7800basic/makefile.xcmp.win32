@@ -1,0 +1,46 @@
+# The 7800basic Win32 cross compiling makefile. 
+#
+# See COMPILE.txt for details on how to setup the supporting environment
+#
+
+export PATH := /usr/x86_64-w64-mingw32/bin:$(PATH)
+SHELL=/bin/sh
+ARCH=Win32.x86
+CFLAGS=-O2 -D WIN32 -m32
+CC=i586-mingw32msvc-gcc
+LEX=lex
+LEXFLAGS=-t
+LDIR=contrib/${ARCH}
+
+all: 7800basic.exe 7800preprocess.exe 7800postprocess.exe 7800filter.exe 7800optimize.exe 7800header.exe 7800sign.exe
+
+7800basic.exe: 7800bas.c statements.c keywords.c statements.h keywords.h atarivox.h 
+	${CC} ${CFLAGS} -o 7800basic.exe 7800bas.c statements.c keywords.c -L${LDIR}/lib -I${LDIR}/include -lpng -lz -lm
+
+7800postprocess.exe: postprocess.c
+	${CC} ${CFLAGS} -o 7800postprocess.exe postprocess.c
+
+7800filter.exe: filter.c
+	${CC} ${CFLAGS} -o 7800filter.exe filter.c
+
+7800preprocess.exe: preprocess.lex
+	${LEX} ${LEXFLAGS}<preprocess.lex>lex.yy.c
+	${CC} ${CFLAGS} -o 7800preprocess.exe lex.yy.c
+	rm -f lex.yy.c
+
+7800optimize.exe: optimize.lex
+	${LEX} ${LEXFLAGS} -i<optimize.lex>lex.yy.c
+	${CC} ${CFLAGS} -o 7800optimize.exe lex.yy.c
+	rm -f lex.yy.c
+
+7800header.exe: 7800header.c
+	${CC} ${CFLAGS} -o 7800header.exe 7800header.c
+
+7800sign.exe: 7800sign.c
+	${CC} ${CFLAGS} -o 7800sign.exe 7800sign.c
+
+install:        all
+
+clean:
+	rm -f 7800basic.exe 7800preprocess.exe 7800postprocess.exe 7800optimize.exe 7800header.exe 7800sign.exe 7800filter.exe
+

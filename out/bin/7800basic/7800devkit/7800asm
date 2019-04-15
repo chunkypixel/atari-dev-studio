@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# do some quick sanity checking...
+
+if [ ! "$asm7800dir" ] ; then
+  echo "### WARNING: the asm7800dir envionronment variable isn't set."
+fi
+
+DV=$(dasm$DASMEXT 2>/dev/null | grep ^DASM | head -n1)
+echo "Using dasm version: $DV" 
+  
+echo "Starting build of $1"
+dasm$DASMEXT $1 -I"$asm7800dir/includes" -f3 -l"$1.list.txt" -s"$1.symbol.txt" -o"$1.bin"
+7800sign$EXT -w "$1.bin"
+	
+exit 0

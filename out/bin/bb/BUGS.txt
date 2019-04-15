@@ -1,0 +1,29 @@
+batari Basic - BUGS.txt - Version 1.0 - 2013.09.24
+
+_What_Is_This_Doc?_
+
+  There are some niggling issues that for one reason or another haven't been
+  yet fixed in the provided bB code. This is a record to track these bugs and
+  any know workarounds.
+
+_Known_Bugs_
+
+  overview:   DPC+ vsprite vertical stack glitch. 
+  details:    If the virtual sprites are stacked with very little
+              spacing, cumulative round-off can occur, and eventually coarse
+              positioning will happen during a virtual sprite display, 
+              resulting in a visual glitch.
+  workaround: avoid stacking vsprites vertically without much
+              spacing. Or put them all on even or all odd rows, depending 
+              if the height of the vsprites are even or odd.
+		
+  overview:   PAL pfres linecount bug.
+  details:    Using "set tv pal" with standard kernel and pfres
+              causes incorrect scanline counts for certian pfres values.
+              workaround: use a value that provides a correct linecount, or
+              use pal60 instead.
+
+  overview:   DPC+ double-line bug
+  details:    In higher resolutions in the DPC+ kernel, the top PF line is
+              duplicated.
+  workaround: None

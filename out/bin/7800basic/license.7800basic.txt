@@ -1,0 +1,27 @@
+The software in this bundle, with the exception of 7800sign, dasm, zlib, and
+libpng, are herein collectively referred to as 7800basic. 
+
+7800basic is derived from batari basic. The license terms for 7800basic are 
+identical to the batari Basic license terms (provided in license.bB.txt) 
+The additional code that was added to batari Basic to produce 7800basic is:
+
+7800basic copyright (c) 2013-2014
+Mike Saarna
+
+See the license.bB.txt for the batari Basic copyright and license information.
+
+7800sign/sign7800 is copyright 2004 Bruce Tomlin, all rights reserved.  
+Permission to include 7800sign/sign7800 in 7800basic was kindly granted by 
+Bruce.
+
+The license terms and source code for zlib and libpng can be found in the 
+7800 "contrib" directory.
+
+Dasm is GPLv2 software. Dasm is included with 7800basic as mere aggregation, 
+and as such does not require GPLv2 licensing of the rest of 7800basic.
+
+See the GNU FAQ entry on "mere aggregation" for more detail:
+http://www.gnu.org/licenses/old-licenses/gpl-2.0-faq.html#MereAggregation
+The GPL license, dasm documentation, and dasm source code are provided in the
+7800basic "contrib" directory.
+

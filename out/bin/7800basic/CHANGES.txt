@@ -1,0 +1,162 @@
+7800basic change log...
+
+___changes since 0.6 20170709___
+    -fixed driving controller driver (tested)
+    -added possible score variables: "scorea" to "scorez"
+
+___changes since 0.6 20170705___
+    -added "set drivingcontrol" to enable code to support driving controllers (untested)
+    -added valid filename checking to functions that use the filename as a label
+    -added "set plotvaluepage" to enable plotvalue to expand it's limit from 64 characters to 256
+
+___changes since 0.6 20170625___
+    -fixed loadmemory+savememory to work with large amounts of memory locations
+
+___changes since 0.6 20170606___
+    -added ability for game code to dimension extra 24-bit score variables, score2 to score9.
+    -fixed "set zoneprotection on" for double-buffering.
+
+___changes since 0.6 20170424___
+    -added 16k, 144k, 272k, and 528k formats. 
+    -added "set extradlmemory" to use up memory at $2200 for more display list.
+
+___changes since 0.5 beta20151221___
+    -boxcollision made a bit more efficient cyclewise. Uses a few bytes more per-call if you have collisionwrap on.
+    -added "set dlmemory"
+    -added double buffer system and commands
+    -enhanced pokey detection to fail when pokey carts are present but missing a pokey chip
+
+___changes since 0.3 beta20150715___ 
+    -added "spacephysics" sample
+    -added "mutesfx [pokey|tia]" command
+    -added alpha (and undocumented) TIA tracker support, and sample/trackertest program
+
+___changes since 0.3 beta20150523___ 
+    -added foundation code to allow some 7800basic assembly modules to be relocated in ROM
+    -added code to throw an error if "return" is used as a label
+    -added "lockzone #" and "unlockzone #" commands
+    -added the "pausedisable" variable
+    -revamped interrupt code to add routines that cannot be interrupted by DMA and/or must happen every frame
+    -rewrote non-visible DLL generation routine, added more DLLs after the visible screen
+
+___changes since 0.3 beta20150330___ 
+    -fixed memory protection for images that weren't on a byte boundary for the imported mode
+    -plugged some memory leaks
+    -extended the long line warning to 150 characters, since 7800basic should handle 200 characters
+    -vertically centered the high score table if screen height is changed
+
+___changes since 0.3 beta20150222___ 
+    -added NOTIALOCK constant to startup.asm, for programs what wish to access the BIOS underneath the cart ROM
+    -fixed issue that would cause some on-screen plotvalues to sometimes shimmer
+    -added drawhiscore command, with support for saving score tables to the HSC, AtariVox, and SaveKey
+    -added loadmemory and savememory commands, for saving data to HSC, AtariVox, and SaveKey
+    -modified dmahole statements to no longer interrupt code flow
+
+___changes since 0.3 beta20150128___ 
+    -reallocated DL memory to maximize the number of possible objects in each zone
+    -fixed issue with background color not fully being B&W when the game is paused
+    -loosened the restrictions on the number of color indexes within a png, vs used colors
+    -added "set zoneprotection on" command
+    -added speechdata and speak commands, and atarivoxspeech sample program
+    -converted internal error, warn, and info functions to use printf style arguments
+
+___changes since 0.3 beta20150106___ 
+    -added "set avoxvoice on" atarivox support
+    -added hsc header support
+    -fixed bug in NTSC/PAL console detection
+    -added dummy _color# constants for images that don't fully use all colors
+    -added joy0any and joy1any checks to if...then
+    -fixed bug in 320B import
+
+___changes since 0.3 beta20141220___ 
+    -fixed memset bug that occurred when exactly 256 bytes were written
+    -added pokey support to playsfx command
+    -added "set plotvalueonscreen on" statement
+    -added NTSC/PAL console detection
+    -rearranged drawscreen code, so a drawscreen call now exits at the top of the frame
+    -added splitmodedemo to samples
+    -updated documentation with pokeydetected and paldetected special variables
+    -added "set screenheight", which allows vertical resolution choice of 192, 208, and 224
+
+___changes since 0.3 beta20141213___ 
+    -incgraphic enhanced to allow import of png images shorter than a zone height
+    -fixed width bug in 160B graphic import
+    -allow bannerplot to use non-zone boundary Y coordinate
+    -added XCTRL register hit to Xboard/XM pokey detection routine
+    -fixed bug where plotvalue's buffer had gaps
+
+___changes since 0.2 beta20140714___ 
+    -fixed 7800sign.c:456 to use memmove rather than memcpy. Target and source overlapped
+    -fixed bug which could cause graphics areas in bankswitched roms to not start off cleared
+    -removed some harmless-but-extraneous *printf arguments
+    -removed var=var+1:inc optimization because it interfered with CARRY
+    -added "memset" command, which sets a block of ram to a particular value
+    -added B&W effect to game pausing, with colorburst-kill
+    -added support code for controller-based RESET (UDL) and SELECT (UDR)
+    -added incbanner and plotbanner commands, to import graphics taller than a zoneheight
+
+___changes since 0.2 beta20140620___ 
+    -added "drawwait" command, which waits until the visible screen has been drawn
+    -added "plotmapfile" command, which can be used for complex screen maps, with many different areas using different palettes
+    -added "set basepath" command, which defines a directory path that incgraphic, incmapfile, and plotmapfile will use
+    -added Atarius Maximus' "smasteroids" demo to the samples
+    -added minumum argument sanity checks to most commands
+    -now throw error for failed atoi() conversions
+
+___changes since 0.2 beta20140612___ 
+    -added the "incmapfile" command, to import Tiled TMX files so they can be used as character map data
+    -enhanced playsfx. if a sound is given 0 initial priority it won't interrupt any playing sounds
+    -added the 7800basic logo to the samples directory and in the Developers Guide
+    -fixed a bug in plotmap that caused a compile error when ":" followed the command
+    -fixed a bug in plotchars. The optional extrawide parameter wasn't working
+    -fixed a bug that would under certain circumstances cause a compile error when complex math was used
+    -fixed a bug that would cause a compile error when the sread command was used
+
+___changes since 0.2 beta20140608___ 
+    -fixed a bug in memcpy that would affect copy sizes <256 bytes
+
+___changes since 0.2 beta20140602___ 
+    -added TIA sound effect engine and playsfx command
+
+___changes since 0.1 beta20140423___ 
+    -added "set mcpdevcart on" option and supporting bankswitch code
+    -added "dmahole #" command, which directs following basic code to a given DMA hole
+    -bumped version number to v0.2
+
+___changes since 0.1 beta20140331___ 
+    -added CARRY to if...then implementation
+    -fixed a bug where incgraphic would refuse to import 256 byte-wide non-160A graphics
+    -fixed a bug where "return:rem comment" would cause a compile error
+    -extended the number of constants to accomodate large numbers of color constants
+    -added indirect arrays
+
+___changes since 0.1 beta20140320___ 
+    -modified plotchars to directly work with strings of text, instead of forcing the user to define alphadata
+    -added "ASCII" and "default" options to the alphachars command
+    -fixed bug in preprocessor, where alphachars processing didn't end
+    -added "set debug color" command, to assist with seeing how much of the visible screen time has been used
+    -updated the Guide with information on above enhancements
+    -updated the Guide with tip for fine-tuning color constants
+
+___changes since 0.1 beta20140311___ 
+    -added pokey detection code, and "set pokeysupport on" command
+    -added psound command
+    -fixed bug that didn't allow alternate mode (160B, 320C, 320D) character support
+    -modified the DL interrupts. previously 1x non-visible scanline was counted as visible
+    -removed "wait for screen end" code from clearscreen, as it isn't strictly needed
+
+___changes since 0.1 beta20140306___ 
+    -fixed alphadata so the format of the generated assembly for large 
+     amounts of data wouldn't segfault dasm
+    -added memcpy command
+    -added peekchar and pokechar commands
+    -added "ramcharmap" sample
+    -fixed bug that slightly reduced efficiency of plotmap palette setup
+
+___changes since 0.1 beta20140228___ 
+    -added some sanity-checking to install_ux.sh
+    -miscellaneous Guide updates, per forum feedback and new commands
+    -added "converttobcd()" function, courtesy of Omegamatrix
+    -added "boxcollision()" function
+    -added tsound command
+    -fixed a few commands that inadvertently used the 6507 stack location

@@ -93,12 +93,24 @@
             {
                 "command": "extension.openWelcomePage",
                 "title": "Open the Welcome page",
-                "category": "atari"
+                "category": "ads"
+            },
+            {
+                "command": "extension.buildGame",
+                "title": "Compile source code",
+                "category": "ads"
+            },
+            {
+                "command": "extension.BuildGameAndRun",
+                "title": "Compile source code and run in emulator",
+                "category": "ads"
             }
         ]
     },
     "activationEvents": [
-        "onCommand:extension.openWelcomePage"
+        "onCommand:extension.openWelcomePage",
+        "onCommand:extension.buildGame",
+        "onCommand:extension.BuildGameAndRun"
     ],
     "main": "./out/extension.js",
     "scripts": {
