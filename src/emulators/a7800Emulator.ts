@@ -1,8 +1,6 @@
 "use strict";
 import * as path from 'path';
 import * as application from '../application';
-import * as filesystem from '../filesystem';
-import * as execute from '../execute';
 import { EmulatorBase } from "./emulatorBase";
 
 export class A7800Emulator extends EmulatorBase {
@@ -15,7 +13,8 @@ export class A7800Emulator extends EmulatorBase {
         console.log('debugger:StellaEmulator.LoadConfigurationAsync');
 
         // Base
-        if (!await super.LoadConfigurationAsync()) return false;
+        let result = await super.LoadConfigurationAsync();
+        if (!result) return false;
 
         // Emulator
         if (!this.CustomFolderOrPath) {

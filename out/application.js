@@ -27,7 +27,7 @@ exports.Description = vscode.extensions.getExtension(exports.Id).packageJSON.des
 // -------------------------------------------------------------------------------------
 // Channels
 // -------------------------------------------------------------------------------------
-exports.CompilerOutputChannel = vscode.window.createOutputChannel("compiler");
+exports.CompilerOutputChannel = vscode.window.createOutputChannel("Compiler");
 // -------------------------------------------------------------------------------------
 // Compilers
 // Register compilers here and in order of preference
@@ -72,9 +72,7 @@ function BuildGameAsync(fileUri) {
             }
         }
         // Not found
-        let message = `Unable to find a compiler for extension '${fileExtension}'.`;
-        vscode.window.showErrorMessage(message);
-        console.log(message);
+        Notify(`Unable to find a compiler for extension '${fileExtension}'.`);
         return false;
     });
 }
@@ -93,9 +91,7 @@ function BuildGameAndRunAsync(fileUri) {
             }
         }
         // Not found
-        let message = `Unable to find a compiler for extension '${fileExtension}'.`;
-        vscode.window.showErrorMessage(message);
-        console.log(message);
+        Notify(`Unable to find a compiler for extension '${fileExtension}'.`);
         return false;
     });
 }

@@ -65,17 +65,14 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             // Validate
             if (!executeResult)
                 return false;
-            // Verify file size
-            if (!(yield this.VerifyCompiledFileSizeAsync()))
-                return false;
-            // Clean up file(s) creating during compilation
-            if (!(yield this.RemoveCompilationFilesAsync()))
-                return false;
-            // Move file(s) to Bin folder
-            if (!(yield this.MoveFilesToBinFolderAsync()))
-                return false;
+            // Finalise
+            let result = yield this.VerifyCompiledFileSizeAsync();
+            if (result)
+                result = yield this.RemoveCompilationFilesAsync();
+            if (result)
+                result = yield this.MoveFilesToBinFolderAsync();
             // Result
-            return true;
+            return result;
         });
     }
     // protected LoadConfiguration(): boolean {

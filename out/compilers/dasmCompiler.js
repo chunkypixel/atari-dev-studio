@@ -67,14 +67,12 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             // Validate
             if (!executeResult)
                 return false;
-            // Verify file size
-            if (!(yield this.VerifyCompiledFileSizeAsync()))
-                return false;
-            // Move file(s) to Bin folder
-            if (!(yield this.MoveFilesToBinFolderAsync()))
-                return false;
+            // Finalise
+            let result = yield this.VerifyCompiledFileSizeAsync();
+            if (result)
+                result = yield this.MoveFilesToBinFolderAsync();
             // Result
-            return true;
+            return result;
         });
     }
     LoadConfigurationAsync() {
@@ -84,7 +82,8 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.LoadConfigurationAsync');
             // Base
-            if (!(yield _super.LoadConfigurationAsync.call(this)))
+            let result = yield _super.LoadConfigurationAsync.call(this);
+            if (!result)
                 return false;
             // Compiler
             // We use a path instead of a folder for dasm for added flexibility

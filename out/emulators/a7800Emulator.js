@@ -22,7 +22,8 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:StellaEmulator.LoadConfigurationAsync');
             // Base
-            if (!(yield _super.LoadConfigurationAsync.call(this)))
+            let result = yield _super.LoadConfigurationAsync.call(this);
+            if (!result)
                 return false;
             // Emulator
             if (!this.CustomFolderOrPath) {

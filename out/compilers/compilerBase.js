@@ -47,7 +47,8 @@ class CompilerBase {
             // Set
             this.Document = document;
             // Process
-            if (!(yield this.InitialiseAsync()))
+            let result = yield this.InitialiseAsync();
+            if (!result)
                 return false;
             return yield this.ExecuteCompilerAsync();
         });
@@ -55,7 +56,8 @@ class CompilerBase {
     BuildGameAndRunAsync(document) {
         return __awaiter(this, void 0, void 0, function* () {
             // Process
-            if (!(yield this.BuildGameAsync(document)))
+            let result = yield this.BuildGameAsync(document);
+            if (!result)
                 return false;
             // Get emulator
             for (const emulator of application.Emulators) {
@@ -80,7 +82,8 @@ class CompilerBase {
                 return false;
             }
             // Configuration
-            if (!(yield this.LoadConfigurationAsync()))
+            let result = yield this.LoadConfigurationAsync();
+            if (!result)
                 return false;
             // Activate output window?
             if (!this.Configuration.get(`editor.preserveCodeEditorFocus`)) {
@@ -126,7 +129,8 @@ class CompilerBase {
             let userCompilerFolder = this.Configuration.get(`${this.Id}.compilerFolder`);
             if (userCompilerFolder) {
                 // Validate (user provided)
-                if (!(yield filesystem.FolderExistsAsync(userCompilerFolder))) {
+                let result = yield filesystem.FolderExistsAsync(userCompilerFolder);
+                if (!result) {
                     // Notify
                     application.Notify(`ERROR: Cannot locate your chosen ${this.Name} compiler folder '${userCompilerFolder}'`);
                     return false;

@@ -33,18 +33,6 @@
     "contributes": {
         "languages": [
             {
-                "id": "bb",
-                "aliases": [
-                    "batari Basic",
-                    "bb"
-                ],
-                "extensions": [
-                    ".bas",
-                    ".bb"
-                ],
-                "configuration": "./languages/bb.language-configuration.json"
-            },
-            {
                 "id": "78b",
                 "aliases": [
                     "7800basic",
@@ -55,6 +43,18 @@
                     ".78b"
                 ],
                 "configuration": "./languages/78b.language-configuration.json"
+            },
+            {
+                "id": "bb",
+                "aliases": [
+                    "batari Basic",
+                    "bb"
+                ],
+                "extensions": [
+                    ".bas",
+                    ".bb"
+                ],
+                "configuration": "./languages/bb.language-configuration.json"
             },
             {
                 "id": "dasm",
@@ -74,14 +74,14 @@
         ],
         "grammars": [
             {
-                "language": "bb",
-                "scopeName": "source.bb",
-                "path": "./syntaxes/bb.tmLanguage.json"
-            },
-            {
                 "language": "78b",
                 "scopeName": "source.78b",
                 "path": "./syntaxes/78b.tmLanguage.json"
+            },
+            {
+                "language": "bb",
+                "scopeName": "source.bb",
+                "path": "./syntaxes/bb.tmLanguage.json"
             },
             {
                 "language": "dasm",

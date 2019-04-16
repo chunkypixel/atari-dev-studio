@@ -1,5 +1,4 @@
 "use strict";
-import * as path from 'path';
 import * as vscode from 'vscode';
 import * as application from '../application';
 import * as filesystem from '../filesystem';
@@ -31,7 +30,8 @@ export abstract class EmulatorBase implements vscode.Disposable {
         this.File = file;
 
         // Process
-        if (!await this.InitialiseAsync()) return false;
+        let result = await this.InitialiseAsync();
+        if (!result) return false;
         return await this.ExecuteEmulatorAsync();
     }
 
@@ -41,7 +41,8 @@ export abstract class EmulatorBase implements vscode.Disposable {
         console.log('debugger:EmulatorBase.InitialiseAsync');
 
         // Configuration
-        if (!await this.LoadConfigurationAsync()) return false;
+        let result = await this.LoadConfigurationAsync();
+        if (!result) return false;
 
         // Result
         return true;

@@ -52,13 +52,15 @@ export abstract class CompilerBase implements vscode.Disposable {
         this.Document = document;
 
         // Process
-        if (!await this.InitialiseAsync()) return false;
+        let result = await this.InitialiseAsync();
+        if (!result) return false;
         return await this.ExecuteCompilerAsync();
     }
 
     public async BuildGameAndRunAsync(document: vscode.TextDocument): Promise<boolean> {
         // Process
-        if (!await this.BuildGameAsync(document)) return false;
+        let result = await this.BuildGameAsync(document);
+        if (!result) return false;
 
         // Get emulator
         for (const emulator of application.Emulators) {
@@ -88,7 +90,8 @@ export abstract class CompilerBase implements vscode.Disposable {
         }
 
         // Configuration
-        if (!await this.LoadConfigurationAsync()) return false;
+        let result = await this.LoadConfigurationAsync();
+        if (!result) return false;
 
         // Activate output window?
         if (!this.Configuration!.get<boolean>(`editor.preserveCodeEditorFocus`))  {
@@ -137,7 +140,8 @@ export abstract class CompilerBase implements vscode.Disposable {
         let userCompilerFolder = this.Configuration.get<string>(`${this.Id}.compilerFolder`);
         if (userCompilerFolder) {
             // Validate (user provided)
-            if (!await filesystem.FolderExistsAsync(userCompilerFolder)) {
+            let result = await filesystem.FolderExistsAsync(userCompilerFolder);
+            if (!result) {
                 // Notify
                 application.Notify(`ERROR: Cannot locate your chosen ${this.Name} compiler folder '${userCompilerFolder}'`);
                 return false;

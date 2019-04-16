@@ -14,8 +14,9 @@ export class StellaEmulator extends EmulatorBase {
         console.log('debugger:StellaEmulator.LoadConfigurationAsync');
 
         // Base
-        if (!await super.LoadConfigurationAsync()) return false;
-
+        let result = await super.LoadConfigurationAsync();
+        if (!result) return false;
+        
         // Emulator
         if (!this.CustomFolderOrPath) {
             // NOTE: currently Linux and macOS must provide path - this will be checked before launch

@@ -22,7 +22,7 @@ export const Description: string = vscode.extensions.getExtension(Id)!.packageJS
 // -------------------------------------------------------------------------------------
 // Channels
 // -------------------------------------------------------------------------------------
-export const CompilerOutputChannel: vscode.OutputChannel = vscode.window.createOutputChannel("compiler"); 
+export const CompilerOutputChannel: vscode.OutputChannel = vscode.window.createOutputChannel("Compiler"); 
 
 // -------------------------------------------------------------------------------------
 // Compilers
@@ -71,9 +71,7 @@ export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
 	}
 
 	// Not found
-	let message = `Unable to find a compiler for extension '${fileExtension}'.`;
-	vscode.window.showErrorMessage(message);
-	console.log(message)
+	Notify(`Unable to find a compiler for extension '${fileExtension}'.`);
 	return false;
 }
 
@@ -91,9 +89,7 @@ export async function BuildGameAndRunAsync(fileUri: vscode.Uri): Promise<boolean
 	}
 
 	// Not found
-	let message = `Unable to find a compiler for extension '${fileExtension}'.`;
-	vscode.window.showErrorMessage(message);
-	console.log(message)
+	Notify(`Unable to find a compiler for extension '${fileExtension}'.`);
 	return false;
 }
 

@@ -29,7 +29,8 @@ class EmulatorBase {
             // Set
             this.File = file;
             // Process
-            if (!(yield this.InitialiseAsync()))
+            let result = yield this.InitialiseAsync();
+            if (!result)
                 return false;
             return yield this.ExecuteEmulatorAsync();
         });
@@ -38,7 +39,8 @@ class EmulatorBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:EmulatorBase.InitialiseAsync');
             // Configuration
-            if (!(yield this.LoadConfigurationAsync()))
+            let result = yield this.LoadConfigurationAsync();
+            if (!result)
                 return false;
             // Result
             return true;
