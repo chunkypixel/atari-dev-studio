@@ -13,6 +13,8 @@ export abstract class EmulatorBase implements vscode.Disposable {
     public readonly DefaultFolderOrPath: string;
     public FolderOrPath: string = "";
     public Args: string = "";
+    protected File: string = "";  
+    protected Configuration: vscode.WorkspaceConfiguration | undefined;
 
     constructor(id: string, name: string, folderOrPath: string) {
         this.Id = id;
@@ -24,4 +26,58 @@ export abstract class EmulatorBase implements vscode.Disposable {
         console.log('debugger:EmulatorBase.dispose');
     }
 
+    public async RunGameAsync(file: string): Promise<boolean> {
+        // Set
+        this.File = file;
+
+        // Process
+        if (!await this.InitialiseAsync()) return false;
+        return await this.ExecuteEmulatorAsync();
+    }
+
+    protected abstract ExecuteEmulatorAsync(): Promise<boolean>
+    
+    protected async InitialiseAsync(): Promise<boolean> {
+        console.log('debugger:EmulatorBase.InitialiseAsync');
+
+        // Configuration
+        if (!await this.LoadConfigurationAsync()) return false;
+
+        // Result
+        return true;
+    }
+
+    protected async LoadConfigurationAsync(): Promise<boolean> {
+        console.log('debugger:EmulatorBase.LoadConfigurationAsync');      
+
+        // Reset
+        this.CustomFolderOrPath = false;
+        this.FolderOrPath = this.DefaultFolderOrPath;
+        this.Args = "";
+
+        // (Re)load
+        // It appears you need to reload this each time incase of change
+        this.Configuration = vscode.workspace.getConfiguration(application.Name, null);
+
+        // Emulator
+        let userEmulatorPath = this.Configuration.get<string>(`${this.Id}.emulatorPath`)
+        if (userEmulatorPath) {
+            // Validate (user provided)
+            let result = await filesystem.FileExistsAsync(userEmulatorPath);
+            if (!result) {
+                // Notify
+                application.Notify(`ERROR: Cannot locate your chosen ${this.Name} emulator path '${userEmulatorPath}'`);
+                return false;
+            }
+
+            // Set
+            this.FolderOrPath = userEmulatorPath;
+            this.CustomFolderOrPath = true;
+        }
+        // Emulator (Other)
+        this.Args = this.Configuration.get<string>(`${this.Id}.emulatorArgs`,""); 
+
+        // Result
+        return true;
+    }
 }

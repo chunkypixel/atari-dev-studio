@@ -15,7 +15,7 @@ const execute = require("../execute");
 const compilerBase_1 = require("./compilerBase");
 class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     constructor() {
-        super("batariBasic", "batari Basic", [".bas", ".bb"], path.join(application.Path, "out", "bin", "compilers", "bb"));
+        super("batariBasic", "batari Basic", [".bas", ".bb"], path.join(application.Path, "out", "bin", "compilers", "bb"), "Stella");
     }
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -30,11 +30,12 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             }
             // Compiler options
             let command = path.join(this.FolderOrPath, commandName);
+            // Args
             let args = [
                 `"${this.FileName}"`,
                 this.Args
             ];
-            // Compiler environment
+            // Environment
             let env = {};
             env["PATH"] = this.FolderOrPath;
             if (application.IsLinux || application.IsMacOS) {
@@ -42,8 +43,10 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                 env["PATH"] = ":/bin:/usr/bin:" + env["PATH"];
             }
             env["bB"] = this.FolderOrPath;
-            // Process
-            this.outputChannel.appendLine(`Building '${this.FileName}'...`);
+            // Notify
+            // Linux and macOS script has this message already
+            if (application.IsWindows)
+                application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`);
             // Compile
             this.IsRunning = true;
             let executeResult = yield execute.Spawn(command, args, env, this.WorkspaceFolder, (stdout) => {
@@ -61,7 +64,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                     result = false;
                 }
                 // Result
-                this.outputChannel.append('' + stdout);
+                application.CompilerOutputChannel.append('' + stdout);
                 return result;
             }, (stderr) => {
                 // Prepare
@@ -83,12 +86,12 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                 else if (stderr.includes("Cannot open includes.bB for reading")) {
                     // Special - seen this when the source is not processed correctly so we'll advise
                     // obviously doesn't get to the point of copying over this file
-                    this.outputChannel.appendLine("WARNING: An unknown issue has occurred during compilation that may have affected your build....");
+                    application.CompilerOutputChannel.appendLine("WARNING: An unknown issue has occurred during compilation that may have affected your build....");
                     // Failed
                     result = false;
                 }
                 // Result
-                this.outputChannel.append('' + stderr);
+                application.CompilerOutputChannel.append('' + stderr);
                 return result;
             });
             this.IsRunning = false;
@@ -96,13 +99,13 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             if (!executeResult)
                 return false;
             // Verify file size
-            if (yield !this.VerifyCompiledFileSizeAsync())
+            if (!(yield this.VerifyCompiledFileSizeAsync()))
                 return false;
             // Clean up file(s) creating during compilation
-            if (yield !this.RemoveCompilationFilesAsync())
+            if (!(yield this.RemoveCompilationFilesAsync()))
                 return false;
             // Move file(s) to Bin folder
-            if (yield !this.MoveFilesToBinFolderAsync())
+            if (!(yield this.MoveFilesToBinFolderAsync()))
                 return false;
             // Result
             return true;
@@ -126,19 +129,19 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             if (application.IsMacOS)
                 architecture = "Darwin";
             // Process
-            let result = yield filesystem.SetChMod(path.join(this.FolderOrPath, '2600basic.sh'));
+            let result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, '2600basic.sh'));
             if (result)
-                result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `2600basic.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `2600basic.${architecture}.x86`));
             if (result)
-                result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `dasm.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `dasm.${architecture}.x86`));
             if (result)
-                result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `bbfilter.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `bbfilter.${architecture}.x86`));
             if (result)
-                result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `optimize.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `optimize.${architecture}.x86`));
             if (result)
-                result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `postprocess.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `postprocess.${architecture}.x86`));
             if (result)
-                result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `preprocess.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `preprocess.${architecture}.x86`));
             return result;
         });
     }
@@ -146,14 +149,14 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:BatariBasicCompiler.RemoveCompilationFilesAsync');
             // Notify
-            this.notify(`Cleaning up files generated during compilation...`);
+            application.Notify(`Cleaning up files generated during compilation...`);
             // Language specific files
             if (this.CleanUpCompilationFiles) {
                 // Process
-                yield filesystem.RemoveFile(path.join(this.WorkspaceFolder, `${this.FileName}.asm`));
-                yield filesystem.RemoveFile(path.join(this.WorkspaceFolder, `bB.asm`));
-                yield filesystem.RemoveFile(path.join(this.WorkspaceFolder, `includes.bB`));
-                yield filesystem.RemoveFile(path.join(this.WorkspaceFolder, `2600basic_variable_redefs.h`));
+                yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `${this.FileName}.asm`));
+                yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `bB.asm`));
+                yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `includes.bB`));
+                yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `2600basic_variable_redefs.h`));
             }
             // Debugger files (from workspace not bin)
             // Note: Remove if option is turned off as they are generated by bB (cannot change I believe)

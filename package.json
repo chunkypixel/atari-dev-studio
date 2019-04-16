@@ -101,7 +101,7 @@
                 "category": "ads"
             },
             {
-                "command": "extension.BuildGameAndRun",
+                "command": "extension.buildGameAndRun",
                 "title": "Compile source code and run in emulator (automatic)",
                 "category": "ads"
             }
@@ -226,7 +226,7 @@
     "activationEvents": [
         "onCommand:extension.openWelcomePage",
         "onCommand:extension.buildGame",
-        "onCommand:extension.BuildGameAndRun"
+        "onCommand:extension.buildGameAndRun"
     ],
     "main": "./out/extension.js",
     "scripts": {

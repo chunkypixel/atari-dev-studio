@@ -26,7 +26,10 @@ export async function GetDocumentAsync(fileUri: vscode.Uri): Promise<vscode.Text
     // Validate
     if (IsRunFromExplorer(fileUri)) {
         // Make sure document exists
-        if (FileExists(fileUri.fsPath)) return await vscode.workspace.openTextDocument(fileUri);
+        let result = await FileExistsAsync(fileUri.fsPath);
+        if (result) return await vscode.workspace.openTextDocument(fileUri);
+
+        // Not found
         vscode.window.showInformationMessage("Error: File cannot be found");
     }
 
@@ -50,8 +53,8 @@ export function IsRunFromExplorer(fileUri: vscode.Uri): boolean {
     return true;
 }
 
-export function FileExists(path: string): Promise<boolean> {
-    console.log('debugger:filesystem.FileExists');
+export function FileExistsAsync(path: string): Promise<boolean> {
+    console.log('debugger:filesystem.FileExistsAsync');
 
     return new Promise((resolve, reject) => {
         fs.access(path, fs.constants.F_OK, err => {
@@ -60,8 +63,8 @@ export function FileExists(path: string): Promise<boolean> {
     });
 }
 
-export function RenameFile(oldName: string, newName: string): Promise<boolean> {
-    console.log('debugger:filesystem.RenameFile');
+export function RenameFileAsync(oldName: string, newName: string): Promise<boolean> {
+    console.log('debugger:filesystem.RenameFileAsync');
     
     return new Promise((resolve, reject) => {
         fs.rename(oldName, newName, err => {
@@ -70,8 +73,8 @@ export function RenameFile(oldName: string, newName: string): Promise<boolean> {
     }); 
 }
 
-export function GetFileStats(path: string): Promise<fs.Stats> {
-    console.log('debugger:filesystem.GetFileStats');
+export function GetFileStatsAsync(path: string): Promise<fs.Stats> {
+    console.log('debugger:filesystem.GetFileStatsAsync');
     
     return new Promise((resolve, reject) => {
         fs.stat(path, (err, stats) => {
@@ -81,8 +84,8 @@ export function GetFileStats(path: string): Promise<fs.Stats> {
     });     
 }
 
-export function RemoveFile(path: string): Promise<boolean> {
-    console.log('debugger:filesystem.RemoveFile');
+export function RemoveFileAsync(path: string): Promise<boolean> {
+    console.log('debugger:filesystem.RemoveFileAsync');
 
     return new Promise((resolve, reject) => {
         fs.unlink(path, err => {
@@ -91,8 +94,8 @@ export function RemoveFile(path: string): Promise<boolean> {
     });
 }
 
-export function FolderExists(folder: string): Promise<boolean> {
-    console.log('debugger:filesystem.FolderExists');
+export function FolderExistsAsync(folder: string): Promise<boolean> {
+    console.log('debugger:filesystem.FolderExistsAsync');
 
     return new Promise((resolve, reject) => {
         fs.access(folder, fs.constants.F_OK, err => {
@@ -101,17 +104,18 @@ export function FolderExists(folder: string): Promise<boolean> {
     });        
 }
 
-export function MakeDir(folder: string): Promise<boolean> {
-    console.log('debugger:filesystem.MakeDir');
+export function MkDirAsync(folder: string): Promise<boolean> {
+    console.log('debugger:filesystem.MkDirAsync');
     
     return new Promise((resolve, reject) => {
         fs.mkdir(folder, err => {
+            if (err && err.code == 'EEXIST') return resolve(true);
             resolve(!err);
         });
     }); 
 }
 
-export function SetChMod(path: string, mode: string = '777'): Promise<boolean> {
+export function ChModAsync(path: string, mode: string = '777'): Promise<boolean> {
     console.log('debugger:filesystem.SetChMod');
 
     return new Promise((resolve, reject) => {

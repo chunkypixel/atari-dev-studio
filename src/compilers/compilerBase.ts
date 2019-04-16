@@ -15,13 +15,13 @@ export abstract class CompilerBase implements vscode.Disposable {
     // Note: these need to be in reverse order compared to how they are read
     public readonly DebuggerExtensions: Map<string, string> = new Map([["-s",".sym"], ["-l",".lst"]]);;
     public CustomFolderOrPath: boolean = false;
-    public readonly DefaultFolderOrPath: string;
+    protected DefaultFolderOrPath: string;
     public FolderOrPath: string = "";
     public Args: string = "";
     public Format: string = "";
     public Verboseness: string = "";
-    readonly channelName: string = "compiler";
-    readonly outputChannel: vscode.OutputChannel = vscode.window.createOutputChannel(this.channelName);
+    public Emulator: string = "";
+    protected DefaultEmulator: string;
     protected Configuration: vscode.WorkspaceConfiguration | undefined;
     public Document: vscode.TextDocument | undefined;
 
@@ -35,11 +35,12 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected CleanUpCompilationFiles: boolean = false;
     protected WorkspaceFolder: string = "";
     
-    constructor(id: string, name: string, extensions: string[], folderOrPath: string) {
+    constructor(id: string, name: string, extensions: string[], folderOrPath: string, emulator: string) {
         this.Id = id;
         this.Name = name;
         this.Extensions = extensions;
         this.DefaultFolderOrPath = folderOrPath;
+        this.DefaultEmulator = emulator;
     }
 
     public dispose(): void {
@@ -51,40 +52,52 @@ export abstract class CompilerBase implements vscode.Disposable {
         this.Document = document;
 
         // Process
-        if (await !this.InitialiseAsync()) return false;
+        if (!await this.InitialiseAsync()) return false;
         return await this.ExecuteCompilerAsync();
     }
 
     public async BuildGameAndRunAsync(document: vscode.TextDocument): Promise<boolean> {
         // Process
-        if (await !this.BuildGameAsync(document)) return false;
-        // TODO: launch emulator here
+        if (!await this.BuildGameAsync(document)) return false;
+
+        // Get emulator
+        for (const emulator of application.Emulators) {
+            if (emulator.Id === this.Emulator) {
+                return await emulator.RunGameAsync(path.join(this.CompiledSubFolder,this.CompiledFileName));
+            }
+        }
+
+        // Not found
+        application.Notify(`Unable to find emulator '${this.Emulator}' to launch game.`);
+        return false;
+
+        // Result
         return true;
     }
 
     protected abstract ExecuteCompilerAsync(): Promise<boolean> 
 
     protected async InitialiseAsync(): Promise<boolean> {
-        console.log('debugger:CompilerBase.InitialiseConfigurationAsync');
+        console.log('debugger:CompilerBase.InitialiseAsync');
 
         // Already running?
         if (this.IsRunning) {
             // Notify
-            this.notify(`The ${this.Name} compiler is already running! If you want to cancel the compilation activate the Stop/Kill command.`);
+            application.Notify(`The ${this.Name} compiler is already running! If you want to cancel the compilation activate the Stop/Kill command.`);
             return false;
         }
 
         // Configuration
-        if (!await this.LoadConfiguration()) return false;
+        if (!await this.LoadConfigurationAsync()) return false;
 
         // Activate output window?
         if (!this.Configuration!.get<boolean>(`editor.preserveCodeEditorFocus`))  {
-            this.outputChannel.show();
+            application.CompilerOutputChannel.show();
         }
 
         // Clear output content?
         if (this.Configuration!.get<boolean>(`editor.clearPreviousOutput`))  {
-            this.outputChannel.clear();
+            application.CompilerOutputChannel.clear();
         }
 
         // Save files?
@@ -105,8 +118,8 @@ export abstract class CompilerBase implements vscode.Disposable {
         return true;
     }
 
-    protected LoadConfiguration(): boolean {
-        console.log('debugger:CompilerBase.LoadConfiguration');  
+    protected async LoadConfigurationAsync(): Promise<boolean> {
+        console.log('debugger:CompilerBase.LoadConfigurationAsync');  
 
         // Reset
         this.CustomFolderOrPath = false;
@@ -114,6 +127,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         this.Args = "";
         this.Format = "";
         this.Verboseness = "";
+        this.Emulator = this.DefaultEmulator;
 
         // (Re)load
         // It appears you need to reload this each time incase of change
@@ -123,9 +137,9 @@ export abstract class CompilerBase implements vscode.Disposable {
         let userCompilerFolder = this.Configuration.get<string>(`${this.Id}.compilerFolder`);
         if (userCompilerFolder) {
             // Validate (user provided)
-            if (!filesystem.FolderExists(userCompilerFolder)) {
+            if (!await filesystem.FolderExistsAsync(userCompilerFolder)) {
                 // Notify
-                this.notify(`ERROR: Cannot locate your chosen ${this.Name} compiler folder '${userCompilerFolder}'`);
+                application.Notify(`ERROR: Cannot locate your chosen ${this.Name} compiler folder '${userCompilerFolder}'`);
                 return false;
             }
 
@@ -159,17 +173,17 @@ export abstract class CompilerBase implements vscode.Disposable {
         let compiledFilePath = path.join(this.WorkspaceFolder, this.CompiledFileName);
 
         // Process
-        let stats = await filesystem.GetFileStats(compiledFilePath);
-        if (stats) {
+        let fileStats = await filesystem.GetFileStatsAsync(compiledFilePath);
+        if (fileStats) {
             // Validate
-            if (stats.size > 0) { return true; }
+            if (fileStats.size > 0) { return true; }
 
             // Notify
-            this.notify(`ERROR: Failed to create compiled file '${this.CompiledFileName}'. The file size is 0 bytes...`);      
+            application.Notify(`ERROR: Failed to create compiled file '${this.CompiledFileName}'. The file size is 0 bytes...`);      
         }
 
         // Failed
-        this.notify(`ERROR: Failed to create compiled file '${this.CompiledFileName}'.`);     
+        application.Notify(`ERROR: Failed to create compiled file '${this.CompiledFileName}'.`);     
         return false;
     }
 
@@ -178,30 +192,32 @@ export abstract class CompilerBase implements vscode.Disposable {
         console.log('debugger:CompilerBase.MoveFilesToBinFolder');
 
         // Create directory?
-        if (await !filesystem.MakeDir(this.CompiledSubFolder)) {
+        let result = await filesystem.MkDirAsync(this.CompiledSubFolder);
+        if (!result) {
             // Notify
-            this.notify(`ERROR: Failed to create folder '${this.CompiledSubFolderName}'`);
+            application.Notify(`ERROR: Failed to create folder '${this.CompiledSubFolderName}'`);
             return false;         
         }
 
         // Notify
-        this.notify(`Moving compiled file '${this.CompiledFileName}' to '${this.CompiledSubFolderName}' folder...`);
+        application.Notify(`Moving compiled file '${this.CompiledFileName}' to '${this.CompiledSubFolderName}' folder...`);
 
         // Prepare
         let oldPath = path.join(this.WorkspaceFolder, this.CompiledFileName);
         let newPath = path.join(this.CompiledSubFolder, this.CompiledFileName);
 
         // Move compiled file
-        if (await !filesystem.RenameFile(oldPath, newPath)) {
+        result = await filesystem.RenameFileAsync(oldPath, newPath);
+        if (!result) {
             // Notify
-            this.notify(`ERROR: Failed to move file from '${this.CompiledFileName}' to ${this.CompiledSubFolderName} folder`);
+            application.Notify(`ERROR: Failed to move file from '${this.CompiledFileName}' to ${this.CompiledSubFolderName} folder`);
             return false;            
         }
 
         // Move all debugger files?
         if (this.GenerateDebuggerFiles)  {          
             // Notify
-            this.notify(`Moving debugger files to '${this.CompiledSubFolderName}' folder...`);
+            application.Notify(`Moving debugger files to '${this.CompiledSubFolderName}' folder...`);
 
             // Process
             this.DebuggerExtensions.forEach(async (extension: string, arg: string) => {
@@ -211,9 +227,10 @@ export abstract class CompilerBase implements vscode.Disposable {
                 let newPath = path.join(this.CompiledSubFolder, debuggerFile);
 
                 // Move compiled file
-                if (await !filesystem.RenameFile(oldPath, newPath)) {
+                result = await filesystem.RenameFileAsync(oldPath, newPath);
+                if (!result) {
                     // Notify            
-                    this.notify(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);          
+                    application.Notify(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);          
                 };
             });
         }
@@ -232,7 +249,7 @@ export abstract class CompilerBase implements vscode.Disposable {
             let debuggerFilePath = path.join(folder, debuggerFile);
 
             // Process
-            await filesystem.RemoveFile(debuggerFilePath);
+            await filesystem.RemoveFileAsync(debuggerFilePath);
         }); 
 
         // Result
@@ -242,24 +259,23 @@ export abstract class CompilerBase implements vscode.Disposable {
     private getWorkspaceFolder(): string {
         console.log('debugger:CompilerBase.getWorkspaceFolder');
 
-        // Workspace
+        // Issue: Get actual document first as the workspace
+        //        is not the best option when file is in a subfolder
+        //        of the chosen workspace
+
+        // Document
+        if (this.Document) return path.dirname(this.Document.fileName);
+
+        // Workspace (last resort)
         if (vscode.workspace.workspaceFolders) {
             if (this.Document) {
-                let workspaceFolder = vscode.workspace.getWorkspaceFolder(this.Document.uri);
+                let workspaceFolder = vscode.workspace.getWorkspaceFolder(this.Document!.uri);
                 if (workspaceFolder) {
                     return workspaceFolder.uri.fsPath;
                 }
             }
             return vscode.workspace.workspaceFolders[0].uri.fsPath;
         }
-
-        // Document
-        if (this.Document) return path.dirname(this.Document.fileName);
         return "";
-    }
-
-    protected notify(message: string): void {
-        this.outputChannel.appendLine(message);
-        console.log(`debugger:${message}`);        
     }
 }

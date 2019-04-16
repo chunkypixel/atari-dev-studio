@@ -13,7 +13,7 @@ const vscode = require("vscode");
 const application = require("../application");
 const filesystem = require("../filesystem");
 class CompilerBase {
-    constructor(id, name, extensions, folderOrPath) {
+    constructor(id, name, extensions, folderOrPath, emulator) {
         // features
         this.IsRunning = false;
         // Note: these need to be in reverse order compared to how they are read
@@ -23,8 +23,7 @@ class CompilerBase {
         this.Args = "";
         this.Format = "";
         this.Verboseness = "";
-        this.channelName = "compiler";
-        this.outputChannel = vscode.window.createOutputChannel(this.channelName);
+        this.Emulator = "";
         this.FileName = "";
         this.CompiledFileName = "";
         this.CompiledSubFolder = "";
@@ -37,6 +36,7 @@ class CompilerBase {
         this.Name = name;
         this.Extensions = extensions;
         this.DefaultFolderOrPath = folderOrPath;
+        this.DefaultEmulator = emulator;
     }
     ;
     dispose() {
@@ -47,7 +47,7 @@ class CompilerBase {
             // Set
             this.Document = document;
             // Process
-            if (yield !this.InitialiseAsync())
+            if (!(yield this.InitialiseAsync()))
                 return false;
             return yield this.ExecuteCompilerAsync();
         });
@@ -55,31 +55,40 @@ class CompilerBase {
     BuildGameAndRunAsync(document) {
         return __awaiter(this, void 0, void 0, function* () {
             // Process
-            if (yield !this.BuildGameAsync(document))
+            if (!(yield this.BuildGameAsync(document)))
                 return false;
-            // TODO: launch emulator here
+            // Get emulator
+            for (const emulator of application.Emulators) {
+                if (emulator.Id === this.Emulator) {
+                    return yield emulator.RunGameAsync(path.join(this.CompiledSubFolder, this.CompiledFileName));
+                }
+            }
+            // Not found
+            application.Notify(`Unable to find emulator '${this.Emulator}' to launch game.`);
+            return false;
+            // Result
             return true;
         });
     }
     InitialiseAsync() {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:CompilerBase.InitialiseConfigurationAsync');
+            console.log('debugger:CompilerBase.InitialiseAsync');
             // Already running?
             if (this.IsRunning) {
                 // Notify
-                this.notify(`The ${this.Name} compiler is already running! If you want to cancel the compilation activate the Stop/Kill command.`);
+                application.Notify(`The ${this.Name} compiler is already running! If you want to cancel the compilation activate the Stop/Kill command.`);
                 return false;
             }
             // Configuration
-            if (!(yield this.LoadConfiguration()))
+            if (!(yield this.LoadConfigurationAsync()))
                 return false;
             // Activate output window?
             if (!this.Configuration.get(`editor.preserveCodeEditorFocus`)) {
-                this.outputChannel.show();
+                application.CompilerOutputChannel.show();
             }
             // Clear output content?
             if (this.Configuration.get(`editor.clearPreviousOutput`)) {
-                this.outputChannel.clear();
+                application.CompilerOutputChannel.clear();
             }
             // Save files?
             if (this.Configuration.get(`editor.saveAllFilesBeforeRun`)) {
@@ -100,44 +109,47 @@ class CompilerBase {
             return true;
         });
     }
-    LoadConfiguration() {
-        console.log('debugger:CompilerBase.LoadConfiguration');
-        // Reset
-        this.CustomFolderOrPath = false;
-        this.FolderOrPath = this.DefaultFolderOrPath;
-        this.Args = "";
-        this.Format = "";
-        this.Verboseness = "";
-        // (Re)load
-        // It appears you need to reload this each time incase of change
-        this.Configuration = vscode.workspace.getConfiguration(application.Name, null);
-        // Compiler
-        let userCompilerFolder = this.Configuration.get(`${this.Id}.compilerFolder`);
-        if (userCompilerFolder) {
-            // Validate (user provided)
-            if (!filesystem.FolderExists(userCompilerFolder)) {
-                // Notify
-                this.notify(`ERROR: Cannot locate your chosen ${this.Name} compiler folder '${userCompilerFolder}'`);
-                return false;
+    LoadConfigurationAsync() {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('debugger:CompilerBase.LoadConfigurationAsync');
+            // Reset
+            this.CustomFolderOrPath = false;
+            this.FolderOrPath = this.DefaultFolderOrPath;
+            this.Args = "";
+            this.Format = "";
+            this.Verboseness = "";
+            this.Emulator = this.DefaultEmulator;
+            // (Re)load
+            // It appears you need to reload this each time incase of change
+            this.Configuration = vscode.workspace.getConfiguration(application.Name, null);
+            // Compiler
+            let userCompilerFolder = this.Configuration.get(`${this.Id}.compilerFolder`);
+            if (userCompilerFolder) {
+                // Validate (user provided)
+                if (!(yield filesystem.FolderExistsAsync(userCompilerFolder))) {
+                    // Notify
+                    application.Notify(`ERROR: Cannot locate your chosen ${this.Name} compiler folder '${userCompilerFolder}'`);
+                    return false;
+                }
+                // Set
+                this.FolderOrPath = userCompilerFolder;
+                this.CustomFolderOrPath = true;
             }
-            // Set
-            this.FolderOrPath = userCompilerFolder;
-            this.CustomFolderOrPath = true;
-        }
-        // Compiler (other)
-        this.Args = this.Configuration.get(`${this.Id}.compilerArgs`, "");
-        this.Format = this.Configuration.get(`${this.Id}.compilerFormat`, "3");
-        this.Verboseness = this.Configuration.get(`${this.Id}.compilerVerboseness`, "0");
-        // Compilation
-        this.GenerateDebuggerFiles = this.Configuration.get(`compilation.generateDebuggerFiles`, true);
-        this.CleanUpCompilationFiles = this.Configuration.get(`compilation.cleanupCompilationFiles`, true);
-        // System
-        this.WorkspaceFolder = this.getWorkspaceFolder();
-        this.FileName = path.basename(this.Document.fileName);
-        this.CompiledFileName = `${this.FileName}${this.CompiledExtensionName}`;
-        this.CompiledSubFolder = path.join(this.WorkspaceFolder, this.CompiledSubFolderName);
-        // Result
-        return true;
+            // Compiler (other)
+            this.Args = this.Configuration.get(`${this.Id}.compilerArgs`, "");
+            this.Format = this.Configuration.get(`${this.Id}.compilerFormat`, "3");
+            this.Verboseness = this.Configuration.get(`${this.Id}.compilerVerboseness`, "0");
+            // Compilation
+            this.GenerateDebuggerFiles = this.Configuration.get(`compilation.generateDebuggerFiles`, true);
+            this.CleanUpCompilationFiles = this.Configuration.get(`compilation.cleanupCompilationFiles`, true);
+            // System
+            this.WorkspaceFolder = this.getWorkspaceFolder();
+            this.FileName = path.basename(this.Document.fileName);
+            this.CompiledFileName = `${this.FileName}${this.CompiledExtensionName}`;
+            this.CompiledSubFolder = path.join(this.WorkspaceFolder, this.CompiledSubFolderName);
+            // Result
+            return true;
+        });
     }
     VerifyCompiledFileSizeAsync() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -145,17 +157,17 @@ class CompilerBase {
             // Prepare
             let compiledFilePath = path.join(this.WorkspaceFolder, this.CompiledFileName);
             // Process
-            let stats = yield filesystem.GetFileStats(compiledFilePath);
-            if (stats) {
+            let fileStats = yield filesystem.GetFileStatsAsync(compiledFilePath);
+            if (fileStats) {
                 // Validate
-                if (stats.size > 0) {
+                if (fileStats.size > 0) {
                     return true;
                 }
                 // Notify
-                this.notify(`ERROR: Failed to create compiled file '${this.CompiledFileName}'. The file size is 0 bytes...`);
+                application.Notify(`ERROR: Failed to create compiled file '${this.CompiledFileName}'. The file size is 0 bytes...`);
             }
             // Failed
-            this.notify(`ERROR: Failed to create compiled file '${this.CompiledFileName}'.`);
+            application.Notify(`ERROR: Failed to create compiled file '${this.CompiledFileName}'.`);
             return false;
         });
     }
@@ -164,26 +176,28 @@ class CompilerBase {
             // Note: generateDebuggerFile - there are different settings for each compiler
             console.log('debugger:CompilerBase.MoveFilesToBinFolder');
             // Create directory?
-            if (yield !filesystem.MakeDir(this.CompiledSubFolder)) {
+            let result = yield filesystem.MkDirAsync(this.CompiledSubFolder);
+            if (!result) {
                 // Notify
-                this.notify(`ERROR: Failed to create folder '${this.CompiledSubFolderName}'`);
+                application.Notify(`ERROR: Failed to create folder '${this.CompiledSubFolderName}'`);
                 return false;
             }
             // Notify
-            this.notify(`Moving compiled file '${this.CompiledFileName}' to '${this.CompiledSubFolderName}' folder...`);
+            application.Notify(`Moving compiled file '${this.CompiledFileName}' to '${this.CompiledSubFolderName}' folder...`);
             // Prepare
             let oldPath = path.join(this.WorkspaceFolder, this.CompiledFileName);
             let newPath = path.join(this.CompiledSubFolder, this.CompiledFileName);
             // Move compiled file
-            if (yield !filesystem.RenameFile(oldPath, newPath)) {
+            result = yield filesystem.RenameFileAsync(oldPath, newPath);
+            if (!result) {
                 // Notify
-                this.notify(`ERROR: Failed to move file from '${this.CompiledFileName}' to ${this.CompiledSubFolderName} folder`);
+                application.Notify(`ERROR: Failed to move file from '${this.CompiledFileName}' to ${this.CompiledSubFolderName} folder`);
                 return false;
             }
             // Move all debugger files?
             if (this.GenerateDebuggerFiles) {
                 // Notify
-                this.notify(`Moving debugger files to '${this.CompiledSubFolderName}' folder...`);
+                application.Notify(`Moving debugger files to '${this.CompiledSubFolderName}' folder...`);
                 // Process
                 this.DebuggerExtensions.forEach((extension, arg) => __awaiter(this, void 0, void 0, function* () {
                     // Prepare
@@ -191,9 +205,10 @@ class CompilerBase {
                     let oldPath = path.join(this.WorkspaceFolder, debuggerFile);
                     let newPath = path.join(this.CompiledSubFolder, debuggerFile);
                     // Move compiled file
-                    if (yield !filesystem.RenameFile(oldPath, newPath)) {
+                    result = yield filesystem.RenameFileAsync(oldPath, newPath);
+                    if (!result) {
                         // Notify            
-                        this.notify(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);
+                        application.Notify(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);
                     }
                     ;
                 }));
@@ -211,7 +226,7 @@ class CompilerBase {
                 let debuggerFile = `${this.FileName}${extension}`;
                 let debuggerFilePath = path.join(folder, debuggerFile);
                 // Process
-                yield filesystem.RemoveFile(debuggerFilePath);
+                yield filesystem.RemoveFileAsync(debuggerFilePath);
             }));
             // Result
             return true;
@@ -219,7 +234,13 @@ class CompilerBase {
     }
     getWorkspaceFolder() {
         console.log('debugger:CompilerBase.getWorkspaceFolder');
-        // Workspace
+        // Issue: Get actual document first as the workspace
+        //        is not the best option when file is in a subfolder
+        //        of the chosen workspace
+        // Document
+        if (this.Document)
+            return path.dirname(this.Document.fileName);
+        // Workspace (last resort)
         if (vscode.workspace.workspaceFolders) {
             if (this.Document) {
                 let workspaceFolder = vscode.workspace.getWorkspaceFolder(this.Document.uri);
@@ -229,14 +250,7 @@ class CompilerBase {
             }
             return vscode.workspace.workspaceFolders[0].uri.fsPath;
         }
-        // Document
-        if (this.Document)
-            return path.dirname(this.Document.fileName);
         return "";
-    }
-    notify(message) {
-        this.outputChannel.appendLine(message);
-        console.log(`debugger:${message}`);
     }
 }
 exports.CompilerBase = CompilerBase;

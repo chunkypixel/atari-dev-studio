@@ -25,6 +25,10 @@ exports.Version = vscode.extensions.getExtension(exports.Id).packageJSON.version
 exports.DisplayName = vscode.extensions.getExtension(exports.Id).packageJSON.displayName;
 exports.Description = vscode.extensions.getExtension(exports.Id).packageJSON.description;
 // -------------------------------------------------------------------------------------
+// Channels
+// -------------------------------------------------------------------------------------
+exports.CompilerOutputChannel = vscode.window.createOutputChannel("compiler");
+// -------------------------------------------------------------------------------------
 // Compilers
 // Register compilers here and in order of preference
 // -------------------------------------------------------------------------------------
@@ -35,7 +39,7 @@ exports.Compilers = [
 ];
 // -------------------------------------------------------------------------------------
 // Emulators
-// Register compilers here and in order of preference
+// Register emulators here and in order of preference
 // -------------------------------------------------------------------------------------
 exports.Emulators = [
     new stellaEmulator_1.StellaEmulator(),
@@ -45,7 +49,7 @@ exports.Emulators = [
 // Operating System
 // -------------------------------------------------------------------------------------
 exports.OSPlatform = os.platform();
-exports.OsArch = os.arch();
+exports.OSArch = os.arch();
 exports.IsWindows = (os.platform() === 'win32');
 exports.IsLinux = (os.platform() === 'linux');
 exports.IsMacOS = (os.platform() === 'darwin');
@@ -96,4 +100,9 @@ function BuildGameAndRunAsync(fileUri) {
     });
 }
 exports.BuildGameAndRunAsync = BuildGameAndRunAsync;
+function Notify(message) {
+    exports.CompilerOutputChannel.appendLine(message);
+    console.log(`debugger:${message}`);
+}
+exports.Notify = Notify;
 //# sourceMappingURL=application.js.map

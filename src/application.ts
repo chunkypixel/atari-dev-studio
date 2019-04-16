@@ -20,6 +20,11 @@ export const DisplayName: string = vscode.extensions.getExtension(Id)!.packageJS
 export const Description: string = vscode.extensions.getExtension(Id)!.packageJSON.description;
 
 // -------------------------------------------------------------------------------------
+// Channels
+// -------------------------------------------------------------------------------------
+export const CompilerOutputChannel: vscode.OutputChannel = vscode.window.createOutputChannel("compiler"); 
+
+// -------------------------------------------------------------------------------------
 // Compilers
 // Register compilers here and in order of preference
 // -------------------------------------------------------------------------------------
@@ -31,7 +36,7 @@ export const Compilers:CompilerBase[] = [
 
 // -------------------------------------------------------------------------------------
 // Emulators
-// Register compilers here and in order of preference
+// Register emulators here and in order of preference
 // -------------------------------------------------------------------------------------
 export const Emulators:EmulatorBase[] = [
 	new StellaEmulator(),
@@ -42,7 +47,7 @@ export const Emulators:EmulatorBase[] = [
 // Operating System
 // -------------------------------------------------------------------------------------
 export const OSPlatform: any = os.platform();
-export const OsArch: any = os.arch();
+export const OSArch: any = os.arch();
 export const IsWindows: boolean = (os.platform() === 'win32');
 export const IsLinux: boolean = (os.platform() === 'linux');
 export const IsMacOS: boolean = (os.platform() === 'darwin');
@@ -90,4 +95,9 @@ export async function BuildGameAndRunAsync(fileUri: vscode.Uri): Promise<boolean
 	vscode.window.showErrorMessage(message);
 	console.log(message)
 	return false;
+}
+
+export function Notify(message: string): void {
+	CompilerOutputChannel.appendLine(message);
+	console.log(`debugger:${message}`);        
 }

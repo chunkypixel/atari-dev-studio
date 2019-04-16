@@ -15,7 +15,7 @@ const execute = require("../execute");
 const compilerBase_1 = require("./compilerBase");
 class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
     constructor() {
-        super("7800basic", "7800basic", [".bas", ".78b"], path.join(application.Path, "out", "bin", "compilers", "7800basic"));
+        super("7800basic", "7800basic", [".bas", ".78b"], path.join(application.Path, "out", "bin", "compilers", "7800basic"), "A7800");
     }
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -42,21 +42,23 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
                 env["PATH"] = ":/bin:/usr/bin:" + env["PATH"];
             }
             env["bB"] = this.FolderOrPath;
-            // Process
-            this.outputChannel.appendLine(`Building '${this.FileName}'...`);
+            // Notify
+            // Linux and macOS script has this message already
+            if (application.IsWindows)
+                application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`);
             // Compile
             this.IsRunning = true;
             let executeResult = yield execute.Spawn(command, args, env, this.WorkspaceFolder, (stdout) => {
                 // Prepare
                 let result = true;
                 // Result
-                this.outputChannel.append('' + stdout);
+                application.CompilerOutputChannel.append('' + stdout);
                 return result;
             }, (stderr) => {
                 // Prepare
                 let result = true;
                 // Result
-                this.outputChannel.append('' + stderr);
+                application.CompilerOutputChannel.append('' + stderr);
                 return result;
             });
             this.IsRunning = false;
@@ -64,13 +66,13 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             if (!executeResult)
                 return false;
             // Verify file size
-            if (yield !this.VerifyCompiledFileSizeAsync())
+            if (!(yield this.VerifyCompiledFileSizeAsync()))
                 return false;
             // Clean up file(s) creating during compilation
-            if (yield !this.RemoveCompilationFilesAsync())
+            if (!(yield this.RemoveCompilationFilesAsync()))
                 return false;
             // Move file(s) to Bin folder
-            if (yield !this.MoveFilesToBinFolderAsync())
+            if (!(yield this.MoveFilesToBinFolderAsync()))
                 return false;
             // Result
             return true;
@@ -94,23 +96,23 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             if (application.IsMacOS)
                 architecture = "Darwin";
             // Process
-            let result = yield filesystem.SetChMod(path.join(this.FolderOrPath, '7800basic.sh'));
+            let result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, '7800basic.sh'));
             if (result)
-                result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `7800basic.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800basic.${architecture}.x86`));
             if (result)
-                result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `7800filter.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800filter.${architecture}.x86`));
             if (result)
-                result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `7800header.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800header.${architecture}.x86`));
             if (result)
-                result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `7800optimize.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800optimize.${architecture}.x86`));
             if (result)
-                result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `7800postprocess.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800postprocess.${architecture}.x86`));
             if (result)
-                result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `7800preprocess.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800preprocess.${architecture}.x86`));
             if (result)
-                result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `dasm.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `dasm.${architecture}.x86`));
             if (result)
-                result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `distella.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `distella.${architecture}.x86`));
             return result;
         });
     }
@@ -118,7 +120,7 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SeventyEightHundredBasicCompiler.RemoveCompilationFiles');
             // Notify
-            this.notify(`Cleaning up files generated during compilation...`);
+            application.Notify(`Cleaning up files generated during compilation...`);
             // // Language specific files
             // if (this.CleanUpCompilationFiles)  {
             //     // Process

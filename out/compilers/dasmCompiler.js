@@ -15,7 +15,7 @@ const execute = require("../execute");
 const compilerBase_1 = require("./compilerBase");
 class DasmCompiler extends compilerBase_1.CompilerBase {
     constructor() {
-        super("dasm", "dasm", [".dasm", ".asm", ".a", ".h"], path.join(application.Path, "out", "bin", "compilers", "dasm"));
+        super("dasm", "dasm", [".dasm", ".asm", ".a", ".h"], path.join(application.Path, "out", "bin", "compilers", "dasm"), "Stella");
     }
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -46,21 +46,21 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             }
             // Env
             let env = {};
-            // Process
-            this.outputChannel.appendLine(`Building '${this.FileName}'...`);
+            // Notify
+            application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`);
             // Compile
             this.IsRunning = true;
             let executeResult = yield execute.Spawn(command, args, env, this.WorkspaceFolder, (stdout) => {
                 // Prepare
                 let result = true;
                 // Result
-                this.outputChannel.append('' + stdout);
+                application.CompilerOutputChannel.append('' + stdout);
                 return result;
             }, (stderr) => {
                 // Prepare
                 let result = true;
                 // Result
-                this.outputChannel.append('' + stderr);
+                application.CompilerOutputChannel.append('' + stderr);
                 return result;
             });
             this.IsRunning = false;
@@ -68,51 +68,63 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             if (!executeResult)
                 return false;
             // Verify file size
-            if (yield !this.VerifyCompiledFileSizeAsync())
+            if (!(yield this.VerifyCompiledFileSizeAsync()))
                 return false;
             // Move file(s) to Bin folder
-            if (yield !this.MoveFilesToBinFolderAsync())
+            if (!(yield this.MoveFilesToBinFolderAsync()))
                 return false;
             // Result
             return true;
         });
     }
-    LoadConfiguration() {
-        console.log('debugger:DasmCompiler.LoadConfiguration');
-        // Base
-        if (!super.LoadConfiguration())
-            return false;
-        // Compiler
-        // We use a path instead of a folder for dasm for added flexibility
-        this.CustomFolderOrPath = false;
-        let userCompilerPath = this.Configuration.get(`${this.Id}.compilerPath`);
-        if (userCompilerPath) {
-            // Validate (user provided)
-            if (!filesystem.FileExists(userCompilerPath)) {
-                // Notify
-                this.notify(`ERROR: Cannot locate your chosen ${this.Name} compiler path '${userCompilerPath}'`);
+    LoadConfigurationAsync() {
+        const _super = Object.create(null, {
+            LoadConfigurationAsync: { get: () => super.LoadConfigurationAsync }
+        });
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('debugger:DasmCompiler.LoadConfigurationAsync');
+            // Base
+            if (!(yield _super.LoadConfigurationAsync.call(this)))
                 return false;
+            // Compiler
+            // We use a path instead of a folder for dasm for added flexibility
+            this.CustomFolderOrPath = false;
+            let userCompilerPath = this.Configuration.get(`${this.Id}.compilerPath`);
+            if (userCompilerPath) {
+                // Validate (user provided)
+                let result = yield filesystem.FileExistsAsync(userCompilerPath);
+                if (!result) {
+                    // Notify
+                    application.Notify(`ERROR: Cannot locate your chosen ${this.Name} compiler path '${userCompilerPath}'`);
+                    return false;
+                }
+                // Set
+                this.FolderOrPath = userCompilerPath;
+                this.CustomFolderOrPath = true;
             }
-            // Set
-            this.FolderOrPath = userCompilerPath;
-            this.CustomFolderOrPath = true;
-        }
-        else {
-            // dasm command (depends on OS)
-            let dasmCommand = "dasm.exe";
-            if (application.IsLinux) {
-                // Linux
-                dasmCommand = "dasm.Linux.x86";
+            else {
+                // dasm command (depends on OS)
+                let dasmCommand = "dasm.exe";
+                if (application.IsLinux) {
+                    // Linux
+                    dasmCommand = "dasm.Linux.x86";
+                }
+                else if (application.IsMacOS) {
+                    // MacOS
+                    dasmCommand = "dasm.Darwin.x86";
+                }
+                // Use the default
+                this.FolderOrPath = path.join(this.DefaultFolderOrPath, dasmCommand);
             }
-            else if (application.IsMacOS) {
-                // MacOS
-                dasmCommand = "dasm.Darwin.x86";
+            // Emulator
+            // User can select required emulator from settings
+            let userDefaultEmulator = this.Configuration.get(`${this.Id}.defaultEmulator`);
+            if (userDefaultEmulator) {
+                this.Emulator = userDefaultEmulator;
             }
-            // Use the default
-            this.FolderOrPath = path.join(this.DefaultFolderOrPath, dasmCommand);
-        }
-        // Result
-        return true;
+            // Result
+            return true;
+        });
     }
     RepairFilePermissionsAsync() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -125,7 +137,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             if (application.IsMacOS)
                 architecture = "Darwin";
             // Process
-            let result = yield filesystem.SetChMod(path.join(this.FolderOrPath, `dasm.${architecture}.x86`));
+            let result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `dasm.${architecture}.x86`));
             return result;
         });
     }

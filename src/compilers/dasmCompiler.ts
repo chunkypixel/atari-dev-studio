@@ -8,9 +8,9 @@ import { CompilerBase } from "./compilerBase";
 export class DasmCompiler extends CompilerBase {
 
     constructor() {
-        super("dasm","dasm",[".dasm",".asm",".a",".h"],path.join(application.Path,"out","bin","compilers","dasm"));
-            
+        super("dasm","dasm",[".dasm",".asm",".a",".h"],path.join(application.Path,"out","bin","compilers","dasm"),"Stella");           
     }
+
     protected async ExecuteCompilerAsync(): Promise<boolean> {
         console.log('debugger:DasmCompiler.ExecuteCompilerAsync');
 
@@ -38,8 +38,8 @@ export class DasmCompiler extends CompilerBase {
         // Env
         let env : { [key: string]: string | null } = {};
 
-        // Process
-        this.outputChannel.appendLine(`Building '${this.FileName}'...`); 
+        // Notify
+        application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`); 
 
         // Compile
         this.IsRunning = true;
@@ -49,7 +49,7 @@ export class DasmCompiler extends CompilerBase {
                 let result = true;
 
                 // Result
-                this.outputChannel.append('' + stdout);
+                application.CompilerOutputChannel.append('' + stdout);
                 return result;
             },
             (stderr: string) => {
@@ -57,7 +57,7 @@ export class DasmCompiler extends CompilerBase {
                 let result = true;
 
                 // Result
-                this.outputChannel.append('' + stderr);
+                application.CompilerOutputChannel.append('' + stderr);
                 return result;
             });
         this.IsRunning = false;
@@ -66,20 +66,20 @@ export class DasmCompiler extends CompilerBase {
         if (!executeResult) return false;
 
         // Verify file size
-        if (await !this.VerifyCompiledFileSizeAsync()) return false;
+        if (!await this.VerifyCompiledFileSizeAsync()) return false;
 
         // Move file(s) to Bin folder
-        if (await !this.MoveFilesToBinFolderAsync()) return false;
+        if (!await this.MoveFilesToBinFolderAsync()) return false;
 
         // Result
         return true;
     }
 
-    protected LoadConfiguration(): boolean {
-        console.log('debugger:DasmCompiler.LoadConfiguration');  
+    protected async LoadConfigurationAsync(): Promise<boolean> {
+        console.log('debugger:DasmCompiler.LoadConfigurationAsync');  
 
         // Base
-        if (!super.LoadConfiguration()) return false;
+        if (!await super.LoadConfigurationAsync()) return false;
 
         // Compiler
         // We use a path instead of a folder for dasm for added flexibility
@@ -87,9 +87,10 @@ export class DasmCompiler extends CompilerBase {
         let userCompilerPath = this.Configuration!.get<string>(`${this.Id}.compilerPath`);
         if (userCompilerPath) {
             // Validate (user provided)
-            if (!filesystem.FileExists(userCompilerPath)) {
+            let result = await filesystem.FileExistsAsync(userCompilerPath);
+            if (!result) {
                 // Notify
-                this.notify(`ERROR: Cannot locate your chosen ${this.Name} compiler path '${userCompilerPath}'`);
+                application.Notify(`ERROR: Cannot locate your chosen ${this.Name} compiler path '${userCompilerPath}'`);
                 return false;
             }
 
@@ -110,6 +111,13 @@ export class DasmCompiler extends CompilerBase {
             this.FolderOrPath = path.join(this.DefaultFolderOrPath, dasmCommand);                
         }
 
+        // Emulator
+        // User can select required emulator from settings
+        let userDefaultEmulator = this.Configuration!.get<string>(`${this.Id}.defaultEmulator`);
+        if (userDefaultEmulator) {
+            this.Emulator = userDefaultEmulator;
+        }
+
         // Result
         return true;
     }
@@ -125,7 +133,7 @@ export class DasmCompiler extends CompilerBase {
         if (application.IsMacOS) architecture = "Darwin";
 
         // Process
-        let result = await filesystem.SetChMod(path.join(this.FolderOrPath,`dasm.${architecture}.x86`));
+        let result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`dasm.${architecture}.x86`));
         return result;
     }
 
