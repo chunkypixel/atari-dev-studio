@@ -1,6 +1,7 @@
 "use strict";
 import * as path from 'path';
 import * as application from '../application';
+import * as execute from '../execute';
 import { EmulatorBase } from "./emulatorBase";
 
 export class A7800Emulator extends EmulatorBase {
@@ -10,7 +11,7 @@ export class A7800Emulator extends EmulatorBase {
     }
 
     protected async LoadConfigurationAsync() : Promise<boolean> {
-        console.log('debugger:StellaEmulator.LoadConfigurationAsync');
+        console.log('debugger:A7800Emulator.LoadConfigurationAsync');
 
         // Base
         let result = await super.LoadConfigurationAsync();
@@ -18,12 +19,11 @@ export class A7800Emulator extends EmulatorBase {
 
         // Emulator
         if (!this.CustomFolderOrPath) {
-            // TODO: Set final path
-            // // NOTE: currently Linux and macOS must provide path - this will be checked before launch
-            // if (application.IsWindows) {
-            //     // Append actual file (based on architecture)
-            //     this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,application.OSArch,"Stella.exe");
-            // }
+            // NOTE: currently Linux and macOS must provide path - this will be checked before launch
+            if (application.IsWindows) {
+                // Append actual file (based on architecture)
+                this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,"x32","A7800.exe");
+            }
         }
 
         // Result
@@ -31,7 +31,7 @@ export class A7800Emulator extends EmulatorBase {
     }
 
     protected async ExecuteEmulatorAsync(): Promise<boolean> {
-        console.log('debugger:StellaEmulator.ExecuteEmulatorAsync');
+        console.log('debugger:A7800Emulator.ExecuteEmulatorAsync');
 
         // Prepare
         application.CompilerOutputChannel.appendLine(''); 
@@ -42,14 +42,41 @@ export class A7800Emulator extends EmulatorBase {
             return false;
         }
 
-        // TODO: Compiler options
+        // Compiler options
+        let command = this.FolderOrPath;
+        // Args
+        let args = [
+            "a7800",
+            "-cart",
+            this.Args,
+            `"${this.File}"`
+        ]
+        // Environment
+        let env : { [key: string]: string | null } = {};
 
         // Process
-        application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);  
+        application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);         
+        
+        // Launch
+        let executeResult = await execute.Spawn(command, args, env, path.dirname(this.FolderOrPath),
+            (stdout: string) => {
+                // Prepare
+                let result = true;
 
-        // TODO: Launch
+                // Result
+                application.CompilerOutputChannel.append('' + stdout);
+                return result;
+            },
+            (stderr: string) => {
+                // Prepare
+                let result = true;
+
+                // Result
+                application.CompilerOutputChannel.append('' + stderr);
+                return result;
+            });
 
         // Result
-        return true;
+        return executeResult;
     }
 }

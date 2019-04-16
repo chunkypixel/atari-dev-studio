@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
 const application = require("../application");
+const execute = require("../execute");
 const emulatorBase_1 = require("./emulatorBase");
 class A7800Emulator extends emulatorBase_1.EmulatorBase {
     constructor() {
@@ -20,19 +21,18 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
             LoadConfigurationAsync: { get: () => super.LoadConfigurationAsync }
         });
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:StellaEmulator.LoadConfigurationAsync');
+            console.log('debugger:A7800Emulator.LoadConfigurationAsync');
             // Base
             let result = yield _super.LoadConfigurationAsync.call(this);
             if (!result)
                 return false;
             // Emulator
             if (!this.CustomFolderOrPath) {
-                // TODO: Set final path
-                // // NOTE: currently Linux and macOS must provide path - this will be checked before launch
-                // if (application.IsWindows) {
-                //     // Append actual file (based on architecture)
-                //     this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,application.OSArch,"Stella.exe");
-                // }
+                // NOTE: currently Linux and macOS must provide path - this will be checked before launch
+                if (application.IsWindows) {
+                    // Append actual file (based on architecture)
+                    this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, "x32", "A7800.exe");
+                }
             }
             // Result
             return true;
@@ -40,7 +40,7 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
     }
     ExecuteEmulatorAsync() {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:StellaEmulator.ExecuteEmulatorAsync');
+            console.log('debugger:A7800Emulator.ExecuteEmulatorAsync');
             // Prepare
             application.CompilerOutputChannel.appendLine('');
             // Linux and MacOS must provide path (for now)
@@ -48,12 +48,35 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
                 application.Notify(`WARNING: You must provide a path to your ${this.Id} emulator before you can launch your game.`);
                 return false;
             }
-            // TODO: Compiler options
+            // Compiler options
+            let command = this.FolderOrPath;
+            // Args
+            let args = [
+                "a7800",
+                "-cart",
+                this.Args,
+                `"${this.File}"`
+            ];
+            // Environment
+            let env = {};
             // Process
             application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);
-            // TODO: Launch
+            // Launch
+            let executeResult = yield execute.Spawn(command, args, env, path.dirname(this.FolderOrPath), (stdout) => {
+                // Prepare
+                let result = true;
+                // Result
+                application.CompilerOutputChannel.append('' + stdout);
+                return result;
+            }, (stderr) => {
+                // Prepare
+                let result = true;
+                // Result
+                application.CompilerOutputChannel.append('' + stderr);
+                return result;
+            });
             // Result
-            return true;
+            return executeResult;
         });
     }
 }

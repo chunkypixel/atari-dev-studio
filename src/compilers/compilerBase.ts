@@ -28,7 +28,7 @@ export abstract class CompilerBase implements vscode.Disposable {
     public FileName: string = "";
     public CompiledFileName: string = "";
     public CompiledSubFolder: string = "";
-    readonly CompiledExtensionName: string = ".bin";
+    protected CompiledExtensionName: string = ".bin";
     readonly CompiledSubFolderName: string = "bin";
 
     protected GenerateDebuggerFiles: boolean = false;
