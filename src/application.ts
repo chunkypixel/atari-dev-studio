@@ -4,9 +4,12 @@ import * as path from 'path';
 import * as filesystem from './filesystem';
 const os = require("os");
 import { CompilerBase } from './compilers/compilerBase';
+import { EmulatorBase } from './emulators/emulatorBase';
 import { BatariBasicCompiler } from './compilers/batariBasicCompiler';
 import { SeventyEightHundredBasicCompiler } from './compilers/seventyEightHundredBasicCompiler';
 import { DasmCompiler } from './compilers/dasmCompiler';
+import { StellaEmulator } from './emulators/stellaEmulator';
+import { A7800Emulator } from './emulators/a7800Emulator';
 
 export const Id = "chunkypixel.atari-dev-studio";
 export const Path: string = vscode.extensions.getExtension(Id)!.extensionPath;
@@ -24,6 +27,15 @@ export const Compilers:CompilerBase[] = [
 	new BatariBasicCompiler(),
 	new SeventyEightHundredBasicCompiler(),
 	new DasmCompiler()
+];
+
+// -------------------------------------------------------------------------------------
+// Emulators
+// Register compilers here and in order of preference
+// -------------------------------------------------------------------------------------
+export const Emulators:EmulatorBase[] = [
+	new StellaEmulator(),
+	new A7800Emulator()
 ];
 
 // -------------------------------------------------------------------------------------

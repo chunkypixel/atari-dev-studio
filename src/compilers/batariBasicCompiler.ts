@@ -8,7 +8,7 @@ import { CompilerBase } from "./compilerBase";
 export class BatariBasicCompiler extends CompilerBase {
     
     constructor() {
-        super("batariBasic","batari Basic",[".bas",".bb"],path.join(application.Path,"out","bin","bb"));
+        super("batariBasic","batari Basic",[".bas",".bb"],path.join(application.Path,"out","bin","compilers","bb"));
     }
 
     protected async ExecuteCompilerAsync(): Promise<boolean> {

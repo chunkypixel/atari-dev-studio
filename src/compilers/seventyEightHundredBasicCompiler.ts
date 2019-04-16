@@ -8,7 +8,7 @@ import { CompilerBase } from "./compilerBase";
 export class SeventyEightHundredBasicCompiler extends CompilerBase {
 
     constructor() {
-        super("7800basic","7800basic",[".bas",".78b"],path.join(application.Path,"out","bin","7800basic"));
+        super("7800basic","7800basic",[".bas",".78b"],path.join(application.Path,"out","bin","compilers","7800basic"));
     }
     
     protected async ExecuteCompilerAsync(): Promise<boolean> {

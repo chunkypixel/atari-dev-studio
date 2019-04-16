@@ -15,7 +15,7 @@ const execute = require("../execute");
 const compilerBase_1 = require("./compilerBase");
 class DasmCompiler extends compilerBase_1.CompilerBase {
     constructor() {
-        super("dasm", "dasm", [".dasm", ".asm", ".a", ".h"], path.join(application.Path, "out", "bin", "dasm"));
+        super("dasm", "dasm", [".dasm", ".asm", ".a", ".h"], path.join(application.Path, "out", "bin", "compilers", "dasm"));
     }
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {

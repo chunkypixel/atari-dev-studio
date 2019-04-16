@@ -15,6 +15,8 @@ const os = require("os");
 const batariBasicCompiler_1 = require("./compilers/batariBasicCompiler");
 const seventyEightHundredBasicCompiler_1 = require("./compilers/seventyEightHundredBasicCompiler");
 const dasmCompiler_1 = require("./compilers/dasmCompiler");
+const stellaEmulator_1 = require("./emulators/stellaEmulator");
+const a7800Emulator_1 = require("./emulators/a7800Emulator");
 exports.Id = "chunkypixel.atari-dev-studio";
 exports.Path = vscode.extensions.getExtension(exports.Id).extensionPath;
 exports.Name = vscode.extensions.getExtension(exports.Id).packageJSON.name;
@@ -30,6 +32,14 @@ exports.Compilers = [
     new batariBasicCompiler_1.BatariBasicCompiler(),
     new seventyEightHundredBasicCompiler_1.SeventyEightHundredBasicCompiler(),
     new dasmCompiler_1.DasmCompiler()
+];
+// -------------------------------------------------------------------------------------
+// Emulators
+// Register compilers here and in order of preference
+// -------------------------------------------------------------------------------------
+exports.Emulators = [
+    new stellaEmulator_1.StellaEmulator(),
+    new a7800Emulator_1.A7800Emulator()
 ];
 // -------------------------------------------------------------------------------------
 // Operating System

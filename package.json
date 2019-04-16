@@ -209,6 +209,16 @@
                     "default": "0",
                     "description": "Specify the verboseness of the dasm compiler (0-4):",
                     "scope": "resource"
+                },
+                "atari-dev-studio.dasm.defaultEmulator": {
+                    "type": "string",
+                    "enum": [
+                      "Stella",
+                      "A7800"
+                    ],
+                    "default": "Stella",
+                    "description": "Specify the default emulator used to launch games compiled with dasm:",
+                    "scope": "resource"
                 }
             }
         }

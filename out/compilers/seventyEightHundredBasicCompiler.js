@@ -15,7 +15,7 @@ const execute = require("../execute");
 const compilerBase_1 = require("./compilerBase");
 class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
     constructor() {
-        super("7800basic", "7800basic", [".bas", ".78b"], path.join(application.Path, "out", "bin", "7800basic"));
+        super("7800basic", "7800basic", [".bas", ".78b"], path.join(application.Path, "out", "bin", "compilers", "7800basic"));
     }
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {

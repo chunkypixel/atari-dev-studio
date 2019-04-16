@@ -8,7 +8,7 @@ import { CompilerBase } from "./compilerBase";
 export class DasmCompiler extends CompilerBase {
 
     constructor() {
-        super("dasm","dasm",[".dasm",".asm",".a",".h"],path.join(application.Path,"out","bin","dasm"));
+        super("dasm","dasm",[".dasm",".asm",".a",".h"],path.join(application.Path,"out","bin","compilers","dasm"));
             
     }
     protected async ExecuteCompilerAsync(): Promise<boolean> {
