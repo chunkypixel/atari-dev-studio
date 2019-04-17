@@ -97,12 +97,12 @@
             },
             {
                 "command": "extension.buildGame",
-                "title": "Compile source code (automatic)",
+                "title": "Compile source code",
                 "category": "ads"
             },
             {
                 "command": "extension.buildGameAndRun",
-                "title": "Compile source code and run in emulator (automatic)",
+                "title": "Compile source code and run in emulator",
                 "category": "ads"
             }
         ],
@@ -224,6 +224,8 @@
         }
     },
     "activationEvents": [
+        "*",
+        "onLanguage:78b",
         "onCommand:extension.openWelcomePage",
         "onCommand:extension.buildGame",
         "onCommand:extension.buildGameAndRun"
