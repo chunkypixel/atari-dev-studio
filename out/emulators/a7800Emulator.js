@@ -31,6 +31,7 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
                 // NOTE: currently Linux and macOS must provide path - this will be checked before launch
                 if (application.IsWindows) {
                     // Append actual file (based on architecture)
+                    // NOTE: 32-bit only
                     this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, "x32", "A7800.exe");
                 }
             }
@@ -44,8 +45,8 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
             // Prepare
             application.CompilerOutputChannel.appendLine('');
             // Linux and MacOS must provide path (for now)
-            if ((application.IsLinux || application.IsMacOS) && !this.FolderOrPath) {
-                application.Notify(`WARNING: You must provide a path to your ${this.Id} emulator before you can launch your game.`);
+            if ((application.IsLinux || application.IsMacOS) && !this.CustomFolderOrPath) {
+                application.Notify(`ERROR: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`);
                 return false;
             }
             // Compiler options
@@ -55,14 +56,12 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
                 "a7800",
                 "-cart",
                 this.Args,
-                `"${this.File}"`
+                `"${this.FileName}"`
             ];
-            // Environment
-            let env = {};
             // Process
             application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);
             // Launch
-            let executeResult = yield execute.Spawn(command, args, env, path.dirname(this.FolderOrPath), (stdout) => {
+            let executeResult = yield execute.Spawn(command, args, null, path.dirname(this.FolderOrPath), (stdout) => {
                 // Prepare
                 let result = true;
                 // Result

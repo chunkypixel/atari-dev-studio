@@ -12,7 +12,7 @@ export abstract class EmulatorBase implements vscode.Disposable {
     public readonly DefaultFolderOrPath: string;
     public FolderOrPath: string = "";
     public Args: string = "";
-    protected File: string = "";  
+    protected FileName: string = "";  
     protected Configuration: vscode.WorkspaceConfiguration | undefined;
 
     constructor(id: string, name: string, folderOrPath: string) {
@@ -25,9 +25,9 @@ export abstract class EmulatorBase implements vscode.Disposable {
         console.log('debugger:EmulatorBase.dispose');
     }
 
-    public async RunGameAsync(file: string): Promise<boolean> {
+    public async RunGameAsync(fileName: string): Promise<boolean> {
         // Set
-        this.File = file;
+        this.FileName = fileName;
 
         // Process
         let result = await this.InitialiseAsync();
@@ -48,6 +48,10 @@ export abstract class EmulatorBase implements vscode.Disposable {
         return true;
     }
 
+    protected async RepairFilePermissionsAsync(): Promise<boolean> {
+        return true;
+    }
+
     protected async LoadConfigurationAsync(): Promise<boolean> {
         console.log('debugger:EmulatorBase.LoadConfigurationAsync');      
 
@@ -61,13 +65,13 @@ export abstract class EmulatorBase implements vscode.Disposable {
         this.Configuration = vscode.workspace.getConfiguration(application.Name, null);
 
         // Emulator
-        let userEmulatorPath = this.Configuration.get<string>(`${this.Id}.emulatorPath`)
+        let userEmulatorPath = this.Configuration.get<string>(`emulator.${this.Id.toLowerCase()}.path`)
         if (userEmulatorPath) {
             // Validate (user provided)
             let result = await filesystem.FileExistsAsync(userEmulatorPath);
             if (!result) {
                 // Notify
-                application.Notify(`ERROR: Cannot locate your chosen ${this.Name} emulator path '${userEmulatorPath}'`);
+                application.Notify(`ERROR: Cannot locate your chosen ${this.Name} emulator path '${userEmulatorPath}'. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`);
                 return false;
             }
 
@@ -76,7 +80,7 @@ export abstract class EmulatorBase implements vscode.Disposable {
             this.CustomFolderOrPath = true;
         }
         // Emulator (Other)
-        this.Args = this.Configuration.get<string>(`${this.Id}.emulatorArgs`,""); 
+        this.Args = this.Configuration.get<string>(`emulator.${this.Id.toLowerCase()}.args`,""); 
 
         // Result
         return true;

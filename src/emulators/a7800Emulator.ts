@@ -22,6 +22,7 @@ export class A7800Emulator extends EmulatorBase {
             // NOTE: currently Linux and macOS must provide path - this will be checked before launch
             if (application.IsWindows) {
                 // Append actual file (based on architecture)
+                // NOTE: 32-bit only
                 this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,"x32","A7800.exe");
             }
         }
@@ -37,8 +38,8 @@ export class A7800Emulator extends EmulatorBase {
         application.CompilerOutputChannel.appendLine(''); 
 
         // Linux and MacOS must provide path (for now)
-        if ((application.IsLinux || application.IsMacOS) && !this.FolderOrPath) {
-            application.Notify(`WARNING: You must provide a path to your ${this.Id} emulator before you can launch your game.`); 
+        if ((application.IsLinux || application.IsMacOS) && !this.CustomFolderOrPath) {
+            application.Notify(`ERROR: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`); 
             return false;
         }
 
@@ -49,16 +50,14 @@ export class A7800Emulator extends EmulatorBase {
             "a7800",
             "-cart",
             this.Args,
-            `"${this.File}"`
+            `"${this.FileName}"`
         ]
-        // Environment
-        let env : { [key: string]: string | null } = {};
 
         // Process
         application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);         
         
         // Launch
-        let executeResult = await execute.Spawn(command, args, env, path.dirname(this.FolderOrPath),
+        let executeResult = await execute.Spawn(command, args, null, path.dirname(this.FolderOrPath),
             (stdout: string) => {
                 // Prepare
                 let result = true;

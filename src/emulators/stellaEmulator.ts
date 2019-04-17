@@ -18,11 +18,14 @@ export class StellaEmulator extends EmulatorBase {
         if (!result) return false;
         
         // Emulator
+        // NOTE: macOS must provide path (for now) - this will be checked before launch
         if (!this.CustomFolderOrPath) {
-            // NOTE: currently Linux and macOS must provide path - this will be checked before launch
+            // Append actual file (based on architecture)
             if (application.IsWindows) {
-                // Append actual file (based on architecture)
                 this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,application.OSArch,"Stella.exe");
+            }
+            else if (application.IsLinux) {
+                this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,application.OSArch,"stella");             
             }
         }
 
@@ -36,9 +39,9 @@ export class StellaEmulator extends EmulatorBase {
         // Prepare
         application.CompilerOutputChannel.appendLine(''); 
 
-        // Linux and MacOS must provide path (for now)
-        if ((application.IsLinux || application.IsMacOS) && !this.FolderOrPath) {
-            application.Notify(`WARNING: You must provide a path to your ${this.Id} emulator before you can launch your game.`); 
+        // macOS must provide path (for now)
+        if ((application.IsLinux || application.IsMacOS) && !this.CustomFolderOrPath) {
+            application.Notify(`WARNING: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`); 
             return false;
         }
 
@@ -47,16 +50,14 @@ export class StellaEmulator extends EmulatorBase {
         // Args
         let args = [
             this.Args,
-            `"${this.File}"`
+            `"${this.FileName}"`
         ]
-        // Environment
-        let env : { [key: string]: string | null } = {};
 
         // Process
         application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);         
         
         // Launch
-        let executeResult = await execute.Spawn(command, args, env, path.dirname(this.File),
+        let executeResult = await execute.Spawn(command, args, null, path.dirname(this.FileName),
             (stdout: string) => {
                 // Prepare
                 let result = true;

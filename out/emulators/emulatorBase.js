@@ -16,7 +16,7 @@ class EmulatorBase {
         this.CustomFolderOrPath = false;
         this.FolderOrPath = "";
         this.Args = "";
-        this.File = "";
+        this.FileName = "";
         this.Id = id;
         this.Name = name;
         this.DefaultFolderOrPath = folderOrPath;
@@ -24,10 +24,10 @@ class EmulatorBase {
     dispose() {
         console.log('debugger:EmulatorBase.dispose');
     }
-    RunGameAsync(file) {
+    RunGameAsync(fileName) {
         return __awaiter(this, void 0, void 0, function* () {
             // Set
-            this.File = file;
+            this.FileName = fileName;
             // Process
             let result = yield this.InitialiseAsync();
             if (!result)
@@ -46,6 +46,11 @@ class EmulatorBase {
             return true;
         });
     }
+    RepairFilePermissionsAsync() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return true;
+        });
+    }
     LoadConfigurationAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:EmulatorBase.LoadConfigurationAsync');
@@ -57,13 +62,13 @@ class EmulatorBase {
             // It appears you need to reload this each time incase of change
             this.Configuration = vscode.workspace.getConfiguration(application.Name, null);
             // Emulator
-            let userEmulatorPath = this.Configuration.get(`${this.Id}.emulatorPath`);
+            let userEmulatorPath = this.Configuration.get(`emulator.${this.Id.toLowerCase()}.path`);
             if (userEmulatorPath) {
                 // Validate (user provided)
                 let result = yield filesystem.FileExistsAsync(userEmulatorPath);
                 if (!result) {
                     // Notify
-                    application.Notify(`ERROR: Cannot locate your chosen ${this.Name} emulator path '${userEmulatorPath}'`);
+                    application.Notify(`ERROR: Cannot locate your chosen ${this.Name} emulator path '${userEmulatorPath}'. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`);
                     return false;
                 }
                 // Set
@@ -71,7 +76,7 @@ class EmulatorBase {
                 this.CustomFolderOrPath = true;
             }
             // Emulator (Other)
-            this.Args = this.Configuration.get(`${this.Id}.emulatorArgs`, "");
+            this.Args = this.Configuration.get(`emulator.${this.Id.toLowerCase()}.args`, "");
             // Result
             return true;
         });

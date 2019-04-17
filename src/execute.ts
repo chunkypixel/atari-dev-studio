@@ -1,7 +1,7 @@
 "use strict";
 const cp = require("child_process");
 
-export function Spawn(command:string, args:string[], env: { [key: string]: string | null }, cwd: string, stdout:any, stderr:any) : Promise<boolean> {
+export function Spawn(command:string, args:string[] | null, env: { [key: string]: string | null } | null, cwd: string, stdout:any, stderr:any) : Promise<boolean> {
     console.log('debugger:execute.ExecuteCommand');
 
     // Process

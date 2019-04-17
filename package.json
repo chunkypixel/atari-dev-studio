@@ -162,7 +162,7 @@
                 "atari-dev-studio.compiler.batariBasic.args": {
                     "type": "string",
                     "default": "",
-                    "description": "Specify (optional) command line arguments, ie. -O (Optimizer).",
+                    "description": "Specify (optional) command line arguments, ie. -O (Optimizer):",
                     "scope": "resource"
                 },
                 "atari-dev-studio.compiler.batariBasic.folder": {
@@ -175,7 +175,7 @@
                 "atari-dev-studio.compiler.7800basic.args": {
                     "type": "string",
                     "default": "",
-                    "description": "Specify (optional) command line arguments.",
+                    "description": "Specify (optional) command line arguments:",
                     "scope": "resource"
                 },
                 "atari-dev-studio.compiler.7800basic.folder": {
@@ -230,7 +230,32 @@
                     "default": "Stella",
                     "description": "Specify the default emulator used to launch games compiled with dasm:",
                     "scope": "resource"
-                }
+                },
+
+                "atari-dev-studio.emulator.stella.path": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Don't wish to use the included version of the Stella emulator? Specify the full path (including filename) of your Stella emulator:",
+                    "scope": "resource"
+                  },
+                  "atari-dev-studio.emulator.stella.args": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Specify (optional) command line arguments:",
+                    "scope": "resource"
+                  },
+                  "atari-dev-studio.emulator.a7800.path": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Don't wish to use the included version of the A7800 emulator? Specify the full path (including filename) of your A7800 emulator:",
+                    "scope": "resource"
+                  },
+                  "atari-dev-studio.emulator.a7800.args": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Specify (optional) command line arguments:",
+                    "scope": "resource"
+                  }
             }
         }
     },

@@ -27,11 +27,14 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
             if (!result)
                 return false;
             // Emulator
+            // NOTE: macOS must provide path (for now) - this will be checked before launch
             if (!this.CustomFolderOrPath) {
-                // NOTE: currently Linux and macOS must provide path - this will be checked before launch
+                // Append actual file (based on architecture)
                 if (application.IsWindows) {
-                    // Append actual file (based on architecture)
                     this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, application.OSArch, "Stella.exe");
+                }
+                else if (application.IsLinux) {
+                    this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, application.OSArch, "stella");
                 }
             }
             // Result
@@ -43,9 +46,9 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
             console.log('debugger:StellaEmulator.ExecuteEmulatorAsync');
             // Prepare
             application.CompilerOutputChannel.appendLine('');
-            // Linux and MacOS must provide path (for now)
-            if ((application.IsLinux || application.IsMacOS) && !this.FolderOrPath) {
-                application.Notify(`WARNING: You must provide a path to your ${this.Id} emulator before you can launch your game.`);
+            // macOS must provide path (for now)
+            if ((application.IsLinux || application.IsMacOS) && !this.CustomFolderOrPath) {
+                application.Notify(`WARNING: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`);
                 return false;
             }
             // Compiler options
@@ -53,14 +56,12 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
             // Args
             let args = [
                 this.Args,
-                `"${this.File}"`
+                `"${this.FileName}"`
             ];
-            // Environment
-            let env = {};
             // Process
             application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);
             // Launch
-            let executeResult = yield execute.Spawn(command, args, env, path.dirname(this.File), (stdout) => {
+            let executeResult = yield execute.Spawn(command, args, null, path.dirname(this.FileName), (stdout) => {
                 // Prepare
                 let result = true;
                 // Result
