@@ -69,7 +69,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             }, (stderr) => {
                 // Prepare
                 let result = true;
-                // Validate (batari basic)
+                // Validate
                 if (stderr.includes("2600 Basic compilation complete.")) {
                     // Ok - bB throws out standard message here that it shouldn't so we need to verify everything arrr...
                 }
@@ -145,10 +145,10 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     RemoveCompilationFilesAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:BatariBasicCompiler.RemoveCompilationFilesAsync');
-            // Notify
-            application.Notify(`Cleaning up files generated during compilation...`);
             // Language specific files
             if (this.CleanUpCompilationFiles) {
+                // Notify
+                application.Notify(`Cleaning up files generated during compilation...`);
                 // Process
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `${this.FileName}.asm`));
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `bB.asm`));

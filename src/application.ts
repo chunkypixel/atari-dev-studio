@@ -10,6 +10,7 @@ import { SeventyEightHundredBasicCompiler } from './compilers/seventyEightHundre
 import { DasmCompiler } from './compilers/dasmCompiler';
 import { StellaEmulator } from './emulators/stellaEmulator';
 import { A7800Emulator } from './emulators/a7800Emulator';
+import { appendFile } from 'fs';
 
 export const Id = "chunkypixel.atari-dev-studio";
 export const Path: string = vscode.extensions.getExtension(Id)!.extensionPath;
@@ -63,15 +64,10 @@ export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
 	if (!document || document!.uri.scheme != "file") return false;
 
 	// Find compiler
-	let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
-	for await (let compiler of Compilers) {
-		if (compiler.Extensions.includes(fileExtension)) {
-			return await compiler.BuildGameAsync(document);
-		}
-	}
+	let compiler = getChosenCompiler(document);
+	if (compiler) return await compiler.BuildGameAsync(document);
 
-	// Not found
-	Notify(`Unable to find a compiler for extension '${fileExtension}'.`);
+	// Result
 	return false;
 }
 
@@ -81,19 +77,60 @@ export async function BuildGameAndRunAsync(fileUri: vscode.Uri): Promise<boolean
 	if (!document || document!.uri.scheme != "file") return false;
 
 	// Find compiler
-	let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
-	for await (let compiler of Compilers) {
-		if (compiler.Extensions.includes(fileExtension)) {
-			return await compiler.BuildGameAndRunAsync(document);
-		}
-	}
+	let compiler = getChosenCompiler(document);
+	if (compiler) return await compiler.BuildGameAndRunAsync(document);
 
-	// Not found
-	Notify(`Unable to find a compiler for extension '${fileExtension}'.`);
+	// Result
 	return false;
 }
 
 export function Notify(message: string): void {
 	CompilerOutputChannel.appendLine(message);
 	console.log(`debugger:${message}`);        
+}
+
+function getChosenCompiler(document: vscode.TextDocument): CompilerBase | undefined {
+	// Prepare
+	let configuration = vscode.workspace.getConfiguration(Name, null);
+
+	// Find compiler (based on configuration selection)
+	let chosenCompiler = configuration.get<string>(`compilation.defaultCompiler`);
+	if (chosenCompiler) {
+		for (let compiler of Compilers) {
+			if (compiler.Id === chosenCompiler || compiler.Name === chosenCompiler) {
+				return compiler;
+			}
+		}	
+	}
+
+	// Find compiler (based on language of chosen file)
+	for (let compiler of Compilers) {
+		if (compiler.Id === document.languageId) {
+			return compiler;
+		}
+	}	
+
+	// // Find compiler (based on extension)
+	// let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
+	// for (let compiler of Compilers) {
+	// 	if (compiler.Extensions.includes(fileExtension)) {
+	// 		return compiler;
+	// 	}
+	// }	
+
+	// Activate output window?
+	if (configuration!.get<boolean>(`editor.preserveCodeEditorFocus`))  {
+		CompilerOutputChannel.show();
+	}
+
+	// Clear output content?
+	if (configuration!.get<boolean>(`editor.clearPreviousOutput`))  {
+		CompilerOutputChannel.clear();
+	}
+
+	// Not found
+	Notify(`Unable to determine a compiler to use based on your chosen default compiler '${chosenCompiler}'.  Review your selection in Preference -> Extensions -> ${DisplayName}.`);
+
+	// Not found
+	return undefined;
 }

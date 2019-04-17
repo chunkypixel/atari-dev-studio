@@ -100,10 +100,9 @@ class CompilerBase {
                 application.Notify(`The ${this.Name} compiler is already running! If you want to cancel the compilation activate the Stop/Kill command.`);
                 return false;
             }
-            // Configuration
-            let result = yield this.LoadConfigurationAsync();
-            if (!result)
-                return false;
+            // (Re)load
+            // It appears you need to reload this each time incase of change
+            this.Configuration = vscode.workspace.getConfiguration(application.Name, null);
             // Activate output window?
             if (!this.Configuration.get(`editor.preserveCodeEditorFocus`)) {
                 application.CompilerOutputChannel.show();
@@ -120,6 +119,10 @@ class CompilerBase {
                 if (this.Document)
                     this.Document.save();
             }
+            // Configuration
+            let result = yield this.LoadConfigurationAsync();
+            if (!result)
+                return false;
             // Remove old debugger file before build
             yield this.RemoveDebuggerFilesAsync(this.CompiledSubFolder);
             // Result
@@ -141,11 +144,8 @@ class CompilerBase {
             this.Format = "";
             this.Verboseness = "";
             this.Emulator = this.DefaultEmulator;
-            // (Re)load
-            // It appears you need to reload this each time incase of change
-            this.Configuration = vscode.workspace.getConfiguration(application.Name, null);
             // Compiler
-            let userCompilerFolder = this.Configuration.get(`${this.Id}.compilerFolder`);
+            let userCompilerFolder = this.Configuration.get(`compiler.${this.Id}.folder`);
             if (userCompilerFolder) {
                 // Validate (user provided)
                 let result = yield filesystem.FolderExistsAsync(userCompilerFolder);
@@ -159,12 +159,12 @@ class CompilerBase {
                 this.CustomFolderOrPath = true;
             }
             // Compiler (other)
-            this.Args = this.Configuration.get(`${this.Id}.compilerArgs`, "");
-            this.Format = this.Configuration.get(`${this.Id}.compilerFormat`, "3");
-            this.Verboseness = this.Configuration.get(`${this.Id}.compilerVerboseness`, "0");
+            this.Args = this.Configuration.get(`compiler.${this.Id}.args`, "");
+            this.Format = this.Configuration.get(`compiler.${this.Id}.format`, "3");
+            this.Verboseness = this.Configuration.get(`compiler.${this.Id}.verboseness`, "0");
             // Compilation
-            this.GenerateDebuggerFiles = this.Configuration.get(`compilation.generateDebuggerFiles`, true);
-            this.CleanUpCompilationFiles = this.Configuration.get(`compilation.cleanupCompilationFiles`, true);
+            this.GenerateDebuggerFiles = this.Configuration.get(`compiler.options.generateDebuggerFiles`, true);
+            this.CleanUpCompilationFiles = this.Configuration.get(`compiler.options.cleanupCompilationFiles`, true);
             // System
             this.WorkspaceFolder = this.getWorkspaceFolder();
             this.FileName = path.basename(this.Document.fileName);

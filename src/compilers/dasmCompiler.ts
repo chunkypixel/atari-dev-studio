@@ -53,6 +53,16 @@ export class DasmCompiler extends CompilerBase {
                 // Prepare
                 let result = true;
 
+                // Validate
+                if (stdout.includes("Parse error:") || stdout.includes("error:")) {
+                    // Potential messages received (so far):
+                    // Parse error
+                    // Error: 
+                    
+                    // Failed
+                    result = false;
+                }
+
                 // Result
                 application.CompilerOutputChannel.append('' + stdout);
                 return result;
@@ -88,7 +98,7 @@ export class DasmCompiler extends CompilerBase {
         // Compiler
         // We use a path instead of a folder for dasm for added flexibility
         this.CustomFolderOrPath = false;
-        let userCompilerPath = this.Configuration!.get<string>(`${this.Id}.compilerPath`);
+        let userCompilerPath = this.Configuration!.get<string>(`compiler.${this.Id}.path`);
         if (userCompilerPath) {
             // Validate (user provided)
             let result = await filesystem.FileExistsAsync(userCompilerPath);
@@ -117,7 +127,7 @@ export class DasmCompiler extends CompilerBase {
 
         // Emulator
         // User can select required emulator from settings
-        let userDefaultEmulator = this.Configuration!.get<string>(`${this.Id}.defaultEmulator`);
+        let userDefaultEmulator = this.Configuration!.get<string>(`compiler.${this.Id}.defaultEmulator`);
         if (userDefaultEmulator) {
             this.Emulator = userDefaultEmulator;
         }

@@ -124,11 +124,11 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
     protected async RemoveCompilationFilesAsync(): Promise<boolean> {
         console.log('debugger:SeventyEightHundredBasicCompiler.RemoveCompilationFiles');
 
-        // Notify
-        application.Notify(`Cleaning up files generated during compilation...`);
-
         // Language specific files
         if (this.CleanUpCompilationFiles)  {
+            // Notify
+            application.Notify(`Cleaning up files generated during compilation...`);
+
             // Process
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`${this.FileName}.asm`));
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`7800.asm`));

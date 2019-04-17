@@ -127,10 +127,10 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
     RemoveCompilationFilesAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SeventyEightHundredBasicCompiler.RemoveCompilationFiles');
-            // Notify
-            application.Notify(`Cleaning up files generated during compilation...`);
             // Language specific files
             if (this.CleanUpCompilationFiles) {
+                // Notify
+                application.Notify(`Cleaning up files generated during compilation...`);
                 // Process
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `${this.FileName}.asm`));
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `7800.asm`));

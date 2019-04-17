@@ -77,7 +77,7 @@ export class BatariBasicCompiler extends CompilerBase {
                 // Prepare
                 let result = true;
 
-                // Validate (batari basic)
+                // Validate
                 if (stderr.includes("2600 Basic compilation complete.")) {
                     // Ok - bB throws out standard message here that it shouldn't so we need to verify everything arrr...
 
@@ -153,11 +153,11 @@ export class BatariBasicCompiler extends CompilerBase {
     protected async RemoveCompilationFilesAsync(): Promise<boolean> {
         console.log('debugger:BatariBasicCompiler.RemoveCompilationFilesAsync');
 
-        // Notify
-        application.Notify(`Cleaning up files generated during compilation...`);
-
         // Language specific files
         if (this.CleanUpCompilationFiles)  {
+            // Notify
+            application.Notify(`Cleaning up files generated during compilation...`);
+
             // Process
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`${this.FileName}.asm`));
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`bB.asm`));

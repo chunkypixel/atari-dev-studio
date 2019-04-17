@@ -53,6 +53,14 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             let executeResult = yield execute.Spawn(command, args, env, this.WorkspaceFolder, (stdout) => {
                 // Prepare
                 let result = true;
+                // Validate
+                if (stdout.includes("Parse error:") || stdout.includes("error:")) {
+                    // Potential messages received (so far):
+                    // Parse error
+                    // Error: 
+                    // Failed
+                    result = false;
+                }
                 // Result
                 application.CompilerOutputChannel.append('' + stdout);
                 return result;
@@ -88,7 +96,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             // Compiler
             // We use a path instead of a folder for dasm for added flexibility
             this.CustomFolderOrPath = false;
-            let userCompilerPath = this.Configuration.get(`${this.Id}.compilerPath`);
+            let userCompilerPath = this.Configuration.get(`compiler.${this.Id}.path`);
             if (userCompilerPath) {
                 // Validate (user provided)
                 let result = yield filesystem.FileExistsAsync(userCompilerPath);
@@ -117,7 +125,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             }
             // Emulator
             // User can select required emulator from settings
-            let userDefaultEmulator = this.Configuration.get(`${this.Id}.defaultEmulator`);
+            let userDefaultEmulator = this.Configuration.get(`compiler.${this.Id}.defaultEmulator`);
             if (userDefaultEmulator) {
                 this.Emulator = userDefaultEmulator;
             }

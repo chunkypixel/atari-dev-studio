@@ -1,6 +1,6 @@
 {
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "batari Basic",
+	"name": "7800basic",
 	"scopeName": "source.78b",
 	"patterns": [
 		{

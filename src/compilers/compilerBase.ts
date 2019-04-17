@@ -92,26 +92,30 @@ export abstract class CompilerBase implements vscode.Disposable {
             return false;
         }
 
-        // Configuration
-        let result = await this.LoadConfigurationAsync();
-        if (!result) return false;
+        // (Re)load
+        // It appears you need to reload this each time incase of change
+        this.Configuration = vscode.workspace.getConfiguration(application.Name, null);
 
         // Activate output window?
-        if (!this.Configuration!.get<boolean>(`editor.preserveCodeEditorFocus`))  {
+        if (!this.Configuration.get<boolean>(`editor.preserveCodeEditorFocus`))  {
             application.CompilerOutputChannel.show();
         }
 
         // Clear output content?
-        if (this.Configuration!.get<boolean>(`editor.clearPreviousOutput`))  {
+        if (this.Configuration.get<boolean>(`editor.clearPreviousOutput`))  {
             application.CompilerOutputChannel.clear();
         }
 
         // Save files?
-        if (this.Configuration!.get<boolean>(`editor.saveAllFilesBeforeRun`))  {
+        if (this.Configuration.get<boolean>(`editor.saveAllFilesBeforeRun`))  {
             vscode.workspace.saveAll();
-        } else if (this.Configuration!.get<boolean>(`editor.saveFileBeforeRun`)) {
+        } else if (this.Configuration.get<boolean>(`editor.saveFileBeforeRun`)) {
             if (this.Document) this.Document.save();
         }
+
+        // Configuration
+        let result = await this.LoadConfigurationAsync();
+        if (!result) return false;
 
         // Remove old debugger file before build
         await this.RemoveDebuggerFilesAsync(this.CompiledSubFolder);
@@ -135,12 +139,8 @@ export abstract class CompilerBase implements vscode.Disposable {
         this.Verboseness = "";
         this.Emulator = this.DefaultEmulator;
 
-        // (Re)load
-        // It appears you need to reload this each time incase of change
-        this.Configuration = vscode.workspace.getConfiguration(application.Name, null);
-
         // Compiler
-        let userCompilerFolder = this.Configuration.get<string>(`${this.Id}.compilerFolder`);
+        let userCompilerFolder = this.Configuration!.get<string>(`compiler.${this.Id}.folder`);
         if (userCompilerFolder) {
             // Validate (user provided)
             let result = await filesystem.FolderExistsAsync(userCompilerFolder);
@@ -155,13 +155,13 @@ export abstract class CompilerBase implements vscode.Disposable {
             this.CustomFolderOrPath = true;
         }
         // Compiler (other)
-        this.Args = this.Configuration.get<string>(`${this.Id}.compilerArgs`,"");
-        this.Format = this.Configuration.get<string>(`${this.Id}.compilerFormat`,"3");
-        this.Verboseness = this.Configuration.get<string>(`${this.Id}.compilerVerboseness`,"0");
+        this.Args = this.Configuration!.get<string>(`compiler.${this.Id}.args`,"");
+        this.Format = this.Configuration!.get<string>(`compiler.${this.Id}.format`,"3");
+        this.Verboseness = this.Configuration!.get<string>(`compiler.${this.Id}.verboseness`,"0");
     
         // Compilation
-        this.GenerateDebuggerFiles = this.Configuration.get<boolean>(`compilation.generateDebuggerFiles`, true);
-        this.CleanUpCompilationFiles = this.Configuration.get<boolean>(`compilation.cleanupCompilationFiles`, true);
+        this.GenerateDebuggerFiles = this.Configuration!.get<boolean>(`compiler.options.generateDebuggerFiles`, true);
+        this.CleanUpCompilationFiles = this.Configuration!.get<boolean>(`compiler.options.cleanupCompilationFiles`, true);
 
         // System
         this.WorkspaceFolder = this.getWorkspaceFolder();

@@ -7,16 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __asyncValues = (this && this.__asyncValues) || function (o) {
-    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-    var m = o[Symbol.asyncIterator], i;
-    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
-    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
-    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
-const path = require("path");
 const filesystem = require("./filesystem");
 const os = require("os");
 const batariBasicCompiler_1 = require("./compilers/batariBasicCompiler");
@@ -67,60 +59,30 @@ exports.Is64Bit = (os.arch() === 'x64');
 // -------------------------------------------------------------------------------------
 function BuildGameAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
-        var e_1, _a;
         // Get document
         let document = yield filesystem.GetDocumentAsync(fileUri);
         if (!document || document.uri.scheme != "file")
             return false;
         // Find compiler
-        let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
-        try {
-            for (var Compilers_1 = __asyncValues(exports.Compilers), Compilers_1_1; Compilers_1_1 = yield Compilers_1.next(), !Compilers_1_1.done;) {
-                let compiler = Compilers_1_1.value;
-                if (compiler.Extensions.includes(fileExtension)) {
-                    return yield compiler.BuildGameAsync(document);
-                }
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (Compilers_1_1 && !Compilers_1_1.done && (_a = Compilers_1.return)) yield _a.call(Compilers_1);
-            }
-            finally { if (e_1) throw e_1.error; }
-        }
-        // Not found
-        Notify(`Unable to find a compiler for extension '${fileExtension}'.`);
+        let compiler = getChosenCompiler(document);
+        if (compiler)
+            return yield compiler.BuildGameAsync(document);
+        // Result
         return false;
     });
 }
 exports.BuildGameAsync = BuildGameAsync;
 function BuildGameAndRunAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
-        var e_2, _a;
         // Get document
         let document = yield filesystem.GetDocumentAsync(fileUri);
         if (!document || document.uri.scheme != "file")
             return false;
         // Find compiler
-        let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
-        try {
-            for (var Compilers_2 = __asyncValues(exports.Compilers), Compilers_2_1; Compilers_2_1 = yield Compilers_2.next(), !Compilers_2_1.done;) {
-                let compiler = Compilers_2_1.value;
-                if (compiler.Extensions.includes(fileExtension)) {
-                    return yield compiler.BuildGameAndRunAsync(document);
-                }
-            }
-        }
-        catch (e_2_1) { e_2 = { error: e_2_1 }; }
-        finally {
-            try {
-                if (Compilers_2_1 && !Compilers_2_1.done && (_a = Compilers_2.return)) yield _a.call(Compilers_2);
-            }
-            finally { if (e_2) throw e_2.error; }
-        }
-        // Not found
-        Notify(`Unable to find a compiler for extension '${fileExtension}'.`);
+        let compiler = getChosenCompiler(document);
+        if (compiler)
+            return yield compiler.BuildGameAndRunAsync(document);
+        // Result
         return false;
     });
 }
@@ -130,4 +92,42 @@ function Notify(message) {
     console.log(`debugger:${message}`);
 }
 exports.Notify = Notify;
+function getChosenCompiler(document) {
+    // Prepare
+    let configuration = vscode.workspace.getConfiguration(exports.Name, null);
+    // Find compiler (based on configuration selection)
+    let chosenCompiler = configuration.get(`compilation.defaultCompiler`);
+    if (chosenCompiler) {
+        for (let compiler of exports.Compilers) {
+            if (compiler.Id === chosenCompiler || compiler.Name === chosenCompiler) {
+                return compiler;
+            }
+        }
+    }
+    // Find compiler (based on language of chosen file)
+    for (let compiler of exports.Compilers) {
+        if (compiler.Id === document.languageId) {
+            return compiler;
+        }
+    }
+    // // Find compiler (based on extension)
+    // let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
+    // for (let compiler of Compilers) {
+    // 	if (compiler.Extensions.includes(fileExtension)) {
+    // 		return compiler;
+    // 	}
+    // }	
+    // Activate output window?
+    if (configuration.get(`editor.preserveCodeEditorFocus`)) {
+        exports.CompilerOutputChannel.show();
+    }
+    // Clear output content?
+    if (configuration.get(`editor.clearPreviousOutput`)) {
+        exports.CompilerOutputChannel.clear();
+    }
+    // Not found
+    Notify(`Unable to determine a compiler to use based on your chosen default compiler '${chosenCompiler}'.  Review your selection in Preference -> Extensions -> ${exports.DisplayName}.`);
+    // Not found
+    return undefined;
+}
 //# sourceMappingURL=application.js.map

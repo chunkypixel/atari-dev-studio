@@ -33,7 +33,7 @@
     "contributes": {
         "languages": [
             {
-                "id": "78b",
+                "id": "7800basic",
                 "aliases": [
                     "7800basic",
                     "78b"
@@ -42,10 +42,10 @@
                     ".bas",
                     ".78b"
                 ],
-                "configuration": "./languages/78b.language-configuration.json"
+                "configuration": "./languages/7800basic.language-configuration.json"
             },
             {
-                "id": "bb",
+                "id": "batariBasic",
                 "aliases": [
                     "batari Basic",
                     "bb"
@@ -54,7 +54,7 @@
                     ".bas",
                     ".bb"
                 ],
-                "configuration": "./languages/bb.language-configuration.json"
+                "configuration": "./languages/batariBasic.language-configuration.json"
             },
             {
                 "id": "dasm",
@@ -74,14 +74,14 @@
         ],
         "grammars": [
             {
-                "language": "78b",
+                "language": "7800basic",
                 "scopeName": "source.78b",
-                "path": "./syntaxes/78b.tmLanguage.json"
+                "path": "./syntaxes/7800basic.tmLanguage.json"
             },
             {
-                "language": "bb",
+                "language": "batariBasic",
                 "scopeName": "source.bb",
-                "path": "./syntaxes/bb.tmLanguage.json"
+                "path": "./syntaxes/batariBasic.tmLanguage.json"
             },
             {
                 "language": "dasm",
@@ -135,58 +135,69 @@
                     "scope": "resource"
                 },
 
-                "atari-dev-studio.compilation.cleanupCompilationFiles": {
+                "atari-dev-studio.compiler.options.defaultCompiler": {
+                    "type": "string",
+                    "enum": [
+                        "Automatic (based on the active language)",
+                        "batari Basic",
+                        "7800basic",
+                        "dasm"
+                    ],
+                    "description": "Specify the default compiler used to compile your source code:",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.compiler.options.cleanupCompilationFiles": {
                     "type": "boolean",
                     "default": true,
                     "description": "Whether to clean up compilation files after build is complete.",
                     "scope": "resource"
                 },
-                "atari-dev-studio.compilation.generateDebuggerFiles": {
+                "atari-dev-studio.compiler.options.generateDebuggerFiles": {
                     "type": "boolean",
                     "default": true,
                     "description": "Whether to generate debugger files on compilation.",
                     "scope": "resource"
                 },
 
-                "atari-dev-studio.batariBasic.compilerArgs": {
+                "atari-dev-studio.compiler.batariBasic.args": {
                     "type": "string",
                     "default": "",
                     "description": "Specify (optional) command line arguments, ie. -O (Optimizer).",
                     "scope": "resource"
                 },
-                "atari-dev-studio.batariBasic.compilerFolder": {
+                "atari-dev-studio.compiler.batariBasic.folder": {
                   "type": "string",
                   "default": "",
                   "description": "Don't wish to use the included version of the batari Basic compiler? Specify the folder location of your compiler:",
                   "scope": "resource"
                 },
 
-                "atari-dev-studio.7800basic.compilerArgs": {
+                "atari-dev-studio.compiler.7800basic.args": {
                     "type": "string",
                     "default": "",
                     "description": "Specify (optional) command line arguments.",
                     "scope": "resource"
                 },
-                "atari-dev-studio.7800basic.compilerFolder": {
+                "atari-dev-studio.compiler.7800basic.folder": {
                   "type": "string",
                   "default": "",
                   "description": "Don't wish to use the included version of the 7800basic compiler? Specify the folder location of your compiler:",
                   "scope": "resource"
                 },
 
-                "atari-dev-studio.dasm.compilerArgs": {
+                "atari-dev-studio.compiler.dasm.args": {
                     "type": "string",
                     "default": "",
                     "description": "Specify (optional) command line arguments:",
                     "scope": "resource"
                 },
-                "atari-dev-studio.dasm.compilerPath": {
+                "atari-dev-studio.compiler.dasm.path": {
                     "type": "string",
                     "default": "",
                     "description": "Don't wish to use the included version of the dasm compiler? Specify the full path (including filename) of your dasm compiler:",
                     "scope": "resource"
                 },
-                "atari-dev-studio.dasm.compilerFormat": {
+                "atari-dev-studio.compiler.dasm.format": {
                     "type": "string",
                     "enum": [
                       "1",
@@ -197,7 +208,7 @@
                     "description": "Specify the output format of the dasm compiler (1-3):",
                     "scope": "resource"
                 },
-                "atari-dev-studio.dasm.compilerVerboseness": {
+                "atari-dev-studio.compiler.dasm.verboseness": {
                     "type": "string",
                     "enum": [
                       "0",
@@ -210,7 +221,7 @@
                     "description": "Specify the verboseness of the dasm compiler (0-4):",
                     "scope": "resource"
                 },
-                "atari-dev-studio.dasm.defaultEmulator": {
+                "atari-dev-studio.compiler.dasm.defaultEmulator": {
                     "type": "string",
                     "enum": [
                       "Stella",
@@ -225,7 +236,6 @@
     },
     "activationEvents": [
         "*",
-        "onLanguage:78b",
         "onCommand:extension.openWelcomePage",
         "onCommand:extension.buildGame",
         "onCommand:extension.buildGameAndRun"

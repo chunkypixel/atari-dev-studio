@@ -17,7 +17,8 @@ require("./statusbar");
 // Activation Events
 // https://code.visualstudio.com/api/references/activation-events
 // Activation will occur if a language is chosen or a command executed
-// We can use "*" in activation events to run on startup (not recommended)
+// We can use "*" in activation events to run on startup (not always recommended)
+// We can use eg. "onLanguage:7800basic" for specific activation
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
