@@ -15,7 +15,7 @@ const execute = require("../execute");
 const compilerBase_1 = require("./compilerBase");
 class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     constructor() {
-        super("batariBasic", "batari Basic", [".bas", ".bb"], path.join(application.Path, "out", "bin", "compilers", "bb"), "Stella");
+        super("batariBasic", "batari Basic", [".bas", ".bb"], [".bin"], path.join(application.Path, "out", "bin", "compilers", "bb"), "Stella");
     }
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -101,9 +101,9 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             // Finalise
             let result = yield this.VerifyCompiledFileSizeAsync();
             if (result)
-                result = yield this.RemoveCompilationFilesAsync();
-            if (result)
                 result = yield this.MoveFilesToBinFolderAsync();
+            if (result)
+                result = yield this.RemoveCompilationFilesAsync();
             // Result
             return result;
         });

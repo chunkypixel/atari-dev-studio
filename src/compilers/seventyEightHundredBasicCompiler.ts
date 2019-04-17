@@ -8,7 +8,12 @@ import { CompilerBase } from "./compilerBase";
 export class SeventyEightHundredBasicCompiler extends CompilerBase {
 
     constructor() {
-        super("7800basic","7800basic",[".bas",".78b"],path.join(application.Path,"out","bin","compilers","7800basic"),"A7800");
+        super("7800basic",
+                "7800basic",
+                [".bas",".78b"],
+                [".a78",".bin"],
+                path.join(application.Path,"out","bin","compilers","7800basic"),
+                "A7800");
     }
     
     protected async ExecuteCompilerAsync(): Promise<boolean> {
@@ -71,18 +76,15 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         // Finalise
         application.CompilerOutputChannel.appendLine(``); 
         let result = await this.VerifyCompiledFileSizeAsync();
-        if (result) result = await this.RemoveCompilationFilesAsync();
         if (result) result = await this.MoveFilesToBinFolderAsync();
-
+        if (result) result = await this.RemoveCompilationFilesAsync();
+        
         // Result
         return result;
     }
 
     protected async LoadConfigurationAsync(): Promise<boolean> {
         console.log('debugger:SeventyEightHundredBasicCompiler.LoadConfigurationAsync');  
-
-        // System
-        this.CompiledExtensionName = ".a78"
 
         // Base
         let result = await super.LoadConfigurationAsync();

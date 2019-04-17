@@ -15,7 +15,7 @@ const execute = require("../execute");
 const compilerBase_1 = require("./compilerBase");
 class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
     constructor() {
-        super("7800basic", "7800basic", [".bas", ".78b"], path.join(application.Path, "out", "bin", "compilers", "7800basic"), "A7800");
+        super("7800basic", "7800basic", [".bas", ".78b"], [".a78", ".bin"], path.join(application.Path, "out", "bin", "compilers", "7800basic"), "A7800");
     }
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -69,9 +69,9 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             application.CompilerOutputChannel.appendLine(``);
             let result = yield this.VerifyCompiledFileSizeAsync();
             if (result)
-                result = yield this.RemoveCompilationFilesAsync();
-            if (result)
                 result = yield this.MoveFilesToBinFolderAsync();
+            if (result)
+                result = yield this.RemoveCompilationFilesAsync();
             // Result
             return result;
         });
@@ -82,8 +82,6 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
         });
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SeventyEightHundredBasicCompiler.LoadConfigurationAsync');
-            // System
-            this.CompiledExtensionName = ".a78";
             // Base
             let result = yield _super.LoadConfigurationAsync.call(this);
             if (!result)

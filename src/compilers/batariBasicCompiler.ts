@@ -8,7 +8,12 @@ import { CompilerBase } from "./compilerBase";
 export class BatariBasicCompiler extends CompilerBase {
     
     constructor() {
-        super("batariBasic","batari Basic",[".bas",".bb"],path.join(application.Path,"out","bin","compilers","bb"),"Stella");
+        super("batariBasic",
+                "batari Basic",
+                [".bas",".bb"],
+                [".bin"],
+                path.join(application.Path,"out","bin","compilers","bb"),
+                "Stella");
     }
 
     protected async ExecuteCompilerAsync(): Promise<boolean> {
@@ -18,7 +23,7 @@ export class BatariBasicCompiler extends CompilerBase {
         await this.RepairFilePermissionsAsync();
 
         // Compiler options
-        let commandName = "2600bas.bat";
+        let commandName = "2600bas.bat"; 
         if (application.IsLinux || application.IsMacOS) {
             // Linux or MacOS
             commandName = "./2600basic.sh";
@@ -107,9 +112,9 @@ export class BatariBasicCompiler extends CompilerBase {
 
         // Finalise
         let result = await this.VerifyCompiledFileSizeAsync();
-        if (result) result = await this.RemoveCompilationFilesAsync();
         if (result) result = await this.MoveFilesToBinFolderAsync();
-
+        if (result) result = await this.RemoveCompilationFilesAsync();
+        
         // Result
         return result;
     }

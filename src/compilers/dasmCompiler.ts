@@ -8,7 +8,12 @@ import { CompilerBase } from "./compilerBase";
 export class DasmCompiler extends CompilerBase {
 
     constructor() {
-        super("dasm","dasm",[".dasm",".asm",".a",".h"],path.join(application.Path,"out","bin","compilers","dasm"),"Stella");           
+        super("dasm",
+                "dasm",
+                [".dasm",".asm",".a",".h"],
+                [".bin"],
+                path.join(application.Path,"out","bin","compilers","dasm"),
+                "Stella");           
     }
 
     protected async ExecuteCompilerAsync(): Promise<boolean> {
@@ -21,7 +26,7 @@ export class DasmCompiler extends CompilerBase {
         let command = this.FolderOrPath;
         let args = [
             this.FileName,
-            `-o${this.CompiledFileName}`
+            `-o${this.FileName}${this.CompiledExtensions[0]}`
         ];
         // Format
         if (this.Format) args.push(`${"-f"}${this.Format}`);

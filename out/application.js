@@ -7,6 +7,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
 const path = require("path");
@@ -60,16 +67,27 @@ exports.Is64Bit = (os.arch() === 'x64');
 // -------------------------------------------------------------------------------------
 function BuildGameAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
+        var e_1, _a;
         // Get document
         let document = yield filesystem.GetDocumentAsync(fileUri);
         if (!document || document.uri.scheme != "file")
             return false;
         // Find compiler
         let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
-        for (const compiler of exports.Compilers) {
-            if (compiler.Extensions.includes(fileExtension)) {
-                return yield compiler.BuildGameAsync(document);
+        try {
+            for (var Compilers_1 = __asyncValues(exports.Compilers), Compilers_1_1; Compilers_1_1 = yield Compilers_1.next(), !Compilers_1_1.done;) {
+                let compiler = Compilers_1_1.value;
+                if (compiler.Extensions.includes(fileExtension)) {
+                    return yield compiler.BuildGameAsync(document);
+                }
             }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (Compilers_1_1 && !Compilers_1_1.done && (_a = Compilers_1.return)) yield _a.call(Compilers_1);
+            }
+            finally { if (e_1) throw e_1.error; }
         }
         // Not found
         Notify(`Unable to find a compiler for extension '${fileExtension}'.`);
@@ -79,16 +97,27 @@ function BuildGameAsync(fileUri) {
 exports.BuildGameAsync = BuildGameAsync;
 function BuildGameAndRunAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
+        var e_2, _a;
         // Get document
         let document = yield filesystem.GetDocumentAsync(fileUri);
         if (!document || document.uri.scheme != "file")
             return false;
         // Find compiler
         let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
-        for (const compiler of exports.Compilers) {
-            if (compiler.Extensions.includes(fileExtension)) {
-                return yield compiler.BuildGameAndRunAsync(document);
+        try {
+            for (var Compilers_2 = __asyncValues(exports.Compilers), Compilers_2_1; Compilers_2_1 = yield Compilers_2.next(), !Compilers_2_1.done;) {
+                let compiler = Compilers_2_1.value;
+                if (compiler.Extensions.includes(fileExtension)) {
+                    return yield compiler.BuildGameAndRunAsync(document);
+                }
             }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (Compilers_2_1 && !Compilers_2_1.done && (_a = Compilers_2.return)) yield _a.call(Compilers_2);
+            }
+            finally { if (e_2) throw e_2.error; }
         }
         // Not found
         Notify(`Unable to find a compiler for extension '${fileExtension}'.`);

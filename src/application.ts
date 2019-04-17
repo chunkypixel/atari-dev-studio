@@ -64,7 +64,7 @@ export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
 
 	// Find compiler
 	let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
-	for (const compiler of Compilers) {
+	for await (let compiler of Compilers) {
 		if (compiler.Extensions.includes(fileExtension)) {
 			return await compiler.BuildGameAsync(document);
 		}
@@ -82,7 +82,7 @@ export async function BuildGameAndRunAsync(fileUri: vscode.Uri): Promise<boolean
 
 	// Find compiler
 	let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
-	for (const compiler of Compilers) {
+	for await (let compiler of Compilers) {
 		if (compiler.Extensions.includes(fileExtension)) {
 			return await compiler.BuildGameAndRunAsync(document);
 		}
