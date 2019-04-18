@@ -19,11 +19,16 @@ export class A7800Emulator extends EmulatorBase {
 
         // Emulator
         if (!this.CustomFolderOrPath) {
-            // NOTE: currently Linux and macOS must provide path - this will be checked before launch
             if (application.IsWindows) {
-                // Append actual file (based on architecture)
-                // NOTE: 32-bit only
-                this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,"x32","A7800.exe");
+                this.FolderOrPath = path.join(this.FolderOrPath,"A7800.exe");
+            }
+            else if (application.IsLinux || application.IsMacOS) {
+                // Prepare
+                let architecture = "Linux";
+                if (application.IsMacOS) architecture = "Darwin";
+                
+                // Set
+                this.FolderOrPath = path.join(this.FolderOrPath,`a7800.${architecture}.x86_64`);
             }
         }
 
@@ -37,11 +42,11 @@ export class A7800Emulator extends EmulatorBase {
         // Prepare
         application.CompilerOutputChannel.appendLine(''); 
 
-        // Linux and MacOS must provide path (for now)
-        if ((application.IsLinux || application.IsMacOS) && !this.CustomFolderOrPath) {
-            application.Notify(`ERROR: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`); 
-            return false;
-        }
+        // // Linux and MacOS must provide path
+        // if ((application.IsLinux || application.IsMacOS) && !this.CustomFolderOrPath) {
+        //     application.Notify(`ERROR: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`); 
+        //     return false;
+        // }
 
         // Compiler options
         let command = this.FolderOrPath;

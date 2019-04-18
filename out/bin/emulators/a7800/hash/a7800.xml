@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE softwarelist SYSTEM "softwarelist.dtd">
+
+	<softwarelist name="a7800" description="Atari 7800 Add-on Hardware">
+	
+<!-- Passthrough carts -->
+
+	<software name="hiscore">
+		<description>High Score Cartridge</description>
+		<year>1984</year>
+		<publisher>Atari</publisher>
+		<info name="serial" value="CX78HSC"/>
+		<part name="cart" interface="a7800_cart">
+			<feature name="slot" value="a78_hsc" />
+			<dataarea name="rom" size="4096">
+				<rom name="highscre.bin" size="4096" crc="9be408d3" sha1="a3af676991391a6dd716c79022d4947206b78164" offset="0" />
+			</dataarea>
+			<dataarea name="nvram" size="2048">
+			</dataarea>
+		</part>
+	</software>
+
+<!-- Chip adding 128K of RAM + POKEY onboard -->
+	<software name="xboard">
+		<description>XBoarD Expansion</description>
+		<year>2005</year>
+		<publisher>&lt;homebrew&gt;</publisher>
+		<part name="cart" interface="a7800_cart">
+			<feature name="slot" value="a78_xboard" />
+			<dataarea name="rom" size="1">
+				<!-- this entry behaves just as passthrough, even if in fact the chips shall be socketed on the PCB! -->
+			</dataarea>
+			<dataarea name="ram" size="131072">
+			</dataarea>
+		</part>
+	</software>
+
+<!-- Chip adding 128K of RAM + POKEY + HighScore onboard -->
+	<software name="xm">
+		<description>XM Expansion Module</description>
+		<year>20XX</year>
+		<publisher>&lt;homebrew&gt;</publisher>
+		<part name="cart" interface="a7800_cart">
+			<feature name="slot" value="a78_xm" />
+			<dataarea name="rom" size="4096">
+				<rom name="highscre.bin" size="4096" crc="9be408d3" sha1="a3af676991391a6dd716c79022d4947206b78164" offset="0" />
+			</dataarea>
+			<dataarea name="ram" size="131072">
+			</dataarea>
+			<dataarea name="nvram" size="2048">
+			</dataarea>
+		</part>
+	</software>
+
+</softwarelist>
