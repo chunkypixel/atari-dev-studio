@@ -84,21 +84,22 @@ export class BatariBasicCompiler extends CompilerBase {
                 } else if (stderr.includes("User-defined score_graphics.asm found in current directory")) {
                     // Ok - bB throws out standard message here that it shouldn't so we need to verify everything arrr...
 
-                } else if (stderr.includes("Parse error") || stderr.includes("error:")) {
+                } else if (stderr.includes("Parse error") || stderr.includes("error:") || stderr.includes("Permission denied")) {
                     // bB messages received (so far):
                     // Parse error
                     // Error: 
+                    // Permission denied
                      
-                     // Failed
-                     result = false;
+                    // Failed
+                    result = false;
 
                 } else if (stderr.includes("Cannot open includes.bB for reading")) {
                     // Special - seen this when the source is not processed correctly so we'll advise
                     // obviously doesn't get to the point of copying over this file
                     application.CompilerOutputChannel.appendLine("WARNING: An unknown issue has occurred during compilation that may have affected your build....");
 
-                     // Failed
-                     result = false;
+                    // Failed
+                    result = false;
                 }
 
                 // Result

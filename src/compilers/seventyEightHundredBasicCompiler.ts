@@ -64,6 +64,15 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
                 // Prepare
                 let result = true;
 
+                // Validate
+                if (stderr.includes("Permission denied")) {
+                    // Potential messages received (so far):
+                    // Permission denied
+                    
+                    // Failed
+                    result = false;
+                }
+
                 // Result
                 application.CompilerOutputChannel.append('' + stderr);
                 return result;
@@ -116,8 +125,11 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800optimize.${architecture}.x86`));
         if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800postprocess.${architecture}.x86`));
         if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800preprocess.${architecture}.x86`));
+        if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800sign.${architecture}.x86`));
         if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`dasm.${architecture}.x86`));
         if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`distella.${architecture}.x86`));
+
+        // Result
         return result;
     }
 

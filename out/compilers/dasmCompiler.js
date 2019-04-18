@@ -67,6 +67,13 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             }, (stderr) => {
                 // Prepare
                 let result = true;
+                // Validate
+                if (stderr.includes("Permission denied")) {
+                    // Potential messages received (so far):
+                    // Permission denied
+                    // Failed
+                    result = false;
+                }
                 // Result
                 application.CompilerOutputChannel.append('' + stderr);
                 return result;
@@ -84,13 +91,11 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
         });
     }
     LoadConfigurationAsync() {
-        const _super = Object.create(null, {
-            LoadConfigurationAsync: { get: () => super.LoadConfigurationAsync }
-        });
+        const _super = name => super[name];
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.LoadConfigurationAsync');
             // Base
-            let result = yield _super.LoadConfigurationAsync.call(this);
+            let result = yield _super("LoadConfigurationAsync").call(this);
             if (!result)
                 return false;
             // Compiler

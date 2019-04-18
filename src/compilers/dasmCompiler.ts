@@ -71,6 +71,15 @@ export class DasmCompiler extends CompilerBase {
                 // Prepare
                 let result = true;
 
+                // Validate
+                if (stderr.includes("Permission denied")) {
+                    // Potential messages received (so far):
+                    // Permission denied
+                    
+                    // Failed
+                    result = false;
+                }
+                                
                 // Result
                 application.CompilerOutputChannel.append('' + stderr);
                 return result;

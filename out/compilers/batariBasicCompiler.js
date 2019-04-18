@@ -76,10 +76,11 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                 else if (stderr.includes("User-defined score_graphics.asm found in current directory")) {
                     // Ok - bB throws out standard message here that it shouldn't so we need to verify everything arrr...
                 }
-                else if (stderr.includes("Parse error") || stderr.includes("error:")) {
+                else if (stderr.includes("Parse error") || stderr.includes("error:") || stderr.includes("Permission denied")) {
                     // bB messages received (so far):
                     // Parse error
                     // Error: 
+                    // Permission denied
                     // Failed
                     result = false;
                 }

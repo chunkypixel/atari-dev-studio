@@ -75,9 +75,6 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Not found
         application.Notify(`Unable to find emulator '${this.Emulator}' to launch game.`);
         return false;
-
-        // Result
-        return true;
     }
 
     protected abstract ExecuteCompilerAsync(): Promise<boolean> 

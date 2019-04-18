@@ -17,13 +17,11 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
         super("Stella", "Stella", path.join(application.Path, "out", "bin", "emulators", "stella"));
     }
     LoadConfigurationAsync() {
-        const _super = Object.create(null, {
-            LoadConfigurationAsync: { get: () => super.LoadConfigurationAsync }
-        });
+        const _super = name => super[name];
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:StellaEmulator.LoadConfigurationAsync');
             // Base
-            let result = yield _super.LoadConfigurationAsync.call(this);
+            let result = yield _super("LoadConfigurationAsync").call(this);
             if (!result)
                 return false;
             // Emulator
