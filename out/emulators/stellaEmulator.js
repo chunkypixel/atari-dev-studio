@@ -47,7 +47,7 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
             // Prepare
             application.CompilerOutputChannel.appendLine('');
             // macOS must provide path (for now)
-            if ((application.IsLinux || application.IsMacOS) && !this.CustomFolderOrPath) {
+            if ((application.IsMacOS) && !this.CustomFolderOrPath) {
                 application.Notify(`WARNING: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`);
                 return false;
             }
