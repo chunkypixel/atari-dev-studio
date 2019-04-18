@@ -18,11 +18,13 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
         super("A7800", "A7800", path.join(application.Path, "out", "bin", "emulators", "a7800"));
     }
     LoadConfigurationAsync() {
-        const _super = name => super[name];
+        const _super = Object.create(null, {
+            LoadConfigurationAsync: { get: () => super.LoadConfigurationAsync }
+        });
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:A7800Emulator.LoadConfigurationAsync');
             // Base
-            let result = yield _super("LoadConfigurationAsync").call(this);
+            let result = yield _super.LoadConfigurationAsync.call(this);
             if (!result)
                 return false;
             // Emulator
@@ -30,7 +32,7 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
                 if (application.IsWindows) {
                     this.FolderOrPath = path.join(this.FolderOrPath, "A7800.exe");
                 }
-                // NOTE: there seems to be an issue running the donwloadable Linux app
+                // NOTE: there seems to be an issue running the downloadable Linux app
                 //       remove for now.
                 // else if (application.IsLinux || application.IsMacOS) {
                 //     // Prepare
@@ -52,7 +54,7 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
             // Prepare
             application.CompilerOutputChannel.appendLine('');
             // Linux and MacOS must provide path
-            // NOTE: there seems to be an issue running the donwloadable Linux app
+            // NOTE: there seems to be an issue running the downloadable Linux app
             //       remove for now.
             if ((application.IsLinux || application.IsMacOS) && !this.CustomFolderOrPath) {
                 application.Notify(`ERROR: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`);

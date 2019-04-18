@@ -23,7 +23,7 @@ export class A7800Emulator extends EmulatorBase {
             if (application.IsWindows) {
                 this.FolderOrPath = path.join(this.FolderOrPath,"A7800.exe");
             }
-            // NOTE: there seems to be an issue running the donwloadable Linux app
+            // NOTE: there seems to be an issue running the downloadable Linux app
             //       remove for now.
             // else if (application.IsLinux || application.IsMacOS) {
             //     // Prepare
@@ -49,7 +49,7 @@ export class A7800Emulator extends EmulatorBase {
         application.CompilerOutputChannel.appendLine(''); 
 
         // Linux and MacOS must provide path
-        // NOTE: there seems to be an issue running the donwloadable Linux app
+        // NOTE: there seems to be an issue running the downloadable Linux app
         //       remove for now.
         if ((application.IsLinux || application.IsMacOS) && !this.CustomFolderOrPath) {
              application.Notify(`ERROR: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`); 
