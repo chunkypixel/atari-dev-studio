@@ -10,6 +10,16 @@ Atari Dev Studio is an extension for Microsoft's cross-platform IDE Visual Studi
 
 The latest releases of batari Basic, 7800basic, dasm, Stella and A7800 are included so you can begin coding straight after installing the extension.
 
+## Features
+Atari Dev Studio includes the following features:
+* Develop your game on Windows, Linux or macOS
+* Compile source code for your Atari 2600 or 7800 using batari Basic, 7800basic or dasm
+* Optionally launch and test your game using the Stella (2600) or A7800 (7800) emulators
+* Manage your project using the File Explorer or version-control your source code directly with GitHub (and others) using the built-in features of the Visual Studio Code platform.
+* Provide references to your own specific releases of each language or emulator rather than use the includes ones (via the Preferences -> Settings -> Atari Dev Studio)
+
+Additional features are planned for the future. At this time the focus is on the core functionality and ensuring full cross-platform support.
+
 ## Installing Atari Dev Studio
 
 ### What is Visual Studio Code?
@@ -32,19 +42,9 @@ Updates will be regularly made available and will be announced via the **AtariAg
 
 It is recommended you restart VS Code after installing an update.
 
-## Features
-Atari Dev Studio includes the following features:
-* Develop your game on Windows, Linux or macOS
-* Compile source code for your Atari 2600 or 7800 using batari Basic, 7800basic or dasm
-* Optionally launch and test your game using the Stella (2600) or A7800 (7800) emulators
-* Manage your project using the File Explorer or version-control your source code directly with GitHub (and others) using the built-in features of the Visual Studio Code platform.
-* Provide references to your own specific releases of each language or emulator rather than use the includes ones (via the Preferences -> Settings -> Atari Dev Studio)
+## Using Atari Dev Studio
 
-Additional features are planned for the future. At this time the focus is on the core functionality and ensuring full cross-platform support.
-
-### Using Atari Dev Studio
-
-## Compiling your program
+### Compiling your program
 To display the available extension features press **CTRL+SHIFT+P** to display the **Command Palette**. From the command palette prompt type **adv** to short-list the available options:
 * ads: Open the Welcome page
 * ads: Compile source code
@@ -59,10 +59,11 @@ When you load a file the initial language will be chosen based on the file exten
 * dasm (.dasm, .asm, .a, .h) 
 
 To change a language you can click on the status bar **Language selector** (bottom right) and a list will be shown allowing you to choose another language. Optionally in the settings (via the Preferences -> Settings -> Atari Dev Studio) you will be able to either let the extension choose based on the active language or set a specific language to always compile against.
+
 ![Language Selector](images/ataridevstudio-languageselector.png)
  
 ### Status Bar
-Apart from using the **Command Palette** to select compilation, I've also added some buttons to the Status Bar allowing you to:
+Apart from using the **Command Palette** to select compilation, there are a number of short-cut buttons on the **Status Bar** allowing you to:
 * Display the extension version (might be useful at times)
 * Open the Welcome page
 * Compile source code
