@@ -1,14 +1,10 @@
 # Atari Dev Studio
-Welcome to Atari Dev Studio for designing homebrew games for the Atari 8-bit systems (Atari 2600 and 7800). Atari Dev Studio is a one-stop-shop for any programmer and includes a number of built-in features to allow you to design, develop and test games for your favourite system. 
-
-Get started with batari Basic (2600) or 7800basic (7800) using easy to learn BASIC-like languages or go hard-core with assembly using dasm.  During development test your creation using the Stella (2600) or A7800 (7800) emulators right from within Atari Dev Studio.
+Welcome to Atari Dev Studio for designing homebrew games for the Atari 8-bit systems (Atari 2600 and 7800). Atari Dev Studio is a one-stop-shop for any programmer and includes a number of built-in features to allow you to design, develop and test games for your favourite system. Get started with batari Basic (2600) or 7800basic (7800) using easy to learn BASIC-like languages or go hard-core with assembly using dasm.  During development test your creation using the Stella (2600) or A7800 (7800) emulators right from within Atari Dev Studio.
 
 ![Atari Dev Studio](images/ataridevstudio-emulator.png)
 
 ## Requirements
-Atari Dev Studio is an extension for Microsoft's cross-platform IDE Visual Studio Code and will run on the Windows, Linux and macOS platforms.
-
-The latest releases of batari Basic, 7800basic, dasm, Stella and A7800 are included so you can begin coding straight after installing the extension.
+Atari Dev Studio is an extension for Microsoft's cross-platform IDE Visual Studio Code and will run on the Windows, Linux and macOS platforms. The latest releases of batari Basic, 7800basic, dasm, Stella and A7800 are included so you can begin coding straight after installing the extension.
 
 ## Features
 Atari Dev Studio includes the following features:
@@ -16,7 +12,7 @@ Atari Dev Studio includes the following features:
 * Compile source code for your Atari 2600 or 7800 using batari Basic, 7800basic or dasm
 * Optionally launch and test your game using the Stella (2600) or A7800 (7800) emulators
 * Manage your project using the File Explorer or version-control your source code directly with GitHub (and others) using the built-in features of the Visual Studio Code platform.
-* Provide references to your own specific releases of each language or emulator rather than use the includes ones (via the Preferences -> Settings -> Atari Dev Studio)
+* Provide references to your own specific releases of each language or emulator rather than use the includes ones (via Preferences -> Settings -> Atari Dev Studio)
 
 Additional features are planned for the future. At this time the focus is on the core functionality and ensuring full cross-platform support.
 
@@ -58,7 +54,7 @@ When you load a file the initial language will be chosen based on the file exten
 * 7800basic (.bas, .78b)
 * dasm (.dasm, .asm, .a, .h) 
 
-To change a language you can click on the status bar **Language selector** (bottom right) and a list will be shown allowing you to choose another language. Optionally in the settings (via the Preferences -> Settings -> Atari Dev Studio) you will be able to either let the extension choose based on the active language or set a specific language to always compile against.
+To change a language you can click on the status bar **Language selector** (bottom right) and a list will be shown allowing you to choose another language. Optionally in the settings (via Preferences -> Settings -> Atari Dev Studio) you will be able to either let the extension choose based on the active language or set a specific language to always compile against.
 
 ![Language Selector](images/ataridevstudio-languageselector.png)
  
@@ -73,7 +69,7 @@ Apart from using the **Command Palette** to select compilation, there are a numb
 
 ## This is a preview
 This software is currently in preview and contains the following missing or untested features:
-* [macOS] Stella emulator is missing. You will be required to provide your own path to Stella for the time-being (via the Preferences -> Settings -> Atari Dev Studio).
+* [macOS] Stella emulator is missing. You will be required to provide your own path to Stella for the time-being (via Preferences -> Settings -> Atari Dev Studio).
 * [macOS] 7800basic and the A7800 emulator is untested
 * [Linux] Potential for missing packages (On Unbuntu 18.04.02 x64 I have been required to install a number)
 
@@ -101,16 +97,12 @@ batari Basic created by Fred 'batari' Quimby is a BASIC-like language used in th
 batari Basic is an external project and can be downloaded separately from [here](http://7800.8bitdev.org/index.php/Batari_basic).  Further information is about this release is available here at [AtariAge](http://atariage.com/forums/topic/214909-bb-with-native-64k-cart-support-11dreveng/).
 
 ### 7800basic (release 0.6 Jul 12 2017 22:46:35)
-7800basic is a BASIC-like language for creating Atari 7800 games.  It is a compiled language that runs on a computer, and it creates a binary file that can be run with an Atari 7800 emulator, or the binary file may be used to make a cartridge that will operate on a real Atari 7800.
-
-7800basic is derived from batari basic, a BASIC-like language for creating Atari 2600 games. Special thanks to the bB creator, Fred Quimby, and all of the the bB contributors!
+7800basic is a BASIC-like language for creating Atari 7800 games.  It is a compiled language that runs on a computer, and it creates a binary file that can be run with an Atari 7800 emulator, or the binary file may be used to make a cartridge that will operate on a real Atari 7800. 7800basic is derived from batari basic, a BASIC-like language for creating Atari 2600 games. Special thanks to the bB creator, Fred Quimby, and all of the the bB contributors!
 
 7800basic is included as part of this extension with many thanks to Mike Saarna (RevEng).  7800basic is an external project and can be downloaded separately [here](http://7800.8bitdev.org/index.php/7800basic).  Further information about this release is available here at [AtariAge](http://atariage.com/forums/topic/222638-7800basic-beta-the-release-thread/.)
 
 ### dasm (release 2.20.11 - 20171206)
-dasm is a versatile macro assembler with support for several 8-bit microprocessors including MOS 6502 & 6507, Motorola 6803, 68705 & 68HC11, Hitachi HD6303 (extended Motorola 6801), and Fairchild F8.
-
-Matthew Dillon started dasm in 1987-1988. Olaf 'Rhialto' Seibert extended dasm in 1995. Andrew Davie maintained dasm in 2003-2008. During all this time, several other versions of dasm sprung up all over the net as well, making the exact chronology quite complicated. Peter Froehlich started maintaining dasm in 2008, hoping (against hope) to unify the various strands of development a little, and to maybe give dasm another 20 years of productive life. :-)
+dasm is a versatile macro assembler with support for several 8-bit microprocessors including MOS 6502 & 6507, Motorola 6803, 68705 & 68HC11, Hitachi HD6303 (extended Motorola 6801), and Fairchild F8. Matthew Dillon started dasm in 1987-1988. Olaf 'Rhialto' Seibert extended dasm in 1995. Andrew Davie maintained dasm in 2003-2008. During all this time, several other versions of dasm sprung up all over the net as well, making the exact chronology quite complicated. Peter Froehlich started maintaining dasm in 2008, hoping (against hope) to unify the various strands of development a little, and to maybe give dasm another 20 years of productive life. :-)
 
 ## Emulation
 Atari Dev Studio includes the following emulators for testing purposes:
