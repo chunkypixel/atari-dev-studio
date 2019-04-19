@@ -6,7 +6,7 @@ Get started with batari Basic (2600) or 7800basic (7800) using easy to learn BAS
 ![Atari Dev Studio](images/ataridevstudio-emulator.png)
 
 ## Requirements
-Atari Dev Studio is an extension for Microsoft's cross-platform IDE Visual Studio Code and will run on the Microsoft Windows, Linux and macOS platforms.
+Atari Dev Studio is an extension for Microsoft's cross-platform IDE Visual Studio Code and will run on the Windows, Linux and macOS platforms.
 
 The latest releases of batari Basic, 7800basic, dasm, Stella and A7800 are included so you can begin coding straight after installing the extension.
 
@@ -42,6 +42,34 @@ Atari Dev Studio includes the following features:
 
 Additional features are planned for the future. At this time the focus is on the core functionality and ensuring full cross-platform support.
 
+### Using Atari Dev Studio
+
+## Compiling your program
+To display the available extension features press **CTRL+SHIFT+P** to display the **Command Palette**. From the command palette prompt type **adv** to short-list the available options:
+* ads: Open the Welcome page
+* ads: Compile source code
+* ads: Compile source code and run in emulator
+
+![Command Palette](images/ataridevstudio-commandpalette.png)
+
+### Language Selection
+When you load a file the initial language will be chosen based on the file extension.  For example:
+* batari Basic (.bas, .bb) [Default for .bas files]
+* 7800basic (.bas, .78b)
+* dasm (.dasm, .asm, .a, .h) 
+
+To change a language you can click on the status bar **Language selector** (bottom right) and a list will be shown allowing you to choose another language. Optionally in the settings (via the Preferences -> Settings -> Atari Dev Studio) you will be able to either let the extension choose based on the active language or set a specific language to always compile against.
+![Language Selector](images/ataridevstudio-languageselector.png)
+ 
+### Status Bar
+Apart from using the **Command Palette** to select compilation, I've also added some buttons to the Status Bar allowing you to:
+* Display the extension version (might be useful at times)
+* Open the Welcome page
+* Compile source code
+* Compile source code and run
+
+![Status Bar](images/ataridevstudio-statusbar.png)
+
 ## This is a preview
 This software is currently in preview and contains the following missing or untested features:
 * [macOS] Stella emulator is missing. You will be required to provide your own path to Stella for the time-being (via the Preferences -> Settings -> Atari Dev Studio).
@@ -69,14 +97,14 @@ Atari Dev Studio includes the following programming languages:
 ### batari Basic (release BB.1.1d.reveng41)
 batari Basic created by Fred 'batari' Quimby is a BASIC-like language used in the creation of Atari 2600 games. batari Basic is compiled to generate a binary file that can by used on actual Atari 2600 VCS hardware via cartridge (such as a Harmony or UNO cart) or by using an Atari 2600 VCS emulator such as Stella.
 
-batari Basic is an external project and can be downloaded seperately from [here](http://7800.8bitdev.org/index.php/Batari_basic).  Further information is about this release is available here at [AtariAge](http://atariage.com/forums/topic/214909-bb-with-native-64k-cart-support-11dreveng/).
+batari Basic is an external project and can be downloaded separately from [here](http://7800.8bitdev.org/index.php/Batari_basic).  Further information is about this release is available here at [AtariAge](http://atariage.com/forums/topic/214909-bb-with-native-64k-cart-support-11dreveng/).
 
 ### 7800basic (release 0.6 Jul 12 2017 22:46:35)
 7800basic is a BASIC-like language for creating Atari 7800 games.  It is a compiled language that runs on a computer, and it creates a binary file that can be run with an Atari 7800 emulator, or the binary file may be used to make a cartridge that will operate on a real Atari 7800.
 
 7800basic is derived from batari basic, a BASIC-like language for creating Atari 2600 games. Special thanks to the bB creator, Fred Quimby, and all of the the bB contributors!
 
-7800basic is included as part of this extension with many thanks to Mike Saarna (RevEng).  7800basic is an external project and can be downloaded seperately [here](http://7800.8bitdev.org/index.php/7800basic).  Further information about this release is available here at [AtariAge](http://atariage.com/forums/topic/222638-7800basic-beta-the-release-thread/.)
+7800basic is included as part of this extension with many thanks to Mike Saarna (RevEng).  7800basic is an external project and can be downloaded separately [here](http://7800.8bitdev.org/index.php/7800basic).  Further information about this release is available here at [AtariAge](http://atariage.com/forums/topic/222638-7800basic-beta-the-release-thread/.)
 
 ### dasm (release 2.20.11 - 20171206)
 dasm is a versatile macro assembler with support for several 8-bit microprocessors including MOS 6502 & 6507, Motorola 6803, 68705 & 68HC11, Hitachi HD6303 (extended Motorola 6801), and Fairchild F8.
@@ -89,7 +117,7 @@ Atari Dev Studio includes the following emulators for testing purposes:
 ### Stella (release 6.0)
 Stella is a multi-platform Atari 2600 VCS emulator released under the GNU General Public License (GPL). Stella was originally developed for Linux by Bradford W. Mott, and is currently maintained by Stephen Anthony. Since its original release several people have joined the development team to port Stella to other operating systems such as AcornOS, AmigaOS, DOS, FreeBSD, IRIX, Linux, OS/2, MacOS, Unix, and Windows. The development team is working hard to perfect the emulator and we hope you enjoy our effort.
 
-Stella is included as part of this extension with many thanks to Stephen Anthony. Stella is an external project and can be downloaded seperately [here](https://stella-emu.github.io). If you enjoy using Stella place consider [donating](https://stella-emu.github.io/donations.html) to ensure it's continued development.
+Stella is included as part of this extension with many thanks to Stephen Anthony. Stella is an external project and can be downloaded separately [here](https://stella-emu.github.io). If you enjoy using Stella place consider [donating](https://stella-emu.github.io/donations.html) to ensure it's continued development.
 
 ### A7800 (release 188-03)
 A7800 is a fork of the MAME Atari 7800 driver, with several enhancements added:
@@ -100,4 +128,4 @@ Maria DMA timing has been improved further, with the addition of accurate DMA ho
 * A bug in the existing RIOT emulation has been fixed.
 * MAME compatibility and syntax has been maintained, to allow for the reuse of MAME configuration files and front-ends.
 
-A7800 is included as part of this extension with many thanks to Mike Saarna (RevEng). A7800 is an external project and can be downloaded seperately [here](http://7800.8bitdev.org/index.php/Emulators_and_Tools).
+A7800 is included as part of this extension with many thanks to Mike Saarna (RevEng). A7800 is an external project and can be downloaded separately [here](http://7800.8bitdev.org/index.php/Emulators_and_Tools).
