@@ -12,7 +12,7 @@ export class A7800Emulator extends EmulatorBase {
     public Console: string = "";
 
     // Lists (to match settings)
-    // Hopefully one-day work out how to hot-load into settings
+    // Hopefully one-day I'll work out how to hot-load into settings
     // so we can dynamically configure
     protected readonly RegionList: Map<string, string> = new Map([
         ["Atari 7800 (NTSC) Cool","a7800"], 

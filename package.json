@@ -2,13 +2,14 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Game creation for the Atari 8-bit consoles",
-    "version": "0.0.1",
+    "version": "0.1.0",
+    "icon": "images/icon.png",
     "preview": true,
     "publisher": "chunkypixel",
     "homepage": "https://github.com/chunkypixel/atari-dev-studio",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/chunkypixel/atari-dev-studio.git"
+        "url": "https://github.com/chunkypixel/atari-dev-studio.git"
     },
     "engines": {
         "vscode": "^1.33.0"

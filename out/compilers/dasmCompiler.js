@@ -94,11 +94,13 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
         });
     }
     LoadConfigurationAsync() {
-        const _super = name => super[name];
+        const _super = Object.create(null, {
+            LoadConfigurationAsync: { get: () => super.LoadConfigurationAsync }
+        });
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.LoadConfigurationAsync');
             // Base
-            let result = yield _super("LoadConfigurationAsync").call(this);
+            let result = yield _super.LoadConfigurationAsync.call(this);
             if (!result)
                 return false;
             // Compiler

@@ -1,9 +1,7 @@
 # Change Log
 
-All notable changes to the "atari-dev-studio" extension will be documented in this file.
+The following enhancements and changes have been made to Atari Dev Studio:
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## 0.1.0
 
-## [Unreleased]
-
-- Initial release
+* Initial release

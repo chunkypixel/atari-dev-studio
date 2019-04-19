@@ -1,0 +1,19 @@
+Creating a VSIX package
+-----------------------
+Install the vsce extension
+npm install -g vsce
+
+Creating a packgage
+vsce package 
+
+
+Installing a VSIX package 
+-------------------------
+* Open the Extensions features from the Activity Bar (left side).
+* In the Extensions panel, click the Hamburger (...) menu and select the 'Install from VSIX...' option
+* From the browser, navigate to the required file select it and click the Install button. 
+
+
+Compiling extension source manually
+-----------------------------------
+tsc

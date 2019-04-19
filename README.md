@@ -42,8 +42,16 @@ Atari Dev Studio includes the following features:
 
 Additional features are planned for the future. At this time the focus is on the core functionality and ensuring full cross-platform support.
 
+## This is a preview
+This software is currently in preview and contains the following missing or untested features:
+* [macOS] Stella emulator is missing. You will be required to provide your own path to Stella for the time-being (via the Preferences -> Settings -> Atari Dev Studio).
+* [macOS] 7800basic and the A7800 emulator is untested
+* [Linux] Potential for missing packages (On Unbuntu 18.04.02 x64 I have been required to install a number)
+
+I don't currently have direct access to a macOS machine to finalise feature integration but will do so in the near future. The previous incarnation of this extension (containing batari Basic and dasm) has been tested by users on macOS and as the process is very similar to Linux I do expect the extension to function correctly.
+
 ## Known Issues
-There are currently no known issues. If you find a problem please raise an issue on [GitHub](https://github.com/chunkypixel/atari-dev-studio/issues) or contact [mksmith](http://atariage.com/forums/user/66583-mksmith/) at the AtariAge community.
+There are currently no known feature issues. If you find a problem please raise an issue on [GitHub](https://github.com/chunkypixel/atari-dev-studio/issues) or contact [mksmith](http://atariage.com/forums/user/66583-mksmith/) at the AtariAge community.
 
 ## Acknowlegments
 This extension is only available due to the great people of the AtariAge community who have created these tools to help developers build their vision.  Special thanks to the following for either allowing the inclusion of their tools or for their ongoing help and encouragement:

@@ -20,7 +20,7 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
         this.Region = "";
         this.Console = "";
         // Lists (to match settings)
-        // Hopefully one-day work out how to hot-load into settings
+        // Hopefully one-day I'll work out how to hot-load into settings
         // so we can dynamically configure
         this.RegionList = new Map([
             ["Atari 7800 (NTSC) Cool", "a7800"],
@@ -38,11 +38,13 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
         ]);
     }
     LoadConfigurationAsync() {
-        const _super = name => super[name];
+        const _super = Object.create(null, {
+            LoadConfigurationAsync: { get: () => super.LoadConfigurationAsync }
+        });
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:A7800Emulator.LoadConfigurationAsync');
             // Base
-            let result = yield _super("LoadConfigurationAsync").call(this);
+            let result = yield _super.LoadConfigurationAsync.call(this);
             if (!result)
                 return false;
             // Reset
