@@ -255,7 +255,33 @@
                     "default": "",
                     "description": "Specify (optional) command line arguments:",
                     "scope": "resource"
-                  }
+                  },
+                  "atari-dev-studio.emulator.a7800.region": {
+                    "type": "string",
+                    "enum": [
+                        "Atari 7800 (NTSC) Cool",
+                        "Atari 7800 (NTSC) Warm",
+                        "Atari 7800 (NTSC) Hot",
+                        "Atari 7800 (PAL) Cool",
+                        "Atari 7800 (PAL) Warm",
+                        "Atari 7800 (PAL) Hot"
+                    ],
+                    "default": "Atari 7800 (NTSC) Cool",
+                    "description": "Specify the required console region:",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.emulator.a7800.console": {
+                  "type": "string",
+                  "enum": [
+                      "Standard Console",
+                      "High Score Cartridge",
+                      "XM Expansion Module",
+                      "XBoarD Expansion"
+                  ],
+                  "default": "Standard Console",
+                  "description": "Specify the required console configuration:",
+                  "scope": "resource"
+              }
             }
         }
     },

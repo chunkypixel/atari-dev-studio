@@ -7,6 +7,10 @@ import { CompilerBase } from "./compilerBase";
 
 export class DasmCompiler extends CompilerBase {
 
+    // Features
+    public Format: string = "";
+    public Verboseness: string = "";
+
     constructor() {
         super("dasm",
                 "dasm",
@@ -133,6 +137,10 @@ export class DasmCompiler extends CompilerBase {
             // Use the default
             this.FolderOrPath = path.join(this.DefaultFolderOrPath, dasmCommand);                
         }
+
+        // Compiler (other)
+        this.Format = this.Configuration!.get<string>(`compiler.${this.Id}.format`,"3");
+        this.Verboseness = this.Configuration!.get<string>(`compiler.${this.Id}.verboseness`,"0");
 
         // Emulator
         // User can select required emulator from settings

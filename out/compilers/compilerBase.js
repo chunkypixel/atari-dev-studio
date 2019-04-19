@@ -9,10 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-    var m = o[Symbol.asyncIterator], i;
-    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
-    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
-    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+    var m = o[Symbol.asyncIterator];
+    return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
@@ -21,15 +19,13 @@ const application = require("../application");
 const filesystem = require("../filesystem");
 class CompilerBase {
     constructor(id, name, extensions, compiledExtensions, folderOrPath, emulator) {
-        // features
+        // Features
         this.IsRunning = false;
         // Note: these need to be in reverse order compared to how they are read
         this.DebuggerExtensions = new Map([["-s", ".sym"], ["-l", ".lst"]]);
         this.CustomFolderOrPath = false;
         this.FolderOrPath = "";
         this.Args = "";
-        this.Format = "";
-        this.Verboseness = "";
         this.Emulator = "";
         this.FileName = "";
         this.CompiledSubFolder = "";
@@ -61,15 +57,14 @@ class CompilerBase {
     }
     BuildGameAndRunAsync(document) {
         return __awaiter(this, void 0, void 0, function* () {
-            var e_1, _a;
             // Process
             let result = yield this.BuildGameAsync(document);
             if (!result)
                 return false;
             try {
                 // Get emulator
-                for (var _b = __asyncValues(application.Emulators), _c; _c = yield _b.next(), !_c.done;) {
-                    let emulator = _c.value;
+                for (var _a = __asyncValues(application.Emulators), _b; _b = yield _a.next(), !_b.done;) {
+                    let emulator = yield _b.value;
                     if (emulator.Id === this.Emulator) {
                         // Note: first extension should be the one which is to be lauched
                         let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
@@ -80,13 +75,14 @@ class CompilerBase {
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                    if (_b && !_b.done && (_c = _a.return)) yield _c.call(_a);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
             // Not found
             application.Notify(`Unable to find emulator '${this.Emulator}' to launch game.`);
             return false;
+            var e_1, _c;
         });
     }
     InitialiseAsync() {
@@ -139,8 +135,6 @@ class CompilerBase {
             this.CustomFolderOrPath = false;
             this.FolderOrPath = this.DefaultFolderOrPath;
             this.Args = "";
-            this.Format = "";
-            this.Verboseness = "";
             this.Emulator = this.DefaultEmulator;
             // Compiler
             let userCompilerFolder = this.Configuration.get(`compiler.${this.Id}.folder`);
@@ -158,8 +152,6 @@ class CompilerBase {
             }
             // Compiler (other)
             this.Args = this.Configuration.get(`compiler.${this.Id}.args`, "");
-            this.Format = this.Configuration.get(`compiler.${this.Id}.format`, "3");
-            this.Verboseness = this.Configuration.get(`compiler.${this.Id}.verboseness`, "0");
             // Compilation
             this.GenerateDebuggerFiles = this.Configuration.get(`compiler.options.generateDebuggerFiles`, true);
             this.CleanUpCompilationFiles = this.Configuration.get(`compiler.options.cleanupCompilationFiles`, true);
@@ -173,13 +165,12 @@ class CompilerBase {
     }
     VerifyCompiledFileSizeAsync() {
         return __awaiter(this, void 0, void 0, function* () {
-            var e_2, _a;
             console.log('debugger:CompilerBase.VerifyCompiledFileSize');
             // Verify created file(s)
             application.Notify(`Verifying compiled file(s)...`);
             try {
-                for (var _b = __asyncValues(this.CompiledExtensions), _c; _c = yield _b.next(), !_c.done;) {
-                    let extension = _c.value;
+                for (var _a = __asyncValues(this.CompiledExtensions), _b; _b = yield _a.next(), !_b.done;) {
+                    let extension = yield _b.value;
                     // Prepare
                     let compiledFileName = `${this.FileName}${extension}`;
                     let compiledFilePath = path.join(this.WorkspaceFolder, compiledFileName);
@@ -195,18 +186,18 @@ class CompilerBase {
             catch (e_2_1) { e_2 = { error: e_2_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                    if (_b && !_b.done && (_c = _a.return)) yield _c.call(_a);
                 }
                 finally { if (e_2) throw e_2.error; }
             }
             ;
             // Result
             return true;
+            var e_2, _c;
         });
     }
     MoveFilesToBinFolderAsync() {
         return __awaiter(this, void 0, void 0, function* () {
-            var e_3, _a, e_4, _b;
             // Note: generateDebuggerFile - there are different settings for each compiler
             console.log('debugger:CompilerBase.MoveFilesToBinFolder');
             // Create directory?
@@ -219,8 +210,8 @@ class CompilerBase {
             // Move compiled file(s)
             application.Notify(`Moving compiled file(s) to '${this.CompiledSubFolderName}' folder...`);
             try {
-                for (var _c = __asyncValues(this.CompiledExtensions), _d; _d = yield _c.next(), !_d.done;) {
-                    let extension = _d.value;
+                for (var _a = __asyncValues(this.CompiledExtensions), _b; _b = yield _a.next(), !_b.done;) {
+                    let extension = yield _b.value;
                     // Prepare
                     let compiledFileName = `${this.FileName}${extension}`;
                     let oldPath = path.join(this.WorkspaceFolder, compiledFileName);
@@ -237,7 +228,7 @@ class CompilerBase {
             catch (e_3_1) { e_3 = { error: e_3_1 }; }
             finally {
                 try {
-                    if (_d && !_d.done && (_a = _c.return)) yield _a.call(_c);
+                    if (_b && !_b.done && (_c = _a.return)) yield _c.call(_a);
                 }
                 finally { if (e_3) throw e_3.error; }
             }
@@ -247,8 +238,8 @@ class CompilerBase {
                 // Move all debugger files?
                 application.Notify(`Moving debugger file(s) to '${this.CompiledSubFolderName}' folder...`);
                 try {
-                    for (var _e = __asyncValues(this.DebuggerExtensions), _f; _f = yield _e.next(), !_f.done;) {
-                        let [arg, extension] = _f.value;
+                    for (var _d = __asyncValues(this.DebuggerExtensions), _e; _e = yield _d.next(), !_e.done;) {
+                        let [arg, extension] = yield _e.value;
                         // Prepare
                         let debuggerFile = `${this.FileName}${extension}`;
                         let oldPath = path.join(this.WorkspaceFolder, debuggerFile);
@@ -265,23 +256,23 @@ class CompilerBase {
                 catch (e_4_1) { e_4 = { error: e_4_1 }; }
                 finally {
                     try {
-                        if (_f && !_f.done && (_b = _e.return)) yield _b.call(_e);
+                        if (_e && !_e.done && (_f = _d.return)) yield _f.call(_d);
                     }
                     finally { if (e_4) throw e_4.error; }
                 }
             }
             // Return
             return true;
+            var e_3, _c, e_4, _f;
         });
     }
     RemoveDebuggerFilesAsync(folder) {
         return __awaiter(this, void 0, void 0, function* () {
-            var e_5, _a;
             console.log('debugger:CompilerBase.RemoveDebuggerFilesAsync');
             try {
                 // Process
-                for (var _b = __asyncValues(this.DebuggerExtensions), _c; _c = yield _b.next(), !_c.done;) {
-                    let [arg, extension] = _c.value;
+                for (var _a = __asyncValues(this.DebuggerExtensions), _b; _b = yield _a.next(), !_b.done;) {
+                    let [arg, extension] = yield _b.value;
                     // Prepare
                     let debuggerFile = `${this.FileName}${extension}`;
                     let debuggerFilePath = path.join(folder, debuggerFile);
@@ -292,12 +283,13 @@ class CompilerBase {
             catch (e_5_1) { e_5 = { error: e_5_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                    if (_b && !_b.done && (_c = _a.return)) yield _c.call(_a);
                 }
                 finally { if (e_5) throw e_5.error; }
             }
             // Result
             return true;
+            var e_5, _c;
         });
     }
     getWorkspaceFolder() {

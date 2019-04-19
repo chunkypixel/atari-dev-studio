@@ -7,7 +7,7 @@ import { stringify } from 'querystring';
 
 export abstract class CompilerBase implements vscode.Disposable {
 
-    // features
+    // Features
     public IsRunning: boolean = false;
 
     public readonly Id: string;
@@ -20,8 +20,6 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected DefaultFolderOrPath: string;
     public FolderOrPath: string = "";
     public Args: string = "";
-    public Format: string = "";
-    public Verboseness: string = "";
     public Emulator: string = "";
     protected DefaultEmulator: string;
     protected Configuration: vscode.WorkspaceConfiguration | undefined;
@@ -132,8 +130,6 @@ export abstract class CompilerBase implements vscode.Disposable {
         this.CustomFolderOrPath = false;
         this.FolderOrPath = this.DefaultFolderOrPath;
         this.Args = "";
-        this.Format = "";
-        this.Verboseness = "";
         this.Emulator = this.DefaultEmulator;
 
         // Compiler
@@ -153,8 +149,6 @@ export abstract class CompilerBase implements vscode.Disposable {
         }
         // Compiler (other)
         this.Args = this.Configuration!.get<string>(`compiler.${this.Id}.args`,"");
-        this.Format = this.Configuration!.get<string>(`compiler.${this.Id}.format`,"3");
-        this.Verboseness = this.Configuration!.get<string>(`compiler.${this.Id}.verboseness`,"0");
     
         // Compilation
         this.GenerateDebuggerFiles = this.Configuration!.get<boolean>(`compiler.options.generateDebuggerFiles`, true);

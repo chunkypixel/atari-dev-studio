@@ -79,14 +79,17 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
             });
         this.IsRunning = false;
 
+        // Cleanup (regardless of state if chosen)
+        application.CompilerOutputChannel.appendLine(``); 
+        await this.RemoveCompilationFilesAsync();
+
         // Validate
         if (!executeResult) return false;
 
         // Finalise
-        application.CompilerOutputChannel.appendLine(``); 
         let result = await this.VerifyCompiledFileSizeAsync();
         if (result) result = await this.MoveFilesToBinFolderAsync();
-        if (result) result = await this.RemoveCompilationFilesAsync();
+        //if (result) result = await this.RemoveCompilationFilesAsync();
         
         // Result
         return result;
@@ -144,6 +147,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
             // Process
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`${this.FileName}.asm`));
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`7800.asm`));
+            await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`includes.7800`));
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`a78info.cfg`));
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`7800basic_variable_redefs.h`));
         }

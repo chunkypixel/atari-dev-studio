@@ -69,28 +69,27 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
                 return result;
             });
             this.IsRunning = false;
+            // Cleanup (regardless of state if chosen)
+            application.CompilerOutputChannel.appendLine(``);
+            yield this.RemoveCompilationFilesAsync();
             // Validate
             if (!executeResult)
                 return false;
             // Finalise
-            application.CompilerOutputChannel.appendLine(``);
             let result = yield this.VerifyCompiledFileSizeAsync();
             if (result)
                 result = yield this.MoveFilesToBinFolderAsync();
-            if (result)
-                result = yield this.RemoveCompilationFilesAsync();
+            //if (result) result = await this.RemoveCompilationFilesAsync();
             // Result
             return result;
         });
     }
     LoadConfigurationAsync() {
-        const _super = Object.create(null, {
-            LoadConfigurationAsync: { get: () => super.LoadConfigurationAsync }
-        });
+        const _super = name => super[name];
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SeventyEightHundredBasicCompiler.LoadConfigurationAsync');
             // Base
-            let result = yield _super.LoadConfigurationAsync.call(this);
+            let result = yield _super("LoadConfigurationAsync").call(this);
             if (!result)
                 return false;
             // System
@@ -144,6 +143,7 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
                 // Process
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `${this.FileName}.asm`));
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `7800.asm`));
+                yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `includes.7800`));
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `a78info.cfg`));
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `7800basic_variable_redefs.h`));
             }

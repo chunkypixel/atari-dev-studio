@@ -96,6 +96,8 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                 return result;
             });
             this.IsRunning = false;
+            // Remove (regardless of state if chosen)
+            yield this.RemoveCompilationFilesAsync();
             // Validate
             if (!executeResult)
                 return false;
@@ -103,8 +105,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             let result = yield this.VerifyCompiledFileSizeAsync();
             if (result)
                 result = yield this.MoveFilesToBinFolderAsync();
-            if (result)
-                result = yield this.RemoveCompilationFilesAsync();
+            //if (result) result = await this.RemoveCompilationFilesAsync();
             // Result
             return result;
         });

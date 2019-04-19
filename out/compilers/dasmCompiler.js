@@ -16,6 +16,9 @@ const compilerBase_1 = require("./compilerBase");
 class DasmCompiler extends compilerBase_1.CompilerBase {
     constructor() {
         super("dasm", "dasm", [".dasm", ".asm", ".a", ".h"], [".bin"], path.join(application.Path, "out", "bin", "compilers", "dasm"), "Stella");
+        // Features
+        this.Format = "";
+        this.Verboseness = "";
     }
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -91,13 +94,11 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
         });
     }
     LoadConfigurationAsync() {
-        const _super = Object.create(null, {
-            LoadConfigurationAsync: { get: () => super.LoadConfigurationAsync }
-        });
+        const _super = name => super[name];
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.LoadConfigurationAsync');
             // Base
-            let result = yield _super.LoadConfigurationAsync.call(this);
+            let result = yield _super("LoadConfigurationAsync").call(this);
             if (!result)
                 return false;
             // Compiler
@@ -130,6 +131,9 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
                 // Use the default
                 this.FolderOrPath = path.join(this.DefaultFolderOrPath, dasmCommand);
             }
+            // Compiler (other)
+            this.Format = this.Configuration.get(`compiler.${this.Id}.format`, "3");
+            this.Verboseness = this.Configuration.get(`compiler.${this.Id}.verboseness`, "0");
             // Emulator
             // User can select required emulator from settings
             let userDefaultEmulator = this.Configuration.get(`compiler.${this.Id}.defaultEmulator`);

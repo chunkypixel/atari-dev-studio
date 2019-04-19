@@ -16,31 +16,72 @@ const emulatorBase_1 = require("./emulatorBase");
 class A7800Emulator extends emulatorBase_1.EmulatorBase {
     constructor() {
         super("A7800", "A7800", path.join(application.Path, "out", "bin", "emulators", "a7800"));
+        // Features
+        this.Region = "";
+        this.Console = "";
+        // Lists (to match settings)
+        // Hopefully one-day work out how to hot-load into settings
+        // so we can dynamically configure
+        this.RegionList = new Map([
+            ["Atari 7800 (NTSC) Cool", "a7800"],
+            ["Atari 7800 (NTSC) Warm", "a7800u1"],
+            ["Atari 7800 (NTSC) Hot", "a7800u2"],
+            ["Atari 7800 (PAL) Cool", "a7800p"],
+            ["Atari 7800 (PAL) Warm", "a7800pu1"],
+            ["Atari 7800 (PAL) Hot", "a7800pu2"]
+        ]);
+        this.ConsoleList = new Map([
+            ["Standard Console", ""],
+            ["High Score Cartridge", "hiscore"],
+            ["XBoarD Expansion", "xboard"],
+            ["XM Expansion Module", "xm"]
+        ]);
     }
     LoadConfigurationAsync() {
-        const _super = Object.create(null, {
-            LoadConfigurationAsync: { get: () => super.LoadConfigurationAsync }
-        });
+        const _super = name => super[name];
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:A7800Emulator.LoadConfigurationAsync');
             // Base
-            let result = yield _super.LoadConfigurationAsync.call(this);
+            let result = yield _super("LoadConfigurationAsync").call(this);
             if (!result)
                 return false;
+            // Reset
+            this.Region = "";
+            this.Console = "";
             // Emulator
             if (!this.CustomFolderOrPath) {
                 if (application.IsWindows) {
                     this.FolderOrPath = path.join(this.FolderOrPath, "A7800.exe");
                 }
-                // NOTE: there seems to be an issue running the downloadable Linux app
-                //       remove for now.
-                // else if (application.IsLinux || application.IsMacOS) {
-                //     // Prepare
-                //     let architecture = "Linux";
-                //     if (application.IsMacOS) architecture = "Darwin";
-                //     // Set
-                //     this.FolderOrPath = path.join(this.FolderOrPath,`a7800.${architecture}.x86_64`);
-                // }
+                else if (application.IsLinux || application.IsMacOS) {
+                    // Prepare
+                    let architecture = "Linux";
+                    if (application.IsMacOS)
+                        architecture = "OSX";
+                    // Set
+                    this.FolderOrPath = path.join(this.FolderOrPath, `a7800.${architecture}-x86_64`);
+                }
+            }
+            // Emulator (Other)
+            let userRegion = this.Configuration.get(`emulator.${this.Id.toLowerCase()}.region`, "");
+            if (userRegion) {
+                // Confirm from list
+                for (let [name, id] of this.RegionList) {
+                    if (name === userRegion) {
+                        this.Region = id;
+                        break;
+                    }
+                }
+            }
+            let userConsole = this.Configuration.get(`emulator.${this.Id.toLowerCase()}.console`, "");
+            if (userConsole) {
+                // Confirm from list
+                for (let [name, id] of this.ConsoleList) {
+                    if (name === userConsole) {
+                        this.Console = id;
+                        break;
+                    }
+                }
             }
             // Result
             return true;
@@ -53,19 +94,21 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
             yield this.RepairFilePermissionsAsync();
             // Prepare
             application.CompilerOutputChannel.appendLine('');
-            // Linux and MacOS must provide path
-            // NOTE: there seems to be an issue running the downloadable Linux app
-            //       remove for now.
-            if ((application.IsLinux || application.IsMacOS) && !this.CustomFolderOrPath) {
-                application.Notify(`ERROR: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`);
-                return false;
-            }
+            // // Validate inbuilt availability
+            // if ((application.IsWindows || application.IsLinux || application.IsMacOS) && !this.CustomFolderOrPath) {
+            //      application.Notify(`ERROR: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`); 
+            //      return false;
+            // }
+            // Set region
+            let regionArg = `${this.Region} -cart1`;
+            // Set console
+            let consoleArg = (this.Console ? `${this.Console} -cart2` : "");
             // Compiler options
             let command = this.FolderOrPath;
             // Args
             let args = [
-                "a7800",
-                "-cart",
+                regionArg,
+                consoleArg,
                 this.Args,
                 `"${this.FileName}"`
             ];
@@ -95,10 +138,6 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
             // Validate
             if (this.CustomFolderOrPath || application.IsWindows)
                 return true;
-            // Prepare
-            let architecture = "Linux";
-            if (application.IsMacOS)
-                architecture = "Darwin";
             // Process
             let result = yield filesystem.ChModAsync(this.FolderOrPath);
             return result;
