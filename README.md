@@ -12,7 +12,7 @@ Atari Dev Studio includes the following features:
 * Compile source code for your Atari 2600 or 7800 using batari Basic, 7800basic or dasm
 * Optionally launch and test your game using the Stella (2600) or A7800 (7800) emulators
 * Manage your project using the File Explorer or version-control your source code directly with GitHub (and others) using the built-in features of the Visual Studio Code platform.
-* Provide references to your own specific releases of each language or emulator rather than use the includes ones (via Preferences -> Settings -> Atari Dev Studio)
+* Provide references to your own specific releases of each language or emulator rather than use the includes ones via the **Settings**.
 
 Additional features are planned for the future. At this time the focus is on the core functionality and ensuring full cross-platform support.
 
@@ -36,12 +36,12 @@ Updates will be regularly made available and will be announced via the **AtariAg
 1. Open **VS Code** and click on the **Extensions** button on the **Activity Bar** to display the **Extensions** window.
 2. From the **Extensions** window, search the **Enabled** list and click the **Update** button on the **Atari Dev Studio** item.
 
-It is recommended you restart VS Code after installing an update.
+> Note: It is recommended you restart VS Code after installing an update.
 
 ## Using Atari Dev Studio
 
 ### Compiling your program
-To display the available extension features press **CTRL+SHIFT+P** to display the **Command Palette**. From the command palette prompt type **adv** to short-list the available options:
+To display the available extension features press **CTRL+SHIFT+P** to display the **Command Palette**. From the **Command Palette** prompt type **adv** to short-list the available options:
 * ads: Open the Welcome page
 * ads: Compile source code
 * ads: Compile source code and run in emulator
@@ -54,7 +54,7 @@ When you load a file the initial language will be chosen based on the file exten
 * 7800basic (.bas, .78b)
 * dasm (.dasm, .asm, .a, .h) 
 
-To change a language you can click on the status bar **Language selector** (bottom right) and a list will be shown allowing you to choose another language. Optionally in the settings (via Preferences -> Settings -> Atari Dev Studio) you will be able to either let the extension choose based on the active language or set a specific language to always compile against.
+To change a language you can click on the Status Bar **Language selector** and a list will be shown allowing you to choose another language. Optionally in the **Settings** you will be able to either let the extension choose based on the active language or set a specific language to always compile against.
 
 ![Language Selector](images/ataridevstudio-languageselector.png)
  
@@ -67,9 +67,12 @@ Apart from using the **Command Palette** to select compilation, there are a numb
 
 ![Status Bar](images/ataridevstudio-statusbar.png)
 
+### Settings
+There are a number of compiler, emulator and editor configuration options available in Atari Dev Studio which can be changed via the **Settings** (Preferences -> Settings -> Extensions -> Atari Dev Studio).
+
 ## This is a preview
 This software is currently in preview and contains the following missing or untested features:
-* [macOS] Stella emulator is missing. You will be required to provide your own path to Stella for the time-being (via Preferences -> Settings -> Atari Dev Studio).
+* [macOS] Stella emulator is missing. You will be required to provide your own path to Stella for the time-being (via the **Settings**).
 * [macOS] 7800basic and the A7800 emulator is untested
 * [Linux] Potential for missing packages (On Unbuntu 18.04.02 x64 I have been required to install a number)
 

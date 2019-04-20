@@ -16,6 +16,19 @@ const seventyEightHundredBasicCompiler_1 = require("./compilers/seventyEightHund
 const dasmCompiler_1 = require("./compilers/dasmCompiler");
 const stellaEmulator_1 = require("./emulators/stellaEmulator");
 const a7800Emulator_1 = require("./emulators/a7800Emulator");
+// -------------------------------------------------------------------------------------
+// Operating System
+// -------------------------------------------------------------------------------------
+exports.OSPlatform = os.platform();
+exports.OSArch = os.arch();
+exports.IsWindows = (os.platform() === 'win32');
+exports.IsLinux = (os.platform() === 'linux');
+exports.IsMacOS = (os.platform() === 'darwin');
+exports.Is32Bit = (os.arch() === 'x32');
+exports.Is64Bit = (os.arch() === 'x64');
+// -------------------------------------------------------------------------------------
+// Extension
+// -------------------------------------------------------------------------------------
 exports.Id = "chunkypixel.atari-dev-studio";
 exports.Path = vscode.extensions.getExtension(exports.Id).extensionPath;
 exports.Name = vscode.extensions.getExtension(exports.Id).packageJSON.name;
@@ -23,6 +36,7 @@ exports.Publisher = vscode.extensions.getExtension(exports.Id).packageJSON.publi
 exports.Version = vscode.extensions.getExtension(exports.Id).packageJSON.version;
 exports.DisplayName = vscode.extensions.getExtension(exports.Id).packageJSON.displayName;
 exports.Description = vscode.extensions.getExtension(exports.Id).packageJSON.description;
+exports.PreferencesSettingsExtensionPath = `${(exports.IsMacOS ? "Code" : "File")} -> Preferences -> Settings -> Extensions -> ${exports.DisplayName}`;
 // -------------------------------------------------------------------------------------
 // Channels
 // -------------------------------------------------------------------------------------
@@ -44,16 +58,6 @@ exports.Emulators = [
     new stellaEmulator_1.StellaEmulator(),
     new a7800Emulator_1.A7800Emulator()
 ];
-// -------------------------------------------------------------------------------------
-// Operating System
-// -------------------------------------------------------------------------------------
-exports.OSPlatform = os.platform();
-exports.OSArch = os.arch();
-exports.IsWindows = (os.platform() === 'win32');
-exports.IsLinux = (os.platform() === 'linux');
-exports.IsMacOS = (os.platform() === 'darwin');
-exports.Is32Bit = (os.arch() === 'x32');
-exports.Is64Bit = (os.arch() === 'x64');
 // -------------------------------------------------------------------------------------
 // Functions
 // -------------------------------------------------------------------------------------
@@ -126,7 +130,7 @@ function getChosenCompiler(document) {
         exports.CompilerOutputChannel.clear();
     }
     // Not found
-    Notify(`Unable to determine a compiler to use based on your chosen default compiler '${chosenCompiler}'.  Review your selection in Preference -> Extensions -> ${exports.DisplayName}.`);
+    Notify(`Unable to determine a compiler to use based on your chosen default compiler '${chosenCompiler}'. Review your selection in ${exports.PreferencesSettingsExtensionPath}.`);
     // Not found
     return undefined;
 }

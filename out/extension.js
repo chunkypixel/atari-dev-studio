@@ -29,7 +29,9 @@ function activate(context) {
     console.log(`Extension ${application.DisplayName} (${application.Version}) is now active!`);
     console.log(`- Installation path: '${application.Path}'`);
     // Announcement
-    vscode.window.showInformationMessage(`Welcome to ${application.DisplayName} (v${application.Version})!`);
+    // Github:https://github.com/chunkypixel/atari-dev-studio/issues/2
+    // Annoyance remove
+    //vscode.window.showInformationMessage(`Welcome to ${application.DisplayName} (v${application.Version})!`);
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json

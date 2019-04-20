@@ -215,7 +215,7 @@ ul, menu, dir {
     margin: 1px;
     padding: 12px 10px;
     width: calc(100% - 2px);
-    height: 5em;
+    height: auto;
     font-size: 1.3em;
     text-align: left;
     cursor: pointer;
@@ -239,7 +239,7 @@ ul, menu, dir {
 }
 
 .welcomePage .commands .item button>span {
-    display: inline-block;
+    display: inline-grid;
     width: 100%;
     min-width: 0;
     white-space: nowrap;

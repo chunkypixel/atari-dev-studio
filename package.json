@@ -1,8 +1,8 @@
 {
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
-    "description": "Game creation for the Atari 8-bit consoles",
-    "version": "0.1.0",
+    "description": "Homebrew game creation for the Atari 8-bit consoles",
+    "version": "0.1.1",
     "icon": "images/icon.png",
     "preview": true,
     "publisher": "chunkypixel",

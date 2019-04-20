@@ -68,7 +68,7 @@ class EmulatorBase {
                 let result = yield filesystem.FileExistsAsync(userEmulatorPath);
                 if (!result) {
                     // Notify
-                    application.Notify(`ERROR: Cannot locate your chosen ${this.Name} emulator path '${userEmulatorPath}'. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`);
+                    application.Notify(`ERROR: Cannot locate your chosen ${this.Name} emulator path '${userEmulatorPath}'. Review your selection in ${application.PreferencesSettingsExtensionPath}.`);
                     return false;
                 }
                 // Set

@@ -41,7 +41,7 @@ export class StellaEmulator extends EmulatorBase {
 
         // Validate inbuilt availability
         if ((application.IsMacOS) && !this.CustomFolderOrPath) {
-            application.Notify(`WARNING: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`); 
+            application.Notify(`WARNING: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Review your selection in ${application.PreferencesSettingsExtensionPath}.`); 
             return false;
         }
 

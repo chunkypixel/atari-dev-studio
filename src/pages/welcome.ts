@@ -66,10 +66,10 @@ export class WelcomePage implements vscode.Disposable {
         // Capture command messages
         this.currentPanel.webview.onDidReceiveMessage(
             message => {
-                console.log(`bbFeature.openWelcomePage.command.${message.command}`);
+                console.log(`WelcomePage.openWelcomePage.command.${message.command}`);
                 switch (message.command) {
                     case 'openNewFile':
-                        this.openNewFileDocument("bB");
+                        this.openNewFileDocument("batariBasic");
                         return;
 
                     case 'openFolder':
@@ -104,12 +104,28 @@ export class WelcomePage implements vscode.Disposable {
                         this.openNewFileDocument("bB", standardContent);
                         return;
 
-                    case 'openRandomTerrainPage':
-                        this.openRandomTerrainPage();                   
+                    case 'openBatariGuidePage':
+                        this.openBatariGuidePage();                   
+                        return;
+
+                    case 'open7800basicGuidePage':
+                        this.open7800basicGuidePage();                   
                         return;
 
                     case 'openBatariBasicForum':
                         this.openBatariBasicForum();
+                        return;
+
+                    case 'open7800ProgrammingForum':
+                        this.open7800ProgrammingForum();
+                        return;
+
+                    case 'openDiscussionPage':
+                        this.openDiscussionPage();
+                        return;
+                    
+                    case 'openGitHubIssue':
+                        this.openGitHubIssue();
                         return;
                 }
             }
@@ -146,16 +162,40 @@ export class WelcomePage implements vscode.Disposable {
         });
     }
 
-    public openBatariBasicForum() {
-        console.log('debugger:bBFeature.openBatariBasicForum');
+    private openBatariBasicForum() {
+        console.log('debugger:WelcomePage.openBatariBasicForum');
 
         this.openUrl("http://atariage.com/forums/forum/65-batari-basic/");
     }
 
-    public openRandomTerrainPage() {
-        console.log('debugger:bBFeature.openRandomTerrainPage');
+    private open7800ProgrammingForum() {
+        console.log('debugger:WelcomePage.open7800ProgrammingForum');
+
+        this.openUrl("http://atariage.com/forums/forum/52-atari-7800-programming/");
+    }
+
+    private openBatariGuidePage() {
+        console.log('debugger:WelcomePage.openBatariGuidePage');
 
         this.openUrl("http://www.randomterrain.com/atari-2600-memories-batari-basic-commands.html");
+    }
+
+    private open7800basicGuidePage() {
+        console.log('debugger:WelcomePage.open7800basicGuidePage');
+
+        this.openUrl("http://www.randomterrain.com/7800basic.html");
+    }
+
+    private openDiscussionPage() {
+        console.log('debugger:WelcomePage.openDiscussionPage');
+
+        this.openUrl("http://atariage.com/forums/topic/290365-atari-dev-studio-for-homebrew-development-release/");
+    }
+
+    private openGitHubIssue() {
+        console.log('debugger:WelcomePage.openGitHubIssue');
+
+        this.openUrl("https://github.com/chunkypixel/atari-dev-studio/issues");
     }
 
     public async openUrl(uri: string) {

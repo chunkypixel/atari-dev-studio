@@ -1,5 +1,6 @@
 "use strict";
 import * as vscode from 'vscode';
+import * as application from './application';
 import * as fs from 'fs';
 
 export async function GetFileUriAsync(fileUri: vscode.Uri): Promise<vscode.Uri> {
@@ -120,7 +121,7 @@ export function ChModAsync(path: string, mode: string = '777'): Promise<boolean>
 
     return new Promise((resolve, reject) => {
         fs.chmod(path, mode, err => {
-            if (err) { console.log(`- failed to set chmod permissions: ${err.message}`)}
+            if (err) { application.Notify(`- failed to set chmod permissions: ${err.message}`)}
             resolve(!err);
         });
     }); 

@@ -98,7 +98,7 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
             application.CompilerOutputChannel.appendLine('');
             // // Validate inbuilt availability
             // if ((application.IsWindows || application.IsLinux || application.IsMacOS) && !this.CustomFolderOrPath) {
-            //      application.Notify(`ERROR: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`); 
+            //      application.Notify(`ERROR: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Review your selection in ${application.PreferencesSettingsExtensionPath}.`); 
             //      return false;
             // }
             // Set region

@@ -30,7 +30,7 @@
 			"patterns": [
 				{
 					"name": "keyword.control.label.dasm",
-					"match": "^[a-zA-Z0-9]+\\b\\s*[^=]",
+					"match": "^[a-zA-Z0-9]+\\b",
 					"comment": "Label"
 				}
 			]
@@ -39,7 +39,7 @@
 			"patterns": [
 				{
 					"name": "keyword.directives.dasm",
-					"match": "(?i)[\\s]*\\b(include|incdir|seg|seg\\.u|dc|dc\\.bwl|dv|dv\\.bwl|hex|org|rorg|rend|align|subroutine|equ|=|eqm|set|mac|endm|mexit|ifconst|ifnconst|if|else|endif|eif|repeat|repend|list\\s+on|list\\soff|processor)\\b"
+					"match": "(?i)[\\s]*\\b(include|incdir|seg|seg\\.u|dc|dc\\.bwl|ds|ds\\.bwl|dv|dv\\.bwl|hex|org|rorg|rend|align|subroutine|equ|=|eqm|set|mac|endm|mexit|ifconst|ifnconst|if|else|endif|eif|repeat|repend|list\\s+on|list\\soff|processor)\\b"
 				}
 			]
 		},

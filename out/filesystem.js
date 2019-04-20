@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
+const application = require("./application");
 const fs = require("fs");
 function GetFileUriAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -127,7 +128,7 @@ function ChModAsync(path, mode = '777') {
     return new Promise((resolve, reject) => {
         fs.chmod(path, mode, err => {
             if (err) {
-                console.log(`- failed to set chmod permissions: ${err.message}`);
+                application.Notify(`- failed to set chmod permissions: ${err.message}`);
             }
             resolve(!err);
         });

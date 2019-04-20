@@ -145,7 +145,7 @@ class CompilerBase {
                 let result = yield filesystem.FolderExistsAsync(userCompilerFolder);
                 if (!result) {
                     // Notify
-                    application.Notify(`ERROR: Cannot locate your chosen ${this.Name} compiler folder '${userCompilerFolder}'. Review your selection in Preference -> Extensions -> ${application.DisplayName}.`);
+                    application.Notify(`ERROR: Cannot locate your chosen ${this.Name} compiler folder '${userCompilerFolder}'. Review your selection in ${application.PreferencesSettingsExtensionPath}.`);
                     return false;
                 }
                 // Set

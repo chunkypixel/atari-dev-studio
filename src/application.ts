@@ -1,6 +1,5 @@
 "use strict";
 import * as vscode from 'vscode';
-import * as path from 'path';
 import * as filesystem from './filesystem';
 const os = require("os");
 import { CompilerBase } from './compilers/compilerBase';
@@ -10,8 +9,21 @@ import { SeventyEightHundredBasicCompiler } from './compilers/seventyEightHundre
 import { DasmCompiler } from './compilers/dasmCompiler';
 import { StellaEmulator } from './emulators/stellaEmulator';
 import { A7800Emulator } from './emulators/a7800Emulator';
-import { appendFile } from 'fs';
 
+// -------------------------------------------------------------------------------------
+// Operating System
+// -------------------------------------------------------------------------------------
+export const OSPlatform: any = os.platform();
+export const OSArch: any = os.arch();
+export const IsWindows: boolean = (os.platform() === 'win32');
+export const IsLinux: boolean = (os.platform() === 'linux');
+export const IsMacOS: boolean = (os.platform() === 'darwin');
+export const Is32Bit: boolean = (os.arch() === 'x32');
+export const Is64Bit: boolean = (os.arch() === 'x64');
+
+// -------------------------------------------------------------------------------------
+// Extension
+// -------------------------------------------------------------------------------------
 export const Id = "chunkypixel.atari-dev-studio";
 export const Path: string = vscode.extensions.getExtension(Id)!.extensionPath;
 export const Name: string = vscode.extensions.getExtension(Id)!.packageJSON.name;
@@ -19,6 +31,7 @@ export const Publisher: string = vscode.extensions.getExtension(Id)!.packageJSON
 export const Version: string = vscode.extensions.getExtension(Id)!.packageJSON.version;
 export const DisplayName: string = vscode.extensions.getExtension(Id)!.packageJSON.displayName;
 export const Description: string = vscode.extensions.getExtension(Id)!.packageJSON.description;
+export const PreferencesSettingsExtensionPath: string = `${(IsMacOS ? "Code" : "File")} -> Preferences -> Settings -> Extensions -> ${DisplayName}`;
 
 // -------------------------------------------------------------------------------------
 // Channels
@@ -43,17 +56,6 @@ export const Emulators:EmulatorBase[] = [
 	new StellaEmulator(),
 	new A7800Emulator()
 ];
-
-// -------------------------------------------------------------------------------------
-// Operating System
-// -------------------------------------------------------------------------------------
-export const OSPlatform: any = os.platform();
-export const OSArch: any = os.arch();
-export const IsWindows: boolean = (os.platform() === 'win32');
-export const IsLinux: boolean = (os.platform() === 'linux');
-export const IsMacOS: boolean = (os.platform() === 'darwin');
-export const Is32Bit: boolean = (os.arch() === 'x32');
-export const Is64Bit: boolean = (os.arch() === 'x64');
 
 // -------------------------------------------------------------------------------------
 // Functions
@@ -129,7 +131,7 @@ function getChosenCompiler(document: vscode.TextDocument): CompilerBase | undefi
 	}
 
 	// Not found
-	Notify(`Unable to determine a compiler to use based on your chosen default compiler '${chosenCompiler}'.  Review your selection in Preference -> Extensions -> ${DisplayName}.`);
+	Notify(`Unable to determine a compiler to use based on your chosen default compiler '${chosenCompiler}'. Review your selection in ${PreferencesSettingsExtensionPath}.`);
 
 	// Not found
 	return undefined;
