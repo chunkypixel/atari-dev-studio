@@ -12,7 +12,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 ### Issues
 * #1 [UnderReview] - Added compiler notification to help with permission error when compiling dasm on macOS (thanks SmallRoomLabs)
 * #2 [Fixed] - Removed popup message (thanks SmallRoomLabs)
-* #3 [Fixed] - Updated breadcrumb to Settings to correcty path and catered for cross-platform (thanks SmallRoomLabs)
+* #3 [Fixed] - Updated breadcrumb to Settings to correct path and catered for cross-platform (thanks SmallRoomLabs)
 * #4 [Fixed] - Updated syntax highlighter (thanks SmallRoomLabs)
 
 ## 0.1.0

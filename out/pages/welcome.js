@@ -11,8 +11,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
 const fs = require("fs");
 const path = require("path");
-const opn = require("open");
 const Application = require("../application");
+const opn = require("open");
 class WelcomePage {
     constructor() {
         this.currentPanel = undefined;
@@ -60,7 +60,6 @@ class WelcomePage {
             }
             // Capture command messages
             this.currentPanel.webview.onDidReceiveMessage(message => {
-                console.log(`WelcomePage.openWelcomePage.command.${message.command}`);
                 switch (message.command) {
                     case 'openNewFile':
                         this.openNewFileDocument("batariBasic");
@@ -112,6 +111,8 @@ class WelcomePage {
                         this.openGitHubIssue();
                         return;
                 }
+                // Unknown
+                console.log(`Unknown Welcome Page command called: ${message.command}`);
             });
             // Capture dispose
             this.currentPanel.onDidDispose(() => {

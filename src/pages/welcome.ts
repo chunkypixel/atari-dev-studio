@@ -2,8 +2,8 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import opn = require('open');
 import * as Application from '../application';
+import opn = require('open');
 
 export class WelcomePage implements vscode.Disposable {
 
@@ -66,7 +66,6 @@ export class WelcomePage implements vscode.Disposable {
         // Capture command messages
         this.currentPanel.webview.onDidReceiveMessage(
             message => {
-                console.log(`WelcomePage.openWelcomePage.command.${message.command}`);
                 switch (message.command) {
                     case 'openNewFile':
                         this.openNewFileDocument("batariBasic");
@@ -128,6 +127,9 @@ export class WelcomePage implements vscode.Disposable {
                         this.openGitHubIssue();
                         return;
                 }
+
+                // Unknown
+                console.log(`Unknown Welcome Page command called: ${message.command}`);
             }
         );
 
