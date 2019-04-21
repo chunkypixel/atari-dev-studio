@@ -70,6 +70,8 @@ Apart from using the **Command Palette** to select compilation, there are a numb
 
 ![Status Bar](images/ataridevstudio-statusbar.png)
 
+> Note: the short-cut buttons on the **Status Bar** can be turned off via the **Settings**.
+
 ### Settings
 There are a number of compiler, emulator and editor configuration options available in Atari Dev Studio which can be changed via the **Settings** (Preferences -> Settings -> Extensions -> Atari Dev Studio).
 
