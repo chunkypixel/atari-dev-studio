@@ -27,7 +27,7 @@
 			"patterns": [
 			{
 				"name": "keyword.control.78b",
-				"match": "\\b(asm|CARRY|callmacro|const|dec|def|dim|else|end|if|include|includesfile|inline|for|gosub|goto|let|macro|next|on|pop|rand|return|set|step|then|to)\\b",
+				"match": "\\b(asm|CARRY|ASCII|callmacro|const|dec|def|dim|else|end|if|include|includesfile|inline|for|gosub|goto|let|macro|next|on|pop|rand|return|set|step|then|to)\\b",
 				"comment": "control keywords"
 			},
 			{
@@ -52,18 +52,13 @@
 			},
 			{
 				"name": "keyword.constant.78b",
-				"match": "\\b(on|off|flip|160A|320A|320B|16k|32k|48k|128k|128kRAM|128kBANKRAM|144k|256k|256kRAM|256kBANKRAM|272k|512k|512kRAM|512kBANKRAM|528K)\\b",
+				"match": "\\b(on|off|flip|tv|ntsc|pal|160A|160B|320A|320B|320C|320D|16k|32k|48k|128k|128kRAM|128kBANKRAM|144k|256k|256kRAM|256kBANKRAM|272k|512k|512kRAM|512kBANKRAM|528K)\\b",
 				"comment": "constant keywords"
 			},
 			{
 				"name": "keyword.directive.78b",
 				"match": "\\b(#ifconst|#elseif|#endif)\\b",
 				"comment": "directive keywords"
-			},		
-			{
-				"name": "keyword.other.tia.78b",
-				"match": "\\b(CXBLPF|CXCLR|CXM0FB|CXM0P|CXM1FB|CXM1P|CXP0FB|CXP1FB|CXPPMM|ENABL|ENAM0|ENAM1|GRP0|GRP1|HMBL|HMCLR|HMM0|HMM1|HMOVE|HMP0|HMP1|INPT0|INPT1|INPT2|INPT3|INPT4|INPT5|PF1|PF2|RESBL|RESM0|RESM1|RESMP0|RESMP1|RESP0|RESP1|RSYNC|SWACNT|SWBCNT|SWCHA|SWCHB|T1024T|TIA_BASE_ADDRESS|TIA_BASE_READ_ADDRESS|TIA_BASE_WRITE_ADDRESS|TIM1T|TIM64T|TIM8T|VBLANK|VDELBL|VDELP0|VDELP1|VERSION_VCS|VSYNC|WSYNC)\\b",
-				"comment" : "TIA registers"
 			}]
 		},
 		"strings": {
