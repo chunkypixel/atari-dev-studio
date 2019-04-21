@@ -26,15 +26,18 @@ VS Code is a cross-platform application which runs on Windows, Linux and macOS. 
 
 > Note: Linux users on 64-bit systems will be required to install the 32-bit compatibility libraries on your system to ensure everything will run as expected. 
 
-### Steps to install
-1. Install **VS Code** from [here](https://code.visualstudio.com/Download) for your OS (depending on your OS there may be other avenues to install VS Code.)
-2. Open **VS Code** and click the **Extensions** button on the **Activity Bar** to display the **Extensions** window.
-3. From the **Extensions** window, type **Atari** into the **Search** box and press **Enter** to display the list of available extensions. From the list click the green **Install** button on the **Atari Dev Studio** item.
+### Installing the extension
+Once you have installed VS Code (available [here](https://code.visualstudio.com/Download)), open the VS Code program and complete the following:
+1. From the **Activity Bar**, click the **Extensions** button to display the **Extensions** window.
+2. From the **Extensions** window, type **Atari** into the **Search** box and press **Enter** to display the list of available extensions. 
+3. From the list of available extensions, locate **Atari Dev Studio** and click the green **Install** button.
+
+![Install the extension](images/ataridevstudio-installation.png)
 
 ### Updating the extension
-Updates will be regularly made available and will be announced via the **AtariAge** forum and you will be notified in VS Code. To update to the latest release:
-1. Open **VS Code** and click on the **Extensions** button on the **Activity Bar** to display the **Extensions** window.
-2. From the **Extensions** window, search the **Enabled** list and click the **Update** button on the **Atari Dev Studio** item.
+Updates will be regularly made available and will be announced via the **AtariAge** forum (you will also be notified in VS Code). To update to the latest release:
+1. From the **Activity Bar**, click the **Extensions** button to display the **Extensions** window.
+2. From the **Extensions** window, search the **Enabled** list, locate **Atari Dev Studio** and click the **Update** button.
 
 > Note: It is recommended you restart VS Code after installing an update.
 
