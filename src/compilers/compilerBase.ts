@@ -89,7 +89,7 @@ export abstract class CompilerBase implements vscode.Disposable {
 
         // (Re)load
         // It appears you need to reload this each time incase of change
-        this.Configuration = vscode.workspace.getConfiguration(application.Name, null);
+        this.Configuration = application.GetConfiguration();
 
         // Activate output window?
         if (!this.Configuration.get<boolean>(`editor.preserveCodeEditorFocus`))  {

@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.1.2
+
+### Issues
+* #1 [Fixed] - Duplicated filename after re-configuration of code (thanks SmallRoomLabs)
+* #5 [Fixed] - Added new setting to turn on/off the status bar commands (thanks SmallRoomLabs)
+
 ## 0.1.1
 
 * Added new Help references and Learn areas for batari Basic and 7800basic to Welcome page

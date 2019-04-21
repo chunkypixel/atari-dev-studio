@@ -62,7 +62,7 @@ export abstract class EmulatorBase implements vscode.Disposable {
 
         // (Re)load
         // It appears you need to reload this each time incase of change
-        this.Configuration = vscode.workspace.getConfiguration(application.Name, null);
+        this.Configuration = application.GetConfiguration();
 
         // Emulator
         let userEmulatorPath = this.Configuration.get<string>(`emulator.${this.Id.toLowerCase()}.path`)

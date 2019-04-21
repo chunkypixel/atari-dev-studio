@@ -78,6 +78,9 @@ This software is currently in preview and contains the following missing or unte
 
 I don't currently have direct access to a macOS machine to finalise feature integration but will do so in the near future. The previous incarnation of this extension (containing batari Basic and dasm) has been tested by users on macOS and as the process is very similar to Linux I do expect the extension to function correctly.
 
+### Debugging the extension
+During the development phase of the extension I've added some developer output to assist with any issues that may appear.  To view this output, open the VS Code **Developer Tools** by selecting **Help -> Toggle Developer Tools** from the menu, and in the debugger window ensure the **Console** tab is activated.  This information may help identify the area where the extension is failing to process as expected.
+
 ## Known Issues
 There are currently no known feature issues. If you find a problem please raise an issue on [GitHub](https://github.com/chunkypixel/atari-dev-studio/issues) or contact [mksmith](http://atariage.com/forums/user/66583-mksmith/) at the AtariAge community.
 

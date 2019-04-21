@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "icon": "images/icon.png",
     "preview": true,
     "publisher": "chunkypixel",
@@ -111,6 +111,12 @@
             "type": "object",
             "title": "Atari Dev Studio",
             "properties": {
+                "atari-dev-studio.editor.showStatusBarCommands": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether to show the short-cut commands on the Status Bar (requires restart).",
+                    "scope": "resource"
+                },
                 "atari-dev-studio.editor.saveFileBeforeRun": {
                     "type": "boolean",
                     "default": true,

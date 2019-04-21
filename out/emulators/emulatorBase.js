@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const vscode = require("vscode");
 const application = require("../application");
 const filesystem = require("../filesystem");
 class EmulatorBase {
@@ -60,7 +59,7 @@ class EmulatorBase {
             this.Args = "";
             // (Re)load
             // It appears you need to reload this each time incase of change
-            this.Configuration = vscode.workspace.getConfiguration(application.Name, null);
+            this.Configuration = application.GetConfiguration();
             // Emulator
             let userEmulatorPath = this.Configuration.get(`emulator.${this.Id.toLowerCase()}.path`);
             if (userEmulatorPath) {

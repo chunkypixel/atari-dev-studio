@@ -159,12 +159,11 @@ export class DasmCompiler extends CompilerBase {
         // Validate
         if (this.CustomFolderOrPath || application.IsWindows) return true;
 
-        // Prepare
-        let architecture = "Linux";
-        if (application.IsMacOS) architecture = "Darwin";
-
+        // Github: https://github.com/chunkypixel/atari-dev-studio/issues/1
+        //         Duplication of filename
+        
         // Process
-        let result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`dasm.${architecture}.x86`));
+        let result = await filesystem.ChModAsync(this.FolderOrPath);
         return result;
     }
 

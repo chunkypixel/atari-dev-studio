@@ -22,9 +22,10 @@ export function activate(context: vscode.ExtensionContext) {
 	console.log(`Extension ${application.DisplayName} (${application.Version}) is now active!`);
     console.log(`- Installation path: '${application.Path}'`);
     
+	// Github: https://github.com/chunkypixel/atari-dev-studio/issues/2
+	//         Annoyance remove
+	
 	// Announcement
-	// Github:https://github.com/chunkypixel/atari-dev-studio/issues/2
-	// Annoyance remove
     //vscode.window.showInformationMessage(`Welcome to ${application.DisplayName} (v${application.Version})!`);
 	
 	// The command has been defined in the package.json file

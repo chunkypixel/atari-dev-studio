@@ -91,9 +91,13 @@ export function Notify(message: string): void {
 	console.log(`debugger:${message}`);        
 }
 
+export function GetConfiguration() : vscode.WorkspaceConfiguration {
+	return vscode.workspace.getConfiguration(Name, null);
+}
+
 function getChosenCompiler(document: vscode.TextDocument): CompilerBase | undefined {
 	// Prepare
-	let configuration = vscode.workspace.getConfiguration(Name, null);
+	let configuration = GetConfiguration();
 
 	// Find compiler (based on configuration selection)
 	let chosenCompiler = configuration.get<string>(`compilation.defaultCompiler`);
