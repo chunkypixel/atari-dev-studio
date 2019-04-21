@@ -27,49 +27,39 @@
 			"patterns": [
 			{
 				"name": "keyword.control.78b",
-				"match": "\\b(asm|callmacro|collision|const|dec|def|dim|else|end|for|gosub|goto|if|include|includesfile|inline|let|macro|next|on|pop|rand|reboot|return|sdata|set|sread|step|then|to|vblank)\\b",
+				"match": "\\b(asm|CARRY|callmacro|const|dec|def|dim|else|end|if|include|includesfile|inline|for|gosub|goto|let|macro|next|on|pop|rand|return|set|step|then|to)\\b",
 				"comment": "control keywords"
 			},
 			{
 				"name": "keyword.other.78b",
-				"match": "\\b(COLUBK|COLUP0|COLUP1|COLUPF|AUDC0|AUDC1|AUDF0|AUDF1|AUDV0|AUDV1|NUSIZ0|NUSIZ1|REFP0|REFP1|CTRLPF|PF0|joy0down|joy0fire|joy0left|joy0right|joy0up|joy1down|joy1fire|joy1left|joy1right|joy1up|switchbw|switchleftb|switchreset|switchrightb|switchselect)\\b",
+				"match": "\\b(AUDC0|AUDC1|AUDF0|AUDF1|AUDV0|AUDV1|PAUDF0|joy0down|joy0fire0|joy0fire1|joy0left|joy0right|joy0up|joy1down|joy1fire0|joy1fire1|joy1left|joy1right|joy1up|switchleftb|switchreset|switchrightb|switchselect)\\b",
 				"comment": "other keywords"
 			},
 			{
-				"name": "keyword.other.playerandmissile.78b",
-				"match": "\\b(player0|player0x|player0y|player0color|player0height|player1|player1x|player1y|player1color|player1height|missile0|missile0x|missile0y|missile1|missile1x|missile1y)\\b",
-				"comment": "player and missile keywords"
+				"name": "keyword.commands.78b",
+				"match": "\\b(adjustvisible|alphachars|alphadata|avoxvoice|basepath|boxcollision|characterset|clearscreen|collision|collisionwrap|dictionary|dmahole|drawscreen|drawwait|data|debug|displaymode|dlmemory|doublebuffer|doublewide|extradlmemory|hsscolorbase|hsdifficultytext|hsgameranks|hsscoresize|hsseconds|hssupport|incbanner|incgraphic|incmapfile|lockzone|loadmemory|loadrambank|loadrombank|mcpdevcart|memcpy|memset|mutesfx|newblock|pauseroutine|peekchar|pitch|phonetic|playsfx|playsong|plotbanner|plotchars|plotmap|plotmapfile|plotsprite|plotvalue|plotvalueonscreen|pokechar|pokeybase|pokeydetected|pokeysound|pokeysupport|psound|raw|reboot|restorescreen|reset|romsize|savescreen|screenheight|savememory|sdata|speak|speechdata|speed|sread|stopsong|songdata|tiasfx|tsound|unlockzone|voice|zoneheight|zoneprotection)\\b",
+				"comment": "other keywords"
 			},		
 			{
-				"name": "keyword.other.playfield.78b",
-				"match": "\\b(pflcear|pfhline|pfpixel|pfread|pfscroll|pfscore1|pfscore2|pfvline|playfield|pfcolors|bkcolors|scorecolors)\\b",
-				"comment": "playfield keywords"
-			},
-			{
-				"name": "keyword.other.bank.78b",
+				"name": "keyword.bank.78b",
 				"match": "\\b(bank|bank1|bank2|bank3|bank4|bank5|bank6|bank7|bank8|otherbank|thisbank)\\b",
 				"comment": "bank keywords"
 			},
 			{
-				"name": "keyword.other.variable.78b",
-				"match": "\\b(pfscore1|pfscore2|score|scorecolor|temp1|temp2|temp3|temp4|temp5|temp6|var0|var1|var2|var3|var4|var5|var6|var7|var8|var9)\\b",
+				"name": "keyword.variable.78b",
+				"match": "\\b(lives|gamedifficulty|mono|score0|score1|paldetected|temp1|temp2|temp3|temp4|temp5|temp6|var0|var1|var2|var3|var4|var5|var6|var7|var8|var9|var10|var11|var12|var13|var14|var15|var16|var17|var18|var19|var20|var21|var22|var23|var24|var25|var26|var27|var28|var29|var30|var31|var32|var33|var34|var35|var36|var37|var38|var39|var40|var41|var42|var43|var44|var45|var46|var47|var48|var49|var50|var51|var52|var53|var54|var55|var56|var57|var58|var59|var60|var61|var62|var63|var64|var65|var66|var67|var68|var69|var70|var71|var72|var73|var74|var75|var76|var77|var78|var79|var80|var81|var82|var83|var84|var85|var86|var87|var88|var89|var90|var91|var92|var93|var94|var95|var96|var97|var98|var99)\\b",
 				"comment": "variable keywords"
 			},
 			{
-				"name": "keyword.other.constant.78b",
-				"match": "\\b(font|noscore|pfscore|scorefade|left|right|up|down|upup|downdown|on|off|ntsc|pal|2k|4k|8k|16k|32k|DPC+|multisprite|8kSC|16kSC|32kSC|speed|size|noninlinedata|inlinerand)\\b",
+				"name": "keyword.constant.78b",
+				"match": "\\b(on|off|flip|160A|320A|320B|16k|32k|48k|128k|128kRAM|128kBANKRAM|144k|256k|256kRAM|256kBANKRAM|272k|512k|512kRAM|512kBANKRAM|528K)\\b",
 				"comment": "constant keywords"
 			},
 			{
-				"name": "keyword.other.constant.standardkernel.78b",
-				"match": "\\b(readpaddle|player1colors|playercolors|no_blank_lines|pfheights|background)\\b",
-				"comment": "constant (standard kernel) keywords"
-			},
-			{
-				"name": "keyword.other.directive.78b",
-				"match": "\\b(smartbranching|tv|romsize|optimization|kernel|kernel_options|debug|legacy)\\b",
+				"name": "keyword.directive.78b",
+				"match": "\\b(#ifconst|#elseif|#endif)\\b",
 				"comment": "directive keywords"
-			},
+			},		
 			{
 				"name": "keyword.other.tia.78b",
 				"match": "\\b(CXBLPF|CXCLR|CXM0FB|CXM0P|CXM1FB|CXM1P|CXP0FB|CXP1FB|CXPPMM|ENABL|ENAM0|ENAM1|GRP0|GRP1|HMBL|HMCLR|HMM0|HMM1|HMOVE|HMP0|HMP1|INPT0|INPT1|INPT2|INPT3|INPT4|INPT5|PF1|PF2|RESBL|RESM0|RESM1|RESMP0|RESMP1|RESP0|RESP1|RSYNC|SWACNT|SWBCNT|SWCHA|SWCHB|T1024T|TIA_BASE_ADDRESS|TIA_BASE_READ_ADDRESS|TIA_BASE_WRITE_ADDRESS|TIM1T|TIM64T|TIM8T|VBLANK|VDELBL|VDELP0|VDELP1|VERSION_VCS|VSYNC|WSYNC)\\b",
