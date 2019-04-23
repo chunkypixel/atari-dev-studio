@@ -16,6 +16,7 @@ class StatusBar {
             const itemOptions = [
                 { text: `     ${application.DisplayName} (v${application.Version})` },
                 { tooltip: 'Welcome', text: '$(home)', command: 'extension.openWelcomePage' },
+                { tooltip: 'Sprite Editor', text: '$(screen-normal)', command: 'extension.openSpriteEditorPage' },
                 { tooltip: 'Compile source code', text: '$(triangle-right)', command: 'extension.buildGame' },
                 { tooltip: 'Compile source code and run in emulator', text: '$(rocket)', command: 'extension.buildGameAndRun' }
             ];

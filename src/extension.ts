@@ -3,7 +3,9 @@
 import * as vscode from 'vscode';
 import * as application from './application';
 import { WelcomePage } from './pages/welcome';
+import { SpriteEditorPage } from './pages/spriteeditor';
 import './statusbar';
+
 
 // Activation Events
 // https://code.visualstudio.com/api/references/activation-events
@@ -16,6 +18,7 @@ import './statusbar';
 export function activate(context: vscode.ExtensionContext) {
 	// Pages
 	let welcomePage = new WelcomePage();
+	let spriteEditorPage = new SpriteEditorPage();
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
@@ -32,10 +35,15 @@ export function activate(context: vscode.ExtensionContext) {
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
 
-	// WelcomePage
+	// Welcome
 	const openWelcomePage = vscode.commands.registerCommand('extension.openWelcomePage', () => {
 		console.log('User activated command "extension.openWelcomePage"');
-		welcomePage.openWelcomePage(context);
+		welcomePage.openPage(context);
+	});
+	// SpriteEditor
+	const openSpriteEditorPage = vscode.commands.registerCommand('extension.openSpriteEditorPage', () => {
+		console.log('User activated command "extension.openSpriteEditorPage"');
+		spriteEditorPage.openPage(context);
 	});
 
 	// Build
@@ -51,6 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Subscriptions (register)
 	context.subscriptions.push(openWelcomePage);
+	context.subscriptions.push(openSpriteEditorPage);
 	context.subscriptions.push(buildGame);
 	context.subscriptions.push(buildGameAndRun);	
 }

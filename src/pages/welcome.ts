@@ -12,8 +12,8 @@ export class WelcomePage implements vscode.Disposable {
     public dispose(): void {
     }
 
-    public async openWelcomePage(context: vscode.ExtensionContext) {
-        console.log('debugger:WelcomePage.openWelcomePage');
+    public async openPage(context: vscode.ExtensionContext) {
+        console.log('debugger:WelcomePage.openPage');
 
         // Prepare
         let contentPath = path.join(context.extensionPath, 'out', 'content', 'pages', 'welcome');
@@ -30,7 +30,7 @@ export class WelcomePage implements vscode.Disposable {
             // Create
             this.currentPanel = vscode.window.createWebviewPanel(
                 'webpage',
-                'Atari Dev Studio Welcome',
+                `${Application.DisplayName}`,
                 columnToShowIn || vscode.ViewColumn.One,
                 {
                     enableScripts: true,
@@ -85,24 +85,6 @@ export class WelcomePage implements vscode.Disposable {
                         });                  
                         return;
 
-                    case 'openDPCKernalTemplate':
-                        let dpcTemplatePath = vscode.Uri.file(path.join(contentPath.toString(), 'templates', 'DPCKernel.bas'));
-                        let dpcContent = fs.readFileSync(dpcTemplatePath.fsPath, 'utf8');
-                        this.openNewFileDocument("bB", dpcContent);
-                        return;
-
-                    case 'openMultispriteKernalTemplate':
-                        let multispriteTemplatePath = vscode.Uri.file(path.join(contentPath.toString(), 'templates', 'MultispriteKernel.bas'));
-                        let multispriteContent = fs.readFileSync(multispriteTemplatePath.fsPath, 'utf8');
-                        this.openNewFileDocument("bB", multispriteContent);
-                        return;
-
-                    case 'openStandardKernalTemplate':
-                        let standardTemplatePath = vscode.Uri.file(path.join(contentPath.toString(), 'templates', 'StandardKernel.bas'));
-                        let standardContent = fs.readFileSync(standardTemplatePath.fsPath, 'utf8');
-                        this.openNewFileDocument("bB", standardContent);
-                        return;
-
                     case 'openBatariGuidePage':
                         this.openBatariGuidePage();                   
                         return;
@@ -126,10 +108,33 @@ export class WelcomePage implements vscode.Disposable {
                     case 'openGitHubIssue':
                         this.openGitHubIssue();
                         return;
+
+                    case 'openSpriteEditor':
+                        this.openSpriteEditor();
+                        return;
+
+                    // case 'openDPCKernalTemplate':
+                    //     let dpcTemplatePath = vscode.Uri.file(path.join(contentPath.toString(), 'templates', 'DPCKernel.bas'));
+                    //     let dpcContent = fs.readFileSync(dpcTemplatePath.fsPath, 'utf8');
+                    //     this.openNewFileDocument("bB", dpcContent);
+                    //     return;
+
+                    // case 'openMultispriteKernalTemplate':
+                    //     let multispriteTemplatePath = vscode.Uri.file(path.join(contentPath.toString(), 'templates', 'MultispriteKernel.bas'));
+                    //     let multispriteContent = fs.readFileSync(multispriteTemplatePath.fsPath, 'utf8');
+                    //     this.openNewFileDocument("bB", multispriteContent);
+                    //     return;
+
+                    // case 'openStandardKernalTemplate':
+                    //     let standardTemplatePath = vscode.Uri.file(path.join(contentPath.toString(), 'templates', 'StandardKernel.bas'));
+                    //     let standardContent = fs.readFileSync(standardTemplatePath.fsPath, 'utf8');
+                    //     this.openNewFileDocument("bB", standardContent);
+                    //     return;
+
                 }
 
                 // Unknown
-                console.log(`Unknown Welcome Page command called: ${message.command}`);
+                console.log(`debugger:WelcomePage: Unknown command called: ${message.command}`);
             }
         );
 
@@ -198,6 +203,10 @@ export class WelcomePage implements vscode.Disposable {
         console.log('debugger:WelcomePage.openGitHubIssue');
 
         this.openUrl("https://github.com/chunkypixel/atari-dev-studio/issues");
+    }
+
+    private openSpriteEditor() {
+        vscode.commands.executeCommand('extension.openSpriteEditorPage');
     }
 
     public async openUrl(uri: string) {

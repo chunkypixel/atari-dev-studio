@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-%NONCE%'; style-src 'nonce-%NONCE%';" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link nonce="%NONCE%" rel="stylesheet" type="text/css" href="%STYLECSSURI%" />
-    <title>Start Page</title>
+    <title>%APPDISPLAYNAME%</title>
 </head>
 <body>
     <div class="welcomePageInstance">
@@ -47,32 +47,22 @@
                         </div>
 
                         <div class="commands">
-                            <!--<div class="section features">
+                            <div class="section features">
                                 <h2 class="caption">Features</h2>
                                 <div class="list">
                                     <div class="item">
-                                        <button role="group" id="command" data-command="commandName"><h3 class="caption">Feature 1</h3> 
-                                            <span class="detail">Description of feature item</a></span>
-                                        </button>
-                                    </div>
-                                    <div class="item">
-                                        <button role="group" id="command" data-command="commandName"><h3 class="caption">Feature 2</h3> 
-                                            <span class="detail">Description of feature item</a></span>
-                                        </button>
-                                    </div>
-                                    <div class="item">
-                                        <button role="group" id="command" data-command="commandName"><h3 class="caption">Feature 3</h3> 
-                                            <span class="detail">Description of feature item</a></span>
+                                        <button role="group" id="command" data-command="openSpriteEditor"><h3 class="caption">Sprite Editor</h3> 
+                                            <span class="detail">Edit your sprites and objects</a></span>
                                         </button>
                                     </div>
                                 </div>
-                            </div>-->
+                            </div>
 
                             <div class="section learn">
                                 <h2 class="caption">Learn</h2>
                                 <div class="list">
                                     <div class="item">
-                                        <button role="group" id="command" data-command="commandName"><h3 class="caption">batari Basic</h3> 
+                                        <button role="group"><h3 class="caption">batari Basic</h3> 
                                             <span class="detail">Want to learn about developing for the Atari 2600? Here are some great resources:
                                                 <a href="#" title="Open" id="command" data-command="openBatariBasicForum">batari Basic forum at AtariAge</a> 
                                                 <a href="#" title="Open" id="command" data-command="openBatariGuidePage">batari's 2600 guide @ Random Terrain</a>
@@ -80,7 +70,7 @@
                                         </button>
                                     </div>
                                     <div class="item">
-                                        <button role="group" id="command" data-command="commandName"><h3 class="caption">7800basic</h3> 
+                                        <button role="group"><h3 class="caption">7800basic</h3> 
                                             <span class="detail">Need some help to unleash the power of the Atari 7800? Check out these resources:
                                                 <a href="#" title="Open" id="command" data-command="open7800ProgrammingForum">7800 developer forum at AtariAge</a> 
                                                 <a href="#" title="Open" id="command" data-command="open7800basicGuidePage">RevEng's 7800basic guide @ Random Terrain</a>

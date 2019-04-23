@@ -14,6 +14,19 @@ Installing a VSIX package
 * From the browser, navigate to the required file select it and click the Install button. 
 
 
+Adding/Updating node packages
+-----------------------------------
+npm install
+
 Compiling extension source manually
 -----------------------------------
 tsc
+
+
+Testing webpackage
+-----------------------------------
+npm start
+
+Compiling webpackage source manually
+-----------------------------------
+npm run build
