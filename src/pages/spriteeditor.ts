@@ -16,7 +16,7 @@ export class SpriteEditorPage implements vscode.Disposable {
         console.log('debugger:SpriteEditorPage.openPage');
         
         // Prepare
-        let contentPath = path.join(context.extensionPath, 'out', 'content', 'pages', 'spriteeditor');
+        let contentPath = path.join(context.extensionPath, 'out', 'content', 'pages', 'spriteEditor');
         let columnToShowIn = vscode.window.activeTextEditor
                                 ? vscode.window.activeTextEditor.viewColumn
                                 : undefined;
