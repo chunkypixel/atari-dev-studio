@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.1.4
+
+* Introduction of a Sprite Editor (basic functionality only). The Sprite Editor is based on Spritemate by Ingo Hinterding ([github](https://github.com/Esshahn/spritemate)) and was suggested by RandomTerrain. I've taken the original source and rebuilt and restructured it. It cannot do anything other than the basics - just wanted to see if it ran OK on other PCs. 
+
 ## 0.1.3
 
 * Updated 7800basic language definition with all (known) keywords, commands and variables. Note: there is every chance I have either missed some or labled incorrectly.
