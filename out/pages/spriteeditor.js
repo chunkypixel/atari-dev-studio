@@ -197,8 +197,9 @@ class SpriteEditorPage {
                     'All Files': ['*']
                 }
             };
+            // TODO: this needs fixing
             // Process
-            vscode.window.showSaveDialog(options).then((fileUri) => __awaiter(this, void 0, void 0, function* () {
+            yield vscode.window.showSaveDialog(options).then((fileUri) => __awaiter(this, void 0, void 0, function* () {
                 if (fileUri) {
                     // Process
                     try {
@@ -222,15 +223,17 @@ class SpriteEditorPage {
                     catch (error) {
                         errorMessage = error;
                     }
+                    // Result
+                    this.currentPanel.webview.postMessage({
+                        command: command,
+                        status: 'error',
+                        errorMessage: errorMessage
+                    });
+                    return false;
                 }
             }));
             // Result
-            this.currentPanel.webview.postMessage({
-                command: command,
-                status: 'error',
-                errorMessage: errorMessage
-            });
-            return false;
+            return true;
         });
     }
 }

@@ -224,8 +224,9 @@ export class SpriteEditorPage implements vscode.Disposable {
             }
         };
 
+        // TODO: this needs fixing
         // Process
-        vscode.window.showSaveDialog(options).then(async fileUri => {
+        await vscode.window.showSaveDialog(options).then(async fileUri => {
             if (fileUri) {
                 // Process
                 try {
@@ -242,7 +243,7 @@ export class SpriteEditorPage implements vscode.Disposable {
                             command: command,
                             status: 'ok'
                         });
-                        return true;                        
+                        return true;                      
                     }
 
                     // Set
@@ -251,16 +252,19 @@ export class SpriteEditorPage implements vscode.Disposable {
                 } catch (error) {
                     errorMessage = error;
                 }
+
+                // Result
+                this.currentPanel!.webview.postMessage({
+                    command: command,
+                    status: 'error',
+                    errorMessage: errorMessage
+                });  
+                return false;  
             }
         });
 
         // Result
-        this.currentPanel!.webview.postMessage({
-            command: command,
-            status: 'error',
-            errorMessage: errorMessage
-        });  
-        return false;  
+        return true;
     }
 
 }
