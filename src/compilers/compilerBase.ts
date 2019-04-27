@@ -3,7 +3,6 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import * as application from '../application';
 import * as filesystem from '../filesystem';
-import { stringify } from 'querystring';
 
 export abstract class CompilerBase implements vscode.Disposable {
 

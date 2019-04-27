@@ -3,6 +3,8 @@ import * as vscode from 'vscode';
 import * as application from './application';
 import * as fs from 'fs';
 
+//export let error: NodeJS.ErrnoException = null;
+
 export async function GetFileUriAsync(fileUri: vscode.Uri): Promise<vscode.Uri> {
 	// Validate
 	if (fileUri) return fileUri;
@@ -117,7 +119,7 @@ export function MkDirAsync(folder: string): Promise<boolean> {
 }
 
 export function ChModAsync(path: string, mode: string = '777'): Promise<boolean> {
-    console.log('debugger:filesystem.SetChMod');
+    console.log('debugger:filesystem.ChModAsync');
 
     return new Promise((resolve, reject) => {
         fs.chmod(path, mode, err => {
@@ -125,4 +127,33 @@ export function ChModAsync(path: string, mode: string = '777'): Promise<boolean>
             resolve(!err);
         });
     }); 
+}
+
+export function ReadFileAsync(path: string): Promise<any> {
+    console.log('debugger:filesystem.ReadFileAsync');
+
+    return new Promise((resolve, reject) => {
+        fs.readFile(path, 'utf8', (err, data) => {
+            if (!err) return resolve(data);
+            resolve(undefined);
+        });
+    });
+}
+
+export function WriteFileAsync(path: string, data: any): Promise<boolean> {
+    console.log('debugger:filesystem.WriteFileAsync');
+
+    return new Promise((resolve, reject) => {
+        fs.writeFile(path, data, err => {
+            resolve(!err);
+        });
+    });
+}
+
+export function WorkspaceFolder(): string {
+    // Workspace 
+    if (vscode.workspace.workspaceFolders) {
+        return vscode.workspace.workspaceFolders[0].uri.fsPath;
+    }
+    return "";
 }

@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
-const fs = require("fs");
 const path = require("path");
-const Application = require("../application");
+const filesystem = require("../filesystem");
+const application = require("../application");
 const opn = require("open");
 class WelcomePage {
     constructor() {
@@ -34,13 +34,13 @@ class WelcomePage {
             }
             else {
                 // Create
-                this.currentPanel = vscode.window.createWebviewPanel('webpage', `${Application.DisplayName}`, columnToShowIn || vscode.ViewColumn.One, {
+                this.currentPanel = vscode.window.createWebviewPanel('webpage', `${application.DisplayName}`, columnToShowIn || vscode.ViewColumn.One, {
                     enableScripts: true,
                     localResourceRoots: [vscode.Uri.file(contentPath)]
                 });
                 // Content
                 let startPagePath = vscode.Uri.file(path.join(contentPath.toString(), 'index.html'));
-                let content = fs.readFileSync(startPagePath.fsPath, 'utf8');
+                let content = yield filesystem.ReadFileAsync(startPagePath.fsPath);
                 let nonce = this.getNonce();
                 // Script
                 let scriptJsPath = vscode.Uri.file(path.join(contentPath.toString(), 'script.js'));
@@ -49,9 +49,9 @@ class WelcomePage {
                 let styleCssPath = vscode.Uri.file(path.join(contentPath.toString(), 'style.css'));
                 let styleCssUri = styleCssPath.with({ scheme: 'vscode-resource' });
                 // Update tags in content
-                content = this.replaceContentTag(content, "APPDISPLAYNAME", Application.DisplayName);
-                content = this.replaceContentTag(content, "APPDESCRIPTION", Application.Description);
-                content = this.replaceContentTag(content, "APPVERSION", Application.Version);
+                content = this.replaceContentTag(content, "APPDISPLAYNAME", application.DisplayName);
+                content = this.replaceContentTag(content, "APPDESCRIPTION", application.Description);
+                content = this.replaceContentTag(content, "APPVERSION", application.Version);
                 content = this.replaceContentTag(content, "NONCE", nonce);
                 content = this.replaceContentTag(content, "SCRIPTJSURI", scriptJsUri);
                 content = this.replaceContentTag(content, "STYLECSSURI", styleCssUri);

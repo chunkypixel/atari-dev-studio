@@ -1,8 +1,8 @@
 "use strict";
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import * as path from 'path';
-import * as Application from '../application';
+import * as filesystem from '../filesystem';
+import * as application from "../application";
 import opn = require('open');
 
 export class WelcomePage implements vscode.Disposable {
@@ -30,7 +30,7 @@ export class WelcomePage implements vscode.Disposable {
             // Create
             this.currentPanel = vscode.window.createWebviewPanel(
                 'webpage',
-                `${Application.DisplayName}`,
+                `${application.DisplayName}`,
                 columnToShowIn || vscode.ViewColumn.One,
                 {
                     enableScripts: true,
@@ -40,7 +40,7 @@ export class WelcomePage implements vscode.Disposable {
 
             // Content
             let startPagePath = vscode.Uri.file(path.join(contentPath.toString(), 'index.html'));
-            let content = fs.readFileSync(startPagePath.fsPath, 'utf8');
+            let content = await filesystem.ReadFileAsync(startPagePath.fsPath);
             let nonce = this.getNonce();
             
             // Script
@@ -52,9 +52,9 @@ export class WelcomePage implements vscode.Disposable {
             let styleCssUri = styleCssPath.with({ scheme: 'vscode-resource' });
 
             // Update tags in content
-            content = this.replaceContentTag(content, "APPDISPLAYNAME", Application.DisplayName);
-            content = this.replaceContentTag(content, "APPDESCRIPTION", Application.Description);
-            content = this.replaceContentTag(content, "APPVERSION", Application.Version);
+            content = this.replaceContentTag(content, "APPDISPLAYNAME", application.DisplayName);
+            content = this.replaceContentTag(content, "APPDESCRIPTION", application.Description);
+            content = this.replaceContentTag(content, "APPVERSION", application.Version);
             content = this.replaceContentTag(content, "NONCE", nonce);
             content = this.replaceContentTag(content, "SCRIPTJSURI", scriptJsUri);
             content = this.replaceContentTag(content, "STYLECSSURI", styleCssUri);

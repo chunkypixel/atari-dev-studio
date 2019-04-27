@@ -11,6 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
 const application = require("./application");
 const fs = require("fs");
+//export let error: NodeJS.ErrnoException = null;
 function GetFileUriAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
         // Validate
@@ -124,7 +125,7 @@ function MkDirAsync(folder) {
 }
 exports.MkDirAsync = MkDirAsync;
 function ChModAsync(path, mode = '777') {
-    console.log('debugger:filesystem.SetChMod');
+    console.log('debugger:filesystem.ChModAsync');
     return new Promise((resolve, reject) => {
         fs.chmod(path, mode, err => {
             if (err) {
@@ -135,4 +136,32 @@ function ChModAsync(path, mode = '777') {
     });
 }
 exports.ChModAsync = ChModAsync;
+function ReadFileAsync(path) {
+    console.log('debugger:filesystem.ReadFileAsync');
+    return new Promise((resolve, reject) => {
+        fs.readFile(path, 'utf8', (err, data) => {
+            if (!err)
+                return resolve(data);
+            resolve(undefined);
+        });
+    });
+}
+exports.ReadFileAsync = ReadFileAsync;
+function WriteFileAsync(path, data) {
+    console.log('debugger:filesystem.WriteFileAsync');
+    return new Promise((resolve, reject) => {
+        fs.writeFile(path, data, err => {
+            resolve(!err);
+        });
+    });
+}
+exports.WriteFileAsync = WriteFileAsync;
+function WorkspaceFolder() {
+    // Workspace 
+    if (vscode.workspace.workspaceFolders) {
+        return vscode.workspace.workspaceFolders[0].uri.fsPath;
+    }
+    return "";
+}
+exports.WorkspaceFolder = WorkspaceFolder;
 //# sourceMappingURL=filesystem.js.map

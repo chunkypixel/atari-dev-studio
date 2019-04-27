@@ -2,7 +2,15 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
-## 0.1.4
+## 0.1.6
+
+Sprite Editor
+* Added ability to load and save sprites
+* Added (auto) load and save of the workspace configuration (window layout)
+* Added ability to select and hold down mouse button to change palette colors on the fly for selected color
+* Fixed issue where holding down mouse button and leaving the sprite editing area left drawing mode on
+
+## 0.1.4, 0.1.5
 
 * Introduction of a Sprite Editor (basic functionality only). The Sprite Editor is based on Spritemate by Ingo Hinterding ([github](https://github.com/Esshahn/spritemate)) and was suggested by RandomTerrain. I've taken the original source and rebuilt and restructured it. It cannot do anything other than the basics - just wanted to see if it ran OK on other PCs. 
 
