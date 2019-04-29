@@ -4,7 +4,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as filesystem from '../filesystem';
 import opn = require('open');
-import { stringify } from 'querystring';
 
 export class SpriteEditorPage implements vscode.Disposable {
 
@@ -18,7 +17,7 @@ export class SpriteEditorPage implements vscode.Disposable {
         console.log('debugger:SpriteEditorPage.openPage');
         
         // Prepare
-        this.contentPath = path.join(context.extensionPath, 'out', 'content', 'pages', 'spriteEditor');
+        this.contentPath = path.join(context.extensionPath, 'out', 'content', 'pages', 'spriteeditor');
         let columnToShowIn = vscode.window.activeTextEditor
                                 ? vscode.window.activeTextEditor.viewColumn
                                 : undefined;
@@ -85,8 +84,8 @@ export class SpriteEditorPage implements vscode.Disposable {
                         this.saveProject(message);
                         return;
 
-                    case 'saveAsProject':
-                        // TODO
+                    case 'saveAsPngFile':
+                        this.saveAsPngFile(message);
                         return;
 
                     case 'configuration':
@@ -224,7 +223,7 @@ export class SpriteEditorPage implements vscode.Disposable {
             }
         };
 
-        // TODO: this needs fixing
+        // TODO: this needs fixing (doesn't wait)
         // Process
         await vscode.window.showSaveDialog(options).then(async fileUri => {
             if (fileUri) {
@@ -267,4 +266,65 @@ export class SpriteEditorPage implements vscode.Disposable {
         return true;
     }
 
+    private async saveAsPngFile(message: any): Promise<boolean> {
+        // Prepare
+        let command = message!.command;
+        let file = message!.file;
+        let data = message!.data;
+        let errorMessage = "";
+
+        // Get file
+        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
+
+        // Prompt user here
+        let options: vscode.SaveDialogOptions = {
+            defaultUri: defaultUri,
+            saveLabel: "Save",
+            filters: {
+                'PNG image': ['png']
+            }
+        };
+
+        // TODO: this needs fixing (doesn't wait)
+        // Process
+        await vscode.window.showSaveDialog(options).then(async fileUri => {
+            if (fileUri) {
+                // Process
+                try {
+                    // Prepare
+                    let folder = path.dirname(fileUri.fsPath);
+
+                    // Save
+                    let result = await filesystem.MkDirAsync(folder);
+                    if (result) result = await filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data,'utf8'));
+
+                    // Validate
+                    if (result) {
+                        this.currentPanel!.webview.postMessage({
+                            command: command,
+                            status: 'ok'
+                        });
+                        return true;                      
+                    }
+
+                    // Set
+                    errorMessage = "Failed to save png file";
+                                       
+                } catch (error) {
+                    errorMessage = error;
+                }
+
+                // Result
+                this.currentPanel!.webview.postMessage({
+                    command: command,
+                    status: 'error',
+                    errorMessage: errorMessage
+                });  
+                return false;  
+            }
+        });
+
+        // Result
+        return true;
+    }
 }

@@ -23,7 +23,7 @@ class SpriteEditorPage {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SpriteEditorPage.openPage');
             // Prepare
-            this.contentPath = path.join(context.extensionPath, 'out', 'content', 'pages', 'spriteEditor');
+            this.contentPath = path.join(context.extensionPath, 'out', 'content', 'pages', 'spriteeditor');
             let columnToShowIn = vscode.window.activeTextEditor
                 ? vscode.window.activeTextEditor.viewColumn
                 : undefined;
@@ -73,8 +73,8 @@ class SpriteEditorPage {
                     case 'saveProject':
                         this.saveProject(message);
                         return;
-                    case 'saveAsProject':
-                        // TODO
+                    case 'saveAsPngFile':
+                        this.saveAsPngFile(message);
                         return;
                     case 'configuration':
                         this.saveConfiguration(message);
@@ -197,7 +197,7 @@ class SpriteEditorPage {
                     'All Files': ['*']
                 }
             };
-            // TODO: this needs fixing
+            // TODO: this needs fixing (doesn't wait)
             // Process
             yield vscode.window.showSaveDialog(options).then((fileUri) => __awaiter(this, void 0, void 0, function* () {
                 if (fileUri) {
@@ -219,6 +219,62 @@ class SpriteEditorPage {
                         }
                         // Set
                         errorMessage = "Failed to save project";
+                    }
+                    catch (error) {
+                        errorMessage = error;
+                    }
+                    // Result
+                    this.currentPanel.webview.postMessage({
+                        command: command,
+                        status: 'error',
+                        errorMessage: errorMessage
+                    });
+                    return false;
+                }
+            }));
+            // Result
+            return true;
+        });
+    }
+    saveAsPngFile(message) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Prepare
+            let command = message.command;
+            let file = message.file;
+            let data = message.data;
+            let errorMessage = "";
+            // Get file
+            let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
+            // Prompt user here
+            let options = {
+                defaultUri: defaultUri,
+                saveLabel: "Save",
+                filters: {
+                    'PNG image': ['png']
+                }
+            };
+            // TODO: this needs fixing (doesn't wait)
+            // Process
+            yield vscode.window.showSaveDialog(options).then((fileUri) => __awaiter(this, void 0, void 0, function* () {
+                if (fileUri) {
+                    // Process
+                    try {
+                        // Prepare
+                        let folder = path.dirname(fileUri.fsPath);
+                        // Save
+                        let result = yield filesystem.MkDirAsync(folder);
+                        if (result)
+                            result = yield filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data, 'utf8'));
+                        // Validate
+                        if (result) {
+                            this.currentPanel.webview.postMessage({
+                                command: command,
+                                status: 'ok'
+                            });
+                            return true;
+                        }
+                        // Set
+                        errorMessage = "Failed to save png file";
                     }
                     catch (error) {
                         errorMessage = error;
