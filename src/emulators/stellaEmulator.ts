@@ -6,6 +6,9 @@ import { EmulatorBase } from "./emulatorBase";
 
 export class StellaEmulator extends EmulatorBase {
     
+    // Features
+    protected AutoCloseExistingInstances:boolean = true;
+
     constructor() {
         super("Stella","Stella",path.join(application.Path,"out","bin","emulators","stella"));
     }
@@ -28,6 +31,9 @@ export class StellaEmulator extends EmulatorBase {
                 this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,application.OSArch,"stella");             
             }
         }
+
+        // Other
+        this.AutoCloseExistingInstances = this.Configuration!.get<boolean>(`emulator.${this.Id.toLowerCase()}.autoCloseExistingInstances`,true); 
 
         // Result
         return true;
@@ -54,7 +60,7 @@ export class StellaEmulator extends EmulatorBase {
         ]
 
         // Kill any existing process
-        await execute.KillProcessByNameAsync(this.Name);
+        if (this.AutoCloseExistingInstances) await execute.KillProcessByNameAsync(this.Name);
 
         // Process
         application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);         

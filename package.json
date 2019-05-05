@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "icon": "images/icon.png",
     "preview": true,
     "publisher": "chunkypixel",
@@ -255,6 +255,12 @@
                     "type": "string",
                     "default": "",
                     "description": "Specify (optional) command line arguments:",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.emulator.stella.autoCloseExistingInstances": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Automatically close any existing Stella instances before opening a new one",
                     "scope": "resource"
                 },
                 "atari-dev-studio.emulator.a7800.path": {

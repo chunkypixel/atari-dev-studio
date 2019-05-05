@@ -15,6 +15,8 @@ const emulatorBase_1 = require("./emulatorBase");
 class StellaEmulator extends emulatorBase_1.EmulatorBase {
     constructor() {
         super("Stella", "Stella", path.join(application.Path, "out", "bin", "emulators", "stella"));
+        // Features
+        this.AutoCloseExistingInstances = true;
     }
     LoadConfigurationAsync() {
         const _super = Object.create(null, {
@@ -37,6 +39,8 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
                     this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, application.OSArch, "stella");
                 }
             }
+            // Other
+            this.AutoCloseExistingInstances = this.Configuration.get(`emulator.${this.Id.toLowerCase()}.autoCloseExistingInstances`, true);
             // Result
             return true;
         });
@@ -59,7 +63,8 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
                 `"${this.FileName}"`
             ];
             // Kill any existing process
-            yield execute.KillProcessByNameAsync(this.Name);
+            if (this.AutoCloseExistingInstances)
+                yield execute.KillProcessByNameAsync(this.Name);
             // Process
             application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);
             // Launch
