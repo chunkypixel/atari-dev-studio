@@ -111,10 +111,20 @@
             "type": "object",
             "title": "Atari Dev Studio",
             "properties": {
-                "atari-dev-studio.editor.showStatusBarCommands": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Whether to show the short-cut commands on the Status Bar (requires restart).",
+                "atari-dev-studio.editor.statusBarCommands": {
+                    "type": "string",
+                    "enum": [
+                        "Full",
+                        "Minimum",
+                        "None"
+                    ],
+                    "enumDescriptions": [
+                        "Name, version and buttons",
+                        "Buttons only",
+                        "Hidden"
+                    ],  
+                    "default": "Full",
+                    "description": "Show information and feature short-cuts on the Status Bar (requires restart).",
                     "scope": "resource"
                 },
                 "atari-dev-studio.editor.saveFileBeforeRun": {
@@ -150,6 +160,7 @@
                         "7800basic",
                         "dasm"
                     ],
+                    "default": "Automatic (based on the active language)",
                     "description": "Specify the default compiler used to compile your source code:",
                     "scope": "resource"
                 },

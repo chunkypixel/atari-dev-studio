@@ -23,6 +23,8 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.ExecuteCompilerAsync');
+            // Prepare
+            let result = true;
             // Premissions
             yield this.RepairFilePermissionsAsync();
             // Compiler options
@@ -84,11 +86,14 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             this.IsRunning = false;
             // Validate
             if (!executeResult)
-                return false;
+                result = false;
             // Finalise
-            let result = yield this.VerifyCompiledFileSizeAsync();
+            if (result)
+                result = yield this.VerifyCompiledFileSizeAsync();
             if (result)
                 result = yield this.MoveFilesToBinFolderAsync();
+            // Remove (if failed)
+            yield this.RemoveCompilationFilesAsync(result);
             // Result
             return result;
         });
@@ -157,6 +162,22 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             // Process
             let result = yield filesystem.ChModAsync(this.FolderOrPath);
             return result;
+        });
+    }
+    RemoveCompilationFilesAsync(result) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('debugger:DasmCompiler.RemoveCompilationFiles');
+            // Language specific files
+            if (!result) {
+                // Process
+                yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `${this.FileName}.bin`));
+            }
+            // Debugger files (from workspace not bin)
+            if (!this.GenerateDebuggerFiles || !result) {
+                yield this.RemoveDebuggerFilesAsync(this.WorkspaceFolder);
+            }
+            // Result
+            return true;
         });
     }
 }

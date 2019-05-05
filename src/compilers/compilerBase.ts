@@ -79,6 +79,9 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected async InitialiseAsync(): Promise<boolean> {
         console.log('debugger:CompilerBase.InitialiseAsync');
 
+        // Prepare
+        let result = true;
+
         // Already running?
         if (this.IsRunning) {
             // Notify
@@ -102,13 +105,14 @@ export abstract class CompilerBase implements vscode.Disposable {
 
         // Save files?
         if (this.Configuration.get<boolean>(`editor.saveAllFilesBeforeRun`))  {
-            vscode.workspace.saveAll();
+            result = await vscode.workspace.saveAll();
         } else if (this.Configuration.get<boolean>(`editor.saveFileBeforeRun`)) {
-            if (this.Document) this.Document.save();
+            if (this.Document) result = await this.Document.save();
         }
+        if (!result) return false;
 
         // Configuration
-        let result = await this.LoadConfigurationAsync();
+        result = await this.LoadConfigurationAsync();
         if (!result) return false;
 
         // Remove old debugger file before build

@@ -90,6 +90,8 @@ class CompilerBase {
     InitialiseAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.InitialiseAsync');
+            // Prepare
+            let result = true;
             // Already running?
             if (this.IsRunning) {
                 // Notify
@@ -109,14 +111,16 @@ class CompilerBase {
             }
             // Save files?
             if (this.Configuration.get(`editor.saveAllFilesBeforeRun`)) {
-                vscode.workspace.saveAll();
+                result = yield vscode.workspace.saveAll();
             }
             else if (this.Configuration.get(`editor.saveFileBeforeRun`)) {
                 if (this.Document)
-                    this.Document.save();
+                    result = yield this.Document.save();
             }
+            if (!result)
+                return false;
             // Configuration
-            let result = yield this.LoadConfigurationAsync();
+            result = yield this.LoadConfigurationAsync();
             if (!result)
                 return false;
             // Remove old debugger file before build

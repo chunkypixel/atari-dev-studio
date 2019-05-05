@@ -13,7 +13,6 @@ function Spawn(command, args, env, cwd, stdout, stderr) {
             env: env,
             cwd: cwd
         });
-        // TODO: need to break out these out to parent class so we don't list all compilers here
         // Capture output
         ca.stdout.on('data', (data) => {
             // Prepare

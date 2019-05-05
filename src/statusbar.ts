@@ -15,19 +15,34 @@ class StatusBar {
         // Github: https://github.com/chunkypixel/atari-dev-studio/issues/5
         //         Option to turn off/on
     
-        // Show commands?
-        if (configuration.get<boolean>(`editor.showStatusBarCommands`,true)) {
-            const itemOptions = [
-                { text: `     ${application.DisplayName} (v${application.Version})`},
+        // Prepare
+        let command = (configuration.get<string>('editor.statusBarCommands','Full'));
+        if (command == "None") return;
+
+        // Spacer
+        let itemOptions = [
+            { text: `   `},
+        ];
+        itemOptions.forEach(option => this.createItem(option));
+
+        // Name and version
+        if (command == "Full") {
+            let itemOptions = [
+                { text: `${application.DisplayName} (v${application.Version})`},
+            ];
+            itemOptions.forEach(option => this.createItem(option));
+        }
+
+        // Buttons
+        if (command == "Full" || command == "Minimum") {
+            let itemOptions = [
                 { tooltip: 'Welcome', text: '$(home)', command: 'extension.openWelcomePage' },
                 { tooltip: 'Sprite Editor', text: '$(screen-normal)', command: 'extension.openSpriteEditorPage' },
                 { tooltip: 'Compile source code', text: '$(triangle-right)', command: 'extension.buildGame' },
                 { tooltip: 'Compile source code and run in emulator', text: '$(rocket)', command: 'extension.buildGameAndRun'}
             ];
-    
-            // register
             itemOptions.forEach(option => this.createItem(option));
-        };
+        }
     }
 
     private createItem(option: any, alignment?: vscode.StatusBarAlignment | undefined, priority?: number | undefined): void {
