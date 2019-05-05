@@ -58,6 +58,8 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
                 this.Args,
                 `"${this.FileName}"`
             ];
+            // Kill any existing process
+            yield execute.KillProcessByNameAsync(this.Name);
             // Process
             application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);
             // Launch

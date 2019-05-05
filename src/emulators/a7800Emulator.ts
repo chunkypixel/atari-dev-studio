@@ -116,6 +116,11 @@ export class A7800Emulator extends EmulatorBase {
             `"${this.FileName}"`
         ]
 
+        // NOTE: This may need to be moved before compilation as it appears MAME is holding onto the launched file.
+        //       Also need to confirm actual name to search for.
+        // Kill any existing process
+        await execute.KillProcessByNameAsync(this.Name);
+
         // Process
         application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);         
         

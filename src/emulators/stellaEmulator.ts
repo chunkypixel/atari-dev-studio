@@ -53,6 +53,9 @@ export class StellaEmulator extends EmulatorBase {
             `"${this.FileName}"`
         ]
 
+        // Kill any existing process
+        await execute.KillProcessByNameAsync(this.Name);
+
         // Process
         application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);         
         

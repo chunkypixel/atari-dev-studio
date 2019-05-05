@@ -1,6 +1,35 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const process_1 = require("process");
 const cp = require("child_process");
+const find = require("find-process");
+function KillProcessByNameAsync(name) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield find('name', name)
+            .then(function (list) {
+            console.log(list);
+            for (let process of list) {
+                try {
+                    process_1.kill(process.pid);
+                }
+                catch (error) {
+                    console.log(`Failed to kill process ${process.pid}: ${process.name}`);
+                }
+            }
+        }, function (err) {
+            console.log(err.stack || err);
+        });
+    });
+}
+exports.KillProcessByNameAsync = KillProcessByNameAsync;
 function Spawn(command, args, env, cwd, stdout, stderr) {
     console.log('debugger:execute.ExecuteCommand');
     // Process

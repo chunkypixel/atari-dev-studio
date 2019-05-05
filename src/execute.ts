@@ -1,5 +1,23 @@
 "use strict";
+import { kill } from "process";
 const cp = require("child_process");
+const find = require("find-process");
+
+export async function KillProcessByNameAsync(name:string): Promise<void> {
+    await find('name', name)
+        .then(function (list:any) {
+            console.log(list);
+            for (let process of list) {
+                try {
+                    kill(process.pid);                   
+                } catch (error) {  
+                    console.log(`Failed to kill process ${process.pid}: ${process.name}`);           
+                }
+            }	
+        }, function (err:any) {
+            console.log(err.stack || err);
+        });
+}
 
 export function Spawn(command:string, args:string[] | null, env: { [key: string]: string | null } | null, cwd: string, stdout:any, stderr:any) : Promise<boolean> {
     console.log('debugger:execute.ExecuteCommand');
@@ -15,7 +33,7 @@ export function Spawn(command:string, args:string[] | null, env: { [key: string]
             env: env,
             cwd: cwd
         });
-        
+
         // Capture output
         ca.stdout.on('data', (data: { toString: () => ""; }) => {
             // Prepare
