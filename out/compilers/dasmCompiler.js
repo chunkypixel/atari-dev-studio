@@ -23,8 +23,6 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.ExecuteCompilerAsync');
-            // Prepare
-            let result = true;
             // Premissions
             yield this.RepairFilePermissionsAsync();
             // Compiler options
@@ -84,28 +82,22 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
                 return result;
             });
             this.IsRunning = false;
-            // Validate
-            if (!executeResult)
-                result = false;
             // Finalise
-            if (result)
-                result = yield this.VerifyCompiledFileSizeAsync();
-            if (result)
-                result = yield this.MoveFilesToBinFolderAsync();
-            // Remove (if failed)
-            yield this.RemoveCompilationFilesAsync(result);
+            if (executeResult)
+                executeResult = yield this.VerifyCompiledFileSizeAsync();
+            yield this.RemoveCompilationFilesAsync(executeResult);
+            if (executeResult)
+                executeResult = yield this.MoveFilesToBinFolderAsync();
             // Result
-            return result;
+            return executeResult;
         });
     }
     LoadConfigurationAsync() {
-        const _super = Object.create(null, {
-            LoadConfigurationAsync: { get: () => super.LoadConfigurationAsync }
-        });
+        const _super = name => super[name];
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.LoadConfigurationAsync');
             // Base
-            let result = yield _super.LoadConfigurationAsync.call(this);
+            let result = yield _super("LoadConfigurationAsync").call(this);
             if (!result)
                 return false;
             // Compiler

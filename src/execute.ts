@@ -1,9 +1,14 @@
 "use strict";
+import * as application from './application';
 import { kill } from "process";
 const cp = require("child_process");
 const find = require("find-process");
 
 export async function KillProcessByNameAsync(name:string): Promise<void> {
+    // Need to lowercase name
+    if (application.IsLinux || application.IsMacOS) name = name.toLowerCase();
+
+    // Search
     await find('name', name)
         .then(function (list:any) {
             console.log(list);

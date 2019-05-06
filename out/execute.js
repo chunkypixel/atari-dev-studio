@@ -8,11 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const application = require("./application");
 const process_1 = require("process");
 const cp = require("child_process");
 const find = require("find-process");
 function KillProcessByNameAsync(name) {
     return __awaiter(this, void 0, void 0, function* () {
+        // Need to lowercase name
+        if (application.IsLinux || application.IsMacOS)
+            name = name.toLowerCase();
+        // Search
         yield find('name', name)
             .then(function (list) {
             console.log(list);

@@ -23,9 +23,6 @@ export class DasmCompiler extends CompilerBase {
     protected async ExecuteCompilerAsync(): Promise<boolean> {
         console.log('debugger:DasmCompiler.ExecuteCompilerAsync');
 
-        // Prepare
-        let result = true;
-
         // Premissions
         await this.RepairFilePermissionsAsync();
 
@@ -93,18 +90,13 @@ export class DasmCompiler extends CompilerBase {
             });
         this.IsRunning = false;
 
-        // Validate
-        if (!executeResult) result = false;
-
         // Finalise
-        if (result) result = await this.VerifyCompiledFileSizeAsync();
-        if (result) result = await this.MoveFilesToBinFolderAsync();
-
-        // Remove (if failed)
-        await this.RemoveCompilationFilesAsync(result);
+        if (executeResult) executeResult = await this.VerifyCompiledFileSizeAsync();
+        await this.RemoveCompilationFilesAsync(executeResult);
+        if (executeResult) executeResult = await this.MoveFilesToBinFolderAsync();
 
         // Result
-        return result;
+        return executeResult;
     }
 
     protected async LoadConfigurationAsync(): Promise<boolean> {
