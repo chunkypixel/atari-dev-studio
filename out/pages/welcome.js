@@ -98,6 +98,21 @@ class WelcomePage {
                     case 'openSpriteEditor':
                         this.openSpriteEditor();
                         return;
+                    // case 'openDPCKernalTemplate':
+                    //     let dpcTemplatePath = vscode.Uri.file(path.join(contentPath.toString(), 'templates', 'DPCKernel.bas'));
+                    //     let dpcContent = fs.readFileSync(dpcTemplatePath.fsPath, 'utf8');
+                    //     this.openNewFileDocument("bB", dpcContent);
+                    //     return;
+                    // case 'openMultispriteKernalTemplate':
+                    //     let multispriteTemplatePath = vscode.Uri.file(path.join(contentPath.toString(), 'templates', 'MultispriteKernel.bas'));
+                    //     let multispriteContent = fs.readFileSync(multispriteTemplatePath.fsPath, 'utf8');
+                    //     this.openNewFileDocument("bB", multispriteContent);
+                    //     return;
+                    // case 'openStandardKernalTemplate':
+                    //     let standardTemplatePath = vscode.Uri.file(path.join(contentPath.toString(), 'templates', 'StandardKernel.bas'));
+                    //     let standardContent = fs.readFileSync(standardTemplatePath.fsPath, 'utf8');
+                    //     this.openNewFileDocument("bB", standardContent);
+                    //     return;
                 }
                 // Unknown
                 console.log(`debugger:WelcomePage: Unknown command called: ${message.command}`);
