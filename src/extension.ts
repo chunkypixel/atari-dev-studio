@@ -5,7 +5,7 @@ import * as application from './application';
 import { WelcomePage } from './pages/welcome';
 import { SpriteEditorPage } from './pages/spriteeditor';
 import './statusbar';
-
+import { Hover } from './hover';
 
 // Activation Events
 // https://code.visualstudio.com/api/references/activation-events
@@ -19,6 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Pages
 	let welcomePage = new WelcomePage();
 	let spriteEditorPage = new SpriteEditorPage();
+	let hover = new Hover(context);
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
@@ -62,6 +63,9 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(openSpriteEditorPage);
 	context.subscriptions.push(buildGame);
 	context.subscriptions.push(buildGameAndRun);	
+
+	// Register the mouse-over hover provider
+	vscode.languages.registerHoverProvider('dasm', hover);
 }
 
 // this method is called when your extension is deactivated
