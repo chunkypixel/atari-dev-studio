@@ -6,7 +6,6 @@ import { WelcomePage } from './pages/welcome';
 import { SpriteEditorPage } from './pages/spriteeditor';
 import './statusbar';
 
-
 // Activation Events
 // https://code.visualstudio.com/api/references/activation-events
 // Activation will occur if a language is chosen or a command executed
@@ -15,7 +14,7 @@ import './statusbar';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
 	// Pages
 	let welcomePage = new WelcomePage();
 	let spriteEditorPage = new SpriteEditorPage();
@@ -24,12 +23,6 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log(`Extension ${application.DisplayName} (${application.Version}) is now active!`);
     console.log(`- Installation path: '${application.Path}'`);
-    
-	// Github: https://github.com/chunkypixel/atari-dev-studio/issues/2
-	//         Annoyance remove
-	
-	// Announcement
-    //vscode.window.showInformationMessage(`Welcome to ${application.DisplayName} (v${application.Version})!`);
 	
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
@@ -62,6 +55,9 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(openSpriteEditorPage);
 	context.subscriptions.push(buildGame);
 	context.subscriptions.push(buildGameAndRun);	
+
+	// Register the mouse-over hover providers
+	await application.RegisterHoverProvidersAsync(context);
 }
 
 // this method is called when your extension is deactivated

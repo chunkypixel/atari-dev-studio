@@ -15,8 +15,8 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const path = require("path");
 const vscode = require("vscode");
+const path = require("path");
 const application = require("../application");
 const filesystem = require("../filesystem");
 class CompilerBase {
