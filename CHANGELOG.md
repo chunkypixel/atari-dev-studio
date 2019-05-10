@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.1.8
+
+* #12 [Done] - SmallRoomLabs added a process to display hover tooltips to dasm language for 6502 and VCS opcodes [thanks SmallRoomLabs]
+* Extended hover tooltip process to work across all languages
+* Minor internal changes to Sprite Editor for future enhancements
+
 ## 0.1.7
 
 * #6 [Done] - Added new drop-down selector in settings to choose what you want to display on the Status Bar (Full, Minimum, None) [thanks SmallRoomLabs]
