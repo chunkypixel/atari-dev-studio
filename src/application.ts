@@ -3,12 +3,16 @@ import * as vscode from 'vscode';
 import * as filesystem from './filesystem';
 const os = require("os");
 import { CompilerBase } from './compilers/compilerBase';
-import { EmulatorBase } from './emulators/emulatorBase';
 import { BatariBasicCompiler } from './compilers/batariBasicCompiler';
 import { SeventyEightHundredBasicCompiler } from './compilers/seventyEightHundredBasicCompiler';
 import { DasmCompiler } from './compilers/dasmCompiler';
+import { EmulatorBase } from './emulators/emulatorBase';
 import { StellaEmulator } from './emulators/stellaEmulator';
 import { A7800Emulator } from './emulators/a7800Emulator';
+import { HoverBase } from './hovers/hoverBase';
+import { DasmHover } from './hovers/dasmHover';
+import { BatariBasicHover } from './hovers/batariBasicHover';
+import { SeventyEightHundredBasicHover } from './hovers/seventyEightHundredBasicHover';
 
 // -------------------------------------------------------------------------------------
 // Operating System
@@ -56,6 +60,22 @@ export const Emulators:EmulatorBase[] = [
 	new StellaEmulator(),
 	new A7800Emulator()
 ];
+
+// -------------------------------------------------------------------------------------
+// Hovers
+// Language tooltips
+// -------------------------------------------------------------------------------------
+export const Hovers:HoverBase[] = [
+	new DasmHover(),
+	new BatariBasicHover(),
+	new SeventyEightHundredBasicHover()
+];
+
+export async function RegisterHoverProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
+	for (let hover of Hovers) {
+		await hover.RegisterAsync(context);
+	}
+}
 
 // -------------------------------------------------------------------------------------
 // Functions

@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
-const filesystem = require("../filesystem");
 const application = require("../application");
+const filesystem = require("../filesystem");
 const execute = require("../execute");
 const emulatorBase_1 = require("./emulatorBase");
 class A7800Emulator extends emulatorBase_1.EmulatorBase {

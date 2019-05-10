@@ -1,7 +1,7 @@
 "use strict";
 import * as path from 'path';
-import * as filesystem from '../filesystem';
 import * as application from '../application';
+import * as filesystem from '../filesystem';
 import * as execute from '../execute';
 import { EmulatorBase } from "./emulatorBase";
 

@@ -16,6 +16,9 @@ const seventyEightHundredBasicCompiler_1 = require("./compilers/seventyEightHund
 const dasmCompiler_1 = require("./compilers/dasmCompiler");
 const stellaEmulator_1 = require("./emulators/stellaEmulator");
 const a7800Emulator_1 = require("./emulators/a7800Emulator");
+const dasmHover_1 = require("./hovers/dasmHover");
+const batariBasicHover_1 = require("./hovers/batariBasicHover");
+const seventyEightHundredBasicHover_1 = require("./hovers/seventyEightHundredBasicHover");
 // -------------------------------------------------------------------------------------
 // Operating System
 // -------------------------------------------------------------------------------------
@@ -58,6 +61,23 @@ exports.Emulators = [
     new stellaEmulator_1.StellaEmulator(),
     new a7800Emulator_1.A7800Emulator()
 ];
+// -------------------------------------------------------------------------------------
+// Hovers
+// Language tooltips
+// -------------------------------------------------------------------------------------
+exports.Hovers = [
+    new dasmHover_1.DasmHover(),
+    new batariBasicHover_1.BatariBasicHover(),
+    new seventyEightHundredBasicHover_1.SeventyEightHundredBasicHover()
+];
+function RegisterHoverProvidersAsync(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (let hover of exports.Hovers) {
+            yield hover.RegisterAsync(context);
+        }
+    });
+}
+exports.RegisterHoverProvidersAsync = RegisterHoverProvidersAsync;
 // -------------------------------------------------------------------------------------
 // Functions
 // -------------------------------------------------------------------------------------

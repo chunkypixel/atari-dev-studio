@@ -23,45 +23,45 @@ require("./statusbar");
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
-    // Pages
-    let welcomePage = new welcome_1.WelcomePage();
-    let spriteEditorPage = new spriteeditor_1.SpriteEditorPage();
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    console.log(`Extension ${application.DisplayName} (${application.Version}) is now active!`);
-    console.log(`- Installation path: '${application.Path}'`);
-    // Github: https://github.com/chunkypixel/atari-dev-studio/issues/2
-    //         Annoyance remove
-    // Announcement
-    //vscode.window.showInformationMessage(`Welcome to ${application.DisplayName} (v${application.Version})!`);
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with registerCommand
-    // The commandId parameter must match the command field in package.json
-    // Welcome
-    const openWelcomePage = vscode.commands.registerCommand('extension.openWelcomePage', () => {
-        console.log('User activated command "extension.openWelcomePage"');
-        welcomePage.openPage(context);
+    return __awaiter(this, void 0, void 0, function* () {
+        // Pages
+        let welcomePage = new welcome_1.WelcomePage();
+        let spriteEditorPage = new spriteeditor_1.SpriteEditorPage();
+        // Use the console to output diagnostic information (console.log) and errors (console.error)
+        // This line of code will only be executed once when your extension is activated
+        console.log(`Extension ${application.DisplayName} (${application.Version}) is now active!`);
+        console.log(`- Installation path: '${application.Path}'`);
+        // The command has been defined in the package.json file
+        // Now provide the implementation of the command with registerCommand
+        // The commandId parameter must match the command field in package.json
+        // Welcome
+        const openWelcomePage = vscode.commands.registerCommand('extension.openWelcomePage', () => {
+            console.log('User activated command "extension.openWelcomePage"');
+            welcomePage.openPage(context);
+        });
+        // SpriteEditor
+        const openSpriteEditorPage = vscode.commands.registerCommand('extension.openSpriteEditorPage', () => {
+            console.log('User activated command "extension.openSpriteEditorPage"');
+            spriteEditorPage.openPage(context);
+        });
+        // Build
+        // Note: apparently the fileUri can be supplied via the command line but we are not going to use it
+        const buildGame = vscode.commands.registerCommand('extension.buildGame', (fileUri) => __awaiter(this, void 0, void 0, function* () {
+            console.log('User activated command "extension.buildGame"');
+            yield application.BuildGameAsync(fileUri);
+        }));
+        const buildGameAndRun = vscode.commands.registerCommand('extension.buildGameAndRun', (fileUri) => __awaiter(this, void 0, void 0, function* () {
+            console.log('User activated command "extension.buildGameAndRun"');
+            yield application.BuildGameAndRunAsync(fileUri);
+        }));
+        // Subscriptions (register)
+        context.subscriptions.push(openWelcomePage);
+        context.subscriptions.push(openSpriteEditorPage);
+        context.subscriptions.push(buildGame);
+        context.subscriptions.push(buildGameAndRun);
+        // Register the mouse-over hover providers
+        yield application.RegisterHoverProvidersAsync(context);
     });
-    // SpriteEditor
-    const openSpriteEditorPage = vscode.commands.registerCommand('extension.openSpriteEditorPage', () => {
-        console.log('User activated command "extension.openSpriteEditorPage"');
-        spriteEditorPage.openPage(context);
-    });
-    // Build
-    // Note: apparently the fileUri can be supplied via the command line but we are not going to use it
-    const buildGame = vscode.commands.registerCommand('extension.buildGame', (fileUri) => __awaiter(this, void 0, void 0, function* () {
-        console.log('User activated command "extension.buildGame"');
-        yield application.BuildGameAsync(fileUri);
-    }));
-    const buildGameAndRun = vscode.commands.registerCommand('extension.buildGameAndRun', (fileUri) => __awaiter(this, void 0, void 0, function* () {
-        console.log('User activated command "extension.buildGameAndRun"');
-        yield application.BuildGameAndRunAsync(fileUri);
-    }));
-    // Subscriptions (register)
-    context.subscriptions.push(openWelcomePage);
-    context.subscriptions.push(openSpriteEditorPage);
-    context.subscriptions.push(buildGame);
-    context.subscriptions.push(buildGameAndRun);
 }
 exports.activate = activate;
 // this method is called when your extension is deactivated

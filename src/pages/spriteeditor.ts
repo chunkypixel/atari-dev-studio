@@ -1,6 +1,5 @@
 "use strict";
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import * as path from 'path';
 import * as filesystem from '../filesystem';
 import opn = require('open');
