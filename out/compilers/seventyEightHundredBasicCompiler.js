@@ -51,6 +51,13 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             let executeResult = yield execute.Spawn(command, args, env, this.WorkspaceFolder, (stdout) => {
                 // Prepare
                 let result = true;
+                // Validate
+                if (stdout.includes("assembly error")) {
+                    // Potential messages received (so far):
+                    // Fatal assembly error: Source is not resolvable.
+                    // Failed
+                    result = false;
+                }
                 // Result
                 application.CompilerOutputChannel.append('' + stdout);
                 return result;
@@ -58,9 +65,10 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
                 // Prepare
                 let result = true;
                 // Validate
-                if (stderr.includes("Permission denied")) {
+                if (stderr.includes("Permission denied") || stderr.includes("*** WARNING: The file size of")) {
                     // Potential messages received (so far):
                     // Permission denied
+                    // *** WARNING: The file size of <file> isn't correct.
                     // Failed
                     result = false;
                 }

@@ -2742,30 +2742,15 @@ Spritemate stylesheet
  }
  
  
- 
  #button-row
  {
    text-align:center;
  }
- 
- #preview
- {
-  
- }
- 
- .editor_ui
- {
- 
- }
+
  
  #palette
  {
    cursor: pointer;
- }
- 
- #palette_spritecolors
- {
-   margin-top: 12px;
  }
  
  .colors
@@ -2779,14 +2764,13 @@ Spritemate stylesheet
  .colors p
  {
    margin: 0px;
-   margin-bottom: 2px;
    padding: 0px;
- 
  }
  
  #palette_all_colors
  {
-   clear:both;
+   clear: both;
+   margin: 0px 2px;
  }
  
  .palette_color_item
@@ -2797,20 +2781,25 @@ Spritemate stylesheet
    cursor: pointer; 
    float: left;
  }
- 
- .palette_color_item_active_colors
+
+ #palette_sprite_colors
  {
-   width: 40px;
+  margin: 0px 0px 4px 2px;
+ }
+ 
+ .palette_color_item_sprite_colors
+ {
+   width: 84px;
+   float: left;
    height: 20px;
    margin: auto;
    cursor: pointer; 
-   margin-bottom: 8px;
+   margin: 2px 2px 0px 0px;
  }
- 
- .palette_highlight_text
- {
-   color: var(--blue);
- }
+
+  div#palette_0 .palette_color_item_sprite_colors {
+    width: 256px;
+  }
  
  .palette_color_item_selected
  {
