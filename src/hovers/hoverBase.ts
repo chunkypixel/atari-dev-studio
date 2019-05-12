@@ -22,28 +22,53 @@ export abstract class HoverBase implements vscode.HoverProvider {
 	//
 	// Load and parse a file located in .../hovers 
 	//
-	// The files are plain text with the keywords in the first column
-	// followed by the description indented.
+	// The files are in markdown format with the keywords separated from the previous description
+	// by three blank lines.
 	//
 	// Each entry in the file is appended to the hoverText[] array to be used
 	// when looking up the keyword the user is hovering over
 	//
 	protected async LoadHoverFileAsync(context: vscode.ExtensionContext, filename: string): Promise<void> {
 		const filePath: vscode.Uri = vscode.Uri.file(path.join(context.extensionPath, 'hovers', filename));
-		let arr = (await filesystem.ReadFileAsync(filePath.fsPath)).toString().split(/\r?\n/);
-		let txt='';
-		for (let i=0; i<arr.length; i++) {
-			if (arr[i].length>0 && arr[i].charAt(0)>' ') {
-				if (txt.length>0) {
-					let key=''
-					let p=0;
-					while (txt.charAt(p)>' ') key+=txt.charAt(p++);
-					this.hoverText[key]=txt.trim();
-					txt='';
-				} 
+		const filearr = (await filesystem.ReadFileAsync(filePath.fsPath)).toString().split(/\r?\n/);
+
+		const keypattern = /^([^A-Za-z0-9_]*)([A-Za-z0-9_]+)/; // Pattern for matching the 'key'
+		const delimCnt = 2 // How many contiguous blank lines that must be found betwen keys
+
+		let blanks=0;      // How many more contigous blank lines until the next key
+		let key='';        // Keyword for the popup
+		let info='';       // Collected info text for the popup
+
+		// Interate thru the file and pick out the keywords by keeping track of
+		// how many contigous blank lines that have passed by.  Since the keyword can be
+		// prefixed by markdown data we need to use a regex to just get the key.
+
+		for (const line of filearr) {
+			let match=line.match(keypattern);
+			// Do we something that looks like a key and also enough blanks passed by?
+			if (match && match[2] && blanks<=0) {  				
+				// Store if already have some lines collected
+				if (info!='') this.hoverText[key] = info; 
+				// Hold the next key, start concatenating info from scratch and reset the blank counter
+				key=match[2];    
+				info='';         
+				blanks=delimCnt; 
 			}
-			txt+=arr[i]+'\r\n';
+
+			// Reset the blank lines counter to its starting value for every non-blank line encountered
+			if (line.trim()=='') { 
+				blanks--;
+			} else {
+				blanks=delimCnt;
+			}
+
+ 			// Concat the current line into the info string
+ 			info+=line+'\r\n'; 
 		}
+
+		// Add eventual final key entry (happens when file is not ending with enough blank lines)
+		if (info.trim()!='') this.hoverText[key] = info;
+
 	}
 
 	provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Hover> {
