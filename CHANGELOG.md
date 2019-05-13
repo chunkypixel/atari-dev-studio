@@ -5,8 +5,13 @@ The following enhancements and changes have been made to Atari Dev Studio:
 ## 0.1.9
 
 * #13 [Done] - SmallRoomLabs updated hover text to markdown format [thanks SmallRoomLabs] 
-* Updated Project area for Sprite Editor to store loaded file and auto save or prompt and also display filename on menu bar
-* Further internal changes to Sprite Editor [breaking]
+
+Sprite Editor
+* Updated Project area to store loaded file and auto save or prompt
+* Added menu bar back to display filename of active file
+* Updated Palette selector to display user colors  across then down to allow for future expansion
+* Changes to file format to allow sprite size to be stored
+* Further internal changes
 
 ## 0.1.8
 
