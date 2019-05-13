@@ -186,52 +186,57 @@ class SpriteEditorPage {
             let file = message.file;
             let data = message.data;
             let errorMessage = "";
-            // Get file
-            let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
-            // Prompt user here
-            let options = {
-                defaultUri: defaultUri,
-                saveLabel: "Save",
-                filters: {
-                    'Sprite Editor': ['spe'],
-                    'All Files': ['*']
-                }
-            };
-            // TODO: this needs fixing (doesn't wait)
-            // Process
-            yield vscode.window.showSaveDialog(options).then((fileUri) => __awaiter(this, void 0, void 0, function* () {
-                if (fileUri) {
-                    // Process
-                    try {
-                        // Prepare
-                        let folder = path.dirname(fileUri.fsPath);
-                        // Save
-                        let result = yield filesystem.MkDirAsync(folder);
-                        if (result)
-                            result = yield filesystem.WriteFileAsync(fileUri.fsPath, data);
-                        // Validate
-                        if (result) {
-                            this.currentPanel.webview.postMessage({
-                                command: command,
-                                status: 'ok'
-                            });
-                            return true;
-                        }
-                        // Set
-                        errorMessage = "Failed to save project";
+            // Set base uri
+            let fileUri = vscode.Uri.file(file);
+            // Prompt?
+            if (!file) {
+                // Options
+                let options = {
+                    defaultUri: vscode.Uri.file(filesystem.WorkspaceFolder()),
+                    saveLabel: "Save",
+                    filters: {
+                        'Sprite Editor': ['spe'],
+                        'All Files': ['*']
                     }
-                    catch (error) {
-                        errorMessage = error;
+                };
+                // Process
+                let result = yield vscode.window.showSaveDialog(options);
+                if (result)
+                    fileUri = result;
+            }
+            // Save?
+            if (fileUri) {
+                // Process
+                try {
+                    // Prepare
+                    let folder = path.dirname(fileUri.fsPath);
+                    // Save
+                    let result = yield filesystem.MkDirAsync(folder);
+                    if (result)
+                        result = yield filesystem.WriteFileAsync(fileUri.fsPath, data);
+                    // Validate
+                    if (result) {
+                        this.currentPanel.webview.postMessage({
+                            command: command,
+                            status: 'ok',
+                            file: fileUri.fsPath,
+                        });
+                        return true;
                     }
-                    // Result
-                    this.currentPanel.webview.postMessage({
-                        command: command,
-                        status: 'error',
-                        errorMessage: errorMessage
-                    });
-                    return false;
+                    // Set
+                    errorMessage = "Failed to save project";
                 }
-            }));
+                catch (error) {
+                    errorMessage = error;
+                }
+                // Result
+                this.currentPanel.webview.postMessage({
+                    command: command,
+                    status: 'error',
+                    errorMessage: errorMessage
+                });
+                return false;
+            }
             // Result
             return true;
         });

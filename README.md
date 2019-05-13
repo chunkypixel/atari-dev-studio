@@ -97,6 +97,7 @@ This extension is only available due to the great people of the AtariAge communi
 * Stella emulator - Stephen Anthony (stephena)
 * A7800 emulator - Mike Saarna (RevEng) and Trebor
 * Muddyfunster, TwentySixHundred, Lillapojkenpåön and vbauer for thier additional testing and bug-reporting of the previous incarnation of this extension for batari Basic.
+* Mats Engstrom (SmallRoomLabs) for his valued testing, suggestions and enhancements to Atari Dev Studio
 * The AtariAge community including Albert, RevEng, Random Terrain, Gemintronic, Karl G and ZeroPage Homebrew
 
 ## Languages

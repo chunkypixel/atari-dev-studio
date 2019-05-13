@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.1.9
+
+* #13 [Done] - SmallRoomLabs updated hover text to markdown format [thanks SmallRoomLabs] 
+* Updated Project area for Sprite Editor to store loaded file and auto save or prompt and also display filename on menu bar
+* Further internal changes to Sprite Editor [breaking]
+
 ## 0.1.8
 
 * #12 [Done] - SmallRoomLabs added a process to display hover tooltips to dasm language for 6502 and VCS opcodes [thanks SmallRoomLabs]

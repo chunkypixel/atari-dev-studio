@@ -209,57 +209,62 @@ export class SpriteEditorPage implements vscode.Disposable {
         let data = message!.data;
         let errorMessage = "";
 
-        // Get file
-        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
+        // Set base uri
+        let fileUri = vscode.Uri.file(file);
+        
+        // Prompt?
+        if (!file) {
+            // Options
+            let options: vscode.SaveDialogOptions = {
+                defaultUri: vscode.Uri.file(filesystem.WorkspaceFolder()),
+                saveLabel: "Save",
+                filters: {
+                    'Sprite Editor': ['spe'],
+                    'All Files': ['*']
+                }
+            };
 
-        // Prompt user here
-        let options: vscode.SaveDialogOptions = {
-            defaultUri: defaultUri,
-            saveLabel: "Save",
-            filters: {
-                'Sprite Editor': ['spe'],
-                'All Files': ['*']
-            }
-        };
+            // Process
+            let result = await vscode.window.showSaveDialog(options);
+            if (result) fileUri = result;
+        }
 
-        // TODO: this needs fixing (doesn't wait)
-        // Process
-        await vscode.window.showSaveDialog(options).then(async fileUri => {
-            if (fileUri) {
-                // Process
-                try {
-                    // Prepare
-                    let folder = path.dirname(fileUri.fsPath);
+        // Save?
+        if (fileUri) {
+            // Process
+            try {
+                // Prepare
+                let folder = path.dirname(fileUri.fsPath);
 
-                    // Save
-                    let result = await filesystem.MkDirAsync(folder);
-                    if (result) result = await filesystem.WriteFileAsync(fileUri.fsPath, data);
+                // Save
+                let result = await filesystem.MkDirAsync(folder);
+                if (result) result = await filesystem.WriteFileAsync(fileUri.fsPath, data);
 
-                    // Validate
-                    if (result) {
-                        this.currentPanel!.webview.postMessage({
-                            command: command,
-                            status: 'ok'
-                        });
-                        return true;                      
-                    }
-
-                    // Set
-                    errorMessage = "Failed to save project";
-                                       
-                } catch (error) {
-                    errorMessage = error;
+                // Validate
+                if (result) {
+                    this.currentPanel!.webview.postMessage({
+                        command: command,
+                        status: 'ok',
+                        file: fileUri.fsPath,
+                    });
+                    return true;                      
                 }
 
-                // Result
-                this.currentPanel!.webview.postMessage({
-                    command: command,
-                    status: 'error',
-                    errorMessage: errorMessage
-                });  
-                return false;  
+                // Set
+                errorMessage = "Failed to save project";
+                                    
+            } catch (error) {
+                errorMessage = error;
             }
-        });
+
+            // Result
+            this.currentPanel!.webview.postMessage({
+                command: command,
+                status: 'error',
+                errorMessage: errorMessage
+            });  
+            return false;  
+        }
 
         // Result
         return true;

@@ -19,8 +19,8 @@ class DasmHover extends hoverBase_1.HoverBase {
         });
         return __awaiter(this, void 0, void 0, function* () {
             // Files
-            yield this.LoadHoverFileAsync(context, '6502.txt'); // 6502 opcodes
-            yield this.LoadHoverFileAsync(context, 'vcs.txt'); // Stella & RIOT
+            yield this.LoadHoverFileAsync(context, '6502.md'); // 6502 opcodes
+            yield this.LoadHoverFileAsync(context, 'vcs.md'); // Stella & RIOT
             // Finalise
             yield _super.RegisterAsync.call(this, context);
         });
