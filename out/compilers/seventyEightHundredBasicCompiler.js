@@ -52,9 +52,10 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
                 // Prepare
                 let result = true;
                 // Validate
-                if (stdout.includes("assembly error")) {
+                if (stdout.includes("Fatal assembly error") || stdout.includes("Compilation failed.")) {
                     // Potential messages received (so far):
                     // Fatal assembly error: Source is not resolvable.
+                    // Compilation failed.
                     // Failed
                     result = false;
                 }
@@ -65,10 +66,11 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
                 // Prepare
                 let result = true;
                 // Validate
-                if (stderr.includes("Permission denied") || stderr.includes("*** WARNING: The file size of")) {
+                if (stderr.includes("Permission denied")) {
                     // Potential messages received (so far):
                     // Permission denied
                     // *** WARNING: The file size of <file> isn't correct.
+                    // *** ERROR, incmapfile couldn't open map file 'maps\level1.tmx' for reading
                     // Failed
                     result = false;
                 }
