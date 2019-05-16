@@ -2,9 +2,17 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.2.0
+* Updated 7800basic compilation routine to validate for additional errors
+* Added missing 7800basic keywords: joy0any, joy1any, converttobcd
+
+Sprite Editor
+* Fixed issue where toolbar was not updated properly after loading project
+
 ## 0.1.9
 
 * #13 [Done] - SmallRoomLabs updated hover text to markdown format [thanks SmallRoomLabs] 
+* Updated 7800basic compilation routine to validate for additional errors
 
 Sprite Editor
 * Updated Project area to store loaded file and auto save or prompt

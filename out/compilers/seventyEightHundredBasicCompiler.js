@@ -52,10 +52,12 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
                 // Prepare
                 let result = true;
                 // Validate
-                if (stdout.includes("Fatal assembly error") || stdout.includes("Compilation failed.")) {
+                if (stdout.includes("Fatal assembly error") || stdout.includes("Compilation failed.") || stdout.includes("Unrecoverable error(s) in pass, aborting assembly!") || stdout.includes("error: ")) {
                     // Potential messages received (so far):
                     // Fatal assembly error: Source is not resolvable.
                     // Compilation failed.
+                    // Unrecoverable error(s) in pass, aborting assembly!
+                    // error: Label mismatch
                     // Failed
                     result = false;
                 }
