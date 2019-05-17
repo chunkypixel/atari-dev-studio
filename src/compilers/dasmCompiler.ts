@@ -175,7 +175,7 @@ export class DasmCompiler extends CompilerBase {
         }
 
         // Debugger files (from workspace not bin)
-        if (!this.GenerateDebuggerFiles || !result) {
+        if (!this.GenerateDebuggerFiles) {
             await this.RemoveDebuggerFilesAsync(this.WorkspaceFolder);
         }
 
