@@ -4,7 +4,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.2.0
 * Updated 7800basic compilation routine to validate for additional errors
-* Added missing 7800basic keywords: joy0any, joy1any, converttobcd
+* Added missing 7800basic keywords: converttobcd, extrawide, joy0any, joy1any
 
 Sprite Editor
 * Fixed issue where toolbar was not updated properly after loading project

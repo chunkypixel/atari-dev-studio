@@ -37,7 +37,7 @@
 			},
 			{
 				"name": "keyword.commands.78b",
-				"match": "\\b(adjustvisible|alphachars|alphadata|avoxvoice|basepath|boxcollision|characterset|clearscreen|collision|collisionwrap|converttobcd|dictionary|dmahole|drawscreen|drawwait|data|debug|displaymode|dlmemory|doublebuffer|doublewide|extradlmemory|hsscolorbase|hsdifficultytext|hsgameranks|hsscoresize|hsseconds|hssupport|incbanner|incgraphic|incmapfile|lockzone|loadmemory|loadrambank|loadrombank|mcpdevcart|memcpy|memset|mutesfx|newblock|pauseroutine|peekchar|pitch|phonetic|playsfx|playsong|plotbanner|plotchars|plotmap|plotmapfile|plotsprite|plotvalue|plotvalueonscreen|pokechar|pokeybase|pokeydetected|pokeysound|pokeysupport|psound|raw|reboot|restorescreen|reset|romsize|savescreen|screenheight|savememory|sdata|speak|speechdata|speed|sread|stopsong|songdata|tiasfx|tsound|unlockzone|voice|zoneheight|zoneprotection)\\b",
+				"match": "\\b(adjustvisible|alphachars|alphadata|avoxvoice|basepath|boxcollision|characterset|clearscreen|collision|collisionwrap|converttobcd|dictionary|dmahole|drawscreen|drawwait|data|debug|displaymode|dlmemory|doublebuffer|doublewide|extradlmemory|extrawide|hsscolorbase|hsdifficultytext|hsgameranks|hsscoresize|hsseconds|hssupport|incbanner|incgraphic|incmapfile|lockzone|loadmemory|loadrambank|loadrombank|mcpdevcart|memcpy|memset|mutesfx|newblock|pauseroutine|peekchar|pitch|phonetic|playsfx|playsong|plotbanner|plotchars|plotmap|plotmapfile|plotsprite|plotvalue|plotvalueonscreen|pokechar|pokeybase|pokeydetected|pokeysound|pokeysupport|psound|raw|reboot|restorescreen|reset|romsize|savescreen|screenheight|savememory|sdata|speak|speechdata|speed|sread|stopsong|songdata|tiasfx|tsound|unlockzone|voice|zoneheight|zoneprotection)\\b",
 				"comment": "other keywords"
 			},		
 			{
