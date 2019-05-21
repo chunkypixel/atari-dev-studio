@@ -11,6 +11,7 @@ Atari Dev Studio includes the following features:
 * Develop your game on Windows, Linux or macOS
 * Compile source code for your Atari 2600 or 7800 using batari Basic, 7800basic or dasm
 * Optionally launch and test your game using the Stella (2600) or A7800 (7800) emulators
+* Built-in Sprite Editor (also suitable for tiles and other objects) [preview]
 * Manage your project using the File Explorer or version-control your source code directly with GitHub (and others) using the built-in features of the Visual Studio Code platform.
 * Provide references to your own specific releases of each language or emulator rather than use the includes ones via the **Settings**.
 
@@ -65,12 +66,27 @@ To change a language you can click on the Status Bar **Language selector** and a
 Apart from using the **Command Palette** to select compilation, there are a number of short-cut buttons on the **Status Bar** allowing you to:
 * Display the extension version (might be useful at times)
 * Open the Welcome page
+* Open the Sprite Editor
 * Compile source code
 * Compile source code and run
 
 ![Status Bar](images/ataridevstudio-statusbar.png)
 
-> Note: the short-cut buttons on the **Status Bar** can be turned off via the **Settings**.
+> Note: the short-cut buttons on the **Status Bar** can be minimised or turned off via the **Settings**.
+
+### Sprite Editor [preview]
+Atari Dev Studio includes a simple and easy to use Sprite Editor allowing you to create sprites, tiles and other objects for use in your projects.  It has the following features:
+* New Project wizard allowing you to select the size, region (palette) and total colors of your sprites
+* Load and Save projects allowing you to save and come back to on-going work
+* Editing features such and palette selector, zoom, pen, eraser, fill and move modes
+* Ability to manage your sprites in a sortable list with options to copy, paste, duplicate and delete
+* Export sprites to png (compatible with 7800basic 3+1 and 12+1 image requirements)
+
+![Sprite Editor](images/ataridevstudio-spriteeditor.png)
+
+The Sprite Editor is based on [Spritemate](http://spritemate.com) by Ingo Hinterding ([GitHub](https://github.com/Esshahn/spritemate)) and was suggested by RandomTerrain for inclusion in Atari Dev Studio. I have customised the source to provide the required features necessary for editing sprites, tiles and objects for the Atari platforms.  This work is currently in preview and will be on-going until all required features have been added.
+
+> Note: The Sprite Editor is currently configured for working with 7800basic images.
 
 ### Settings
 There are a number of compiler, emulator and editor configuration options available in Atari Dev Studio which can be changed via the **Settings** (Preferences -> Settings -> Extensions -> Atari Dev Studio).

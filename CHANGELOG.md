@@ -3,14 +3,16 @@
 The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.2.0
+
 * Updated 7800basic compilation routine to validate for additional errors and added cleanup of 7800hole.x.asm files after compilation
 * Changes to RemoveCompilationFilesAsync routine as the CleanUpCompilationFiles flag wasn't working as expected
-* Added missing 7800basic keywords: converttobcd, extrawide, joy0fire, joy0fire, joy0any, joy1any
+* Added missing 7800basic keywords: converttobcd, extrawide, joy0fire, joy1fire, joy0any, joy1any
 
 Sprite Editor
 * Added New Project wizard to configure your sprites allowing you to select the size, region (palette) and total colors
 * Added additional messaging to status bar when using features
 * Fixed issue where toolbar was not updated properly after loading project
+
 ## 0.1.9
 
 * #13 [Done] - SmallRoomLabs updated hover text to markdown format [thanks SmallRoomLabs] 
