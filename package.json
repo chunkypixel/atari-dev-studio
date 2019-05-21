@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.1.9",
+    "version": "0.2.0",
     "icon": "images/icon.png",
     "preview": true,
     "publisher": "chunkypixel",
@@ -319,13 +319,13 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "dependencies": {
-        "open": "^6.2.0",
+        "open": "^6.3.0",
         "tree-kill": "^1.2.1",
         "find-process": "^1.4.1"
     },
     "devDependencies": {
         "@types/mocha": "^5.2.6",
-        "@types/node": "^12.0.0",
+        "@types/node": "^12.0.2",
         "@types/open": "^6.1.0",
         "typescript": "^3.4.5",
         "vscode": "^1.1.33"

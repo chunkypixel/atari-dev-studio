@@ -73,8 +73,8 @@ class SpriteEditorPage {
                     case 'saveProject':
                         this.saveProject(message);
                         return;
-                    case 'saveAsPngFile':
-                        this.saveAsPngFile(message);
+                    case 'exportAsPngFile':
+                        this.exportAsPngFile(message);
                         return;
                     case 'configuration':
                         this.saveConfiguration(message);
@@ -241,7 +241,7 @@ class SpriteEditorPage {
             return true;
         });
     }
-    saveAsPngFile(message) {
+    exportAsPngFile(message) {
         return __awaiter(this, void 0, void 0, function* () {
             // Prepare
             let command = message.command;
@@ -253,7 +253,7 @@ class SpriteEditorPage {
             // Prompt user here
             let options = {
                 defaultUri: defaultUri,
-                saveLabel: "Save",
+                saveLabel: "Export",
                 filters: {
                     'PNG image': ['png']
                 }
@@ -274,12 +274,13 @@ class SpriteEditorPage {
                         if (result) {
                             this.currentPanel.webview.postMessage({
                                 command: command,
-                                status: 'ok'
+                                status: 'ok',
+                                file: path.basename(fileUri.fsPath)
                             });
                             return true;
                         }
                         // Set
-                        errorMessage = "Failed to save png file";
+                        errorMessage = `Failed to export image file: ${path.basename(fileUri.fsPath)}`;
                     }
                     catch (error) {
                         errorMessage = error;

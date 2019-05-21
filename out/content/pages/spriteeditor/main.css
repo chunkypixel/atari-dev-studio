@@ -2602,6 +2602,14 @@ Spritemate stylesheet
    padding: 8px;
    float:left;
  }
+
+ table#project {
+  margin-bottom: 24px;
+}
+
+ tr:nth-child(even) {
+   background-color: transparent;
+ }
  
  .ui-widget input.settings_colorvalue
  {
@@ -2612,10 +2620,7 @@ Spritemate stylesheet
    padding: 4px 4px 4px 4px;
    font-size: 80%;
    margin: 2px 2px 2px 2px;
- 
  }
- 
- 
  
  .ui-widget button
  {
@@ -2625,12 +2630,22 @@ Spritemate stylesheet
    font-size: 80%;
    font-family: 'Quicksand', sans-serif;
    font-weight: normal;
-   border-radius: 32px;
+   border-radius: 4px;
    margin: 4px;
    padding: 8px 16px 8px 16px;
    min-width: 160px;
  }
- 
+
+ .ui-widget.ui-spinner {
+  max-width: 100px;
+  background: white;
+ }
+
+ .ui-spinner-input {
+  background: white;
+  color: black;
+  padding: .3em 0;
+}
  
  .ui-widget button.center
  {
@@ -2658,31 +2673,7 @@ Spritemate stylesheet
  {
    background-color: var(--red);
  }
- 
- .ui-widget input
- {
-   border: 2px solid var(--blue);
-   background-color: black;
-   color: white;
-   font-size: 100%;
-   font-family: 'Quicksand', sans-serif;
-   font-weight: normal;
-   border-radius: 32px;
-   margin: 4px;
-   padding: 8px 16px 8px 16px;
-   min-width: 260px;
-   text-align: center;
- }
- 
- 
- .ui-widget input:focus
- {
-   outline:0;
-   background-color: var(--blue);
- }
- 
- 
- 
+  
  .ui-widget .error:focus
  {
    border: 2px solid var(--red);
@@ -3141,22 +3132,6 @@ Spritemate stylesheet
      opacity: 0.6;
  }
  
- .ui-widget input.ui-inputfield
- {
-   font-size: 80%;
-   margin: 2px;
-   padding: 0px;
-   border: 1px solid black;
-   min-width: 60px;
-   width: 80px;
-   min-height: 19px;
-   float:left;
-   text-align: left;
-   padding: 0px 12px 0px 12px;
-   color: var(--blue);
- 
- }
- 
  .ui-widget input.ui-inputfield:focus
  {
    border: 1px solid var(--blue);
@@ -3180,7 +3155,13 @@ Spritemate stylesheet
    image-rendering: pixelated;                 /* Awesome future-browsers       */
    -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
  }
- 
+
+ label.ui-checkboxradio-label.ui-corner-all.ui-button.ui-widget {
+  background: transparent;
+  border: 0px;
+  color: white;
+  padding-left: 0px;
+}
  
  #menubar 
  {
@@ -3215,13 +3196,6 @@ Spritemate stylesheet
    padding-right: 80px;
  }
  
- /* Menu label (hover) */
-/*  #menubar .menulabel:hover
- {
-   background-color: var(--blue);
-   color: #dddddd;
- } */
- 
  /* Drop-down menu */
  #menubar div div
  {
@@ -3237,10 +3211,6 @@ Spritemate stylesheet
    margin-top:4px;
  }
  
- 
- /* Drop-down menu (hidden) */
- #menubar span:not(.activeMenu) + div{visibility:hidden}
- 
  /* Menu item */
  #menubar div div a
  {
@@ -3249,22 +3219,6 @@ Spritemate stylesheet
    display:block;
    padding: 6px 4px 6px 20px;
  }
- 
- #menubar div div a:hover
- {
-   background:var(--blue);
-   color: #fff;
- }
- 
- 
- /* Hotkey documentation in a menu item */
- #menubar div div a .hotkey{position:absolute;right:9px;color:rgba(200,200,200,.5)}
- 
- /* Label documentation in a menu item */
- #menubar div div .label{padding: 4px 4px 4px 14px;color:rgba(200,200,200,.5)}
- 
- /* Line between menu items */
- #menubar div div hr{border:none;height:1px;background:rgba(200,200,200,.15);}
  
  #dialog-confirm
  {

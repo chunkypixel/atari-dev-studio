@@ -32,7 +32,7 @@
 			},
 			{
 				"name": "keyword.other.78b",
-				"match": "\\b(AUDC0|AUDC1|AUDF0|AUDF1|AUDV0|AUDV1|PAUDF0|joy0any|joy0down|joy0fire0|joy0fire1|joy0left|joy0right|joy0up|joy1any|joy1down|joy1fire0|joy1fire1|joy1left|joy1right|joy1up|switchleftb|switchreset|switchrightb|switchselect)\\b",
+				"match": "\\b(AUDC0|AUDC1|AUDF0|AUDF1|AUDV0|AUDV1|PAUDF0|joy0any|joy0down|joy0fire|joy0fire0|joy0fire1|joy0left|joy0right|joy0up|joy1any|joy1down|joy1fire|joy1fire0|joy1fire1|joy1left|joy1right|joy1up|switchleftb|switchreset|switchrightb|switchselect)\\b",
 				"comment": "other keywords"
 			},
 			{

@@ -83,8 +83,8 @@ export class SpriteEditorPage implements vscode.Disposable {
                         this.saveProject(message);
                         return;
 
-                    case 'saveAsPngFile':
-                        this.saveAsPngFile(message);
+                    case 'exportAsPngFile':
+                        this.exportAsPngFile(message);
                         return;
 
                     case 'configuration':
@@ -270,7 +270,7 @@ export class SpriteEditorPage implements vscode.Disposable {
         return true;
     }
 
-    private async saveAsPngFile(message: any): Promise<boolean> {
+    private async exportAsPngFile(message: any): Promise<boolean> {
         // Prepare
         let command = message!.command;
         let file = message!.file;
@@ -283,7 +283,7 @@ export class SpriteEditorPage implements vscode.Disposable {
         // Prompt user here
         let options: vscode.SaveDialogOptions = {
             defaultUri: defaultUri,
-            saveLabel: "Save",
+            saveLabel: "Export",
             filters: {
                 'PNG image': ['png']
             }
@@ -306,13 +306,14 @@ export class SpriteEditorPage implements vscode.Disposable {
                     if (result) {
                         this.currentPanel!.webview.postMessage({
                             command: command,
-                            status: 'ok'
+                            status: 'ok',
+                            file: path.basename(fileUri.fsPath)
                         });
                         return true;                      
                     }
 
                     // Set
-                    errorMessage = "Failed to save png file";
+                    errorMessage = `Failed to export image file: ${path.basename(fileUri.fsPath)}`;
                                        
                 } catch (error) {
                     errorMessage = error;
