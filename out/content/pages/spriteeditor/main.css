@@ -2643,8 +2643,9 @@ Spritemate stylesheet
 
  .ui-spinner-input {
   background: white;
-  color: black;
+  color: #333333;
   padding: .3em 0;
+  margin-left: 1em;
 }
  
  .ui-widget button.center

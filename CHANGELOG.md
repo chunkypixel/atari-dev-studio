@@ -2,6 +2,13 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.2.1
+
+Sprite Editor
+* Fixed an issue selecting a palette color
+* Indented spinner value on New Project wizard to match combobox
+* Added information about the Sprite Editor to the README
+ 
 ## 0.2.0
 
 * Updated 7800basic compilation routine to validate for additional errors and added cleanup of 7800hole.x.asm files after compilation
