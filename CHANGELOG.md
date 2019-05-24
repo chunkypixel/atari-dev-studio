@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.2.2
+
+Sprite Editor
+* Added resize feature
+
 ## 0.2.1
 
 Sprite Editor
