@@ -5,7 +5,9 @@ The following enhancements and changes have been made to Atari Dev Studio:
 ## 0.2.2
 
 Sprite Editor
-* Added resize feature
+* Added resize sprite feature allowing sprites sizes to be changed
+* Added ability to export the selected sprite to .png
+* Wrapped the toolbar to be 2 icons wide by default and adjusted initial layout location
 
 ## 0.2.1
 

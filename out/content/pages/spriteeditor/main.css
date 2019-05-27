@@ -2711,10 +2711,9 @@ Spritemate stylesheet
  {
    cursor: crosshair;
  }
- 
- #menu
- {
-   width: 54px;
+
+ #tools {
+  max-width: 108px;
  }
  
  #statusbar
@@ -3120,6 +3119,7 @@ Spritemate stylesheet
  {
    /* menu should not have any padding */
    padding: 0px;
+   margin-bottom: 4px;
  }
  
  .ui-dialog .ui-dialog-title
