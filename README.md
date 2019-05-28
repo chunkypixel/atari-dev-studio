@@ -80,7 +80,7 @@ Atari Dev Studio includes a simple and easy to use Sprite Editor allowing you to
 * Load and Save projects allowing you to save and come back to on-going work
 * Editing features such and palette selector, zoom, pen, eraser, fill and move modes
 * Ability to manage your sprites in a sortable list with options to copy, paste, duplicate, resize and delete
-* Export sprites to png - either selected or all (compatible with 7800basic 3+1 and 12+1 image requirements)
+* Export sprites to .png files - either selected or all (compatible with 7800basic 3+1 and 12+1 image requirements)
 
 ![Sprite Editor](images/ataridevstudio-spriteeditor.png)
 
@@ -95,7 +95,7 @@ There are a number of compiler, emulator and editor configuration options availa
 This software is currently in preview and contains the following missing or untested features:
 * [macOS] Stella emulator is missing. You will be required to provide your own path to Stella for the time-being (via the **Settings**).
 * [macOS] 7800basic and the A7800 emulator is untested
-* [Linux] Potential for missing packages (On Unbuntu 18.04.02 x64 I have been required to install a number)
+* [Linux] Potential for missing packages (On Ubuntu 18.04.02 x64 I have been required to install a number)
 
 I don't currently have direct access to a macOS machine to finalise feature integration but will do so in the near future. The previous incarnation of this extension (containing batari Basic and dasm) has been tested by users on macOS and as the process is very similar to Linux I do expect the extension to function correctly.
 
