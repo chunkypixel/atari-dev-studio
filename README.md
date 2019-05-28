@@ -79,8 +79,8 @@ Atari Dev Studio includes a simple and easy to use Sprite Editor allowing you to
 * New Project wizard allowing you to select the size, region (palette) and total colors of your sprites
 * Load and Save projects allowing you to save and come back to on-going work
 * Editing features such and palette selector, zoom, pen, eraser, fill and move modes
-* Ability to manage your sprites in a sortable list with options to copy, paste, duplicate and delete
-* Export sprites to png (compatible with 7800basic 3+1 and 12+1 image requirements)
+* Ability to manage your sprites in a sortable list with options to copy, paste, duplicate, resize and delete
+* Export sprites to png - either selected or all (compatible with 7800basic 3+1 and 12+1 image requirements)
 
 ![Sprite Editor](images/ataridevstudio-spriteeditor.png)
 

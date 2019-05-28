@@ -4,10 +4,12 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.2.2
 
+* Added missing 7800basic keywords: function, BACKGRND, PXC1,PXC2,PXC3 for palettes 0-7 
+
 Sprite Editor
 * Added resize sprite feature allowing sprites sizes to be changed
 * Added ability to export the selected sprite to .png
-* Wrapped the toolbar to be 2 icons wide by default and adjusted initial layout location
+* Wrapped the toolbar to be 2 icons wide by default and adjusted initial layout location of all windows
 
 ## 0.2.1
 
