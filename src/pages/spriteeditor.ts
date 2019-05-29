@@ -90,6 +90,14 @@ export class SpriteEditorPage implements vscode.Disposable {
                     case 'configuration':
                         this.saveConfiguration(message);
                         return
+
+                    case 'loadPalette':
+                        this.loadPalette(message);
+                        return;
+                    
+                    case 'savePalette':
+                        this.savePalette(message);
+                        return;
                 }
 
                 // Unknown
@@ -328,6 +336,128 @@ export class SpriteEditorPage implements vscode.Disposable {
                 return false;  
             }
         });
+
+        // Result
+        return true;
+    }
+
+    private async loadPalette(message: any): Promise<boolean> {
+        // Prompt user here, get selected file content
+        // and send response back to webview
+
+        // Prepare
+        let command = message!.command;
+        //let content = message!.content;
+        //let file = message!.file;
+
+        // Options
+        let options: vscode.OpenDialogOptions = {
+            canSelectMany: false,
+            openLabel: "Open",
+            filters: {
+                'Sprite Editor Palette': ['palette'],
+                'All Files': ['*']
+            }
+        };
+
+        // Process
+        vscode.window.showOpenDialog(options).then(async fileUri => {
+            if (fileUri && fileUri[0]) {
+                // Process
+                try {
+                    // Load
+                    let data = await filesystem.ReadFileAsync(fileUri[0].fsPath);
+
+                    // Result
+                    this.currentPanel!.webview.postMessage({
+                        command: command,
+                        status: 'ok',
+                        file: fileUri[0].fsPath,
+                        data: data
+                    });
+                                       
+                } catch (error) {
+                    // Result
+                    this.currentPanel!.webview.postMessage({
+                        command: command,
+                        status: 'error',
+                        errorMessage: error
+                    }); 
+                    return false;                   
+                }
+            }
+        });
+
+        // Result
+        return true;
+    }
+
+    private async savePalette(message: any): Promise<boolean> {
+        // If no file provided open in workspace
+        // send response back to webview
+
+        // Prepare
+        let command = message!.command;
+        let file = message!.file;
+        let data = message!.data;
+        let errorMessage = "";
+
+        // Set base uri
+        let fileUri = vscode.Uri.file(file);
+        
+        // Prompt?
+        if (!file) {
+            // Options
+            let options: vscode.SaveDialogOptions = {
+                defaultUri: vscode.Uri.file(filesystem.WorkspaceFolder()),
+                saveLabel: "Save",
+                filters: {
+                    'Sprite Editor Palette': ['palette'],
+                    'All Files': ['*']
+                }
+            };
+
+            // Process
+            let result = await vscode.window.showSaveDialog(options);
+            if (result) fileUri = result;
+        }
+
+        // Save?
+        if (fileUri) {
+            // Process
+            try {
+                // Prepare
+                let folder = path.dirname(fileUri.fsPath);
+
+                // Save
+                let result = await filesystem.MkDirAsync(folder);
+                if (result) result = await filesystem.WriteFileAsync(fileUri.fsPath, data);
+
+                // Validate
+                if (result) {
+                    this.currentPanel!.webview.postMessage({
+                        command: command,
+                        status: 'ok',
+                        file: fileUri.fsPath,
+                    });
+                    return true;                      
+                }
+
+                // Set
+                errorMessage = "Failed to save palette";
+                                    
+            } catch (error) {
+                errorMessage = error;
+            }
+
+            // Result
+            this.currentPanel!.webview.postMessage({
+                command: command,
+                status: 'error',
+                errorMessage: errorMessage
+            });  
+            return false;  
+        }
 
         // Result
         return true;

@@ -3109,12 +3109,6 @@ Spritemate stylesheet
    overflow: hidden;
  }
  
- .colors.ui-dialog-content
- {
-   /* color palette should not have any padding */
-   padding: 0px;
- }
- 
  .menu.ui-dialog-content
  {
    /* menu should not have any padding */

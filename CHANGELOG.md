@@ -2,6 +2,13 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.2.3 
+
+* Added missing 7800basic keywords: P6C3
+
+Sprite Editor
+* Added features to load, save and reset your palettes (via a new toolbar on the Palette window)
+
 ## 0.2.2
 
 * Added missing 7800basic keywords: function, BACKGRND, PXC1,PXC2,PXC3 for palettes 0-7 
