@@ -9,6 +9,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 Sprite Editor
 * Added features to load, save and reset your palettes (via a new toolbar on the Palette window)
 * Added a fix for the occasional re-popup of load and save dialogs when communicating with VSCode
+* Fixed issue where items on the New Project window did not reflect the expected value on first start
 
 ## 0.2.2
 
