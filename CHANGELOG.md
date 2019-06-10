@@ -4,7 +4,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.2.4
 
-* Updated Stella to 6.0.1 (Windows)
+* Updated Stella to 6.0.1 (Windows, Linux)
 
 ## 0.2.3 
 
