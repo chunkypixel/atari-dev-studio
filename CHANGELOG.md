@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.2.4
+
+* Updated Stella to 6.0.1 (Windows)
+
 ## 0.2.3 
 
 * Added missing 7800basic keywords: P6C3
