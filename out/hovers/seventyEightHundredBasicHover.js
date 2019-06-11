@@ -19,6 +19,7 @@ class SeventyEightHundredBasicHover extends hoverBase_1.HoverBase {
         });
         return __awaiter(this, void 0, void 0, function* () {
             // Files
+            yield this.LoadHoverFileAsync(context, '7800basic.md'); // 7800basic keywords
             yield this.LoadHoverFileAsync(context, '6502.md'); // 6502 opcodes
             yield this.LoadHoverFileAsync(context, 'vcs.md'); // Stella & RIOT
             // Finalise
