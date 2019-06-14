@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.2.6
+
+* Updated internal dev packages (security notification)
+
 ## 0.2.5
 
 * Added hover tooltips for 7800basic keywords (a large majority)
