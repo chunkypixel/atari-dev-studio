@@ -33,8 +33,9 @@ DV=$(dasm$DASMEXT 2>/dev/null | grep ^DASM | head -n1)
 echo "Using dasm version: $DV" 
   
 echo "Starting build of $1"
-7800preprocess$EXT<"$1" | 7800basic$EXT -i "$bas7800dir" 
-#7800preprocess$EXT<"$1" | valgrind --tool=memcheck --leak-check=yes 7800basic$EXT -i "$bas7800dir" 
+ #7800preprocess$EXT<"$1" | valgrind --tool=memcheck --leak-check=yes 7800basic$EXT -i "$bas7800dir" 
+ 7800preprocess$EXT<"$1" | 7800basic$EXT -i "$bas7800dir" 
+
 if [ "$?" -ne "0" ]
  then
   echo "Compilation failed."
@@ -50,5 +51,6 @@ fi
 dasm$DASMEXT $1.asm -I"$bas7800dir/includes" -f3 -l"$1.list.txt" -s"$1.symbol.txt" -o"$1.bin" | 7800filter$EXT 
 7800sign$EXT -w "$1.bin"
 7800header$EXT -o -f a78info.cfg "$1.bin"
+7800makecc2$EXT "$1.bin"
 	
 exit 0

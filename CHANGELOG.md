@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.2.5
+
+* Added hover tooltips for 7800basic keywords (a large majority)
+* Updated 7800basic to 0.6 Jul 13 2019 22:37:29
+
 ## 0.2.4
 
 * Updated Stella to 6.0.1 (Windows, Linux)

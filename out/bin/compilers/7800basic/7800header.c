@@ -10,7 +10,7 @@
 //	7800header - a simple app to generate/interrogate a a78 header.
 //			Michael Saarna (aka RevEng@AtariAge)
 
-#define HEADER_VERSION_INFO "7800header 0.7"
+#define HEADER_VERSION_INFO "7800header 0.9"
 
 void usage(char *binaryname);
 uint32_t phtole32(uint32_t value);
@@ -19,6 +19,7 @@ void report(void);
 void setupheaderdefaults(void);
 void setunset(char *command);
 void writea78(char *filename);
+void writebin(char *filename);
 void prerror(char *format, ...);
 void prwarn(char *format, ...);
 void trimnewline(char *string);
@@ -111,7 +112,7 @@ int main(int argc, char **argv)
 	fread(rombuffer,128,(gamesize/128),in);
 
 	// get options - mainly used for reading in header configuration setup from a file
-	while ((c = getopt (argc, argv, "f:op")) != -1)
+	while ((c = getopt (argc, argv, "f:opb")) != -1)
 	{
 		switch (c)
 		{
@@ -126,15 +127,19 @@ int main(int argc, char **argv)
 			case 'p': // print header info and exit
 				printinfo=1;
 				break;
+			case 'b': // write out a bin file
+				writebin(filename);
+				exit(0);
+				break;
            	}
 	}
 
 	//fix bits that shouldn't be set in the header
 	if(printinfo==0)
 	{
-		if (myheader.controller1>4)
+		if (myheader.controller1>9)
 			myheader.controller1=1;
-		if (myheader.controller2>4)
+		if (myheader.controller2>9)
 			myheader.controller2=1;
 		myheader.tvformat &= 1;
 		myheader.saveperipheral &= 3;
@@ -155,7 +160,8 @@ int main(int argc, char **argv)
 		report();
 		if(printinfo!=0)
 			exit(0);
-		printf("Commands: \"save\"           Save the A78 file and exit.\n");
+		printf("Commands: \"save\"  [name]   Save the A78 file and exit.\n");
+		printf("          \"strip\" [name]   Save a headerless .BIN and exit.\n");
 		printf("          \"set [option]\"   Set one of the options.\n");
 		printf("          \"unset [option]\" Unset one of the options.\n");
 		printf("          \"name game name\" Set the game name in the header.\n");
@@ -163,16 +169,28 @@ int main(int argc, char **argv)
 		printf("\n");
 		printf("Options:  rom@4000 ram@4000 bank6@4000 pokey@450 pokey@4000 mram@4000\n");
 		printf("          supergame supergameram supergamebankram absolute activision\n");
-		printf("          tvpal tvntsc savekey hsc xm joystick1 joystick2 lightgun1 lightgun2\n");
-		printf("          paddle1 paddle2 trackball1 trackball2\n");
-		printf("\n> ");
+		printf("          tvpal tvntsc savekey hsc xm 7800joy1 7800joy2 lightgun1 lightgun2\n");
+		printf("          paddle1 paddle2 tball1 tball2 2600joy1 2600joy2 driving1 driving2\n");
+		printf("          keypad1 keypad2 stmouse1 stmouse2 amouse1 amouse2\n");
+		printf("> ");
 
 		if (fgets(usercommand, 1024, stdin))
 		{
 			trimnewline(usercommand);
 			if(strncmp(usercommand,"save",4)==0)
 			{
-				writea78(filename);
+				if((usercommand[4]==' ')&&(usercommand[5]!=0))
+					writea78(usercommand+5);
+				else
+					writea78(filename);
+				exit(0);
+			}
+			if(strncmp(usercommand,"strip",5)==0)
+			{
+				if((usercommand[5]==' ')&&(usercommand[6]!=0))
+					writebin(usercommand+6);
+				else
+					writebin(filename);
 				exit(0);
 			}
 			else if(strncmp(usercommand,"name ",5)==0)
@@ -257,6 +275,37 @@ void writea78(char *filename)
 	fclose(out);
 }
 
+void writebin(char *filename)
+{
+	char newname[1024];
+	char *ext;
+	ext=strrstr(filename,".a78");
+	if(ext!=NULL)
+	{
+		strcpy(ext,".bin");
+	}
+	FILE *in,*out;
+	if(overwrite==0)
+	{
+		in=fopen(filename,"r");
+		if(in!=NULL)
+		{
+			fclose(in);
+			//the destination file exists. rename it to back it up.
+			strcpy(newname,filename);
+			strcat(newname,".backup");
+			rename(filename,newname);
+		}
+	}
+	out=fopen(filename,"wb");
+	if(out==NULL)
+		prerror("error opening file '%s' for writing.",filename);
+	if(fwrite(rombuffer,128,(gamesize/128),out)!=(gamesize/128))
+		prerror("error while writing bin file out.\n");
+	fclose(out);
+}
+
+
 void setupheaderdefaults()
 {
 	headergamesize = phtole32(gamesize);
@@ -284,7 +333,7 @@ void setupheaderdefaults()
 	myheader.carttype1 = 0;
 	myheader.carttype2 = 0;
 
-	// controller 0=none, 1=joystick, 2=light gun
+	// controller 0=none, 1=7800joy, 2=lightgun, ...
 	myheader.controller1 = 1;
 	myheader.controller2 = 1;
 
@@ -507,14 +556,14 @@ void setunset(char *command)
 		else
 			myheader.xm = myheader.xm & (1^0xff);
 	}
-	else if(strcmp(noun,"joystick1")==0)
+	else if(strcmp(noun,"7800joy1")==0)
 	{
 		if(set)
 			myheader.controller1 = myheader.controller1 = 1;
 		else if (myheader.controller1==1)
 			myheader.controller1 = 0;
 	}
-	else if(strcmp(noun,"joystick2")==0)
+	else if(strcmp(noun,"7800joy2")==0)
 	{
 		if(set)
 			myheader.controller2 = myheader.controller2 = 1;
@@ -549,14 +598,14 @@ void setunset(char *command)
 		else if (myheader.controller2==3)
 			myheader.controller2 = 0;
 	}
-	else if(strcmp(noun,"trackball1")==0)
+	else if(strcmp(noun,"tball1")==0)
 	{
 		if(set)
 			myheader.controller1 = 4;
 		else if (myheader.controller1==4)
 			myheader.controller1 = 0;
 	}
-	else if(strcmp(noun,"trackball2")==0)
+	else if(strcmp(noun,"tball2")==0)
 	{
 		if(set)
 			myheader.controller2 = 4;
@@ -564,6 +613,80 @@ void setunset(char *command)
 			myheader.controller2 = 0;
 	}
 
+	else if(strcmp(noun,"2600joy1")==0)
+	{
+		if(set)
+			myheader.controller1 = 5;
+		else if (myheader.controller1==5)
+			myheader.controller1 = 0;
+	}
+	else if(strcmp(noun,"2600joy2")==0)
+	{
+		if(set)
+			myheader.controller2 = 5;
+		else if (myheader.controller2==5)
+			myheader.controller2 = 0;
+	}
+
+	else if(strcmp(noun,"driving1")==0)
+	{
+		if(set)
+			myheader.controller1 = 6;
+		else if (myheader.controller1==6)
+			myheader.controller1 = 0;
+	}
+	else if(strcmp(noun,"driving2")==0)
+	{
+		if(set)
+			myheader.controller2 = 6;
+		else if (myheader.controller2==6)
+			myheader.controller2 = 0;
+	}
+
+	else if(strcmp(noun,"keypad1")==0)
+	{
+		if(set)
+			myheader.controller1 = 7;
+		else if (myheader.controller1==7)
+			myheader.controller1 = 0;
+	}
+	else if(strcmp(noun,"keypad2")==0)
+	{
+		if(set)
+			myheader.controller2 = 7;
+		else if (myheader.controller2==7)
+			myheader.controller2 = 0;
+	}
+
+	else if(strcmp(noun,"stmouse1")==0)
+	{
+		if(set)
+			myheader.controller1 = 8;
+		else if (myheader.controller1==8)
+			myheader.controller1 = 0;
+	}
+	else if(strcmp(noun,"stmouse2")==0)
+	{
+		if(set)
+			myheader.controller2 = 8;
+		else if (myheader.controller2==8)
+			myheader.controller2 = 0;
+	}
+
+	else if(strcmp(noun,"amouse1")==0)
+	{
+		if(set)
+			myheader.controller1 = 9;
+		else if (myheader.controller1==9)
+			myheader.controller1 = 0;
+	}
+	else if(strcmp(noun,"amouse2")==0)
+	{
+		if(set)
+			myheader.controller2 = 9;
+		else if (myheader.controller2==9)
+			myheader.controller2 = 0;
+	}
 
 }
 
@@ -596,7 +719,8 @@ void usage(char *binaryname)
 {
 	fprintf(stderr,"Usage:\n\n");
 	fprintf(stderr,"\"%s [options] FILENAME\", where options are zero or more of the following... \n\n",binaryname);
-	fprintf(stderr,"\t[-f file]\n\t\t...file for command input. same syntax as interactive mode.\n\n");
+	fprintf(stderr,"\t[-f file]\n\t\t...file for command input, write a78. same syntax as interactive mode.\n\n");
+	fprintf(stderr,"\t[-b]\n\t\t...strip off the a78 header and write out a bin.\n\n");
 	fprintf(stderr,"\t[-o]\n\t\t...override backup of the a78 file before updating it.\n\n");
 	fprintf(stderr,"\t[-p]\n\t\t...print info about the file's a78 header and exit.\n\n");
 	exit(0);
@@ -662,23 +786,44 @@ void report(void)
 	if(myheader.controller1 == 0 )
 		printf("none ");
 	if(myheader.controller1 == 1 )
-		printf("joystick1 ");
+		printf("7800joy1 ");
 	if(myheader.controller1 == 2 )
 		printf("lightgun1 ");
 	if(myheader.controller1 == 3 )
 		printf("paddle1 ");
 	if(myheader.controller1 == 4 )
-		printf("trackball1 ");
+		printf("tball1 ");
+	if(myheader.controller1 == 5 )
+		printf("2600joy1 ");
+	if(myheader.controller1 == 6 )
+		printf("driving1 ");
+	if(myheader.controller1 == 7 )
+		printf("keypad1 ");
+	if(myheader.controller1 == 8 )
+		printf("stmouse1 ");
+	if(myheader.controller1 == 9 )
+		printf("amouse1 ");
 	if(myheader.controller2 == 0 )
 		printf("none ");
 	if(myheader.controller2 == 1 )
-		printf("joystick2 ");
+		printf("7800joy2 ");
 	if(myheader.controller2 == 2 )
 		printf("lightgun2 ");
 	if(myheader.controller2 == 3 )
 		printf("paddle2 ");
 	if(myheader.controller2 == 4 )
-		printf("trackball2 ");
+		printf("tball2 ");
+	if(myheader.controller2 == 5 )
+		printf("2600joy2 ");
+	if(myheader.controller2 == 6 )
+		printf("driving2 ");
+	if(myheader.controller2 == 7 )
+		printf("keypad2 ");
+	if(myheader.controller2 == 8 )
+		printf("stmouse2 ");
+	if(myheader.controller2 == 9 )
+		printf("amouse2 ");
+	
 	printf("\n");
 
 	printf("    save peripheral    : ");

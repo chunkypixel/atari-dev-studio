@@ -20,6 +20,7 @@ static int extra;
 static int extralabel;
 static int extraactive;
 static int macroactive;
+static int tallspritemode=1;
 static char user_includes[1000];
 static char sprite_data[5000][50];
 static int sprite_index;

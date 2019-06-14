@@ -53,6 +53,7 @@ void keywords(char **cstatement)
 	for (k=0; k<=190; ++k) // reversed loop since last build, need to check for rems first!
 	{
 		if (!strncmp(cstatement[k+1],"rem\0",3)) break;  // if statement has a rem, do not process it
+		if (!strncmp(cstatement[k+1],"echo\0",4)) break;  // if statement has an echo, do not process it
 		if (!strncmp(cstatement[k+1],"if\0",2))
 		{
 			for (i=k+2; i<200; ++i)
@@ -245,8 +246,8 @@ void keywords(char **cstatement)
 		else if (!strncmp(statement[1],"def\0",4)) {free(deallocstatement); freemem(deallocorstatement); freemem(deallocelstatement); return; }
 		else if (!strncmp(statement[0],"end\0",4)) endfunction();
 		else if (!strncmp(statement[1],"#ifconst\0",8)) ifconst(statement);
-		else if (!strncmp(statement[1],"#else\0",8)) doelse();
-		else if (!strncmp(statement[1],"#endif\0",5)) endif();
+		else if (!strncmp(statement[1],"#else\0",5)) doelse();
+		else if (!strncmp(statement[1],"#endif\0",6)) endif();
 		else if (!strncmp(statement[1],"includesfile\0",13)) create_includes(statement[2]);
 		else if (!strncmp(statement[1],"include\0",7)) add_includes(statement[2]);
 		else if (!strncmp(statement[1],"inline\0",7)) add_inline(statement[2]);
@@ -267,6 +268,7 @@ void keywords(char **cstatement)
 		else if (!strncmp(statement[1],"data\0",5)) data(statement);
 		else if (!strncmp(statement[1],"alphachars\0",10)) alphachars(statement);
 		else if (!strncmp(statement[1],"alphadata\0",9)) alphadata(statement);
+		else if (!strncmp(statement[1],"sinedata\0",8)) sinedata(statement);
 		else if (!strncmp(statement[1],"pokechar\0",8)) pokechar(statement);
 		else if ((!strncmp(statement[1],"on\0",3)) &&
 		         (!strncmp(statement[3],"go\0",2))) ongoto(statement);  // on ... goto or on ... gosub
@@ -301,6 +303,9 @@ void keywords(char **cstatement)
 		else if (!strncmp(statement[1],"asm\r",4)) doasm();
 		else if (!strncmp(statement[1],"pop\r",4)) dopop();
 		else if (!strncmp(statement[1],"rem\r",4)) {rem(statement); free(deallocstatement); freemem(deallocorstatement); freemem(deallocelstatement); return; }
+		else if (!strncmp(statement[1],"echo\0",5)) {echo(statement); free(deallocstatement); freemem(deallocorstatement); freemem(deallocelstatement); return; }
+		else if (!strncmp(statement[1],"echo\n",5)) {echo(statement); free(deallocstatement); freemem(deallocorstatement); freemem(deallocelstatement); return; }
+		else if (!strncmp(statement[1],"echo\r",5)) {echo(statement); free(deallocstatement); freemem(deallocorstatement); freemem(deallocelstatement); return; }
 		else if (!strncmp(statement[1],"set\0",4)) set(statement);
 		else if (!strncmp(statement[1],"return\0",7)) doreturn(statement);
 		else if (!strncmp(statement[1],"reboot\0",7)) doreboot();
@@ -308,7 +313,7 @@ void keywords(char **cstatement)
 		else if (!strncmp(statement[1],"reboot\n",7)) doreboot();
 		else if (!strncmp(statement[1],"return\r",7)) doreturn(statement);
 		else if (!strncmp(statement[1],"reboot\r",7)) doreboot();
-		else if (!strncmp(statement[1],"lives:\0",6)) lives(statement);
+		else if (!strncmp(statement[1],"changecontrol\0",14)) changecontrol(statement);
 		else if (!strncmp(statement[1],"plotvalue\0",9)) plotvalue(statement);
 		else if (!strncmp(statement[1],"displaymode\0",11)) displaymode(statement);
 		else if (!strncmp(statement[1],"incgraphic\0",10)) add_graphic(statement,0);

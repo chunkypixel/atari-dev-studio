@@ -1,5 +1,9 @@
 7800basic change log...
 
+    -need to document #ifconst #else #endif
+    -need to document echo
+    -fixed bug where complex math interrupted by NMI caused value corruption
+
 ___changes since 0.6 20170709___
     -fixed driving controller driver (tested)
     -added possible score variables: "scorea" to "scorez"

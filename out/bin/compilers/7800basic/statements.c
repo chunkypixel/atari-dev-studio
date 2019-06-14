@@ -20,6 +20,10 @@
 extern char stdoutfilename[256];
 extern FILE *stdoutfilepointer;
 
+char tallspritelabel[2048][1024];
+int tallspriteheight[2048];
+int tallspritecount = 0;
+
 #define PNG_DEBUG 3
 #include <png.h>
 
@@ -239,7 +243,30 @@ int switchjoy(char *input_source)
 		printf(" bit sINPT3\n");
 		return 3;
 	}
+	if (!strncmp(input_source,"keypad",6))
+	{
+		// 1 2 3   keypad layout
+		// 4 5 6
+		// 7 8 9
+		// s 0 h
 
+		int port, keynum;
+		int keymask[3] = { 0x04, 0x02, 0x01 };
+		int rowletter[4] = { 'a', 'b', 'c', 'd' };
+		char keynumlut[13] = { '1', '2', '3', '4', '5', '6', '7', '8', '9', 's', '0', 'h', 'X' };
+		port = input_source[6]-'0';
+		if ((port!=0)&&(port!=1))
+			prerror("unsupported keypad port value");
+		for(keynum=0;keynum<13;keynum++)
+			if(keynumlut[keynum]==input_source[10])
+				break;
+		if(keynum==13)
+			prerror("unsupported keypad key value");
+		// if we're here, the input_source in the form "keypadNkeyT", where N=port #, K=key (0-9,s or n)
+		printf(" lda keypadmatrix%d%c\n",port,rowletter[keynum/3]);
+		printf(" and #$%02x\n",keymask[keynum%3]);
+		return 4;
+	}
 	prerror("invalid console switch/controller reference");
 }
 
@@ -635,10 +662,28 @@ void displaymode(char **statement)
 	printf("    sta sCTRL\n\n");
 }
 
+int gettallspriteindex(char *needle)
+{
+
+	int t;
+
+	if(tallspritemode==0)
+		return(-1);
+	for(t=0;t<tallspritecount;t++)
+	{
+		if(strcmp(tallspritelabel[t],needle)==0)
+		{
+			return(t);
+		}
+	}
+	return(-1);
+}
+
+
 void plotsprite(char **statement)
 {
-        //    1          2         3    4 5   6
-	//plotsprite spritename palette x y [frame]
+        //    1          2         3    4 5   6        7
+	//plotsprite spritename palette x y [frame] [tallheight]
 
 	// temp1 = lowbyte_of_sprite (adjusted for "frame")
 	// temp2 = hibyte_of_sprite
@@ -646,24 +691,15 @@ void plotsprite(char **statement)
 	// temp4 = x
 	// temp5 = y
 
+	int frame;
+
 	assertminimumargs(statement,"plotsprite",4);
 
-	if((statement[6][0]!=0)&&(statement[6][0]!=':'))
+	if((statement[6][0]!=0)&&(statement[6][0]!=':')&&(statement[6][0]!='0'))
 	{
 		removeCR(statement[6]);
 
-/*
-
-		printf("    lda "); printimmed(statement[6]); printf("%s\n",statement[6]);
-		printf("    ldy #%s_width\n",statement[2]);
-		printf("    jsr mul8\n");
-		printf("    clc\n");
-		printf("    adc #<%s\n",statement[2]);
-		printf("    sta temp1\n\n");
-*/
-
 		printf("    lda #<%s\n",statement[2]);
-
 		printf("    ldy "); printimmed(statement[6]); printf("%s\n",statement[6]);
 		printf("      clc\n");
 		printf("      beq plotspritewidthskip%d\n",templabel);
@@ -714,6 +750,42 @@ void plotsprite(char **statement)
 	printf("    sta temp6\n\n");
 
 	jsr("plotsprite");
+
+	int tsi=gettallspriteindex(statement[2]);
+	if((statement[6][0]!=0)&&(statement[6][0]!=':')&&(statement[7][0]!=0)&&(statement[7][0]!=':'))
+	{
+		int tsheight, t;
+		removeCR(statement[7]);
+		tsheight=atoi(statement[7]);
+		for(t=1;t<tsheight;t++)
+		{
+			printf("    ; +tall sprite replot\n");
+			printf("    clc\n");
+			printf("    lda temp1\n");
+			printf("    adc #%s_width\n",statement[2]);
+			printf("    sta temp1\n");
+			printf("    lda temp5\n");
+			printf("    adc #WZONEHEIGHT\n");
+			printf("    sta temp5\n");
+			printf("    jsr plotsprite\n");
+		}
+	}
+	else if((tsi>=0)&&(tallspritemode!=2))
+	{
+		int t;	
+		for(t=1;t<tallspriteheight[tsi];t++)
+		{
+			printf("    ; +tall sprite replot\n");
+			printf("    clc\n");
+			printf("    lda temp1\n");
+			printf("    adc #%s_width\n",statement[2]);
+			printf("    sta temp1\n");
+			printf("    lda temp5\n");
+			printf("    adc #WZONEHEIGHT\n");
+			printf("    sta temp5\n");
+			printf("    jsr plotsprite\n");
+		}
+	}
 
 }
 
@@ -791,6 +863,67 @@ void plotbanner(char **statement)
 }
 
 
+void sinedata(char **statement)
+{
+
+	int t;
+	// sinedata generates a sine data table
+
+	//      1          2        3            [   4.0      [    5.0      [ 6  [     7    ]]]]
+	//   sinedata    label  wave-len(bytes)  [wave-cycles [phase-offset [amp [amp-offset]]]]
+	assertminimumargs(statement,"sidedata",2);
+	if (!(optimization&4)) printf("	JMP .skip%s\n",statement[0]);
+	printf("%s\n",statement[2]);
+
+	for(t=3;t<8;t++)
+		removeCR(statement[t]);
+
+	int wavelength, waveamplitude, waveamplitudeoffset;
+	double waveindex, wavecycles, wavephaseoffset;
+	int value;
+
+	wavelength=strictatoi(statement[3]);
+	if((statement[4]!=NULL)&&(statement[4][0]!=0))
+		wavecycles=atof(statement[4]);
+	else
+		wavecycles=1.0;
+
+	if((statement[5]!=NULL)&&(statement[5][0]!=0))
+		wavephaseoffset=atof(statement[5]);
+	else
+		wavephaseoffset=0.0;
+
+	if((statement[6]!=NULL)&&(statement[6][0]!=0))
+		waveamplitude=strictatoi(statement[6]);
+	else
+		waveamplitude=127;
+
+	if((statement[7]!=NULL)&&(statement[7][0]!=0))
+		waveamplitudeoffset=strictatoi(statement[7]);
+	else
+		waveamplitudeoffset=0;
+
+	if ((wavelength<1)||(wavelength>256))
+		prerror("invalid wavelength used for sinedata");
+
+	for(t=0;t<wavelength;t++)
+	{
+		if((t%16)==0)
+		{
+			printf("\n");
+			if(t!=wavelength)
+				printf(" .byte ");
+		}
+		waveindex=(((double)t * wavecycles * 2.0 * M_PI ) / (double)wavelength)+(wavephaseoffset * 2.0 * M_PI);
+		value = (sin(waveindex) * ((double)waveamplitude+0.5) ) + (double)waveamplitudeoffset;
+		printf("$%02x",(value&0xff));
+		if((t%16!=15))
+			printf(",");
+	}
+	printf("\n");
+	printf(".skip%s\n",statement[0]);
+
+}
 
 
 int inlinealphadata(char **statement)
@@ -1121,12 +1254,17 @@ void plotmapfile(char **statement)
 				gid=atoi(firstgid+10);
 				tilename=tilename+6;
 				for(t=0;t<1024;t++)
+				{
 					if(line[t]=='"')
 						line[t]=0;
+					if(line[t]=='.')
+						line[t]=0;
+				}
 				s=0;
 				for(t=gid;t<256;t++)
 				{
 					sprintf(datavalues[t],"%s",tilename);
+					
 					s=s+1;
 					if(doublewide==1)
 						s=s+1;
@@ -1141,6 +1279,9 @@ void plotmapfile(char **statement)
 
 			//get the tile value...
 			gid=atoi(keyword+10);
+
+			if(gid==0)
+				gid=1; //kludge - to work around empty characters
 
 			//get the image name, and look up the palette value for that image
 			for(q=0;q<1000;q++)
@@ -1520,8 +1661,17 @@ void domemset(char **statement)
 	}
 	else
 	{
-		val=strictatoi(statement[3]);
-		count=strictatoi(statement[4]);
+
+		if (isalpha(statement[3][0]))
+		{
+			val=-1; // flag as a variable or constant
+			count=strictatoi(statement[4]);
+		}
+		else
+		{
+			val=strictatoi(statement[3]);
+			count=strictatoi(statement[4]);
+		}
 	}
 
 	if(count>255) 
@@ -1533,7 +1683,17 @@ void domemset(char **statement)
 		printf(" sta temp2\n");
 		printf(" lda #>(%s)\n", statement[2]);
 		printf(" sta temp3\n");
-		printf(" lda #%d\n",val);
+		if(val>-1)
+		{
+			printf(" lda #%d\n",val);
+		}
+		else
+		{
+			if(isimmed(statement[3]))
+				printf(" lda #%s\n",statement[3]);
+			else
+				printf(" lda %s\n",statement[3]);
+		}
 		printf(" ldy #0\n");
 		printf("memsetloop%d\n",templabel);
 		printf(" sta (temp2),y\n");
@@ -1681,13 +1841,15 @@ int  strictatoi(char *numstring)
 		return(-1); 
 	}
 	//check if its a plain decimal argument...
+	if(numstring[0]=='-')
+		return(256-atoi(numstring+1));
 	if((numstring[0]>='0')&&(numstring[0]<='9'))
 		return(atoi(numstring));
 	if((numstring[0]=='$')&&(numstring[1]!='\0'))
 		return((int)strtol(numstring+1,NULL,16));
 	if((numstring[0]=='%')&&(numstring[1]!='\0'))
 		return((int)strtol(numstring+1,NULL,2));
-	prerror("bad non-variable value");
+	prwarn("bad non-variable value");
 	return(-1); 
 }
 
@@ -1814,6 +1976,203 @@ void psound(char **statement)
 		}
 	}
 
+}
+
+void changecontrol(char **statement)
+{
+        //   1            2     3  
+	// changecontrol 0|1 controltype
+
+	int port;
+
+	assertminimumargs(statement,"changecontrol",2);
+	removeCR(statement[2]);
+	removeCR(statement[3]);
+
+	port=strictatoi(statement[2]);
+
+ /*
+       port#control values...
+       1 = proline
+       2 = lightgun
+       3 = paddle
+       4 = trakball
+       5 = vcs joystick
+       6 = driving
+       7 = keypad
+       8 = st mouse/cx80
+       9 = amiga mouse
+      10 = atarivox
+ */
+	
+	if((port!=0)&&(port!=1))
+		prerror("only ports 0 or 1 are supported");
+
+	if(!strcmp(statement[3],"2buttonjoy"))
+	{
+		printf("  lda #1 ; controller=joystick\n");
+		if(port==0)
+		{
+			printf("  sta port0control\n");
+			printf("  ldx #0\n");
+		}
+		else
+		{
+			printf("  sta port1control\n");
+			printf("  ldx #1\n");
+		}
+		printf("  jsr setportforinput\n"); 
+		printf("  jsr settwobuttonmode\n"); 
+	}
+	if(!strcmp(statement[3],"1buttonjoy"))
+	{
+		printf("  lda #1 ; controller=joystick\n");
+		if(port==0)
+		{
+			printf("  sta port0control\n");
+			printf("  ldx #0\n");
+		}
+		else
+		{
+			printf("  sta port1control\n");
+			printf("  ldx #1\n");
+		}
+		printf("  jsr setportforinput\n"); 
+		printf("  jsr setonebuttonmode\n"); 
+	}
+	else if(!strcmp(statement[3],"lightgun"))
+	{
+		printf("  lda #2 ; controller=lightgun\n");
+		if(port==0)
+		{
+			printf("  sta port0control\n");
+			printf("  ldx #0\n");
+		}
+		else
+		{
+			printf("  sta port1control\n");
+			printf("  ldx #1\n");
+		}
+		printf("  jsr setportforinput\n"); 
+		printf("  jsr setonebuttonmode\n"); 
+	}
+
+	if(!strcmp(statement[3],"paddle"))
+	{
+		printf("  lda #3 ; controller=paddle\n");
+		if(port==0)
+		{
+			printf("  sta port0control\n");
+			printf("  ldx #0\n");
+		}
+		else
+		{
+			printf("  sta port1control\n");
+			printf("  ldx #1\n");
+		}
+		printf("  jsr setportforinput\n"); 
+	}
+	else if(!strcmp(statement[3],"trakball"))
+	{
+		printf("  lda #4 ; controller=trakball\n");
+		if(port==0)
+		{
+			printf("  sta port0control\n");
+			printf("  lda #0\n");
+			printf("  sta trakballcodex0\n");
+			printf("  sta trakballcodey0\n");
+			printf("  ldx #0\n");
+		}
+		else
+		{
+			printf("  sta port1control\n");
+			printf("  lda #0\n");
+			printf("  sta trakballcodex1\n");
+			printf("  sta trakballcodey1\n");
+			printf("  ldx #1\n");
+		}
+		printf("  jsr setportforinput\n"); 
+		printf("  jsr settwobuttonmode\n"); 
+	}
+	else if(!strcmp(statement[3],"driving"))
+	{
+		printf("  lda #6 ; controller=driving\n");
+		if(port==0)
+		{
+			printf("  sta port0control\n");
+			printf("  ldx #0\n");
+		}
+		else
+		{
+			printf("  sta port1control\n");
+			printf("  ldx #1\n");
+		}
+		printf("  jsr setportforinput\n"); 
+		printf("  jsr settwobuttonmode\n"); 
+	}
+	else if(!strcmp(statement[3],"keypad"))
+	{
+		printf("  lda #7 ; controller=keypad\n");
+		if(port==0)
+		{
+			printf("  sta port0control\n");
+			printf("  ldx #0\n");
+		}
+		else
+		{
+			printf("  sta port1control\n");
+			printf("  ldx #1\n");
+		}
+		/* we don't need to modify CTLSWA/CTLSWAs. the keypad driver does this*/
+		printf("  jsr setonebuttonmode\n"); 
+	}
+	else if(!strcmp(statement[3],"stmouse"))
+	{
+		printf("  lda #8 ; controller=stmouse\n");
+		if(port==0)
+		{
+			printf("  sta port0control\n");
+			printf("  ldx #0\n");
+		}
+		else
+		{
+			printf("  sta port1control\n");
+			printf("  ldx #1\n");
+		}
+		printf("  jsr setportforinput\n"); 
+		printf("  jsr setonebuttonmode\n"); 
+	}
+	else if(!strcmp(statement[3],"amigamouse"))
+	{
+		printf("  lda #9 ; controller=stmouse\n");
+		if(port==0)
+		{
+			printf("  sta port0control\n");
+			printf("  ldx #0\n");
+		}
+		else
+		{
+			printf("  sta port1control\n");
+			printf("  ldx #1\n");
+		}
+		printf("  jsr setportforinput\n"); 
+		printf("  jsr setonebuttonmode\n"); 
+	}
+	else if(!strcmp(statement[3],"atarivox"))
+	{
+		printf("  lda #10 ; controller=stmouse\n");
+		if(port==0)
+		{
+			printf("  sta port0control\n");
+			printf("  ldx #0\n");
+		}
+		else
+		{
+			printf("  sta port1control\n");
+			printf("  ldx #1\n");
+		}
+		printf("  jsr setportforinput\n"); 
+	}
 }
 
 void playsfx(char **statement)
@@ -1945,7 +2304,6 @@ char *ourbasename(char *fullpath)
 void incmapfile(char **statement)
 {
 	// Converts a "tiled" tmx xml file to a data statement.
-	// Some day this should actually parse the xml...
 
 	//     1        2
 	// incmapfile filename
@@ -2118,9 +2476,10 @@ unsigned char graphic7800colors[16];
 unsigned char graphiccolormode;
 void add_graphic(char **statement, int incbanner)
 {
-	int s,t,width;
+	int s,t,width,height;
 	int palettestatement=-1;
 	char *fileextension;
+	char generalname[1024];
 
 	//160A...
 	//320B...
@@ -2242,22 +2601,53 @@ void add_graphic(char **statement, int incbanner)
 
 	if (!incbanner) 
 	{
-		//fprintf(stderr,"  ***DEBUG gfxdatawidth:%d    width:%d\n",graphicsdatawidth[dmaplain],width);
-		if ( (graphicsdatawidth[dmaplain]+width) > 256)
-		{
-			//the next graphic will overflow the DMA plain, so we skip to the next one...
-			dmaplain=dmaplain+1;
-			graphicsdatawidth[dmaplain]=0;
-		}
 
+		int row;
+		int offset=0;
+		int istallsprite;
+
+		height=getgraphicheight(statement[2]);
+		istallsprite=( ((height/zoneheight)>1) && (tallspritemode>0) );
+
+		if(istallsprite)
+		{
+			if ( (graphicsdatawidth[dmaplain]+(width*(height/zoneheight))) > 256)
+			{
+				//the next graphic will overflow the DMA plain, so we skip to the next one...
+				dmaplain=dmaplain+1;
+				graphicsdatawidth[dmaplain]=0;
+			}
+		}
+		else //it's a regular height sprite
+		{
+			if ( (graphicsdatawidth[dmaplain]+width) > 256)
+			{
+				//the next graphic will overflow the DMA plain, so we skip to the next one...
+				dmaplain=dmaplain+1;
+				graphicsdatawidth[dmaplain]=0;
+			}
+		}
 		//our label is based on the filename...
-		snprintf(graphicslabels[dmaplain][graphicsdatawidth[dmaplain]],80,"%s",ourbasename(statement[2]));
+		snprintf(generalname,80,"%s",ourbasename(statement[2]));
+
+		checkvalidfilename(statement[2]);
 
 		//but remove the extension...
-		for(t=(strlen(graphicslabels[dmaplain][graphicsdatawidth[dmaplain]])-3); t>0; t--)
-			if (strcasecmp(graphicslabels[dmaplain][graphicsdatawidth[dmaplain]]+t,".png")==0)
-				graphicslabels[dmaplain][graphicsdatawidth[dmaplain]][t]=0;
+		for(t=(strlen(generalname)-3); t>0; t--)
+			if (strcasecmp(generalname+t,".png")==0)
+				generalname[t]=0;
 
+		//save the label
+		strcpy(graphicslabels[dmaplain][graphicsdatawidth[dmaplain]],generalname);
+		
+		if(istallsprite)
+		{
+			//remember sprite height 
+			strcpy(tallspritelabel[tallspritecount],generalname);
+			tallspriteheight[tallspritecount]=height/zoneheight;
+			tallspritecount++;
+			
+		}
 
 		if(palettestatement>0)
 		{
@@ -2293,15 +2683,32 @@ void add_graphic(char **statement, int incbanner)
 			}
 		}
 
-		// Now read the png into memory...
-		incgraphic(statement[2],0);
+		if(istallsprite)
+		{
+			for(t=0;t<(height/zoneheight);t++)
+			{
+				char indexstr[1024];
+
+				// Now read the png into memory...
+				incgraphic(statement[2],offset);
+				offset=offset+zoneheight;
+
+				//add on the banner zone number to the label, for our extra rows
+				sprintf(indexstr,"%s_tallsprite_%02d",generalname,t);
+				strcat(graphicslabels[dmaplain][graphicsdatawidth[dmaplain]],indexstr);
+			}
+		}
+		else
+		{
+			// Now read the png into memory...
+			incgraphic(statement[2],offset);
+		}
 	}
 	else // incbanner called us. we're importing a multi-zoneheight tall banner
 	{
 		int height;
 		int offset=0;
 		char indexstr[256];
-		char generalname[1024];
 
 		height=getgraphicheight(statement[2]);
 		if((height<zoneheight)||(height>224))
@@ -2621,7 +3028,6 @@ void incgraphic(char *file_name, int offset)
 			if(s==num_palette)
 				num_unique_palette=num_unique_palette+1;
 		}
-		//fprintf(stderr," DEBUG: %d is the number of palettes,\n       %d is the unique pallete count\n",num_palette,num_unique_palette);
 
 
                 const double convertval = 7.5 / M_PI;
@@ -2672,9 +3078,11 @@ void incgraphic(char *file_name, int offset)
 			finalcolor=((int)(colorangle*16))&0xF0;
 			finalcolor=finalcolor|(int)y;
 
-			sprintf(redefined_variables[numredefvars++],"%s_color%d = $%02x",graphicslabels[dmaplain][graphicsdatawidth[dmaplain]],t,finalcolor);
-			sprintf(constants[numconstants++],"%s_color%d",graphicslabels[dmaplain][graphicsdatawidth[dmaplain]],t); // record to queue
-
+			if(graphicslabels[dmaplain][graphicsdatawidth[dmaplain]][0]!=0)
+			{
+				sprintf(redefined_variables[numredefvars++],"%s_color%d = $%02x",graphicslabels[dmaplain][graphicsdatawidth[dmaplain]],t,finalcolor);
+				sprintf(constants[numconstants++],"%s_color%d",graphicslabels[dmaplain][graphicsdatawidth[dmaplain]],t); // record to queue
+			}
 
 		}
 		//deal with images that are missing color indexes...
@@ -3161,11 +3569,17 @@ void barf_graphic_file(void)
 	{
 		BANKSTART=0x6000;
 		REALSTART=0x8000;
+		// need to waste less space with zoneheight=8...
+		//BANKSTART=0x7000;
+		//REALSTART=0x9000;
 	}
 	else
 	{
 		BANKSTART=0xA000;
 		REALSTART=0x8000;
+		// need to waste less space with zoneheight=8...
+		//BANKSTART=0xB000;
+		//REALSTART=0x9000;
 	}
 
 
@@ -3949,7 +4363,6 @@ void data(char **statement)
 	removeCR(statement[2]);
 
 	if (!(optimization&4)) printf("	JMP .skip%s\n",statement[0]);
-	// if optimization level >=4 then data cannot be placed inline with code!
 
 	printf("%s\n",statement[2]);
 	while (1) {
@@ -5461,6 +5874,7 @@ void dofor(char **statement)
 	sprintf(forlabel[numfors],"%sfor%s",statement[0],statement[2]);
 	printf(".%s\n",forlabel[numfors]);
 
+	removeCR(statement[6]);
 	forend[numfors][0]='\0';
 	strcpy(forend[numfors],statement[6]);
 
@@ -5469,7 +5883,11 @@ void dofor(char **statement)
 
 	forstep[numfors][0]='\0';
 
-	if (!strncasecmp(statement[7],"step\0",4)) strcpy(forstep[numfors],statement[8]);
+	if (!strncasecmp(statement[7],"step\0",4))
+	{
+		removeCR(statement[8]);
+		strcpy(forstep[numfors],statement[8]);
+	}
 	else strcpy(forstep[numfors],"1");
 
 	numfors++;
@@ -5785,47 +6203,6 @@ void doend()
 	else prerror("extraneous end statement found");
 }
 
-void lives(char **statement)
-{
-	int height=8,i=0; //height is always 8
-	char label[200];
-	char data[200];
-	if (!lifekernel)
-	{
-		lifekernel=1;
-		//strcpy(redefined_variables[numredefvars++],"lifekernel = 1");
-	}
-
-	sprintf(label,"lives__%s\n",statement[0]);
-	removeCR(label);
-
-	printf("	LDA #<%s\n",label);
-	printf("	STA lifepointer\n");
-
-	printf("	LDA lifepointer+1\n");
-	printf("	AND #$E0\n");
-	printf("	ORA #(>%s)&($1F)\n",label);
-	printf("	STA lifepointer+1\n");
-
-	sprintf(sprite_data[sprite_index++]," if (<*) > (<(*+8))\n");
-	sprintf(sprite_data[sprite_index++],"	repeat ($100-<*)\n	.byte 0\n");
-	sprintf(sprite_data[sprite_index++],"	repend\n	endif\n");
-
-	sprintf(sprite_data[sprite_index++],"%s\n",label);
-
-	for (i=0; i<9; ++i) {
-		if ( ((!fgets(data,200,stdin))
-		      || ( (data[0]<(unsigned char)0x3A) && (data[0]>(unsigned char)0x2F) ))
-		     && (data[0] != 'e')) {
-
-			prerror("not enough data or missing \"end\" keyword at end of lives declaration");
-			exit(1);
-		}
-		line++;
-		if (!strncmp(data,"end\0",3)) break;
-		sprintf(sprite_data[sprite_index++],"	.byte %s",data);
-	}
-}
 
 void ifconst(char **statement)
 {
@@ -5913,6 +6290,8 @@ void doif(char **statement)
 
 	if ( (!strncmp(statement[2],"joy0\0",4)) 
              || (!strncmp(statement[2],"joy1\0",4))
+	     || (!strncmp(statement[2],"keypad0key\0",10)) 
+	     || (!strncmp(statement[2],"keypad1key\0",10)) 
 	     || (!strncmp(statement[2],"switch\0",6)) 
              || (!strncmp(statement[2],"softswitches\0",12))
              || (!strncmp(statement[2],"softselect\0",10))
@@ -6425,7 +6804,8 @@ void doif(char **statement)
 		strcpy(cstatement[3],statement[k]);
 		if (push2) strcpy(cstatement[4]," $101[TSX]\0");
 		else strcpy(cstatement[4],statement[k+1]);
-		for (j=5; j<40; ++j) strcpy(cstatement[j],statement[j-5+i]);
+		for (j=5; j<40; ++j) 
+			strcpy(cstatement[j],statement[j-5+i]); 
 		strcpy (cstatement[0],statement[0]); // copy label
 		if (situation != 4 && situation != 5) strcpy(Areg,cstatement[2]);  // attempt to suppress superfluous LDA
 
@@ -6663,8 +7043,8 @@ void displayoperation(char *opcode, char *operand, int index)
 		{
 			printf("  TSX\n");
 			printf("  INX\n");
-			printf("  TXS\n");
 			printf("  %s $100,x\n",opcode+1);
+			printf("  TXS\n");
 		}
 	}
 	else
@@ -7543,6 +7923,8 @@ void dogoto(char **statement)
 
 	if(!strncmp(statement[3],"bank",4))
 	{
+		if((statement[3][4]<'1')||(statement[3][4]>'9'))
+			prerror("destination bank is malformed. should be in form 'bank#'");
 		anotherbank=strictatoi(statement[3]+4);
 		anotherbank=anotherbank-1;
 	}
@@ -7662,6 +8044,8 @@ void gosub(char **statement)
 	assertminimumargs(statement,"gosub",1);
 	if(!strncmp(statement[3],"bank",4))
 	{
+		if((statement[3][4]<'1')||(statement[3][4]>'9'))
+			prerror("destination bank is malformed. should be in form 'bank#'");
 		anotherbank=strictatoi(statement[3]+4);
 		anotherbank=anotherbank-1;
 	}
@@ -7763,7 +8147,7 @@ void set(char **statement)
 	}
 	else if (!strncmp(statement[2],"softresetpause\0",15))
 	{
-		if (!strncmp(statement[3],"off",2)) 
+		if (!strncmp(statement[3],"off",3)) 
 			strcpy(redefined_variables[numredefvars++],"SOFTRESETASPAUSEOFF = 1");
 	}
 	else if (!strncmp(statement[2],"basepath\0",7))
@@ -7784,11 +8168,25 @@ void set(char **statement)
 		removeCR(statement[3]); //remove CR from the value, if present
 		sprintf(redefined_variables[numredefvars++],"PLOTVALUEPAGE = %s",statement[3]);
 	}
-	else if (!strncmp(statement[2],"drivingcontrols\0",15))
+	else if (!strncmp(statement[2],"drivingsupport\0",15))
 	{
 		if (!strncmp(statement[3],"on",2))
 		{
-			strcpy(redefined_variables[numredefvars++],"DRIVINGCONTROL = 1");
+			strcpy(redefined_variables[numredefvars++],"DRIVINGSUPPORT = 1");
+		}
+	}
+	else if (!strncmp(statement[2],"mousesupport\0",15))
+	{
+		if (!strncmp(statement[3],"on",2))
+		{
+			strcpy(redefined_variables[numredefvars++],"MOUSESUPPORT = 1");
+		}
+	}
+	else if (!strncmp(statement[2],"keypadsupport\0",15))
+	{
+		if (!strncmp(statement[3],"on",2))
+		{
+			strcpy(redefined_variables[numredefvars++],"KEYPADSUPPORT = 1");
 		}
 	}
 	else if (!strncmp(statement[2],"extradlmemory\0",13))
@@ -7797,6 +8195,15 @@ void set(char **statement)
 		{
 			strcpy(redefined_variables[numredefvars++],"EXTRADLMEMORY = 1");
 		}
+	}
+	else if (!strncmp(statement[2],"tallsprite\0",10))
+	{
+		if (!strncmp(statement[3],"off",3)) 
+			tallspritemode=0;
+		else if (!strncmp(statement[3],"on",2)) 
+			tallspritemode=1;
+		else if (!strncmp(statement[3],"spritesheet",11)) 
+			tallspritemode=2;
 	}
 	else if (!strncmp(statement[2],"dlmemory\0",8))
 	{
@@ -8319,6 +8726,22 @@ void set(char **statement)
 	else prerror("unknown set parameter");
 }
 
+void echo(char **statement)
+{
+	int t;
+	for(t=1;t<100;t++)
+	{
+		if((statement[t]!=NULL)||(statement[t][0]!=0))
+		{
+			removeCR(statement[t]);
+			printf(" %s ",statement[t]);
+		}
+		else
+			break;
+	}
+	printf("\n");
+}
+
 void rem(char **statement)
 {
 	if (!strncmp(statement[2],"smartbranching\0",14))
@@ -8526,6 +8949,7 @@ int isimmed(char *value)
 	// search queue of constants
 	int i;
 	//removeCR(value);
+
 	for (i=0; i<numconstants; ++i)
 	{
 		if (!strcmp(value,constants[i]))
@@ -8603,3 +9027,4 @@ void header_write(FILE *header, char *filename)
 	fclose(header);
 
 }
+

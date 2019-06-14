@@ -137,6 +137,8 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             if (result)
                 result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800sign.${architecture}.x86`));
             if (result)
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800makecc2.${architecture}.x86`));
+            if (result)
                 result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `dasm.${architecture}.x86`));
             if (result)
                 result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `distella.${architecture}.x86`));

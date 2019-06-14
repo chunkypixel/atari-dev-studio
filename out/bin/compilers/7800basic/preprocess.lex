@@ -43,6 +43,10 @@ int linenumber=1;
 <comment>^\n* printf("%s",yytext);
 <comment>\n {linenumber++;printf("\n");BEGIN(INITIAL);}
 
+"echo" {printf("echo");BEGIN(comment);}
+<comment>^\n* printf("%s",yytext);
+<comment>\n {linenumber++;printf("\n");BEGIN(INITIAL);}
+
 [ \t\r]+"/*" {BEGIN(mcomment);}
 "/*" {BEGIN(mcomment);}
 <mcomment>"*/" {BEGIN(INITIAL);}
