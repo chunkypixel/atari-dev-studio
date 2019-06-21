@@ -217,6 +217,12 @@
 
 
 
+## HSGAMENAME
+
+    set hsgamename 'name'
+
+
+    
 ## HSSECONDS
 
     set hsseconds seconds
@@ -240,20 +246,26 @@
     color - starting color for color cycle on the high score attract screen
 
 
+
 ## HSDIFFICULTYTEXT
 
-    set hsdifficultytext [diff_string_1] [diff_string_2] [diff_string_3] [diff_string_4] [off]
+    set hsdifficultytext ['string_1'] ['string_2'] ['string_3'] ['string_4'] [off]
 
-    diff_string_# (optional) - override provided difficulty level names (easy, intermediate, advanced, expert)
+    string_# (optional) - override provided difficulty level names (easy, intermediate, advanced, expert)
     off (optional) - turn off difficulty level names
+
+    note: single quotes are required where a name includes spaces
 
 
 
 ## HSGAMERANKS
 
-    set hsgameranks [rank_string_1] [rank_string_2] [rank_string_3] ...
+    set hsgameranks value_1 ['string_1'] value_2 ['string_2'] value_3 ['string_3'] ...
 
-    rank_string_# - display a descriptive ranking of player's score
+    value_# - value required to achieve player ranking
+    string_# - display a descriptive ranking of player's score
+
+    note: single quotes are required where a name includes spaces
 
 
 
@@ -500,6 +512,12 @@
 
 
 
+## JOY0FIRE
+
+    if joy0fire then ...
+
+
+
 ## JOY0FIRE0
 
     if joy0fire0 then ...
@@ -539,6 +557,12 @@
 ## JOY1ANY
 
     if joy1any then ...
+
+
+
+## JOY1FIRE
+
+    if joy1fire then ...
 
 
 
@@ -610,6 +634,12 @@
 
 
 
+## TRACKERSUPPORT
+
+    set trackersupport basic
+
+
+    
 ## INLINE
 
     inline filename.asm
