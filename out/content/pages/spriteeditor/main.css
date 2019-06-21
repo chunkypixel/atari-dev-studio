@@ -2918,10 +2918,15 @@ Spritemate stylesheet
  {
     margin: 0px;
     padding: 0px;
-    overflow: auto;
-    height: 84%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 85%;
     line-height: 0px;
-    padding-bottom: 20px;
+ }
+
+ #sprite-list
+ {
+    overflow: auto;
  }
  
  /*
@@ -3097,6 +3102,10 @@ Spritemate stylesheet
      height: 12px;
  }
  
+.ui-dialog .ui-dialog-content {
+	overflow: hidden;
+}
+
  .ui-dialog-content.ui-widget-content
  {
      /* inner part of a window */
