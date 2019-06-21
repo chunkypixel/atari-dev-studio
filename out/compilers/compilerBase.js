@@ -58,8 +58,8 @@ class CompilerBase {
         });
     }
     BuildGameAndRunAsync(document) {
+        var e_1, _a;
         return __awaiter(this, void 0, void 0, function* () {
-            var e_1, _a;
             // Process
             let result = yield this.BuildGameAsync(document);
             if (!result)
@@ -170,8 +170,8 @@ class CompilerBase {
         });
     }
     VerifyCompiledFileSizeAsync() {
+        var e_2, _a;
         return __awaiter(this, void 0, void 0, function* () {
-            var e_2, _a;
             console.log('debugger:CompilerBase.VerifyCompiledFileSize');
             // Verify created file(s)
             application.Notify(`Verifying compiled file(s)...`);
@@ -203,8 +203,8 @@ class CompilerBase {
         });
     }
     MoveFilesToBinFolderAsync() {
+        var e_3, _a, e_4, _b;
         return __awaiter(this, void 0, void 0, function* () {
-            var e_3, _a, e_4, _b;
             // Note: generateDebuggerFile - there are different settings for each compiler
             console.log('debugger:CompilerBase.MoveFilesToBinFolder');
             // Create directory?
@@ -273,8 +273,8 @@ class CompilerBase {
         });
     }
     RemoveDebuggerFilesAsync(folder) {
+        var e_5, _a;
         return __awaiter(this, void 0, void 0, function* () {
-            var e_5, _a;
             console.log('debugger:CompilerBase.RemoveDebuggerFilesAsync');
             try {
                 // Process

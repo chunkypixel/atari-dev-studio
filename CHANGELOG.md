@@ -2,6 +2,15 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.2.7
+
+* Added missing 7800basic keywords: hsgamename, noflow, trackersupport
+* Added additional hover tooltips for 7800basic keywords
+
+Sprite Editor
+* Updated Editor window to be resizable
+* Rearranged Toolbar order
+
 ## 0.2.6
 
 * Updated internal dev packages (security notification)

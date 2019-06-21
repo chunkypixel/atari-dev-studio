@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "icon": "images/icon.png",
     "preview": true,
     "publisher": "chunkypixel",
@@ -321,7 +321,7 @@
     "dependencies": {
         "open": "^6.3.0",
         "tree-kill": "^1.2.1",
-        "find-process": "^1.4.1"
+        "find-process": "^1.4.2"
     },
     "devDependencies": {
         "@types/mocha": "^5.2.7",
