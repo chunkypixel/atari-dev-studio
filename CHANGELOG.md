@@ -9,7 +9,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 Sprite Editor
 * Updated Editor window to be resizable
-* Rearranged Toolbar order
+* Re-arranged Toolbar order
 
 ## 0.2.6
 
