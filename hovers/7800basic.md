@@ -92,7 +92,25 @@
 
 ## DOUBLEWIDE
 
-    set doublewide on
+    set doublewide state
+
+    state - on, off
+
+
+
+## TALLSPRITE
+
+    set tallsprite state
+
+    state - on, off 
+
+
+
+## TV
+
+    set tv region
+
+    region - ntsc (default), pal
 
 
 
@@ -114,7 +132,9 @@
 
 ## EXTRADLMEMORY
 
-    set extradlmemory on
+    set extradlmemory state
+
+    state - on, off
 
 
 
@@ -165,7 +185,9 @@
 
 ## POKEYSUPPORT
 
-    set pokeysupport on
+    set pokeysupport state
+
+    state - on, off
 
 
 

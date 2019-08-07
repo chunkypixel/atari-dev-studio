@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.2.8
+
+* fixed issue with rem keyword mis-highlighting when used within variables (batariBasic and 7800basic)
+* Added missing 7800basic keywords: tallsprite
+* Updated existing and added additional hover tooltips for 7800basic keywords
+
 ## 0.2.7
 
 * Added missing 7800basic keywords: hsgamename, noflow, trackersupport
