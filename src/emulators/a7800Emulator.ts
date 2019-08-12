@@ -10,6 +10,7 @@ export class A7800Emulator extends EmulatorBase {
     // Features
     public Region: string = "";
     public Console: string = "";
+    public Debugger: boolean = false;
 
     // Lists (to match settings)
     // Hopefully one-day I'll work out how to hot-load into settings
@@ -38,11 +39,12 @@ export class A7800Emulator extends EmulatorBase {
 
         // Base
         let result = await super.LoadConfigurationAsync();
-        if (!result) return false;
+        if (!result) { return false; }
 
         // Reset
         this.Region = "";
         this.Console = "";
+        this.Debugger = false;
 
         // Emulator
         if (!this.CustomFolderOrPath) {
@@ -52,7 +54,7 @@ export class A7800Emulator extends EmulatorBase {
             else if (application.IsLinux || application.IsMacOS) {
                 // Prepare
                 let architecture = "Linux";
-                if (application.IsMacOS) architecture = "OSX";
+                if (application.IsMacOS) { architecture = "OSX"; }
             
                 // Set
                 this.FolderOrPath = path.join(this.FolderOrPath,`a7800.${architecture}-x86_64`);
@@ -80,6 +82,7 @@ export class A7800Emulator extends EmulatorBase {
                 }
             }
         }
+        this.Debugger = this.Configuration!.get<boolean>(`emulator.${this.Id.toLowerCase()}.debugger`,false);
 
         // Result
         return true;
@@ -100,11 +103,10 @@ export class A7800Emulator extends EmulatorBase {
         //      return false;
         // }
 
-        // Set region
+        // Set args
         let regionArg = `${this.Region} -cart1`;
-
-        // Set console
         let consoleArg = (this.Console ? `${this.Console} -cart2` : "");
+        let debuggerArg = (this.Debugger ? `-debug` : "");
 
         // Compiler options
         let command = this.FolderOrPath;
@@ -113,8 +115,9 @@ export class A7800Emulator extends EmulatorBase {
             regionArg,
             consoleArg,
             this.Args,
-            `"${this.FileName}"`
-        ]
+            `"${this.FileName}"`,
+            debuggerArg
+        ];
 
         // NOTE: This may need to be moved before compilation as it appears MAME is holding onto the launched file.
         //       Also need to confirm actual name to search for.
@@ -151,7 +154,7 @@ export class A7800Emulator extends EmulatorBase {
         console.log('debugger:A7800Emulator.RepairFilePermissionsAsync'); 
 
         // Validate
-        if (this.CustomFolderOrPath || application.IsWindows) return true;
+        if (this.CustomFolderOrPath || application.IsWindows) { return true; }
 
         // Process
         let result = await filesystem.ChModAsync(this.FolderOrPath);

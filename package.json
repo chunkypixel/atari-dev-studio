@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.2.8",
+    "version": "0.2.9",
     "icon": "images/icon.png",
     "preview": true,
     "publisher": "chunkypixel",
@@ -299,6 +299,12 @@
                     ],
                     "default": "Standard Console",
                     "description": "Specify the required console configuration:",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.emulator.a7800.debugger": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specify whether to activate the A7800 debugger",
                     "scope": "resource"
                 }
             }

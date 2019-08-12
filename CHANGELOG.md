@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.2.9
+
+* Added option to activate the A7800 emulator debugger
+
 ## 0.2.8
 
 * fixed issue with rem keyword mis-highlighting when used within variables (batariBasic and 7800basic)

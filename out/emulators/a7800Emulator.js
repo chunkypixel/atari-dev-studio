@@ -19,6 +19,7 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
         // Features
         this.Region = "";
         this.Console = "";
+        this.Debugger = false;
         // Lists (to match settings)
         // Hopefully one-day I'll work out how to hot-load into settings
         // so we can dynamically configure
@@ -45,11 +46,13 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
             console.log('debugger:A7800Emulator.LoadConfigurationAsync');
             // Base
             let result = yield _super.LoadConfigurationAsync.call(this);
-            if (!result)
+            if (!result) {
                 return false;
+            }
             // Reset
             this.Region = "";
             this.Console = "";
+            this.Debugger = false;
             // Emulator
             if (!this.CustomFolderOrPath) {
                 if (application.IsWindows) {
@@ -58,8 +61,9 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
                 else if (application.IsLinux || application.IsMacOS) {
                     // Prepare
                     let architecture = "Linux";
-                    if (application.IsMacOS)
+                    if (application.IsMacOS) {
                         architecture = "OSX";
+                    }
                     // Set
                     this.FolderOrPath = path.join(this.FolderOrPath, `a7800.${architecture}-x86_64`);
                 }
@@ -85,6 +89,7 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
                     }
                 }
             }
+            this.Debugger = this.Configuration.get(`emulator.${this.Id.toLowerCase()}.debugger`, false);
             // Result
             return true;
         });
@@ -101,10 +106,10 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
             //      application.Notify(`ERROR: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Review your selection in ${application.PreferencesSettingsExtensionPath}.`); 
             //      return false;
             // }
-            // Set region
+            // Set args
             let regionArg = `${this.Region} -cart1`;
-            // Set console
             let consoleArg = (this.Console ? `${this.Console} -cart2` : "");
+            let debuggerArg = (this.Debugger ? `-debug` : "");
             // Compiler options
             let command = this.FolderOrPath;
             // Args
@@ -112,7 +117,8 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
                 regionArg,
                 consoleArg,
                 this.Args,
-                `"${this.FileName}"`
+                `"${this.FileName}"`,
+                debuggerArg
             ];
             // NOTE: This may need to be moved before compilation as it appears MAME is holding onto the launched file.
             //       Also need to confirm actual name to search for.
@@ -142,8 +148,9 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:A7800Emulator.RepairFilePermissionsAsync');
             // Validate
-            if (this.CustomFolderOrPath || application.IsWindows)
+            if (this.CustomFolderOrPath || application.IsWindows) {
                 return true;
+            }
             // Process
             let result = yield filesystem.ChModAsync(this.FolderOrPath);
             return result;
