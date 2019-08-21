@@ -13,6 +13,8 @@ import { HoverBase } from './hovers/hoverBase';
 import { DasmHover } from './hovers/dasmHover';
 import { BatariBasicHover } from './hovers/batariBasicHover';
 import { SeventyEightHundredBasicHover } from './hovers/seventyEightHundredBasicHover';
+import { CompletionBase } from './completions/completionBase';
+import { SeventyEightHundredBasicCompletion } from './completions/seventyEightHundredBasicCompletion';
 
 // -------------------------------------------------------------------------------------
 // Operating System
@@ -78,16 +80,31 @@ export async function RegisterHoverProvidersAsync(context: vscode.ExtensionConte
 }
 
 // -------------------------------------------------------------------------------------
+// Completion
+// Language intellisense
+// -------------------------------------------------------------------------------------
+
+export const Completions:CompletionBase[] = [
+	new SeventyEightHundredBasicCompletion()
+];
+
+export async function RegisterCompletionProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
+	for (let completion of Completions) {
+		await completion.RegisterAsync(context);
+	}
+}
+
+// -------------------------------------------------------------------------------------
 // Functions
 // -------------------------------------------------------------------------------------
 export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
 	// Get document
 	let document = await filesystem.GetDocumentAsync(fileUri);
-	if (!document || document!.uri.scheme != "file") return false;
+	if (!document || document!.uri.scheme != "file") { return false; }
 
 	// Find compiler
 	let compiler = getChosenCompiler(document);
-	if (compiler) return await compiler.BuildGameAsync(document);
+	if (compiler) { return await compiler.BuildGameAsync(document); }
 
 	// Result
 	return false;

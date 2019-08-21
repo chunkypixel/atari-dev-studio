@@ -61,6 +61,8 @@ function activate(context) {
         context.subscriptions.push(buildGameAndRun);
         // Register the mouse-over hover providers
         yield application.RegisterHoverProvidersAsync(context);
+        // Register code completion providers
+        yield application.RegisterCompletionProvidersAsync(context);
     });
 }
 exports.activate = activate;

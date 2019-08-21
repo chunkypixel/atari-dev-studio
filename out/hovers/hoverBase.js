@@ -49,15 +49,16 @@ class HoverBase {
                 // Do we something that looks like a key and also enough blanks passed by?
                 if (match && match[2] && blanks <= 0) {
                     // Store if already have some lines collected
-                    if (info != '')
+                    if (info !== '') {
                         this.hoverText[key] = info;
+                    }
                     // Hold the next key, start concatenating info from scratch and reset the blank counter
                     key = match[2];
                     info = '';
                     blanks = delimCnt;
                 }
                 // Reset the blank lines counter to its starting value for every non-blank line encountered
-                if (line.trim() == '') {
+                if (line.trim() === '') {
                     blanks--;
                 }
                 else {
@@ -67,8 +68,9 @@ class HoverBase {
                 info += line + '\r\n';
             }
             // Add eventual final key entry (happens when file is not ending with enough blank lines)
-            if (info.trim() != '')
+            if (info.trim() !== '') {
                 this.hoverText[key] = info;
+            }
         });
     }
     provideHover(document, position, token) {
@@ -77,14 +79,17 @@ class HoverBase {
         let p = position.character;
         const line = String(document.lineAt(position.line).text);
         // Find beginning of the hower-word
-        while (p > 0 && validchars.indexOf(line[p]) != -1)
+        while (p > 0 && validchars.indexOf(line[p]) !== -1) {
             p--;
+        }
         // Skip leading invalid character
-        if (validchars.indexOf(line[p]) == -1)
+        if (validchars.indexOf(line[p]) === -1) {
             p++;
+        }
         // Collect string until an invalid charecter is encountered
-        while (p < line.length && validchars.indexOf(line[p]) != -1)
+        while (p < line.length && validchars.indexOf(line[p]) !== -1) {
             word += line[p++];
+        }
         return new vscode.Hover(this.hoverText[word.toUpperCase()]);
     }
 }

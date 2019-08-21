@@ -5,6 +5,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 ## 0.2.9
 
 * Added option to activate the A7800 emulator debugger
+* Added simple intellisense for 7800basic (keywords, functions, consts etc)
 
 ## 0.2.8
 

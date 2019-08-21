@@ -5,7 +5,7 @@ import * as filesystem from '../filesystem';
 
 export abstract class HoverBase implements vscode.HoverProvider {
 
-    public readonly Id:string
+    public readonly Id:string;
     private hoverText: { [key: string]: string; } = {};
 
     constructor(id:string) {
@@ -33,7 +33,7 @@ export abstract class HoverBase implements vscode.HoverProvider {
 		const filearr = (await filesystem.ReadFileAsync(filePath.fsPath)).toString().split(/\r?\n/);
 
 		const keypattern = /^([^A-Za-z0-9_]*)([A-Za-z0-9_]+)/; // Pattern for matching the 'key'
-		const delimCnt = 2 // How many contiguous blank lines that must be found betwen keys
+		const delimCnt = 2; // How many contiguous blank lines that must be found betwen keys
 
 		let blanks=0;      // How many more contigous blank lines until the next key
 		let key='';        // Keyword for the popup
@@ -48,7 +48,7 @@ export abstract class HoverBase implements vscode.HoverProvider {
 			// Do we something that looks like a key and also enough blanks passed by?
 			if (match && match[2] && blanks<=0) {  				
 				// Store if already have some lines collected
-				if (info!='') this.hoverText[key] = info; 
+				if (info !== '') { this.hoverText[key] = info; } 
 				// Hold the next key, start concatenating info from scratch and reset the blank counter
 				key=match[2];    
 				info='';         
@@ -56,7 +56,7 @@ export abstract class HoverBase implements vscode.HoverProvider {
 			}
 
 			// Reset the blank lines counter to its starting value for every non-blank line encountered
-			if (line.trim()=='') { 
+			if (line.trim() === '') { 
 				blanks--;
 			} else {
 				blanks=delimCnt;
@@ -67,22 +67,22 @@ export abstract class HoverBase implements vscode.HoverProvider {
 		}
 
 		// Add eventual final key entry (happens when file is not ending with enough blank lines)
-		if (info.trim()!='') this.hoverText[key] = info;
+		if (info.trim() !== '') { this.hoverText[key] = info; }
 
 	}
 
 	provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Hover> {
 		const validchars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
-		let word=''
-		let p=position.character;
-		const line=String(document.lineAt(position.line).text);
+		let word='';
+		let p = position.character;
+		const line = String(document.lineAt(position.line).text);
 		
 		// Find beginning of the hower-word
-		while (p>0 && validchars.indexOf(line[p])!=-1) p--;
+		while (p > 0 && validchars.indexOf(line[p]) !== -1) { p--; }
 		// Skip leading invalid character
-		if (validchars.indexOf(line[p])==-1) p++;
+		if (validchars.indexOf(line[p]) === -1) { p++; }
 		// Collect string until an invalid charecter is encountered
-		while (p<line.length && validchars.indexOf(line[p])!=-1) word+=line[p++];
+		while (p < line.length && validchars.indexOf(line[p]) !== -1) { word += line[p++]; }
 
 		return new vscode.Hover(this.hoverText[word.toUpperCase()]);
 	}

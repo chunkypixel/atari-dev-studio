@@ -10,8 +10,8 @@ export class BatariBasicHover extends HoverBase {
 
     public async RegisterAsync(context: vscode.ExtensionContext): Promise<void> {
         // Files
-        await this.LoadHoverFileAsync(context, '6502.md') // 6502 opcodes
-        await this.LoadHoverFileAsync(context, 'vcs.md')  // Stella & RIOT
+        await this.LoadHoverFileAsync(context, '6502.md'); // 6502 opcodes
+        await this.LoadHoverFileAsync(context, 'vcs.md');  // Stella & RIOT
         
         // Finalise
         await super.RegisterAsync(context);

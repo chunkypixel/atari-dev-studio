@@ -19,6 +19,7 @@ const a7800Emulator_1 = require("./emulators/a7800Emulator");
 const dasmHover_1 = require("./hovers/dasmHover");
 const batariBasicHover_1 = require("./hovers/batariBasicHover");
 const seventyEightHundredBasicHover_1 = require("./hovers/seventyEightHundredBasicHover");
+const seventyEightHundredBasicCompletion_1 = require("./completions/seventyEightHundredBasicCompletion");
 // -------------------------------------------------------------------------------------
 // Operating System
 // -------------------------------------------------------------------------------------
@@ -79,18 +80,35 @@ function RegisterHoverProvidersAsync(context) {
 }
 exports.RegisterHoverProvidersAsync = RegisterHoverProvidersAsync;
 // -------------------------------------------------------------------------------------
+// Completion
+// Language intellisense
+// -------------------------------------------------------------------------------------
+exports.Completions = [
+    new seventyEightHundredBasicCompletion_1.SeventyEightHundredBasicCompletion()
+];
+function RegisterCompletionProvidersAsync(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (let completion of exports.Completions) {
+            yield completion.RegisterAsync(context);
+        }
+    });
+}
+exports.RegisterCompletionProvidersAsync = RegisterCompletionProvidersAsync;
+// -------------------------------------------------------------------------------------
 // Functions
 // -------------------------------------------------------------------------------------
 function BuildGameAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
         // Get document
         let document = yield filesystem.GetDocumentAsync(fileUri);
-        if (!document || document.uri.scheme != "file")
+        if (!document || document.uri.scheme != "file") {
             return false;
+        }
         // Find compiler
         let compiler = getChosenCompiler(document);
-        if (compiler)
+        if (compiler) {
             return yield compiler.BuildGameAsync(document);
+        }
         // Result
         return false;
     });
