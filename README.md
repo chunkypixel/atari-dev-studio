@@ -135,7 +135,7 @@ dasm is a versatile macro assembler with support for several 8-bit microprocesso
 ## Emulation
 Atari Dev Studio includes the following emulators for testing purposes:
 
-### Stella (release 6.0.1 - 20190606)
+### Stella (release 6.0.2 - 20191012)
 Stella is a multi-platform Atari 2600 VCS emulator released under the GNU General Public License (GPL). Stella was originally developed for Linux by Bradford W. Mott, and is currently maintained by Stephen Anthony. Since its original release several people have joined the development team to port Stella to other operating systems such as AcornOS, AmigaOS, DOS, FreeBSD, IRIX, Linux, OS/2, MacOS, Unix, and Windows. The development team is working hard to perfect the emulator and we hope you enjoy our effort.
 
 Stella is included as part of this extension with many thanks to Stephen Anthony. Stella is an external project and can be downloaded separately [here](https://stella-emu.github.io). If you enjoy using Stella place consider [donating](https://stella-emu.github.io/donations.html) to ensure it's continued development.
