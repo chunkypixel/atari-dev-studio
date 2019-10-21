@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -15,8 +16,9 @@ const find = require("find-process");
 function KillProcessByNameAsync(name) {
     return __awaiter(this, void 0, void 0, function* () {
         // Need to lowercase name
-        if (application.IsLinux || application.IsMacOS)
+        if (application.IsLinux || application.IsMacOS) {
             name = name.toLowerCase();
+        }
         // Search
         yield find('name', name)
             .then(function (list) {
@@ -53,8 +55,9 @@ function Spawn(command, args, env, cwd, stdout, stderr) {
             let message = data.toString();
             // Send out
             var result = stdout(message);
-            if (!result)
+            if (!result) {
                 receivedError = true;
+            }
             // Notify
             console.log('- stdout ');
             console.log(message);
@@ -64,8 +67,9 @@ function Spawn(command, args, env, cwd, stdout, stderr) {
             let message = data.toString();
             // Send out
             var result = stderr(message);
-            if (!result)
+            if (!result) {
                 receivedError = true;
+            }
             // Notify
             console.log('- stderr ');
             console.log(message);

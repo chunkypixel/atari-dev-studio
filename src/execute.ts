@@ -6,7 +6,7 @@ const find = require("find-process");
 
 export async function KillProcessByNameAsync(name:string): Promise<void> {
     // Need to lowercase name
-    if (application.IsLinux || application.IsMacOS) name = name.toLowerCase();
+    if (application.IsLinux || application.IsMacOS) { name = name.toLowerCase(); }
 
     // Search
     await find('name', name)
@@ -46,7 +46,7 @@ export function Spawn(command:string, args:string[] | null, env: { [key: string]
             
             // Send out
             var result = stdout(message);
-            if (!result) receivedError = true;
+            if (!result) { receivedError = true; }
 
             // Notify
             console.log('- stdout ');
@@ -58,7 +58,7 @@ export function Spawn(command:string, args:string[] | null, env: { [key: string]
 
             // Send out
             var result = stderr(message);
-            if (!result) receivedError = true;
+            if (!result) { receivedError = true; }
 
             // Notify
             console.log('- stderr ');

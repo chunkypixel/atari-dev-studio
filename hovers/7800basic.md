@@ -363,7 +363,6 @@
     palette_# - index of palette (0-7)
     x - x screen co-ordinate
     y - y screen co-ordinate
-    frame (optional) - index of the frame to display
 
 
 

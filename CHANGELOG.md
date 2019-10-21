@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.3.0
+
+* Updated Stella to 6.0.2 (Windows, Linux)
+* Removed the intellisense for 7800basic (for now) until we can include code keyword (ie. labels, function, variables)
+
 ## 0.2.9
 
 * Added option to activate the A7800 emulator debugger
