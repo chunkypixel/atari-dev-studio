@@ -33,9 +33,9 @@ export class DasmCompiler extends CompilerBase {
             `-o${this.FileName}${this.CompiledExtensions[0]}`
         ];
         // Format
-        if (this.Format) args.push(`${"-f"}${this.Format}`);
+        if (this.Format) { args.push(`${"-f"}${this.Format}`); }
         // Verboseness
-        if (this.Verboseness) args.push(`${"-v"}${this.Verboseness}`);
+        if (this.Verboseness) { args.push(`${"-v"}${this.Verboseness}`); }
         // Args
         if (this.GenerateDebuggerFiles)  {
             // Process
@@ -91,9 +91,9 @@ export class DasmCompiler extends CompilerBase {
         this.IsRunning = false;
 
         // Finalise
-        if (executeResult) executeResult = await this.VerifyCompiledFileSizeAsync();
+        if (executeResult) { executeResult = await this.VerifyCompiledFileSizeAsync(); }
         await this.RemoveCompilationFilesAsync(executeResult);
-        if (executeResult) executeResult = await this.MoveFilesToBinFolderAsync();
+        if (executeResult) { executeResult = await this.MoveFilesToBinFolderAsync(); }
 
         // Result
         return executeResult;
@@ -104,7 +104,7 @@ export class DasmCompiler extends CompilerBase {
 
         // Base
         let result = await super.LoadConfigurationAsync();
-        if (!result) return false;
+        if (!result) { return false; }
 
         // Compiler
         // We use a path instead of a folder for dasm for added flexibility
@@ -155,7 +155,7 @@ export class DasmCompiler extends CompilerBase {
         console.log('debugger:DasmCompiler.RepairFilePermissionsAsync'); 
 
         // Validate
-        if (this.CustomFolderOrPath || application.IsWindows) return true;
+        if (this.CustomFolderOrPath || application.IsWindows) { return true; }
 
         // Github: https://github.com/chunkypixel/atari-dev-studio/issues/1
         //         Duplication of filename

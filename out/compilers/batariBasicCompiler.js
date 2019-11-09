@@ -46,8 +46,9 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             env["bB"] = this.FolderOrPath;
             // Notify
             // Linux and macOS script has this message already
-            if (application.IsWindows)
+            if (application.IsWindows) {
                 application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`);
+            }
             // Compile
             this.IsRunning = true;
             let executeResult = yield execute.Spawn(command, args, env, this.WorkspaceFolder, (stdout) => {
@@ -98,11 +99,13 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             });
             this.IsRunning = false;
             // Finalise
-            if (executeResult)
+            if (executeResult) {
                 executeResult = yield this.VerifyCompiledFileSizeAsync();
+            }
             yield this.RemoveCompilationFilesAsync();
-            if (executeResult)
+            if (executeResult) {
                 executeResult = yield this.MoveFilesToBinFolderAsync();
+            }
             // Result
             return executeResult;
         });
@@ -118,26 +121,34 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:BatariBasicCompiler.RepairFilePermissionsAsync');
             // Validate
-            if (this.CustomFolderOrPath || application.IsWindows)
+            if (this.CustomFolderOrPath || application.IsWindows) {
                 return true;
+            }
             // Prepare
             let architecture = "Linux";
-            if (application.IsMacOS)
+            if (application.IsMacOS) {
                 architecture = "Darwin";
+            }
             // Process
             let result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, '2600basic.sh'));
-            if (result)
+            if (result) {
                 result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `2600basic.${architecture}.x86`));
-            if (result)
+            }
+            if (result) {
                 result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `dasm.${architecture}.x86`));
-            if (result)
+            }
+            if (result) {
                 result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `bbfilter.${architecture}.x86`));
-            if (result)
+            }
+            if (result) {
                 result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `optimize.${architecture}.x86`));
-            if (result)
+            }
+            if (result) {
                 result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `postprocess.${architecture}.x86`));
-            if (result)
+            }
+            if (result) {
                 result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `preprocess.${architecture}.x86`));
+            }
             return result;
         });
     }

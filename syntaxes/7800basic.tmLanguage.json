@@ -1,73 +1,70 @@
 {
-	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
 	"name": "7800basic",
 	"scopeName": "source.78b",
-	"patterns": [
+	"patterns" : [
 		{
-			"include": "#keywords"
+			"match" : "\\n",
+			"name" : "meta.ending-space"
 		},
 		{
-			"include": "#strings"
+			"begin" : "^(?=\\t)",
+			"end" : "(?=[^\\t])",
+			"name" : "meta.leading-space",
+			"patterns" : [
+				{
+					"captures" : {
+						"1" : {
+							"name" : "meta.odd-tab.tabs"
+						},
+						"2" : {
+							"name" : "meta.even-tab.tabs"
+						}
+					},
+					"match" : "(\\t)(\\t)?"
+				}
+			]
 		},
 		{
-			"include": "#comments"
+			"begin" : "^(?= )",
+			"end" : "(?=[^ ])",
+			"name" : "meta.leading-space",
+			"patterns" : [
+				{
+					"captures" : {
+						"1" : {
+							"name" : "meta.odd-tab.spaces"
+						},
+						"2" : {
+							"name" : "meta.even-tab.spaces"
+						}
+					},
+					"match" : "(  )(  )?"
+				}
+			]
 		},
 		{
-			"include": "#numerics"
+			"begin": "(^[ \\t]+)?(?=;)",
+			"end": "\\n",
+			"name": "comment.line.78b",
+			"comment": "single line comment"
 		},
 		{
-			"include" : "#operators"
+			"begin": "(^[ \\t]+)?(?i:rem)([ \\t]+)",
+			"end": "\\n",
+			"name": "comment.line.78b",
+			"comment": "single line comment"
 		},
 		{
-			"include" : "#assembly"
-		}
-	],
-	"repository": {
-		"keywords": {
-			"patterns": [
-			{
-				"name": "keyword.control.78b",
-				"match": "\\b(asm|CARRY|ASCII|callmacro|const|dec|def|dim|else|end|function|if|include|includesfile|inline|for|gosub|goto|let|macro|next|on|pop|rand|return|set|step|then|to)\\b",
-				"comment": "control keywords"
+			"begin": "/\\*",
+			"captures": {
+				"0": {
+					"name": "punctuation.definition.comment.78b"
+				}
 			},
-			{
-				"name": "keyword.other.78b",
-				"match": "\\b(AUDC0|AUDC1|AUDF0|AUDF1|AUDV0|AUDV1|PAUDF0|joy0any|joy0down|joy0fire|joy0fire0|joy0fire1|joy0left|joy0right|joy0up|joy1any|joy1down|joy1fire|joy1fire0|joy1fire1|joy1left|joy1right|joy1up|switchleftb|switchreset|switchrightb|switchselect)\\b",
-				"comment": "other keywords"
-			},
-			{
-				"name": "keyword.commands.78b",
-				"match": "\\b(adjustvisible|alphachars|alphadata|avoxvoice|basepath|basic|boxcollision|characterset|clearscreen|collision|collisionwrap|converttobcd|dictionary|dmahole|drawscreen|drawwait|data|debug|displaymode|dlmemory|doublebuffer|doublewide|extradlmemory|extrawide|hscolorbase|hsdifficultytext|hsgamename|hsgameranks|hsscoresize|hsseconds|hssupport|incbanner|incgraphic|incmapfile|lockzone|loadmemory|loadrambank|loadrombank|mcpdevcart|memcpy|memset|mutesfx|newblock|noflow|pauseroutine|peekchar|pitch|phonetic|playsfx|playsong|plotbanner|plotchars|plotmap|plotmapfile|plotsprite|plotvalue|plotvalueonscreen|plotvaluepage|pokechar|pokeybase|pokeydetected|pokeysound|pokeysupport|psound|raw|reboot|restorescreen|reset|romsize|savescreen|screenheight|savememory|sdata|speak|speechdata|speed|sread|stopsong|songdata|tallsprite|tiasfx|trackersupport|tsound|unlockzone|voice|zoneheight|zoneprotection)\\b",
-				"comment": "other keywords"
-			},		
-			{
-				"name": "keyword.bank.78b",
-				"match": "\\b(bank|bank1|bank2|bank3|bank4|bank5|bank6|bank7|bank8|otherbank|thisbank)\\b",
-				"comment": "bank keywords"
-			},
-			{
-				"name": "keyword.variable.78b",
-				"match": "\\b(lives|gamedifficulty|mono|score0|score1|paldetected|temp1|temp2|temp3|temp4|temp5|temp6|var0|var1|var2|var3|var4|var5|var6|var7|var8|var9|var10|var11|var12|var13|var14|var15|var16|var17|var18|var19|var20|var21|var22|var23|var24|var25|var26|var27|var28|var29|var30|var31|var32|var33|var34|var35|var36|var37|var38|var39|var40|var41|var42|var43|var44|var45|var46|var47|var48|var49|var50|var51|var52|var53|var54|var55|var56|var57|var58|var59|var60|var61|var62|var63|var64|var65|var66|var67|var68|var69|var70|var71|var72|var73|var74|var75|var76|var77|var78|var79|var80|var81|var82|var83|var84|var85|var86|var87|var88|var89|var90|var91|var92|var93|var94|var95|var96|var97|var98|var99)\\b",
-				"comment": "variable keywords"
-			},
-			{
-				"name": "keyword.constant.78b",
-				"match": "\\b(on|off|flip|tv|ntsc|pal|160A|160B|320A|320B|320C|320D|16k|32k|48k|128k|128kRAM|128kBANKRAM|144k|256k|256kRAM|256kBANKRAM|272k|512k|512kRAM|512kBANKRAM|528K)\\b",
-				"comment": "constant keywords"
-			},
-			{
-				"name": "keyword.colors.78b",
-				"match": "\\b(BACKGRND|P0C1|P0C2|P0C3|P1C1|P1C2|P1C3|P2C1|P2C2|P2C3|P3C1|P3C2|P3C3|P4C1|P4C2|P4C3|P5C1|P5C2|P5C3|P6C1|P6C2|P6C3|P7C1|P7C2|P7C3)\\b",
-				"comment": "constant keywords"
-			},
-			{
-				"name": "keyword.directive.78b",
-				"match": "\\b(#ifconst|#elseif|#endif)\\b",
-				"comment": "directive keywords"
-			}]
+			"end": "\\*/",
+			"name": "comment.block.78b"
 		},
-		"strings": {
-			"name": "string.quoted.double.78b",
+		{
 			"begin": "\"",
 			"end": "\"",
 			"patterns": [
@@ -75,40 +72,48 @@
 					"name": "constant.character.escape.78b",
 					"match": "\\\\."
 				}
-			]
+			],
+			"name": "string.quoted.double.78b"
 		},
-		"comments": {
+		{
+			"begin": "'",
+			"end": "'",
 			"patterns": [
 				{
-					"name": "comment.line.semicolon.78b",
-					"begin": ";",
-					"end": "$",
-					"comment": "single line comment"
-				},
-				{
-					"name": "comment.line.rem.78b",
-					"begin": "^\\s*rem",
-					"end": "$",
-					"comment": "single line comment"
-				},
-				{
-					"name": "comment.block.78b",
-					"begin": "/\\*",
-					"beginCaptures": {
-						"0": {
-							"name": "punctuation.definition.comment.78b"
-						}
-					},
-					"end": "\\*/",
-					"endCaptures": {
-						"0": {
-							"name": "punctuation.definition.comment.78b"
-						}
-					}
+					"name": "constant.character.escape.78b",
+					"match": "\\\\."
 				}
-			]
+			],
+			"name": "string.quoted.single.78b"
 		},
-		"numerics": {
+		{
+			"patterns":[{
+				"match": "\\=",
+				"name": "keyword.operator.assignment.78b",
+				"comment": "assignment operators"
+			},
+			{
+				"match": "\\*|/|-|\\+",
+				"name": "keyword.operator.arithmetic.78b",
+				"comment": "arithmetic operators"				
+			},
+			{
+				"match": "\\!|&&",
+				"name": "keyword.operator.logical.78b",
+				"comment": "logical operators"				
+			},
+			{
+				"match": "\\^",
+				"name": "keyword.operator.bitwise.78b",
+				"comment": "bitwise operators"				
+			},
+			{
+				"match": "<=|>=|<|>",
+				"name": "keyword.operator.relational.78b",
+				"comment": "relational operators"				
+			}]
+		},
+		{
 			"patterns": [{
 				"name": "keyword.numeric.hexadecimal.78b",
 				"match": "\\$[0-9a-fA-F]+\\b",
@@ -125,45 +130,55 @@
 				"comment": "binary number"	
 			}]
 		},
-		"operators" : {
-			"patterns":[{
-				"name": "keyword.operator.assignment.78b",
-				"match": "\\=",
-				"comment": "assignment operators"
-			},
-			{
-				"name": "keyword.operator.arithmetic.78b",
-				"match": "\\*|/|-|\\+",
-				"comment": "arithmetic operators"				
-			},
-			{
-				"name": "keyword.operator.logical.78b",
-				"match": "\\!|&&",
-				"comment": "logical operators"				
-			},
-			{
-				"name": "keyword.operator.bitwise.78b",
-				"match": "\\^",
-				"comment": "bitwise operators"				
-			},
-			{
-				"name": "keyword.operator.relational.78b",
-				"match": "<=|>=|<|>",
-				"comment": "relational operators"				
-			}
-		]
+		{
+			"patterns": [
+				{
+					"name": "keyword.control.78b",
+					"match": "\\b(asm|CARRY|ASCII|callmacro|const|dec|def|dim|else|end|function|if|include|includesfile|inline|for|gosub|goto|let|macro|next|on|pop|rand|return|set|step|then|to)\\b",
+					"comment": "control keywords"
+				},
+				{
+					"name": "keyword.other.78b",
+					"match": "\\b(AUDC0|AUDC1|AUDF0|AUDF1|AUDV0|AUDV1|PAUDF0|joy0any|joy0down|joy0fire|joy0fire0|joy0fire1|joy0left|joy0right|joy0up|joy1any|joy1down|joy1fire|joy1fire0|joy1fire1|joy1left|joy1right|joy1up|switchleftb|switchreset|switchrightb|switchselect)\\b",
+					"comment": "other keywords"
+				},
+				{
+					"name": "keyword.commands.78b",
+					"match": "\\b(adjustvisible|alphachars|alphadata|avoxvoice|basepath|basic|boxcollision|characterset|clearscreen|collision|collisionwrap|converttobcd|dictionary|dmahole|drawscreen|drawwait|data|debug|displaymode|dlmemory|doublebuffer|doublewide|extradlmemory|extrawide|hscolorbase|hsdifficultytext|hsgamename|hsgameranks|hsscoresize|hsseconds|hssupport|incbanner|incgraphic|incmapfile|lockzone|loadmemory|loadrambank|loadrombank|mcpdevcart|memcpy|memset|mutesfx|newblock|noflow|pauseroutine|peekchar|pitch|phonetic|playsfx|playsong|plotbanner|plotchars|plotmap|plotmapfile|plotsprite|plotvalue|plotvalueonscreen|plotvaluepage|pokechar|pokeybase|pokeydetected|pokeysound|pokeysupport|psound|raw|reboot|restorescreen|reset|romsize|savescreen|screenheight|savememory|sdata|speak|speechdata|speed|sread|stopsong|songdata|tallsprite|tiasfx|trackersupport|tsound|unlockzone|voice|zoneheight|zoneprotection)\\b",
+					"comment": "other keywords"
+				},		
+				{
+					"name": "keyword.bank.78b",
+					"match": "\\b(bank|bank1|bank2|bank3|bank4|bank5|bank6|bank7|bank8|otherbank|thisbank)\\b",
+					"comment": "bank keywords"
+				},
+				{
+					"name": "keyword.variable.78b",
+					"match": "\\b(lives|gamedifficulty|mono|score0|score1|paldetected|temp1|temp2|temp3|temp4|temp5|temp6|var0|var1|var2|var3|var4|var5|var6|var7|var8|var9|var10|var11|var12|var13|var14|var15|var16|var17|var18|var19|var20|var21|var22|var23|var24|var25|var26|var27|var28|var29|var30|var31|var32|var33|var34|var35|var36|var37|var38|var39|var40|var41|var42|var43|var44|var45|var46|var47|var48|var49|var50|var51|var52|var53|var54|var55|var56|var57|var58|var59|var60|var61|var62|var63|var64|var65|var66|var67|var68|var69|var70|var71|var72|var73|var74|var75|var76|var77|var78|var79|var80|var81|var82|var83|var84|var85|var86|var87|var88|var89|var90|var91|var92|var93|var94|var95|var96|var97|var98|var99)\\b",
+					"comment": "variable keywords"
+				},
+				{
+					"name": "keyword.constant.78b",
+					"match": "\\b(on|off|flip|tv|ntsc|pal|160A|160B|320A|320B|320C|320D|16k|32k|48k|128k|128kRAM|128kBANKRAM|144k|256k|256kRAM|256kBANKRAM|272k|512k|512kRAM|512kBANKRAM|528K)\\b",
+					"comment": "constant keywords"
+				},
+				{
+					"name": "keyword.colors.78b",
+					"match": "\\b(BACKGRND|P0C1|P0C2|P0C3|P1C1|P1C2|P1C3|P2C1|P2C2|P2C3|P3C1|P3C2|P3C3|P4C1|P4C2|P4C3|P5C1|P5C2|P5C3|P6C1|P6C2|P6C3|P7C1|P7C2|P7C3)\\b",
+					"comment": "constant keywords"
+				},
+				{
+					"name": "keyword.directive.78b",
+					"match": "\\b(#ifconst|#elseif|#endif)\\b",
+					"comment": "directive keywords"
+				}]
 		},
-		"assembly" : {
+		{
 			"patterns":[{
 				"name": "keyword.instuctions.asm.78b",
 				"match": "(?i)[\\s]*\\b(adc|and|asl|bcc|bcs|beq|bit|bmi|bne|bpl|brk|bvc|bvs|clc|cld|cli|clv|cmp|cpx|cpy|dec|dex|dey|eor|inc|inx|iny|jmp|jsr|lda|ldx|ldy|lsr|nop|ora|pha|php|pla|plp|rol|ror|rti|rts|sbc|sec|sed|sei|sta|stx|sty|tax|tay|tsx|txa|txs|tya)\\b",
 				"comment": "assembly instructions"
-			},
-			{
-				"name": "keyword.registers.asm.78b",
-				"match": "(?i)\\b(pc|ac|x|y|sr|sp)\\b",
-				"comment": "assembly registers"
-			}]
+			}]			
 		}
-	}
+	]
 }

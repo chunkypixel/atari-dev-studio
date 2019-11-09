@@ -43,7 +43,6 @@ class CompilerBase {
         this.DefaultFolderOrPath = folderOrPath;
         this.DefaultEmulator = emulator;
     }
-    ;
     dispose() {
         console.log('debugger:CompilerBase.dispose');
     }
@@ -53,8 +52,9 @@ class CompilerBase {
             this.Document = document;
             // Process
             let result = yield this.InitialiseAsync();
-            if (!result)
+            if (!result) {
                 return false;
+            }
             return yield this.ExecuteCompilerAsync();
         });
     }
@@ -63,8 +63,9 @@ class CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             // Process
             let result = yield this.BuildGameAsync(document);
-            if (!result)
+            if (!result) {
                 return false;
+            }
             try {
                 // Get emulator
                 for (var _b = __asyncValues(application.Emulators), _c; _c = yield _b.next(), !_c.done;) {
@@ -115,15 +116,18 @@ class CompilerBase {
                 result = yield vscode.workspace.saveAll();
             }
             else if (this.Configuration.get(`editor.saveFileBeforeRun`)) {
-                if (this.Document)
+                if (this.Document) {
                     result = yield this.Document.save();
+                }
             }
-            if (!result)
+            if (!result) {
                 return false;
+            }
             // Configuration
             result = yield this.LoadConfigurationAsync();
-            if (!result)
+            if (!result) {
                 return false;
+            }
             // Remove old debugger file before build
             yield this.RemoveDebuggerFilesAsync(this.CompiledSubFolder);
             // Result
@@ -184,8 +188,9 @@ class CompilerBase {
                     let compiledFilePath = path.join(this.WorkspaceFolder, compiledFileName);
                     // Validate
                     let fileStats = yield filesystem.GetFileStatsAsync(compiledFilePath);
-                    if (fileStats && fileStats.size > 0)
+                    if (fileStats && fileStats.size > 0) {
                         continue;
+                    }
                     // Failed
                     application.Notify(`ERROR: Failed to create compiled file '${compiledFileName}'.`);
                     return false;
@@ -198,7 +203,6 @@ class CompilerBase {
                 }
                 finally { if (e_2) throw e_2.error; }
             }
-            ;
             // Result
             return true;
         });
@@ -240,7 +244,6 @@ class CompilerBase {
                 }
                 finally { if (e_3) throw e_3.error; }
             }
-            ;
             // Process?
             if (this.GenerateDebuggerFiles) {
                 // Move all debugger files?
@@ -258,7 +261,6 @@ class CompilerBase {
                             // Notify            
                             application.Notify(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);
                         }
-                        ;
                     }
                 }
                 catch (e_4_1) { e_4 = { error: e_4_1 }; }
@@ -305,8 +307,9 @@ class CompilerBase {
         //        is not the best option when file is in a subfolder
         //        of the chosen workspace
         // Document
-        if (this.Document)
+        if (this.Document) {
             return path.dirname(this.Document.fileName);
+        }
         // Workspace (last resort)
         if (vscode.workspace.workspaceFolders) {
             if (this.Document) {

@@ -4,26 +4,134 @@
 	"scopeName": "source.bb",
 	"patterns": [
 		{
-			"include": "#keywords"
+			"match" : "\\n",
+			"name" : "meta.ending-space"
 		},
 		{
-			"include": "#strings"
+			"begin" : "^(?=\\t)",
+			"end" : "(?=[^\\t])",
+			"name" : "meta.leading-space",
+			"patterns" : [
+				{
+					"captures" : {
+						"1" : {
+							"name" : "meta.odd-tab.tabs"
+						},
+						"2" : {
+							"name" : "meta.even-tab.tabs"
+						}
+					},
+					"match" : "(\\t)(\\t)?"
+				}
+			]
 		},
 		{
-			"include": "#comments"
+			"begin" : "^(?= )",
+			"end" : "(?=[^ ])",
+			"name" : "meta.leading-space",
+			"patterns" : [
+				{
+					"captures" : {
+						"1" : {
+							"name" : "meta.odd-tab.spaces"
+						},
+						"2" : {
+							"name" : "meta.even-tab.spaces"
+						}
+					},
+					"match" : "(  )(  )?"
+				}
+			]
 		},
 		{
-			"include": "#numerics"
+			"begin": "(^[ \\t]+)?(?=;)",
+			"end": "\\n",
+			"name": "comment.line.78b",
+			"comment": "single line comment"
 		},
 		{
-			"include" : "#operators"
+			"begin": "(^[ \\t]+)?(?i:rem)([ \\t]+)",
+			"end": "\\n",
+			"name": "comment.line.78b",
+			"comment": "single line comment"
 		},
 		{
-			"include" : "#assembly"
-		}
-	],
-	"repository": {
-		"keywords": {
+			"begin": "/\\*",
+			"captures": {
+				"0": {
+					"name": "punctuation.definition.comment.78b"
+				}
+			},
+			"end": "\\*/",
+			"name": "comment.block.78b"
+		},
+		{
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.78b",
+					"match": "\\\\."
+				}
+			],
+			"name": "string.quoted.double.78b"
+		},
+		{
+			"begin": "'",
+			"end": "'",
+			"patterns": [
+				{
+					"name": "constant.character.escape.78b",
+					"match": "\\\\."
+				}
+			],
+			"name": "string.quoted.single.78b"
+		},
+		{
+			"patterns":[{
+				"match": "\\=",
+				"name": "keyword.operator.assignment.78b",
+				"comment": "assignment operators"
+			},
+			{
+				"match": "\\*|/|-|\\+",
+				"name": "keyword.operator.arithmetic.78b",
+				"comment": "arithmetic operators"				
+			},
+			{
+				"match": "\\!|&&",
+				"name": "keyword.operator.logical.78b",
+				"comment": "logical operators"				
+			},
+			{
+				"match": "\\^",
+				"name": "keyword.operator.bitwise.78b",
+				"comment": "bitwise operators"				
+			},
+			{
+				"match": "<=|>=|<|>",
+				"name": "keyword.operator.relational.78b",
+				"comment": "relational operators"				
+			}]
+		},
+		{
+			"patterns": [{
+				"name": "keyword.numeric.hexadecimal.78b",
+				"match": "\\$[0-9a-fA-F]+\\b",
+				"comment": "hexadecimal number"
+			},
+			{
+				"name": "keyword.numeric.integer.78b",
+				"match": "\\b[0-9]+\\b",
+				"comment": "integer number"				
+			},
+			{
+				"name": "keyword.numeric.binary.78b",
+				"match": "\\%[0-1]+\\b",
+				"comment": "binary number"	
+			}]
+		},
+		{
 			"patterns": [
 			{
 				"name": "keyword.control.bb",
@@ -101,104 +209,12 @@
 				"comment": "playfield (DPC+) registers"				
 			}]
 		},
-		"strings": {
-			"name": "string.quoted.double.bb",
-			"begin": "\"",
-			"end": "\"",
-			"patterns": [
-				{
-					"name": "constant.character.escape.bb",
-					"match": "\\\\."
-				}
-			]
-		},
-		"comments": {
-			"patterns": [
-				{
-					"name": "comment.line.semicolon.bb",
-					"begin": ";",
-					"end": "$",
-					"comment": "single line comment"
-				},
-				{
-					"name": "comment.line.rem.bb",
-					"begin": "^\\s*rem",
-					"end": "$",
-					"comment": "single line comment"
-				},
-				{
-					"name": "comment.block.bb",
-					"begin": "/\\*",
-					"beginCaptures": {
-						"0": {
-							"name": "punctuation.definition.comment.bb"
-						}
-					},
-					"end": "\\*/",
-					"endCaptures": {
-						"0": {
-							"name": "punctuation.definition.comment.bb"
-						}
-					}
-				}
-			]
-		},
-		"numerics": {
-			"patterns": [{
-				"name": "keyword.numeric.hexadecimal.bb",
-				"match": "\\$[0-9a-fA-F]+\\b",
-				"comment": "hexadecimal number"
-			},
-			{
-				"name": "keyword.numeric.integer.bb",
-				"match": "\\b[0-9]+\\b",
-				"comment": "integer number"				
-			},
-			{
-				"name": "keyword.numeric.binary.bb",
-				"match": "\\%[0-1]+\\b",
-				"comment": "binary number"	
-			}]
-		},
-		"operators" : {
+		{
 			"patterns":[{
-				"name": "keyword.operator.assignment.bb",
-				"match": "\\=",
-				"comment": "assignment operators"
-			},
-			{
-				"name": "keyword.operator.arithmetic.bb",
-				"match": "\\*|/|-|\\+",
-				"comment": "arithmetic operators"				
-			},
-			{
-				"name": "keyword.operator.logical.bb",
-				"match": "\\!|&&",
-				"comment": "logical operators"				
-			},
-			{
-				"name": "keyword.operator.bitwise.bb",
-				"match": "\\^",
-				"comment": "bitwise operators"				
-			},
-			{
-				"name": "keyword.operator.relational.bb",
-				"match": "<=|>=|<|>",
-				"comment": "relational operators"				
-			}
-		]
-		},
-		"assembly" : {
-			"patterns":[{
-				"name": "keyword.instuctions.asm.bb",
+				"name": "keyword.instuctions.asm.78b",
 				"match": "(?i)[\\s]*\\b(adc|and|asl|bcc|bcs|beq|bit|bmi|bne|bpl|brk|bvc|bvs|clc|cld|cli|clv|cmp|cpx|cpy|dec|dex|dey|eor|inc|inx|iny|jmp|jsr|lda|ldx|ldy|lsr|nop|ora|pha|php|pla|plp|rol|ror|rti|rts|sbc|sec|sed|sei|sta|stx|sty|tax|tay|tsx|txa|txs|tya)\\b",
 				"comment": "assembly instructions"
-			},
-			{
-				"name": "keyword.registers.asm.bb",
-				"match": "(?i)\\b(pc|ac|x|y|sr|sp)\\b",
-				"comment": "assembly registers"
-			}]
+			}]			
 		}
-	}
+	]
 }

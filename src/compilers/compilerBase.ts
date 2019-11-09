@@ -14,7 +14,7 @@ export abstract class CompilerBase implements vscode.Disposable {
     public readonly Extensions: string[];
     public readonly CompiledExtensions: string[];
     // Note: these need to be in reverse order compared to how they are read
-    public readonly DebuggerExtensions: Map<string, string> = new Map([["-s",".sym"], ["-l",".lst"]]);;
+    public readonly DebuggerExtensions: Map<string, string> = new Map([["-s",".sym"], ["-l",".lst"]]);
     public CustomFolderOrPath: boolean = false;
     protected DefaultFolderOrPath: string;
     public FolderOrPath: string = "";
@@ -51,14 +51,14 @@ export abstract class CompilerBase implements vscode.Disposable {
 
         // Process
         let result = await this.InitialiseAsync();
-        if (!result) return false;
+        if (!result) { return false; }
         return await this.ExecuteCompilerAsync();
     }
 
     public async BuildGameAndRunAsync(document: vscode.TextDocument): Promise<boolean> {
         // Process
         let result = await this.BuildGameAsync(document);
-        if (!result) return false;
+        if (!result) { return false; }
 
         // Get emulator
         for await (let emulator of application.Emulators) {
@@ -74,7 +74,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         return false;
     }
 
-    protected abstract ExecuteCompilerAsync(): Promise<boolean> 
+    protected abstract ExecuteCompilerAsync(): Promise<boolean>; 
 
     protected async InitialiseAsync(): Promise<boolean> {
         console.log('debugger:CompilerBase.InitialiseAsync');
@@ -107,13 +107,13 @@ export abstract class CompilerBase implements vscode.Disposable {
         if (this.Configuration.get<boolean>(`editor.saveAllFilesBeforeRun`))  {
             result = await vscode.workspace.saveAll();
         } else if (this.Configuration.get<boolean>(`editor.saveFileBeforeRun`)) {
-            if (this.Document) result = await this.Document.save();
+            if (this.Document) { result = await this.Document.save(); }
         }
-        if (!result) return false;
+        if (!result) { return false; }
 
         // Configuration
         result = await this.LoadConfigurationAsync();
-        if (!result) return false;
+        if (!result) { return false; }
 
         // Remove old debugger file before build
         await this.RemoveDebuggerFilesAsync(this.CompiledSubFolder);
@@ -178,12 +178,12 @@ export abstract class CompilerBase implements vscode.Disposable {
 
             // Validate
             let fileStats = await filesystem.GetFileStatsAsync(compiledFilePath);
-            if (fileStats && fileStats.size > 0) continue;
+            if (fileStats && fileStats.size > 0) { continue; }
 
             // Failed
             application.Notify(`ERROR: Failed to create compiled file '${compiledFileName}'.`);     
             return false;  
-        };
+        }
 
         // Result
         return true;
@@ -216,7 +216,7 @@ export abstract class CompilerBase implements vscode.Disposable {
                 application.Notify(`ERROR: Failed to move file from '${compiledFileName}' to ${this.CompiledSubFolderName} folder`);
                 return false;            
             }
-        };
+        }
 
         // Process?
         if (this.GenerateDebuggerFiles)  {          
@@ -233,7 +233,7 @@ export abstract class CompilerBase implements vscode.Disposable {
                 if (!result) {
                     // Notify            
                     application.Notify(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);          
-                };
+                }
             }
         }
         
@@ -266,7 +266,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         //        of the chosen workspace
 
         // Document
-        if (this.Document) return path.dirname(this.Document.fileName);
+        if (this.Document) { return path.dirname(this.Document.fileName); }
 
         // Workspace (last resort)
         if (vscode.workspace.workspaceFolders) {

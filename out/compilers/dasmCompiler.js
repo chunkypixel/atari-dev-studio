@@ -33,11 +33,13 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
                 `-o${this.FileName}${this.CompiledExtensions[0]}`
             ];
             // Format
-            if (this.Format)
+            if (this.Format) {
                 args.push(`${"-f"}${this.Format}`);
+            }
             // Verboseness
-            if (this.Verboseness)
+            if (this.Verboseness) {
                 args.push(`${"-v"}${this.Verboseness}`);
+            }
             // Args
             if (this.GenerateDebuggerFiles) {
                 // Process
@@ -84,11 +86,13 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             });
             this.IsRunning = false;
             // Finalise
-            if (executeResult)
+            if (executeResult) {
                 executeResult = yield this.VerifyCompiledFileSizeAsync();
+            }
             yield this.RemoveCompilationFilesAsync(executeResult);
-            if (executeResult)
+            if (executeResult) {
                 executeResult = yield this.MoveFilesToBinFolderAsync();
+            }
             // Result
             return executeResult;
         });
@@ -101,8 +105,9 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             console.log('debugger:DasmCompiler.LoadConfigurationAsync');
             // Base
             let result = yield _super.LoadConfigurationAsync.call(this);
-            if (!result)
+            if (!result) {
                 return false;
+            }
             // Compiler
             // We use a path instead of a folder for dasm for added flexibility
             this.CustomFolderOrPath = false;
@@ -150,8 +155,9 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.RepairFilePermissionsAsync');
             // Validate
-            if (this.CustomFolderOrPath || application.IsWindows)
+            if (this.CustomFolderOrPath || application.IsWindows) {
                 return true;
+            }
             // Github: https://github.com/chunkypixel/atari-dev-studio/issues/1
             //         Duplication of filename
             // Process
