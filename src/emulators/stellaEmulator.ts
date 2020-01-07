@@ -18,12 +18,14 @@ export class StellaEmulator extends EmulatorBase {
 
         // Base
         let result = await super.LoadConfigurationAsync();
-        if (!result) return false;
+        if (!result) { return false; }
         
         // Emulator
         if (!this.CustomFolderOrPath) {
             // Get emulator name
             var emulatorName = "";
+
+            // Validate
             if (application.IsWindows) {
                 emulatorName = "Stella.exe";
             }
@@ -33,6 +35,7 @@ export class StellaEmulator extends EmulatorBase {
             else if (application.IsMacOS) {
                 emulatorName = "Stella.app";                      
             }
+
             // Append path (based on architecture and emulator name)
             this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,application.OSArch,emulatorName);                      
         }
@@ -50,27 +53,24 @@ export class StellaEmulator extends EmulatorBase {
         // Prepare
         application.CompilerOutputChannel.appendLine(''); 
 
-        // Validate inbuilt availability
-        //if ((application.IsMacOS) && !this.CustomFolderOrPath) {
-        //    application.Notify(`WARNING: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Review your selection in ${application.PreferencesSettingsExtensionPath}.`); 
-        //    return false;
-        //}
+        // Validate for 32-bit on macOS
+        if (!this.CustomFolderOrPath && (application.IsMacOS && application.Is32Bit)) {
+            application.Notify(`ERROR: Unable to launch the Stella emulator as there is no 32-bit version available for macOS.`); 
+            return false;  
+        }
 
         // Compiler options
         let command = this.FolderOrPath;
-        if (application.IsMacOS) {
-            // Append
-            command = `open -a "${command}"`;
-        }
+        if (application.IsMacOS) { command = `open -a "${command}"`;}
  
         // Args
         let args = [
             this.Args,
             `"${this.FileName}"`
-        ]
+        ];
 
         // Kill any existing process
-        if (this.AutoCloseExistingInstances) await execute.KillProcessByNameAsync(this.Name);
+        if (this.AutoCloseExistingInstances) { await execute.KillProcessByNameAsync(this.Name); }
 
         // Process
         application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);         
