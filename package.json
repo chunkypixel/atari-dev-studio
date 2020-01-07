@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "icon": "images/icon.png",
     "preview": true,
     "publisher": "chunkypixel",
@@ -12,7 +12,7 @@
         "url": "https://github.com/chunkypixel/atari-dev-studio.git"
     },
     "engines": {
-        "vscode": "^1.33.0"
+        "vscode": "^1.41.0"
     },
     "categories": [
         "Programming Languages",
@@ -320,22 +320,21 @@
     "scripts": {
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+        "watch": "tsc -watch -p ./"
     },
     "dependencies": {
-        "find-process": "^1.4.2",
+        "find-process": "^1.4.3",
         "open": "^7.0.0",
-        "tree-kill": "^1.2.1",
-        "tslint": "^5.20.0"
+        "tree-kill": "^1.2.2",
+        "tslint": "^5.20.1"
     },
     "devDependencies": {
         "@types/mocha": "^5.2.7",
-        "@types/node": "^12.11.1",
+        "@types/node": "^13.1.4",
         "@types/open": "^6.2.1",
-        "typescript": "^3.6.4",
-        "vscode": "^1.1.36",
-        "diff": "^4.0.1"
+        "@types/vscode": "^1.41.0",
+        "typescript": "^3.7.4",
+        "diff": "^4.0.1",
+        "vscode-test": "^1.2.2"
     }
 }
