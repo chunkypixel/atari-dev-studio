@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.3.1
+
+* Updated internal dev packages
+* Added Stella 6.0.2 (macOS)
+* Offically tested compiler and emulator packages on macOS (Mojave)
+
 ## 0.3.0
 
 * Updated Stella to 6.0.2 (Windows, Linux)
@@ -14,7 +20,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.2.8
 
-* fixed issue with rem keyword mis-highlighting when used within variables (batariBasic and 7800basic)
+* Fixed issue with rem keyword mis-highlighting when used within variables (batariBasic and 7800basic)
 * Added missing 7800basic keywords: tallsprite
 * Updated existing and added additional hover tooltips for 7800basic keywords
 

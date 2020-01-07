@@ -39,6 +39,9 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
                 else if (application.IsLinux) {
                     this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, application.OSArch, "stella");
                 }
+                else if (application.IsMacOS) {
+                    this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, application.OSArch, "Stella.app");
+                }
             }
             // Other
             this.AutoCloseExistingInstances = this.Configuration.get(`emulator.${this.Id.toLowerCase()}.autoCloseExistingInstances`, true);
@@ -52,12 +55,16 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
             // Prepare
             application.CompilerOutputChannel.appendLine('');
             // Validate inbuilt availability
-            if ((application.IsMacOS) && !this.CustomFolderOrPath) {
-                application.Notify(`WARNING: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Review your selection in ${application.PreferencesSettingsExtensionPath}.`);
-                return false;
-            }
+            //if ((application.IsMacOS) && !this.CustomFolderOrPath) {
+            //    application.Notify(`WARNING: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Review your selection in ${application.PreferencesSettingsExtensionPath}.`); 
+            //    return false;
+            //}
             // Compiler options
             let command = this.FolderOrPath;
+            if (application.IsMacOS) {
+                // Append
+                command = `open "${command}"`;
+            }
             // Args
             let args = [
                 this.Args,

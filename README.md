@@ -27,6 +27,8 @@ VS Code is a cross-platform application which runs on Windows, Linux and macOS. 
 
 > Note: Linux users on 64-bit systems will be required to install the 32-bit compatibility libraries on your system to ensure everything will run as expected. 
 
+> Note: MacOS users will be required to install the SDL libraries on your system to ensure the emulators will run as expected.
+
 ### Installing the extension
 Once you have installed VS Code (available [here](https://code.visualstudio.com/Download)), open the VS Code program and complete the following:
 1. From the **Activity Bar**, click the **Extensions** button to display the **Extensions** window.
@@ -94,10 +96,7 @@ There are a number of compiler, emulator and editor configuration options availa
 ## This is a preview
 This software is currently in preview and contains the following missing or untested features:
 * [macOS] Stella emulator is missing. You will be required to provide your own path to Stella for the time-being (via the **Settings**).
-* [macOS] 7800basic and the A7800 emulator is untested
 * [Linux] Potential for missing packages (On Ubuntu 18.04.02 x64 I have been required to install a number)
-
-I don't currently have direct access to a macOS machine to finalise feature integration but will do so in the near future. The previous incarnation of this extension (containing batari Basic and dasm) has been tested by users on macOS and as the process is very similar to Linux I do expect the extension to function correctly.
 
 ### Debugging the extension
 During the development phase of the extension I've added some developer output to assist with any issues that may appear.  To view this output, open the VS Code **Developer Tools** by selecting **Help -> Toggle Developer Tools** from the menu, and in the debugger window ensure the **Console** tab is activated.  This information may help identify the area where the extension is failing to process as expected.
