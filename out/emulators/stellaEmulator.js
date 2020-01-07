@@ -63,7 +63,7 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
             let command = this.FolderOrPath;
             if (application.IsMacOS) {
                 // Append
-                command = `open "${command}"`;
+                command = `open -a "${command}"`;
             }
             // Args
             let args = [

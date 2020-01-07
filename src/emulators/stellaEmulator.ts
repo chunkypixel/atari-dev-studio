@@ -21,18 +21,20 @@ export class StellaEmulator extends EmulatorBase {
         if (!result) return false;
         
         // Emulator
-        // NOTE: macOS must provide path (for now) - this will be checked before launch
         if (!this.CustomFolderOrPath) {
-            // Append actual file (based on architecture)
+            // Get emulator name
+            var emulatorName = "";
             if (application.IsWindows) {
-                this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,application.OSArch,"Stella.exe");
+                emulatorName = "Stella.exe";
             }
             else if (application.IsLinux) {
-                this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,application.OSArch,"stella");     
+                emulatorName = "stella";     
             }  
             else if (application.IsMacOS) {
-                this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,application.OSArch,"Stella.app");                      
+                emulatorName = "Stella.app";                      
             }
+            // Append path (based on architecture and emulator name)
+            this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,application.OSArch,emulatorName);                      
         }
 
         // Other
@@ -58,7 +60,7 @@ export class StellaEmulator extends EmulatorBase {
         let command = this.FolderOrPath;
         if (application.IsMacOS) {
             // Append
-            command = `open "${command}"`;
+            command = `open -a "${command}"`;
         }
  
         // Args
