@@ -122,18 +122,19 @@ export class DasmCompiler extends CompilerBase {
             // Set
             this.FolderOrPath = userCompilerPath;
             this.CustomFolderOrPath = true;
+    
         } else {
-            // dasm command (depends on OS)
-            let dasmCommand = "dasm.exe";
+            // dasm name (depends on OS)
+            let dasmName = "dasm.exe";
             if (application.IsLinux) {
                 // Linux
-                dasmCommand = "dasm.Linux.x86";
+                dasmName = "dasm";
             } else if (application.IsMacOS) {
                 // MacOS
-                dasmCommand = "dasm.Darwin.x86";
+                dasmName = "dasm";
             }
-            // Use the default
-            this.FolderOrPath = path.join(this.DefaultFolderOrPath, dasmCommand);                
+            // Append path (based on architecture and emulator name)
+            this.FolderOrPath = path.join(this.DefaultFolderOrPath,application.OSPlatform,application.OSArch,dasmName);                
         }
 
         // Compiler (other)

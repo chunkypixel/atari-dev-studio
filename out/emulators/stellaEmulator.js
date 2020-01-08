@@ -27,21 +27,21 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
             console.log('debugger:StellaEmulator.LoadConfigurationAsync');
             // Base
             let result = yield _super.LoadConfigurationAsync.call(this);
-            if (!result)
+            if (!result) {
                 return false;
+            }
             // Emulator
-            // NOTE: macOS must provide path (for now) - this will be checked before launch
             if (!this.CustomFolderOrPath) {
-                // Append actual file (based on architecture)
-                if (application.IsWindows) {
-                    this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, application.OSArch, "Stella.exe");
-                }
-                else if (application.IsLinux) {
-                    this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, application.OSArch, "stella");
+                // Emulator name (depends on OS)
+                var emulatorName = "Stella.exe";
+                if (application.IsLinux) {
+                    emulatorName = "stella";
                 }
                 else if (application.IsMacOS) {
-                    this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, application.OSArch, "Stella.app");
+                    emulatorName = "Stella.app";
                 }
+                // Append path (based on architecture and emulator name)
+                this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, application.OSArch, emulatorName);
             }
             // Other
             this.AutoCloseExistingInstances = this.Configuration.get(`emulator.${this.Id.toLowerCase()}.autoCloseExistingInstances`, true);
@@ -54,15 +54,14 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
             console.log('debugger:StellaEmulator.ExecuteEmulatorAsync');
             // Prepare
             application.CompilerOutputChannel.appendLine('');
-            // Validate inbuilt availability
-            //if ((application.IsMacOS) && !this.CustomFolderOrPath) {
-            //    application.Notify(`WARNING: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Review your selection in ${application.PreferencesSettingsExtensionPath}.`); 
-            //    return false;
-            //}
+            // Validate for 32-bit on macOS
+            if (!this.CustomFolderOrPath && (application.IsMacOS && application.Is32Bit)) {
+                application.Notify(`ERROR: Unable to launch the Stella emulator as there is no 32-bit version available for macOS.`);
+                return false;
+            }
             // Compiler options
             let command = this.FolderOrPath;
             if (application.IsMacOS) {
-                // Append
                 command = `open -a "${command}"`;
             }
             // Args
@@ -71,8 +70,9 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
                 `"${this.FileName}"`
             ];
             // Kill any existing process
-            if (this.AutoCloseExistingInstances)
+            if (this.AutoCloseExistingInstances) {
                 yield execute.KillProcessByNameAsync(this.Name);
+            }
             // Process
             application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);
             // Launch

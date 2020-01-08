@@ -22,20 +22,14 @@ export class StellaEmulator extends EmulatorBase {
         
         // Emulator
         if (!this.CustomFolderOrPath) {
-            // Get emulator name
-            var emulatorName = "";
-
-            // Validate
-            if (application.IsWindows) {
-                emulatorName = "Stella.exe";
-            }
-            else if (application.IsLinux) {
+            // Emulator name (depends on OS)
+            var emulatorName = "Stella.exe";
+            if (application.IsLinux) {
                 emulatorName = "stella";     
             }  
             else if (application.IsMacOS) {
                 emulatorName = "Stella.app";                      
             }
-
             // Append path (based on architecture and emulator name)
             this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,application.OSArch,emulatorName);                      
         }

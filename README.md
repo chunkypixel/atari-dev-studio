@@ -27,7 +27,7 @@ VS Code is a cross-platform application which runs on Windows, Linux and macOS. 
 
 > Note: Linux users on 64-bit systems will be required to install the 32-bit compatibility libraries on your system to ensure everything will run as expected. 
 
-> Note: MacOS users will be required to install the SDL libraries on your system to ensure the emulators will run as expected.
+> Note: MacOS users will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
 
 ### Installing the extension
 Once you have installed VS Code (available [here](https://code.visualstudio.com/Download)), open the VS Code program and complete the following:
@@ -93,11 +93,6 @@ The Sprite Editor is based on [Spritemate](http://spritemate.com) by Ingo Hinter
 ### Settings
 There are a number of compiler, emulator and editor configuration options available in Atari Dev Studio which can be changed via the **Settings** (Preferences -> Settings -> Extensions -> Atari Dev Studio).
 
-## This is a preview
-This software is currently in preview and contains the following missing or untested features:
-* [macOS] Stella emulator is missing. You will be required to provide your own path to Stella for the time-being (via the **Settings**).
-* [Linux] Potential for missing packages (On Ubuntu 18.04.02 x64 I have been required to install a number)
-
 ### Debugging the extension
 During the development phase of the extension I've added some developer output to assist with any issues that may appear.  To view this output, open the VS Code **Developer Tools** by selecting **Help -> Toggle Developer Tools** from the menu, and in the debugger window ensure the **Console** tab is activated.  This information may help identify the area where the extension is failing to process as expected.
 
@@ -128,8 +123,10 @@ batari Basic is an external project and can be downloaded separately from [here]
 
 7800basic is included as part of this extension with many thanks to Mike Saarna (RevEng).  7800basic is an external project and can be downloaded separately [here](http://7800.8bitdev.org/index.php/7800basic).  Further information about this release is available here at [AtariAge](http://atariage.com/forums/topic/222638-7800basic-beta-the-release-thread/.)
 
-### dasm (release 2.20.11 - 20171206)
-dasm is a versatile macro assembler with support for several 8-bit microprocessors including MOS 6502 & 6507, Motorola 6803, 68705 & 68HC11, Hitachi HD6303 (extended Motorola 6801), and Fairchild F8. Matthew Dillon started dasm in 1987-1988. Olaf 'Rhialto' Seibert extended dasm in 1995. Andrew Davie maintained dasm in 2003-2008. During all this time, several other versions of dasm sprung up all over the net as well, making the exact chronology quite complicated. Peter Froehlich started maintaining dasm in 2008, hoping (against hope) to unify the various strands of development a little, and to maybe give dasm another 20 years of productive life. :-)
+### dasm (release 2.20.12 - 20191214)
+dasm is a versatile macro assembler with support for several 8-bit microprocessors including MOS 6502 & 6507, Motorola 6803, 68705 & 68HC11, Hitachi HD6303 (extended Motorola 6801), and Fairchild F8. Matthew Dillon started dasm in 1987-1988. Olaf 'Rhialto' Seibert extended dasm in 1995. dasm has also been maintained by Andrew Davie (2003-2008) and Peter Froehlich (2008-2015). the DASM team has taken over maintaining and updating dasm since 2019.
+
+dasm is an external project and can be downloaded seperately [here](https://dasm-assembler.github.io/).
 
 ## Emulation
 Atari Dev Studio includes the following emulators for testing purposes:
@@ -141,8 +138,8 @@ Stella is included as part of this extension with many thanks to Stephen Anthony
 
 ### A7800 (release 188-03)
 A7800 is a fork of the MAME Atari 7800 driver, with several enhancements added:
-* Support for emulation of Proline Joysticks, VCS Joysticks, Lightguns, Paddles, * Driving Controllers, Keypads, Trak-Balls, Amiga Mice, and ST Mice.
-Maria DMA timing has been improved further, with the addition of accurate DMA hole penalties.
+* Support for emulation of Proline Joysticks, VCS Joysticks, Lightguns, Paddles, Driving Controllers, Keypads, Trak-Balls, Amiga Mice, and ST Mice.
+* Maria DMA timing has been improved further, with the addition of accurate DMA hole penalties.
 * Improved saturated/normalized colors with palette selection.
 * Streamlined UI including menu options to have an Atari 7800 system focus.
 * A bug in the existing RIOT emulation has been fixed.
