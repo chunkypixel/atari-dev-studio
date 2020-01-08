@@ -27,7 +27,7 @@ VS Code is a cross-platform application which runs on Windows, Linux and macOS. 
 
 > Note: Linux users on 64-bit systems will be required to install the 32-bit compatibility libraries on your system to ensure everything will run as expected. 
 
-> Note: MacOS users will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
+> Note: macOS users will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
 
 ### Installing the extension
 Once you have installed VS Code (available [here](https://code.visualstudio.com/Download)), open the VS Code program and complete the following:
@@ -126,7 +126,7 @@ batari Basic is an external project and can be downloaded separately from [here]
 ### dasm (release 2.20.12 - 20191214)
 dasm is a versatile macro assembler with support for several 8-bit microprocessors including MOS 6502 & 6507, Motorola 6803, 68705 & 68HC11, Hitachi HD6303 (extended Motorola 6801), and Fairchild F8. Matthew Dillon started dasm in 1987-1988. Olaf 'Rhialto' Seibert extended dasm in 1995. dasm has also been maintained by Andrew Davie (2003-2008) and Peter Froehlich (2008-2015). the DASM team has taken over maintaining and updating dasm since 2019.
 
-dasm is an external project and can be downloaded seperately [here](https://dasm-assembler.github.io/).
+dasm is an external project and can be downloaded separately [here](https://dasm-assembler.github.io/).
 
 ## Emulation
 Atari Dev Studio includes the following emulators for testing purposes:
