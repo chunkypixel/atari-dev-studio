@@ -1,6 +1,7 @@
 "use strict";
 import * as path from 'path';
 import * as application from '../application';
+import * as filesystem from '../filesystem';
 import * as execute from '../execute';
 import { EmulatorBase } from "./emulatorBase";
 
@@ -53,6 +54,9 @@ export class StellaEmulator extends EmulatorBase {
             return false;  
         }
 
+        // Premissions
+        await this.RepairFilePermissionsAsync();
+
         // Compiler options
         let command = this.FolderOrPath;
         if (application.IsMacOS) { command = `open -a "${command}"`;}
@@ -90,5 +94,16 @@ export class StellaEmulator extends EmulatorBase {
 
         // Result
         return executeResult;
+    }
+
+    protected async RepairFilePermissionsAsync(): Promise<boolean> {
+        console.log('debugger:StellaEmulator.RepairFilePermissionsAsync'); 
+
+        // Validate
+        if (this.CustomFolderOrPath || application.IsWindows) { return true; }
+
+        // Process
+        let result = await filesystem.ChModAsync(this.FolderOrPath);
+        return result;
     }
 }

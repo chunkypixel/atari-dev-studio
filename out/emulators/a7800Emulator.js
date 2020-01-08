@@ -98,15 +98,10 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
     ExecuteEmulatorAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:A7800Emulator.ExecuteEmulatorAsync');
-            // Premissions
-            yield this.RepairFilePermissionsAsync();
             // Prepare
             application.CompilerOutputChannel.appendLine('');
-            // // Validate inbuilt availability
-            // if ((application.IsWindows || application.IsLinux || application.IsMacOS) && !this.CustomFolderOrPath) {
-            //      application.Notify(`ERROR: You must provide a path to your ${this.Id} emulator before you can launch your game. Review your selection in Review your selection in ${application.PreferencesSettingsExtensionPath}.`); 
-            //      return false;
-            // }
+            // Premissions
+            yield this.RepairFilePermissionsAsync();
             // Set args
             let regionArg = `${this.Region} -cart1`;
             let consoleArg = (this.Console ? `${this.Console} -cart2` : "");

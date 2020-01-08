@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
 const application = require("../application");
+const filesystem = require("../filesystem");
 const execute = require("../execute");
 const emulatorBase_1 = require("./emulatorBase");
 class StellaEmulator extends emulatorBase_1.EmulatorBase {
@@ -59,6 +60,8 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
                 application.Notify(`ERROR: Unable to launch the Stella emulator as there is no 32-bit version available for macOS.`);
                 return false;
             }
+            // Premissions
+            yield this.RepairFilePermissionsAsync();
             // Compiler options
             let command = this.FolderOrPath;
             if (application.IsMacOS) {
@@ -91,6 +94,18 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
             });
             // Result
             return executeResult;
+        });
+    }
+    RepairFilePermissionsAsync() {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('debugger:StellaEmulator.RepairFilePermissionsAsync');
+            // Validate
+            if (this.CustomFolderOrPath || application.IsWindows) {
+                return true;
+            }
+            // Process
+            let result = yield filesystem.ChModAsync(this.FolderOrPath);
+            return result;
         });
     }
 }

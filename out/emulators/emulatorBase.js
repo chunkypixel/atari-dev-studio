@@ -40,8 +40,9 @@ class EmulatorBase {
             console.log('debugger:EmulatorBase.InitialiseAsync');
             // Configuration
             let result = yield this.LoadConfigurationAsync();
-            if (!result)
+            if (!result) {
                 return false;
+            }
             // Result
             return true;
         });

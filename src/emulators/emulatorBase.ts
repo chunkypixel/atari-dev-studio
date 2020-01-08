@@ -42,7 +42,7 @@ export abstract class EmulatorBase implements vscode.Disposable {
 
         // Configuration
         let result = await this.LoadConfigurationAsync();
-        if (!result) return false;
+        if (!result) { return false; }
 
         // Result
         return true;
