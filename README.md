@@ -113,15 +113,15 @@ This extension is only available due to the great people of the AtariAge communi
 ## Languages
 Atari Dev Studio includes the following programming languages:
 
-### batari Basic (release BB.1.1d.reveng41)
+### batari Basic (release v1.2 20012020)
 batari Basic created by Fred 'batari' Quimby is a BASIC-like language used in the creation of Atari 2600 games. batari Basic is compiled to generate a binary file that can by used on actual Atari 2600 VCS hardware via cartridge (such as a Harmony or UNO cart) or by using an Atari 2600 VCS emulator such as Stella.
 
-batari Basic is an external project and can be downloaded separately from [here](http://7800.8bitdev.org/index.php/Batari_basic).  Further information is about this release is available here at [AtariAge](http://atariage.com/forums/topic/214909-bb-with-native-64k-cart-support-11dreveng/).
+batari Basic is an external project and can be downloaded separately [here](https://github.com/batari-Basic/batari-Basic).  Further information is about this release is available here at [AtariAge](https://atariage.com/forums/topic/300856-official-home-for-batari-basic).
 
 ### 7800basic (release 0.6 Jul 13 2019 22:37:29)
 7800basic is a BASIC-like language for creating Atari 7800 games.  It is a compiled language that runs on a computer, and it creates a binary file that can be run with an Atari 7800 emulator, or the binary file may be used to make a cartridge that will operate on a real Atari 7800. 7800basic is derived from batari basic, a BASIC-like language for creating Atari 2600 games. Special thanks to the bB creator, Fred Quimby, and all of the the bB contributors!
 
-7800basic is included as part of this extension with many thanks to Mike Saarna (RevEng).  7800basic is an external project and can be downloaded separately [here](http://7800.8bitdev.org/index.php/7800basic).  Further information about this release is available here at [AtariAge](http://atariage.com/forums/topic/222638-7800basic-beta-the-release-thread/.)
+7800basic is included as part of this extension with many thanks to Mike Saarna (RevEng).  7800basic is an external project and can be downloaded separately [here](http://7800.8bitdev.org/index.php/7800basic).  Further information about this release is available here at [AtariAge](http://atariage.com/forums/topic/222638-7800basic-beta-the-release-thread/).
 
 ### dasm (release 2.20.12 - 20191214)
 dasm is a versatile macro assembler with support for several 8-bit microprocessors including MOS 6502 & 6507, Motorola 6803, 68705 & 68HC11, Hitachi HD6303 (extended Motorola 6801), and Fairchild F8. Matthew Dillon started dasm in 1987-1988. Olaf 'Rhialto' Seibert extended dasm in 1995. dasm has also been maintained by Andrew Davie (2003-2008) and Peter Froehlich (2008-2015). the DASM team has taken over maintaining and updating dasm since 2019.

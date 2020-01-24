@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 ; MACRO.H
 ; Version 1.05, 13/NOVEMBER/2003
 

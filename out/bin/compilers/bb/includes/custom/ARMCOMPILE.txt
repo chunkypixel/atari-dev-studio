@@ -1,4 +1,4 @@
-batari Basic - ARMCOMPILE.txt - Version 1.0 - 2013.09.25
+batari Basic - ARMCOMPILE.txt 
 
 _What_Is_This_Doc?_
 

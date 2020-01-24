@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 ; DPCplus.H - Display Processor Chip Plus Definitions
 ; Chris Walton, Fred Quimby, Darrell Spice 2010
 ; Version 0.00

@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
  SEG.U vars
  org $80
 player0x ds 1

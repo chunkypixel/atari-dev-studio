@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 ; feel free to modify the score graphics - just keep each digit 8 high
 ; and keep the conditional compilation stuff intact
  ifconst ROM2k
@@ -33,6 +35,11 @@ interrupted = 4
 retroputer = 5    
 whimsey = 6
 tiny = 7
+hex = 8
+
+ ifconst font == hex
+ ORG . - 48
+ endif
 
 scoretable
 
@@ -57,6 +64,9 @@ scoretable
   endif
   if font == tiny
     include "score_graphics.asm.tiny"
+  endif
+  if font == hex
+    include "score_graphics.asm.hex"
   endif
  else ; default font
 

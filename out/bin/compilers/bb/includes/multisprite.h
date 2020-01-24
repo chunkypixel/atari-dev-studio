@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 missile0x = $80
 missile1x = $81
 ballx = $82

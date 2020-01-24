@@ -39,9 +39,9 @@ _Cross_Compiling_All_OS_Binaries_
 
   _Cross_Compiling_for_Windows_
 
-    The mingw32 gcc is used for producing Windows binaries. To set this up 
+    The mingw64 gcc is used for producing Windows binaries. To set this up 
     under Ubuntu or Debian should just be a matter of typing 
-    "sudo apt-get install mingw32" from command-line. 
+    "sudo apt-get install mingw-w64" from command-line. 
 
     For cross compiling from other OSes, look up instructions at 
     http://www.mingw.org/
@@ -59,29 +59,38 @@ _Cross_Compiling_All_OS_Binaries_
     but sufficed to say you'll need Apple-patched gcc sources, Apple-patched 
     odcctools sources, and the Apple 10.5 SDK. 
 
-    You can find these in tarball format at:
-      http://ppa.launchpad.net/flosoft/cross-apple/ubuntu/pool/main/a
-
 
     _Cross_Compiling_OS_X_on_Ubuntu_64-bit_x86_
 
       break out your command prompt, and...
-      sudo apt-get install libssl0.9.8
-      wget http://ppa.launchpad.net/flosoft/cross-apple/ubuntu/pool/main/a/apple-uni-sdk-10.5/apple-uni-sdk-10.5_20110407-0.flosoft1_amd64.deb
-      wget http://ppa.launchpad.net/flosoft/cross-apple/ubuntu/pool/main/a/apple-x86-odcctools/apple-x86-odcctools_758.159-0flosoft11_amd64.deb
-      wget http://ppa.launchpad.net/flosoft/cross-apple/ubuntu/pool/main/a/apple-x86-gcc/apple-x86-gcc_4.2.1~5646.1flosoft2_amd64.deb
+
+      wget https://launchpad.net/~flosoft/+archive/ubuntu/cross-apple/+files/apple-uni-sdk-10.5_20110407-0.flosoft1_amd64.deb
+      wget https://launchpad.net/~flosoft/+archive/ubuntu/cross-apple/+files/apple-x86-odcctools_758.159-0flosoft11_amd64.deb
+      wget https://launchpad.net/~flosoft/+archive/ubuntu/cross-apple/+files/apple-x86-gcc_4.2.1~5646.1flosoft2_amd64.deb
+
       sudo dpkg -i apple-uni-sdk-10.5_20110407-0.flosoft1_amd64.deb
       sudo dpkg -i apple-x86-odcctools_758.159-0flosoft11_amd64.deb
       sudo dpkg -i apple-x86-gcc_4.2.1~5646.1flosoft2_amd64.deb
-         
+
+      NOTE: if you may get an error of "Package libssl0.9.8 is not installed" 
+      when you try to install odcctools, install libssl 0.9.8...
+      wget http://archive.ubuntu.com/ubuntu/pool/universe/o/openssl098/libssl0.9.8_0.9.8o-7ubuntu3.1_amd64.deb
+      sudo dpkg -i libssl0.9.8_0.9.8o-7ubuntu3.1_amd64.deb
+
 
     _Cross_Compiling_OS_X_on_Ubuntu_32-bit_x86_
 
       break out your command prompt, and...
-      sudo apt-get install libssl0.9.8
-      wget http://ppa.launchpad.net/flosoft/cross-apple/ubuntu/pool/main/a/apple-uni-sdk-10.5/apple-uni-sdk-10.5_20110407-0.flosoft1_i386.deb
-      wget http://ppa.launchpad.net/flosoft/cross-apple/ubuntu/pool/main/a/apple-x86-odcctools/apple-x86-odcctools_758.159-0flosoft11_i386.deb
-      wget http://ppa.launchpad.net/flosoft/cross-apple/ubuntu/pool/main/a/apple-x86-gcc/apple-x86-gcc_4.2.1~5646.1flosoft2_i386.deb
+
+      wget https://launchpad.net/~flosoft/+archive/ubuntu/cross-apple/+files/apple-uni-sdk-10.5_20110407-0.flosoft1_i386.deb
+      wget https://launchpad.net/~flosoft/+archive/ubuntu/cross-apple/+files/apple-x86-odcctools_758.159-0flosoft11_i386.deb
+      wget https://launchpad.net/~flosoft/+archive/ubuntu/cross-apple/+files/apple-x86-gcc_4.2.1~5646.1flosoft2_i386.deb
+
       sudo dpkg -i apple-uni-sdk-10.5_20110407-0.flosoft1_i386.deb
       sudo dpkg -i apple-x86-odcctools_758.159-0flosoft11_i386.deb
       sudo dpkg -i apple-x86-gcc_4.2.1~5646.1flosoft2_i386.deb
+
+      NOTE: if you may get an error of "Package libssl0.9.8 is not installed" 
+      when you try to install odcctools, install libssl 0.9.8...
+      wget http://archive.ubuntu.com/ubuntu/pool/universe/o/openssl098/libssl0.9.8_0.9.8o-7ubuntu3.2.14.04.1_i386.deb
+      sudo dpkg -i libssl0.9.8_0.9.8o-7ubuntu3.2.14.04.1_i386.deb

@@ -1,3 +1,5 @@
+// Provided under the GPL v2 license. See the included LICENSE.txt for details.
+
 // src/custom.h defines the following:
 //
 // queue[]     - points to the 4K Display Data Bank

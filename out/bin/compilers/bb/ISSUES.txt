@@ -1,12 +1,26 @@
-batari Basic - BUGS.txt - Version 1.0 - 2013.09.24
+batari Basic - ISSUES.txt
 
 _What_Is_This_Doc?_
 
-  There are some niggling issues that for one reason or another haven't been
-  yet fixed in the provided bB code. This is a record to track these bugs and
-  any know workarounds.
+  There are some niggling issues and/or unexpected behaviors that users
+  may run across. This file explains those issues, and any known 
+  work-arouds.
 
-_Known_Bugs_
+_Known_Issues_
+
+  overview:   A wide score font causes glitching on the right-most digit. 
+  details:    There isn't sufficient kernel time for the update of all 6
+              score digits *and* the PF bars, so the standard score font
+              doesn't display the left-most digit.
+  workaround: avoid defining graphics in the left-most pixel column of the
+              score font.
+
+  overview:   Some kernels have a score that is off-center.
+  details:    There isn't sufficient kernel time for the update of all 6
+              score digits *and* the PF bars, so the standard score is
+              positioned to minimize the resulting glitch resulting from 
+              this.
+  workaround: use the DPC+ kernel, or ignore it.
 
   overview:   DPC+ vsprite vertical stack glitch. 
   details:    If the virtual sprites are stacked with very little

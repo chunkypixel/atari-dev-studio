@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 write_RAM = $F000
 wRAM = $F000
 w000 = $F000

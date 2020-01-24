@@ -1,7 +1,9 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 drawscreen
      lda #1
      sta CXCLR
-     sta COLUBK ; REVENG - don't start with the lastline color
+     sta COLUBK ; don't start with the lastline color
 
 fufu
      lda INTIM
@@ -22,7 +24,7 @@ fufu
      lda #0
      sta DF0WRITE
 
-     ; REVENG - pass the number of vsprites we want...
+     ; pass the number of vsprites we want...
      ifnconst dpcspritemax
        ifconst readpaddle
           lda #8
@@ -95,7 +97,7 @@ setloopfrac
      sta NUSIZ1
      sta REFP1
 
-     ;REVENG - allow P0 to wrap at the top
+     ; allow P0 to wrap at the top
 startwrapfix
      lda #255
      sta temp2
@@ -123,7 +125,7 @@ skipwrapfix
      adc player0height
      sta DF2BOT
 
-     ;REVENG - 1/2 of the COLUM0 fix. the rest is in main.c
+     ; 1/2 of the COLUM0 fix. the rest is in main.c
      lda #<(P0COLOR)
      sta DF0LOW
      sta temp2
@@ -182,7 +184,7 @@ fuu
      sta VBLANK
      sta FASTFETCH
      ;sleep 7
-     lda #<DF2DATAW         ; REVENG - added so GRP0 is at TOP
+     lda #<DF2DATAW         ; added so GRP0 is at TOP
      STA GRP0 ; 36 (VDEL)   ; ""
      sleep 2                ; ""
 
@@ -252,7 +254,7 @@ norepo     ; 60
      lda #<DF3FRACDATA ;53
      sta PF1 ; 56
      ifnconst DPC_kernel_options
-         ;sleep 8 ; REVENG - timing is off - results in a garbled screen
+         ;sleep 8 ; timing is off - results in a garbled screen
          sleep 5 ; this is better
      else
          bit DPC_kernel_options
@@ -915,7 +917,7 @@ scoreloop
      lda #<DF3DATA ;9
      sta GRP0 ;12
 
-     ; REVENG - rearranged to correct pf write timing and A register overwrite
+     ; rearranged to correct pf write timing and A register overwrite
      ifconst pfscore
          lda pfscore1
          sta PF1

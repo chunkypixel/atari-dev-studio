@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 ; VCS.H
 ; Version 1.05, 13/November/2003
 

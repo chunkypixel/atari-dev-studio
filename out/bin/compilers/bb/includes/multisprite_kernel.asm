@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 FineAdjustTableBegin
 	.byte %01100000		;left 6
 	.byte %01010000
@@ -339,6 +341,8 @@ sixdigscore
  jsr minikernel
  endif
  ifconst noscore
+ pla
+ pla
  jmp skipscore
  endif
 

@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
      ; This is a 2-line kernel!
      ifnconst vertical_reflect
 kernel
@@ -370,11 +372,11 @@ lastkernelline
          ifconst PFheights
              ldx #1
              ;sleep 4
-             sleep 3 ; REVENG - this was over 1 cycle
+             sleep 3 ; this was over 1 cycle
          else
              ldx playfieldpos
              ;sleep 3
-             sleep 2 ; REVENG - this was over 1 cycle
+             sleep 2 ; this was over 1 cycle
          endif
 
          jmp enterlastkernel
@@ -385,11 +387,11 @@ lastkernelline
          ifconst PFheights
              ldx #1
              ;sleep 5
-             sleep 4 ; REVENG - this was over 1 cycle
+             sleep 4 ; this was over 1 cycle
          else
              ldx playfieldpos
              ;sleep 4
-             sleep 3 ; REVENG - this was over 1 cycle
+             sleep 3 ; this was over 1 cycle
          endif
 
          cpx #0
@@ -404,7 +406,7 @@ lastkernelline
 
 .skipDrawlastP1
      lda #0
-     tay ; REVENG - added so we don't cross a page
+     tay ; added so we don't cross a page
      jmp .continuelastP1
 
 .endkerloop     ; enter at cycle 59??
@@ -613,7 +615,7 @@ noshakescreen2
      lda stack2
      sta bally
 
-     ; REVENG - strangely, this isn't required any more. might have
+     ; strangely, this isn't required any more. might have
      ; resulted from the no_blank_lines score bounce fix
      ;ifconst no_blank_lines
          ;sta WSYNC

@@ -1,3 +1,5 @@
+// Provided under the GPL v2 license. See the included LICENSE.txt for details.
+
 #define _readpaddle 1
 #define _player1colors 2
 #define _playercolors 4

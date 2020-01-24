@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 drawscreen
      ifconst debugscore
          ldx #14

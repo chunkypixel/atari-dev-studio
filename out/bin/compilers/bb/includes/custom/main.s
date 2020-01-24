@@ -1,3 +1,5 @@
+@ Provided under the GPL v2 license. See the included LICENSE.txt for details.
+
 	.cpu arm7tdmi
 	.fpu softvfp
 	.eabi_attribute 20, 1

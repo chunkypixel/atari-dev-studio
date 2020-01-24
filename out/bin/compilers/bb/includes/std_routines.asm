@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 ;standard routines needed for pretty much all games
 ; just the random number generator is left - maybe we should remove this asm file altogether?
 ; repositioning code and score pointer setup moved to overscan

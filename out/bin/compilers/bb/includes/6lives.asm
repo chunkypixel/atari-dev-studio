@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 minikernel ; display up to 6 lives on screen
  sta WSYNC
  sleep 10 ; can we optimize this?

@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 pfscroll ; for MSK (a=0 up, 1 down)
  bne MSK_scrolldown
  dec playfieldpos

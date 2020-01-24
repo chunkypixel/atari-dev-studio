@@ -2,9 +2,13 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.3.2
+
+* Updated to latest batari Basic release v1.2 20012020 (Windows, Linux, macOS)
+
 ## 0.3.1
 
-* Officially (finally!) included compiler and emulator packages for macOS (Mojave).
+* Officially (finally!) included compiler and emulator packages for macOS (tested on Mojave).
 * Added Stella 6.0.2 (macOS)
 * Updated dasm to the latest 32 and 64 bit packages (Windows, Linux and macOS).
 * Updated internal dev packages 

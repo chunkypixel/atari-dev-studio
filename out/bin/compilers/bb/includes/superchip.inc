@@ -1,4 +1,5 @@
-; this file is screwed, I accidentally deleted the comments.  Restore with version in .99b zip file.
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 superchipheader.asm
 bB.asm
 std_kernel.asm

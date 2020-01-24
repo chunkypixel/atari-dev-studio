@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 ; Compute mul1*mul2+acc -> acc:mul1 [mul2 is unchanged]
 ; Routine courtesy of John Payson (AtariAge member supercat)
  
@@ -23,23 +25,21 @@ noaddmul
 ; returns with quotient in A, remainder in temp1
 
 div16
- sty temp1
-  ldx #8
-loopdiv
+ sta temp2 
+ sty temp1 
+ lda #0
+ ldx #8
+ asl temp2
+div16_1
+ rol
  cmp temp1
- bcc toosmalldiv
- sbc temp1   ; Note: Carry is, and will remain, set.
+ bcc div16_2
+ sbc temp1
+div16_2
  rol temp2
- rol
  dex
- bne loopdiv
- beq donediv
-toosmalldiv
- rol temp2
- rol
- dex
- bne loopdiv
-donediv
+ bne div16_1
  sta temp1
  lda temp2
  RETURN
+

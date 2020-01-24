@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
  ifconst bankswitch
    if bankswitch == 8
      ORG $2FFC
@@ -32,5 +34,5 @@
      ORG $FFFC
    endif
  endif
- .word start
- .word start
+ .word (start & $ffff)
+ .word (start & $ffff)

@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
  processor 6502
  include "vcs.h"
  include "macro.h"

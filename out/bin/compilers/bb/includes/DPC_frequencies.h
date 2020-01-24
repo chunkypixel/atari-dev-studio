@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 ; 1K Frequency Table.
 ; Fred Quimby, Darrell Spice Jr, Chris Walton 2010
 ;

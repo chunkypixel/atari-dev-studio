@@ -1,3 +1,5 @@
+// Provided under the GPL v2 license. See the included LICENSE.txt for details.
+
 // src/custom.h defines the following:
 //
 // queue[]     - points to the 4K Display Data Bank
@@ -144,8 +146,8 @@ int temp5;
 unsigned int mask;
 
  // masking: NUSIZ bit 7=off/on, NUSIZ 6=L/R
- // REVENG - no-mask entries replaced by later if...then which is a bit smaller.
- //          in their place is masking for reflected sprites.
+ // no-mask entries replaced by later if...then which is a bit smaller.
+ // in their place is masking for reflected sprites.
 const unsigned char maskdata[32]=
 	{
 	 0,0x01,0x03,0x07,0x0F,0x1F,0x3F,0x7F,
@@ -157,7 +159,7 @@ const unsigned char maskdata[32]=
 char spritesort[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 0};
 char myGfxIndex[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 0};
 
-// REVENG - changed maxsprites to a variable value, so unused sprite memory can be claimed
+// changed maxsprites to a variable value, so unused sprite memory can be claimed
 char maxsprites;
 
 #define    kernello(a) fetcheraddr[(a)]
@@ -198,7 +200,7 @@ void reverse(int i, int j, unsigned char* x)
 
 void memscroll(unsigned char* qmemory, unsigned char offset)
 {
-        // REVENG - the classic "shift N elements through reversal" algorithm
+        // the classic "shift N elements through reversal" algorithm
         reverse(0,offset-1,qmemory);
         reverse(offset,255,qmemory);
         reverse(0,255,qmemory);
@@ -297,7 +299,7 @@ int main()
 
   int i;
 
-  // REVENG - moving the the scope of these variables saved a *lot* of space. 
+  // moving the the scope of these variables saved a *lot* of space. 
   int temp2;
   int temp3;
   int Gfxindex;
@@ -310,7 +312,7 @@ int main()
 
   fetcheraddr=flashdata+fetcher_address_table[0];
 
-  // REVENG - preindex these to save some space...
+  // preindex these to save some space...
   unsigned char C_function1=C_function[1];
   unsigned char C_function2=C_function[2];
   unsigned char C_function3=C_function[3];
@@ -373,18 +375,18 @@ int main()
       }
       return;
     }
-    case 24: // REVENG - pfread 
+    case 24: // pfread 
     {
       pfpixel=queue+get32bitdff(C_function1>>3); // physical addy of xpos (pf)
       C_function[3]=(!(pfpixel[C_function2]&setbyte[C_function1]));
       return;
     }
-    case 28: // REVENG - pfclear
+    case 28: // pfclear
     {
       my_memset(queue+get32bitdff(0),C_function1,1024);
       return;
     }
-    case 32: // REVENG - pfscroll
+    case 32: // pfscroll
     {
       for(temp3=C_function2;temp3<C_function3;temp3++)
         memscroll(queue+get32bitdff(temp3),C_function1);
@@ -395,7 +397,7 @@ int main()
    break;
   }
 
-  //REVENG - passed the sprite max as a parameter instead
+  //passed the sprite max as a parameter instead
   maxsprites=C_function1;
 
   for (i=0;i<maxsprites;i++)
@@ -438,7 +440,7 @@ int main()
   //my_memset(queue+(dfhigh(0)<<8)+dflow(0)-1,RIOT[COLUM0],193); // fill COLUM0 colors
   my_memset(queue+get32bitdf(0)-1,RIOT[COLUM0],193); // fill COLUM0 colors
 
-  // REVENG - fill color from player0, wrapping if necessary...
+  // fill color from player0, wrapping if necessary...
   //my_memcpy(queue+(dfhigh(0)<<8)+dflow(0),
   my_memcpy(queue+get32bitdf(0),
             flashdata+(RIOT[player0color+1]<<8)+RIOT[player0color], RIOT[player0y],
@@ -465,7 +467,7 @@ int main()
       {
         if (RIOT[player1x+Gfxindex]>=0x99)
         {
-           // REVENG - modified to work with reflected sprites
+           // modified to work with reflected sprites
            mask=maskdata[((RIOT[_NUSIZ1+Gfxindex]&64)>>3)^((RIOT[_NUSIZ1+Gfxindex]&8)<<1)|(RIOT[player1x+Gfxindex]-0x99)];
         }
       }
@@ -482,7 +484,7 @@ int main()
               RIOT[player1height+Gfxindex]);
     //}
     temp5=temp4;
-    temp4=(RIOT[player1y+Gfxindex]+RIOT[player1height+Gfxindex])&255; // REVENG - &255 to allow for wrapped sprites 
+    temp4=(RIOT[player1y+Gfxindex]+RIOT[player1height+Gfxindex])&255; // &255 to allow for wrapped sprites 
     Gfxindex=myGfxIndex[count+1];
     if ((count == temp3) || (RIOT[player1y+Gfxindex]>175) )
     {
@@ -490,7 +492,7 @@ int main()
       temp5=0;
     }
 
-    // REVENG - it looks like if vertical positioning is tight, cumulative round-off 
+    // it looks like if vertical positioning is tight, cumulative round-off 
     // can occur and eventually coarse positioning will happen during sprite display...
      //queue[(dfhigh(4)<<8)+dflow(4)+count]=(temp4-temp5-(count>>1))>>1;
      queue[get32bitdf(4)+count]=(temp4-temp5-(count>>1))>>1;

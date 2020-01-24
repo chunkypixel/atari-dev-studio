@@ -31,16 +31,23 @@ bbfilter: bbfilter.c
 	${CC} ${CFLAGS} -o bbfilter bbfilter.c
 
 distclean:
-	make -f makefile.linux32 clean
-	make -f makefile.xcmp.win32 clean
-	make -f makefile.xcmp.osx clean
+	make -f makefile.xcmp.win-x86 clean
+	make -f makefile.xcmp.win-x64 clean
+	make -f makefile.linux-x86 clean
+	make -f makefile.linux-x64 clean
+	make -f makefile.xcmp.osx-x86 clean
+	make -f makefile.xcmp.osx-x64 clean
 
 dist:
 	make clean
 	make distclean
-	make -f makefile.linux32
-	make -f makefile.xcmp.win32
-	make -f makefile.xcmp.osx
+	make -f makefile.xcmp.win-x86
+	make -f makefile.xcmp.win-x64
+	make -f makefile.linux-x86
+	make -f makefile.linux-x64
+	make -f makefile.xcmp.osx-x86
+	make -f makefile.xcmp.osx-x64
+	unix2dos *.txt *.c *.h
 
 install: all
 
@@ -49,3 +56,9 @@ clean:
 
 love:
 	@echo "not war"
+peace:
+	@echo "not war"
+hay:
+	@echo "while the sun shines"
+believe:
+	@echo "ok... the floor is lava"

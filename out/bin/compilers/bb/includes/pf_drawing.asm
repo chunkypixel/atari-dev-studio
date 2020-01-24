@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 ; playfield drawing routines
 ; you get a 32x12 bitmapped display in a single color :)
 ; 0-31 and 0-11

@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 ; y and a contain multiplicands, result in a
 
 mul8
@@ -31,3 +33,4 @@ div8end
  tya
  ; result in a
  RETURN
+

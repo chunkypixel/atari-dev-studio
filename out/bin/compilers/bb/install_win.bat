@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 echo
-echo The bB installation batch file v1.1
+echo The bB installation batch file v1.2
 echo -----------------------------------
 echo.
 echo   Permanently setting the bB variable to:
@@ -35,7 +35,7 @@ exit
 
 :FAILED
 echo   Setting the bB variable failed. This batch file requires SETX, which comes
-echo   with WinXP SP2, Windows Vista, and later versions of the Windows. 
+echo   with WinXP SP2, Windows Vista, and later versions of Windows. 
 echo.
 echo   You should obtain a copy of SETX and re-run this script, or set the bB
 echo   variable manually.
