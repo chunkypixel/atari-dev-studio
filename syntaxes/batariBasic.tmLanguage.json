@@ -155,7 +155,7 @@
 			},
 			{
 				"name": "keyword.other.bank.bb",
-				"match": "\\b(bank|bank1|bank2|bank3|bank4|bank5|bank6|bank7|bank8|otherbank|thisbank)\\b",
+				"match": "\\b(bank|bank1|bank2|bank3|bank4|bank5|bank6|bank7|bank8|bank9|bank10|bank11|bank12|bank13|bank14|bank15|bank16|bank17|bank18|bank19|bank20|bank21|bank22|bank23|bank24|otherbank|thisbank)\\b",
 				"comment": "bank keywords"
 			},
 			{

@@ -15,6 +15,10 @@ import { BatariBasicHover } from './hovers/batariBasicHover';
 import { SeventyEightHundredBasicHover } from './hovers/seventyEightHundredBasicHover';
 import { CompletionBase } from './completions/completionBase';
 import { SeventyEightHundredBasicCompletion } from './completions/seventyEightHundredBasicCompletion';
+import { FoldingBase } from './foldings/foldingBase';
+import { BatariBasicFolding } from './foldings/batariBasicFolding';
+import { SeventyEightHundredBasicFolding } from './foldings/seventyEightHundredBasicFolding';
+
 
 // -------------------------------------------------------------------------------------
 // Operating System
@@ -91,6 +95,22 @@ export const Completions:CompletionBase[] = [
 export async function RegisterCompletionProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
 	for (let completion of Completions) {
 		await completion.RegisterAsync(context);
+	}
+}
+
+// -------------------------------------------------------------------------------------
+// Region Folding
+// Language intellisense
+// -------------------------------------------------------------------------------------
+
+export const Foldings:FoldingBase[] = [
+	new BatariBasicFolding(),
+	new SeventyEightHundredBasicFolding()
+];
+
+export async function RegisterFoldingProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
+	for (let folding of Foldings) {
+		await folding.RegisterAsync(context);
 	}
 }
 

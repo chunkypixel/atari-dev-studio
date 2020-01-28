@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.3.3
+
+* #14 [Done] Fixed clock tables for Horizontal Motion documentation (thanks andyjp)
+* #15 [Done] Added region folding for 7800basic and batari Basic (thanks MikeBrownEmplas) Usage: ;#region " XXX ", ;#endregion). Code based on the [#region folding for VS Code](https://marketplace.visualstudio.com/items?itemName=maptz.regionfolder) extension by maptz
+
 ## 0.3.2
 
 * Updated to latest batari Basic release v1.2 20012020 (Windows, Linux, macOS)

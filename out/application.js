@@ -21,6 +21,8 @@ const dasmHover_1 = require("./hovers/dasmHover");
 const batariBasicHover_1 = require("./hovers/batariBasicHover");
 const seventyEightHundredBasicHover_1 = require("./hovers/seventyEightHundredBasicHover");
 const seventyEightHundredBasicCompletion_1 = require("./completions/seventyEightHundredBasicCompletion");
+const batariBasicFolding_1 = require("./foldings/batariBasicFolding");
+const seventyEightHundredBasicFolding_1 = require("./foldings/seventyEightHundredBasicFolding");
 // -------------------------------------------------------------------------------------
 // Operating System
 // -------------------------------------------------------------------------------------
@@ -95,6 +97,22 @@ function RegisterCompletionProvidersAsync(context) {
     });
 }
 exports.RegisterCompletionProvidersAsync = RegisterCompletionProvidersAsync;
+// -------------------------------------------------------------------------------------
+// Region Folding
+// Language intellisense
+// -------------------------------------------------------------------------------------
+exports.Foldings = [
+    new batariBasicFolding_1.BatariBasicFolding(),
+    new seventyEightHundredBasicFolding_1.SeventyEightHundredBasicFolding()
+];
+function RegisterFoldingProvidersAsync(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (let folding of exports.Foldings) {
+            yield folding.RegisterAsync(context);
+        }
+    });
+}
+exports.RegisterFoldingProvidersAsync = RegisterFoldingProvidersAsync;
 // -------------------------------------------------------------------------------------
 // Functions
 // -------------------------------------------------------------------------------------

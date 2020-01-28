@@ -460,11 +460,11 @@ WARNING: Should not be modified during the 24 computer cycles immediately follow
     - bit7..4=0111 ($70): Left 7 clock
     - bit7..4=1000 ($80): Right 8 clock
     - bit7..4=1001 ($90): Right 7 clock
-    - bit7..4=0101 ($A0): Right 6 clock
-    - bit7..4=1101 ($B0): Right 5 clock
-    - bit7..4=0011 ($C0): Right 4 clock
-    - bit7..4=1011 ($D0): Right 3 clock
-    - bit7..4=0111 ($E0): Right 2 clock 
+    - bit7..4=1010 ($A0): Right 6 clock
+    - bit7..4=1011 ($B0): Right 5 clock
+    - bit7..4=1100 ($C0): Right 4 clock
+    - bit7..4=1101 ($D0): Right 3 clock
+    - bit7..4=1110 ($E0): Right 2 clock 
     - bit7..4=1111 ($F0): Right 1 clock
 
 
@@ -488,18 +488,18 @@ WARNING: Should not be modified during the 24 computer cycles immediately follow
     - bit7..4=0111 ($70): Left 7 clock
     - bit7..4=1000 ($80): Right 8 clock
     - bit7..4=1001 ($90): Right 7 clock
-    - bit7..4=0101 ($A0): Right 6 clock
-    - bit7..4=1101 ($B0): Right 5 clock
-    - bit7..4=0011 ($C0): Right 4 clock
-    - bit7..4=1011 ($D0): Right 3 clock
-    - bit7..4=0111 ($E0): Right 2 clock 
+    - bit7..4=1010 ($A0): Right 6 clock
+    - bit7..4=1011 ($B0): Right 5 clock
+    - bit7..4=1100 ($C0): Right 4 clock
+    - bit7..4=1101 ($D0): Right 3 clock
+    - bit7..4=1110 ($E0): Right 2 clock 
     - bit7..4=1111 ($F0): Right 1 clock
 
 
 
 ## HMM0 - $22 - (write)
 
-**Horizontal Motion Misslie 0**
+**Horizontal Motion Missile 0**
 
 Controls horizontal offset for Missile0 in effect only when commanded to do so by the horizontal move command HMOVE.
 WARNING: Should not be modified during the 24 computer cycles immediately following an HMOVE command. Unpredictable motion values may result.
@@ -516,11 +516,11 @@ WARNING: Should not be modified during the 24 computer cycles immediately follow
     - bit7..4=0111 ($70): Left 7 clock
     - bit7..4=1000 ($80): Right 8 clock
     - bit7..4=1001 ($90): Right 7 clock
-    - bit7..4=0101 ($A0): Right 6 clock
-    - bit7..4=1101 ($B0): Right 5 clock
-    - bit7..4=0011 ($C0): Right 4 clock
-    - bit7..4=1011 ($D0): Right 3 clock
-    - bit7..4=0111 ($E0): Right 2 clock 
+    - bit7..4=1010 ($A0): Right 6 clock
+    - bit7..4=1011 ($B0): Right 5 clock
+    - bit7..4=1100 ($C0): Right 4 clock
+    - bit7..4=1101 ($D0): Right 3 clock
+    - bit7..4=1110 ($E0): Right 2 clock 
     - bit7..4=1111 ($F0): Right 1 clock
 
 
@@ -545,11 +545,11 @@ WARNING: Should not be modified during the 24 computer cycles immediately follow
     - bit7..4=0111 ($70): Left 7 clock
     - bit7..4=1000 ($80): Right 8 clock
     - bit7..4=1001 ($90): Right 7 clock
-    - bit7..4=0101 ($A0): Right 6 clock
-    - bit7..4=1101 ($B0): Right 5 clock
-    - bit7..4=0011 ($C0): Right 4 clock
-    - bit7..4=1011 ($D0): Right 3 clock
-    - bit7..4=0111 ($E0): Right 2 clock 
+    - bit7..4=1010 ($A0): Right 6 clock
+    - bit7..4=1011 ($B0): Right 5 clock
+    - bit7..4=1100 ($C0): Right 4 clock
+    - bit7..4=1101 ($D0): Right 3 clock
+    - bit7..4=1110 ($E0): Right 2 clock 
     - bit7..4=1111 ($F0): Right 1 clock
 
 
@@ -574,11 +574,11 @@ WARNING: Should not be modified during the 24 computer cycles immediately follow
     - bit7..4=0111 ($70): Left 7 clock
     - bit7..4=1000 ($80): Right 8 clock
     - bit7..4=1001 ($90): Right 7 clock
-    - bit7..4=0101 ($A0): Right 6 clock
-    - bit7..4=1101 ($B0): Right 5 clock
-    - bit7..4=0011 ($C0): Right 4 clock
-    - bit7..4=1011 ($D0): Right 3 clock
-    - bit7..4=0111 ($E0): Right 2 clock 
+    - bit7..4=1010 ($A0): Right 6 clock
+    - bit7..4=1011 ($B0): Right 5 clock
+    - bit7..4=1100 ($C0): Right 4 clock
+    - bit7..4=1101 ($D0): Right 3 clock
+    - bit7..4=1110 ($E0): Right 2 clock 
     - bit7..4=1111 ($F0): Right 1 clock
 
 

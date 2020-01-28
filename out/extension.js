@@ -62,6 +62,8 @@ function activate(context) {
         context.subscriptions.push(buildGameAndRun);
         // Register the mouse-over hover providers
         yield application.RegisterHoverProvidersAsync(context);
+        // Register region folding providers
+        yield application.RegisterFoldingProvidersAsync(context);
         // Register code completion providers
         // MS: Disabled for now
         // await application.RegisterCompletionProvidersAsync(context);

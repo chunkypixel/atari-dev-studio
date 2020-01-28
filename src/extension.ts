@@ -59,6 +59,9 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Register the mouse-over hover providers
 	await application.RegisterHoverProvidersAsync(context);
 
+	// Register region folding providers
+	await application.RegisterFoldingProvidersAsync(context);
+	
 	// Register code completion providers
 	// MS: Disabled for now
 	// await application.RegisterCompletionProvidersAsync(context);
