@@ -120,7 +120,7 @@ function BuildGameAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
         // Get document
         let document = yield filesystem.GetDocumentAsync(fileUri);
-        if (!document || document.uri.scheme != "file") {
+        if (!document || document.uri.scheme !== "file") {
             return false;
         }
         // Find compiler
@@ -137,12 +137,14 @@ function BuildGameAndRunAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
         // Get document
         let document = yield filesystem.GetDocumentAsync(fileUri);
-        if (!document || document.uri.scheme != "file")
+        if (!document || document.uri.scheme !== "file") {
             return false;
+        }
         // Find compiler
         let compiler = getChosenCompiler(document);
-        if (compiler)
+        if (compiler) {
             return yield compiler.BuildGameAndRunAsync(document);
+        }
         // Result
         return false;
     });

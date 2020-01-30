@@ -13,22 +13,23 @@ class StatusBar {
         //         Option to turn off/on
         // Prepare
         let command = (configuration.get('editor.statusBarCommands', 'Full'));
-        if (command == "None")
+        if (command === "None") {
             return;
+        }
         // Spacer
         let itemOptions = [
             { text: `   ` },
         ];
         itemOptions.forEach(option => this.createItem(option));
         // Name and version
-        if (command == "Full") {
+        if (command === "Full") {
             let itemOptions = [
                 { text: `${application.DisplayName} (v${application.Version})` },
             ];
             itemOptions.forEach(option => this.createItem(option));
         }
         // Buttons
-        if (command == "Full" || command == "Minimum") {
+        if (command === "Full" || command === "Minimum") {
             let itemOptions = [
                 { tooltip: 'Welcome', text: '$(home)', command: 'extension.openWelcomePage' },
                 { tooltip: 'Sprite Editor', text: '$(screen-normal)', command: 'extension.openSpriteEditorPage' },

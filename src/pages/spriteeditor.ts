@@ -60,7 +60,7 @@ export class SpriteEditorPage implements vscode.Disposable {
             let configuration = await this.loadConfiguration();
 
             // Update tags in content
-            content = this.replaceContentTag(content, "APPNAME", "Sprite Editor")
+            content = this.replaceContentTag(content, "APPNAME", "Sprite Editor");
             content = this.replaceContentTag(content, "NONCE", nonce);
             content = this.replaceContentTag(content, "SCRIPTJSURI", scriptJsUri);
             content = this.replaceContentTag(content, "STYLECSSURI", styleCssUri);
@@ -89,7 +89,7 @@ export class SpriteEditorPage implements vscode.Disposable {
 
                     case 'configuration':
                         this.saveConfiguration(message);
-                        return
+                        return;
 
                     case 'loadPalette':
                         this.loadPalette(message);
@@ -143,7 +143,7 @@ export class SpriteEditorPage implements vscode.Disposable {
         let data = await filesystem.ReadFileAsync(configurationFileUri.fsPath);
 
         // Return BASE64
-        if (data) return Buffer.from(data).toString("base64");
+        if (data) { return Buffer.from(data).toString("base64"); }
         return "";
     }
 
@@ -234,7 +234,7 @@ export class SpriteEditorPage implements vscode.Disposable {
 
             // Process
             let result = await vscode.window.showSaveDialog(options);
-            if (result) fileUri = result;
+            if (result) { fileUri = result; }
         }
 
         // Save?
@@ -246,7 +246,7 @@ export class SpriteEditorPage implements vscode.Disposable {
 
                 // Save
                 let result = await filesystem.MkDirAsync(folder);
-                if (result) result = await filesystem.WriteFileAsync(fileUri.fsPath, data);
+                if (result) { result = await filesystem.WriteFileAsync(fileUri.fsPath, data); }
 
                 // Validate
                 if (result) {
@@ -308,7 +308,7 @@ export class SpriteEditorPage implements vscode.Disposable {
 
                     // Save
                     let result = await filesystem.MkDirAsync(folder);
-                    if (result) result = await filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data,'utf8'));
+                    if (result) { result = await filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data,'utf8')); }
 
                     // Validate
                     if (result) {
@@ -419,7 +419,7 @@ export class SpriteEditorPage implements vscode.Disposable {
 
             // Process
             let result = await vscode.window.showSaveDialog(options);
-            if (result) fileUri = result;
+            if (result) { fileUri = result; }
         }
 
         // Save?
@@ -431,7 +431,7 @@ export class SpriteEditorPage implements vscode.Disposable {
 
                 // Save
                 let result = await filesystem.MkDirAsync(folder);
-                if (result) result = await filesystem.WriteFileAsync(fileUri.fsPath, data);
+                if (result) { result = await filesystem.WriteFileAsync(fileUri.fsPath, data); }
 
                 // Validate
                 if (result) {

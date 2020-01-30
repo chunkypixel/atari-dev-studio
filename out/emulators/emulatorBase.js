@@ -30,8 +30,9 @@ class EmulatorBase {
             this.FileName = fileName;
             // Process
             let result = yield this.InitialiseAsync();
-            if (!result)
+            if (!result) {
                 return false;
+            }
             return yield this.ExecuteEmulatorAsync();
         });
     }

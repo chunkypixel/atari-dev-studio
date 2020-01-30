@@ -17,7 +17,7 @@ class StatusBar {
     
         // Prepare
         let command = (configuration.get<string>('editor.statusBarCommands','Full'));
-        if (command == "None") return;
+        if (command === "None") { return; }
 
         // Spacer
         let itemOptions = [
@@ -26,7 +26,7 @@ class StatusBar {
         itemOptions.forEach(option => this.createItem(option));
 
         // Name and version
-        if (command == "Full") {
+        if (command === "Full") {
             let itemOptions = [
                 { text: `${application.DisplayName} (v${application.Version})`},
             ];
@@ -34,7 +34,7 @@ class StatusBar {
         }
 
         // Buttons
-        if (command == "Full" || command == "Minimum") {
+        if (command === "Full" || command === "Minimum") {
             let itemOptions = [
                 { tooltip: 'Welcome', text: '$(home)', command: 'extension.openWelcomePage' },
                 { tooltip: 'Sprite Editor', text: '$(screen-normal)', command: 'extension.openSpriteEditorPage' },

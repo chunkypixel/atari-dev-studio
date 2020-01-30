@@ -47,7 +47,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
 
         // Notify
         // Linux and macOS script has this message already
-        if (application.IsWindows) application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`); 
+        if (application.IsWindows) { application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`); } 
 
         // Compile
         this.IsRunning = true;
@@ -97,9 +97,9 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         application.CompilerOutputChannel.appendLine(``); 
 
         // Finalise
-        if (executeResult) executeResult = await this.VerifyCompiledFileSizeAsync();
+        if (executeResult) { executeResult = await this.VerifyCompiledFileSizeAsync(); }
         await this.RemoveCompilationFilesAsync();
-        if (executeResult) executeResult = await this.MoveFilesToBinFolderAsync();
+        if (executeResult) { executeResult = await this.MoveFilesToBinFolderAsync(); }
        
         // Result
         return executeResult;
@@ -110,7 +110,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
 
         // Base
         let result = await super.LoadConfigurationAsync();
-        if (!result) return false;
+        if (!result) { return false; }
 
         // System
         // Not available for 7800basic
@@ -124,24 +124,24 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         console.log('debugger:SeventyEightHundredBasicCompiler.RepairFilePermissionsAsync'); 
 
         // Validate
-        if (this.CustomFolderOrPath || application.IsWindows) return true;
+        if (this.CustomFolderOrPath || application.IsWindows) { return true; }
 
         // Prepare
         let architecture = "Linux";
-        if (application.IsMacOS) architecture = "Darwin";
+        if (application.IsMacOS) { architecture = "Darwin"; }
 
         // Process
         let result = await filesystem.ChModAsync(path.join(this.FolderOrPath,'7800basic.sh'));
-        if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800basic.${architecture}.x86`));
-        if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800filter.${architecture}.x86`));
-        if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800header.${architecture}.x86`));
-        if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800optimize.${architecture}.x86`));
-        if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800postprocess.${architecture}.x86`));
-        if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800preprocess.${architecture}.x86`));
-        if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800sign.${architecture}.x86`));
-        if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800makecc2.${architecture}.x86`));
-        if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`dasm.${architecture}.x86`));
-        if (result) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`distella.${architecture}.x86`));
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800basic.${architecture}.x86`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800filter.${architecture}.x86`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800header.${architecture}.x86`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800optimize.${architecture}.x86`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800postprocess.${architecture}.x86`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800preprocess.${architecture}.x86`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800sign.${architecture}.x86`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800makecc2.${architecture}.x86`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`dasm.${architecture}.x86`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`distella.${architecture}.x86`)); }
 
         // Result
         return result;

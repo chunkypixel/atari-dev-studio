@@ -31,11 +31,11 @@ export abstract class EmulatorBase implements vscode.Disposable {
 
         // Process
         let result = await this.InitialiseAsync();
-        if (!result) return false;
+        if (!result) { return false; }
         return await this.ExecuteEmulatorAsync();
     }
 
-    protected abstract ExecuteEmulatorAsync(): Promise<boolean>
+    protected abstract ExecuteEmulatorAsync(): Promise<boolean>;
     
     protected async InitialiseAsync(): Promise<boolean> {
         console.log('debugger:EmulatorBase.InitialiseAsync');
@@ -65,7 +65,7 @@ export abstract class EmulatorBase implements vscode.Disposable {
         this.Configuration = application.GetConfiguration();
 
         // Emulator
-        let userEmulatorPath = this.Configuration.get<string>(`emulator.${this.Id.toLowerCase()}.path`)
+        let userEmulatorPath = this.Configuration.get<string>(`emulator.${this.Id.toLowerCase()}.path`);
         if (userEmulatorPath) {
             // Validate (user provided)
             let result = await filesystem.FileExistsAsync(userEmulatorPath);

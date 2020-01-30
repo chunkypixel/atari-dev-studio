@@ -16,8 +16,9 @@ const fs = require("fs");
 function GetFileUriAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
         // Validate
-        if (fileUri)
+        if (fileUri) {
             return fileUri;
+        }
         // Prepare
         let document;
         // Document not open?
@@ -40,15 +41,17 @@ function GetDocumentAsync(fileUri) {
         if (IsRunFromExplorer(fileUri)) {
             // Make sure document exists
             let result = yield FileExistsAsync(fileUri.fsPath);
-            if (result)
+            if (result) {
                 return yield vscode.workspace.openTextDocument(fileUri);
+            }
             // Not found
             vscode.window.showInformationMessage("Error: File cannot be found");
         }
         // Try current document
         let editor = vscode.window.activeTextEditor;
-        if (editor)
+        if (editor) {
             return editor.document;
+        }
         return null;
     });
 }
@@ -89,8 +92,9 @@ function GetFileStatsAsync(path) {
     console.log('debugger:filesystem.GetFileStatsAsync');
     return new Promise((resolve, reject) => {
         fs.stat(path, (err, stats) => {
-            if (!err)
+            if (!err) {
                 return resolve(stats);
+            }
             resolve(undefined);
         });
     });
@@ -118,8 +122,9 @@ function MkDirAsync(folder) {
     console.log('debugger:filesystem.MkDirAsync');
     return new Promise((resolve, reject) => {
         fs.mkdir(folder, err => {
-            if (err && err.code == 'EEXIST')
+            if (err && err.code === 'EEXIST') {
                 return resolve(true);
+            }
             resolve(!err);
         });
     });
@@ -141,8 +146,9 @@ function ReadFileAsync(path) {
     console.log('debugger:filesystem.ReadFileAsync');
     return new Promise((resolve, reject) => {
         fs.readFile(path, 'utf8', (err, data) => {
-            if (!err)
+            if (!err) {
                 return resolve(data);
+            }
             resolve(undefined);
         });
     });

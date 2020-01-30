@@ -120,7 +120,7 @@ export async function RegisterFoldingProvidersAsync(context: vscode.ExtensionCon
 export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
 	// Get document
 	let document = await filesystem.GetDocumentAsync(fileUri);
-	if (!document || document!.uri.scheme != "file") { return false; }
+	if (!document || document!.uri.scheme !== "file") { return false; }
 
 	// Find compiler
 	let compiler = getChosenCompiler(document);
@@ -133,11 +133,11 @@ export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
 export async function BuildGameAndRunAsync(fileUri: vscode.Uri): Promise<boolean> {
 	// Get document
 	let document = await filesystem.GetDocumentAsync(fileUri);
-	if (!document || document!.uri.scheme != "file") return false;
+	if (!document || document!.uri.scheme !== "file") { return false; }
 
 	// Find compiler
 	let compiler = getChosenCompiler(document);
-	if (compiler) return await compiler.BuildGameAndRunAsync(document);
+	if (compiler) { return await compiler.BuildGameAndRunAsync(document); }
 
 	// Result
 	return false;

@@ -7,7 +7,7 @@ import * as fs from 'fs';
 
 export async function GetFileUriAsync(fileUri: vscode.Uri): Promise<vscode.Uri> {
 	// Validate
-	if (fileUri) return fileUri;
+	if (fileUri) { return fileUri; }
 
 	// Prepare
 	let document: vscode.TextDocument;
@@ -30,15 +30,15 @@ export async function GetDocumentAsync(fileUri: vscode.Uri): Promise<vscode.Text
     if (IsRunFromExplorer(fileUri)) {
         // Make sure document exists
         let result = await FileExistsAsync(fileUri.fsPath);
-        if (result) return await vscode.workspace.openTextDocument(fileUri);
+        if (result) { return await vscode.workspace.openTextDocument(fileUri); }
 
         // Not found
         vscode.window.showInformationMessage("Error: File cannot be found");
     }
 
 	// Try current document
-    let editor = vscode.window.activeTextEditor
-    if (editor) return editor.document;
+    let editor = vscode.window.activeTextEditor;
+    if (editor) { return editor.document; }
     return null;
 }
 
@@ -81,7 +81,7 @@ export function GetFileStatsAsync(path: string): Promise<fs.Stats> {
     
     return new Promise((resolve, reject) => {
         fs.stat(path, (err, stats) => {
-            if (!err) return resolve(stats);
+            if (!err) { return resolve(stats); }
             resolve(undefined);
         });
     });     
@@ -112,7 +112,7 @@ export function MkDirAsync(folder: string): Promise<boolean> {
     
     return new Promise((resolve, reject) => {
         fs.mkdir(folder, err => {
-            if (err && err.code == 'EEXIST') return resolve(true);
+            if (err && err.code === 'EEXIST') { return resolve(true); }
             resolve(!err);
         });
     }); 
@@ -123,7 +123,7 @@ export function ChModAsync(path: string, mode: string = '777'): Promise<boolean>
 
     return new Promise((resolve, reject) => {
         fs.chmod(path, mode, err => {
-            if (err) { application.Notify(`- failed to set chmod permissions: ${err.message}`)}
+            if (err) { application.Notify(`- failed to set chmod permissions: ${err.message}`);}
             resolve(!err);
         });
     }); 
@@ -134,7 +134,7 @@ export function ReadFileAsync(path: string): Promise<any> {
 
     return new Promise((resolve, reject) => {
         fs.readFile(path, 'utf8', (err, data) => {
-            if (!err) return resolve(data);
+            if (!err) { return resolve(data); }
             resolve(undefined);
         });
     });

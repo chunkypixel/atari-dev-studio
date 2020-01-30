@@ -123,8 +123,9 @@ class SpriteEditorPage {
             let configurationFileUri = vscode.Uri.file(path.join(this.contentPath, 'spriteeditor.config'));
             let data = yield filesystem.ReadFileAsync(configurationFileUri.fsPath);
             // Return BASE64
-            if (data)
+            if (data) {
                 return Buffer.from(data).toString("base64");
+            }
             return "";
         });
     }
@@ -208,8 +209,9 @@ class SpriteEditorPage {
                 };
                 // Process
                 let result = yield vscode.window.showSaveDialog(options);
-                if (result)
+                if (result) {
                     fileUri = result;
+                }
             }
             // Save?
             if (fileUri) {
@@ -219,8 +221,9 @@ class SpriteEditorPage {
                     let folder = path.dirname(fileUri.fsPath);
                     // Save
                     let result = yield filesystem.MkDirAsync(folder);
-                    if (result)
+                    if (result) {
                         result = yield filesystem.WriteFileAsync(fileUri.fsPath, data);
+                    }
                     // Validate
                     if (result) {
                         this.currentPanel.webview.postMessage({
@@ -275,8 +278,9 @@ class SpriteEditorPage {
                         let folder = path.dirname(fileUri.fsPath);
                         // Save
                         let result = yield filesystem.MkDirAsync(folder);
-                        if (result)
+                        if (result) {
                             result = yield filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data, 'utf8'));
+                        }
                         // Validate
                         if (result) {
                             this.currentPanel.webview.postMessage({
@@ -376,8 +380,9 @@ class SpriteEditorPage {
                 };
                 // Process
                 let result = yield vscode.window.showSaveDialog(options);
-                if (result)
+                if (result) {
                     fileUri = result;
+                }
             }
             // Save?
             if (fileUri) {
@@ -387,8 +392,9 @@ class SpriteEditorPage {
                     let folder = path.dirname(fileUri.fsPath);
                     // Save
                     let result = yield filesystem.MkDirAsync(folder);
-                    if (result)
+                    if (result) {
                         result = yield filesystem.WriteFileAsync(fileUri.fsPath, data);
+                    }
                     // Validate
                     if (result) {
                         this.currentPanel.webview.postMessage({
