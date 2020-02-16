@@ -1,3 +1,5 @@
+ ; Provided under the CC0 license. See the included LICENSE.txt for details.
+
      ifconst HSSUPPORT
 detectatarivoxeeprom
 hiscoremodulestart
@@ -196,7 +198,11 @@ carronwithscoreevaluation
              sta temp2 ; charmaphi
              lda #SCORESIZE
              sta temp6
+ ifnconst DOUBLEWIDE
              jsr plotvalue
+ else
+             jsr plotvaluedw
+ endif
 
 USED_PLOTVALUE = 1 ; ensure that plotvalue gets compiled in
 
@@ -389,7 +395,11 @@ plothsscoresloop
              sta temp2 ; charmaphi
              lda #6
              sta temp6
+ ifnconst DOUBLEWIDE
              jsr plotvalue
+ else
+             jsr plotvaluedw
+ endif
              clc
              lda temp3
              adc #32
@@ -424,7 +434,11 @@ plothsindexloop
              sta temp2 ; charmaphi
              lda #1
              sta temp6 ; number of characters
+ ifnconst DOUBLEWIDE
              jsr plotvalue
+ else
+             jsr plotvaluedw
+ endif
              clc
              lda temp3
              adc #32
@@ -1094,6 +1108,65 @@ cleardifficultytablememloop
 hiscoremoduleend
 
  echo "  hiscore assembly: ",[(hiscoremoduleend-hiscoremodulestart)]d," bytes"
+
+ ifconst DOUBLEWIDE
+plotvaluedw
+plotdigitcount     = temp6
+     lda #0
+     tay
+     ldx valbufend
+
+     lda plotdigitcount
+     and #1
+     beq pvnibble2chardw
+     lda #0
+     sta VALBUFFER,x ; just in case we skip this digit
+     beq pvnibble2char_skipnibbledw
+
+pvnibble2chardw
+     ; high nibble...
+     lda (temp7),y
+     and #$f0 
+     lsr 
+     lsr
+     lsr
+     lsr
+
+     clc
+     adc temp1 ; add the offset to character graphics to our value
+     sta VALBUFFER,x
+     inx
+     dec plotdigitcount
+pvnibble2char_skipnibbledw
+     ; low nibble...
+     lda (temp7),y
+     and #$0f 
+     clc
+     adc temp1 ; add the offset to character graphics to our value
+     sta VALBUFFER,x
+     inx
+     iny
+
+     dec plotdigitcount
+     bne pvnibble2chardw
+     ;point to the start of our valuebuffer
+     clc
+     lda #<VALBUFFER
+     adc valbufend
+     sta temp1
+     lda #>VALBUFFER
+     adc #0
+     sta temp2
+
+     ;advance valbufend to the end of our value buffer
+     stx valbufend
+
+     ifnconst plotvalueonscreen
+         jmp plotcharacters
+     else
+         jmp plotcharacterslive
+     endif
+ endif ; DOUBLEWIDE
 
      endif ; HSSUPPORT
 

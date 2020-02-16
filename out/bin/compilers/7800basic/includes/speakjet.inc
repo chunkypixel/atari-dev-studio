@@ -62,7 +62,6 @@ SERIAL_RDYMASK  equ     $02
 	; to match the original baud rate...
         ;ldx     #$07 ; 2600
         ldx     #$0D
-        ;nop #0 ; experiment
 
 .delay_loop
         dex			; 

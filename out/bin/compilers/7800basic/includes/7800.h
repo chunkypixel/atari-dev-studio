@@ -1,3 +1,14 @@
+ ; Provided under the CC0 license. See the included LICENSE.txt for details.
+
+; 7800.h
+; Version 1.0, 2019/12/13
+
+; This file defines hardware registers and memory mapping for the
+; Atari 7800. It is distributed as a companion machine-specific support package
+; for the DASM compiler. Updates to this file, DASM, and associated tools are
+; available at https://github.com/dasm-assembler/dasm
+
+
 ; ******************** 7800 Hardware Adresses ***************************
 ;
 ;       MEMORY MAP USAGE OF THE 7800
@@ -54,12 +65,12 @@ INPT5L   = $0B     ;Joystick 1 Fire 1                            read-only
 INPT4    = $0C     ;Player 0 Fire Button Input                   read-only
 INPT5    = $0D     ;Player 1 Fire Button Input                   read-only
 
-AUDC0    = $15     ;Audio Control Channel 0                      write-only
-AUDC1    = $16     ;Audio Control Channel 1                      write-only
+AUDC0    = $15     ;Audio Control Channel   0                    write-only
+AUDC1    = $16     ;Audio Control Channel   1                    write-only
 AUDF0    = $17     ;Audio Frequency Channel 0                    write-only
 AUDF1    = $18     ;Audio Frequency Channel 1                    write-only
-AUDV0    = $19     ;Audio Volume Channel 0                       write-only
-AUDV1    = $1A     ;Audio Volume Channel 1                       write-only
+AUDV0    = $19     ;Audio Volume Channel    0                    write-only
+AUDV1    = $1A     ;Audio Volume Channel    1                    write-only
 
 ;****** 20-3F ********* MARIA REGISTERS ***************
 
@@ -100,10 +111,10 @@ P7C3     = $3F     ;Palette 7 - Color 3                          write-only
 
 ;****** 280-2FF ******* PIA PORTS AND TIMERS ************
 
-SWCHA    = $280    ;P0, P1 Joystick Directional Input            read-write
-SWCHB    = $282    ;Console Switches                             read-write
+SWCHA    = $280    ;P0+P1 Joystick Directional Input             read-write
 CTLSWA   = $281    ;I/O Control for SCHWA                        read-write
 SWACNT   = $281    ;VCS name for above                           read-write
+SWCHB    = $282    ;Console Switches                             read-write
 CTLSWB   = $283    ;I/O Control for SCHWB                        read-write
 SWBCNT   = $283    ;VCS name for above                           read-write
 
@@ -114,8 +125,8 @@ TIM64T   = $296    ;Set 64   CLK Interval (63.6  usec/interval)  write-only
 T1024T   = $297    ;Set 1024 CLK Interval (858.2 usec/interval)  write-only
 TIM64TI  = $29E    ;Interrupt timer 64T                          write-only
 
-;XM/Xboard
-XCTRL    = $470 ; ---PM210 P=pokey on, M=mem on, 210=mem bank    write-only
+;XM
+XCTRL    = $470    ; 7=YM2151 6=RAM@6k 5=RAM@4k 4=pokey@450 3=hsc 2=cart 1=RoF_bank1 0=RoF_bank2
 
 ; Pokey register relative locations, since its base may be different
 ; depending on the hardware.

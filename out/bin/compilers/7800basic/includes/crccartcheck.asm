@@ -1,6 +1,7 @@
+ ; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 
 calculatecartcrc
- asm
  lda #$00 ; lo byte of cart rom start
  sta temp1
 
@@ -86,5 +87,4 @@ calculatecarttemploop
  bne calculatecarttemploop
  ; when we exit, the crc is in temp4+temp5
  rts
-
 

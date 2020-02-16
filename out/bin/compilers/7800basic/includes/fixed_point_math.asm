@@ -1,3 +1,5 @@
+ ; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 ; Fixed point math routines - created by AtariAge member djmips
 ; some changes by Fred Quimby
 

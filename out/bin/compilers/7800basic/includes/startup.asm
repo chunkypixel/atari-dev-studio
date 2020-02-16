@@ -1,3 +1,5 @@
+ ; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 START
 start
 
@@ -137,17 +139,30 @@ pndetecispal
 
      ifnconst ONEBUTTONMODE
          ;Setup port B for two button reading, and turn on both joysticks...
-         lda #$14
+         ifconst ONEBUTTONMODEJOY1
+         	lda #$10
+         else
+                ifconst ONEBUTTONMODEJOY2
+         	        lda #$04
+                else
+         	        lda #$14
+                endif
+         endif
          sta CTLSWB
+         sta CTLSWBs
          lda #0
          sta SWCHB
-     else
-         lda #0
      endif
- 
+
+     lda #1 ; default for port 0 and 1 is a regular joystick
+     sta port0control
+     sta port1control
+
      ;max sprites displayed in any one frame before drawscreen is called...
+     lda #0
      sta maxspritecount 
 
+ 
      ;Setup port A to read mode
      ;lda #$00
      ;sta SWCHA

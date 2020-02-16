@@ -9,9 +9,10 @@ goto nooptimize
 :optimize
 7800postprocess -i "%bas7800dir%" | 7800optimize >"%~f1.asm"
 :nooptimize
-dasm "%~f1.asm" -I"%bas7800dir%"/includes -f3 -o"%~f1.bin" | 7800filter
+dasm "%~f1.asm" -I"%bas7800dir%"/includes -f3 -l"%~f1.list.txt" -o"%~f1.bin" | 7800filter
 7800sign -w "%~f1.bin"
 7800header -o -f a78info.cfg "%~f1.bin"
+7800makecc2 "%~f1.bin"
 goto end
 
 :nobasic

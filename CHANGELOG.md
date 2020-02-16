@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.3.4
+
+* Updated to latest batari Basic release v1.4 (Windows, Linux, macOS)
+* Updated to latest 7800basic release v0.7 (Windows, Linux, macOS)
+* Re-enabled basic language completion for 7800basic 
+
 ## 0.3.3
 
 * #14 [Done] Fixed clock tables for Horizontal Motion documentation (thanks andyjp)
@@ -11,7 +17,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.3.2
 
-* Updated to latest batari Basic release v1.2 20200120 (Windows, Linux, macOS)
+* Updated to latest batari Basic release v1.2 (Windows, Linux, macOS)
 
 ## 0.3.1
 

@@ -1,3 +1,5 @@
+ ; Provided under the CC0 license. See the included LICENSE.txt for details.
+
  ifnconst bankswitchmode
    if ( * < $f000 )
      ORG $F000

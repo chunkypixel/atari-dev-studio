@@ -1,6 +1,7 @@
+ ; Provided under the CC0 license. See the included LICENSE.txt for details.
+
  processor 6502
  include "7800.h"
- ;include "macro.h"
  include "7800basic_variable_redefs.h"
 
  ;************ 7800 overall RAM map **************
@@ -16,7 +17,7 @@
  ;         40-FF         numerous defines, listed below
  ;        140-1FF        RAM (stack)
 
- ;       1800-1880       DLL  (1880-18BF with page flipping enabled)
+ ;       1800-187F       DLL  (1880-18BF with page flipping enabled)
  ;       1880-1FFF       DLs  (18C0-1FFF with page flipping enabled)
 
  ;       2000-203F       Reserved
@@ -30,6 +31,7 @@ VALBUFFER        = (PLOTVALUEPAGE*256)
  else
 VALBUFFER        = $2000 ; to $203F  ** never let VALBUFFER straddle pages
  endif
+
 
 pausestate     = $2100
 dlzero         = $2101 ; zero to force end of $2100 DL, which we use in vblank and overscan
@@ -190,7 +192,7 @@ songloops     = $cf
 songpointerlo = $D0
 songpointerhi = $D1
 
-voxlock = $D2
+voxlock      = $D2
 voxqueuesize = $D3
 
 vblankroutines = $D4
@@ -213,7 +215,8 @@ sfxinstrumenthi = $E1
 sfxpitchoffset = $E2
 sfxnoteindex = $E3
 
-; ** RESERVED $E4,$E5
+CTLSWAs = $E4
+CTLSWBs = $E5
 
 A = $e6
 a = $e6
@@ -434,14 +437,72 @@ songchannel2stackdepth  = $1DD
 songchannel3stackdepth  = $1DE
 songchannel4stackdepth  = $1DF
 
-palframes    = $1E0
-palfastframe = $1E1
+palframes    =        $1E0
+palfastframe =        $1E1
 
-drivingcontrollast0 = $1E2
-drivingcontrollast1 = $1E3
-drivingposition0 = $1E4
-drivingposition1 = $1E5
+port0control =        $1E2
+port1control =        $1E3
 
-; $1E6 - $1FF reserved for stack
+ ; port#control values...
+ ;      1 = proline
+ ;      2 = lightgun
+ ;      3 = paddle
+ ;      4 = trakball
+ ;      5 = vcs joystick
+ ;      6 = driving
+ ;      7 = keypad
+ ;      8 = st mouse/cx80
+ ;      9 = amiga mouse
+ ;     10 = atarivox
 
+ ; controller 0 data...
+paddleposition0     =     $1E4
+keypadmatrix0a      =     $1E4
+drivingposition0    =     $1E4
+trakballx0          =     $1E4
+mousex0             =     $1E4
+lighttgunx0         =     $1E4
+
+ ; controller 1 data...
+paddleposition2     =     $1E5
+keypadmatrix1a      =     $1E5
+drivingposition1    =     $1E5
+trakballx1          =     $1E5
+mousex1             =     $1E5
+lightgunx1          =     $1E5
+
+ ; controller 0 altdata...
+paddleposition1     =     $1E6 
+keypadmatrix0b      =     $1E6
+trakbally0          =     $1E6
+mousey0             =     $1E6
+lightguny0          =     $1E6
+
+ ; controller 1 altdata...
+paddleposition3     =     $1E7 
+keypadmatrix1b      =     $1E7
+trakbally1          =     $1E7
+mousey1             =     $1E7
+lightguny1          =     $1E7
+
+; controller state save. for trakball state+dir codes, rotary position codes
+controller0statesave =    $1E8
+mousecodex0          =    $1E8
+trakballcodex0       =    $1E8
+keypadmatrix0c       =    $1E8
+
+controller1statesave =    $1E9
+mousecodex1          =    $1E9
+trakballcodex1       =    $1E9
+keypadmatrix1c       =    $1E9
+
+keypadmatrix0d       =    $1EA
+mousecodey0          =    $1EA
+trakballcodey0       =    $1EA
+
+keypadmatrix1d       =    $1EB
+mousecodey1          =    $1EB
+trakballcodey1       =    $1EB
+
+; $1EC - $1FF reserved for stack
 

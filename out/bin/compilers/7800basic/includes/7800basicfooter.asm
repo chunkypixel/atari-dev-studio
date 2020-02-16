@@ -1,3 +1,5 @@
+; Provided under the CC0 license. See the included LICENSE.txt for details.
+
   ifconst DEV
     ifnconst ZONEHEIGHT
       echo "* the 4k 7800basic area has",[($FF7E - *)]d,"bytes free."

@@ -8,7 +8,7 @@ fi
 
 OSTYPE=$(uname -s)
 ARCH=$(uname -m)
-for EXT in "" .$OSTYPE.x86 .$OSTYPE.$ARCH .$OSTYPE ; do
+for EXT in "" .$OSTYPE.x86 .$OSTYPE.x64 .$OSTYPE.$ARCH .$OSTYPE ; do
   echo | 7800preprocess$EXT 2>/dev/null >&2 && break
 done
 
@@ -19,7 +19,7 @@ if [ ! $? = 0 ] ; then
 fi
 
 #do dasm separately, because it's distributed separately
-for DASMEXT in "" .$OSTYPE.x86 .$OSTYPE.$ARCH .$OSTYPE ; do
+for DASMEXT in "" .$OSTYPE.x86 .$OSTYPE.x64 .$OSTYPE.$ARCH .$OSTYPE ; do
   dasm$DASMEXT 2>/dev/null >&2 
   [ $? = 1 ] && break
 done
@@ -29,8 +29,15 @@ if [ ! $? = 1 ] ; then
   exit 1
 fi
 
+if [ "$1" = "-v" ] ; then
+  #this is just a version check. pass it along to the 7800basic binary
+  7800basic$EXT -v
+  exit
+fi
+
+
 DV=$(dasm$DASMEXT 2>/dev/null | grep ^DASM | head -n1)
-echo "Using dasm version: $DV" 
+echo "Using dasm version: $DV (dasm$DASMEXT)" 
   
 echo "Starting build of $1"
  #7800preprocess$EXT<"$1" | valgrind --tool=memcheck --leak-check=yes 7800basic$EXT -i "$bas7800dir" 

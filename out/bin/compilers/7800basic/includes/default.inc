@@ -1,3 +1,5 @@
+ ; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 ; Inclues go below - the order is crucial, since this is also the order in
 ; which they will appear in the generated assembly file
 ;

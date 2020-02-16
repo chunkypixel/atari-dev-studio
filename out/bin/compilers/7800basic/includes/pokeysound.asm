@@ -1,3 +1,5 @@
+ ; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 
  ifconst pokeysupport 
 
@@ -158,7 +160,7 @@ schedulepokeyX
 
 detectpokeylocation
          ;XBoard/XM...
-         lda #%00010000
+         lda #%00011100
          sta $470 ; tell XCTRL to hit the POKEY enable
          ldx #1
 detectpokeyloop

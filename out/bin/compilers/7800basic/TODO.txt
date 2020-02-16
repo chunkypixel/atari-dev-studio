@@ -1,0 +1,5 @@
+-get stmouse working smoothly
+-get amigamouse working
+-alternate per frame if 2 longcontrollers are hooked up
+-get trackball working
+-update mouse demo to dynamically change controllers between stmouse, amigamouse, trackball, or joystick

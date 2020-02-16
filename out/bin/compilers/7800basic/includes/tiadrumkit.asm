@@ -1,3 +1,5 @@
+ ; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 
  ; ** Drums are mapped to keys so high that humans can not hear them...
 

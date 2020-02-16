@@ -1,46 +1,13 @@
 ; MACRO.H
-; Version 1.05, 13/NOVEMBER/2003
 
-VERSION_MACRO         = 105
+; Based on the 2600 macro.h file.
+; Macros irrelevant to the 7800 have been removed, and the sleep macro 
+; has been adapted to give accurate results on the 7800.
 
-;
-; THIS FILE IS EXPLICITLY SUPPORTED AS A DASM-PREFERRED COMPANION FILE
-; PLEASE DO *NOT* REDISTRIBUTE MODIFIED VERSIONS OF THIS FILE!
-;
-; This file defines DASM macros useful for development for the Atari 2600.
-; It is distributed as a companion machine-specific support package
-; for the DASM compiler. Updates to this file, DASM, and associated tools are
-; available at at http://www.atari2600.org/dasm
-;
-; Many thanks to the people who have contributed.  If you take issue with the
-; contents, or would like to add something, please write to me
-; (atari2600@taswegian.com) with your contribution.
-;
-; Latest Revisions...
-;
-; 1.05  14/NOV/2003      - Added VERSION_MACRO equate (which will reflect 100x version #)
-;                          This will allow conditional code to verify MACRO.H being
-;                          used for code assembly.
-; 1.04  13/NOV/2003     - SET_POINTER macro added (16-bit address load)
-;
-; 1.03  23/JUN/2003     - CLEAN_START macro added - clears TIA, RAM, registers
-;
-; 1.02  14/JUN/2003     - VERTICAL_SYNC macro added
-;                         (standardised macro for vertical synch code)
-; 1.01  22/MAR/2003     - SLEEP macro added. 
-;                       - NO_ILLEGAL_OPCODES switch implemented
-; 1.0	22/MAR/2003		Initial release
-
-; Note: These macros use illegal opcodes.  To disable illegal opcode usage, 
-;   define the symbol NO_ILLEGAL_OPCODES (-DNO_ILLEGAL_OPCODES=1 on command-line).
-;   If you do not allow illegal opcode usage, you must include this file 
-;   *after* including VCS.H (as the non-illegal opcodes access hardware
-;   registers and require them to be defined first).
+; Version 1.0 2019/12/11 (based on the 2600 Version 1.05, 13/NOVEMBER/2003)
 
 ; Available macros...
 ;   SLEEP n             - sleep for n cycles
-;   VERTICAL_SYNC       - correct 3 scanline vertical synch code
-;   CLEAN_START         - set machine to known state on startup
 ;   SET_POINTER         - load a 16-bit absolute to a 16-bit variable
 
 ;-------------------------------------------------------------------------------
@@ -64,7 +31,7 @@ VERSION_MACRO         = 105
                     IFNCONST NO_ILLEGAL_OPCODES
                         nop $80
                     ELSE
-                        bit VSYNC
+                        bit $80
                     ENDIF
 .CYCLES             SET .CYCLES - 3
                 ENDIF

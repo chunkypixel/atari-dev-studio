@@ -1,3 +1,5 @@
+ ; Provided under the CC0 license. See the included LICENSE.txt for details.
+
      ;standard routimes needed for pretty much all games
 
      ; some definitions used with "set debug color"
@@ -8,7 +10,7 @@ DEBUGDRAW      = $C1
      ;NMI and IRQ handlers
 NMI
      ;VISIBLEOVER is 255 while the screen is drawn, and 0 right after the visible screen is done.
-     pha
+     pha ; save A
      lda visibleover
      eor #255
      sta visibleover
@@ -20,7 +22,7 @@ NMI
      beq reallyoffvisible
        lda visibleover
        beq skiptopscreenroutine
-         txa
+         txa ; save X+Y
          pha
          tya
          pha
@@ -28,16 +30,66 @@ NMI
  ifconst .topscreenroutine
          jsr .topscreenroutine
  endif
+         inc frameslost ; this is balanced with a "dec frameslost" when drawscreen is called.
+
        ; ** Other important routines that need to regularly run, and can run onscreen.
        ; ** Atarivox can't go here, because Maria might interrupt it while it's bit-banging.
+
+longcontrollerreads ; ** controllers that take a lot of time to read. We use much of the visible screen here.
+         ifconst LONGCONTROLLERREAD
+           lda #$38
+ ifconst LONGDEBUG
+           sta BACKGRND
+ endif
+           sta inttemp6
+
+lonereadlineloop
+           ldx #1
+longreadloop
+           ldy port0control,x
+           lda longreadroutinelo,y
+           sta inttemp3
+           lda longreadroutinehi,y
+           sta inttemp4
+	   ora inttemp3
+           beq longreadloopreturn
+           jmp (inttemp3)
+longreadloopreturn
+           dex
+           bpl longreadloop
+           dec inttemp6
+           sta WSYNC
+           bne lonereadlineloop
+
+ ifconst LONGDEBUG
+           lda #$00
+           sta BACKGRND
+ endif
+         endif ; LONGCONTROLLERREAD
+
          jsr servicesfxchannels 
          ifconst MUSICTRACKER
            jsr servicesong
          endif ; MUSICTRACKER
+
+         inc framecounter
+         lda framecounter
+         and #63
+         bne skipcountdownseconds
+         lda countdownseconds
+         beq skipcountdownseconds
+         dec countdownseconds
+skipcountdownseconds
+
          jsr checkjoybuttons
-	ifconst DRIVINGCONTROL
-           jsr updatedrivingcontrols
-	endif ; DRIVINGCONTROL
+
+	 ifconst DRIVINGSUPPORT
+           jsr drivingupdate
+	 endif ; DRIVINGSUPPORT
+	 ifconst KEYPADSUPPORT
+           jsr keypadrowselect
+	 endif ; KEYPADSUPPORT
+
 
          lda doublebufferminimumframeindex
          beq skipdoublebufferminimumframeindexadjust
@@ -52,6 +104,26 @@ skiptopscreenroutine
      pla
 IRQ
      RTI
+
+     ifconst LONGCONTROLLERREAD
+longreadroutinelo
+ ;        NONE          PROLINE        LIGHTGUN      PADDLE
+ .byte    0,            0,             0,            0           
+ ;        TRKBALL       VCS STICK      DRIVING       KEYPAD
+ .byte    0,            0,             0,            0           
+ ;        STMOUSE       AMOUSE         ATARIVOX
+ .byte    <mouseupdate, <mouseupdate,  0
+
+longreadroutinehi
+ ;        NONE          PROLINE        LIGHTGUN      PADDLE
+ .byte    0,            0,             0,            0           
+ ;        TRKBALL       VCS STICK      DRIVING       KEYPAD
+ .byte    0,            0,             0,            0           
+ ;        STMOUSE       AMOUSE         ATARIVOX
+ .byte    >mouseupdate, >mouseupdate,  0
+nullroutine
+ rts
+     endif ; LONGCONTROLLERREAD
 
 reallyoffvisible
      sta WSYNC
@@ -72,10 +144,13 @@ reallyoffvisible
      cld
 
      jsr uninterruptableroutines
-     inc frameslost
 
      ifconst .userinterrupt
          jsr .userinterrupt
+     endif
+
+     ifconst KEYPADSUPPORT
+         jsr keypadcolumnread
      endif
 
      pla
@@ -128,7 +203,6 @@ savescreenrts
      rts
 
 drawscreen
-
      ifconst SPRITECOUNTING
          lda spritecount
          cmp maxspritecount
@@ -139,23 +213,10 @@ skipspritecountsave
          sta spritecount
      endif ; SPRITECOUNTING
 
-     inc framecounter
-     lda framecounter
-     and #63
-     bne skipcountdownseconds
-     lda countdownseconds
-     beq skipcountdownseconds
-     dec countdownseconds
-skipcountdownseconds
-
      lda #0
      sta temp1 ; not B&W if we're here...
 
 drawscreenwait
-     ifconst DEBUGCOLOR
-         lda #DEBUGWASTE
-         sta BACKGRND
-     endif ; DEBUGCOLOR
      lda visibleover
      bne drawscreenwait ; make sure the visible screen isn't being drawn
 
@@ -175,32 +236,11 @@ drawscreenwait
 
      ; Make sure the visible screen has *started* before we exit. That way we can rely on drawscreen
      ; delaying a full frame, but still allowing time for basic calculations.
-visiblescreenstarted
-     ifconst DEBUGFRAMES
-         lda #DEBUGCALC
-         ldy #0
-     endif ; DEBUGFRAMES
-     dec frameslost
-     beq skipframeswerelost
-frameswerelost
-     ifconst DEBUGFRAMES
-         lda #DEBUGWASTE
-     endif ; DEBUGFRAMES
-     sty frameslost
-skipframeswerelost
-     ifconst DEBUGFRAMES
-         sta BACKGRND
-     endif ; DEBUGFRAMES
-
 visiblescreenstartedwait
      lda visibleover
      beq visiblescreenstartedwait
 visiblescreenstartedwaitdone
-
-     ifconst DEBUGCOLOR
-         lda #DEBUGCALC
-         sta BACKGRND
-     endif ; DEBUGCOLOR
+     dec frameslost ; ; this gets balanced with an "inc frameslost" by an NMI at the top of the screen
      rts
 
      ifnconst pauseroutineoff
@@ -213,9 +253,11 @@ pauseroutine
          beq pausepressed
 
  ifnconst SOFTRESETASPAUSEOFF
+ ifnconst MOUSESUPPORT
      lda SWCHA ; then check the soft "RESET" joysick code...
      and #%01110000 ; _LDU
      beq pausepressed
+ endif
  endif
 
          ;pause isn't pressed
@@ -344,7 +386,9 @@ dlendthiszonedone
 uninterruptableroutines
      ; this is for routines that must happen off the visible screen, each frame.
 
-     jsr serviceatarivoxqueue
+     ifconst AVOXVOICE
+       jsr serviceatarivoxqueue
+     endif
 
      lda #0
      sta palfastframe
@@ -390,7 +434,7 @@ processavoxvoice
          rts
 avoxfixport
          lda #0 ; restore the port to all bits as inputs...
-         sta SWACNT
+         sta CTLSWA
          rts
 silenceavoxvoice
          SPEAK avoxsilentdata
@@ -402,10 +446,14 @@ avoxsilentdata
      endif ; AVOXVOICE
 
 checkjoybuttons
-     ;we poll the joystick fire buttons and throw them in shadow registers now
+     ;we poll the joystick fire buttons and throw them in shadow registers. We do this
+     ;to map 1-button joysticks to the left button on 2-button joysticks.
+     ldx port0control
+     lda controlsusing2buttoncode,x
+     beq .skipp0firecheck
+     ; ** not sure if we need to handle the mice with custom code or not
      lda #0
      sta sINPT1
-     sta sINPT3
      lda INPT4
      bmi .skipp0firecheck
      ;one button joystick is down
@@ -419,6 +467,11 @@ checkjoybuttons
      sta joybuttonmode
      sta SWCHB
 .skipp0firecheck
+     ldx port1control
+     lda controlsusing2buttoncode,x
+     beq .all2buttonschecked
+     lda #0
+     sta sINPT3
      lda INPT5
      bmi .skipp1firecheck
      ;one button joystick is down
@@ -439,7 +492,50 @@ checkjoybuttons
      lda INPT3
      ora sINPT3
      sta sINPT3
+.all2buttonschecked
+ ifconst LIGHTGUNSUPPORT
+     jmp checkgun0trigger ; tack lightgun trigger onto the joystick button state, so we reuse basic code...
+ endif
      rts
+
+ ifconst LIGHTGUNSUPPORT
+checkgun0trigger
+     lda port0control 
+     cmp #2 ; lightgun in port 0?
+     bne skipcheckgun0trigger
+     lda SWCHA
+     asl ; shift D4 to D5
+     asl ; shift D5 to D6
+     asl ; shift D6 to D7
+     and #%10000000
+     eor #%10000000
+     sta sINPT1
+skipcheckgun0trigger
+     lda port0control
+     cmp #2 ; lightgun i port 1?
+     bne skipcheckgun1trigger
+     lda SWCHA
+     lsr ; shift D0 into carry
+     lsr ; shift carry into D7
+     and #%10000000
+     eor #%10000000
+     sta sINPT3
+skipcheckgun1trigger
+     rts
+ endif ; LIGHTGUNSUPPORT
+
+controlsusing2buttoncode
+     .byte 0 ; 00=no controller plugged in
+     .byte 1 ; 01=proline joystick
+     .byte 0 ; 02=lightgun
+     .byte 0 ; 03=paddle
+     .byte 1 ; 04=trakball
+     .byte 1 ; 05=vcs joystick
+     .byte 1 ; 06=driving control
+     .byte 0 ; 07=keypad control
+     .byte 1 ; 08=st mouse/cx80  - not sure if the 2-button code will mess up this controller
+     .byte 1 ; 09=amiga mouse    - not sure if the 2-button code will mess up this controller
+     .byte 1 ; 10=atarivox
 
 drawwait
      lda visibleover
@@ -656,10 +752,6 @@ plotsprite
      ifconst SPRITECOUNTING
          inc spritecount
      endif
-     ifconst DEBUGCOLOR
-         lda #DEBUGWASTE
-         sta BACKGRND
-     endif
 
  ifconst DOUBLEBUFFER
      lda doublebufferstate
@@ -669,11 +761,6 @@ plotspritewait
      lda visibleover
      bne plotspritewait
 skipplotspritewait
-
-     ifconst DEBUGCOLOR
-         lda #DEBUGDRAW
-         sta BACKGRND
-     endif
 
      ;arguments: 
      ; temp1=lo graphicdata 
@@ -923,10 +1010,6 @@ plotcharloop
      ; ** read from a data indirectly pointed to from temp8,temp9
      ; ** format is: lo_data, hi_data, palette|width, x, y
      ; ** format ends with lo_data | hi_data = 0
-     ifconst DEBUGCOLOR
-         lda #DEBUGWASTE
-         sta BACKGRND
-     endif
 
  ifconst DOUBLEBUFFER
      lda doublebufferstate
@@ -936,10 +1019,6 @@ plotcharloopwait
      lda visibleover
      bne plotcharloopwait
 skipplotcharloopwait
-     ifconst DEBUGCOLOR
-         lda #DEBUGDRAW
-         sta BACKGRND
-     endif
 plotcharlooploop
      ldy #0
      lda (temp8),y
@@ -975,10 +1054,6 @@ plotcharacters
      ifconst SPRITECOUNTING
          inc spritecount
      endif
-     ifconst DEBUGCOLOR
-         lda #DEBUGWASTE
-         sta BACKGRND
-     endif
  ifconst DOUBLEBUFFER
      lda doublebufferstate
      bne skipplotcharacterswait
@@ -987,10 +1062,6 @@ plotcharacterswait
      lda visibleover
      bne plotcharacterswait
 skipplotcharacterswait
-     ifconst DEBUGCOLOR
-         lda #DEBUGDRAW
-         sta BACKGRND
-     endif
      ;arguments: 
      ; temp1=lo charactermap
      ; temp2=hi charactermap
@@ -1219,6 +1290,7 @@ pvnibble2char_skipnibble
 
 
  ifconst USED_PLOTVALUEEXTRA
+plotdigitcount     = temp6
 plotvalueextra
      ; calling 7800basic command:
      ; plotvalue digit_gfx palette variable/data number_of_digits screen_x screen_y
@@ -1327,6 +1399,7 @@ DoXCollisionCheck
      cmp __boxx2          ;3
      bcs X1isbiggerthanX2 ;2/3
 X2isbiggerthanX1
+     ; carry is clear
      adc __boxw1 ;3
      cmp __boxx2 ;3
      bcs DoYCollisionCheck ;3/2
@@ -1341,6 +1414,7 @@ DoYCollisionCheck
      cmp __boxy2 ;3
      bcs Y1isbiggerthanY2 ;3/2
 Y2isbiggerthanY1
+     ; carry is clear
      adc __boxh1 ;3
      cmp __boxy2 ;3
      rts ;6 
@@ -1448,23 +1522,20 @@ mul16_2
      ; numerator in A, denom in temp1
      ; returns with quotient in A, remainder in temp1
 div16
+     sta temp2
      sty temp1
+     lda #0
      ldx #8
-loopdiv
+     asl temp2
+div16_1
+     rol
      cmp temp1
-     bcc toosmalldiv
-     sbc temp1 ; Note: Carry is, and will remain, set.
+     bcc div16_2
+     sbc temp1
+div16_2
      rol temp2
-     rol
      dex
-     bne loopdiv
-     beq donediv
-toosmalldiv
-     rol temp2
-     rol
-     dex
-     bne loopdiv
-donediv
+     bne div16_1
      sta temp1
      lda temp2
      rts
@@ -1501,18 +1572,22 @@ BS_return
 checkselectswitch
      lda SWCHB ; first check the real select switch...
      and #%00000010
+ ifnconst MOUSESUPPORT
      beq checkselectswitchreturn ; switch is pressed
      lda SWCHA ; then check the soft "select" joysick code...
      and #%10110000 ; R_DU
+ endif ; MOUSESUPPORT
 checkselectswitchreturn
      rts
 
 checkresetswitch
      lda SWCHB ; first check the real reset switch...
      and #%00000001
+ ifnconst MOUSESUPPORT
      beq checkresetswitchreturn ; switch is pressed
      lda SWCHA ; then check the soft "reset" joysick code...
      and #%01110000 ; _LDU
+ endif ; MOUSESUPPORT
 checkresetswitchreturn
      rts
 
@@ -1604,14 +1679,14 @@ createallgamedlls
      ldy paldetected
      beq skipcreatePALpadding
      clc
-     adc #25 
+     adc #21 
 skipcreatePALpadding
      jsr createnonvisibledlls
      stx visibleDLLstart
      jsr createvisiblezones
      stx overscanDLLstart
 createallgamedllscontinue
-     lda #(NVLINES+50) ; extras for PAL
+     lda #(NVLINES+55) ; extras for PAL
      jsr createnonvisibledlls
 
      ldx visibleDLLstart
@@ -1822,7 +1897,6 @@ doublebufferoff
      sta doublebufferdloffset
      rts
 
-
 DLLMEMLutLo
   .byte <DLLMEM,<(DLLMEM+$60)
 DLLMEMLutHi
@@ -1834,7 +1908,89 @@ NewPageflipoffset
 
      endif ; DOUBLEBUFFER
 
- ifconst DRIVINGCONTROL
+ ifconst MOUSESUPPORT
+   ifnconst DRIVINGSUPPORT
+rotationalcompare
+     ; new=00, old=xx
+     .byte $00, $01, $ff, $00
+     ; new=01, old=xx
+     .byte $ff, $00, $00, $01
+     ; new=10, old=xx
+     .byte $01, $00, $00, $ff
+     ; new=11, old=xx
+     .byte $00, $ff, $01, $00
+   endif
+
+   ;  0000YyXx st mouse
+   ;  0000xyXY amiga mouse
+amigatoataribits ; swap bits 1 and 4...
+  .byte %00000000, %00001000, %00000010, %00001010
+  .byte %00000100, %00001100, %00000110, %00001110
+  .byte %00000001, %00001001, %00000011, %00001011
+  .byte %00000101, %00001101, %00000111, %00001111
+
+mouseupdate
+;LONGDEBUG = 1
+   lda SWCHA
+   and #$0f
+   sta inttemp2
+   lda SWCHA
+   lsr
+   lsr
+   lsr
+   lsr
+   sta inttemp1
+
+   lda port0control,x
+   cmp #8 ; st mouse
+   beq domousecontrol
+   cmp #9 ; amiga mouse
+   bne skipmousecontrol
+   ; st mice encode on different bits/joystick-lines than amiga mice...
+   ;  0000YyXx st mouse
+   ;  0000xyXY amiga mouse
+   ; ...so can shuffle the amiga bits to reuse the st driver.
+   lda inttemp1,x
+   tay
+   lda amigatoataribits,y
+   sta inttemp1,x
+domousecontrol
+   ;port X has a mouse enabled
+   lda inttemp1,x
+   and #%00000011
+   asl
+   asl
+   ora mousecodex0,x
+   and #%00001111
+   tay
+   lda rotationalcompare,y
+   clc
+   adc mousex0,x
+   sta mousex0,x
+   tya
+   lsr
+   lsr
+   sta mousecodex0,x
+
+   lda inttemp1,x
+   and #%00001100
+   ora mousecodey0,x
+   and #%00001111
+   tay
+   lda rotationalcompare,y
+   asl ; *2 for y axis, since it has ~double the resolution of x
+   clc
+   adc mousey0,x
+   sta mousey0,x
+   tya
+   lsr
+   lsr
+   sta mousecodey0,x
+skipmousecontrol
+   jmp longreadloopreturn
+ endif ; MOUSESUPPORT
+
+ ifconst DRIVINGSUPPORT
 rotationalcompare
  ; new=00, old=xx
  .byte $00, $01, $ff, $00
@@ -1844,14 +2000,17 @@ rotationalcompare
  .byte $01, $00, $00, $ff
  ; new=11, old=xx
  .byte $00, $ff, $01, $00
-updatedrivingcontrols
+drivingupdate
    ldx #1
+   lda port1control
+   cmp #6 ; check if port1=driving
+   bne skipfirstdrivingcontrol
    lda SWCHA
    and #%00000011
    asl
    asl
-updatedrivingcontrolsloop
-   ora drivingcontrollast0,x
+drivingupdateloop
+   ora controller0statesave,x
    tay
    lda rotationalcompare,y
    clc
@@ -1860,13 +2019,144 @@ updatedrivingcontrolsloop
    tya
    lsr
    lsr
-   sta drivingcontrollast0,x
+   sta controller0statesave,x
+skipfirstdrivingcontrol
+   lda port0control
+   cmp #6 ; check if port0=driving
+   bne drivingcontrolsloopdone
    lda SWCHA
    and #%00110000
    lsr
    lsr
    dex
-   bpl updatedrivingcontrolsloop
+   bpl drivingupdateloop
+drivingcontrolsloopdone
    rts
- endif ; DRIVINGCONTROL
+ endif ; DRIVINGSUPPORT
+
+ ifconst KEYPADSUPPORT
+   ; ** select keypad rows 0 to 3 over 4 frames...
+keypadrowselect
+   ldy #0
+   lda port0control
+   cmp #7
+   bne skipport0val
+   iny ; y=y+1
+skipport0val
+   lda port1control
+   cmp #7
+   bne skipport1val
+   iny
+   iny ; y=y+2
+skipport1val
+   lda keyrowdirectionmask,y
+   sta CTLSWA
+   tya
+   asl
+   asl
+   sta inttemp1
+   lda framecounter
+   and #3
+   ora inttemp1
+   tax
+   lda keyrowselectvalue,x
+   sta SWCHA
+   rts
+
+keyrowdirectionmask
+    .byte #%00000000 ; 0 : port0=input  port1=input
+    .byte #%11110000 ; 1 : port0=output port1=input
+    .byte #%00001111 ; 2 : port0=input  port1=output
+    .byte #%11111111 ; 2 : port0=output port1=output
+
+keyrowselectvalue
+        .byte #%11111111, #%11111111, #%11111111, #%11111111 ; no row selected, all pins high, always
+        .byte #%11101111, #%11011111, #%10111111, #%01111111 ; p0 keypad in
+        .byte #%11111110, #%11111101, #%11111011, #%11110111 ; p1 keypad in
+        .byte #%11101110, #%11011101, #%10111011, #%01110111 ; p0+p1 keypads in
+ endif;  KEYPADSUPPORT
+
+ ifconst KEYPADSUPPORT
+keypadcolumnread
+   lda framecounter
+   and #3
+   asl ; x2 because keypad variables are interleaved
+   tax
+
+   lda #0
+   sta keypadmatrix0a,x
+   sta keypadmatrix1a,x
+
+   lda INPT0
+   cmp #$80
+   rol keypadmatrix0a,x
+   lda INPT1
+   cmp #$80
+   rol keypadmatrix0a,x
+   lda INPT4
+   cmp #$80
+   rol keypadmatrix0a,x
+   lda keypadmatrix0a,x
+   eor #%00000111
+   sta keypadmatrix0a,x
+  
+   rol keypadmatrix1a,x
+   lda INPT2
+   cmp #$80
+   rol keypadmatrix1a,x
+   lda INPT3
+   cmp #$80
+   rol keypadmatrix1a,x
+   lda INPT5
+   cmp #$80
+   rol keypadmatrix1a,x
+   lda keypadmatrix1a,x
+   eor #%00000111
+   sta keypadmatrix1a,x
+
+   rts
+ endif ; KEYPADSUPPORT
+ 
+setportforinput
+   lda CTLSWAs
+   and allpinsinputlut,x
+   sta CTLSWAs
+   sta CTLSWA
+   rts
+
+allpinsinputlut
+ .byte $0F, $F0
+
+setonebuttonmode
+   lda #$ff
+   sta SWCHB
+   lda CTLSWBs
+   sta SWCHB
+   lda CTLSWBs
+   and twobuttonlut,x
+   sta CTLSWBs
+   sta CTLSWB
+   lda #$00
+   sta SWCHB
+   rts
+
+onebuttonlut
+ .byte $10, $04
+
+settwobuttonmode
+   lda #$ff
+   sta SWCHB
+   lda CTLSWBs
+   sta SWCHB
+   lda CTLSWBs
+   ora onebuttonlut,x
+   sta CTLSWBs
+   sta CTLSWB
+   lda #$00
+   sta SWCHB
+   rts
+ 
+twobuttonlut
+ .byte $04, $10
+
 

@@ -5,7 +5,7 @@ CP=cp
 RM=rm
 #CFLAGS for valgrind...
 #CFLAGS= -g -O0
-CFLAGS=-O0
+CFLAGS=-O0 -Wall
 CC=cc
 LEX=lex
 LEXFLAGS=-t
@@ -43,17 +43,34 @@ all: 7800basic 7800preprocess 7800postprocess 7800filter 7800optimize 7800header
 dist:
 	make clean
 	make distclean
-	make -f makefile.linux32
-	make -f makefile.xcmp.win32
-	make -f makefile.xcmp.osx
+	make -f makefile.xcmp.win-x86
+	make -f makefile.xcmp.win-x64
+	make -f makefile.linux-x86
+	make -f makefile.linux-x64
+	make -f makefile.xcmp.osx-x86
+	make -f makefile.xcmp.osx-x64
+	unix2dos *.txt *.c *.h
 
 distclean:
-	make -f makefile.linux32 clean
-	make -f makefile.xcmp.win32 clean
-	make -f makefile.xcmp.osx clean
+	make -f makefile.xcmp.win-x86 clean
+	make -f makefile.xcmp.win-x64 clean
+	make -f makefile.linux-x86 clean
+	make -f makefile.linux-x64 clean
+	make -f makefile.xcmp.osx-x86 clean
+	make -f makefile.xcmp.osx-x64 clean
+
 
 install: all
 
 clean:
 	${RM} -f 7800basic 7800preprocess 7800postprocess 7800filter 7800optimize 7800header 7800sign 7800makecc2
+
+love:
+	@echo "not war"
+peace:
+	@echo "not war"
+hay:
+	@echo "while the sun shines"
+believe:
+	@echo "ok... the floor is lava"
 

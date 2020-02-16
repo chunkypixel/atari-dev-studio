@@ -1,3 +1,5 @@
+ ; Provided under the CC0 license. See the included LICENSE.txt for details.
+
 
  ifconst MUSICTRACKER
 	; ** songtempo lists how many 256ths of a frame a 16th note lasts

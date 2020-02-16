@@ -1,0 +1,198 @@
+Archive member included because of file (symbol)
+
+/usr/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-memcpy.o)
+                              main.o (memcpy)
+
+Allocating common symbols
+Common symbol       size              file
+
+fetcheraddr         0x4               main.o
+mask                0x4               main.o
+temp5               0x4               main.o
+maxsprites          0x1               main.o
+temp4               0x4               main.o
+count               0x4               main.o
+pfpixel             0x4               main.o
+
+Discarded input sections
+
+ .text          0x00000000        0x0 custom.o
+ .data          0x00000000        0x0 custom.o
+ .bss           0x00000000        0x0 custom.o
+ .text          0x00000000        0x0 main.o
+ .bss           0x00000000        0x0 main.o
+ .text.checkwrap
+                0x00000000       0x1a main.o
+ .text          0x00000000        0x0 /usr/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-memcpy.o)
+ .data          0x00000000        0x0 /usr/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-memcpy.o)
+ .bss           0x00000000        0x0 /usr/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-memcpy.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+boot             0x00000c00         0x00000080         xr
+C_code           0x00000c80         0x00005400         xr
+ram              0x40001c00         0x00000200
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD custom.o
+LOAD main.o
+START GROUP
+LOAD /usr/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/4.7.4/thumb/libgcc.a
+LOAD /usr/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/lib/thumb/libg.a
+LOAD /usr/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/lib/thumb/libc.a
+END GROUP
+                0x40001fdc                _stack_end = 0x40001fdc
+
+.bootcode       0x00000c00       0x50
+                0x00000c00                _sboot = .
+ *(.boot)
+ .boot          0x00000c00       0x50 custom.o
+                0x00000c00                Custom
+                0x00000c50                . = ALIGN (0x4)
+                0x00000c50                _eboot = .
+
+.text           0x00000c80      0x7e4
+                0x00000c80                .stext = .
+                0x00000c80                . = ALIGN (0x4)
+ *(.text)
+ *(.text.*)
+ .text.my_memcpy
+                0x00000c80       0x28 main.o
+                0x00000c80                my_memcpy
+ .text.my_memset
+                0x00000ca8       0x16 main.o
+                0x00000ca8                my_memset
+ .text.reverse  0x00000cbe       0x1a main.o
+                0x00000cbe                reverse
+ .text.memscroll
+                0x00000cd8       0x2a main.o
+                0x00000cd8                memscroll
+ *fill*         0x00000d02        0x2 00
+ .text.get32bitdff
+                0x00000d04       0x1c main.o
+                0x00000d04                get32bitdff
+ .text.get32bitdf
+                0x00000d20       0x14 main.o
+                0x00000d20                get32bitdf
+ .text.shiftnumbers
+                0x00000d34       0x24 main.o
+                0x00000d34                shiftnumbers
+ .text.checkswap
+                0x00000d58       0x5c main.o
+                0x00000d58                checkswap
+ .text.copynybble
+                0x00000db4       0x64 main.o
+                0x00000db4                copynybble
+ .text.on_off_flip
+                0x00000e18       0x48 main.o
+                0x00000e18                on_off_flip
+ .text.startup.main
+                0x00000e60      0x534 main.o
+                0x00000e60                main
+ .text.memcpy   0x00001394       0x90 /usr/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-memcpy.o)
+                0x00001394                memcpy
+ *(.rodata)
+ .rodata        0x00001424       0x40 main.o
+                0x00001444                maskdata
+ *(.rodata*)
+                0x00001464                . = ALIGN (0x4)
+                0x00001464                _etext = .
+
+.glue_7         0x00001464        0x0
+ .glue_7        0x00000000        0x0 linker stubs
+
+.glue_7t        0x00001464        0x0
+ .glue_7t       0x00000000        0x0 linker stubs
+
+.vfp11_veneer   0x00001464        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x00001464        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.iplt           0x00001464        0x0
+ .iplt          0x00000000        0x0 custom.o
+
+.rel.dyn        0x00001464        0x0
+ .rel.iplt      0x00000000        0x0 custom.o
+
+.data           0x40001c00       0x30 load address 0x00001464
+                0x40001c00                . = ALIGN (0x4)
+                0x40001c00                _sdata = .
+ *(.data)
+ .data          0x40001c00       0x30 main.o
+                0x40001c00                myGfxIndex
+                0x40001c0c                RIOT
+                0x40001c10                queue
+                0x40001c14                flashdata
+                0x40001c18                C_function
+                0x40001c1c                fetcher_address_table
+                0x40001c20                spritesort
+                0x40001c2c                queue_int
+ *(.data.*)
+                0x40001c30                . = ALIGN (0x4)
+                0x40001c30                _edata = .
+
+.igot.plt       0x40001c30        0x0 load address 0x00001494
+ .igot.plt      0x00000000        0x0 custom.o
+
+.bss            0x40001c30       0x1c load address 0x00001494
+                0x40001c30                . = ALIGN (0x4)
+                0x40001c30                _sbss = .
+ *(.bss)
+ *(COMMON)
+ COMMON         0x40001c30       0x1c main.o
+                0x40001c30                fetcheraddr
+                0x40001c34                mask
+                0x40001c38                temp5
+                0x40001c3c                maxsprites
+                0x40001c40                temp4
+                0x40001c44                count
+                0x40001c48                pfpixel
+                0x40001c4c                . = ALIGN (0x4)
+                0x40001c4c                _ebss = .
+                0x40001c4c                end = .
+OUTPUT(bin/custom2.elf elf32-littlearm)
+
+.ARM.attributes
+                0x00000000       0x2b
+ .ARM.attributes
+                0x00000000       0x16 custom.o
+ .ARM.attributes
+                0x00000016       0x30 main.o
+ .ARM.attributes
+                0x00000046       0x30 /usr/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-memcpy.o)
+
+.comment        0x00000000       0x70
+ .comment       0x00000000       0x70 main.o
+                                 0x71 (size before relaxing)
+
+.debug_info     0x00000000      0xb75
+ .debug_info    0x00000000      0xb75 main.o
+
+.debug_abbrev   0x00000000      0x2e0
+ .debug_abbrev  0x00000000      0x2e0 main.o
+
+.debug_loc      0x00000000      0x88c
+ .debug_loc     0x00000000      0x88c main.o
+
+.debug_aranges  0x00000000       0x78
+ .debug_aranges
+                0x00000000       0x78 main.o
+
+.debug_ranges   0x00000000       0x88
+ .debug_ranges  0x00000000       0x88 main.o
+
+.debug_line     0x00000000      0x2df
+ .debug_line    0x00000000      0x2df main.o
+
+.debug_str      0x00000000      0x654
+ .debug_str     0x00000000      0x654 main.o
+                                0x67a (size before relaxing)
+
+.debug_frame    0x00000000      0x184
+ .debug_frame   0x00000000      0x154 main.o
+ .debug_frame   0x00000154       0x30 /usr/gcc-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/4.7.4/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-memcpy.o)
