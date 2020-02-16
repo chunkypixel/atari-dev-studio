@@ -64,7 +64,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	
 	// Register code completion providers
 	// MS: Disabled for now
-	// await application.RegisterCompletionProvidersAsync(context);
+	await application.RegisterCompletionProvidersAsync(context);
 }
 
 // this method is called when your extension is deactivated

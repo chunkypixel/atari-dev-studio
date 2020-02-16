@@ -66,7 +66,7 @@ function activate(context) {
         yield application.RegisterFoldingProvidersAsync(context);
         // Register code completion providers
         // MS: Disabled for now
-        // await application.RegisterCompletionProvidersAsync(context);
+        yield application.RegisterCompletionProvidersAsync(context);
     });
 }
 exports.activate = activate;
