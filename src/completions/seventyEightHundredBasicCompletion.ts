@@ -15,115 +15,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
         // Read?
         //if (this._keywords.length <= 0) { this._keywords = await this.LoadCompletionFileAsync(context, '7800basic.md'); }
 
-/*         // Keywords/functions
-        let keywordFunctionProvider = vscode.languages.registerCompletionItemProvider(
-            this.Id,
-            {
-                // return list of available language methods
-                provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
-                    return [
-                        new vscode.CompletionItem('adjustvisible', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('alphachars', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('alphadata', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('BACKGRND', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P0C1', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P0C2', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P0C3', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P1C1', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P1C2', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P1C3', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P2C1', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P2C2', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P2C3', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P3C1', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P3C2', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P3C3', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P4C1', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P4C2', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P4C3', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P5C1', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P5C2', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P5C3', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P6C1', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P6C2', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P6C3', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P7C1', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P7C2', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('P7C3', vscode.CompletionItemKind.Constant),
-                        new vscode.CompletionItem('boxcollision', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('characterset', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('clearscreen', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('converttobcd', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('debug', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('displaymode', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('dmahole', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('doublebuffer', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('drawscreen', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('drawwait', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('drawhighscore', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('gamedifficulty', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('incbanner', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('incgraphic', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('incmapfile', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('inline', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('include', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy0up', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy0down', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy0left', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy0right', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy0any', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy0fire', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy0fire0', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy0fire1', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy1up', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy1down', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy1left', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy1right', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy1any', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy1fire', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy1fire0', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('joy1fire1', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('lockzone', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('loadmemory', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('loadrambank', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('loadrombank', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('memcopy', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('memset', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('newblock', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('peekchar', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('playsfx', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('playsong', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('plotbanner', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('plotchars', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('plotmap', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('plotmapfile', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('plotsprite', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('plotvalue', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('pokechar', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('pokeydetected', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('psound', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('reboot', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('restorescreen', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('savememory', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('speak', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('stopsong', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('switchreset', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('switchselect', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('switchleftb', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('switchrightb', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('trackersupport', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('tsound', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('unlockzone', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('reboot', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('restorescreen', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('savescreen', vscode.CompletionItemKind.Function)
-                    ];
-                }
-            }); 
-   
-        */
-
-        let languageProvider = vscode.languages.registerCompletionItemProvider(
+/*         let languageProvider = vscode.languages.registerCompletionItemProvider(
             this.Id,
             {
                  // return list of available language methods
@@ -234,7 +126,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                  }
             }
         );
-        context.subscriptions.push(languageProvider); 
+        context.subscriptions.push(languageProvider);  */
 
         // If
         let ifProvider = vscode.languages.registerCompletionItemProvider(

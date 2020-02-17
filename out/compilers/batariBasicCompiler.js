@@ -16,7 +16,7 @@ const execute = require("../execute");
 const compilerBase_1 = require("./compilerBase");
 class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     constructor() {
-        super("batariBasic", "batari Basic", [".bas", ".bb"], [".bin"], path.join(application.Path, "out", "bin", "compilers", "bb"), "Stella");
+        super("batariBasic", "batari Basic", [".bas", ".bb"], [".bin"], path.join(application.Path, "out", "bin", "compilers", "bB"), "Stella");
     }
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
