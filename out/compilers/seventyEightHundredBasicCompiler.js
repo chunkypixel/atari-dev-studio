@@ -191,6 +191,22 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             return true;
         });
     }
+    RemoveDebuggerFilesAsync(folder) {
+        const _super = Object.create(null, {
+            RemoveDebuggerFilesAsync: { get: () => super.RemoveDebuggerFilesAsync }
+        });
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('debugger:SeventyEightHundredBasicCompiler.RemoveDebuggerFilesAsync');
+            // Files specific to 7800basic
+            // TODO: more analysis of where to remove these...
+            yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `${this.FileName}.list.txt`));
+            yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `${this.FileName}.symbol.txt`));
+            // base
+            yield _super.RemoveDebuggerFilesAsync.call(this, folder);
+            // Result
+            return true;
+        });
+    }
 }
 exports.SeventyEightHundredBasicCompiler = SeventyEightHundredBasicCompiler;
 //# sourceMappingURL=seventyEightHundredBasicCompiler.js.map

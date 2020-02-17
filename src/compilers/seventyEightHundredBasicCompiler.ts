@@ -177,4 +177,19 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         // Result
         return true;
     }
+
+    protected async RemoveDebuggerFilesAsync(folder: string): Promise<boolean> {
+        console.log('debugger:SeventyEightHundredBasicCompiler.RemoveDebuggerFilesAsync');
+            
+        // Files specific to 7800basic
+        // TODO: more analysis of where to remove these...
+        await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`${this.FileName}.list.txt`));
+        await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`${this.FileName}.symbol.txt`));
+
+        // base
+        await super.RemoveDebuggerFilesAsync(folder);
+
+        // Result
+        return true;
+    }
 }
