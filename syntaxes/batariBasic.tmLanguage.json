@@ -5,7 +5,7 @@
 	"patterns": [
 		{
 			"match" : "\\n",
-			"name" : "meta.ending-space"
+			"name" : "meta.ending-space.bb"
 		},
 		{
 			"begin" : "^(?=\\t)",
@@ -15,10 +15,10 @@
 				{
 					"captures" : {
 						"1" : {
-							"name" : "meta.odd-tab.tabs"
+							"name" : "meta.odd-tab.tabs.bb"
 						},
 						"2" : {
-							"name" : "meta.even-tab.tabs"
+							"name" : "meta.even-tab.tabs.bb"
 						}
 					},
 					"match" : "(\\t)(\\t)?"
@@ -28,15 +28,15 @@
 		{
 			"begin" : "^(?= )",
 			"end" : "(?=[^ ])",
-			"name" : "meta.leading-space",
+			"name" : "meta.leading-space.bb",
 			"patterns" : [
 				{
 					"captures" : {
 						"1" : {
-							"name" : "meta.odd-tab.spaces"
+							"name" : "meta.odd-tab.spaces.bb"
 						},
 						"2" : {
-							"name" : "meta.even-tab.spaces"
+							"name" : "meta.even-tab.spaces.bb"
 						}
 					},
 					"match" : "(  )(  )?"
@@ -46,87 +46,87 @@
 		{
 			"begin": "(^[ \\t]+)?(?=;)",
 			"end": "\\n",
-			"name": "comment.line.78b",
+			"name": "comment.line.bb",
 			"comment": "single line comment"
 		},
 		{
 			"begin": "(^[ \\t]+)?(?i:rem)([ \\t]+)",
 			"end": "\\n",
-			"name": "comment.line.78b",
+			"name": "comment.line.bb",
 			"comment": "single line comment"
 		},
 		{
 			"begin": "/\\*",
 			"captures": {
 				"0": {
-					"name": "punctuation.definition.comment.78b"
+					"name": "punctuation.definition.comment.bb"
 				}
 			},
 			"end": "\\*/",
-			"name": "comment.block.78b"
+			"name": "comment.block.bb"
 		},
 		{
 			"begin": "\"",
 			"end": "\"",
 			"patterns": [
 				{
-					"name": "constant.character.escape.78b",
+					"name": "constant.character.escape.bb",
 					"match": "\\\\."
 				}
 			],
-			"name": "string.quoted.double.78b"
+			"name": "string.quoted.double.bb"
 		},
 		{
 			"begin": "'",
 			"end": "'",
 			"patterns": [
 				{
-					"name": "constant.character.escape.78b",
+					"name": "constant.character.escape.bb",
 					"match": "\\\\."
 				}
 			],
-			"name": "string.quoted.single.78b"
+			"name": "string.quoted.single.bb"
 		},
 		{
 			"patterns":[{
 				"match": "\\=",
-				"name": "keyword.operator.assignment.78b",
+				"name": "keyword.operator.assignment.bb",
 				"comment": "assignment operators"
 			},
 			{
 				"match": "\\*|/|-|\\+",
-				"name": "keyword.operator.arithmetic.78b",
+				"name": "keyword.operator.arithmetic.bb",
 				"comment": "arithmetic operators"				
 			},
 			{
 				"match": "\\!|&&",
-				"name": "keyword.operator.logical.78b",
+				"name": "keyword.operator.logical.bb",
 				"comment": "logical operators"				
 			},
 			{
 				"match": "\\^",
-				"name": "keyword.operator.bitwise.78b",
+				"name": "keyword.operator.bitwise.bb",
 				"comment": "bitwise operators"				
 			},
 			{
 				"match": "<=|>=|<|>",
-				"name": "keyword.operator.relational.78b",
+				"name": "keyword.operator.relational.bb",
 				"comment": "relational operators"				
 			}]
 		},
 		{
 			"patterns": [{
-				"name": "keyword.numeric.hexadecimal.78b",
+				"name": "keyword.numeric.hexadecimal.bb",
 				"match": "\\$[0-9a-fA-F]+\\b",
 				"comment": "hexadecimal number"
 			},
 			{
-				"name": "keyword.numeric.integer.78b",
+				"name": "keyword.numeric.integer.bb",
 				"match": "\\b[0-9]+\\b",
 				"comment": "integer number"				
 			},
 			{
-				"name": "keyword.numeric.binary.78b",
+				"name": "keyword.numeric.binary.bb",
 				"match": "\\%[0-1]+\\b",
 				"comment": "binary number"	
 			}]

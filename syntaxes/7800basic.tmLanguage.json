@@ -4,20 +4,20 @@
 	"patterns" : [
 		{
 			"match" : "\\n",
-			"name" : "meta.ending-space"
+			"name" : "meta.ending-space.78b"
 		},
 		{
 			"begin" : "^(?=\\t)",
 			"end" : "(?=[^\\t])",
-			"name" : "meta.leading-space",
+			"name" : "meta.leading-space.78b",
 			"patterns" : [
 				{
 					"captures" : {
 						"1" : {
-							"name" : "meta.odd-tab.tabs"
+							"name" : "meta.odd-tab.tabs.78b"
 						},
 						"2" : {
-							"name" : "meta.even-tab.tabs"
+							"name" : "meta.even-tab.tabs.78b"
 						}
 					},
 					"match" : "(\\t)(\\t)?"
@@ -27,15 +27,15 @@
 		{
 			"begin" : "^(?= )",
 			"end" : "(?=[^ ])",
-			"name" : "meta.leading-space",
+			"name" : "meta.leading-space.78b",
 			"patterns" : [
 				{
 					"captures" : {
 						"1" : {
-							"name" : "meta.odd-tab.spaces"
+							"name" : "meta.odd-tab.spaces.78b"
 						},
 						"2" : {
-							"name" : "meta.even-tab.spaces"
+							"name" : "meta.even-tab.spaces.78b"
 						}
 					},
 					"match" : "(  )(  )?"
