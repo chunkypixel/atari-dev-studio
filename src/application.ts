@@ -156,15 +156,15 @@ function getChosenCompiler(document: vscode.TextDocument): CompilerBase | undefi
 	// Prepare
 	let configuration = GetConfiguration();
 
-	// Find compiler (based on configuration selection)
-	let chosenCompiler = configuration.get<string>(`compilation.defaultCompiler`);
-	if (chosenCompiler) {
-		for (let compiler of Compilers) {
-			if (compiler.Id === chosenCompiler || compiler.Name === chosenCompiler) {
-				return compiler;
-			}
-		}	
-	}
+	// // Find compiler (based on configuration selection)
+	// let chosenCompiler = configuration.get<string>(`compilation.defaultCompiler`);
+	// if (chosenCompiler) {
+	// 	for (let compiler of Compilers) {
+	// 		if (compiler.Id === chosenCompiler || compiler.Name === chosenCompiler) {
+	// 			return compiler;
+	// 		}
+	// 	}	
+	// }
 
 	// Find compiler (based on language of chosen file)
 	for (let compiler of Compilers) {
@@ -192,7 +192,7 @@ function getChosenCompiler(document: vscode.TextDocument): CompilerBase | undefi
 	}
 
 	// Not found
-	Notify(`Unable to determine a compiler to use based on your chosen default compiler '${chosenCompiler}'. Review your selection in ${PreferencesSettingsExtensionPath}.`);
+	//Notify(`Unable to determine a compiler to use based on your chosen default compiler '${chosenCompiler}'. Review your selection in ${PreferencesSettingsExtensionPath}.`);
 
 	// Not found
 	return undefined;

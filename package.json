@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.3.4",
+    "version": "0.3.5",
     "icon": "images/icon.png",
     "preview": true,
     "publisher": "chunkypixel",
@@ -175,6 +175,16 @@
                     "description": "Whether to generate debugger files on compilation.",
                     "scope": "resource"
                 },
+                "atari-dev-studio.compiler.batariBasic.defaultCompiler": {
+                    "type": "string",
+                    "enum": [
+                        "Default",
+                        "Custom"
+                    ],
+                    "default": "Default",
+                    "description": "Specify the default compiler used to compile your batari Basic source code.",
+                    "scope": "resource"
+                },
                 "atari-dev-studio.compiler.batariBasic.args": {
                     "type": "string",
                     "default": "",
@@ -184,7 +194,17 @@
                 "atari-dev-studio.compiler.batariBasic.folder": {
                     "type": "string",
                     "default": "",
-                    "description": "Don't wish to use the included version of the batari Basic compiler? Specify the folder location of your compiler:",
+                    "description": "Don't wish to use the included version of the batari Basic compiler? Specify the folder location of your custom compiler:",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.compiler.7800basic.defaultCompiler": {
+                    "type": "string",
+                    "enum": [
+                        "Default",
+                        "Custom"
+                    ],
+                    "default": "Default",
+                    "description": "Specify the default compiler used to compile your 7800basic source code.",
                     "scope": "resource"
                 },
                 "atari-dev-studio.compiler.7800basic.args": {
@@ -196,7 +216,17 @@
                 "atari-dev-studio.compiler.7800basic.folder": {
                     "type": "string",
                     "default": "",
-                    "description": "Don't wish to use the included version of the 7800basic compiler? Specify the folder location of your compiler:",
+                    "description": "Don't wish to use the included version of the 7800basic compiler? Specify the folder location of your custom compiler:",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.compiler.dasm.defaultCompiler": {
+                    "type": "string",
+                    "enum": [
+                        "Default",
+                        "Custom"
+                    ],
+                    "default": "Default",
+                    "description": "Specify the default compiler used to compile your dasm source code.",
                     "scope": "resource"
                 },
                 "atari-dev-studio.compiler.dasm.args": {

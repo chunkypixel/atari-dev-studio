@@ -162,15 +162,15 @@ exports.GetConfiguration = GetConfiguration;
 function getChosenCompiler(document) {
     // Prepare
     let configuration = GetConfiguration();
-    // Find compiler (based on configuration selection)
-    let chosenCompiler = configuration.get(`compilation.defaultCompiler`);
-    if (chosenCompiler) {
-        for (let compiler of exports.Compilers) {
-            if (compiler.Id === chosenCompiler || compiler.Name === chosenCompiler) {
-                return compiler;
-            }
-        }
-    }
+    // // Find compiler (based on configuration selection)
+    // let chosenCompiler = configuration.get<string>(`compilation.defaultCompiler`);
+    // if (chosenCompiler) {
+    // 	for (let compiler of Compilers) {
+    // 		if (compiler.Id === chosenCompiler || compiler.Name === chosenCompiler) {
+    // 			return compiler;
+    // 		}
+    // 	}	
+    // }
     // Find compiler (based on language of chosen file)
     for (let compiler of exports.Compilers) {
         if (compiler.Id === document.languageId) {
@@ -193,7 +193,7 @@ function getChosenCompiler(document) {
         exports.CompilerOutputChannel.clear();
     }
     // Not found
-    Notify(`Unable to determine a compiler to use based on your chosen default compiler '${chosenCompiler}'. Review your selection in ${exports.PreferencesSettingsExtensionPath}.`);
+    //Notify(`Unable to determine a compiler to use based on your chosen default compiler '${chosenCompiler}'. Review your selection in ${PreferencesSettingsExtensionPath}.`);
     // Not found
     return undefined;
 }

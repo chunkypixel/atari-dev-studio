@@ -135,20 +135,31 @@ export abstract class CompilerBase implements vscode.Disposable {
         this.Args = "";
         this.Emulator = this.DefaultEmulator;
 
-        // Compiler
-        let userCompilerFolder = this.Configuration!.get<string>(`compiler.${this.Id}.folder`);
-        if (userCompilerFolder) {
-            // Validate (user provided)
-            let result = await filesystem.FolderExistsAsync(userCompilerFolder);
-            if (!result) {
-                // Notify
-                application.Notify(`ERROR: Cannot locate your chosen ${this.Name} compiler folder '${userCompilerFolder}'. Review your selection in ${application.PreferencesSettingsExtensionPath}.`);
-                return false;
-            }
+        // Are we using the built-in or custom compiler?
+        let defaultCompiler = this.Configuration!.get<string>(`compiler.${this.Id}.defaultCompiler`);
+        if (defaultCompiler === "Custom") {
+            let customCompilerFolder = this.Configuration!.get<string>(`compiler.${this.Id}.folder`);
+            if (!customCompilerFolder) {
+                // No custom compiler provided, revert
+                application.Notify(`WARNING: You have chosen to use a custom ${this.Name} compiler but have not provided the location. Reverting to the default compiler instead.`);
+                application.Notify("");
+            } else {
+                // Validate custom compiler path exists
+                let result = await filesystem.FolderExistsAsync(customCompilerFolder);
+                if (!result) {
+                    // Failed
+                    application.Notify(`ERROR: Cannot locate your chosen custom ${this.Name} compiler folder '${customCompilerFolder}'. Review your selection in ${application.PreferencesSettingsExtensionPath}.`);
+                    return false;
+                } else {
+                    // Ok
+                    application.Notify(`NOTE: Building your program using your chosen custom ${this.Name} compiler.`);
+                    application.Notify("");                    
+                }
 
-            // Set
-            this.FolderOrPath = userCompilerFolder;
-            this.CustomFolderOrPath = true;
+                // Set
+                this.FolderOrPath = customCompilerFolder;
+                this.CustomFolderOrPath = true;
+            }
         }
         // Compiler (other)
         this.Args = this.Configuration!.get<string>(`compiler.${this.Id}.args`,"");
