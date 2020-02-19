@@ -4,6 +4,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.3.5
 
+* Updated to latest dasm release v2.20.13 (Windows, Linux, macOS) 
 * Added options in the settings for choosing to use the **Default** (built-in) compiler or using a **Custom** one you have provided (batari Basic, 7800basic, dasm). This change will allow you to keep your custom compiler path without having to remove it to revert back to the default built-in one. 
 * Removed setting **atari-dev-studio.compiler.options.defaultCompiler** as it is no longer required (didn't appear to work anyway). Compilation of a file is determined by the language chosen in the editor.
 
@@ -28,7 +29,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 * Officially (finally!) included compiler and emulator packages for macOS (tested on Mojave).
 * Added Stella 6.0.2 (macOS)
-* Updated dasm to the latest 32 and 64 bit packages (Windows, Linux and macOS).
+* Updated to latest dasm release v2.20.12 (Windows, Linux and macOS).
 * Updated internal dev packages 
 
 ## 0.3.0
