@@ -230,6 +230,39 @@ class SeventyEightHundredBasicCompletion extends completionBase_1.CompletionBase
                     ];
                 }
             }, ' ');
+            // shakescreen
+            let shakescreenModeProvider = vscode.languages.registerCompletionItemProvider(this.Id, {
+                // return list of available language methods
+                provideCompletionItems(document, position) {
+                    // get all text until the `position` and check if it reads `return `
+                    let linePrefix = document.lineAt(position).text.substr(0, position.character);
+                    if (!linePrefix.endsWith('shakescreen ')) {
+                        return undefined;
+                    }
+                    return [
+                        new vscode.CompletionItem('lo', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('med', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('hi', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('off', vscode.CompletionItemKind.Value)
+                    ];
+                }
+            }, ' ');
+            // tallsprite
+            let tallsrpiteModeProvider = vscode.languages.registerCompletionItemProvider(this.Id, {
+                // return list of available language methods
+                provideCompletionItems(document, position) {
+                    // get all text until the `position` and check if it reads `return `
+                    let linePrefix = document.lineAt(position).text.substr(0, position.character);
+                    if (!linePrefix.endsWith('tallsprite ')) {
+                        return undefined;
+                    }
+                    return [
+                        new vscode.CompletionItem('off', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('on', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('spritesheet', vscode.CompletionItemKind.Value)
+                    ];
+                }
+            }, ' ');
             // set
             let setProvider = vscode.languages.registerCompletionItemProvider(this.Id, {
                 // return list of available language methods
@@ -270,7 +303,7 @@ class SeventyEightHundredBasicCompletion extends completionBase_1.CompletionBase
                 }
             }, ' ');
             // add items           
-            context.subscriptions.push(ifProvider, returnProvider, romsizeProvider, setProvider);
+            context.subscriptions.push(ifProvider, returnProvider, romsizeProvider, displayModeProvider, shakescreenModeProvider, tallsrpiteModeProvider, setProvider);
         });
     }
 }

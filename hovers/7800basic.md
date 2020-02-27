@@ -98,11 +98,19 @@
 
 
 
+## SHAKESCREEN
+
+    shakescreen state
+
+    state - lo, med, hi, off
+
+
+
 ## TALLSPRITE
 
     set tallsprite state
 
-    state - on, off 
+    state - on, off, spritesheet
 
 
 

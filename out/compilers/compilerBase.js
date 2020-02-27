@@ -166,7 +166,7 @@ class CompilerBase {
                     }
                     else {
                         // Ok
-                        application.Notify(`NOTE: Using your chosen custom ${this.Name} compiler to build this application.`);
+                        application.Notify(`NOTE: Building your program using your chosen custom ${this.Name} compiler.`);
                         application.Notify("");
                     }
                     // Set
