@@ -174,7 +174,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `${this.FileName}.bin`));
             }
             // Debugger files (from workspace not bin)
-            if (!this.GenerateDebuggerFiles) {
+            if (!this.GenerateDebuggerFiles || this.CleanUpCompilationFiles) {
                 yield this.RemoveDebuggerFilesAsync(this.WorkspaceFolder);
             }
             // Result
