@@ -29,6 +29,12 @@
 
 
 
+## RAND
+
+    rand
+
+
+
 ## DISPLAYMODE
 
     displaymode mode
@@ -353,13 +359,14 @@
 
 ## PLOTSPRITE
 
-    plotsprite sprite_graphic palette_# x y [frame]
+    plotsprite sprite_graphic palette_# x y [frame] [count]
     
     sprite_graphic - name of the included graphic
     palette_# - index of palette (0-7)
     x - x screen co-ordinate
     y - y screen co-ordinate
     frame (optional) - index of the frame to display
+    count (optional) - number of sprites to stack (tallsprite)
 
 
 
