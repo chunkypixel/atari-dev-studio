@@ -104,7 +104,9 @@ export class StellaEmulator extends EmulatorBase {
 
         // Process
         let result = await filesystem.ChModAsync(this.FolderOrPath);
-        if (result && application.IsMacOS) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`Stella.app/Contents/MacOS/Stella`),"100"); }
+        // Attempt to mark Stella as execute #19
+        // Don't worry about returned state
+        if (result && application.IsMacOS) { await filesystem.ChModAsync(path.join(this.FolderOrPath,`Contents/MacOS/Stella`),"100"); }
 
         // Result
         return result;
