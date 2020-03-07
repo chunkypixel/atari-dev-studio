@@ -54,6 +54,8 @@ SCORESIZE                 = 6
              sta ssCTRL
              lda sCHARBASE
              sta ssCHARBASE
+             lda #$60
+             sta charactermode
              jsr drawwait
              jsr blacken320colors
              jsr clearscreen
@@ -506,9 +508,9 @@ carryonkeepdisplayinghs
              jsr plotsprite
 
              ldx hscursorx
-
+             ldy hsdisplaymode
              lda SWCHA
-             cpx #3
+             cpy #3
              bne hsskipadjustjoystick1
              asl
              asl

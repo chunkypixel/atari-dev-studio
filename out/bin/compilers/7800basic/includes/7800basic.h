@@ -17,8 +17,8 @@
  ;         40-FF         numerous defines, listed below
  ;        140-1FF        RAM (stack)
 
- ;       1800-187F       DLL  (1880-18BF with page flipping enabled)
- ;       1880-1FFF       DLs  (18C0-1FFF with page flipping enabled)
+ ;       1800-187F       DLL  (1800-18DF with page flipping enabled)
+ ;       1880-1FFF       DLs  (18E0-1FFF with page flipping enabled)
 
  ;       2000-203F       Reserved
  ;       2100-213F       Reserved
@@ -26,6 +26,8 @@
 
 eeprombuffer     = $1FE0
 DLLMEM           = $1800
+DBOFFSET         =   $70   ; $E0 length DL is /2 for double-buffering
+
  ifconst PLOTVALUEPAGE
 VALBUFFER        = (PLOTVALUEPAGE*256)
  else

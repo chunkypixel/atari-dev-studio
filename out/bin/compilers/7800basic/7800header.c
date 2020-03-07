@@ -12,7 +12,7 @@
 //      7800header - a simple app to generate/interrogate a a78 header.
 //                      Michael Saarna (aka RevEng@AtariAge)
 
-#define HEADER_VERSION_INFO "7800header 0.9"
+#define HEADER_VERSION_INFO "7800header 0.10"
 
 void usage(char *binaryname);
 uint32_t phtole32(uint32_t value);
@@ -195,6 +195,14 @@ int main(int argc, char **argv)
 		    writebin(filename);
 		exit(0);
 	    }
+	    if (strncmp(usercommand, "fixsize", 7) == 0)
+            {
+                myheader.romsize4 = (gamesize>>0) & 0xff;
+                myheader.romsize3 = (gamesize>>8) & 0xff;
+                myheader.romsize2 = (gamesize>>16) & 0xff;
+                myheader.romsize1 = (gamesize>>24) & 0xff;
+                headergamesize=gamesize;
+            }
 	    else if (strncmp(usercommand, "name ", 5) == 0)
 	    {
 		memset(myheader.gamename, 0, 32);
@@ -751,8 +759,11 @@ void report(void)
 
     printf("7800 A78 Header Info   : %s\n\n", filename);
     printf("    embedded game name : %s\n", myheader.gamename);
-    printf("    rom size           : %d\n", (myheader.romsize4) |
-	   (myheader.romsize3 << 8) | (myheader.romsize2 << 16) | (myheader.romsize1 << 24));
+    headergamesize = (myheader.romsize4) | (myheader.romsize3 << 8) | (myheader.romsize2 << 16) | (myheader.romsize1 << 24);
+    printf("    rom size           : %d", headergamesize);
+    if (gamesize!=headergamesize) 
+        printf(" !!! actual %ld !!! (\"fixsize\" to correct)", gamesize);
+    printf("\n");
     printf("    cart format        : ");
     if ((myheader.carttype1 == 0) && (myheader.carttype2 == 0))
 	printf("Non-Banked ");

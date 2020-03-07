@@ -26,6 +26,7 @@ char *filterterm[] = {
     "^debugcolor",
     "^collisionwrap",
     "^pokeysupport",
+    "^ROM32K",
     "^ROM128K",
     "^ROM256K",
     "^ROM512K",
@@ -92,6 +93,11 @@ char *filterterm[] = {
     "^SOFTRESETASPAUSEOFF",
     "^DLMEMSTART",
     "^DLMEMEND",
+    "^pokeysound.asm",
+    "^BEADHEADER",
+    "^LONGDEBUG",
+    "^hiscore.asm",
+    "^tracker.asm",
     " Unresolved Symbols",
     ""
 };

@@ -603,8 +603,6 @@ void dmahole(char **statement)
 	    printf(" jmp dmahole_%d_%d\n", requestedhole, currentbank);
     }
 
-    if (bankcount > 0)
-	printf("dmahole_%d_%d\n", currentbank, requestedhole);
 
     sprintf(stdoutfilename, "7800hole.%d.asm", requestedhole);
     if ((stdoutfilepointer = freopen(stdoutfilename, "w", stdout)) == NULL)
@@ -6283,9 +6281,18 @@ void next(char **statement)
 	{
 	    printf("	LDA %s\n", forvar[numfors]);
 	    printf("	CMP ");
-	    printimmed(forend[numfors]);
-	    printf("%s\n", forend[numfors]);
-	    bcs(forlabel[numfors]);
+	    if (!strncmp(forend[numfors], "0\0", 2)) 
+            {
+                // the special case of 0 as end, since we can't check to see if it was smaller than 0
+                printf("#255\n");
+	        bne(forlabel[numfors]);
+            }
+            else // general case
+            {
+	        printimmed(forend[numfors]);
+	        printf("%s\n", forend[numfors]);
+	        bcs(forlabel[numfors]);
+            }
 	}
 	else
 	    bne(forlabel[numfors]);

@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.3.6
+
+* Updated to latest batari Basic release v1.5 (Windows, Linux, macOS)
+* Updated to latest 7800basic release v0.8 (Windows, Linux, macOS)
+* Updated internal dev packages
+
 ## 0.3.5
 
 * Updated to latest dasm release v2.20.13 (Windows, Linux, macOS) 

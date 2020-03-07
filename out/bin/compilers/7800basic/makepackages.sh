@@ -12,6 +12,8 @@ cat 7800bas.c | sed 's/BASIC_VERSION_INFO .*/BASIC_VERSION_INFO "7800basic v'"$R
 mv 7800bas.c.new 7800bas.c
 unix2dos 7800bas.c >/dev/null 2>&1
 
+find . -name .\*.swp -exec rm '{}' \;
+
 make dist
 
 rm -fr packages

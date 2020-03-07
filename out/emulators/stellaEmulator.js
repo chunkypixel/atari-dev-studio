@@ -105,6 +105,10 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
             }
             // Process
             let result = yield filesystem.ChModAsync(this.FolderOrPath);
+            if (result && application.IsMacOS) {
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `Stella.app/Contents/MacOS/Stella`), "100");
+            }
+            // Result
             return result;
         });
     }

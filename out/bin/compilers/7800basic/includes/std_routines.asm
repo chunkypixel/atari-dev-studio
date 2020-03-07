@@ -653,7 +653,10 @@ advancesfxpointer
 sfxsoundloop
      pha
      lda sfx1priority,x
-     beq advancesfxpointer
+     bne sfxsoundloop_carryon
+     pla ; fix the stack before we go
+     jmp advancesfxpointer
+sfxsoundloop_carryon
      pla
      and #$F0
      lsr
@@ -1624,7 +1627,7 @@ foundfirstinterrupt
      and #%01111111 ; clear the interrupt bit
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+$60,x
+       sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
      ldx overscanDLLstart
 findlastinterrupt
@@ -1638,7 +1641,7 @@ foundlastinterrupt
      and #%01111111 ; clear the interrupt bit
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+$60,x
+       sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
      ;now we need to set the new interrupts
      clc
@@ -1649,7 +1652,7 @@ foundlastinterrupt
      ora #%10000000
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+$60,x
+       sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
      clc
      lda temp2
@@ -1659,7 +1662,7 @@ foundlastinterrupt
      ora #%10000000
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+$60,x
+       sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
      jsr vblankresync
      rts
@@ -1694,7 +1697,7 @@ createallgamedllscontinue
      ora #%10000000 ; NMI 1 - start of visible screen
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+$60,x
+       sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
 
      ldx overscanDLLstart
@@ -1703,7 +1706,7 @@ createallgamedllscontinue
      and #%11110011 ; change this to a 1-line DLL, so there's time enough for the "deeper overscan" DLL
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+$60,x
+       sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
 
      inx
@@ -1714,7 +1717,7 @@ createallgamedllscontinue
      ora #%10000000 ; NMI 3 - deeper overscan
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+$60,x
+       sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
 
      rts
@@ -1746,19 +1749,19 @@ createnonvisibledllsreturn
 createblankdllentry
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+$60,x
+       sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
      inx
      lda #$21 ; blank
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+$60,x
+       sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
      inx
      lda #$00
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+$60,x
+       sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
      inx
      rts 
@@ -1770,13 +1773,13 @@ createvisiblezonesloop
      ora #(WZONEHEIGHT * 4) ; set Holey DMA for 8 or 16 tall zones
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+$60,x
+       sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
      inx
      lda DLPOINTH,y
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+$60,x
+       sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
      inx
      lda DLPOINTL,y
@@ -1784,9 +1787,9 @@ createvisiblezonesloop
      ifconst DOUBLEBUFFER
        clc
        adc #DOUBLEBUFFEROFFSET
-       sta DLLMEM+$60,x
+       sta DLLMEM+DBOFFSET,x
        bcc skiphidoublebufferadjust  ; dlls are big endian, so we need to fix the hi byte after-the-fact...
-         inc DLLMEM+$5F,x
+         inc DLLMEM+DBOFFSET-1,x
 skiphidoublebufferadjust
      endif ; DOUBLEBUFFER
      inx
@@ -1898,9 +1901,9 @@ doublebufferoff
      rts
 
 DLLMEMLutLo
-  .byte <DLLMEM,<(DLLMEM+$60)
+  .byte <DLLMEM,<(DLLMEM+DBOFFSET)
 DLLMEMLutHi
-  .byte >DLLMEM,>(DLLMEM+$60)
+  .byte >DLLMEM,>(DLLMEM+DBOFFSET)
 NewPageflipstate
   .byte 3,1
 NewPageflipoffset
