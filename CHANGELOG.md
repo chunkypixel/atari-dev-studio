@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.3.7
+
+* #19 [Done] Fix for macOS - attempt to mark Stella as an execute
+
 ## 0.3.6
 
 * Updated to latest batari Basic release v1.5 (Windows, Linux, macOS)
