@@ -123,41 +123,41 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
                 return true;
             }
             // Prepare
-            let architecture = "Linux";
+            let platform = "Linux";
             if (application.IsMacOS) {
-                architecture = "Darwin";
+                platform = "Darwin";
             }
             // Process
             let result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, '7800basic.sh'));
             if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800basic.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800basic.${platform}.${application.OSArch}`));
             }
             if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800filter.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800filter.${platform}.${application.OSArch}`));
             }
             if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800header.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800header.${platform}.${application.OSArch}`));
             }
             if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800optimize.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800optimize.${platform}.${application.OSArch}`));
             }
             if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800postprocess.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800postprocess.${platform}.${application.OSArch}`));
             }
             if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800preprocess.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800preprocess.${platform}.${application.OSArch}`));
             }
             if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800sign.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800sign.${platform}.${application.OSArch}`));
             }
             if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800makecc2.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800makecc2.${platform}.${application.OSArch}`));
             }
             if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `dasm.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `dasm.${platform}.${application.OSArch}`));
             }
             if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `distella.${architecture}.x86`));
+                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `distella.${platform}.${application.OSArch}`));
             }
             // Result
             return result;

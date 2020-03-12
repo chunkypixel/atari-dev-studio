@@ -134,17 +134,17 @@ export class BatariBasicCompiler extends CompilerBase {
         if (this.CustomFolderOrPath || application.IsWindows) { return true; }
 
         // Prepare
-        let architecture = "Linux";
-        if (application.IsMacOS) { architecture = "Darwin"; }
+        let platform = "Linux";
+        if (application.IsMacOS) { platform = "Darwin"; }
 
         // Process
         let result = await filesystem.ChModAsync(path.join(this.FolderOrPath,'2600basic.sh'));
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`2600basic.${architecture}.x86`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`dasm.${architecture}.x86`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`bbfilter.${architecture}.x86`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`optimize.${architecture}.x86`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`postprocess.${architecture}.x86`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`preprocess.${architecture}.x86`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`2600basic.${platform}.${application.OSArch}`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`dasm.${platform}.${application.OSArch}`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`bbfilter.${platform}.${application.OSArch}`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`optimize.${platform}.${application.OSArch}`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`postprocess.${platform}.${application.OSArch}`)); }
+        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`preprocess.${platform}.${application.OSArch}`)); }
         return result;
     }
 
