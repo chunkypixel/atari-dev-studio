@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.3.8
+
+* #22 [Fixed] Fixed issue identifying ChMod files for batari Basic and 7800basic where the architecture was hard-coded to x86 (Linux and macOS)
+* #19 [Fixed] Added full ChMod permissions to Stella on macOS (same as compilers)
+
 ## 0.3.7
 
 * #19 [Done] Fix for macOS - attempt to mark Stella as an execute
