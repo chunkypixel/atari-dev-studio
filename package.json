@@ -359,6 +359,7 @@
         "watch": "tsc -watch -p ./"
     },
     "dependencies": {
+        "minimist": "^1.2.5",
         "find-process": "^1.4.3",
         "open": "^7.0.3",
         "tree-kill": "^1.2.2",
