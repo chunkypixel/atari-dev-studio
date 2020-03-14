@@ -22,19 +22,14 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
         this.Verboseness = "";
     }
     ExecuteCompilerAsync() {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.ExecuteCompilerAsync');
-            // Compile make file?
-            if (this.UsingMakeFile) {
-                // Show terminal window?  
-                if (!((_a = this.Configuration) === null || _a === void 0 ? void 0 : _a.get(`editor.preserveCodeEditorFocus`))) {
-                    application.MakeTerminal.show();
-                }
-                // Launch
+            // Make compile?
+            if (this.UsingMakeCompiler) {
+                // Launch and exit
+                // note: we cannot wait for a result
+                application.MakeTerminal.sendText(`cd ${this.WorkspaceFolder}`);
                 application.MakeTerminal.sendText('make');
-                // Result
-                // Note: we cannot wait for a result
                 return true;
             }
             // Standard compile
@@ -123,7 +118,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
                 return false;
             }
             // Using a make process? if so we can skip some of the configuration
-            if (this.UsingMakeFile) {
+            if (this.UsingMakeCompiler) {
                 return true;
             }
             // Default compiler
@@ -158,9 +153,6 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.RepairFilePermissionsAsync');
             // Validate
-            if (this.UsingMakeFile) {
-                return true;
-            }
             if (this.CustomFolderOrPath || application.IsWindows) {
                 return true;
             }
@@ -174,10 +166,6 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
     RemoveCompilationFilesAsync(result) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.RemoveCompilationFiles');
-            // Validate
-            if (this.UsingMakeFile) {
-                return true;
-            }
             // Language specific files
             if (!result) {
                 // Process

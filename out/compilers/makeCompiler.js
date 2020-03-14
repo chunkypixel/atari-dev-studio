@@ -26,6 +26,11 @@ class MakeCompiler extends compilerBase_1.CompilerBase {
             // (Re)load
             // It appears you need to reload this each time incase of change
             this.Configuration = application.GetConfiguration();
+            // Configuration
+            result = yield this.LoadConfigurationAsync();
+            if (!result) {
+                return false;
+            }
             // Activate output window?
             if (!this.Configuration.get(`editor.preserveCodeEditorFocus`)) {
                 application.MakeTerminal.show();
@@ -43,23 +48,18 @@ class MakeCompiler extends compilerBase_1.CompilerBase {
             if (!result) {
                 return false;
             }
-            // Configuration
-            result = yield this.LoadConfigurationAsync();
-            if (!result) {
-                return false;
-            }
             // Result
             return true;
         });
     }
     ExecuteCompilerAsync() {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:MakeCompiler.ExecuteCompilerAsync');
-            // Launch
-            application.MakeTerminal.sendText('make');
-            // Result
-            return (((_a = application.MakeTerminal.exitStatus) === null || _a === void 0 ? void 0 : _a.code) == 0);
+            // Launch and exit
+            // note: we cannot wait for a result
+            application.MakeTerminal.sendText(`cd ${this.WorkspaceFolder}`);
+            application.MakeTerminal.sendText(`make -f ${this.FileName}`);
+            return true;
         });
     }
     LoadConfigurationAsync() {
@@ -73,8 +73,8 @@ class MakeCompiler extends compilerBase_1.CompilerBase {
             if (!result) {
                 return false;
             }
-            // Set state
-            this.UsingMakeFile = true;
+            // Flag
+            this.UsingMakeCompiler = true;
             // Result
             return true;
         });

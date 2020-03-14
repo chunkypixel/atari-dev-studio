@@ -2,9 +2,13 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.4.0
+
+* Added option to dasm compiler to allow you to select the 'Make' to compile your source code (Andrew Davie). This option will automatically scan the root workspace folder for a Makefile to use without having to open it first (make sure your base source code file is open and active as per the current compilation process). Note: you can still open a Makefile and compile from that if required.
+
 ## 0.3.9
 
-* Added ability to use 'Make' to compile your game source code (Andrew Davie). Note: this feature is experimental and requires the user to have a fully configured environment to compile and launch emulation outside VS Code (tested only on macOS)
+* Added ability to use 'Make' to compile your source code (Andrew Davie). Note: this feature is experimental and requires the user to have a fully configured environment to compile and launch emulation outside VS Code (tested only on macOS)
 * Added missing Command Palette option 'ads: Kill compile process'. This feature will kill any running compilation process across all available compilers. Note: this should not be required but is available if needed.
 
 ## 0.3.8

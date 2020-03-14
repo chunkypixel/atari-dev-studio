@@ -1,9 +1,6 @@
 "use strict";
 import * as vscode from 'vscode';
-import * as path from 'path';
 import * as application from '../application';
-import * as filesystem from '../filesystem';
-import * as execute from '../execute';
 import { CompilerBase } from "./compilerBase";
 
 export class MakeCompiler extends CompilerBase {
@@ -16,7 +13,7 @@ export class MakeCompiler extends CompilerBase {
             ["makefile"],
             [""],
             "",
-            "")
+            "");
     }
 
     protected async InitialiseAsync(): Promise<boolean> {
@@ -30,6 +27,10 @@ export class MakeCompiler extends CompilerBase {
         // (Re)load
         // It appears you need to reload this each time incase of change
         this.Configuration = application.GetConfiguration();
+
+        // Configuration
+        result = await this.LoadConfigurationAsync();
+        if (!result) { return false; }
 
         // Activate output window?
         if (!this.Configuration.get<boolean>(`editor.preserveCodeEditorFocus`))  {
@@ -46,10 +47,6 @@ export class MakeCompiler extends CompilerBase {
         }
         if (!result) { return false; }
 
-        // Configuration
-        result = await this.LoadConfigurationAsync();
-        if (!result) { return false; }
-
          // Result
         return true;
     }
@@ -57,11 +54,11 @@ export class MakeCompiler extends CompilerBase {
     protected async ExecuteCompilerAsync(): Promise<boolean> {
         console.log('debugger:MakeCompiler.ExecuteCompilerAsync');
 
-        // Launch
-        application.MakeTerminal.sendText('make')
-        
-        // Result
-        return (application.MakeTerminal.exitStatus?.code == 0);
+        // Launch and exit
+        // note: we cannot wait for a result
+        application.MakeTerminal.sendText(`cd ${this.WorkspaceFolder}`);
+        application.MakeTerminal.sendText(`make -f ${this.FileName}`);
+        return true;
     }
 
     protected async LoadConfigurationAsync(): Promise<boolean> {
@@ -71,8 +68,8 @@ export class MakeCompiler extends CompilerBase {
         let result = await super.LoadConfigurationAsync();
         if (!result) { return false; }
 
-        // Set state
-        this.UsingMakeFile = true;
+        // Flag
+        this.UsingMakeCompiler = true;
 
         // Result
         return true;

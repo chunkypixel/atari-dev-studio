@@ -23,23 +23,16 @@ export class DasmCompiler extends CompilerBase {
     protected async ExecuteCompilerAsync(): Promise<boolean> {
         console.log('debugger:DasmCompiler.ExecuteCompilerAsync');
 
-        // Compile make file?
-        if (this.UsingMakeFile) {   
-            // Show terminal window?  
-            if (!this.Configuration?.get<boolean>(`editor.preserveCodeEditorFocus`))  {
-                application.MakeTerminal.show();
-            }
-
-            // Launch
-            application.MakeTerminal.sendText('make')
-            
-            // Result
-            // Note: we cannot wait for a result
+        // Make compile?
+        if (this.UsingMakeCompiler) {   
+            // Launch and exit
+            // note: we cannot wait for a result
+            application.MakeTerminal.sendText(`cd ${this.WorkspaceFolder}`);
+            application.MakeTerminal.sendText('make');
             return true;
         }
 
         // Standard compile
-
         // Premissions
         await this.RepairFilePermissionsAsync();
 
@@ -124,7 +117,7 @@ export class DasmCompiler extends CompilerBase {
         if (!result) { return false; }
 
         // Using a make process? if so we can skip some of the configuration
-        if (this.UsingMakeFile) { return true; }
+        if (this.UsingMakeCompiler) { return true; }
 
         // Default compiler
         if (!this.CustomFolderOrPath) {
@@ -160,7 +153,6 @@ export class DasmCompiler extends CompilerBase {
         console.log('debugger:DasmCompiler.RepairFilePermissionsAsync'); 
 
         // Validate
-        if (this.UsingMakeFile) { return true; }
         if (this.CustomFolderOrPath || application.IsWindows) { return true; }
 
         // Github: https://github.com/chunkypixel/atari-dev-studio/issues/1
@@ -173,9 +165,6 @@ export class DasmCompiler extends CompilerBase {
 
     protected async RemoveCompilationFilesAsync(result: boolean): Promise<boolean> {
         console.log('debugger:DasmCompiler.RemoveCompilationFiles');
-
-        // Validate
-        if (this.UsingMakeFile) { return true; }
 
         // Language specific files
         if (!result)  {
