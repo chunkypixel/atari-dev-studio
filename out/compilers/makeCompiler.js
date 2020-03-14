@@ -9,46 +9,57 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const vscode = require("vscode");
 const application = require("../application");
-const execute = require("../execute");
 const compilerBase_1 = require("./compilerBase");
 class MakeCompiler extends compilerBase_1.CompilerBase {
     // Features
     constructor() {
         super("makefile", "makefile", ["makefile"], [""], "", "");
     }
+    InitialiseAsync() {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('debugger:MakeCompiler.InitialiseAsync');
+            // Prepare
+            let result = true;
+            // Already running?
+            // (Re)load
+            // It appears you need to reload this each time incase of change
+            this.Configuration = application.GetConfiguration();
+            // Activate output window?
+            if (!this.Configuration.get(`editor.preserveCodeEditorFocus`)) {
+                application.MakeTerminal.show();
+            }
+            // Clear output content? (not available for terminals)
+            // Save files?
+            if (this.Configuration.get(`editor.saveAllFilesBeforeRun`)) {
+                result = yield vscode.workspace.saveAll();
+            }
+            else if (this.Configuration.get(`editor.saveFileBeforeRun`)) {
+                if (this.Document) {
+                    result = yield this.Document.save();
+                }
+            }
+            if (!result) {
+                return false;
+            }
+            // Configuration
+            result = yield this.LoadConfigurationAsync();
+            if (!result) {
+                return false;
+            }
+            // Result
+            return true;
+        });
+    }
     ExecuteCompilerAsync() {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:MakeCompiler.ExecuteCompilerAsync');
-            // Compiler options
-            let command = this.FolderOrPath;
-            let args = [
-                `-f ${this.FileName}`
-            ];
-            // Env
-            let env = {};
-            // Notify
-            application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`);
-            // Compile
-            this.IsRunning = true;
-            let executeResult = yield execute.Spawn(command, args, env, this.WorkspaceFolder, (stdout) => {
-                // Prepare
-                let result = true;
-                // Result
-                application.CompilerOutputChannel.append('' + stdout);
-                return result;
-            }, (stderr) => {
-                // Prepare
-                let result = false;
-                // Result
-                application.CompilerOutputChannel.append('' + stderr);
-                return result;
-            });
-            this.IsRunning = false;
-            // Notify
-            application.CompilerOutputChannel.appendLine(`Finished...`);
+            // Launch
+            application.MakeTerminal.sendText('make');
             // Result
-            return executeResult;
+            return (((_a = application.MakeTerminal.exitStatus) === null || _a === void 0 ? void 0 : _a.code) == 0);
         });
     }
     LoadConfigurationAsync() {
@@ -62,9 +73,8 @@ class MakeCompiler extends compilerBase_1.CompilerBase {
             if (!result) {
                 return false;
             }
-            // Path
-            //this.FolderOrPath = path.join(this.WorkspaceFolder,'make');
-            this.FolderOrPath = 'make';
+            // Set state
+            this.UsingMakeFile = true;
             // Result
             return true;
         });

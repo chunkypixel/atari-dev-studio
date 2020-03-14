@@ -228,7 +228,8 @@
                     "type": "string",
                     "enum": [
                         "Default",
-                        "Custom"
+                        "Custom",
+                        "Make"
                     ],
                     "default": "Default",
                     "description": "Specify the default compiler used to compile your dasm source code.",

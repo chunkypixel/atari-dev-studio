@@ -20,7 +20,6 @@ import { FoldingBase } from './foldings/foldingBase';
 import { BatariBasicFolding } from './foldings/batariBasicFolding';
 import { SeventyEightHundredBasicFolding } from './foldings/seventyEightHundredBasicFolding';
 
-
 // -------------------------------------------------------------------------------------
 // Operating System
 // -------------------------------------------------------------------------------------
@@ -48,6 +47,7 @@ export const PreferencesSettingsExtensionPath: string = `${(IsMacOS ? "Code" : "
 // Channels
 // -------------------------------------------------------------------------------------
 export const CompilerOutputChannel: vscode.OutputChannel = vscode.window.createOutputChannel("Compiler"); 
+export const MakeTerminal: vscode.Terminal = vscode.window.createTerminal("Make");
 
 // -------------------------------------------------------------------------------------
 // Compilers

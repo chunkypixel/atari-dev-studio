@@ -37,6 +37,7 @@ class CompilerBase {
         this.GenerateDebuggerFiles = false;
         this.CleanUpCompilationFiles = false;
         this.WorkspaceFolder = "";
+        this.UsingMakeFile = false;
         this.Id = id;
         this.Name = name;
         this.Extensions = extensions;
@@ -67,8 +68,9 @@ class CompilerBase {
             if (!result) {
                 return false;
             }
-            // Does compiler have an emulator?
-            if (this.Emulator === '')
+            // Does compiler have/use an emulator?
+            // Make doesn't use an emulator - user must provide their own
+            if (this.Emulator === '' || this.UsingMakeFile)
                 return true;
             try {
                 // Get emulator
@@ -109,11 +111,17 @@ class CompilerBase {
             this.Configuration = application.GetConfiguration();
             // Activate output window?
             if (!this.Configuration.get(`editor.preserveCodeEditorFocus`)) {
-                application.CompilerOutputChannel.show();
+                if (!this.UsingMakeFile) {
+                    application.CompilerOutputChannel.show();
+                }
+                else {
+                    application.MakeTerminal.show();
+                }
             }
             // Clear output content?
             if (this.Configuration.get(`editor.clearPreviousOutput`)) {
-                application.CompilerOutputChannel.clear();
+                if (!this.UsingMakeFile)
+                    application.CompilerOutputChannel.clear();
             }
             // Save files?
             if (this.Configuration.get(`editor.saveAllFilesBeforeRun`)) {
@@ -132,7 +140,7 @@ class CompilerBase {
             if (!result) {
                 return false;
             }
-            // Remove old debugger file before build
+            // Remove old debugger files before build
             yield this.RemoveDebuggerFilesAsync(this.CompiledSubFolder);
             // Result
             return true;
@@ -151,8 +159,21 @@ class CompilerBase {
             this.FolderOrPath = this.DefaultFolderOrPath;
             this.Args = "";
             this.Emulator = this.DefaultEmulator;
+            // System
+            this.WorkspaceFolder = this.getWorkspaceFolder();
+            this.FileName = path.basename(this.Document.fileName);
             // Are we using the built-in or custom compiler?
             let defaultCompiler = this.Configuration.get(`compiler.${this.Id}.defaultCompiler`);
+            if (defaultCompiler === "Make") {
+                // Only working is dasm currently
+                this.UsingMakeFile = yield this.HasMakeFileAsync();
+                if (!this.UsingMakeFile) {
+                    // Failed
+                    application.Notify(`Error: You have chosen to use the Make compiler for ${this.Id} but no Makefile was found your root workspace folder. Review your selection in ${application.PreferencesSettingsExtensionPath}.`);
+                    application.Notify(`Workspace folder: ${this.WorkspaceFolder}`);
+                    return false;
+                }
+            }
             if (defaultCompiler === "Custom") {
                 let customCompilerFolder = this.Configuration.get(`compiler.${this.Id}.folder`);
                 if (!customCompilerFolder) {
@@ -166,7 +187,6 @@ class CompilerBase {
                     if (!result) {
                         // Failed
                         application.Notify(`ERROR: Cannot locate your chosen custom ${this.Name} compiler folder '${customCompilerFolder}'. Review your selection in ${application.PreferencesSettingsExtensionPath}.`);
-                        return false;
                     }
                     else {
                         // Ok
@@ -184,8 +204,6 @@ class CompilerBase {
             this.GenerateDebuggerFiles = this.Configuration.get(`compiler.options.generateDebuggerFiles`, true);
             this.CleanUpCompilationFiles = this.Configuration.get(`compiler.options.cleanupCompilationFiles`, true);
             // System
-            this.WorkspaceFolder = this.getWorkspaceFolder();
-            this.FileName = path.basename(this.Document.fileName);
             this.CompiledSubFolder = path.join(this.WorkspaceFolder, this.CompiledSubFolderName);
             // Result
             return true;
@@ -195,6 +213,10 @@ class CompilerBase {
         var e_2, _a;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.VerifyCompiledFileSize');
+            // Validate
+            if (this.UsingMakeFile) {
+                return true;
+            }
             // Verify created file(s)
             application.Notify(`Verifying compiled file(s)...`);
             try {
@@ -229,6 +251,10 @@ class CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             // Note: generateDebuggerFile - there are different settings for each compiler
             console.log('debugger:CompilerBase.MoveFilesToBinFolder');
+            // Validate
+            if (this.UsingMakeFile) {
+                return true;
+            }
             // Create directory?
             let result = yield filesystem.MkDirAsync(this.CompiledSubFolder);
             if (!result) {
@@ -296,6 +322,10 @@ class CompilerBase {
         var e_5, _a;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.RemoveDebuggerFilesAsync');
+            // Validate
+            if (this.UsingMakeFile) {
+                return true;
+            }
             try {
                 // Process
                 for (var _b = __asyncValues(this.DebuggerExtensions), _c; _c = yield _b.next(), !_c.done;) {
@@ -328,6 +358,24 @@ class CompilerBase {
             this.IsRunning = false;
             execute.KillSpawnProcess();
         }
+    }
+    HasMakeFileAsync() {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('debugger:CompilerBase.HasMakeFileAsync');
+            // scan
+            var result = yield filesystem.FileExistsAsync(path.join(this.WorkspaceFolder, "makefile"));
+            // add some additional checks for Linux/macOS
+            if (application.IsLinux || application.IsMacOS) {
+                if (!result) {
+                    result = yield filesystem.FileExistsAsync(path.join(this.WorkspaceFolder, "Makefile"));
+                }
+                if (!result) {
+                    result = yield filesystem.FileExistsAsync(path.join(this.WorkspaceFolder, "MAKEFILE"));
+                }
+            }
+            // Result
+            return result;
+        });
     }
     getWorkspaceFolder() {
         console.log('debugger:CompilerBase.getWorkspaceFolder');

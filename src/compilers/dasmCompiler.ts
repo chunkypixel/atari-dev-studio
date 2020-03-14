@@ -23,6 +23,23 @@ export class DasmCompiler extends CompilerBase {
     protected async ExecuteCompilerAsync(): Promise<boolean> {
         console.log('debugger:DasmCompiler.ExecuteCompilerAsync');
 
+        // Compile make file?
+        if (this.UsingMakeFile) {   
+            // Show terminal window?  
+            if (!this.Configuration?.get<boolean>(`editor.preserveCodeEditorFocus`))  {
+                application.MakeTerminal.show();
+            }
+
+            // Launch
+            application.MakeTerminal.sendText('make')
+            
+            // Result
+            // Note: we cannot wait for a result
+            return true;
+        }
+
+        // Standard compile
+
         // Premissions
         await this.RepairFilePermissionsAsync();
 
@@ -50,7 +67,7 @@ export class DasmCompiler extends CompilerBase {
         // Notify
         application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`); 
 
-        // Compile
+        // Process
         this.IsRunning = true;
         let executeResult = await execute.Spawn(command, args, env, this.WorkspaceFolder,
             (stdout: string) => {
@@ -94,7 +111,7 @@ export class DasmCompiler extends CompilerBase {
         if (executeResult) { executeResult = await this.VerifyCompiledFileSizeAsync(); }
         await this.RemoveCompilationFilesAsync(executeResult);
         if (executeResult) { executeResult = await this.MoveFilesToBinFolderAsync(); }
-
+    
         // Result
         return executeResult;
     }
@@ -106,25 +123,12 @@ export class DasmCompiler extends CompilerBase {
         let result = await super.LoadConfigurationAsync();
         if (!result) { return false; }
 
-        // Compiler
-        // We use a path instead of a folder for dasm for added flexibility
-        this.CustomFolderOrPath = false;
-        let userCompilerPath = this.Configuration!.get<string>(`compiler.${this.Id}.path`);
-        if (userCompilerPath) {
-            // Validate (user provided)
-            let result = await filesystem.FileExistsAsync(userCompilerPath);
-            if (!result) {
-                // Notify
-                application.Notify(`ERROR: Cannot locate your chosen ${this.Name} compiler path '${userCompilerPath}'`);
-                return false;
-            }
+        // Using a make process? if so we can skip some of the configuration
+        if (this.UsingMakeFile) { return true; }
 
-            // Set
-            this.FolderOrPath = userCompilerPath;
-            this.CustomFolderOrPath = true;
-    
-        } else {
-            // dasm name (depends on OS)
+        // Default compiler
+        if (!this.CustomFolderOrPath) {
+             // dasm name (depends on OS)
             let dasmName = "dasm.exe";
             if (application.IsLinux) {
                 // Linux
@@ -156,6 +160,7 @@ export class DasmCompiler extends CompilerBase {
         console.log('debugger:DasmCompiler.RepairFilePermissionsAsync'); 
 
         // Validate
+        if (this.UsingMakeFile) { return true; }
         if (this.CustomFolderOrPath || application.IsWindows) { return true; }
 
         // Github: https://github.com/chunkypixel/atari-dev-studio/issues/1
@@ -168,6 +173,9 @@ export class DasmCompiler extends CompilerBase {
 
     protected async RemoveCompilationFilesAsync(result: boolean): Promise<boolean> {
         console.log('debugger:DasmCompiler.RemoveCompilationFiles');
+
+        // Validate
+        if (this.UsingMakeFile) { return true; }
 
         // Language specific files
         if (!result)  {
@@ -183,4 +191,5 @@ export class DasmCompiler extends CompilerBase {
         // Result
         return true;
     }
+
 }

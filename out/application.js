@@ -49,6 +49,7 @@ exports.PreferencesSettingsExtensionPath = `${(exports.IsMacOS ? "Code" : "File"
 // Channels
 // -------------------------------------------------------------------------------------
 exports.CompilerOutputChannel = vscode.window.createOutputChannel("Compiler");
+exports.MakeTerminal = vscode.window.createTerminal("Make");
 // -------------------------------------------------------------------------------------
 // Compilers
 // Register compilers here and in order of preference

@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as application from '../application';
 import * as filesystem from '../filesystem';
 import * as execute from '../execute';
+import { promises } from 'dns';
 
 export abstract class CompilerBase implements vscode.Disposable {
 
@@ -32,7 +33,8 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected GenerateDebuggerFiles: boolean = false;
     protected CleanUpCompilationFiles: boolean = false;
     protected WorkspaceFolder: string = "";
-    
+    protected UsingMakeFile: boolean = false;
+
     constructor(id: string, name: string, extensions: string[], compiledExtensions: string[], folderOrPath: string, emulator: string) {
         this.Id = id;
         this.Name = name;
@@ -61,8 +63,9 @@ export abstract class CompilerBase implements vscode.Disposable {
         let result = await this.BuildGameAsync(document);
         if (!result) { return false; }
 
-        // Does compiler have an emulator?
-        if (this.Emulator === '') return true;
+        // Does compiler have/use an emulator?
+        // Make doesn't use an emulator - user must provide their own
+        if (this.Emulator === '' || this.UsingMakeFile) return true;
 
         // Get emulator
         for await (let emulator of application.Emulators) {
@@ -99,12 +102,16 @@ export abstract class CompilerBase implements vscode.Disposable {
 
         // Activate output window?
         if (!this.Configuration.get<boolean>(`editor.preserveCodeEditorFocus`))  {
-            application.CompilerOutputChannel.show();
+            if (!this.UsingMakeFile) {
+                application.CompilerOutputChannel.show();
+            } else {
+                application.MakeTerminal.show();
+            }
         }
 
         // Clear output content?
         if (this.Configuration.get<boolean>(`editor.clearPreviousOutput`))  {
-            application.CompilerOutputChannel.clear();
+            if (!this.UsingMakeFile) application.CompilerOutputChannel.clear();
         }
 
         // Save files?
@@ -119,7 +126,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         result = await this.LoadConfigurationAsync();
         if (!result) { return false; }
 
-        // Remove old debugger file before build
+        // Remove old debugger files before build
         await this.RemoveDebuggerFilesAsync(this.CompiledSubFolder);
 
          // Result
@@ -138,9 +145,23 @@ export abstract class CompilerBase implements vscode.Disposable {
         this.FolderOrPath = this.DefaultFolderOrPath;
         this.Args = "";
         this.Emulator = this.DefaultEmulator;
+        
+        // System
+        this.WorkspaceFolder = this.getWorkspaceFolder();
+        this.FileName = path.basename(this.Document!.fileName);
 
         // Are we using the built-in or custom compiler?
         let defaultCompiler = this.Configuration!.get<string>(`compiler.${this.Id}.defaultCompiler`);
+        if (defaultCompiler === "Make") {
+            // Only working is dasm currently
+            this.UsingMakeFile = await this.HasMakeFileAsync();
+            if (!this.UsingMakeFile) {
+                // Failed
+                application.Notify(`Error: You have chosen to use the Make compiler for ${this.Id} but no Makefile was found your root workspace folder. Review your selection in ${application.PreferencesSettingsExtensionPath}.`);
+                application.Notify(`Workspace folder: ${this.WorkspaceFolder}`);
+                return false;
+            }
+        }
         if (defaultCompiler === "Custom") {
             let customCompilerFolder = this.Configuration!.get<string>(`compiler.${this.Id}.folder`);
             if (!customCompilerFolder) {
@@ -153,7 +174,7 @@ export abstract class CompilerBase implements vscode.Disposable {
                 if (!result) {
                     // Failed
                     application.Notify(`ERROR: Cannot locate your chosen custom ${this.Name} compiler folder '${customCompilerFolder}'. Review your selection in ${application.PreferencesSettingsExtensionPath}.`);
-                    return false;
+
                 } else {
                     // Ok
                     application.Notify(`NOTE: Building your program using your chosen custom ${this.Name} compiler.`);
@@ -164,17 +185,16 @@ export abstract class CompilerBase implements vscode.Disposable {
                 this.FolderOrPath = customCompilerFolder;
                 this.CustomFolderOrPath = true;
             }
-        }
+        } 
+
         // Compiler (other)
         this.Args = this.Configuration!.get<string>(`compiler.${this.Id}.args`,"");
-    
+
         // Compilation
         this.GenerateDebuggerFiles = this.Configuration!.get<boolean>(`compiler.options.generateDebuggerFiles`, true);
         this.CleanUpCompilationFiles = this.Configuration!.get<boolean>(`compiler.options.cleanupCompilationFiles`, true);
 
         // System
-        this.WorkspaceFolder = this.getWorkspaceFolder();
-        this.FileName = path.basename(this.Document!.fileName);
         this.CompiledSubFolder = path.join(this.WorkspaceFolder, this.CompiledSubFolderName);
 
         // Result
@@ -183,6 +203,9 @@ export abstract class CompilerBase implements vscode.Disposable {
 
     protected async VerifyCompiledFileSizeAsync(): Promise<boolean> {
         console.log('debugger:CompilerBase.VerifyCompiledFileSize');
+
+        // Validate
+        if (this.UsingMakeFile) { return true; }
 
         // Verify created file(s)
         application.Notify(`Verifying compiled file(s)...`);
@@ -207,6 +230,9 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected async MoveFilesToBinFolderAsync(): Promise<boolean> {
         // Note: generateDebuggerFile - there are different settings for each compiler
         console.log('debugger:CompilerBase.MoveFilesToBinFolder');
+
+        // Validate
+        if (this.UsingMakeFile) { return true; }
 
         // Create directory?
         let result = await filesystem.MkDirAsync(this.CompiledSubFolder);
@@ -243,11 +269,13 @@ export abstract class CompilerBase implements vscode.Disposable {
                 let oldPath = path.join(this.WorkspaceFolder, debuggerFile);
                 let newPath = path.join(this.CompiledSubFolder, debuggerFile);
 
-                // Move compiled file
-                result = await filesystem.RenameFileAsync(oldPath, newPath);
-                if (!result) {
-                    // Notify            
-                    application.Notify(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);          
+                // Move compiled file?
+                if (filesystem.FileExistsAsync(oldPath)) {
+                    result = await filesystem.RenameFileAsync(oldPath, newPath);
+                    if (!result) {
+                        // Notify            
+                        application.Notify(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);          
+                    }
                 }
             }
         }
@@ -259,6 +287,9 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected async RemoveDebuggerFilesAsync(folder: string): Promise<boolean> {
         console.log('debugger:CompilerBase.RemoveDebuggerFilesAsync');
             
+        // Validate
+        if (this.UsingMakeFile) { return true; }
+
         // Process
         for await (let [arg, extension] of this.DebuggerExtensions) {
             // Prepare
@@ -266,7 +297,9 @@ export abstract class CompilerBase implements vscode.Disposable {
             let debuggerFilePath = path.join(folder, debuggerFile);
 
             // Process
-            await filesystem.RemoveFileAsync(debuggerFilePath);
+            if (filesystem.FileExistsAsync(debuggerFilePath)) {
+                await filesystem.RemoveFileAsync(debuggerFilePath);
+            }
         }
 
         // Result
@@ -285,6 +318,21 @@ export abstract class CompilerBase implements vscode.Disposable {
             this.IsRunning = false;
             execute.KillSpawnProcess();
         }
+    }
+
+    public async HasMakeFileAsync(): Promise<boolean> {
+        console.log('debugger:CompilerBase.HasMakeFileAsync'); 
+        
+        // scan
+        var result = await filesystem.FileExistsAsync(path.join(this.WorkspaceFolder,"makefile"));
+        // add some additional checks for Linux/macOS
+        if (application.IsLinux || application.IsMacOS) {
+            if (!result) { result = await filesystem.FileExistsAsync(path.join(this.WorkspaceFolder,"Makefile")); }
+            if (!result) { result = await filesystem.FileExistsAsync(path.join(this.WorkspaceFolder,"MAKEFILE")); }
+        }
+
+        // Result
+        return result;
     }
 
     private getWorkspaceFolder(): string {

@@ -22,8 +22,22 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
         this.Verboseness = "";
     }
     ExecuteCompilerAsync() {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.ExecuteCompilerAsync');
+            // Compile make file?
+            if (this.UsingMakeFile) {
+                // Show terminal window?  
+                if (!((_a = this.Configuration) === null || _a === void 0 ? void 0 : _a.get(`editor.preserveCodeEditorFocus`))) {
+                    application.MakeTerminal.show();
+                }
+                // Launch
+                application.MakeTerminal.sendText('make');
+                // Result
+                // Note: we cannot wait for a result
+                return true;
+            }
+            // Standard compile
             // Premissions
             yield this.RepairFilePermissionsAsync();
             // Compiler options
@@ -54,7 +68,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             let env = {};
             // Notify
             application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`);
-            // Compile
+            // Process
             this.IsRunning = true;
             let executeResult = yield execute.Spawn(command, args, env, this.WorkspaceFolder, (stdout) => {
                 // Prepare
@@ -108,23 +122,12 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             if (!result) {
                 return false;
             }
-            // Compiler
-            // We use a path instead of a folder for dasm for added flexibility
-            this.CustomFolderOrPath = false;
-            let userCompilerPath = this.Configuration.get(`compiler.${this.Id}.path`);
-            if (userCompilerPath) {
-                // Validate (user provided)
-                let result = yield filesystem.FileExistsAsync(userCompilerPath);
-                if (!result) {
-                    // Notify
-                    application.Notify(`ERROR: Cannot locate your chosen ${this.Name} compiler path '${userCompilerPath}'`);
-                    return false;
-                }
-                // Set
-                this.FolderOrPath = userCompilerPath;
-                this.CustomFolderOrPath = true;
+            // Using a make process? if so we can skip some of the configuration
+            if (this.UsingMakeFile) {
+                return true;
             }
-            else {
+            // Default compiler
+            if (!this.CustomFolderOrPath) {
                 // dasm name (depends on OS)
                 let dasmName = "dasm.exe";
                 if (application.IsLinux) {
@@ -155,6 +158,9 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.RepairFilePermissionsAsync');
             // Validate
+            if (this.UsingMakeFile) {
+                return true;
+            }
             if (this.CustomFolderOrPath || application.IsWindows) {
                 return true;
             }
@@ -168,6 +174,10 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
     RemoveCompilationFilesAsync(result) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.RemoveCompilationFiles');
+            // Validate
+            if (this.UsingMakeFile) {
+                return true;
+            }
             // Language specific files
             if (!result) {
                 // Process
