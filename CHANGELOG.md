@@ -4,7 +4,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.4.0
 
-* Added option to dasm compiler to allow you to select the 'Make' to compile your source code (Andrew Davie). This option will automatically scan the root workspace folder for a Makefile to use without having to open it first (make sure your base source code file is open and active as per the current compilation process). Note: you can still open a Makefile and compile from that if required.
+* Added option to dasm compiler to allow you to select 'Make' to compile your source code (Andrew Davie). This option will automatically scan the root workspace folder for a Makefile to use without having to open it first (make sure your base source code file is open and active as per the current compilation process). Note: you can still open a Makefile and compile from that if required.
 
 ## 0.3.9
 
