@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.3.9
+
+* Added ability to use 'Make' to compile your game source code (Andrew Davie). Note: this feature is experimental and requires the user to have a fully configured environment to compile and launch emulation outside VS Code (tested only on macOS)
+* Added missing Command Palette option 'ads: Kill compile process'. This feature will kill any running compilation process across all available compilers. Note: this should not be required but is available if needed.
+
 ## 0.3.8
 
 * #22 [Fixed] Fixed issue identifying ChMod files for batari Basic and 7800basic where the architecture was hard-coded to x86 (Linux and macOS)

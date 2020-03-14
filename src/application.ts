@@ -6,6 +6,7 @@ import { CompilerBase } from './compilers/compilerBase';
 import { BatariBasicCompiler } from './compilers/batariBasicCompiler';
 import { SeventyEightHundredBasicCompiler } from './compilers/seventyEightHundredBasicCompiler';
 import { DasmCompiler } from './compilers/dasmCompiler';
+import { MakeCompiler } from './compilers/makeCompiler';
 import { EmulatorBase } from './emulators/emulatorBase';
 import { StellaEmulator } from './emulators/stellaEmulator';
 import { A7800Emulator } from './emulators/a7800Emulator';
@@ -55,7 +56,8 @@ export const CompilerOutputChannel: vscode.OutputChannel = vscode.window.createO
 export const Compilers:CompilerBase[] = [
 	new BatariBasicCompiler(),
 	new SeventyEightHundredBasicCompiler(),
-	new DasmCompiler()
+	new DasmCompiler(),
+	new MakeCompiler()
 ];
 
 // -------------------------------------------------------------------------------------
@@ -141,6 +143,15 @@ export async function BuildGameAndRunAsync(fileUri: vscode.Uri): Promise<boolean
 
 	// Result
 	return false;
+}
+
+export function KillBuildGame(): void {
+	// Process all compilers
+	for (let compiler of Compilers) {
+		if (compiler.IsRunning) {
+			compiler.Kill();
+		}
+	}		
 }
 
 export function Notify(message: string): void {

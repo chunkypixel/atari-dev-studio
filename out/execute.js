@@ -37,6 +37,16 @@ function KillProcessByNameAsync(name) {
     });
 }
 exports.KillProcessByNameAsync = KillProcessByNameAsync;
+function KillSpawnProcess() {
+    // Process
+    try {
+        // Try and kill any child process
+        let kill = require('tree-kill');
+        kill(cp._process.id);
+    }
+    finally { }
+}
+exports.KillSpawnProcess = KillSpawnProcess;
 function Spawn(command, args, env, cwd, stdout, stderr) {
     console.log('debugger:execute.ExecuteCommand');
     // Process

@@ -20,6 +20,7 @@ const vscode = require("vscode");
 const path = require("path");
 const application = require("../application");
 const filesystem = require("../filesystem");
+const execute = require("../execute");
 class CompilerBase {
     constructor(id, name, extensions, compiledExtensions, folderOrPath, emulator) {
         // Features
@@ -66,12 +67,15 @@ class CompilerBase {
             if (!result) {
                 return false;
             }
+            // Does compiler have an emulator?
+            if (this.Emulator === '')
+                return true;
             try {
                 // Get emulator
                 for (var _b = __asyncValues(application.Emulators), _c; _c = yield _b.next(), !_c.done;) {
                     let emulator = _c.value;
                     if (emulator.Id === this.Emulator) {
-                        // Note: first extension should be the one which is to be lauched
+                        // Note: first extension should be the one which is to be launched
                         let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
                         return yield emulator.RunGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
                     }
@@ -97,7 +101,7 @@ class CompilerBase {
             // Already running?
             if (this.IsRunning) {
                 // Notify
-                application.Notify(`The ${this.Name} compiler is already running! If you want to cancel the compilation activate the Stop/Kill command.`);
+                application.Notify(`The ${this.Name} compiler is already running! If you need to cancel the compilation process use the 'ads: Kill build process' option from the Command Palette.`);
                 return false;
             }
             // (Re)load
@@ -313,6 +317,17 @@ class CompilerBase {
             // Result
             return true;
         });
+    }
+    Kill() {
+        console.log('debugger:CompilerBase.Kill');
+        // Validate
+        if (this.IsRunning) {
+            // Notify
+            application.Notify(`Attempting to kill running ${this.Name} compilation process...`);
+            // Process
+            this.IsRunning = false;
+            execute.KillSpawnProcess();
+        }
     }
     getWorkspaceFolder() {
         console.log('debugger:CompilerBase.getWorkspaceFolder');

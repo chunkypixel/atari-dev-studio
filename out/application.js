@@ -15,6 +15,7 @@ const os = require("os");
 const batariBasicCompiler_1 = require("./compilers/batariBasicCompiler");
 const seventyEightHundredBasicCompiler_1 = require("./compilers/seventyEightHundredBasicCompiler");
 const dasmCompiler_1 = require("./compilers/dasmCompiler");
+const makeCompiler_1 = require("./compilers/makeCompiler");
 const stellaEmulator_1 = require("./emulators/stellaEmulator");
 const a7800Emulator_1 = require("./emulators/a7800Emulator");
 const dasmHover_1 = require("./hovers/dasmHover");
@@ -55,7 +56,8 @@ exports.CompilerOutputChannel = vscode.window.createOutputChannel("Compiler");
 exports.Compilers = [
     new batariBasicCompiler_1.BatariBasicCompiler(),
     new seventyEightHundredBasicCompiler_1.SeventyEightHundredBasicCompiler(),
-    new dasmCompiler_1.DasmCompiler()
+    new dasmCompiler_1.DasmCompiler(),
+    new makeCompiler_1.MakeCompiler()
 ];
 // -------------------------------------------------------------------------------------
 // Emulators
@@ -150,6 +152,15 @@ function BuildGameAndRunAsync(fileUri) {
     });
 }
 exports.BuildGameAndRunAsync = BuildGameAndRunAsync;
+function KillBuildGame() {
+    // Process all compilers
+    for (let compiler of exports.Compilers) {
+        if (compiler.IsRunning) {
+            compiler.Kill();
+        }
+    }
+}
+exports.KillBuildGame = KillBuildGame;
 function Notify(message) {
     exports.CompilerOutputChannel.appendLine(message);
     console.log(`debugger:${message}`);

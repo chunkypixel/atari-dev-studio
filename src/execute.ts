@@ -24,6 +24,17 @@ export async function KillProcessByNameAsync(name:string): Promise<void> {
         });
 }
 
+export function KillSpawnProcess() {
+    // Process
+    try {
+        // Try and kill any child process
+        let kill = require('tree-kill');
+        kill(cp._process.id);       
+    } 
+    finally
+    { }
+}
+
 export function Spawn(command:string, args:string[] | null, env: { [key: string]: string | null } | null, cwd: string, stdout:any, stderr:any) : Promise<boolean> {
     console.log('debugger:execute.ExecuteCommand');
 
@@ -82,4 +93,5 @@ export function Spawn(command:string, args:string[] | null, env: { [key: string]
         });
 
     });
+    
 }

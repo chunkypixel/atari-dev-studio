@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as application from '../application';
 import * as filesystem from '../filesystem';
+import * as execute from '../execute';
 
 export abstract class CompilerBase implements vscode.Disposable {
 
@@ -60,10 +61,13 @@ export abstract class CompilerBase implements vscode.Disposable {
         let result = await this.BuildGameAsync(document);
         if (!result) { return false; }
 
+        // Does compiler have an emulator?
+        if (this.Emulator === '') return true;
+
         // Get emulator
         for await (let emulator of application.Emulators) {
             if (emulator.Id === this.Emulator) {
-                // Note: first extension should be the one which is to be lauched
+                // Note: first extension should be the one which is to be launched
                 let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
                 return await emulator.RunGameAsync(path.join(this.CompiledSubFolder,compiledFileName));
             }
@@ -85,7 +89,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Already running?
         if (this.IsRunning) {
             // Notify
-            application.Notify(`The ${this.Name} compiler is already running! If you want to cancel the compilation activate the Stop/Kill command.`);
+            application.Notify(`The ${this.Name} compiler is already running! If you need to cancel the compilation process use the 'ads: Kill build process' option from the Command Palette.`);
             return false;
         }
 
@@ -267,6 +271,20 @@ export abstract class CompilerBase implements vscode.Disposable {
 
         // Result
         return true;
+    }
+
+    public Kill() {
+        console.log('debugger:CompilerBase.Kill');
+        
+        // Validate
+        if (this.IsRunning) {
+            // Notify
+            application.Notify(`Attempting to kill running ${this.Name} compilation process...`);
+
+            // Process
+            this.IsRunning = false;
+            execute.KillSpawnProcess();
+        }
     }
 
     private getWorkspaceFolder(): string {

@@ -55,11 +55,16 @@ function activate(context) {
             console.log('User activated command "extension.buildGameAndRun"');
             yield application.BuildGameAndRunAsync(fileUri);
         }));
+        const killBuildGame = vscode.commands.registerCommand('extension.killBuildGame', () => {
+            console.log('User activated command "extension.killBuildGame"');
+            application.KillBuildGame();
+        });
         // Subscriptions (register)
         context.subscriptions.push(openWelcomePage);
         context.subscriptions.push(openSpriteEditorPage);
         context.subscriptions.push(buildGame);
         context.subscriptions.push(buildGameAndRun);
+        context.subscriptions.push(killBuildGame);
         // Register the mouse-over hover providers
         yield application.RegisterHoverProvidersAsync(context);
         // Register region folding providers
