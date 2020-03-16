@@ -49,7 +49,15 @@ exports.PreferencesSettingsExtensionPath = `${(exports.IsMacOS ? "Code" : "File"
 // Channels
 // -------------------------------------------------------------------------------------
 exports.CompilerOutputChannel = vscode.window.createOutputChannel("Compiler");
-exports.MakeTerminal = vscode.window.createTerminal("Make");
+function InitialiseMakeTerminalAsync() {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Kill existing terminal?
+        exports.MakeTerminal === null || exports.MakeTerminal === void 0 ? void 0 : exports.MakeTerminal.dispose();
+        // Create
+        exports.MakeTerminal = vscode.window.createTerminal("Make");
+    });
+}
+exports.InitialiseMakeTerminalAsync = InitialiseMakeTerminalAsync;
 // -------------------------------------------------------------------------------------
 // Compilers
 // Register compilers here and in order of preference

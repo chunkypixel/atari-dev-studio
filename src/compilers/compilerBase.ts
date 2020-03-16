@@ -112,7 +112,7 @@ export abstract class CompilerBase implements vscode.Disposable {
             if (!this.UsingMakeCompiler) {
                 application.CompilerOutputChannel.show();
             } else {
-                application.MakeTerminal.show();
+                application.MakeTerminal?.show();
             }
         }
 
@@ -168,6 +168,9 @@ export abstract class CompilerBase implements vscode.Disposable {
                 application.Notify(`Workspace folder: ${this.WorkspaceFolder}`);
                 return false;
             }
+
+            // Initialise terminal
+            await application.InitialiseMakeTerminalAsync();
         }
         if (defaultCompiler === "Custom") {
             let customCompilerFolder = this.Configuration!.get<string>(`compiler.${this.Id}.folder`);
@@ -323,6 +326,14 @@ export abstract class CompilerBase implements vscode.Disposable {
             execute.KillSpawnProcess();
         }
     }
+
+    // public async InitialiseMakeTerminalAsync() {
+    //     // Kill existing terminal?
+    //     this.MakeTerminal?.dispose();
+
+    //     // Create
+    //     this.MakeTerminal = vscode.window.createTerminal("Make");
+    // }
 
     public async IsMakeFileAvailableAsync(): Promise<boolean> {
         console.log('debugger:CompilerBase.IsMakeFileAvailableAsync'); 

@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.4.1
+
+* Disposed and re-initialised Make terminal window (Andrew Davie) this should dispose of any running processes...
+* Removed Make terminal set path feature as it's no longer required
+* #24 Fixed spelling issue in 6502 hover tooltip popup (Andrew Davie)
+
 ## 0.4.0
 
 * Added option to dasm compiler to allow you to select 'Make' to compile your source code (Andrew Davie). This option will automatically scan the root workspace folder for a Makefile to use without having to open it first (make sure your base source code file is open and active as per the current compilation process). Note: you can still open a Makefile and compile from that if required.

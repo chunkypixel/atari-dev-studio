@@ -1,4 +1,5 @@
 "use strict";
+import * as vscode from 'vscode';
 import * as path from 'path';
 import * as application from '../application';
 import * as filesystem from '../filesystem';
@@ -26,9 +27,7 @@ export class DasmCompiler extends CompilerBase {
         // Make compile?
         if (this.UsingMakeCompiler) {   
             // Launch and exit
-            // note: we cannot wait for a result
-            application.MakeTerminal.sendText(`cd ${this.WorkspaceFolder}`);
-            application.MakeTerminal.sendText('make');
+            application.MakeTerminal?.sendText('make');
             return true;
         }
 

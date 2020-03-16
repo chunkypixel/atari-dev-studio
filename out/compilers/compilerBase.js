@@ -98,6 +98,7 @@ class CompilerBase {
         });
     }
     InitialiseAsync() {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.InitialiseAsync');
             // Prepare
@@ -122,7 +123,7 @@ class CompilerBase {
                     application.CompilerOutputChannel.show();
                 }
                 else {
-                    application.MakeTerminal.show();
+                    (_a = application.MakeTerminal) === null || _a === void 0 ? void 0 : _a.show();
                 }
             }
             // Clear output content?
@@ -178,6 +179,8 @@ class CompilerBase {
                     application.Notify(`Workspace folder: ${this.WorkspaceFolder}`);
                     return false;
                 }
+                // Initialise terminal
+                yield application.InitialiseMakeTerminalAsync();
             }
             if (defaultCompiler === "Custom") {
                 let customCompilerFolder = this.Configuration.get(`compiler.${this.Id}.folder`);
@@ -364,6 +367,12 @@ class CompilerBase {
             execute.KillSpawnProcess();
         }
     }
+    // public async InitialiseMakeTerminalAsync() {
+    //     // Kill existing terminal?
+    //     this.MakeTerminal?.dispose();
+    //     // Create
+    //     this.MakeTerminal = vscode.window.createTerminal("Make");
+    // }
     IsMakeFileAvailableAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.IsMakeFileAvailableAsync');

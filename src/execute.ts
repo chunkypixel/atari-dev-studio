@@ -1,4 +1,5 @@
 "use strict";
+import * as vscode from 'vscode';
 import * as application from './application';
 import { kill } from "process";
 const cp = require("child_process");
@@ -13,26 +14,30 @@ export async function KillProcessByNameAsync(name:string): Promise<void> {
         .then(function (list:any) {
             console.log(list);
             for (let process of list) {
-                try {
-                    kill(process.pid);                   
-                } catch (error) {  
-                    console.log(`Failed to kill process ${process.pid}: ${process.name}`);           
-                }
+                KillProcessById(process?.id);
             }	
         }, function (err:any) {
             console.log(err.stack || err);
         });
 }
 
-export function KillSpawnProcess() {
+export function KillProcessById(pid:any): void {
+    // Validate
+    if (pid === undefined) { return; }
+
     // Process
     try {
         // Try and kill any child process
         let kill = require('tree-kill');
-        kill(cp._process.id);       
-    } 
-    finally
-    { }
+        kill(pid);       
+    } catch (error) {  
+        console.log(`Failed to kill process ${pid}`); 
+    }
+}
+
+export function KillSpawnProcess(): void {
+    // Process
+    KillProcessById(cp?._process?.id);
 }
 
 export function Spawn(command:string, args:string[] | null, env: { [key: string]: string | null } | null, cwd: string, stdout:any, stderr:any) : Promise<boolean> {

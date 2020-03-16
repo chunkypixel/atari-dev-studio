@@ -18,6 +18,7 @@ class MakeCompiler extends compilerBase_1.CompilerBase {
         super("makefile", "makefile", ["makefile"], [""], "", "");
     }
     InitialiseAsync() {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:MakeCompiler.InitialiseAsync');
             // Prepare
@@ -31,9 +32,11 @@ class MakeCompiler extends compilerBase_1.CompilerBase {
             if (!result) {
                 return false;
             }
+            // Initialise terminal
+            yield application.InitialiseMakeTerminalAsync();
             // Activate output window?
             if (!this.Configuration.get(`editor.preserveCodeEditorFocus`)) {
-                application.MakeTerminal.show();
+                (_a = application.MakeTerminal) === null || _a === void 0 ? void 0 : _a.show();
             }
             // Clear output content? (not available for terminals)
             // Save files?
@@ -53,12 +56,12 @@ class MakeCompiler extends compilerBase_1.CompilerBase {
         });
     }
     ExecuteCompilerAsync() {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:MakeCompiler.ExecuteCompilerAsync');
             // Launch and exit
             // note: we cannot wait for a result
-            application.MakeTerminal.sendText(`cd ${this.WorkspaceFolder}`);
-            application.MakeTerminal.sendText(`make -f ${this.FileName}`);
+            (_a = application.MakeTerminal) === null || _a === void 0 ? void 0 : _a.sendText(`make -f ${this.FileName}`);
             return true;
         });
     }

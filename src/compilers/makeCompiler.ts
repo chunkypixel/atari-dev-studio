@@ -32,9 +32,12 @@ export class MakeCompiler extends CompilerBase {
         result = await this.LoadConfigurationAsync();
         if (!result) { return false; }
 
+        // Initialise terminal
+        await application.InitialiseMakeTerminalAsync();
+
         // Activate output window?
         if (!this.Configuration.get<boolean>(`editor.preserveCodeEditorFocus`))  {
-            application.MakeTerminal.show();
+            application.MakeTerminal?.show();
         }
 
         // Clear output content? (not available for terminals)
@@ -56,8 +59,7 @@ export class MakeCompiler extends CompilerBase {
 
         // Launch and exit
         // note: we cannot wait for a result
-        application.MakeTerminal.sendText(`cd ${this.WorkspaceFolder}`);
-        application.MakeTerminal.sendText(`make -f ${this.FileName}`);
+        application.MakeTerminal?.sendText(`make -f ${this.FileName}`);
         return true;
     }
 

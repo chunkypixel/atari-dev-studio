@@ -47,7 +47,19 @@ export const PreferencesSettingsExtensionPath: string = `${(IsMacOS ? "Code" : "
 // Channels
 // -------------------------------------------------------------------------------------
 export const CompilerOutputChannel: vscode.OutputChannel = vscode.window.createOutputChannel("Compiler"); 
-export const MakeTerminal: vscode.Terminal = vscode.window.createTerminal("Make");
+
+// -------------------------------------------------------------------------------------
+// Terminal
+// -------------------------------------------------------------------------------------
+export let MakeTerminal: vscode.Terminal | undefined;
+
+export async function InitialiseMakeTerminalAsync() {
+	// Kill existing terminal?
+	MakeTerminal?.dispose();
+	
+	// Create
+	MakeTerminal = vscode.window.createTerminal("Make");
+}
 
 // -------------------------------------------------------------------------------------
 // Compilers

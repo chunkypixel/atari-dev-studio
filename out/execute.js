@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const application = require("./application");
-const process_1 = require("process");
 const cp = require("child_process");
 const find = require("find-process");
 function KillProcessByNameAsync(name) {
@@ -24,12 +23,7 @@ function KillProcessByNameAsync(name) {
             .then(function (list) {
             console.log(list);
             for (let process of list) {
-                try {
-                    process_1.kill(process.pid);
-                }
-                catch (error) {
-                    console.log(`Failed to kill process ${process.pid}: ${process.name}`);
-                }
+                KillProcessById(process === null || process === void 0 ? void 0 : process.id);
             }
         }, function (err) {
             console.log(err.stack || err);
@@ -37,14 +31,26 @@ function KillProcessByNameAsync(name) {
     });
 }
 exports.KillProcessByNameAsync = KillProcessByNameAsync;
-function KillSpawnProcess() {
+function KillProcessById(pid) {
+    // Validate
+    if (pid === undefined) {
+        return;
+    }
     // Process
     try {
         // Try and kill any child process
         let kill = require('tree-kill');
-        kill(cp._process.id);
+        kill(pid);
     }
-    finally { }
+    catch (error) {
+        console.log(`Failed to kill process ${pid}`);
+    }
+}
+exports.KillProcessById = KillProcessById;
+function KillSpawnProcess() {
+    var _a;
+    // Process
+    KillProcessById((_a = cp === null || cp === void 0 ? void 0 : cp._process) === null || _a === void 0 ? void 0 : _a.id);
 }
 exports.KillSpawnProcess = KillSpawnProcess;
 function Spawn(command, args, env, cwd, stdout, stderr) {
