@@ -280,7 +280,7 @@ export abstract class CompilerBase implements vscode.Disposable {
                 let newPath = path.join(this.CompiledSubFolder, debuggerFile);
 
                 // Move compiled file?
-                if (filesystem.FileExistsAsync(oldPath)) {
+                if (await filesystem.FileExistsAsync(oldPath)) {
                     result = await filesystem.RenameFileAsync(oldPath, newPath);
                     if (!result) {
                         // Notify            
@@ -304,7 +304,7 @@ export abstract class CompilerBase implements vscode.Disposable {
             let debuggerFilePath = path.join(folder, debuggerFile);
 
             // Process
-            if (filesystem.FileExistsAsync(debuggerFilePath)) {
+            if (await filesystem.FileExistsAsync(debuggerFilePath)) {
                 await filesystem.RemoveFileAsync(debuggerFilePath);
             }
         }

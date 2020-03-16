@@ -307,7 +307,7 @@ class CompilerBase {
                         let oldPath = path.join(this.WorkspaceFolder, debuggerFile);
                         let newPath = path.join(this.CompiledSubFolder, debuggerFile);
                         // Move compiled file?
-                        if (filesystem.FileExistsAsync(oldPath)) {
+                        if (yield filesystem.FileExistsAsync(oldPath)) {
                             result = yield filesystem.RenameFileAsync(oldPath, newPath);
                             if (!result) {
                                 // Notify            
@@ -340,7 +340,7 @@ class CompilerBase {
                     let debuggerFile = `${this.FileName}${extension}`;
                     let debuggerFilePath = path.join(folder, debuggerFile);
                     // Process
-                    if (filesystem.FileExistsAsync(debuggerFilePath)) {
+                    if (yield filesystem.FileExistsAsync(debuggerFilePath)) {
                         yield filesystem.RemoveFileAsync(debuggerFilePath);
                     }
                 }
