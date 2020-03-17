@@ -70,8 +70,9 @@ function activate(context) {
         // Register region folding providers
         yield application.RegisterFoldingProvidersAsync(context);
         // Register code completion providers
-        // MS: Disabled for now
         yield application.RegisterCompletionProvidersAsync(context);
+        // Show welcome messages
+        yield application.ShowStartupMessagesAsync();
     });
 }
 exports.activate = activate;

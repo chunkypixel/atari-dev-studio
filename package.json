@@ -354,6 +354,16 @@
                     "default": false,
                     "description": "Specify whether to activate the A7800 debugger",
                     "scope": "resource"
+                },
+                "atari-dev-studio.application.configuration.latestVersion": {
+                    "default": "",
+                    "scope": "application"
+                },
+                "atari-dev-studio.application.configuration.showNewVersionMessage": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show welcome message after installing a new release of Atari Dev Studio.",
+                    "scope": "resource"
                 }
             }
         }

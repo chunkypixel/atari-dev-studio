@@ -42,6 +42,7 @@ export const Version: string = vscode.extensions.getExtension(Id)!.packageJSON.v
 export const DisplayName: string = vscode.extensions.getExtension(Id)!.packageJSON.displayName;
 export const Description: string = vscode.extensions.getExtension(Id)!.packageJSON.description;
 export const PreferencesSettingsExtensionPath: string = `${(IsMacOS ? "Code" : "File")} -> Preferences -> Settings -> Extensions -> ${DisplayName}`;
+export const ChangeLogUri: vscode.Uri = vscode.Uri.parse(`https://marketplace.visualstudio.com/items/${Id}/changelog`);
 
 // -------------------------------------------------------------------------------------
 // Channels
@@ -219,4 +220,40 @@ function getChosenCompiler(document: vscode.TextDocument): CompilerBase | undefi
 
 	// Not found
 	return undefined;
+}
+
+export async function ShowStartupMessagesAsync(): Promise<void> {
+	// Prepare
+	let configuration = GetConfiguration();
+
+	// Load settings
+	let showNewVersionMessage = configuration.get<string>(`application.configuration.showNewVersionMessage`);
+	let latestVersion = configuration.get<string>(`application.configuration.latestVersion`);
+
+	// Process?
+	if (!showNewVersionMessage || latestVersion === Version) { return; }
+
+	// Update latest version
+	configuration.update(`application.configuration.latestVersion`, Version, vscode.ConfigurationTarget.Global);
+
+	// buttons
+	let latestChanges = "Learn more about the latest changes";
+	let dontShowMeThisMessage = "Don't show me this message again";
+
+	// Show prompt
+	await vscode.window.showInformationMessage(`Welcome to the new version of ${DisplayName}`,
+			latestChanges,dontShowMeThisMessage)
+			.then(selection => {
+				if (selection === undefined) {
+					// Dismissed
+				}
+				else if (selection === latestChanges) {
+					// Show changelog
+					vscode.env.openExternal(ChangeLogUri);
+				} 
+				else if (selection = dontShowMeThisMessage) {
+					// Disable
+					configuration.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
+				}
+			});
 }

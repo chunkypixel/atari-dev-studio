@@ -45,6 +45,7 @@ exports.Version = vscode.extensions.getExtension(exports.Id).packageJSON.version
 exports.DisplayName = vscode.extensions.getExtension(exports.Id).packageJSON.displayName;
 exports.Description = vscode.extensions.getExtension(exports.Id).packageJSON.description;
 exports.PreferencesSettingsExtensionPath = `${(exports.IsMacOS ? "Code" : "File")} -> Preferences -> Settings -> Extensions -> ${exports.DisplayName}`;
+exports.ChangeLogUri = vscode.Uri.parse(`https://marketplace.visualstudio.com/items/${exports.Id}/changelog`);
 // -------------------------------------------------------------------------------------
 // Channels
 // -------------------------------------------------------------------------------------
@@ -217,4 +218,38 @@ function getChosenCompiler(document) {
     // Not found
     return undefined;
 }
+function ShowStartupMessagesAsync() {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Prepare
+        let configuration = GetConfiguration();
+        // Load settings
+        let showNewVersionMessage = configuration.get(`application.configuration.showNewVersionMessage`);
+        let latestVersion = configuration.get(`application.configuration.latestVersion`);
+        // Process?
+        if (!showNewVersionMessage || latestVersion === exports.Version) {
+            return;
+        }
+        // Update latest version
+        configuration.update(`application.configuration.latestVersion`, exports.Version, vscode.ConfigurationTarget.Global);
+        // buttons
+        let latestChanges = "Learn more about the latest changes";
+        let dontShowMeThisMessage = "Don't show me this message again";
+        // Show prompt
+        yield vscode.window.showInformationMessage(`Welcome to the new version of ${exports.DisplayName}`, latestChanges, dontShowMeThisMessage)
+            .then(selection => {
+            if (selection === undefined) {
+                // Dismissed
+            }
+            else if (selection === latestChanges) {
+                // Show changelog
+                vscode.env.openExternal(exports.ChangeLogUri);
+            }
+            else if (selection = dontShowMeThisMessage) {
+                // Disable
+                configuration.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
+            }
+        });
+    });
+}
+exports.ShowStartupMessagesAsync = ShowStartupMessagesAsync;
 //# sourceMappingURL=application.js.map
