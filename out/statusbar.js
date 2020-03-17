@@ -33,8 +33,8 @@ class StatusBar {
             let itemOptions = [
                 { tooltip: 'Welcome', text: '$(home)', command: 'extension.openWelcomePage' },
                 { tooltip: 'Sprite Editor', text: '$(screen-normal)', command: 'extension.openSpriteEditorPage' },
-                { tooltip: 'Compile source code', text: '$(triangle-right)', command: 'extension.buildGame' },
-                { tooltip: 'Compile source code and run in emulator', text: '$(rocket)', command: 'extension.buildGameAndRun' }
+                { tooltip: 'Compile source code (Shift+F5)', text: '$(triangle-right)', command: 'extension.buildGame' },
+                { tooltip: 'Compile source code and run in emulator (F5)', text: '$(rocket)', command: 'extension.buildGameAndRun' }
             ];
             itemOptions.forEach(option => this.createItem(option));
         }

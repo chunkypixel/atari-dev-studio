@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.4.2
+
+* Added the following keyboard shortcuts which will activate when you have a bataribasic, 7800basic or dasm language file open:
+    - F5 - Build and Run 
+    - Shift+F5 - Build
+    
 ## 0.4.1
 
 * Disposed and re-initialised Make terminal window (Andrew Davie) this should dispose of any running processes...
