@@ -12,15 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
 const application = require("../application");
 const compilerBase_1 = require("./compilerBase");
-class MakeCompiler extends compilerBase_1.CompilerBase {
+class ShellScriptCompiler extends compilerBase_1.CompilerBase {
     // Features
     constructor() {
-        super("makefile", "makefile", ["makefile"], [""], "", "");
+        super("shellscript", "Shell Script", ["sh"], [""], "", "");
     }
     InitialiseAsync() {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:MakeCompiler.InitialiseAsync');
+            console.log('debugger:ShellCompiler.InitialiseAsync');
             // Prepare
             let result = true;
             // Already running?
@@ -58,10 +58,10 @@ class MakeCompiler extends compilerBase_1.CompilerBase {
     ExecuteCompilerAsync() {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:MakeCompiler.ExecuteCompilerAsync');
+            console.log('debugger:ShellCompiler.ExecuteCompilerAsync');
             // Launch and exit
             // note: we cannot wait for a result
-            (_a = application.AdsTerminal) === null || _a === void 0 ? void 0 : _a.sendText(`make -f ${this.FileName}`);
+            (_a = application.AdsTerminal) === null || _a === void 0 ? void 0 : _a.sendText(`${this.FileName}`);
             return true;
         });
     }
@@ -70,18 +70,18 @@ class MakeCompiler extends compilerBase_1.CompilerBase {
             LoadConfigurationAsync: { get: () => super.LoadConfigurationAsync }
         });
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:MakeCompiler.LoadConfigurationAsync');
+            console.log('debugger:ShellCompiler.LoadConfigurationAsync');
             // Base
             let result = yield _super.LoadConfigurationAsync.call(this);
             if (!result) {
                 return false;
             }
             // Flag
-            this.UsingMakeFileCompiler = true;
+            this.UsingShellScriptCompiler = true;
             // Result
             return true;
         });
     }
 }
-exports.MakeCompiler = MakeCompiler;
-//# sourceMappingURL=makeCompiler.js.map
+exports.ShellScriptCompiler = ShellScriptCompiler;
+//# sourceMappingURL=shellScriptCompiler.js.map

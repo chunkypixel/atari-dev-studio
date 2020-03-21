@@ -37,7 +37,9 @@ class CompilerBase {
         this.GenerateDebuggerFiles = false;
         this.CleanUpCompilationFiles = false;
         this.WorkspaceFolder = "";
-        this.UsingMakeCompiler = false;
+        this.UsingMakeFileCompiler = false;
+        this.UsingBatchCompiler = false;
+        this.UsingShellScriptCompiler = false;
         this.Id = id;
         this.Name = name;
         this.Extensions = extensions;
@@ -71,7 +73,7 @@ class CompilerBase {
             }
             // Does compiler have/use an emulator?
             // Make doesn't use an emulator - user must provide their own
-            if (this.Emulator === '' || this.UsingMakeCompiler) {
+            if (this.Emulator === '' || (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler)) {
                 return true;
             }
             try {
@@ -119,16 +121,16 @@ class CompilerBase {
             }
             // Activate output window?
             if (!this.Configuration.get(`editor.preserveCodeEditorFocus`)) {
-                if (!this.UsingMakeCompiler) {
-                    application.CompilerOutputChannel.show();
+                if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) {
+                    (_a = application.AdsTerminal) === null || _a === void 0 ? void 0 : _a.show();
                 }
                 else {
-                    (_a = application.MakeTerminal) === null || _a === void 0 ? void 0 : _a.show();
+                    application.CompilerOutputChannel.show();
                 }
             }
             // Clear output content?
             if (this.Configuration.get(`editor.clearPreviousOutput`)) {
-                if (!this.UsingMakeCompiler) {
+                if (!this.UsingMakeFileCompiler && !this.UsingBatchCompiler && !this.UsingShellScriptCompiler) {
                     application.CompilerOutputChannel.clear();
                 }
             }
@@ -145,7 +147,7 @@ class CompilerBase {
                 return false;
             }
             // Remove old debugger files before build
-            if (!this.UsingMakeCompiler) {
+            if (!this.UsingMakeFileCompiler && !this.UsingBatchCompiler && !this.UsingShellScriptCompiler) {
                 yield this.RemoveDebuggerFilesAsync(this.CompiledSubFolder);
             }
             // Result
@@ -165,6 +167,9 @@ class CompilerBase {
             this.FolderOrPath = this.DefaultFolderOrPath;
             this.Args = "";
             this.Emulator = this.DefaultEmulator;
+            this.UsingMakeFileCompiler = false;
+            this.UsingBatchCompiler = false;
+            this.UsingShellScriptCompiler = false;
             // System
             this.WorkspaceFolder = this.getWorkspaceFolder();
             this.FileName = path.basename(this.Document.fileName);
@@ -172,15 +177,16 @@ class CompilerBase {
             let defaultCompiler = this.Configuration.get(`compiler.${this.Id}.defaultCompiler`);
             if (defaultCompiler === "Make") {
                 // Only working in dasm currently
-                this.UsingMakeCompiler = yield this.IsMakeFileAvailableAsync();
-                if (!this.UsingMakeCompiler) {
+                // validate for one of the script files
+                yield this.IsTerminalMakeFileAvailable();
+                if (!this.UsingMakeFileCompiler && !this.UsingBatchCompiler && !this.UsingShellScriptCompiler) {
                     // Failed
-                    application.Notify(`Error: You have chosen to use the Make compiler for ${this.Id} but no Makefile was found in your root workspace folder. Review your selection in ${application.PreferencesSettingsExtensionPath} or create a Makefile.`);
+                    application.Notify(`Error: You have chosen to use the Make compiler for ${this.Id} but no makefile was not found in your root workspace folder. Review your selection in ${application.PreferencesSettingsExtensionPath} or create a 'Makefile', 'makefile.bat' or 'makefile.sh' script.`);
                     application.Notify(`Workspace folder: ${this.WorkspaceFolder}`);
                     return false;
                 }
                 // Initialise terminal
-                yield application.InitialiseMakeTerminalAsync();
+                yield application.InitialiseAdsTerminalAsync();
             }
             if (defaultCompiler === "Custom") {
                 let customCompilerFolder = this.Configuration.get(`compiler.${this.Id}.folder`);
@@ -222,7 +228,7 @@ class CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.VerifyCompiledFileSize');
             // Validate
-            if (this.UsingMakeCompiler) {
+            if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) {
                 return true;
             }
             // Verify created file(s)
@@ -260,7 +266,7 @@ class CompilerBase {
             // Note: generateDebuggerFile - there are different settings for each compiler
             console.log('debugger:CompilerBase.MoveFilesToBinFolder');
             // Validate
-            if (this.UsingMakeCompiler) {
+            if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) {
                 return true;
             }
             // Create directory?
@@ -367,28 +373,47 @@ class CompilerBase {
             execute.KillSpawnProcess();
         }
     }
-    // public async InitialiseMakeTerminalAsync() {
-    //     // Kill existing terminal?
-    //     this.MakeTerminal?.dispose();
-    //     // Create
-    //     this.MakeTerminal = vscode.window.createTerminal("Make");
-    // }
-    IsMakeFileAvailableAsync() {
+    IsTerminalMakeFileAvailable() {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:CompilerBase.IsMakeFileAvailableAsync');
-            // scan
-            var result = yield filesystem.FileExistsAsync(path.join(this.WorkspaceFolder, "makefile"));
+            console.log('debugger:MakeCompiler.IsTerminalMakeFileAvailable');
+            // Makefile?
+            this.UsingMakeFileCompiler = yield this.FindTerminalMakeFileAsync("makefile");
             // add some additional checks for Linux/macOS
             if (application.IsLinux || application.IsMacOS) {
                 // cater for case-specific
-                if (!result) {
-                    result = yield filesystem.FileExistsAsync(path.join(this.WorkspaceFolder, "Makefile"));
+                if (!this.UsingMakeFileCompiler) {
+                    this.UsingMakeFileCompiler = yield this.FindTerminalMakeFileAsync("Makefile");
                 }
-                if (!result) {
-                    result = yield filesystem.FileExistsAsync(path.join(this.WorkspaceFolder, "MAKEFILE"));
+                if (!this.UsingMakeFileCompiler) {
+                    this.UsingMakeFileCompiler = yield this.FindTerminalMakeFileAsync("MAKEFILE");
                 }
             }
-            // Result
+            if (this.UsingMakeFileCompiler) {
+                return;
+            }
+            // Shell?
+            this.UsingShellScriptCompiler = yield this.FindTerminalMakeFileAsync("makefile.sh");
+            if (!this.UsingShellScriptCompiler) {
+                this.UsingShellScriptCompiler = yield this.FindTerminalMakeFileAsync("Makefile.sh");
+            }
+            if (!this.UsingShellScriptCompiler) {
+                this.UsingShellScriptCompiler = yield this.FindTerminalMakeFileAsync("MAKEFILE.SH");
+            }
+            if (this.UsingShellScriptCompiler) {
+                return;
+            }
+            // Bat?
+            this.UsingBatchCompiler = yield yield this.FindTerminalMakeFileAsync("makefile.bat");
+        });
+    }
+    FindTerminalMakeFileAsync(fileName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Scan for required makefile and store if found
+            let result = yield filesystem.FileExistsAsync(path.join(this.WorkspaceFolder, fileName));
+            if (result) {
+                this.FileName = fileName;
+            }
+            // Return
             return result;
         });
     }

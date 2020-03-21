@@ -7,6 +7,8 @@ import { BatariBasicCompiler } from './compilers/batariBasicCompiler';
 import { SeventyEightHundredBasicCompiler } from './compilers/seventyEightHundredBasicCompiler';
 import { DasmCompiler } from './compilers/dasmCompiler';
 import { MakeCompiler } from './compilers/makeCompiler';
+import { BatchCompiler } from './compilers/batchCompiler';
+import { ShellScriptCompiler } from './compilers/shellScriptCompiler';
 import { EmulatorBase } from './emulators/emulatorBase';
 import { StellaEmulator } from './emulators/stellaEmulator';
 import { A7800Emulator } from './emulators/a7800Emulator';
@@ -52,14 +54,14 @@ export const CompilerOutputChannel: vscode.OutputChannel = vscode.window.createO
 // -------------------------------------------------------------------------------------
 // Terminal
 // -------------------------------------------------------------------------------------
-export let MakeTerminal: vscode.Terminal | undefined;
+export let AdsTerminal: vscode.Terminal | undefined;
 
-export async function InitialiseMakeTerminalAsync() {
+export async function InitialiseAdsTerminalAsync() {
 	// Kill existing terminal?
-	MakeTerminal?.dispose();
+	AdsTerminal?.dispose();
 	
 	// Create
-	MakeTerminal = vscode.window.createTerminal("Make");
+	AdsTerminal = vscode.window.createTerminal(`${Name}`);
 }
 
 // -------------------------------------------------------------------------------------
@@ -70,7 +72,9 @@ export const Compilers:CompilerBase[] = [
 	new BatariBasicCompiler(),
 	new SeventyEightHundredBasicCompiler(),
 	new DasmCompiler(),
-	new MakeCompiler()
+	new MakeCompiler(),
+	new BatchCompiler(),
+	new ShellScriptCompiler()
 ];
 
 // -------------------------------------------------------------------------------------

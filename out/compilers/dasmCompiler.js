@@ -22,13 +22,19 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
         this.Verboseness = "";
     }
     ExecuteCompilerAsync() {
-        var _a;
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:DasmCompiler.ExecuteCompilerAsync');
             // Make compile?
-            if (this.UsingMakeCompiler) {
+            if (this.UsingMakeFileCompiler) {
                 // Launch and exit
-                (_a = application.MakeTerminal) === null || _a === void 0 ? void 0 : _a.sendText('make');
+                (_a = application.AdsTerminal) === null || _a === void 0 ? void 0 : _a.sendText(`make`);
+                return true;
+            }
+            // Bat or Shell compiler?
+            if (this.UsingBatchCompiler || this.UsingShellScriptCompiler) {
+                // Launch and exit
+                (_b = application.AdsTerminal) === null || _b === void 0 ? void 0 : _b.sendText(`${this.FileName}`);
                 return true;
             }
             // Standard compile
@@ -117,7 +123,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
                 return false;
             }
             // Using a make process? if so we can skip some of the configuration
-            if (this.UsingMakeCompiler) {
+            if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) {
                 return true;
             }
             // Default compiler

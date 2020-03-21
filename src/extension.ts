@@ -52,7 +52,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	const killBuildGame = vscode.commands.registerCommand('extension.killBuildGame', () => {
 		console.log('User activated command "extension.killBuildGame"');
 		application.KillBuildGame();		
-	})
+	});
 
 	// Subscriptions (register)
 	context.subscriptions.push(openWelcomePage);

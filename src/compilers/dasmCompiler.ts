@@ -1,5 +1,4 @@
 "use strict";
-import * as vscode from 'vscode';
 import * as path from 'path';
 import * as application from '../application';
 import * as filesystem from '../filesystem';
@@ -25,10 +24,16 @@ export class DasmCompiler extends CompilerBase {
         console.log('debugger:DasmCompiler.ExecuteCompilerAsync');
 
         // Make compile?
-        if (this.UsingMakeCompiler) {   
+        if (this.UsingMakeFileCompiler) {   
             // Launch and exit
-            application.MakeTerminal?.sendText('make');
+            application.AdsTerminal?.sendText(`make`);
             return true;
+        }
+        // Bat or Shell compiler?
+        if (this.UsingBatchCompiler || this.UsingShellScriptCompiler) {
+             // Launch and exit
+             application.AdsTerminal?.sendText(`${this.FileName}`);
+             return true;           
         }
 
         // Standard compile
@@ -116,7 +121,7 @@ export class DasmCompiler extends CompilerBase {
         if (!result) { return false; }
 
         // Using a make process? if so we can skip some of the configuration
-        if (this.UsingMakeCompiler) { return true; }
+        if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) { return true; }
 
         // Default compiler
         if (!this.CustomFolderOrPath) {

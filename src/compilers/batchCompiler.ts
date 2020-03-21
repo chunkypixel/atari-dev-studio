@@ -1,24 +1,23 @@
 "use strict";
 import * as vscode from 'vscode';
 import * as application from '../application';
-import * as filesystem from '../filesystem';
 import { CompilerBase } from "./compilerBase";
 
-export class MakeCompiler extends CompilerBase {
+export class BatchCompiler extends CompilerBase {
 
     // Features
 
     constructor() {
-        super("makefile",
-            "makefile",
-            ["makefile"],
+        super("bat",
+            "Batch",
+            ["bat"],
             [""],
             "",
             "");
     }
 
     protected async InitialiseAsync(): Promise<boolean> {
-        console.log('debugger:MakeCompiler.InitialiseAsync');
+        console.log('debugger:BatCompiler.InitialiseAsync');
 
         // Prepare
         let result = true;
@@ -56,26 +55,25 @@ export class MakeCompiler extends CompilerBase {
     }
 
     protected async ExecuteCompilerAsync(): Promise<boolean> {
-        console.log('debugger:MakeCompiler.ExecuteCompilerAsync');
+        console.log('debugger:BatCompiler.ExecuteCompilerAsync');
 
         // Launch and exit
         // note: we cannot wait for a result
-        application.AdsTerminal?.sendText(`make -f ${this.FileName}`);
+        application.AdsTerminal?.sendText(`${this.FileName}`);
         return true;
     }
 
     protected async LoadConfigurationAsync(): Promise<boolean> {
-        console.log('debugger:MakeCompiler.LoadConfigurationAsync'); 
+        console.log('debugger:BatCompiler.LoadConfigurationAsync'); 
 
         // Base
         let result = await super.LoadConfigurationAsync();
         if (!result) { return false; }
 
         // Flag
-        this.UsingMakeFileCompiler = true;
+        this.UsingBatchCompiler = true;
 
         // Result
         return true;
     }
-
 }

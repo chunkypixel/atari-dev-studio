@@ -16,6 +16,8 @@ const batariBasicCompiler_1 = require("./compilers/batariBasicCompiler");
 const seventyEightHundredBasicCompiler_1 = require("./compilers/seventyEightHundredBasicCompiler");
 const dasmCompiler_1 = require("./compilers/dasmCompiler");
 const makeCompiler_1 = require("./compilers/makeCompiler");
+const batchCompiler_1 = require("./compilers/batchCompiler");
+const shellScriptCompiler_1 = require("./compilers/shellScriptCompiler");
 const stellaEmulator_1 = require("./emulators/stellaEmulator");
 const a7800Emulator_1 = require("./emulators/a7800Emulator");
 const dasmHover_1 = require("./hovers/dasmHover");
@@ -50,15 +52,15 @@ exports.ChangeLogUri = vscode.Uri.parse(`https://marketplace.visualstudio.com/it
 // Channels
 // -------------------------------------------------------------------------------------
 exports.CompilerOutputChannel = vscode.window.createOutputChannel("Compiler");
-function InitialiseMakeTerminalAsync() {
+function InitialiseAdsTerminalAsync() {
     return __awaiter(this, void 0, void 0, function* () {
         // Kill existing terminal?
-        exports.MakeTerminal === null || exports.MakeTerminal === void 0 ? void 0 : exports.MakeTerminal.dispose();
+        exports.AdsTerminal === null || exports.AdsTerminal === void 0 ? void 0 : exports.AdsTerminal.dispose();
         // Create
-        exports.MakeTerminal = vscode.window.createTerminal("Make");
+        exports.AdsTerminal = vscode.window.createTerminal(`${exports.Name}`);
     });
 }
-exports.InitialiseMakeTerminalAsync = InitialiseMakeTerminalAsync;
+exports.InitialiseAdsTerminalAsync = InitialiseAdsTerminalAsync;
 // -------------------------------------------------------------------------------------
 // Compilers
 // Register compilers here and in order of preference
@@ -67,7 +69,9 @@ exports.Compilers = [
     new batariBasicCompiler_1.BatariBasicCompiler(),
     new seventyEightHundredBasicCompiler_1.SeventyEightHundredBasicCompiler(),
     new dasmCompiler_1.DasmCompiler(),
-    new makeCompiler_1.MakeCompiler()
+    new makeCompiler_1.MakeCompiler(),
+    new batchCompiler_1.BatchCompiler(),
+    new shellScriptCompiler_1.ShellScriptCompiler()
 ];
 // -------------------------------------------------------------------------------------
 // Emulators

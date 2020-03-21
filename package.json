@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.4.2",
+    "version": "0.4.3",
     "icon": "images/icon.png",
     "preview": true,
     "publisher": "chunkypixel",
@@ -94,12 +94,12 @@
             {
                 "command": "extension.buildGame",
                 "key": "Shift+f5",
-                "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm"
+                "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile || resourceLangId == bat || resourceLangId == shellscript"
             },
             {
                 "command": "extension.buildGameAndRun",
                 "key": "f5",
-                "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm"
+                "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript"
             }
         ],
         "commands": [

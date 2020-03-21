@@ -4,7 +4,6 @@ import * as path from 'path';
 import * as application from '../application';
 import * as filesystem from '../filesystem';
 import * as execute from '../execute';
-import { promises } from 'dns';
 
 export abstract class CompilerBase implements vscode.Disposable {
 
@@ -34,7 +33,9 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected CleanUpCompilationFiles: boolean = false;
     protected WorkspaceFolder: string = "";
 
-    protected UsingMakeCompiler: boolean = false;
+    protected UsingMakeFileCompiler: boolean = false;
+    protected UsingBatchCompiler: boolean = false;
+    protected UsingShellScriptCompiler: boolean = false;
 
     constructor(id: string, name: string, extensions: string[], compiledExtensions: string[], folderOrPath: string, emulator: string) {
         this.Id = id;
@@ -68,7 +69,7 @@ export abstract class CompilerBase implements vscode.Disposable {
 
         // Does compiler have/use an emulator?
         // Make doesn't use an emulator - user must provide their own
-        if (this.Emulator === '' || this.UsingMakeCompiler) { return true; }
+        if (this.Emulator === '' || (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler)) { return true; }
 
         // Get emulator
         for await (let emulator of application.Emulators) {
@@ -109,16 +110,16 @@ export abstract class CompilerBase implements vscode.Disposable {
 
         // Activate output window?
         if (!this.Configuration.get<boolean>(`editor.preserveCodeEditorFocus`))  {
-            if (!this.UsingMakeCompiler) {
-                application.CompilerOutputChannel.show();
+            if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) {
+                application.AdsTerminal?.show();
             } else {
-                application.MakeTerminal?.show();
+                application.CompilerOutputChannel.show();               
             }
         }
 
         // Clear output content?
         if (this.Configuration.get<boolean>(`editor.clearPreviousOutput`))  {
-            if (!this.UsingMakeCompiler) { 
+            if (!this.UsingMakeFileCompiler && !this.UsingBatchCompiler && !this.UsingShellScriptCompiler) { 
                 application.CompilerOutputChannel.clear(); 
             }
         }
@@ -132,7 +133,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         if (!result) { return false; }
 
         // Remove old debugger files before build
-        if (!this.UsingMakeCompiler) { 
+        if (!this.UsingMakeFileCompiler && !this.UsingBatchCompiler && !this.UsingShellScriptCompiler) { 
             await this.RemoveDebuggerFilesAsync(this.CompiledSubFolder); 
         }
 
@@ -152,7 +153,10 @@ export abstract class CompilerBase implements vscode.Disposable {
         this.FolderOrPath = this.DefaultFolderOrPath;
         this.Args = "";
         this.Emulator = this.DefaultEmulator;
-        
+        this.UsingMakeFileCompiler = false;
+        this.UsingBatchCompiler = false;
+        this.UsingShellScriptCompiler = false;
+
         // System
         this.WorkspaceFolder = this.getWorkspaceFolder();
         this.FileName = path.basename(this.Document!.fileName);
@@ -161,16 +165,18 @@ export abstract class CompilerBase implements vscode.Disposable {
         let defaultCompiler = this.Configuration!.get<string>(`compiler.${this.Id}.defaultCompiler`);
         if (defaultCompiler === "Make") {
             // Only working in dasm currently
-            this.UsingMakeCompiler = await this.IsMakeFileAvailableAsync();
-            if (!this.UsingMakeCompiler) {
+
+            // validate for one of the script files
+            await this.IsTerminalMakeFileAvailable();
+            if (!this.UsingMakeFileCompiler && !this.UsingBatchCompiler && !this.UsingShellScriptCompiler) {
                 // Failed
-                application.Notify(`Error: You have chosen to use the Make compiler for ${this.Id} but no Makefile was found in your root workspace folder. Review your selection in ${application.PreferencesSettingsExtensionPath} or create a Makefile.`);
+                application.Notify(`Error: You have chosen to use the Make compiler for ${this.Id} but no makefile was not found in your root workspace folder. Review your selection in ${application.PreferencesSettingsExtensionPath} or create a 'Makefile', 'makefile.bat' or 'makefile.sh' script.`);
                 application.Notify(`Workspace folder: ${this.WorkspaceFolder}`);
                 return false;
             }
 
             // Initialise terminal
-            await application.InitialiseMakeTerminalAsync();
+            await application.InitialiseAdsTerminalAsync();
         }
         if (defaultCompiler === "Custom") {
             let customCompilerFolder = this.Configuration!.get<string>(`compiler.${this.Id}.folder`);
@@ -215,7 +221,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         console.log('debugger:CompilerBase.VerifyCompiledFileSize');
 
         // Validate
-        if (this.UsingMakeCompiler) { return true; }
+        if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) { return true; }
 
         // Verify created file(s)
         application.Notify(`Verifying compiled file(s)...`);
@@ -242,7 +248,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         console.log('debugger:CompilerBase.MoveFilesToBinFolder');
 
         // Validate
-        if (this.UsingMakeCompiler) { return true; }
+        if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) { return true; }
 
         // Create directory?
         let result = await filesystem.MkDirAsync(this.CompiledSubFolder);
@@ -327,27 +333,35 @@ export abstract class CompilerBase implements vscode.Disposable {
         }
     }
 
-    // public async InitialiseMakeTerminalAsync() {
-    //     // Kill existing terminal?
-    //     this.MakeTerminal?.dispose();
+    protected async IsTerminalMakeFileAvailable(): Promise<void> {
+        console.log('debugger:MakeCompiler.IsTerminalMakeFileAvailable'); 
 
-    //     // Create
-    //     this.MakeTerminal = vscode.window.createTerminal("Make");
-    // }
-
-    public async IsMakeFileAvailableAsync(): Promise<boolean> {
-        console.log('debugger:CompilerBase.IsMakeFileAvailableAsync'); 
-        
-        // scan
-        var result = await filesystem.FileExistsAsync(path.join(this.WorkspaceFolder,"makefile"));
+        // Makefile?
+        this.UsingMakeFileCompiler = await this.FindTerminalMakeFileAsync("makefile");
         // add some additional checks for Linux/macOS
         if (application.IsLinux || application.IsMacOS) {
             // cater for case-specific
-            if (!result) { result = await filesystem.FileExistsAsync(path.join(this.WorkspaceFolder,"Makefile")); }
-            if (!result) { result = await filesystem.FileExistsAsync(path.join(this.WorkspaceFolder,"MAKEFILE")); }
+            if (!this.UsingMakeFileCompiler) { this.UsingMakeFileCompiler = await this.FindTerminalMakeFileAsync("Makefile"); }
+            if (!this.UsingMakeFileCompiler) { this.UsingMakeFileCompiler = await this.FindTerminalMakeFileAsync("MAKEFILE"); }
         }
+        if (this.UsingMakeFileCompiler) { return; }
+    
+        // Shell?
+        this.UsingShellScriptCompiler = await this.FindTerminalMakeFileAsync("makefile.sh"); 
+        if (!this.UsingShellScriptCompiler) { this.UsingShellScriptCompiler = await this.FindTerminalMakeFileAsync("Makefile.sh"); }
+        if (!this.UsingShellScriptCompiler) { this.UsingShellScriptCompiler = await this.FindTerminalMakeFileAsync("MAKEFILE.SH"); }
+        if (this.UsingShellScriptCompiler) { return; }    
 
-        // Result
+        // Bat?
+        this.UsingBatchCompiler = await await this.FindTerminalMakeFileAsync("makefile.bat");
+    }
+
+    private async FindTerminalMakeFileAsync(fileName: string): Promise<boolean> {
+        // Scan for required makefile and store if found
+        let result = await filesystem.FileExistsAsync(path.join(this.WorkspaceFolder,fileName));
+        if (result) { this.FileName = fileName; }
+
+        // Return
         return result;
     }
 
