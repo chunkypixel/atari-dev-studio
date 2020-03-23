@@ -48,8 +48,9 @@ Updates are regularly provided and you will be notified via VS Code when one has
 ### Compiling your program
 To display the available extension features press **CTRL+SHIFT+P** to display the **Command Palette**. From the **Command Palette** prompt type **adv** to short-list the available options:
 * ads: Open the Welcome page
-* ads: Compile source code
-* ads: Compile source code and run in emulator
+* ads: Compile source code (Shift+F5)
+* ads: Compile source code and run in emulator (F5)
+* ads: Kill build process
 
 ![Command Palette](images/ataridevstudio-commandpalette.png)
 
@@ -68,15 +69,15 @@ Prefer using scripts to build your dasm games? If you have chosen to override th
 
 ![dasm Compiler](images/ataridevstudio-dasmcompiler.png)
 
-> Note: You are totally responsible to ensure your enviroment is properly configured to allow you to utilise the tools and applications you will be interacting with.  No support will be provided for this feature.
+> Note: You are totally responsible to ensure your environment is properly configured to allow you to utilise the tools and applications you will be interacting with.  No support will be provided for this feature.
  
 ### Status Bar
 Apart from using the **Command Palette** to select compilation, there are a number of short-cut buttons on the **Status Bar** allowing you to:
 * Display the extension version (might be useful at times)
 * Open the Welcome page
 * Open the Sprite Editor
-* Compile source code
-* Compile source code and run
+* Compile source code (Shift+F5)
+* Compile source code and run (F5)
 
 ![Status Bar](images/ataridevstudio-statusbar.png)
 
