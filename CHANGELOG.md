@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.4.4
+
+* Updated Stella to 6.1 (Windows, Linux, macOS)
+
 ## 0.4.3
 
 * Added ability to compile Batch (.bat) or Shell Script (.sh) files (splendidnut) using the 'Make' process (change dasm compiler option to 'Make'). This option will automatically scan the root workspace folder for a 'makefile.bat' or 'makefile.sh' to use without having to open it first (make sure your base source code file is open and active as per the current compilation process). Note: you can also open the script file and compile from that if required.
