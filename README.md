@@ -10,12 +10,15 @@ Atari Dev Studio is an extension for Microsoft's cross-platform IDE Visual Studi
 Atari Dev Studio includes the following features:
 * Develop your game on Windows, Linux or macOS
 * Compile source code for your Atari 2600 or 7800 using batari Basic, 7800basic or dasm
+* Use scripting (makefile, batch or shell script files) to build your dasm projects [preview]
 * Optionally launch and test your game using the Stella (2600) or A7800 (7800) emulators
 * Built-in Sprite Editor (also suitable for tiles and other objects) [preview]
 * Manage your project using the File Explorer or version-control your source code directly with GitHub (and others) using the built-in features of the Visual Studio Code platform.
 * Provide references to your own specific releases of each language or emulator rather than use the includes ones via the **Settings**.
 
 Additional features are planned for the future. At this time the focus is on the core functionality and ensuring full cross-platform support.
+
+![Workspace](images/ataridevstudio-workspace.png)
 
 ## Installing Atari Dev Studio
 
@@ -27,7 +30,7 @@ VS Code is a cross-platform application which runs on Windows, Linux and macOS. 
 
 > Note: Linux users on 64-bit systems will be required to install the 32-bit compatibility libraries on your system to ensure everything will run as expected. 
 
-> Note: macOS users will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
+> Note: macOS users require a 64-bit operating system to fully utilise all features of Atari Dev Studio and will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
 
 ### Installing the extension
 Once you have installed VS Code (available [here](https://code.visualstudio.com/Download)), open the VS Code program and complete the following:
@@ -38,19 +41,16 @@ Once you have installed VS Code (available [here](https://code.visualstudio.com/
 ![Install the extension](images/ataridevstudio-installation.png)
 
 ### Updating the extension
-Updates will be regularly made available and will be announced via the **AtariAge** forum (you will also be notified in VS Code). To update to the latest release:
-1. From the **Activity Bar**, click the **Extensions** button to display the **Extensions** window.
-2. From the **Extensions** window, search the **Enabled** list, locate **Atari Dev Studio** and click the **Update** button.
-
-> Note: It is recommended you restart VS Code after installing an update.
+Updates are regularly provided and you will be notified via VS Code when one has been made available. Once an update has been installed you will generally be prompted to restart VS Code.
 
 ## Using Atari Dev Studio
 
 ### Compiling your program
 To display the available extension features press **CTRL+SHIFT+P** to display the **Command Palette**. From the **Command Palette** prompt type **adv** to short-list the available options:
 * ads: Open the Welcome page
-* ads: Compile source code
-* ads: Compile source code and run in emulator
+* ads: Compile source code (Shift+F5)
+* ads: Compile source code and run in emulator (F5)
+* ads: Kill build process
 
 ![Command Palette](images/ataridevstudio-commandpalette.png)
 
@@ -63,14 +63,21 @@ When you load a file the initial language will be chosen based on the file exten
 To change a language you can click on the Status Bar **Language selector** and a list will be shown allowing you to choose another language. Optionally in the **Settings** you will be able to either let the extension choose based on the active language or set a specific language to always compile against.
 
 ![Language Selector](images/ataridevstudio-languageselector.png)
+
+### Build scripts [preview]
+Prefer using scripts to build your dasm games? If you have chosen to override the dasm compiler (select Make via the **Settings**) , Atari Dev Studio will scan and detect for makefile, batch (makefile.bat) or shell scripts (makefile.sh) files which are located in your root workspace folder to build your game. 
+
+![dasm Compiler](images/ataridevstudio-dasmcompiler.png)
+
+> Note: You are totally responsible to ensure your environment is properly configured to allow you to utilise the tools and applications you will be interacting with.  No support will be provided for this feature.
  
 ### Status Bar
 Apart from using the **Command Palette** to select compilation, there are a number of short-cut buttons on the **Status Bar** allowing you to:
 * Display the extension version (might be useful at times)
 * Open the Welcome page
 * Open the Sprite Editor
-* Compile source code
-* Compile source code and run
+* Compile source code (Shift+F5)
+* Compile source code and run (F5)
 
 ![Status Bar](images/ataridevstudio-statusbar.png)
 
