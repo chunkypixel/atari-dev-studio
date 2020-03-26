@@ -141,8 +141,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800sign.${platform}.${application.OSArch}`)); }
         if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800makecc2.${platform}.${application.OSArch}`)); }
         if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`dasm.${platform}.${application.OSArch}`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`distella.${platform}.${application.OSArch}`)); }
-
+     
         // Result
         return result;
     }
