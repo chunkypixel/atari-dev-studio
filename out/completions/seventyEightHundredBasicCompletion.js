@@ -200,6 +200,7 @@ class SeventyEightHundredBasicCompletion extends completionBase_1.CompletionBase
                         new vscode.CompletionItem('128k', vscode.CompletionItemKind.Value),
                         new vscode.CompletionItem('128kRAM', vscode.CompletionItemKind.Value),
                         new vscode.CompletionItem('128kBANKRAM', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('144k', vscode.CompletionItemKind.Value),
                         new vscode.CompletionItem('256k', vscode.CompletionItemKind.Value),
                         new vscode.CompletionItem('256kRAM', vscode.CompletionItemKind.Value),
                         new vscode.CompletionItem('256kBANKRAM', vscode.CompletionItemKind.Value),

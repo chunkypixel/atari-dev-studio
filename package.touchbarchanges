@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.4.5",
+    "version": "0.4.4",
     "icon": "images/icon.png",
     "preview": true,
     "publisher": "chunkypixel",
@@ -122,8 +122,38 @@
                 "command": "extension.killBuildGame",
                 "title": "Kill build process",
                 "category": "ads"
+            },
+            {
+                "command": "extension.touchbar.buildGame",
+                "title": "$(triangle-right)"
+            },
+            {
+                "command": "extension.touchbar.buildGameAndRun",
+                "title": "$(rocket)"
+            },      
+            {
+                "command": "workbench.action.toggleZenMode",
+                "title": "□ Zen Mode"
             }
         ],
+        "menus" : {
+            "touchBar": [
+                {
+                    "command": "extension.touchbar.buildGame",
+                    "group": "compile",
+                    "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript"
+                },
+                {
+                    "command": "extension.touchbar.buildGameAndRun",
+                    "group": "compile",
+                    "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript"
+                },
+                {
+                    "command": "workbench.action.toggleZenMode",
+                    "group": "editor"
+                }         
+            ]
+        },
         "configuration": {
             "type": "object",
             "title": "Atari Dev Studio",

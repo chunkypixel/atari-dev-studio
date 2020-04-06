@@ -59,12 +59,25 @@ function activate(context) {
             console.log('User activated command "extension.killBuildGame"');
             application.KillBuildGame();
         });
+        // Build (touchbar)
+        // Note: apparently the fileUri can be supplied via the command line but we are not going to use it
+        // const touchbarBuildGame = vscode.commands.registerCommand('extension.touchbar.buildGame', async (fileUri: vscode.Uri) => {
+        // 	console.log('User activated command "extension.touchbar.buildGame"');
+        // 	await application.BuildGameAsync(fileUri);
+        // });
+        // const touchbarBuildGameAndRun = vscode.commands.registerCommand('extension.touchbar.buildGameAndRun', async (fileUri: vscode.Uri) => {
+        // 	console.log('User activated command "extension.touchbar.buildGameAndRun"');
+        // 	await application.BuildGameAndRunAsync(fileUri);
+        // });
         // Subscriptions (register)
         context.subscriptions.push(openWelcomePage);
         context.subscriptions.push(openSpriteEditorPage);
         context.subscriptions.push(buildGame);
         context.subscriptions.push(buildGameAndRun);
         context.subscriptions.push(killBuildGame);
+        // Subscriptions (touchbar)
+        // context.subscriptions.push(touchbarBuildGame);
+        // context.subscriptions.push(touchbarBuildGameAndRun);	
         // Register the mouse-over hover providers
         yield application.RegisterHoverProvidersAsync(context);
         // Register region folding providers

@@ -156,9 +156,6 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             if (result) {
                 result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `dasm.${platform}.${application.OSArch}`));
             }
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `distella.${platform}.${application.OSArch}`));
-            }
             // Result
             return result;
         });
