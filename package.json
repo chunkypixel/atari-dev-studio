@@ -122,8 +122,34 @@
                 "command": "extension.killBuildGame",
                 "title": "Kill build process",
                 "category": "ads"
+            },
+            {
+                "command": "extension.touchbar.buildGame",
+                "title": "build",
+                "category": "touchbar",
+                "enablement": "isMac"
+            },
+            {
+                "command": "extension.touchbar.buildGameAndRun",
+                "title": "build & run",
+                "category": "touchbar",
+                "enablement": "IsMac"
             }
         ],
+        "menus" : {
+            "touchBar": [ 
+                {
+                    "command": "extension.touchbar.buildGame",
+                    "group": "compile",
+                    "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript"
+                },
+                {
+                    "command": "extension.touchbar.buildGameAndRun",
+                    "group": "compile",
+                    "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript"
+                } 
+            ]
+        },
         "configuration": {
             "type": "object",
             "title": "Atari Dev Studio",
