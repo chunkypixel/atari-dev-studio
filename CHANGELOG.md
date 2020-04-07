@@ -5,6 +5,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 ## 0.4.5
 
 * Updated Stella to 6.1.1 (Windows, Linux, macOS)
+* Added initial items for macOS Touch Bar - Build, Build & Run (Generation2Games)
 * Added missing set romsize intellisense item: 144k (7800basic)
 
 ## 0.4.4

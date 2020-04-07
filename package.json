@@ -133,7 +133,7 @@
                 "command": "extension.touchbar.buildGameAndRun",
                 "title": "build & run",
                 "category": "touchbar",
-                "enablement": "IsMac"
+                "enablement": "isMac"
             }
         ],
         "menus" : {
