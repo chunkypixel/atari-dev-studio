@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.4.6
+
+Sprite Editor
+* #29 [InProgress] Added Palette (region) selector to Palette window. Added PAL palette and updated NTSC palette to match A7800 (warm)
+* #23 [Done] - rotated palette display to show vertically instead of horizontally
+
 ## 0.4.5
 
 * Updated Stella to 6.1.1 (Windows, Linux, macOS)
