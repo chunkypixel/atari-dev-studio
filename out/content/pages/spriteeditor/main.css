@@ -2777,6 +2777,15 @@ Spritemate stylesheet
   margin: 0px 0px 4px 2px;
  }
  
+ div#palette-section #palette-dropdown-button {
+   width: 232px;
+   margin-bottom: 10px;
+ }
+
+ div#palette-section .ui-selectmenu-text {
+  font-size: 1.3em;
+ }
+
  .palette_color_item_sprite_colors
  {
    width: 84px;
