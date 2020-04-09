@@ -144,12 +144,13 @@ class SpriteEditorPage {
             // and send response back to webview
             // Prepare
             let command = message.command;
-            //let content = message!.content;
-            //let file = message!.file;
+            // Get current workspace
+            let defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
             // Options
             let options = {
                 canSelectMany: false,
                 openLabel: "Open",
+                defaultUri: defaultUri,
                 filters: {
                     'Sprite Editor': ['spe'],
                     'All Files': ['*']
@@ -194,24 +195,22 @@ class SpriteEditorPage {
             let file = message.file;
             let data = message.data;
             let errorMessage = "";
-            // Set base uri
-            let fileUri = vscode.Uri.file(file);
-            // Prompt?
-            if (!file) {
-                // Options
-                let options = {
-                    defaultUri: vscode.Uri.file(filesystem.WorkspaceFolder()),
-                    saveLabel: "Save",
-                    filters: {
-                        'Sprite Editor': ['spe'],
-                        'All Files': ['*']
-                    }
-                };
-                // Process
-                let result = yield vscode.window.showSaveDialog(options);
-                if (result) {
-                    fileUri = result;
+            let fileUri = undefined;
+            // Set default path
+            let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
+            // Options
+            let options = {
+                defaultUri: defaultUri,
+                saveLabel: "Save",
+                filters: {
+                    'Sprite Editor': ['spe'],
+                    'All Files': ['*']
                 }
+            };
+            // Process
+            let result = yield vscode.window.showSaveDialog(options);
+            if (result) {
+                fileUri = result;
             }
             // Save?
             if (fileUri) {
@@ -258,7 +257,8 @@ class SpriteEditorPage {
             let file = message.file;
             let data = message.data;
             let errorMessage = "";
-            // Get file
+            let fileUri = undefined;
+            // Get default path
             let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
             // Prompt user here
             let options = {
@@ -268,43 +268,45 @@ class SpriteEditorPage {
                     'PNG image': ['png']
                 }
             };
-            // TODO: this needs fixing (doesn't wait)
             // Process
-            yield vscode.window.showSaveDialog(options).then((fileUri) => __awaiter(this, void 0, void 0, function* () {
-                if (fileUri) {
-                    // Process
-                    try {
-                        // Prepare
-                        let folder = path.dirname(fileUri.fsPath);
-                        // Save
-                        let result = yield filesystem.MkDirAsync(folder);
-                        if (result) {
-                            result = yield filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data, 'utf8'));
-                        }
-                        // Validate
-                        if (result) {
-                            this.currentPanel.webview.postMessage({
-                                command: command,
-                                status: 'ok',
-                                file: path.basename(fileUri.fsPath)
-                            });
-                            return true;
-                        }
-                        // Set
-                        errorMessage = `Failed to export image file: ${path.basename(fileUri.fsPath)}`;
+            let result = yield vscode.window.showSaveDialog(options);
+            if (result) {
+                fileUri = result;
+            }
+            // Save?
+            if (fileUri) {
+                // Process
+                try {
+                    // Prepare
+                    let folder = path.dirname(fileUri.fsPath);
+                    // Save
+                    let result = yield filesystem.MkDirAsync(folder);
+                    if (result) {
+                        result = yield filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data, 'utf8'));
                     }
-                    catch (error) {
-                        errorMessage = error;
+                    // Validate
+                    if (result) {
+                        this.currentPanel.webview.postMessage({
+                            command: command,
+                            status: 'ok',
+                            file: path.basename(fileUri.fsPath)
+                        });
+                        return true;
                     }
-                    // Result
-                    this.currentPanel.webview.postMessage({
-                        command: command,
-                        status: 'error',
-                        errorMessage: errorMessage
-                    });
-                    return false;
+                    // Set
+                    errorMessage = `Failed to export image file: ${path.basename(fileUri.fsPath)}`;
                 }
-            }));
+                catch (error) {
+                    errorMessage = error;
+                }
+                // Result
+                this.currentPanel.webview.postMessage({
+                    command: command,
+                    status: 'error',
+                    errorMessage: errorMessage
+                });
+                return false;
+            }
             // Result
             return true;
         });
@@ -315,12 +317,13 @@ class SpriteEditorPage {
             // and send response back to webview
             // Prepare
             let command = message.command;
-            //let content = message!.content;
-            //let file = message!.file;
+            // Get default path
+            let defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
             // Options
             let options = {
                 canSelectMany: false,
                 openLabel: "Open",
+                defaultUri: defaultUri,
                 filters: {
                     'Sprite Editor Palette': ['palette'],
                     'All Files': ['*']
@@ -365,24 +368,22 @@ class SpriteEditorPage {
             let file = message.file;
             let data = message.data;
             let errorMessage = "";
-            // Set base uri
-            let fileUri = vscode.Uri.file(file);
-            // Prompt?
-            if (!file) {
-                // Options
-                let options = {
-                    defaultUri: vscode.Uri.file(filesystem.WorkspaceFolder()),
-                    saveLabel: "Save",
-                    filters: {
-                        'Sprite Editor Palette': ['palette'],
-                        'All Files': ['*']
-                    }
-                };
-                // Process
-                let result = yield vscode.window.showSaveDialog(options);
-                if (result) {
-                    fileUri = result;
+            let fileUri = undefined;
+            // Get default path
+            let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
+            // Options
+            let options = {
+                defaultUri: defaultUri,
+                saveLabel: "Save",
+                filters: {
+                    'Sprite Editor Palette': ['palette'],
+                    'All Files': ['*']
                 }
+            };
+            // Process
+            let result = yield vscode.window.showSaveDialog(options);
+            if (result) {
+                fileUri = result;
             }
             // Save?
             if (fileUri) {
