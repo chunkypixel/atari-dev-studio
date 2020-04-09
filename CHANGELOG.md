@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.4.7
+
+* Added missing 7800basic keywords: switchpause
+
 ## 0.4.6
 
 Sprite Editor
