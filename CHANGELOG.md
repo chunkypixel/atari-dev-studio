@@ -5,8 +5,11 @@ The following enhancements and changes have been made to Atari Dev Studio:
 ## 0.4.6
 
 Sprite Editor
-* #29 [InProgress] Added Palette (region) selector to Palette window. Added PAL palette and updated NTSC palette to match A7800 (warm)
-* #23 [Done] - rotated palette display to show vertically instead of horizontally
+* #29 [Done] Added Palette (region) selector to Palette window. Added PAL palette and updated NTSC palette to match A7800 (warm)
+* #23 [Done] Rotated palette display to show vertically instead of horizontally (various)
+* #16 [Done] Added NTSC and PAL palettes for the 2600 (MikeBrownEmplas) 
+* #17 [InProgress] Added ability to create 2600 sprites (added sizing, colors and palettes) (MikeBrownEmplas)
+* Updated Project dialog for better selection of sizing ranges for the 7800 where steps follow expected boundaries (multiples of 4 for width and 8 for height). Also added 2600 ranges (8 for width and 1-256 for height)
 
 ## 0.4.5
 

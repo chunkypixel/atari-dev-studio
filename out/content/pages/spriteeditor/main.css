@@ -2760,7 +2760,7 @@ Spritemate stylesheet
  #palette_all_colors
  {
    clear: both;
-   margin: 0px 2px;
+   margin: 0px 2px 4px;
  }
  
  .palette_color_item
@@ -2777,12 +2777,12 @@ Spritemate stylesheet
   margin: 0px 0px 4px 2px;
  }
  
- div#palette-section #palette-dropdown-button {
+ div#region-section #palette-dropdown-region-button {
    width: 232px;
    margin-bottom: 10px;
  }
 
- div#palette-section .ui-selectmenu-text {
+ div#region-section .ui-selectmenu-text {
   font-size: 1.3em;
  }
 

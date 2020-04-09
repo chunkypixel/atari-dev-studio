@@ -85,17 +85,16 @@ Apart from using the **Command Palette** to select compilation, there are a numb
 
 ### Sprite Editor [preview]
 Atari Dev Studio includes a simple and easy to use Sprite Editor allowing you to create sprites, tiles and other objects for use in your projects.  It has the following features:
-* New Project wizard allowing you to select the size, region (palette) and total colors of your sprites
+* New Project wizard allowing you to select the size, region (NTSC or PAL palettes) and total colors of your sprites for either the 2600 or 7800
 * Load and Save projects allowing you to save and come back to on-going work
 * Editing features such and palette selector, zoom, pen, eraser, fill and move modes
 * Ability to manage your sprites in a sortable list with options to copy, paste, duplicate, resize and delete
+* Ability to set
 * Export sprites to .png files - either selected or all (compatible with 7800basic 3+1 and 12+1 image requirements)
 
 ![Sprite Editor](images/ataridevstudio-spriteeditor.png)
 
 The Sprite Editor is based on [Spritemate](http://spritemate.com) by Ingo Hinterding ([GitHub](https://github.com/Esshahn/spritemate)) and was suggested by RandomTerrain for inclusion in Atari Dev Studio. I have customised the source to provide the required features necessary for editing sprites, tiles and objects for the Atari platforms.  This work is currently in preview and will be on-going until all required features have been added.
-
-> Note: The Sprite Editor is currently configured for working with 7800basic images.
 
 ### Settings
 There are a number of compiler, emulator and editor configuration options available in Atari Dev Studio which can be changed via the **Settings** (Preferences -> Settings -> Extensions -> Atari Dev Studio).
@@ -113,7 +112,7 @@ This extension is only available due to the great people of the AtariAge communi
 * dasm - the many contibutors
 * Stella emulator - Stephen Anthony (stephena)
 * A7800 emulator - Mike Saarna (RevEng) and Robert Tuccitto (Trebor)
-* The AtariAge community including Albert, CPUWiz, Random Terrain, Trebor, Synthpopalooza, sramirez2008, Defender_2600 Gemintronic, Karl G, ZeroPage Homebrew, Muddyfunster, TwentySixHundred, Lillapojkenpåön, Andrew Davie, splendidnut
+* The AtariAge community including Albert, CPUWiz, Random Terrain, Trebor, Synthpopalooza, sramirez2008, Defender_2600 Gemintronic, Karl G, ZeroPage Homebrew, Muddyfunster, TwentySixHundred, Lillapojkenpåön, Andrew Davie, splendidnut, andyjp, sexyUnderwriter, MikeBrownEmplas, Generation2Games
 * Mats Engstrom (SmallRoomLabs)
 
 ## Languages
