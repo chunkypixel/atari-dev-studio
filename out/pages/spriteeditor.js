@@ -77,6 +77,12 @@ class SpriteEditorPage {
                     case 'exportAsPngFile':
                         this.exportAsPngFile(message);
                         return;
+                    case 'exportAsBatariFile':
+                        this.exportAsBatariFile(message);
+                        return;
+                    case 'exportAsAssemblyFile':
+                        this.exportAsAssemblyFile(message);
+                        return;
                     case 'configuration':
                         this.saveConfiguration(message);
                         return;
@@ -266,6 +272,128 @@ class SpriteEditorPage {
                 saveLabel: "Export",
                 filters: {
                     'PNG image': ['png']
+                }
+            };
+            // Process
+            let result = yield vscode.window.showSaveDialog(options);
+            if (result) {
+                fileUri = result;
+            }
+            // Save?
+            if (fileUri) {
+                // Process
+                try {
+                    // Prepare
+                    let folder = path.dirname(fileUri.fsPath);
+                    // Save
+                    let result = yield filesystem.MkDirAsync(folder);
+                    if (result) {
+                        result = yield filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data, 'utf8'));
+                    }
+                    // Validate
+                    if (result) {
+                        this.currentPanel.webview.postMessage({
+                            command: command,
+                            status: 'ok',
+                            file: path.basename(fileUri.fsPath)
+                        });
+                        return true;
+                    }
+                    // Set
+                    errorMessage = `Failed to export image file: ${path.basename(fileUri.fsPath)}`;
+                }
+                catch (error) {
+                    errorMessage = error;
+                }
+                // Result
+                this.currentPanel.webview.postMessage({
+                    command: command,
+                    status: 'error',
+                    errorMessage: errorMessage
+                });
+                return false;
+            }
+            // Result
+            return true;
+        });
+    }
+    exportAsBatariFile(message) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Prepare
+            let command = message.command;
+            let file = message.file;
+            let data = message.data;
+            let errorMessage = "";
+            let fileUri = undefined;
+            // Get default path
+            let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
+            // Prompt user here
+            let options = {
+                defaultUri: defaultUri,
+                saveLabel: "Export",
+                filters: {
+                    'batari Basic': ['bb']
+                }
+            };
+            // Process
+            let result = yield vscode.window.showSaveDialog(options);
+            if (result) {
+                fileUri = result;
+            }
+            // Save?
+            if (fileUri) {
+                // Process
+                try {
+                    // Prepare
+                    let folder = path.dirname(fileUri.fsPath);
+                    // Save
+                    let result = yield filesystem.MkDirAsync(folder);
+                    if (result) {
+                        result = yield filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data, 'utf8'));
+                    }
+                    // Validate
+                    if (result) {
+                        this.currentPanel.webview.postMessage({
+                            command: command,
+                            status: 'ok',
+                            file: path.basename(fileUri.fsPath)
+                        });
+                        return true;
+                    }
+                    // Set
+                    errorMessage = `Failed to export source file: ${path.basename(fileUri.fsPath)}`;
+                }
+                catch (error) {
+                    errorMessage = error;
+                }
+                // Result
+                this.currentPanel.webview.postMessage({
+                    command: command,
+                    status: 'error',
+                    errorMessage: errorMessage
+                });
+                return false;
+            }
+            // Result
+            return true;
+        });
+    }
+    exportAsAssemblyFile(message) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Prepare
+            let command = message.command;
+            let file = message.file;
+            let data = message.data;
+            let errorMessage = "";
+            let fileUri = undefined;
+            // Get default path
+            let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
+            // Prompt user here
+            let options = {
+                defaultUri: defaultUri,
+                saveLabel: "Export",
+                filters: {
+                    'Assembly': ['asm']
                 }
             };
             // Process

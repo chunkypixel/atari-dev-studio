@@ -87,6 +87,14 @@ export class SpriteEditorPage implements vscode.Disposable {
                         this.exportAsPngFile(message);
                         return;
 
+                    case 'exportAsBatariFile':
+                        this.exportAsBatariFile(message);
+                        return;
+
+                    case 'exportAsAssemblyFile':
+                        this.exportAsAssemblyFile(message);
+                        return;
+
                     case 'configuration':
                         this.saveConfiguration(message);
                         return;
@@ -295,6 +303,136 @@ export class SpriteEditorPage implements vscode.Disposable {
             saveLabel: "Export",
             filters: {
                 'PNG image': ['png']
+            }
+        };
+
+        // Process
+        let result = await vscode.window.showSaveDialog(options);
+        if (result) { fileUri = result; }
+
+        // Save?
+        if (fileUri) {
+            // Process
+            try {
+                // Prepare
+                let folder = path.dirname(fileUri.fsPath);
+
+                // Save
+                let result = await filesystem.MkDirAsync(folder);
+                if (result) { result = await filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data,'utf8')); }
+
+                // Validate
+                if (result) {
+                    this.currentPanel!.webview.postMessage({
+                        command: command,
+                        status: 'ok',
+                        file: path.basename(fileUri.fsPath)
+                    });
+                    return true;                      
+                }
+
+                // Set
+                errorMessage = `Failed to export image file: ${path.basename(fileUri.fsPath)}`;
+                                    
+            } catch (error) {
+                errorMessage = error;
+            }
+
+            // Result
+            this.currentPanel!.webview.postMessage({
+                command: command,
+                status: 'error',
+                errorMessage: errorMessage
+            });  
+            return false;  
+        }
+
+        // Result
+        return true;
+    }
+
+    private async exportAsBatariFile(message: any): Promise<boolean> {
+        // Prepare
+        let command = message!.command;
+        let file = message!.file;
+        let data = message!.data;
+        let errorMessage = "";
+        let fileUri = undefined;
+
+        // Get default path
+        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
+
+        // Prompt user here
+        let options: vscode.SaveDialogOptions = {
+            defaultUri: defaultUri,
+            saveLabel: "Export",
+            filters: {
+                'batari Basic': ['bb']
+            }
+        };
+
+        // Process
+        let result = await vscode.window.showSaveDialog(options);
+        if (result) { fileUri = result; }
+
+        // Save?
+        if (fileUri) {
+            // Process
+            try {
+                // Prepare
+                let folder = path.dirname(fileUri.fsPath);
+
+                // Save
+                let result = await filesystem.MkDirAsync(folder);
+                if (result) { result = await filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data,'utf8')); }
+
+                // Validate
+                if (result) {
+                    this.currentPanel!.webview.postMessage({
+                        command: command,
+                        status: 'ok',
+                        file: path.basename(fileUri.fsPath)
+                    });
+                    return true;                      
+                }
+
+                // Set
+                errorMessage = `Failed to export source file: ${path.basename(fileUri.fsPath)}`;
+                                    
+            } catch (error) {
+                errorMessage = error;
+            }
+
+            // Result
+            this.currentPanel!.webview.postMessage({
+                command: command,
+                status: 'error',
+                errorMessage: errorMessage
+            });  
+            return false;  
+        }
+
+        // Result
+        return true;
+    }
+
+    private async exportAsAssemblyFile(message: any): Promise<boolean> {
+        // Prepare
+        let command = message!.command;
+        let file = message!.file;
+        let data = message!.data;
+        let errorMessage = "";
+        let fileUri = undefined;
+
+        // Get default path
+        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
+
+        // Prompt user here
+        let options: vscode.SaveDialogOptions = {
+            defaultUri: defaultUri,
+            saveLabel: "Export",
+            filters: {
+                'Assembly': ['asm']
             }
         };
 
