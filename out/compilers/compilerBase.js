@@ -190,33 +190,9 @@ class CompilerBase {
                 yield application.InitialiseAdsTerminalAsync();
             }
             if (defaultCompiler === "Custom") {
-                let customCompilerFolder = this.Configuration.get(`compiler.${this.Id}.folder`);
-                if (!customCompilerFolder) {
-                    // No custom compiler provided, revert
-                    let message = `WARNING: You have chosen to use a custom ${this.Name} compiler but have not provided the location.\nReverting to the default compiler...`;
-                    application.WriteToCompilerTerminal(message);
-                    application.ShowWarningPopup(message);
-                }
-                else {
-                    // Validate custom compiler path exists
-                    let result = yield filesystem.FolderExistsAsync(customCompilerFolder);
-                    if (!result) {
-                        // Failed, revert
-                        let message = `WARNING: Your custom ${this.Name} compiler location '${customCompilerFolder}' cannot be found.\nReverting to the default compiler...`;
-                        application.WriteToCompilerTerminal(message);
-                        application.ShowWarningPopup(message);
-                    }
-                    else {
-                        // Ok
-                        application.WriteToCompilerTerminal(`Building using your custom ${this.Name} compiler.`);
-                        application.WriteToCompilerTerminal(`Location: ${customCompilerFolder}`);
-                        // Set
-                        this.FolderOrPath = customCompilerFolder;
-                        this.CustomFolderOrPath = true;
-                    }
-                }
-                // Finalise
-                application.WriteToCompilerTerminal("");
+                // Validate
+                // bB and 7800basic check for a folder, dasm checks for a path
+                yield this.ValidateCustomCompilerLocationAsync();
             }
             // Compiler (other)
             this.Args = this.Configuration.get(`compiler.${this.Id}.args`, "");
@@ -227,6 +203,39 @@ class CompilerBase {
             this.CompiledSubFolder = path.join(this.WorkspaceFolder, this.CompiledSubFolderName);
             // Result
             return true;
+        });
+    }
+    ValidateCustomCompilerLocationAsync() {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('debugger:CompilerBase.ValidateCustomCompilerLocationAsync');
+            // Validate for a folder
+            let customCompilerFolder = this.Configuration.get(`compiler.${this.Id}.folder`);
+            if (!customCompilerFolder) {
+                // No custom compiler provided, revert
+                let message = `WARNING: You have chosen to use a custom ${this.Name} compiler but have not provided the location.\nReverting to the default compiler...`;
+                application.WriteToCompilerTerminal(message);
+                application.ShowWarningPopup(message);
+            }
+            else {
+                // Validate custom compiler path exists
+                let result = yield filesystem.FolderExistsAsync(customCompilerFolder);
+                if (!result) {
+                    // Failed, revert
+                    let message = `WARNING: Your custom ${this.Name} compiler location '${customCompilerFolder}' cannot be found.\nReverting to the default compiler...`;
+                    application.WriteToCompilerTerminal(message);
+                    application.ShowWarningPopup(message);
+                }
+                else {
+                    // Ok
+                    application.WriteToCompilerTerminal(`Building using your custom ${this.Name} compiler.`);
+                    application.WriteToCompilerTerminal(`Location: ${customCompilerFolder}`);
+                    // Set
+                    this.FolderOrPath = customCompilerFolder;
+                    this.CustomFolderOrPath = true;
+                }
+            }
+            // Finalise
+            application.WriteToCompilerTerminal("");
         });
     }
     VerifyCompiledFileSizeAsync() {

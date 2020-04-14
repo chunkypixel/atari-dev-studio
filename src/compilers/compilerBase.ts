@@ -180,35 +180,9 @@ export abstract class CompilerBase implements vscode.Disposable {
             await application.InitialiseAdsTerminalAsync();
         }
         if (defaultCompiler === "Custom") {
-            let customCompilerFolder = this.Configuration!.get<string>(`compiler.${this.Id}.folder`);
-            if (!customCompilerFolder) {
-                // No custom compiler provided, revert
-                let message = `WARNING: You have chosen to use a custom ${this.Name} compiler but have not provided the location.\nReverting to the default compiler...`;
-                application.WriteToCompilerTerminal(message);
-                application.ShowWarningPopup(message);
-
-            } else {
-                // Validate custom compiler path exists
-                let result = await filesystem.FolderExistsAsync(customCompilerFolder);
-                if (!result) {
-                    // Failed, revert
-                    let message = `WARNING: Your custom ${this.Name} compiler location '${customCompilerFolder}' cannot be found.\nReverting to the default compiler...`;
-                    application.WriteToCompilerTerminal(message);
-                    application.ShowWarningPopup(message);
-
-                } else {
-                    // Ok
-                    application.WriteToCompilerTerminal(`Building using your custom ${this.Name} compiler.`);               
-                    application.WriteToCompilerTerminal(`Location: ${customCompilerFolder}`);  
-
-                    // Set
-                    this.FolderOrPath = customCompilerFolder;
-                    this.CustomFolderOrPath = true;
-                }
-            }
-
-            // Finalise
-            application.WriteToCompilerTerminal("");
+            // Validate
+            // bB and 7800basic check for a folder, dasm checks for a path
+            await this.ValidateCustomCompilerLocationAsync();
         } 
 
         // Compiler (other)
@@ -223,6 +197,41 @@ export abstract class CompilerBase implements vscode.Disposable {
 
         // Result
         return true;
+    }
+
+    protected async ValidateCustomCompilerLocationAsync() : Promise<void> {
+        console.log('debugger:CompilerBase.ValidateCustomCompilerLocationAsync');  
+
+        // Validate for a folder
+        let customCompilerFolder = this.Configuration!.get<string>(`compiler.${this.Id}.folder`);
+        if (!customCompilerFolder) {
+            // No custom compiler provided, revert
+            let message = `WARNING: You have chosen to use a custom ${this.Name} compiler but have not provided the location.\nReverting to the default compiler...`;
+            application.WriteToCompilerTerminal(message);
+            application.ShowWarningPopup(message);
+
+        } else {
+            // Validate custom compiler path exists
+            let result = await filesystem.FolderExistsAsync(customCompilerFolder);
+            if (!result) {
+                // Failed, revert
+                let message = `WARNING: Your custom ${this.Name} compiler location '${customCompilerFolder}' cannot be found.\nReverting to the default compiler...`;
+                application.WriteToCompilerTerminal(message);
+                application.ShowWarningPopup(message);
+
+            } else {
+                // Ok
+                application.WriteToCompilerTerminal(`Building using your custom ${this.Name} compiler.`);               
+                application.WriteToCompilerTerminal(`Location: ${customCompilerFolder}`);  
+
+                // Set
+                this.FolderOrPath = customCompilerFolder;
+                this.CustomFolderOrPath = true;
+            }
+        }
+
+        // Finalise
+        application.WriteToCompilerTerminal("");
     }
 
     protected async VerifyCompiledFileSizeAsync(): Promise<boolean> {

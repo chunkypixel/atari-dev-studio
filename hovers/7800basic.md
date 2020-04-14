@@ -519,6 +519,16 @@
     sprite2height
 
 
+
+## CHANGECONTROL
+
+    changecontrol port controltype
+
+    port - left or right (0-1)
+    controltype - 2buttonjoy (default), 1buttonjoy, lightgun, paddle, trakball, driving, keypad, stmouse, amigamouse, atarivox)
+
+
+
 ## JOY0UP
 
     if joy0up then ...

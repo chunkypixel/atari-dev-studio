@@ -164,7 +164,31 @@ class SeventyEightHundredBasicCompletion extends completionBase_1.CompletionBase
                         new vscode.CompletionItem('switchreset', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('switchselect', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('switchleftb', vscode.CompletionItemKind.Function),
-                        new vscode.CompletionItem('switchrightb', vscode.CompletionItemKind.Function)
+                        new vscode.CompletionItem('switchrightb', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad0key0', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad0key1', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad0key2', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad0key3', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad0key4', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad0key5', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad0key6', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad0key7', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad0key8', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad0key9', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad0keys', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad0keyh', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad1key0', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad1key1', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad1key2', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad1key3', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad1key4', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad1key5', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad1key6', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad1key7', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad1key8', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad1key9', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad1keys', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('keypad1keyh', vscode.CompletionItemKind.Function)
                     ];
                 }
             }, ' ');

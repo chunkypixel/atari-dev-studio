@@ -6,8 +6,9 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 * Fixed issue where 7800basic was not handling .list.txt files as expected based on preference selections
 * Fixed issue where spacing on custom compiler paths failed to compile (bB, 7800basic, dasm)
+* Fixed an issue with setting custom dasm path related to the recent changes
 * Updated the initialisation process to display messages in the compile log when custom compilers have been chosen. For warning or error messages pop-ups are also displayed.
-* Added missing 7800basic keywords: switchpause
+* Added missing 7800basic keywords: switchpause, changecontrol, drivingposition0, drivingposition1, 2buttonjoy, 1buttonjoy, lightgun, paddle, trakball, driving, keypad, stmouse, amigamouse, atarivox, keypad0key0, keypad0key1, keypad0key2, keypad0key3, keypad0key4, keypad0key5, keypad0key6, keypad0key7, keypad0key8, keypad0key9, keypad0keys, keypad0keyh, keypad1key0, keypad1key1, keypad1key2, keypad1key3, keypad1key4, keypad1key5, keypad1key6, keypad1key7, keypad1key8, keypad1key9, keypad1keys, keypad1keyh
 * Updated hover tooltips for 7800basic keywords
 
 ## 0.4.6

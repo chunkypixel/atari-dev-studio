@@ -153,6 +153,41 @@ export class DasmCompiler extends CompilerBase {
         return true;
     }
 
+    protected async ValidateCustomCompilerLocationAsync() : Promise<void> {
+        console.log('debugger:DasmCompiler.ValidateCustomCompilerLocationAsync');  
+
+        // Validate for a folder
+        let customCompilerPath = this.Configuration!.get<string>(`compiler.${this.Id}.path`);
+        if (!customCompilerPath) {
+            // No custom compiler provided, revert
+            let message = `WARNING: You have chosen to use a custom ${this.Name} compiler but have not provided the location.\nReverting to the default compiler...`;
+            application.WriteToCompilerTerminal(message);
+            application.ShowWarningPopup(message);
+
+        } else {
+            // Validate custom compiler path exists
+            let result = await filesystem.FileExistsAsync(customCompilerPath);
+            if (!result) {
+                // Failed, revert
+                let message = `WARNING: Your custom ${this.Name} compiler location '${customCompilerPath}' cannot be found.\nReverting to the default compiler...`;
+                application.WriteToCompilerTerminal(message);
+                application.ShowWarningPopup(message);
+
+            } else {
+                // Ok
+                application.WriteToCompilerTerminal(`Building using your custom ${this.Name} compiler.`);               
+                application.WriteToCompilerTerminal(`Location: ${customCompilerPath}`);  
+
+                // Set
+                this.FolderOrPath = customCompilerPath;
+                this.CustomFolderOrPath = true;
+            }
+        }
+
+        // Finalise
+        application.WriteToCompilerTerminal("");
+    }
+
     protected async RepairFilePermissionsAsync(): Promise<boolean> {
         console.log('debugger:DasmCompiler.RepairFilePermissionsAsync'); 
 
