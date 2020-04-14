@@ -95,7 +95,7 @@ class CompilerBase {
                 finally { if (e_1) throw e_1.error; }
             }
             // Not found
-            application.Notify(`Unable to find emulator '${this.Emulator}' to launch game.`);
+            application.WriteToCompilerTerminal(`Unable to find emulator '${this.Emulator}' to launch game.`);
             return false;
         });
     }
@@ -108,17 +108,12 @@ class CompilerBase {
             // Already running?
             if (this.IsRunning) {
                 // Notify
-                application.Notify(`The ${this.Name} compiler is already running! If you need to cancel the compilation process use the 'ads: Kill build process' option from the Command Palette.`);
+                application.WriteToCompilerTerminal(`The ${this.Name} compiler is already running! If you need to cancel the compilation process use the 'ads: Kill build process' option from the Command Palette.`);
                 return false;
             }
             // (Re)load
             // It appears you need to reload this each time incase of change
             this.Configuration = application.GetConfiguration();
-            // Configuration
-            result = yield this.LoadConfigurationAsync();
-            if (!result) {
-                return false;
-            }
             // Activate output window?
             if (!this.Configuration.get(`editor.preserveCodeEditorFocus`)) {
                 if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) {
@@ -143,6 +138,11 @@ class CompilerBase {
                     result = yield this.Document.save();
                 }
             }
+            if (!result) {
+                return false;
+            }
+            // Configuration
+            result = yield this.LoadConfigurationAsync();
             if (!result) {
                 return false;
             }
@@ -181,8 +181,9 @@ class CompilerBase {
                 yield this.IsTerminalMakeFileAvailable();
                 if (!this.UsingMakeFileCompiler && !this.UsingBatchCompiler && !this.UsingShellScriptCompiler) {
                     // Failed
-                    application.Notify(`Error: You have chosen to use the Make compiler for ${this.Id} but no makefile was not found in your root workspace folder. Review your selection in ${application.PreferencesSettingsExtensionPath} or create a 'Makefile', 'makefile.bat' or 'makefile.sh' script.`);
-                    application.Notify(`Workspace folder: ${this.WorkspaceFolder}`);
+                    let message = `ERROR: You have chosen to use the Make compiler for ${this.Id} but no makefile was not found in your root workspace folder.\nCreate a 'Makefile', 'makefile.bat' or 'makefile.sh' script...`;
+                    application.WriteToCompilerTerminal(message);
+                    application.ShowErrorPopup(message);
                     return false;
                 }
                 // Initialise terminal
@@ -192,25 +193,30 @@ class CompilerBase {
                 let customCompilerFolder = this.Configuration.get(`compiler.${this.Id}.folder`);
                 if (!customCompilerFolder) {
                     // No custom compiler provided, revert
-                    application.Notify(`WARNING: You have chosen to use a custom ${this.Name} compiler but have not provided the location. Reverting to the default compiler instead.`);
-                    application.Notify("");
+                    let message = `WARNING: You have chosen to use a custom ${this.Name} compiler but have not provided the location.\nReverting to the default compiler...`;
+                    application.WriteToCompilerTerminal(message);
+                    application.ShowWarningPopup(message);
                 }
                 else {
                     // Validate custom compiler path exists
                     let result = yield filesystem.FolderExistsAsync(customCompilerFolder);
                     if (!result) {
-                        // Failed
-                        application.Notify(`ERROR: Cannot locate your chosen custom ${this.Name} compiler folder '${customCompilerFolder}'. Review your selection in ${application.PreferencesSettingsExtensionPath}.`);
+                        // Failed, revert
+                        let message = `WARNING: Your custom ${this.Name} compiler location '${customCompilerFolder}' cannot be found.\nReverting to the default compiler...`;
+                        application.WriteToCompilerTerminal(message);
+                        application.ShowWarningPopup(message);
                     }
                     else {
                         // Ok
-                        application.Notify(`NOTE: Building your program using your chosen custom ${this.Name} compiler.`);
-                        application.Notify("");
+                        application.WriteToCompilerTerminal(`Building using your custom ${this.Name} compiler.`);
+                        application.WriteToCompilerTerminal(`Location: ${customCompilerFolder}`);
+                        // Set
+                        this.FolderOrPath = customCompilerFolder;
+                        this.CustomFolderOrPath = true;
                     }
-                    // Set
-                    this.FolderOrPath = customCompilerFolder;
-                    this.CustomFolderOrPath = true;
                 }
+                // Finalise
+                application.WriteToCompilerTerminal("");
             }
             // Compiler (other)
             this.Args = this.Configuration.get(`compiler.${this.Id}.args`, "");
@@ -232,7 +238,7 @@ class CompilerBase {
                 return true;
             }
             // Verify created file(s)
-            application.Notify(`Verifying compiled file(s)...`);
+            application.WriteToCompilerTerminal(`Verifying compiled file(s)...`);
             try {
                 for (var _b = __asyncValues(this.CompiledExtensions), _c; _c = yield _b.next(), !_c.done;) {
                     let extension = _c.value;
@@ -245,7 +251,7 @@ class CompilerBase {
                         continue;
                     }
                     // Failed
-                    application.Notify(`ERROR: Failed to create compiled file '${compiledFileName}'.`);
+                    application.WriteToCompilerTerminal(`ERROR: Failed to create compiled file '${compiledFileName}'.`);
                     return false;
                 }
             }
@@ -273,11 +279,11 @@ class CompilerBase {
             let result = yield filesystem.MkDirAsync(this.CompiledSubFolder);
             if (!result) {
                 // Notify
-                application.Notify(`ERROR: Failed to create folder '${this.CompiledSubFolderName}'`);
+                application.WriteToCompilerTerminal(`ERROR: Failed to create folder '${this.CompiledSubFolderName}'`);
                 return false;
             }
             // Move compiled file(s)
-            application.Notify(`Moving compiled file(s) to '${this.CompiledSubFolderName}' folder...`);
+            application.WriteToCompilerTerminal(`Moving compiled file(s) to '${this.CompiledSubFolderName}' folder...`);
             try {
                 for (var _c = __asyncValues(this.CompiledExtensions), _d; _d = yield _c.next(), !_d.done;) {
                     let extension = _d.value;
@@ -289,7 +295,7 @@ class CompilerBase {
                     result = yield filesystem.RenameFileAsync(oldPath, newPath);
                     if (!result) {
                         // Notify
-                        application.Notify(`ERROR: Failed to move file from '${compiledFileName}' to ${this.CompiledSubFolderName} folder`);
+                        application.WriteToCompilerTerminal(`ERROR: Failed to move file from '${compiledFileName}' to ${this.CompiledSubFolderName} folder`);
                         return false;
                     }
                 }
@@ -304,7 +310,7 @@ class CompilerBase {
             // Process?
             if (this.GenerateDebuggerFiles) {
                 // Move all debugger files?
-                application.Notify(`Moving debugger file(s) to '${this.CompiledSubFolderName}' folder...`);
+                application.WriteToCompilerTerminal(`Moving debugger file(s) to '${this.CompiledSubFolderName}' folder...`);
                 try {
                     for (var _e = __asyncValues(this.DebuggerExtensions), _f; _f = yield _e.next(), !_f.done;) {
                         let [arg, extension] = _f.value;
@@ -317,7 +323,7 @@ class CompilerBase {
                             result = yield filesystem.RenameFileAsync(oldPath, newPath);
                             if (!result) {
                                 // Notify            
-                                application.Notify(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);
+                                application.WriteToCompilerTerminal(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);
                             }
                         }
                     }
@@ -367,7 +373,7 @@ class CompilerBase {
         // Validate
         if (this.IsRunning) {
             // Notify
-            application.Notify(`Attempting to kill running ${this.Name} compilation process...`);
+            application.WriteToCompilerTerminal(`Attempting to kill running ${this.Name} compilation process...`);
             // Process
             this.IsRunning = false;
             execute.KillSpawnProcess();

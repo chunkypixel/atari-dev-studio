@@ -175,11 +175,25 @@ function KillBuildGame() {
     }
 }
 exports.KillBuildGame = KillBuildGame;
-function Notify(message) {
+function WriteToCompilerTerminal(message, writeToLog = false) {
     exports.CompilerOutputChannel.appendLine(message);
-    console.log(`debugger:${message}`);
+    if (writeToLog) {
+        console.log(`debugger:${message}`);
+    }
 }
-exports.Notify = Notify;
+exports.WriteToCompilerTerminal = WriteToCompilerTerminal;
+function ShowWarningPopup(message) {
+    vscode.window.showWarningMessage(message);
+}
+exports.ShowWarningPopup = ShowWarningPopup;
+function ShowInformationPopup(message) {
+    vscode.window.showInformationMessage(message);
+}
+exports.ShowInformationPopup = ShowInformationPopup;
+function ShowErrorPopup(message) {
+    vscode.window.showErrorMessage(message);
+}
+exports.ShowErrorPopup = ShowErrorPopup;
 function GetConfiguration() {
     return vscode.workspace.getConfiguration(exports.Name, null);
 }
@@ -187,28 +201,12 @@ exports.GetConfiguration = GetConfiguration;
 function getChosenCompiler(document) {
     // Prepare
     let configuration = GetConfiguration();
-    // // Find compiler (based on configuration selection)
-    // let chosenCompiler = configuration.get<string>(`compilation.defaultCompiler`);
-    // if (chosenCompiler) {
-    // 	for (let compiler of Compilers) {
-    // 		if (compiler.Id === chosenCompiler || compiler.Name === chosenCompiler) {
-    // 			return compiler;
-    // 		}
-    // 	}	
-    // }
     // Find compiler (based on language of chosen file)
     for (let compiler of exports.Compilers) {
         if (compiler.Id === document.languageId) {
             return compiler;
         }
     }
-    // // Find compiler (based on extension)
-    // let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
-    // for (let compiler of Compilers) {
-    // 	if (compiler.Extensions.includes(fileExtension)) {
-    // 		return compiler;
-    // 	}
-    // }	
     // Activate output window?
     if (configuration.get(`editor.preserveCodeEditorFocus`)) {
         exports.CompilerOutputChannel.show();
@@ -217,8 +215,6 @@ function getChosenCompiler(document) {
     if (configuration.get(`editor.clearPreviousOutput`)) {
         exports.CompilerOutputChannel.clear();
     }
-    // Not found
-    //Notify(`Unable to determine a compiler to use based on your chosen default compiler '${chosenCompiler}'. Review your selection in ${PreferencesSettingsExtensionPath}.`);
     // Not found
     return undefined;
 }

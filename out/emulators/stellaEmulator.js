@@ -54,10 +54,10 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:StellaEmulator.ExecuteEmulatorAsync');
             // Prepare
-            application.CompilerOutputChannel.appendLine('');
+            application.WriteToCompilerTerminal('');
             // Validate for 32-bit on macOS
             if (!this.CustomFolderOrPath && (application.IsMacOS && application.Is32Bit)) {
-                application.Notify(`ERROR: Unable to launch the Stella emulator as there is no 32-bit version available for macOS.`);
+                application.WriteToCompilerTerminal(`ERROR: Unable to launch the Stella emulator as there is no 32-bit version available for macOS.`);
                 return false;
             }
             // Premissions
@@ -77,19 +77,19 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
                 yield execute.KillProcessByNameAsync(this.Name);
             }
             // Process
-            application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);
+            application.WriteToCompilerTerminal(`Launching ${this.Name} emulator...`);
             // Launch
             let executeResult = yield execute.Spawn(command, args, null, path.dirname(this.FileName), (stdout) => {
                 // Prepare
                 let result = true;
                 // Result
-                application.CompilerOutputChannel.append('' + stdout);
+                application.WriteToCompilerTerminal('' + stdout, false);
                 return result;
             }, (stderr) => {
                 // Prepare
                 let result = true;
                 // Result
-                application.CompilerOutputChannel.append('' + stderr);
+                application.WriteToCompilerTerminal('' + stderr, false);
                 return result;
             });
             // Result

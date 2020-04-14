@@ -30,7 +30,7 @@ export class BatariBasicCompiler extends CompilerBase {
         }
         
         // Compiler options
-        let command = path.join(this.FolderOrPath, commandName);
+        let command = `"${path.join(this.FolderOrPath, commandName)}"`;
         // Args
         let args = [
             `"${this.FileName}"`,
@@ -47,7 +47,7 @@ export class BatariBasicCompiler extends CompilerBase {
     
         // Notify
         // Linux and macOS script has this message already
-        if (application.IsWindows) { application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`); } 
+        if (application.IsWindows) { application.WriteToCompilerTerminal(`Starting build of ${this.FileName}...`, false); } 
 
         // Compile
         this.IsRunning = true;
@@ -70,7 +70,7 @@ export class BatariBasicCompiler extends CompilerBase {
                 }
 
                 // Result
-                application.CompilerOutputChannel.append('' + stdout);
+                application.WriteToCompilerTerminal('' + stdout, false);
                 return result;
             },
             (stderr: string) => {
@@ -96,7 +96,7 @@ export class BatariBasicCompiler extends CompilerBase {
                 } else if (stderr.includes("Cannot open includes.bB for reading")) {
                     // Special - seen this when the source is not processed correctly so we'll advise
                     // obviously doesn't get to the point of copying over this file
-                    application.CompilerOutputChannel.appendLine("WARNING: An unknown issue has occurred during compilation that may have affected your build....");
+                    application.WriteToCompilerTerminal("WARNING: An unknown issue has occurred during compilation that may have affected your build....", false);
 
                     // Failed
                     result = false;
@@ -154,7 +154,7 @@ export class BatariBasicCompiler extends CompilerBase {
         // Language specific files
         if (this.CleanUpCompilationFiles)  {
             // Notify
-            application.Notify(`Cleaning up files generated during compilation...`);
+            application.WriteToCompilerTerminal(`Cleaning up files generated during compilation...`);
 
             // Process
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`${this.FileName}.asm`));

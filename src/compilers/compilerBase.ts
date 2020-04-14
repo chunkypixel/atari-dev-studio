@@ -15,7 +15,7 @@ export abstract class CompilerBase implements vscode.Disposable {
     public readonly Extensions: string[];
     public readonly CompiledExtensions: string[];
     // Note: these need to be in reverse order compared to how they are read
-    public readonly DebuggerExtensions: Map<string, string> = new Map([["-s",".sym"], ["-l",".lst"]]);
+    public DebuggerExtensions: Map<string, string> = new Map([["-s",".sym"], ["-l",".lst"]]);
     public CustomFolderOrPath: boolean = false;
     protected DefaultFolderOrPath: string;
     public FolderOrPath: string = "";
@@ -81,7 +81,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         }
 
         // Not found
-        application.Notify(`Unable to find emulator '${this.Emulator}' to launch game.`);
+        application.WriteToCompilerTerminal(`Unable to find emulator '${this.Emulator}' to launch game.`);
         return false;
     }
 
@@ -96,17 +96,13 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Already running?
         if (this.IsRunning) {
             // Notify
-            application.Notify(`The ${this.Name} compiler is already running! If you need to cancel the compilation process use the 'ads: Kill build process' option from the Command Palette.`);
+            application.WriteToCompilerTerminal(`The ${this.Name} compiler is already running! If you need to cancel the compilation process use the 'ads: Kill build process' option from the Command Palette.`);
             return false;
         }
 
         // (Re)load
         // It appears you need to reload this each time incase of change
         this.Configuration = application.GetConfiguration();
-
-        // Configuration
-        result = await this.LoadConfigurationAsync();
-        if (!result) { return false; }
 
         // Activate output window?
         if (!this.Configuration.get<boolean>(`editor.preserveCodeEditorFocus`))  {
@@ -130,6 +126,10 @@ export abstract class CompilerBase implements vscode.Disposable {
         } else if (this.Configuration.get<boolean>(`editor.saveFileBeforeRun`)) {
             if (this.Document) { result = await this.Document.save(); }
         }
+        if (!result) { return false; }
+
+        // Configuration
+        result = await this.LoadConfigurationAsync();
         if (!result) { return false; }
 
         // Remove old debugger files before build
@@ -170,8 +170,9 @@ export abstract class CompilerBase implements vscode.Disposable {
             await this.IsTerminalMakeFileAvailable();
             if (!this.UsingMakeFileCompiler && !this.UsingBatchCompiler && !this.UsingShellScriptCompiler) {
                 // Failed
-                application.Notify(`Error: You have chosen to use the Make compiler for ${this.Id} but no makefile was not found in your root workspace folder. Review your selection in ${application.PreferencesSettingsExtensionPath} or create a 'Makefile', 'makefile.bat' or 'makefile.sh' script.`);
-                application.Notify(`Workspace folder: ${this.WorkspaceFolder}`);
+                let message = `ERROR: You have chosen to use the Make compiler for ${this.Id} but no makefile was not found in your root workspace folder.\nCreate a 'Makefile', 'makefile.bat' or 'makefile.sh' script...`;
+                application.WriteToCompilerTerminal(message);
+                application.ShowErrorPopup(message);
                 return false;
             }
 
@@ -182,25 +183,32 @@ export abstract class CompilerBase implements vscode.Disposable {
             let customCompilerFolder = this.Configuration!.get<string>(`compiler.${this.Id}.folder`);
             if (!customCompilerFolder) {
                 // No custom compiler provided, revert
-                application.Notify(`WARNING: You have chosen to use a custom ${this.Name} compiler but have not provided the location. Reverting to the default compiler instead.`);
-                application.Notify("");
+                let message = `WARNING: You have chosen to use a custom ${this.Name} compiler but have not provided the location.\nReverting to the default compiler...`;
+                application.WriteToCompilerTerminal(message);
+                application.ShowWarningPopup(message);
+
             } else {
                 // Validate custom compiler path exists
                 let result = await filesystem.FolderExistsAsync(customCompilerFolder);
                 if (!result) {
-                    // Failed
-                    application.Notify(`ERROR: Cannot locate your chosen custom ${this.Name} compiler folder '${customCompilerFolder}'. Review your selection in ${application.PreferencesSettingsExtensionPath}.`);
+                    // Failed, revert
+                    let message = `WARNING: Your custom ${this.Name} compiler location '${customCompilerFolder}' cannot be found.\nReverting to the default compiler...`;
+                    application.WriteToCompilerTerminal(message);
+                    application.ShowWarningPopup(message);
 
                 } else {
                     // Ok
-                    application.Notify(`NOTE: Building your program using your chosen custom ${this.Name} compiler.`);
-                    application.Notify("");                    
-                }
+                    application.WriteToCompilerTerminal(`Building using your custom ${this.Name} compiler.`);               
+                    application.WriteToCompilerTerminal(`Location: ${customCompilerFolder}`);  
 
-                // Set
-                this.FolderOrPath = customCompilerFolder;
-                this.CustomFolderOrPath = true;
+                    // Set
+                    this.FolderOrPath = customCompilerFolder;
+                    this.CustomFolderOrPath = true;
+                }
             }
+
+            // Finalise
+            application.WriteToCompilerTerminal("");
         } 
 
         // Compiler (other)
@@ -224,7 +232,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) { return true; }
 
         // Verify created file(s)
-        application.Notify(`Verifying compiled file(s)...`);
+        application.WriteToCompilerTerminal(`Verifying compiled file(s)...`);
         for await (let extension of this.CompiledExtensions) {
             // Prepare
             let compiledFileName = `${this.FileName}${extension}`;
@@ -235,7 +243,7 @@ export abstract class CompilerBase implements vscode.Disposable {
             if (fileStats && fileStats.size > 0) { continue; }
 
             // Failed
-            application.Notify(`ERROR: Failed to create compiled file '${compiledFileName}'.`);     
+            application.WriteToCompilerTerminal(`ERROR: Failed to create compiled file '${compiledFileName}'.`);     
             return false;  
         }
 
@@ -254,12 +262,12 @@ export abstract class CompilerBase implements vscode.Disposable {
         let result = await filesystem.MkDirAsync(this.CompiledSubFolder);
         if (!result) {
             // Notify
-            application.Notify(`ERROR: Failed to create folder '${this.CompiledSubFolderName}'`);
+            application.WriteToCompilerTerminal(`ERROR: Failed to create folder '${this.CompiledSubFolderName}'`);
             return false;         
         }
 
         // Move compiled file(s)
-        application.Notify(`Moving compiled file(s) to '${this.CompiledSubFolderName}' folder...`);
+        application.WriteToCompilerTerminal(`Moving compiled file(s) to '${this.CompiledSubFolderName}' folder...`);
         for await (let extension of this.CompiledExtensions) {
             // Prepare
             let compiledFileName = `${this.FileName}${extension}`;
@@ -270,7 +278,7 @@ export abstract class CompilerBase implements vscode.Disposable {
             result = await filesystem.RenameFileAsync(oldPath, newPath);
             if (!result) {
                 // Notify
-                application.Notify(`ERROR: Failed to move file from '${compiledFileName}' to ${this.CompiledSubFolderName} folder`);
+                application.WriteToCompilerTerminal(`ERROR: Failed to move file from '${compiledFileName}' to ${this.CompiledSubFolderName} folder`);
                 return false;            
             }
         }
@@ -278,7 +286,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Process?
         if (this.GenerateDebuggerFiles)  {          
             // Move all debugger files?
-            application.Notify(`Moving debugger file(s) to '${this.CompiledSubFolderName}' folder...`);
+            application.WriteToCompilerTerminal(`Moving debugger file(s) to '${this.CompiledSubFolderName}' folder...`);
             for await (let [arg, extension] of this.DebuggerExtensions) {
                 // Prepare
                 let debuggerFile: string = `${this.FileName}${extension}`;
@@ -290,7 +298,7 @@ export abstract class CompilerBase implements vscode.Disposable {
                     result = await filesystem.RenameFileAsync(oldPath, newPath);
                     if (!result) {
                         // Notify            
-                        application.Notify(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);          
+                        application.WriteToCompilerTerminal(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);          
                     }
                 }
             }
@@ -325,7 +333,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Validate
         if (this.IsRunning) {
             // Notify
-            application.Notify(`Attempting to kill running ${this.Name} compilation process...`);
+            application.WriteToCompilerTerminal(`Attempting to kill running ${this.Name} compilation process...`);
 
             // Process
             this.IsRunning = false;

@@ -450,13 +450,14 @@
 
 ## POKECHAR
 
-    pokechar mapdata x y width height
+    pokechar mapdata x y width height value
 
     mapdata - RAM or ROM location of the data to set
     x - x screen column co-ordinate
     y - y screen row co-ordinate
     width - total width of the map
     height - total height of the map
+    value - value to be stored
 
     
 

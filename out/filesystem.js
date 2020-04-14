@@ -135,7 +135,7 @@ function ChModAsync(path, mode = '777') {
     return new Promise((resolve, reject) => {
         fs.chmod(path, mode, err => {
             if (err) {
-                application.Notify(`- failed to set chmod permissions: ${err.message}`);
+                application.WriteToCompilerTerminal(`- failed to set chmod permissions: ${err.message}`);
             }
             resolve(!err);
         });

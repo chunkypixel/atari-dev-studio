@@ -14,6 +14,9 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
                 [".a78",".bin"],
                 path.join(application.Path,"out","bin","compilers","7800basic"),
                 "A7800");
+        
+        // Debugger extensions
+        this.DebuggerExtensions = new Map([["-s",".symbol.txt"],["-l",".list.txt"]]);
     }
     
     protected async ExecuteCompilerAsync(): Promise<boolean> {
@@ -30,7 +33,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         }
         
         // Compiler options
-        let command = path.join(this.FolderOrPath, commandName);
+        let command = `"${path.join(this.FolderOrPath, commandName)}"`;
         let args = [
             `"${this.FileName}"`,
             this.Args
@@ -47,7 +50,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
 
         // Notify
         // Linux and macOS script has this message already
-        if (application.IsWindows) { application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`); } 
+        if (application.IsWindows) { application.WriteToCompilerTerminal(`Starting build of ${this.FileName}...`); } 
 
         // Compile
         this.IsRunning = true;
@@ -69,7 +72,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
                 }
 
                 // Result
-                application.CompilerOutputChannel.append('' + stdout);
+                application.WriteToCompilerTerminal('' + stdout, false);
                 return result;
             },
             (stderr: string) => {
@@ -88,13 +91,13 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
                 }
 
                 // Result
-                application.CompilerOutputChannel.append('' + stderr);
+                application.WriteToCompilerTerminal('' + stderr, false);
                 return result;
             });
         this.IsRunning = false;
 
         // Cleanup (regardless of state if chosen)
-        application.CompilerOutputChannel.appendLine(``); 
+        application.WriteToCompilerTerminal(``, false); 
 
         // Finalise
         if (executeResult) { executeResult = await this.VerifyCompiledFileSizeAsync(); }
@@ -105,20 +108,15 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         return executeResult;
     }
 
-    protected async LoadConfigurationAsync(): Promise<boolean> {
-        console.log('debugger:SeventyEightHundredBasicCompiler.LoadConfigurationAsync');  
+    // protected LoadConfiguration(): boolean {
+    //     console.log('debugger:BatariBasicCompiler.LoadConfiguration');  
 
-        // Base
-        let result = await super.LoadConfigurationAsync();
-        if (!result) { return false; }
+    //     // Base
+    //     if (!super.LoadConfiguration()) return false;
 
-        // System
-        // Not available for 7800basic
-        this.GenerateDebuggerFiles = false;
-
-        // Result
-        return true;
-    }
+    //     // Result
+    //     return true;
+    // }
 
     protected async RepairFilePermissionsAsync(): Promise<boolean> {
         console.log('debugger:SeventyEightHundredBasicCompiler.RepairFilePermissionsAsync'); 
@@ -152,7 +150,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         // Language specific files
         if (this.CleanUpCompilationFiles)  {
             // Notify
-            application.Notify(`Cleaning up files generated during compilation...`);
+            application.WriteToCompilerTerminal(`Cleaning up files generated during compilation...`);
 
             // Process
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`${this.FileName}.asm`));
@@ -177,18 +175,4 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         return true;
     }
 
-    protected async RemoveDebuggerFilesAsync(folder: string): Promise<boolean> {
-        console.log('debugger:SeventyEightHundredBasicCompiler.RemoveDebuggerFilesAsync');
-            
-        // Files specific to 7800basic
-        // TODO: more analysis of where to remove these...
-        await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`${this.FileName}.list.txt`));
-        await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`${this.FileName}.symbol.txt`));
-
-        // base
-        await super.RemoveDebuggerFilesAsync(folder);
-
-        // Result
-        return true;
-    }
 }

@@ -70,12 +70,20 @@ class EmulatorBase {
                 let result = yield filesystem.FileExistsAsync(userEmulatorPath);
                 if (!result) {
                     // Notify
-                    application.Notify(`ERROR: Cannot locate your chosen ${this.Name} emulator path '${userEmulatorPath}'. Review your selection in ${application.PreferencesSettingsExtensionPath}.`);
-                    return false;
+                    let message = `WARNING: Your chosen ${this.Name} emulator path '${userEmulatorPath}' cannot be found.\nReverting to the default emulator...`;
+                    application.WriteToCompilerTerminal(message);
+                    application.WriteToCompilerTerminal("");
+                    application.ShowWarningPopup(message);
+                    // // Notify
+                    // application.WriteToCompilerTerminal(`ERROR: Your chosen ${this.Name} emulator path '${userEmulatorPath}' cannot be found.`);
+                    // application.WriteToCompilerTerminal(`Reverting to the default emulator...`);
+                    // application.WriteToCompilerTerminal("");
                 }
-                // Set
-                this.FolderOrPath = userEmulatorPath;
-                this.CustomFolderOrPath = true;
+                else {
+                    // Set
+                    this.FolderOrPath = userEmulatorPath;
+                    this.CustomFolderOrPath = true;
+                }
             }
             // Emulator (Other)
             this.Args = this.Configuration.get(`emulator.${this.Id.toLowerCase()}.args`, "");

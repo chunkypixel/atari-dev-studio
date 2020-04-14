@@ -30,7 +30,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                 commandName = "./2600basic.sh";
             }
             // Compiler options
-            let command = path.join(this.FolderOrPath, commandName);
+            let command = `"${path.join(this.FolderOrPath, commandName)}"`;
             // Args
             let args = [
                 `"${this.FileName}"`,
@@ -47,7 +47,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             // Notify
             // Linux and macOS script has this message already
             if (application.IsWindows) {
-                application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`);
+                application.WriteToCompilerTerminal(`Starting build of ${this.FileName}...`, false);
             }
             // Compile
             this.IsRunning = true;
@@ -66,7 +66,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                     result = false;
                 }
                 // Result
-                application.CompilerOutputChannel.append('' + stdout);
+                application.WriteToCompilerTerminal('' + stdout, false);
                 return result;
             }, (stderr) => {
                 // Prepare
@@ -89,7 +89,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                 else if (stderr.includes("Cannot open includes.bB for reading")) {
                     // Special - seen this when the source is not processed correctly so we'll advise
                     // obviously doesn't get to the point of copying over this file
-                    application.CompilerOutputChannel.appendLine("WARNING: An unknown issue has occurred during compilation that may have affected your build....");
+                    application.WriteToCompilerTerminal("WARNING: An unknown issue has occurred during compilation that may have affected your build....", false);
                     // Failed
                     result = false;
                 }
@@ -158,7 +158,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             // Language specific files
             if (this.CleanUpCompilationFiles) {
                 // Notify
-                application.Notify(`Cleaning up files generated during compilation...`);
+                application.WriteToCompilerTerminal(`Cleaning up files generated during compilation...`);
                 // Process
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `${this.FileName}.asm`));
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `bB.asm`));

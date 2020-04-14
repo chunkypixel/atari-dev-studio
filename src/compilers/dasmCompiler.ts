@@ -41,9 +41,9 @@ export class DasmCompiler extends CompilerBase {
         await this.RepairFilePermissionsAsync();
 
         // Compiler options
-        let command = this.FolderOrPath;
+        let command = `"${this.FolderOrPath}"`;
         let args = [
-            this.FileName,
+            `"${this.FileName}"`,
             `-o${this.FileName}${this.CompiledExtensions[0]}`
         ];
         // Format

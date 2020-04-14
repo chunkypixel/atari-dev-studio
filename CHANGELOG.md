@@ -4,7 +4,11 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.4.7
 
+* Fixed issue where 7800basic was not handling .list.txt files as expected based on preference selections
+* Fixed issue where spacing on custom compiler paths failed to compile (bB, 7800basic, dasm)
+* Updated the initialisation process to display messages in the compile log when custom compilers have been chosen. For warning or error messages pop-ups are also displayed.
 * Added missing 7800basic keywords: switchpause
+* Updated hover tooltips for 7800basic keywords
 
 ## 0.4.6
 

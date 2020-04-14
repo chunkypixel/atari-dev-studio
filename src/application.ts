@@ -171,9 +171,21 @@ export function KillBuildGame(): void {
 	}		
 }
 
-export function Notify(message: string): void {
+export function WriteToCompilerTerminal(message: string, writeToLog: boolean = false): void {
 	CompilerOutputChannel.appendLine(message);
-	console.log(`debugger:${message}`);        
+	if (writeToLog) { console.log(`debugger:${message}`); }        
+}
+
+export function ShowWarningPopup(message: string): void {
+	vscode.window.showWarningMessage(message);
+}
+
+export function ShowInformationPopup(message: string): void {
+	vscode.window.showInformationMessage(message);
+}
+
+export function ShowErrorPopup(message: string): void {
+	vscode.window.showErrorMessage(message);
 }
 
 export function GetConfiguration() : vscode.WorkspaceConfiguration {
@@ -184,30 +196,12 @@ function getChosenCompiler(document: vscode.TextDocument): CompilerBase | undefi
 	// Prepare
 	let configuration = GetConfiguration();
 
-	// // Find compiler (based on configuration selection)
-	// let chosenCompiler = configuration.get<string>(`compilation.defaultCompiler`);
-	// if (chosenCompiler) {
-	// 	for (let compiler of Compilers) {
-	// 		if (compiler.Id === chosenCompiler || compiler.Name === chosenCompiler) {
-	// 			return compiler;
-	// 		}
-	// 	}	
-	// }
-
 	// Find compiler (based on language of chosen file)
 	for (let compiler of Compilers) {
 		if (compiler.Id === document.languageId) {
 			return compiler;
 		}
 	}	
-
-	// // Find compiler (based on extension)
-	// let fileExtension = path.extname(document.uri.fsPath).toLowerCase();
-	// for (let compiler of Compilers) {
-	// 	if (compiler.Extensions.includes(fileExtension)) {
-	// 		return compiler;
-	// 	}
-	// }	
 
 	// Activate output window?
 	if (configuration!.get<boolean>(`editor.preserveCodeEditorFocus`))  {
@@ -218,9 +212,6 @@ function getChosenCompiler(document: vscode.TextDocument): CompilerBase | undefi
 	if (configuration!.get<boolean>(`editor.clearPreviousOutput`))  {
 		CompilerOutputChannel.clear();
 	}
-
-	// Not found
-	//Notify(`Unable to determine a compiler to use based on your chosen default compiler '${chosenCompiler}'. Review your selection in ${PreferencesSettingsExtensionPath}.`);
 
 	// Not found
 	return undefined;
