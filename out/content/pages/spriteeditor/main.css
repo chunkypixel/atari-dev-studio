@@ -2685,6 +2685,10 @@ Spritemate stylesheet
  {
    border: 2px solid var(--red);
  }
+
+ .ui-checkboxradio {
+  margin-right: 8px;
+}
  
  #info
  {

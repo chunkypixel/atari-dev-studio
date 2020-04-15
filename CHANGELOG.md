@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.4.8
+
+Sprite Editor
+* Fixed issue exporting images to batari Basic and assembly with incorrect width and height (karlg)
+* Added a 'Show on Startup' checkbox to the Project dialog.  The editor will default to your last settings (Note: I need to work out how I can store these outside the current installation)
+
 ## 0.4.7
 
 * Fixed issue where 7800basic was not handling .list.txt files as expected based on preference selections
