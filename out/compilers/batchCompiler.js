@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
+const path = require("path");
 const application = require("../application");
 const compilerBase_1 = require("./compilerBase");
 class BatchCompiler extends compilerBase_1.CompilerBase {
@@ -20,7 +21,7 @@ class BatchCompiler extends compilerBase_1.CompilerBase {
     InitialiseAsync() {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:BatCompiler.InitialiseAsync');
+            console.log('debugger:BatchCompiler.InitialiseAsync');
             // Prepare
             let result = true;
             // Already running?
@@ -58,7 +59,7 @@ class BatchCompiler extends compilerBase_1.CompilerBase {
     ExecuteCompilerAsync() {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:BatCompiler.ExecuteCompilerAsync');
+            console.log('debugger:BatchCompiler.ExecuteCompilerAsync');
             // Launch and exit
             // note: we cannot wait for a result
             (_a = application.AdsTerminal) === null || _a === void 0 ? void 0 : _a.sendText(`${this.FileName}`);
@@ -66,18 +67,11 @@ class BatchCompiler extends compilerBase_1.CompilerBase {
         });
     }
     LoadConfigurationAsync() {
-        const _super = Object.create(null, {
-            LoadConfigurationAsync: { get: () => super.LoadConfigurationAsync }
-        });
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:BatCompiler.LoadConfigurationAsync');
-            // Base
-            let result = yield _super.LoadConfigurationAsync.call(this);
-            if (!result) {
-                return false;
-            }
-            // Flag
+            console.log('debugger:BatchCompiler.LoadConfigurationAsync');
+            // System
             this.UsingBatchCompiler = true;
+            this.FileName = path.basename(this.Document.fileName);
             // Result
             return true;
         });

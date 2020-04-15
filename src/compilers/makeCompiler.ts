@@ -1,7 +1,7 @@
 "use strict";
 import * as vscode from 'vscode';
+import * as path from 'path';
 import * as application from '../application';
-import * as filesystem from '../filesystem';
 import { CompilerBase } from "./compilerBase";
 
 export class MakeCompiler extends CompilerBase {
@@ -67,12 +67,9 @@ export class MakeCompiler extends CompilerBase {
     protected async LoadConfigurationAsync(): Promise<boolean> {
         console.log('debugger:MakeCompiler.LoadConfigurationAsync'); 
 
-        // Base
-        let result = await super.LoadConfigurationAsync();
-        if (!result) { return false; }
-
-        // Flag
+        // System
         this.UsingMakeFileCompiler = true;
+        this.FileName = path.basename(this.Document!.fileName);
 
         // Result
         return true;

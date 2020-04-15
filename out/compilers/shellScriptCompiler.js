@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
+const path = require("path");
 const application = require("../application");
 const compilerBase_1 = require("./compilerBase");
 class ShellScriptCompiler extends compilerBase_1.CompilerBase {
@@ -66,18 +67,11 @@ class ShellScriptCompiler extends compilerBase_1.CompilerBase {
         });
     }
     LoadConfigurationAsync() {
-        const _super = Object.create(null, {
-            LoadConfigurationAsync: { get: () => super.LoadConfigurationAsync }
-        });
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:ShellCompiler.LoadConfigurationAsync');
-            // Base
-            let result = yield _super.LoadConfigurationAsync.call(this);
-            if (!result) {
-                return false;
-            }
-            // Flag
+            // System
             this.UsingShellScriptCompiler = true;
+            this.FileName = path.basename(this.Document.fileName);
             // Result
             return true;
         });

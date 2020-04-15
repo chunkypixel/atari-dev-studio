@@ -93,6 +93,9 @@ export function Spawn(command:string, args:string[] | null, env: { [key: string]
             let result = e;
             if (receivedError && result === 0) { result = 1; }
 
+            // Exit code?
+            if (result !== 0) { stdout(`Exit code: ${result}`); }
+
             // Finalise and exit
             return resolve(result === 0);
         });

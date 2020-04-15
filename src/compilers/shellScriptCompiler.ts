@@ -1,5 +1,6 @@
 "use strict";
 import * as vscode from 'vscode';
+import * as path from 'path';
 import * as application from '../application';
 import { CompilerBase } from "./compilerBase";
 
@@ -66,12 +67,9 @@ export class ShellScriptCompiler extends CompilerBase {
     protected async LoadConfigurationAsync(): Promise<boolean> {
         console.log('debugger:ShellCompiler.LoadConfigurationAsync'); 
 
-        // Base
-        let result = await super.LoadConfigurationAsync();
-        if (!result) { return false; }
-
-        // Flag
+        // System
         this.UsingShellScriptCompiler = true;
+        this.FileName = path.basename(this.Document!.fileName);
 
         // Result
         return true;

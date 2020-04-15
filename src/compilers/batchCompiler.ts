@@ -1,5 +1,6 @@
 "use strict";
 import * as vscode from 'vscode';
+import * as path from 'path';
 import * as application from '../application';
 import { CompilerBase } from "./compilerBase";
 
@@ -17,7 +18,7 @@ export class BatchCompiler extends CompilerBase {
     }
 
     protected async InitialiseAsync(): Promise<boolean> {
-        console.log('debugger:BatCompiler.InitialiseAsync');
+        console.log('debugger:BatchCompiler.InitialiseAsync');
 
         // Prepare
         let result = true;
@@ -55,7 +56,7 @@ export class BatchCompiler extends CompilerBase {
     }
 
     protected async ExecuteCompilerAsync(): Promise<boolean> {
-        console.log('debugger:BatCompiler.ExecuteCompilerAsync');
+        console.log('debugger:BatchCompiler.ExecuteCompilerAsync');
 
         // Launch and exit
         // note: we cannot wait for a result
@@ -64,14 +65,11 @@ export class BatchCompiler extends CompilerBase {
     }
 
     protected async LoadConfigurationAsync(): Promise<boolean> {
-        console.log('debugger:BatCompiler.LoadConfigurationAsync'); 
+        console.log('debugger:BatchCompiler.LoadConfigurationAsync'); 
 
-        // Base
-        let result = await super.LoadConfigurationAsync();
-        if (!result) { return false; }
-
-        // Flag
+        // System
         this.UsingBatchCompiler = true;
+        this.FileName = path.basename(this.Document!.fileName);
 
         // Result
         return true;

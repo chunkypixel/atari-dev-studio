@@ -4,6 +4,9 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.4.9
 
+* Fixed issue with scripts (makefile, shellscript, batch) not activating the Terminal window
+* Simplified compilation of makefile, shellscript, batch files when compiling them directly.
+
 Sprite Editor
 * Updated the batari Basic and assembly exports to output in bottom-to-top format and added a DPC+ export (top-to-bottom format).
 * Updated the export dialogs 

@@ -105,15 +105,25 @@ class CompilerBase {
             console.log('debugger:CompilerBase.InitialiseAsync');
             // Prepare
             let result = true;
+            // (Re)load
+            // It appears you need to reload this each time incase of change
+            this.Configuration = application.GetConfiguration();
+            // Clear output content?
+            // Note: need to do this here otherwise output from configuration is lost
+            if (this.Configuration.get(`editor.clearPreviousOutput`)) {
+                application.CompilerOutputChannel.clear();
+            }
             // Already running?
             if (this.IsRunning) {
                 // Notify
                 application.WriteToCompilerTerminal(`The ${this.Name} compiler is already running! If you need to cancel the compilation process use the 'ads: Kill build process' option from the Command Palette.`);
                 return false;
             }
-            // (Re)load
-            // It appears you need to reload this each time incase of change
-            this.Configuration = application.GetConfiguration();
+            // Configuration
+            result = yield this.LoadConfigurationAsync();
+            if (!result) {
+                return false;
+            }
             // Activate output window?
             if (!this.Configuration.get(`editor.preserveCodeEditorFocus`)) {
                 if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) {
@@ -121,12 +131,6 @@ class CompilerBase {
                 }
                 else {
                     application.CompilerOutputChannel.show();
-                }
-            }
-            // Clear output content?
-            if (this.Configuration.get(`editor.clearPreviousOutput`)) {
-                if (!this.UsingMakeFileCompiler && !this.UsingBatchCompiler && !this.UsingShellScriptCompiler) {
-                    application.CompilerOutputChannel.clear();
                 }
             }
             // Save files?
@@ -138,11 +142,6 @@ class CompilerBase {
                     result = yield this.Document.save();
                 }
             }
-            if (!result) {
-                return false;
-            }
-            // Configuration
-            result = yield this.LoadConfigurationAsync();
             if (!result) {
                 return false;
             }
@@ -171,23 +170,19 @@ class CompilerBase {
             this.UsingBatchCompiler = false;
             this.UsingShellScriptCompiler = false;
             // System
-            this.WorkspaceFolder = this.getWorkspaceFolder();
+            this.WorkspaceFolder = this.GetWorkspaceFolder();
             this.FileName = path.basename(this.Document.fileName);
             // Validate compilers
             let defaultCompiler = this.Configuration.get(`compiler.${this.Id}.defaultCompiler`);
             if (defaultCompiler === "Make") {
                 // Only working in dasm currently
                 // validate for one of the script files
-                yield this.IsTerminalMakeFileAvailable();
-                if (!this.UsingMakeFileCompiler && !this.UsingBatchCompiler && !this.UsingShellScriptCompiler) {
-                    // Failed
-                    let message = `ERROR: You have chosen to use the Make compiler for ${this.Id} but no makefile was not found in your root workspace folder.\nCreate a 'Makefile', 'makefile.bat' or 'makefile.sh' script...`;
-                    application.WriteToCompilerTerminal(message);
-                    application.ShowErrorPopup(message);
+                if (!(yield this.ValidateTerminalMakeFileAvailableAysnc())) {
                     return false;
                 }
                 // Initialise terminal
                 yield application.InitialiseAdsTerminalAsync();
+                return true;
             }
             if (defaultCompiler === "Custom") {
                 // Validate
@@ -203,6 +198,44 @@ class CompilerBase {
             this.CompiledSubFolder = path.join(this.WorkspaceFolder, this.CompiledSubFolderName);
             // Result
             return true;
+        });
+    }
+    ValidateTerminalMakeFileAvailableAysnc() {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('debugger:CompilerBase.ValidateTerminalMakeFileAvailableAysnc');
+            // Makefile?
+            this.UsingMakeFileCompiler = yield this.FindTerminalMakeFileAsync("makefile");
+            if (!this.UsingMakeFileCompiler) {
+                this.UsingMakeFileCompiler = yield this.FindTerminalMakeFileAsync("Makefile");
+            }
+            if (!this.UsingMakeFileCompiler) {
+                this.UsingMakeFileCompiler = yield this.FindTerminalMakeFileAsync("MAKEFILE");
+            }
+            if (this.UsingMakeFileCompiler) {
+                return true;
+            }
+            // Shell?
+            this.UsingShellScriptCompiler = yield this.FindTerminalMakeFileAsync("makefile.sh");
+            if (!this.UsingShellScriptCompiler) {
+                this.UsingShellScriptCompiler = yield this.FindTerminalMakeFileAsync("Makefile.sh");
+            }
+            if (!this.UsingShellScriptCompiler) {
+                this.UsingShellScriptCompiler = yield this.FindTerminalMakeFileAsync("MAKEFILE.SH");
+            }
+            if (this.UsingShellScriptCompiler) {
+                return true;
+            }
+            // Bat?
+            this.UsingBatchCompiler = yield this.FindTerminalMakeFileAsync("makefile.bat");
+            if (this.UsingBatchCompiler) {
+                return true;
+            }
+            // Nothing found
+            let message = `ERROR: You have chosen to use the Make compiler for ${this.Id} but no makefile was not found in your root workspace folder.\nCreate a 'Makefile', 'makefile.bat' or 'makefile.sh' script...`;
+            application.WriteToCompilerTerminal(message);
+            application.ShowErrorPopup(message);
+            // Exit
+            return false;
         });
     }
     ValidateCustomCompilerLocationAsync() {
@@ -388,39 +421,6 @@ class CompilerBase {
             execute.KillSpawnProcess();
         }
     }
-    IsTerminalMakeFileAvailable() {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:MakeCompiler.IsTerminalMakeFileAvailable');
-            // Makefile?
-            this.UsingMakeFileCompiler = yield this.FindTerminalMakeFileAsync("makefile");
-            // add some additional checks for Linux/macOS
-            if (application.IsLinux || application.IsMacOS) {
-                // cater for case-specific
-                if (!this.UsingMakeFileCompiler) {
-                    this.UsingMakeFileCompiler = yield this.FindTerminalMakeFileAsync("Makefile");
-                }
-                if (!this.UsingMakeFileCompiler) {
-                    this.UsingMakeFileCompiler = yield this.FindTerminalMakeFileAsync("MAKEFILE");
-                }
-            }
-            if (this.UsingMakeFileCompiler) {
-                return;
-            }
-            // Shell?
-            this.UsingShellScriptCompiler = yield this.FindTerminalMakeFileAsync("makefile.sh");
-            if (!this.UsingShellScriptCompiler) {
-                this.UsingShellScriptCompiler = yield this.FindTerminalMakeFileAsync("Makefile.sh");
-            }
-            if (!this.UsingShellScriptCompiler) {
-                this.UsingShellScriptCompiler = yield this.FindTerminalMakeFileAsync("MAKEFILE.SH");
-            }
-            if (this.UsingShellScriptCompiler) {
-                return;
-            }
-            // Bat?
-            this.UsingBatchCompiler = yield yield this.FindTerminalMakeFileAsync("makefile.bat");
-        });
-    }
     FindTerminalMakeFileAsync(fileName) {
         return __awaiter(this, void 0, void 0, function* () {
             // Scan for required makefile and store if found
@@ -432,7 +432,7 @@ class CompilerBase {
             return result;
         });
     }
-    getWorkspaceFolder() {
+    GetWorkspaceFolder() {
         console.log('debugger:CompilerBase.getWorkspaceFolder');
         // Issue: Get actual document first as the workspace
         //        is not the best option when file is in a subfolder
