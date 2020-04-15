@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.4.9
+
+Sprite Editor
+* Updated the batari Basic and assembly exports to output in bottom-to-top format and added a DPC+ export (top-to-bottom format).
+* Updated the export dialogs 
+
 ## 0.4.8
 
 Sprite Editor
