@@ -2,6 +2,13 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.5.0
+
+* Fixed order of command-line args for A7800
+
+Sprite Editor
+* Updated resize dialog to use new sizing boundaries
+
 ## 0.4.9
 
 * Fixed issue with scripts (makefile, shellscript, batch) not activating the Terminal window

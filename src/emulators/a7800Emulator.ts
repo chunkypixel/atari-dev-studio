@@ -108,9 +108,9 @@ export class A7800Emulator extends EmulatorBase {
         let args = [
             regionArg,
             consoleArg,
-            this.Args,
             `"${this.FileName}"`,
-            debuggerArg
+            debuggerArg,
+            this.Args
         ];
 
         // NOTE: This may need to be moved before compilation as it appears MAME is holding onto the launched file.
