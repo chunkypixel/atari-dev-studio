@@ -4,6 +4,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.5.0
 
+* Updated Stella to 6.1.2 (Windows, Linux, macOS)
 * Fixed order of command-line args for A7800
 
 Sprite Editor
