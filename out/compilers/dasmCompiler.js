@@ -44,7 +44,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             let command = `"${this.FolderOrPath}"`;
             let args = [
                 `"${this.FileName}"`,
-                `-o${this.FileName}${this.CompiledExtensions[0]}`
+                `-o"${this.FileName}${this.CompiledExtensions[0]}"`
             ];
             // Format
             if (this.Format) {
@@ -58,7 +58,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             if (this.GenerateDebuggerFiles) {
                 // Process
                 this.DebuggerExtensions.forEach((extension, arg) => {
-                    args.push(`${arg}${this.FileName}${extension}`);
+                    args.push(`${arg}"${this.FileName}${extension}"`);
                 });
             }
             if (this.Args) {
@@ -209,10 +209,12 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
                 // Process
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `${this.FileName}.bin`));
             }
-            // Debugger files (from workspace not bin)
-            if (!this.GenerateDebuggerFiles || this.CleanUpCompilationFiles) {
-                yield this.RemoveDebuggerFilesAsync(this.WorkspaceFolder);
-            }
+            // Don't think we need this as user chooses to generate and as they are
+            // not compilation files we don't need to remove them
+            /* // Debugger files (from workspace not bin)
+              if (!this.GenerateDebuggerFiles || this.CleanUpCompilationFiles) {
+                await this.RemoveDebuggerFilesAsync(this.WorkspaceFolder);
+            } */
             // Result
             return true;
         });

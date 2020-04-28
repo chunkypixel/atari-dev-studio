@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.5.1
+
+* #30 [Done] Fixed issue with spaces in filenames when compiling with dasm (cwieland)
+
 ## 0.5.0
 
 * Updated Stella to 6.1.2 (Windows, Linux, macOS)
