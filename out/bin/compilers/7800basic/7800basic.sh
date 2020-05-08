@@ -8,7 +8,7 @@ fi
 
 OSTYPE=$(uname -s)
 ARCH=$(uname -m)
-for EXT in "" .$OSTYPE.x86 .$OSTYPE.x64 .$OSTYPE.$ARCH .$OSTYPE ; do
+for EXT in "" .$OSTYPE.x64 .$OSTYPE.x86 .$OSTYPE.$ARCH .$OSTYPE ; do
   echo | 7800preprocess$EXT 2>/dev/null >&2 && break
 done
 
@@ -18,8 +18,10 @@ if [ ! $? = 0 ] ; then
   exit 1
 fi
 
+echo Using \"$EXT\" flavored 7800basic binaries
+
 #do dasm separately, because it's distributed separately
-for DASMEXT in "" .$OSTYPE.x86 .$OSTYPE.x64 .$OSTYPE.$ARCH .$OSTYPE ; do
+for DASMEXT in "" .$OSTYPE.x64 .$OSTYPE.x86 .$OSTYPE.$ARCH .$OSTYPE ; do
   dasm$DASMEXT 2>/dev/null >&2 
   [ $? = 1 ] && break
 done
@@ -28,6 +30,8 @@ if [ ! $? = 1 ] ; then
   echo "### ERROR: couldn't find dasm binary for $OSTYPE($ARCH). Exiting."
   exit 1
 fi
+
+echo Using \"$DASMEXT\" flavored dasm binary
 
 if [ "$1" = "-v" ] ; then
   #this is just a version check. pass it along to the 7800basic binary

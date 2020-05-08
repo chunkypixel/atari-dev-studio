@@ -822,6 +822,7 @@ savememdeviceisntHSC
 savedifficultytableAVOX
          ; the load call already setup the memory structure and atarivox memory location
          jsr savealoadedHSCtablecontinue
+savedifficultytableAVOXskipconvert
          lda #HSIDHI
          sta eeprombuffer
          lda #HSIDLO

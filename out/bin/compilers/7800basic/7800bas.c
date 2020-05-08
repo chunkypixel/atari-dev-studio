@@ -11,7 +11,7 @@
 char stdoutfilename[256];
 FILE *stdoutfilepointer;
 
-#define BASIC_VERSION_INFO "7800basic v0.8"
+#define BASIC_VERSION_INFO "7800basic v0.9"
 
 int main(int argc, char *argv[])
 {

@@ -126,10 +126,7 @@ T1024T   = $297    ;Set 1024 CLK Interval (858.2 usec/interval)  write-only
 TIM64TI  = $29E    ;Interrupt timer 64T                          write-only
 
 ;XM
-XCTRL1   = $470    ; %Y64PHCrR YM2151 RAM@6k RAM@4k Pokey@450 Hsc Cart roF_bank1 RoF_bank2
-XCTRL2   = $478    ; d0-d3 sally ram page 0 a0-a3, d4-d7 sally ram page 1 a0-a3
-XCTRL3   = $47C    ; d0-d3 maria ram page 0 a0-a3, d4-d7 maria ram page 1 a0-a3
-
+XCTRL    = $470    ; 7=YM2151 6=RAM@6k 5=RAM@4k 4=pokey@450 3=hsc 2=cart 1=RoF_bank1 0=RoF_bank2
 
 ; Pokey register relative locations, since its base may be different
 ; depending on the hardware.

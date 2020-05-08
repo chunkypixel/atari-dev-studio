@@ -210,8 +210,8 @@ int switchjoy(char *input_source)
     }
     if (!strncmp(input_source, "joy0fire0\0", 9))
     {
-	printf(" bit INPT0\n");
-	return 3;
+	printf(" bit sINPT1\n");
+	return 5;
     }
     if (!strncmp(input_source, "joy0fire1\0", 9))
     {
@@ -2333,7 +2333,7 @@ void changecontrol(char **statement)
     }
     else if (!strcmp(statement[3], "atarivox"))
     {
-	printf("  lda #10 ; controller=stmouse\n");
+	printf("  lda #10 ; controller=atarivox\n");
 	if (port == 0)
 	{
 	    printf("  sta port0control\n");
@@ -2905,8 +2905,7 @@ void add_graphic(char **statement, int incbanner)
 	    prerror("ran out of banner height entries");
 	strcpy(bannerfilenames[s], generalname);
 	bannerheights[s] = height / zoneheight;
-	bannerwidths[s] = width / 32;
-	//bannerpixelwidth[s]=
+	bannerwidths[s] = (width-1) / 32;
 
 	// width of 32 bytes, in coordinates...
 	//TODO: stuff this into a LUT...
@@ -3648,7 +3647,7 @@ void incgraphic(char *file_name, int offset)
 	if (num_unique_palette > 4)
 	    prwarn("image contains more unique colors than 320D allows");
 	graphicsinfo[dmaplain][graphicsdatawidth[dmaplain]] = width / 8;	//image width in 6502 bytes
-	graphicsmode[dmaplain][graphicsdatawidth[dmaplain]] = 128;
+	graphicsmode[dmaplain][graphicsdatawidth[dmaplain]] = 0;
 	for (x = 0; x < width; x = x + 8)
 	{
 	    graphicsdatawidth[dmaplain] = graphicsdatawidth[dmaplain] + 1;
@@ -4868,8 +4867,7 @@ void savememory(char **statement)
     printf("    lda hsdevice\n");
     printf("    cmp #2\n");
     printf("    bne skipvoxsave%d\n", templabel);
-    printf("    lda #32\n");
-    printf("    jsr AVoxWriteBytes\n");
+    printf("    jsr savedifficultytableAVOXskipconvert\n");
     printf("  ifconst DOUBLEBUFFER\n");
     printf("    lda doublebufferstate\n");
     printf("    bne skipsavememory%d\n", templabel);
@@ -6739,6 +6737,13 @@ void doif(char **statement)
 		else
 		    bne(statement[4]);
 	    }
+	    else if (i == 5)	// bvs/bvc
+	    {
+		if (not)
+		    bvc(statement[4]);
+		else
+		    bvs(statement[4]);
+	    }
 
 
 	    freemem(dealloccstatement);
@@ -6780,6 +6785,13 @@ void doif(char **statement)
 		    printf("	BNE ");
 		else
 		    printf("	BEQ ");
+	    }
+	    else if (i == 5)
+	    {
+		if (not)
+		    printf("	BVS ");
+		else
+		    printf("	BVC ");
 	    }
 
 	    printf(".skip%s\n", statement[0]);
@@ -9243,13 +9255,6 @@ void set(char **statement)
 	if (!strncmp(statement[3], "mono", 4))
 	{
 	    strcpy(redefined_variables[numredefvars++], "TIASFXMONO = 1");
-	}
-    }
-    else if (!strncmp(statement[2], "onebuttonmode", 13))
-    {
-	if (!strncmp(statement[3], "on", 2))
-	{
-	    strcpy(redefined_variables[numredefvars++], "ONEBUTTONMODE = 1");
 	}
     }
     else if (!strncmp(statement[2], "xm", 2))

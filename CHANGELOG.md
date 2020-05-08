@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.5.2
+
+* Updated to latest 7800basic release v0.9 (Windows, Linux, macOS)
+* Fixed misspelt 7800basic keyword: 528k
+
 ## 0.5.1
 
 * #30 [Done] Fixed issue with spaces in filenames when compiling with dasm (cwieland)

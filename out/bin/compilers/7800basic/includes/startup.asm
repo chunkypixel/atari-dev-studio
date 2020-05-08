@@ -137,23 +137,6 @@ pndetecispal
          jsr detectpokeylocation
      endif
 
-     ifnconst ONEBUTTONMODE
-         ;Setup port B for two button reading, and turn on both joysticks...
-         ifconst ONEBUTTONMODEJOY1
-         	lda #$10
-         else
-                ifconst ONEBUTTONMODEJOY2
-         	        lda #$04
-                else
-         	        lda #$14
-                endif
-         endif
-         sta CTLSWB
-         sta CTLSWBs
-         lda #0
-         sta SWCHB
-     endif
-
      lda #1 ; default for port 0 and 1 is a regular joystick
      sta port0control
      sta port1control
@@ -194,6 +177,9 @@ storeAinhsdevice
      ifconst AVOXVOICE
          jsr silenceavoxvoice
      endif
+
+     ldx #0
+     jsr settwobuttonmode
 
 
      ifconst bankswitchmode
