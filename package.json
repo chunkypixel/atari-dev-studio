@@ -136,8 +136,8 @@
                 "enablement": "isMac"
             }
         ],
-        "menus" : {
-            "touchBar": [ 
+        "menus": {
+            "touchBar": [
                 {
                     "command": "extension.touchbar.buildGame",
                     "group": "compile",
@@ -147,7 +147,7 @@
                     "command": "extension.touchbar.buildGameAndRun",
                     "group": "compile",
                     "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript"
-                } 
+                }
             ]
         },
         "configuration": {
