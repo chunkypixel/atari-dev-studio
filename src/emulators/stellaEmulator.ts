@@ -57,10 +57,10 @@ export class StellaEmulator extends EmulatorBase {
         // Premissions
         await this.RepairFilePermissionsAsync();
 
-        // Compiler options
-        let command = this.FolderOrPath;
-        if (application.IsMacOS) { command = `open -a "${command}"`;}
- 
+        // Command
+        let command = `"${this.FolderOrPath}"`;
+        if (application.IsMacOS) { command = `open -a "${command}"`; }
+
         // Args
         let args = [
             this.Args,

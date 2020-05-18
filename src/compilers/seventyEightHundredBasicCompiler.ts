@@ -32,14 +32,16 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
             commandName = "./7800basic.sh";
         }
         
-        // Compiler options
+        // Command
         let command = `"${path.join(this.FolderOrPath, commandName)}"`;
+
+        // Args
         let args = [
             `"${this.FileName}"`,
             this.Args
         ];
 
-        // Compiler environment
+        // Environment
         let env : { [key: string]: string | null } = {};
         env["PATH"] = this.FolderOrPath;
         if (application.IsLinux || application.IsMacOS) {

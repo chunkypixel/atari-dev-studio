@@ -31,13 +31,14 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
                 // Linux or MacOS
                 commandName = "./7800basic.sh";
             }
-            // Compiler options
+            // Command
             let command = `"${path.join(this.FolderOrPath, commandName)}"`;
+            // Args
             let args = [
                 `"${this.FileName}"`,
                 this.Args
             ];
-            // Compiler environment
+            // Environment
             let env = {};
             env["PATH"] = this.FolderOrPath;
             if (application.IsLinux || application.IsMacOS) {

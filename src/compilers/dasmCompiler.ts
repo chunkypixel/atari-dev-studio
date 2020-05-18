@@ -40,25 +40,24 @@ export class DasmCompiler extends CompilerBase {
         // Premissions
         await this.RepairFilePermissionsAsync();
 
-        // Compiler options
+        // Command
         let command = `"${this.FolderOrPath}"`;
+
+        // Args
         let args = [
             `"${this.FileName}"`,
             `-o"${this.FileName}${this.CompiledExtensions[0]}"`
         ];
-        // Format
         if (this.Format) { args.push(`${"-f"}${this.Format}`); }
-        // Verboseness
         if (this.Verboseness) { args.push(`${"-v"}${this.Verboseness}`); }
-        // Args
         if (this.GenerateDebuggerFiles)  {
-            // Process
             this.DebuggerExtensions.forEach((extension: string, arg: string) => {
                 args.push(`${arg}"${this.FileName}${extension}"`);
             });
         }
         if (this.Args) { args.push(`${this.Args}`); }
-        // Env
+
+        // Environment
         let env : { [key: string]: string | null } = {};
 
         // Notify

@@ -97,19 +97,15 @@ export class A7800Emulator extends EmulatorBase {
         // Premissions
         await this.RepairFilePermissionsAsync();
 
-        // Set args
-        let regionArg = `${this.Region} -cart1`;
-        let consoleArg = (this.Console ? `${this.Console} -cart2` : "");
-        let debuggerArg = (this.Debugger ? `-debug` : "");
-
-        // Compiler options
-        let command = this.FolderOrPath;
+        // Command
+        let command = `"${this.FolderOrPath}"`;
+        
         // Args
         let args = [
-            regionArg,
-            consoleArg,
+            `${this.Region} -cart1`,
+            (this.Console ? `${this.Console} -cart2` : ""),
             `"${this.FileName}"`,
-            debuggerArg,
+            (this.Debugger ? `-debug` : ""),
             this.Args
         ];
 

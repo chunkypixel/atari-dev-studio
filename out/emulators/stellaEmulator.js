@@ -62,8 +62,8 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
             }
             // Premissions
             yield this.RepairFilePermissionsAsync();
-            // Compiler options
-            let command = this.FolderOrPath;
+            // Command
+            let command = `"${this.FolderOrPath}"`;
             if (application.IsMacOS) {
                 command = `open -a "${command}"`;
             }

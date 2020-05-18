@@ -40,23 +40,20 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             // Standard compile
             // Premissions
             yield this.RepairFilePermissionsAsync();
-            // Compiler options
+            // Command
             let command = `"${this.FolderOrPath}"`;
+            // Args
             let args = [
                 `"${this.FileName}"`,
                 `-o"${this.FileName}${this.CompiledExtensions[0]}"`
             ];
-            // Format
             if (this.Format) {
                 args.push(`${"-f"}${this.Format}`);
             }
-            // Verboseness
             if (this.Verboseness) {
                 args.push(`${"-v"}${this.Verboseness}`);
             }
-            // Args
             if (this.GenerateDebuggerFiles) {
-                // Process
                 this.DebuggerExtensions.forEach((extension, arg) => {
                     args.push(`${arg}"${this.FileName}${extension}"`);
                 });
@@ -64,7 +61,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             if (this.Args) {
                 args.push(`${this.Args}`);
             }
-            // Env
+            // Environment
             let env = {};
             // Notify
             application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`);

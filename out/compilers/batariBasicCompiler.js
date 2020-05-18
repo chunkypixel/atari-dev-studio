@@ -29,7 +29,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                 // Linux or MacOS
                 commandName = "./2600basic.sh";
             }
-            // Compiler options
+            // Command
             let command = `"${path.join(this.FolderOrPath, commandName)}"`;
             // Args
             let args = [

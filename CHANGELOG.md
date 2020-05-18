@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.5.3
+
+* Fixed issue with paths to Stella and A7800 emulators when extension path locations have spaces (vbauer)
+
 ## 0.5.2
 
 * Updated to latest 7800basic release v0.9 (Windows, Linux, macOS)

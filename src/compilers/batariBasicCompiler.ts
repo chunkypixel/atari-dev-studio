@@ -29,13 +29,15 @@ export class BatariBasicCompiler extends CompilerBase {
             commandName = "./2600basic.sh";
         }
         
-        // Compiler options
+        // Command
         let command = `"${path.join(this.FolderOrPath, commandName)}"`;
+
         // Args
         let args = [
             `"${this.FileName}"`,
             this.Args
         ];
+
         // Environment
         let env : { [key: string]: string | null } = {};
         env["PATH"] = this.FolderOrPath;
