@@ -159,7 +159,7 @@
 				},
 				{
 					"name": "keyword.constant.78b",
-					"match": "\\b(on|off|lo|med|hi|flip|tv|spritesheet|ntsc|pal|160A|160B|320A|320B|320C|320D|16k|32k|48k|128k|128kRAM|128kBANKRAM|144k|256k|256kRAM|256kBANKRAM|272k|512k|512kRAM|512kBANKRAM|528k)\\b",
+					"match": "\\b(on|off|lo|med|hi|flip|tv|spritesheet|ntsc|pal|repeat|160A|160B|320A|320B|320C|320D|16k|32k|48k|128k|128kRAM|128kBANKRAM|144k|256k|256kRAM|256kBANKRAM|272k|512k|512kRAM|512kBANKRAM|528k)\\b",
 					"comment": "constant keywords"
 				},
 				{
