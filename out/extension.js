@@ -84,6 +84,8 @@ function activate(context) {
         yield application.RegisterFoldingProvidersAsync(context);
         // Register code completion providers
         yield application.RegisterCompletionProvidersAsync(context);
+        // Register outline providers
+        yield application.RegisterOutlineProvidersAsync(context);
         // Show welcome messages
         yield application.ShowStartupMessagesAsync();
     });

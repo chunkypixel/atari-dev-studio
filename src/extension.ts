@@ -84,6 +84,9 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Register code completion providers
 	await application.RegisterCompletionProvidersAsync(context);
 
+	// Register outline providers
+	await application.RegisterOutlineProvidersAsync(context);
+
 	// Show welcome messages
 	await application.ShowStartupMessagesAsync();
 }

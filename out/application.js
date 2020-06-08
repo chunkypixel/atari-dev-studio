@@ -26,6 +26,7 @@ const seventyEightHundredBasicHover_1 = require("./hovers/seventyEightHundredBas
 const seventyEightHundredBasicCompletion_1 = require("./completions/seventyEightHundredBasicCompletion");
 const batariBasicFolding_1 = require("./foldings/batariBasicFolding");
 const seventyEightHundredBasicFolding_1 = require("./foldings/seventyEightHundredBasicFolding");
+const seventyEightHundredBasicOutline_1 = require("./outline/seventyEightHundredBasicOutline");
 // -------------------------------------------------------------------------------------
 // Operating System
 // -------------------------------------------------------------------------------------
@@ -129,6 +130,21 @@ function RegisterFoldingProvidersAsync(context) {
     });
 }
 exports.RegisterFoldingProvidersAsync = RegisterFoldingProvidersAsync;
+// -------------------------------------------------------------------------------------
+// Outline
+// Language intellisense
+// -------------------------------------------------------------------------------------
+exports.Outlines = [
+    new seventyEightHundredBasicOutline_1.SeventyEightHundredBasicOutline()
+];
+function RegisterOutlineProvidersAsync(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (let outline of exports.Outlines) {
+            yield outline.RegisterAsync(context);
+        }
+    });
+}
+exports.RegisterOutlineProvidersAsync = RegisterOutlineProvidersAsync;
 // -------------------------------------------------------------------------------------
 // Functions
 // -------------------------------------------------------------------------------------

@@ -21,6 +21,8 @@ import { SeventyEightHundredBasicCompletion } from './completions/seventyEightHu
 import { FoldingBase } from './foldings/foldingBase';
 import { BatariBasicFolding } from './foldings/batariBasicFolding';
 import { SeventyEightHundredBasicFolding } from './foldings/seventyEightHundredBasicFolding';
+import { OutlineBase } from './outline/outlineBase';
+import { SeventyEightHundredBasicOutline } from './outline/seventyEightHundredBasicOutline';
 
 // -------------------------------------------------------------------------------------
 // Operating System
@@ -130,6 +132,21 @@ export const Foldings:FoldingBase[] = [
 export async function RegisterFoldingProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
 	for (let folding of Foldings) {
 		await folding.RegisterAsync(context);
+	}
+}
+
+// -------------------------------------------------------------------------------------
+// Outline
+// Language intellisense
+// -------------------------------------------------------------------------------------
+
+export const Outlines:OutlineBase[] = [
+	new SeventyEightHundredBasicOutline()
+];
+
+export async function RegisterOutlineProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
+	for (let outline of Outlines) {
+		await outline.RegisterAsync(context);
 	}
 }
 
