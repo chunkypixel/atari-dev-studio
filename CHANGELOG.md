@@ -4,7 +4,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.5.4
 
-* Updated Stella to 6.1 (Windows, Linux, macOS)
+* Updated Stella to 6.2 (Windows, Linux, macOS)
 * Added missing 7800basic keywords: songtempo, repeat
 
 ## 0.5.3
