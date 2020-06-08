@@ -2,9 +2,10 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.5.3",
+    "version": "0.5.4",
     "icon": "images/icon.png",
     "preview": true,
+    "author": "mksmith",
     "publisher": "chunkypixel",
     "homepage": "https://github.com/chunkypixel/atari-dev-studio",
     "repository": {
