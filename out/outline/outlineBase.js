@@ -36,7 +36,7 @@ class OutlineBase {
             let line = document.lineAt(lineIndex);
             // extend container range
             containers.forEach(container => {
-                // note: for this work correctly set the range we need to set the range to the 
+                // note: for this work correctly (for open methods) set the range we need to set the range to the 
                 // previous row not the current one
                 container.range = new vscode.Range(container.selectionRange.start, prevLine.range.end);
             });
@@ -135,10 +135,15 @@ class OutlineBase {
                         symbolKind = vscode.SymbolKind.Function;
                         isWithinFunctionOrMacro = true;
                         isContainer = true;
+                        // is in method?
+                        if (isWithinMethod) {
+                            containers.pop();
+                            isWithinMethod = false;
+                        }
                     }
                     break;
                 case 'return':
-                    // inside method, function or macro?
+                    // inside function or macro?
                     if (isWithinMethod || isWithinFunctionOrMacro) {
                         // reset
                         containers.pop();
@@ -168,8 +173,8 @@ class OutlineBase {
                     if (isSubMethod) {
                         symbolDetail = 'sub';
                     }
-                    // are we already is a method (and not a sub-method)
-                    if (isContainer && isWithinMethod) {
+                    // are we already in a method (and not a sub-method)
+                    if (isContainer && (isWithinMethod || isWithinFunctionOrMacro)) {
                         containers.pop();
                     }
                     // set
