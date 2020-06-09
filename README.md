@@ -12,6 +12,7 @@ Atari Dev Studio includes the following features:
 * Compile source code for your Atari 2600 or 7800 using batari Basic, 7800basic or dasm
 * Use scripting (makefile, batch or shell script files) to build your dasm projects [preview]
 * Optionally launch and test your game using the Stella (2600) or A7800 (7800) emulators
+* Document function outline support (batari basic and 7800basic)
 * Built-in Sprite Editor (also suitable for tiles and other objects) [preview]
 * Manage your project using the File Explorer or version-control your source code directly with GitHub (and others) using the built-in features of the Visual Studio Code platform.
 * Provide references to your own specific releases of each language or emulator rather than use the includes ones via the **Settings**.

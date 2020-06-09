@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.5.5
+
+* Added document outline support for batari Basic and 7800basic
+
 ## 0.5.4
 
 * Updated Stella to 6.2 (Windows, Linux, macOS)

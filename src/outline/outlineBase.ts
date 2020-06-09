@@ -24,6 +24,7 @@ export abstract class OutlineBase implements vscode.DocumentSymbolProvider {
         let isWithinMethod = false;
         let isWithinData = false;
         let isWithinAsm = false;
+        let isWithinFunctionOrMacro = false;
         let prevLine:vscode.TextLine;
 
         // Scan
@@ -76,12 +77,13 @@ export abstract class OutlineBase implements vscode.DocumentSymbolProvider {
                     isWithinMethod = false;
                     isWithinData = false;
                     isWithinAsm = false;
+                    isWithinFunctionOrMacro = false;
 
-                    // Get name (append bank number)
+                    // set name (append bank number)
                     symbolName = firstKeyword;
                     if (keywords[0].length > 1) { symbolName += ` ${keywords[1]}`;} 
 
-                    // Reset container to root
+                    // reset container to root?
                     while (containers.length > 0) {
                         containers.pop();
                     }
@@ -104,19 +106,51 @@ export abstract class OutlineBase implements vscode.DocumentSymbolProvider {
                 case 'alphadata':
                 case 'songdata':
                 case 'speechdata':
+                    // set
                     isWithinData = true;
                     break;
                 case 'end':
-                    if (isWithinData) { isWithinData = false; }
-                    if (isWithinAsm) { isWithinAsm = false; }
+                    // careful of order here - asm can be within a function/macro
+                    if (isWithinAsm) { 
+                        isWithinAsm = false; 
+                        break; 
+                    }
+                    if (isWithinData) { 
+                        isWithinData = false; 
+                        break; 
+                    }
+                    if (isWithinFunctionOrMacro) { 
+                        isWithinFunctionOrMacro = false;
+                        containers.pop(); 
+                        break; 
+                    }
                     break;
                 case 'asm':
+                    // set
                     isWithinAsm = true;
                     break;
+                case 'function':
+                case 'macro':
+                    if (keywords.length >= 2) {
+                        // initialise
+                        symbolName = keywords[1];
+                        symbolDetail = `() ${firstKeyword}`;
+                        symbolKind = vscode.SymbolKind.Function;
+                        isWithinFunctionOrMacro = true;
+                        isContainer = true;
+                    }
+                    break;
                 case 'return':
-                    // do nothing for now
+                    // inside method, function or macro?
+                    if (isWithinMethod || isWithinFunctionOrMacro) { 
+                        // reset
+                        containers.pop();
+                        isWithinMethod = false;
+                        isWithinFunctionOrMacro = false; 
+                    }
                     break;
                 case 'dmahole':
+                    // do nothing for now
                     break;                
                 default:
                     // validate
@@ -125,19 +159,20 @@ export abstract class OutlineBase implements vscode.DocumentSymbolProvider {
                     // is within data or asm? if so skip
                     if (isWithinData || isWithinAsm) { continue; }
 
-                    // prepare
+                    // initialise
                     let isSubMethod:boolean = firstKeyword.startsWith('_');
                     isContainer = !isSubMethod;
                     symbolName = keywords[0];  
                     // method or sub-function within method)
                     symbolKind = (isSubMethod ? vscode.SymbolKind.Field : vscode.SymbolKind.Method);
-                    if (isSubMethod) { symbolDetail = '(sub)'; }
+                    if (isSubMethod) { symbolDetail = 'sub'; }
 
                     // are we already is a method (and not a sub-method)
                     if (isContainer && isWithinMethod) { containers.pop(); } 
                     
                     // set
                     isWithinMethod = true;
+                    isWithinFunctionOrMacro = false;
                     isWithinData = false;
                     isWithinAsm = false;
                     break;

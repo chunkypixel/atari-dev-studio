@@ -28,6 +28,7 @@ class OutlineBase {
         let isWithinMethod = false;
         let isWithinData = false;
         let isWithinAsm = false;
+        let isWithinFunctionOrMacro = false;
         let prevLine;
         // Scan
         for (var lineIndex = 0; lineIndex < document.lineCount; lineIndex++) {
@@ -74,12 +75,13 @@ class OutlineBase {
                     isWithinMethod = false;
                     isWithinData = false;
                     isWithinAsm = false;
-                    // Get name (append bank number)
+                    isWithinFunctionOrMacro = false;
+                    // set name (append bank number)
                     symbolName = firstKeyword;
                     if (keywords[0].length > 1) {
                         symbolName += ` ${keywords[1]}`;
                     }
-                    // Reset container to root
+                    // reset container to root?
                     while (containers.length > 0) {
                         containers.pop();
                     }
@@ -101,23 +103,51 @@ class OutlineBase {
                 case 'alphadata':
                 case 'songdata':
                 case 'speechdata':
+                    // set
                     isWithinData = true;
                     break;
                 case 'end':
-                    if (isWithinData) {
-                        isWithinData = false;
-                    }
+                    // careful of order here - asm can be within a function/macro
                     if (isWithinAsm) {
                         isWithinAsm = false;
+                        break;
+                    }
+                    if (isWithinData) {
+                        isWithinData = false;
+                        break;
+                    }
+                    if (isWithinFunctionOrMacro) {
+                        isWithinFunctionOrMacro = false;
+                        containers.pop();
+                        break;
                     }
                     break;
                 case 'asm':
+                    // set
                     isWithinAsm = true;
                     break;
+                case 'function':
+                case 'macro':
+                    if (keywords.length >= 2) {
+                        // initialise
+                        symbolName = keywords[1];
+                        symbolDetail = `() ${firstKeyword}`;
+                        symbolKind = vscode.SymbolKind.Function;
+                        isWithinFunctionOrMacro = true;
+                        isContainer = true;
+                    }
+                    break;
                 case 'return':
-                    // do nothing for now
+                    // inside method, function or macro?
+                    if (isWithinMethod || isWithinFunctionOrMacro) {
+                        // reset
+                        containers.pop();
+                        isWithinMethod = false;
+                        isWithinFunctionOrMacro = false;
+                    }
                     break;
                 case 'dmahole':
+                    // do nothing for now
                     break;
                 default:
                     // validate
@@ -129,14 +159,14 @@ class OutlineBase {
                     if (isWithinData || isWithinAsm) {
                         continue;
                     }
-                    // prepare
+                    // initialise
                     let isSubMethod = firstKeyword.startsWith('_');
                     isContainer = !isSubMethod;
                     symbolName = keywords[0];
                     // method or sub-function within method)
                     symbolKind = (isSubMethod ? vscode.SymbolKind.Field : vscode.SymbolKind.Method);
                     if (isSubMethod) {
-                        symbolDetail = '(sub)';
+                        symbolDetail = 'sub';
                     }
                     // are we already is a method (and not a sub-method)
                     if (isContainer && isWithinMethod) {
@@ -144,6 +174,7 @@ class OutlineBase {
                     }
                     // set
                     isWithinMethod = true;
+                    isWithinFunctionOrMacro = false;
                     isWithinData = false;
                     isWithinAsm = false;
                     break;
