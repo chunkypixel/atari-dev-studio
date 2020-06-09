@@ -60,6 +60,11 @@ class DefinitionProviderBase {
                 if (firstKeyword === 'dim' || firstKeyword === 'const' || firstKeyword === 'function' || firstKeyword === 'macro' ||
                     firstKeyword.search('data') > -1) {
                     for (var keywordIndex = 1; keywordIndex < keywords.length; keywordIndex++) {
+                        // exit?
+                        if (keywords[keywordIndex] === '=' || keywords[keywordIndex].startsWith(';')) {
+                            break;
+                        }
+                        // match?
                         if (keywords[keywordIndex].toLowerCase() === word) {
                             // position of word on line
                             let wordIndex = line.text.indexOf(keywords[keywordIndex]);
