@@ -1,0 +1,1 @@
+{"version":3,"file":"batariBasicDocumentSymbolProvider.js","sourceRoot":"","sources":["../../src/documentSymbolProvider/batariBasicDocumentSymbolProvider.ts"],"names":[],"mappings":"AAAA,YAAY,CAAC;;AACb,6EAA0E;AAE1E,MAAa,iCAAkC,SAAQ,uDAA0B;IAE7E;QACI,KAAK,CAAC,aAAa,CAAC,CAAC;IACzB,CAAC;CACJ;AALD,8EAKC"}

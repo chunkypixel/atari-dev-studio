@@ -21,9 +21,12 @@ import { SeventyEightHundredBasicCompletion } from './completions/seventyEightHu
 import { FoldingBase } from './foldings/foldingBase';
 import { BatariBasicFolding } from './foldings/batariBasicFolding';
 import { SeventyEightHundredBasicFolding } from './foldings/seventyEightHundredBasicFolding';
-import { OutlineBase } from './outline/outlineBase';
-import { SeventyEightHundredBasicOutline } from './outline/seventyEightHundredBasicOutline';
-import { BatariBasicOutline } from './outline/batariBasicOutline';
+import { DocumentSymbolProviderBase } from './documentSymbolProvider/documentSymbolProviderBase';
+import { SeventyEightHundredBasicDocumentSymbolProvider } from './documentSymbolProvider/seventyEightHundredBasicDocumentSymbolProvider';
+import { BatariBasicDocumentSymbolProvider } from './documentSymbolProvider/batariBasicDocumentSymbolProvider';
+import { DefinitionProviderBase } from './definitionProvider/definitionProviderBase';
+import { SeventyEightHundredBasicDefinitionProvider } from './definitionProvider/seventyEightHundredBasicDefinitionProvider';
+import { BatariBasicDefinitionProvider } from './definitionProvider/batariBasicDefinitionProvider';
 
 // -------------------------------------------------------------------------------------
 // Operating System
@@ -137,18 +140,34 @@ export async function RegisterFoldingProvidersAsync(context: vscode.ExtensionCon
 }
 
 // -------------------------------------------------------------------------------------
-// Outline
+// DocumentSymbolProviders
 // Language intellisense
 // -------------------------------------------------------------------------------------
 
-export const Outlines:OutlineBase[] = [
-	new BatariBasicOutline(),
-	new SeventyEightHundredBasicOutline()
+export const DocumentSymbolProviders:DocumentSymbolProviderBase[] = [
+	new BatariBasicDocumentSymbolProvider(),
+	new SeventyEightHundredBasicDocumentSymbolProvider()
 ];
 
-export async function RegisterOutlineProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
-	for (let outline of Outlines) {
-		await outline.RegisterAsync(context);
+export async function RegisterDocumentSymbolProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
+	for (let documentSymbolProvider of DocumentSymbolProviders) {
+		await documentSymbolProvider.RegisterAsync(context);
+	}
+}
+
+// -------------------------------------------------------------------------------------
+// DefinitionProviders
+// Language intellisense
+// -------------------------------------------------------------------------------------
+
+export const DefinitionProviders:DefinitionProviderBase[] = [
+	new BatariBasicDefinitionProvider(),
+	new SeventyEightHundredBasicDefinitionProvider()
+];
+
+export async function RegisterDefinitionProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
+	for (let definitionProvider of DefinitionProviders) {
+		await definitionProvider.RegisterAsync(context);
 	}
 }
 

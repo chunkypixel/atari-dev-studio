@@ -82,10 +82,10 @@ function activate(context) {
         yield application.RegisterHoverProvidersAsync(context);
         // Register region folding providers
         yield application.RegisterFoldingProvidersAsync(context);
-        // Register code completion providers
+        // Register intellisence features
+        yield application.RegisterDocumentSymbolProvidersAsync(context);
+        yield application.RegisterDefinitionProvidersAsync(context);
         yield application.RegisterCompletionProvidersAsync(context);
-        // Register outline providers
-        yield application.RegisterOutlineProvidersAsync(context);
         // Show welcome messages
         yield application.ShowStartupMessagesAsync();
     });

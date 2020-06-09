@@ -81,12 +81,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Register region folding providers
 	await application.RegisterFoldingProvidersAsync(context);
 	
-	// Register code completion providers
+	// Register intellisence features
+	await application.RegisterDocumentSymbolProvidersAsync(context);
+	await application.RegisterDefinitionProvidersAsync(context);
 	await application.RegisterCompletionProvidersAsync(context);
-
-	// Register outline providers
-	await application.RegisterOutlineProvidersAsync(context);
-
+	
 	// Show welcome messages
 	await application.ShowStartupMessagesAsync();
 }

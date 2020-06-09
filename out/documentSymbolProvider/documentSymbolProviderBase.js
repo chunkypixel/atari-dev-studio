@@ -1,73 +1,71 @@
 "use strict";
-import * as vscode from 'vscode';
-
-export abstract class OutlineBase implements vscode.DocumentSymbolProvider {
-
-    public readonly Id:string;
-
-    constructor(id:string) {
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const vscode = require("vscode");
+class DocumentSymbolProviderBase {
+    constructor(id) {
         this.Id = id;
     }
-
-    public async RegisterAsync(context: vscode.ExtensionContext): Promise<void>
-    {
-        // Complete registration
-        vscode.languages.registerDocumentSymbolProvider(this.Id, this);
+    RegisterAsync(context) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Complete registration
+            vscode.languages.registerDocumentSymbolProvider(this.Id, this);
+        });
     }
-
     // Used for both 7800basic and batariBasic
-
-    provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.ProviderResult<vscode.SymbolInformation[] | vscode.DocumentSymbol[]> {
+    provideDocumentSymbols(document, token) {
         // prepare
-        let symbols: vscode.DocumentSymbol[] = [];
-        let containers: vscode.DocumentSymbol[] = [];
+        let symbols = [];
+        let containers = [];
         let isWithinMethod = false;
         let isWithinData = false;
         let isWithinAsm = false;
         let isWithinFunctionOrMacro = false;
-        let prevLine:vscode.TextLine;
-
+        let prevLine;
         // Scan
         for (var lineIndex = 0; lineIndex < document.lineCount; lineIndex++) {
             // get
-            let line:vscode.TextLine = document.lineAt(lineIndex);
-            
+            let line = document.lineAt(lineIndex);
             // extend container range
-			containers.forEach( container => {
+            containers.forEach(container => {
                 // note: for this work correctly (for open methods) set the range we need to set the range to the 
                 // previous row not the current one
-				container.range = new vscode.Range(
-					container.selectionRange.start,
-					prevLine.range.end
-				);
+                container.range = new vscode.Range(container.selectionRange.start, prevLine.range.end);
             });
-            
             // store (for expanding container)
             prevLine = line;
-
             // validation
-            if (line.isEmptyOrWhitespace) { continue; }
-
-			// get line
-			let lineText:string = line.text
-			.slice(line.firstNonWhitespaceCharacterIndex)
-            .replace('\t', ' ');
-
+            if (line.isEmptyOrWhitespace) {
+                continue;
+            }
+            // get line
+            let lineText = line.text
+                .slice(line.firstNonWhitespaceCharacterIndex)
+                .replace('\t', ' ');
             // get keywords
-            let keywords:string[] = lineText.split(' ');
-            if (keywords.length < 0) { continue; }
+            let keywords = lineText.split(' ');
+            if (keywords.length < 0) {
+                continue;
+            }
             // get first keyword
-            let firstKeyword: string = keywords[0].toLowerCase();
-    
+            let firstKeyword = keywords[0].toLowerCase();
             // validation - rem
-            if (firstKeyword.startsWith(';') || firstKeyword.startsWith('rem') || firstKeyword.startsWith('/*') || firstKeyword.startsWith('*/')) { continue; }
-
+            if (firstKeyword.startsWith(';') || firstKeyword.startsWith('rem') || firstKeyword.startsWith('/*') || firstKeyword.startsWith('*/')) {
+                continue;
+            }
             // prepare
-            let symbolKind:vscode.SymbolKind | undefined = undefined;
-            let isContainer:boolean = false;    
-            let symbolName:string = '';
-            let symbolDetail:string = '';
-            
+            let symbolKind = undefined;
+            let isContainer = false;
+            let symbolName = '';
+            let symbolDetail = '';
             // Symbols
             switch (firstKeyword) {
                 case 'bank':
@@ -78,16 +76,15 @@ export abstract class OutlineBase implements vscode.DocumentSymbolProvider {
                     isWithinData = false;
                     isWithinAsm = false;
                     isWithinFunctionOrMacro = false;
-
                     // set name (append bank number)
                     symbolName = firstKeyword;
-                    if (keywords[0].length > 1) { symbolName += ` ${keywords[1]}`;} 
-
+                    if (keywords[0].length > 1) {
+                        symbolName += ` ${keywords[1]}`;
+                    }
                     // reset container to root?
                     while (containers.length > 0) {
                         containers.pop();
                     }
-
                     break;
                 case 'dim':
                     // enable this to show variables
@@ -111,18 +108,18 @@ export abstract class OutlineBase implements vscode.DocumentSymbolProvider {
                     break;
                 case 'end':
                     // careful of order here - asm can be within a function/macro
-                    if (isWithinAsm) { 
-                        isWithinAsm = false; 
-                        break; 
+                    if (isWithinAsm) {
+                        isWithinAsm = false;
+                        break;
                     }
-                    if (isWithinData) { 
-                        isWithinData = false; 
-                        break; 
+                    if (isWithinData) {
+                        isWithinData = false;
+                        break;
                     }
-                    if (isWithinFunctionOrMacro) { 
+                    if (isWithinFunctionOrMacro) {
                         isWithinFunctionOrMacro = false;
-                        containers.pop(); 
-                        break; 
+                        containers.pop();
+                        break;
                     }
                     break;
                 case 'asm':
@@ -138,7 +135,6 @@ export abstract class OutlineBase implements vscode.DocumentSymbolProvider {
                         symbolKind = vscode.SymbolKind.Function;
                         isWithinFunctionOrMacro = true;
                         isContainer = true;
-
                         // is in method?
                         if (isWithinMethod) {
                             containers.pop();
@@ -148,34 +144,39 @@ export abstract class OutlineBase implements vscode.DocumentSymbolProvider {
                     break;
                 case 'return':
                     // inside function or macro?
-                    if (isWithinMethod || isWithinFunctionOrMacro) { 
+                    if (isWithinMethod || isWithinFunctionOrMacro) {
                         // reset
                         containers.pop();
                         isWithinMethod = false;
-                        isWithinFunctionOrMacro = false; 
+                        isWithinFunctionOrMacro = false;
                     }
                     break;
                 case 'dmahole':
                     // do nothing for now
-                    break;                
+                    break;
                 default:
                     // validate
                     // anything indented at this point does not get processed
-                    if (line.text.startsWith(' ')) { continue; }
+                    if (line.text.startsWith(' ')) {
+                        continue;
+                    }
                     // is within data or asm? if so skip
-                    if (isWithinData || isWithinAsm) { continue; }
-
+                    if (isWithinData || isWithinAsm) {
+                        continue;
+                    }
                     // initialise
-                    let isSubMethod:boolean = firstKeyword.startsWith('_');
+                    let isSubMethod = firstKeyword.startsWith('_');
                     isContainer = !isSubMethod;
-                    symbolName = keywords[0];  
+                    symbolName = keywords[0];
                     // method or sub-function within method)
                     symbolKind = (isSubMethod ? vscode.SymbolKind.Field : vscode.SymbolKind.Method);
-                    if (isSubMethod) { symbolDetail = 'sub'; }
-
+                    if (isSubMethod) {
+                        symbolDetail = 'sub';
+                    }
                     // are we already in a method (and not a sub-method)
-                    if (isContainer && (isWithinMethod || isWithinFunctionOrMacro)) { containers.pop(); } 
-                    
+                    if (isContainer && (isWithinMethod || isWithinFunctionOrMacro)) {
+                        containers.pop();
+                    }
                     // set
                     isWithinMethod = true;
                     isWithinFunctionOrMacro = false;
@@ -183,36 +184,28 @@ export abstract class OutlineBase implements vscode.DocumentSymbolProvider {
                     isWithinAsm = false;
                     break;
             }
-
             // anything to add?
             if (symbolKind) {
                 // initialise
-                let symbol = new vscode.DocumentSymbol(
-                    symbolName,
-                    symbolDetail,
-                    symbolKind,
-                    line.range, line.range
-                );
-
+                let symbol = new vscode.DocumentSymbol(symbolName, symbolDetail, symbolKind, line.range, line.range);
                 // add to store
                 if (containers.length > 0) {
                     // child
-                    containers[containers.length-1].children.push(symbol);
+                    containers[containers.length - 1].children.push(symbol);
                 }
-                else
-                {
+                else {
                     // parent
                     symbols.push(symbol);
                 }
-
                 // is this a container?
-                if (isContainer) { containers.push(symbol); }
+                if (isContainer) {
+                    containers.push(symbol);
+                }
             }
-            
         }
-
         // return result
         return symbols;
     }
-
 }
+exports.DocumentSymbolProviderBase = DocumentSymbolProviderBase;
+//# sourceMappingURL=documentSymbolProviderBase.js.map

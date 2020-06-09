@@ -26,8 +26,10 @@ const seventyEightHundredBasicHover_1 = require("./hovers/seventyEightHundredBas
 const seventyEightHundredBasicCompletion_1 = require("./completions/seventyEightHundredBasicCompletion");
 const batariBasicFolding_1 = require("./foldings/batariBasicFolding");
 const seventyEightHundredBasicFolding_1 = require("./foldings/seventyEightHundredBasicFolding");
-const seventyEightHundredBasicOutline_1 = require("./outline/seventyEightHundredBasicOutline");
-const batariBasicOutline_1 = require("./outline/batariBasicOutline");
+const seventyEightHundredBasicDocumentSymbolProvider_1 = require("./documentSymbolProvider/seventyEightHundredBasicDocumentSymbolProvider");
+const batariBasicDocumentSymbolProvider_1 = require("./documentSymbolProvider/batariBasicDocumentSymbolProvider");
+const seventyEightHundredBasicDefinitionProvider_1 = require("./definitionProvider/seventyEightHundredBasicDefinitionProvider");
+const batariBasicDefinitionProvider_1 = require("./definitionProvider/batariBasicDefinitionProvider");
 // -------------------------------------------------------------------------------------
 // Operating System
 // -------------------------------------------------------------------------------------
@@ -132,21 +134,37 @@ function RegisterFoldingProvidersAsync(context) {
 }
 exports.RegisterFoldingProvidersAsync = RegisterFoldingProvidersAsync;
 // -------------------------------------------------------------------------------------
-// Outline
+// DocumentSymbolProviders
 // Language intellisense
 // -------------------------------------------------------------------------------------
-exports.Outlines = [
-    new batariBasicOutline_1.BatariBasicOutline(),
-    new seventyEightHundredBasicOutline_1.SeventyEightHundredBasicOutline()
+exports.DocumentSymbolProviders = [
+    new batariBasicDocumentSymbolProvider_1.BatariBasicDocumentSymbolProvider(),
+    new seventyEightHundredBasicDocumentSymbolProvider_1.SeventyEightHundredBasicDocumentSymbolProvider()
 ];
-function RegisterOutlineProvidersAsync(context) {
+function RegisterDocumentSymbolProvidersAsync(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        for (let outline of exports.Outlines) {
-            yield outline.RegisterAsync(context);
+        for (let documentSymbolProvider of exports.DocumentSymbolProviders) {
+            yield documentSymbolProvider.RegisterAsync(context);
         }
     });
 }
-exports.RegisterOutlineProvidersAsync = RegisterOutlineProvidersAsync;
+exports.RegisterDocumentSymbolProvidersAsync = RegisterDocumentSymbolProvidersAsync;
+// -------------------------------------------------------------------------------------
+// DefinitionProviders
+// Language intellisense
+// -------------------------------------------------------------------------------------
+exports.DefinitionProviders = [
+    new batariBasicDefinitionProvider_1.BatariBasicDefinitionProvider(),
+    new seventyEightHundredBasicDefinitionProvider_1.SeventyEightHundredBasicDefinitionProvider()
+];
+function RegisterDefinitionProvidersAsync(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (let definitionProvider of exports.DefinitionProviders) {
+            yield definitionProvider.RegisterAsync(context);
+        }
+    });
+}
+exports.RegisterDefinitionProvidersAsync = RegisterDefinitionProvidersAsync;
 // -------------------------------------------------------------------------------------
 // Functions
 // -------------------------------------------------------------------------------------
