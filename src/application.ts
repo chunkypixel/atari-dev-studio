@@ -23,6 +23,7 @@ import { BatariBasicFolding } from './foldings/batariBasicFolding';
 import { SeventyEightHundredBasicFolding } from './foldings/seventyEightHundredBasicFolding';
 import { OutlineBase } from './outline/outlineBase';
 import { SeventyEightHundredBasicOutline } from './outline/seventyEightHundredBasicOutline';
+import { BatariBasicOutline } from './outline/batariBasicOutline';
 
 // -------------------------------------------------------------------------------------
 // Operating System
@@ -141,6 +142,7 @@ export async function RegisterFoldingProvidersAsync(context: vscode.ExtensionCon
 // -------------------------------------------------------------------------------------
 
 export const Outlines:OutlineBase[] = [
+	new BatariBasicOutline(),
 	new SeventyEightHundredBasicOutline()
 ];
 

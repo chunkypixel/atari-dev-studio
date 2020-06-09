@@ -27,6 +27,7 @@ const seventyEightHundredBasicCompletion_1 = require("./completions/seventyEight
 const batariBasicFolding_1 = require("./foldings/batariBasicFolding");
 const seventyEightHundredBasicFolding_1 = require("./foldings/seventyEightHundredBasicFolding");
 const seventyEightHundredBasicOutline_1 = require("./outline/seventyEightHundredBasicOutline");
+const batariBasicOutline_1 = require("./outline/batariBasicOutline");
 // -------------------------------------------------------------------------------------
 // Operating System
 // -------------------------------------------------------------------------------------
@@ -135,6 +136,7 @@ exports.RegisterFoldingProvidersAsync = RegisterFoldingProvidersAsync;
 // Language intellisense
 // -------------------------------------------------------------------------------------
 exports.Outlines = [
+    new batariBasicOutline_1.BatariBasicOutline(),
     new seventyEightHundredBasicOutline_1.SeventyEightHundredBasicOutline()
 ];
 function RegisterOutlineProvidersAsync(context) {
