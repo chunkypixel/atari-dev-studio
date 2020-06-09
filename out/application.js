@@ -30,6 +30,8 @@ const seventyEightHundredBasicDocumentSymbolProvider_1 = require("./documentSymb
 const batariBasicDocumentSymbolProvider_1 = require("./documentSymbolProvider/batariBasicDocumentSymbolProvider");
 const seventyEightHundredBasicDefinitionProvider_1 = require("./definitionProvider/seventyEightHundredBasicDefinitionProvider");
 const batariBasicDefinitionProvider_1 = require("./definitionProvider/batariBasicDefinitionProvider");
+const seventyEightHundredBasicReferenceProvider_1 = require("./referenceProvider/seventyEightHundredBasicReferenceProvider");
+const batariBasicReferenceProvider_1 = require("./referenceProvider/batariBasicReferenceProvider");
 // -------------------------------------------------------------------------------------
 // Operating System
 // -------------------------------------------------------------------------------------
@@ -165,6 +167,22 @@ function RegisterDefinitionProvidersAsync(context) {
     });
 }
 exports.RegisterDefinitionProvidersAsync = RegisterDefinitionProvidersAsync;
+// -------------------------------------------------------------------------------------
+// ReferenceProviders
+// Language intellisense
+// -------------------------------------------------------------------------------------
+exports.ReferenceProviders = [
+    new batariBasicReferenceProvider_1.BatariBasicReferenceProvider(),
+    new seventyEightHundredBasicReferenceProvider_1.SeventyEightHundredBasicReferenceProvider()
+];
+function RegisterReferenceProvidersAsync(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (let referenceProvider of exports.ReferenceProviders) {
+            yield referenceProvider.RegisterAsync(context);
+        }
+    });
+}
+exports.RegisterReferenceProvidersAsync = RegisterReferenceProvidersAsync;
 // -------------------------------------------------------------------------------------
 // Functions
 // -------------------------------------------------------------------------------------

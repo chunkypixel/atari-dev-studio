@@ -85,6 +85,7 @@ function activate(context) {
         // Register intellisence features
         yield application.RegisterDocumentSymbolProvidersAsync(context);
         yield application.RegisterDefinitionProvidersAsync(context);
+        yield application.RegisterReferenceProvidersAsync(context);
         yield application.RegisterCompletionProvidersAsync(context);
         // Show welcome messages
         yield application.ShowStartupMessagesAsync();

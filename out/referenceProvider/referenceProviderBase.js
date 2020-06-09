@@ -10,18 +10,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
-class DefinitionProviderBase {
+class ReferenceProviderBase {
     constructor(id) {
         this.Id = id;
     }
     RegisterAsync(context) {
         return __awaiter(this, void 0, void 0, function* () {
             // Complete registration
-            vscode.languages.registerDefinitionProvider(this.Id, this);
+            vscode.languages.registerReferenceProvider(this.Id, this);
         });
     }
     // Used for both 7800basic and batariBasic
-    provideDefinition(document, position, token) {
+    provideReferences(document, position, context, token) {
         var _a;
         // prepare
         let definitions = [];
@@ -51,39 +51,22 @@ class DefinitionProviderBase {
             if (keywords.length < 0) {
                 continue;
             }
-            let firstKeyword = keywords[0].toLowerCase();
-            // Notes:
-            // for methods need to be the first word (no spaces)
-            // for other definitions need to be dim, const (vars), function or macros
-            if (line.text.startsWith(' ')) {
-                // validate
-                if (firstKeyword === 'dim' || firstKeyword === 'const' || firstKeyword === 'function' || firstKeyword === 'macro' ||
-                    firstKeyword.search('data') > -1) {
-                    for (var keywordIndex = 0; keywordIndex < keywords.length; keywordIndex++) {
-                        // Prepare
-                        var keyword = keywords[keywordIndex].toLowerCase();
-                        if (keyword === '=' || keyword.startsWith(';') || keyword.startsWith('rem') || keyword.startsWith('/*')) {
-                            break;
-                        }
-                        // match?
-                        if (keyword.startsWith(word)) {
-                            // position of word on line
-                            let wordIndex = line.text.indexOf(keywords[keywordIndex]);
-                            if (wordIndex < 0) {
-                                wordIndex = 0;
-                            }
-                            // store and exit for
-                            definitions.push(new vscode.Location(document.uri, new vscode.Position(lineIndex, wordIndex)));
-                            break;
-                        }
-                    }
+            // validate
+            for (var keywordIndex = 0; keywordIndex < keywords.length; keywordIndex++) {
+                // Prepare
+                var keyword = keywords[keywordIndex].toLowerCase();
+                if (keyword.startsWith(';') || keyword.startsWith('rem') || keyword.startsWith('/*')) {
+                    break;
                 }
-            }
-            else {
-                // validate method
-                if (firstKeyword === word) {
-                    // store
-                    definitions.push(new vscode.Location(document.uri, new vscode.Position(lineIndex, 0)));
+                // match?
+                if (keyword.startsWith(word)) {
+                    // position of word on line
+                    let wordIndex = line.text.indexOf(keywords[keywordIndex]);
+                    if (wordIndex < 0) {
+                        wordIndex = 0;
+                    }
+                    // store and exit for
+                    definitions.push(new vscode.Location(document.uri, new vscode.Position(lineIndex, wordIndex)));
                 }
             }
         }
@@ -91,5 +74,5 @@ class DefinitionProviderBase {
         return definitions;
     }
 }
-exports.DefinitionProviderBase = DefinitionProviderBase;
-//# sourceMappingURL=definitionProviderBase.js.map
+exports.ReferenceProviderBase = ReferenceProviderBase;
+//# sourceMappingURL=referenceProviderBase.js.map

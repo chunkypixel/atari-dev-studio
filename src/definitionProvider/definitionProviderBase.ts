@@ -52,12 +52,13 @@ export abstract class DefinitionProviderBase implements vscode.DefinitionProvide
                 // validate
                 if (firstKeyword === 'dim' || firstKeyword === 'const' || firstKeyword === 'function' || firstKeyword === 'macro' ||
                     firstKeyword.search('data') > -1) {
-                    for (var keywordIndex = 1; keywordIndex < keywords.length; keywordIndex++) {
-                        // exit?
-                        if (keywords[keywordIndex] === '=' || keywords[keywordIndex].startsWith(';')) { break; }
+                    for (var keywordIndex = 0; keywordIndex < keywords.length; keywordIndex++) {
+                        // Prepare
+                        var keyword = keywords[keywordIndex].toLowerCase();
+                        if (keyword === '=' || keyword.startsWith(';') || keyword.startsWith('rem') || keyword.startsWith('/*')) { break; }
 
                         // match?
-                        if (keywords[keywordIndex].toLowerCase() === word) {
+                        if (keyword.startsWith(word)) {
                             // position of word on line
                             let wordIndex = line.text.indexOf(keywords[keywordIndex]);
                             if (wordIndex < 0) { wordIndex = 0; }

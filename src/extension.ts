@@ -84,6 +84,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Register intellisence features
 	await application.RegisterDocumentSymbolProvidersAsync(context);
 	await application.RegisterDefinitionProvidersAsync(context);
+	await application.RegisterReferenceProvidersAsync(context);
 	await application.RegisterCompletionProvidersAsync(context);
 	
 	// Show welcome messages

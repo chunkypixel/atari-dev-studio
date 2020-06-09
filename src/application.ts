@@ -27,6 +27,9 @@ import { BatariBasicDocumentSymbolProvider } from './documentSymbolProvider/bata
 import { DefinitionProviderBase } from './definitionProvider/definitionProviderBase';
 import { SeventyEightHundredBasicDefinitionProvider } from './definitionProvider/seventyEightHundredBasicDefinitionProvider';
 import { BatariBasicDefinitionProvider } from './definitionProvider/batariBasicDefinitionProvider';
+import { ReferenceProviderBase } from './referenceProvider/referenceProviderBase';
+import { SeventyEightHundredBasicReferenceProvider } from './referenceProvider/seventyEightHundredBasicReferenceProvider';
+import { BatariBasicReferenceProvider } from './referenceProvider/batariBasicReferenceProvider';
 
 // -------------------------------------------------------------------------------------
 // Operating System
@@ -168,6 +171,22 @@ export const DefinitionProviders:DefinitionProviderBase[] = [
 export async function RegisterDefinitionProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
 	for (let definitionProvider of DefinitionProviders) {
 		await definitionProvider.RegisterAsync(context);
+	}
+}
+
+// -------------------------------------------------------------------------------------
+// ReferenceProviders
+// Language intellisense
+// -------------------------------------------------------------------------------------
+
+export const ReferenceProviders:ReferenceProviderBase[] = [
+	new BatariBasicReferenceProvider(),
+	new SeventyEightHundredBasicReferenceProvider()
+];
+
+export async function RegisterReferenceProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
+	for (let referenceProvider of ReferenceProviders) {
+		await referenceProvider.RegisterAsync(context);
 	}
 }
 
