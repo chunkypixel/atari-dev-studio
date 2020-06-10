@@ -22,7 +22,6 @@ class DefinitionProviderBase {
     }
     // Used for both 7800basic and batariBasic
     provideDefinition(document, position, token) {
-        var _a;
         // prepare
         let definitions = [];
         // validate if a range is selected
@@ -31,7 +30,7 @@ class DefinitionProviderBase {
             return undefined;
         }
         // get selected word
-        let word = (_a = document.getText(wordRange)) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+        let word = document.getText(wordRange);
         if (!word) {
             return undefined;
         }
@@ -44,29 +43,39 @@ class DefinitionProviderBase {
             }
             // get line
             let lineText = line.text
-                .slice(line.firstNonWhitespaceCharacterIndex)
-                .replace('\t', ' ');
+                .slice(line.firstNonWhitespaceCharacterIndex);
             // get keywords
-            let keywords = lineText.split(' ');
+            // just get the first 3 to increase speed (<mainkeyword><space><secondarykeyword>)
+            let keywords = lineText.split(/[\s\t]+/, 3);
             if (keywords.length < 0) {
                 continue;
             }
-            let firstKeyword = keywords[0].toLowerCase();
+            let mainKeyword = keywords[0].toLowerCase();
             // Notes:
             // for methods need to be the first word (no spaces)
             // for other definitions need to be dim, const (vars), function or macros
             if (line.text.startsWith(' ')) {
                 // validate
-                if (firstKeyword === 'dim' || firstKeyword === 'const' || firstKeyword === 'function' || firstKeyword === 'macro' ||
-                    firstKeyword.search('data') > -1) {
+                if (mainKeyword === 'dim' || mainKeyword === 'const' || mainKeyword === 'function' || mainKeyword === 'macro' ||
+                    mainKeyword.search('data') > -1) {
                     for (var keywordIndex = 0; keywordIndex < keywords.length; keywordIndex++) {
                         // Prepare
-                        var keyword = keywords[keywordIndex].toLowerCase();
-                        if (keyword === '=' || keyword.startsWith(';') || keyword.startsWith('rem') || keyword.startsWith('/*')) {
+                        // remmarks may appear later in line too
+                        var keyword = keywords[keywordIndex];
+                        if (keyword === '=' || keyword.startsWith(';') || keyword.startsWith('rem')) {
                             break;
                         }
                         // match?
                         if (keyword.startsWith(word)) {
+                            // validate length
+                            if (keyword.length > word.length) {
+                                // is next character a letter? if so not a full match
+                                // we need to verify this to get exact matches where line is NOT spaced between fields
+                                let char = keyword.substring(word.length, word.length + 1);
+                                if (char !== '=' && char !== ':' && char !== '[' && char !== '{' && char !== '(') {
+                                    break;
+                                }
+                            }
                             // position of word on line
                             let wordIndex = line.text.indexOf(keywords[keywordIndex]);
                             if (wordIndex < 0) {
@@ -81,7 +90,7 @@ class DefinitionProviderBase {
             }
             else {
                 // validate method
-                if (firstKeyword === word) {
+                if (mainKeyword === word) {
                     // store
                     definitions.push(new vscode.Location(document.uri, new vscode.Position(lineIndex, 0)));
                 }

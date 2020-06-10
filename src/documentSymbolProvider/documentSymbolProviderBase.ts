@@ -3,14 +3,13 @@ import * as vscode from 'vscode';
 
 export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbolProvider {
 
-    public readonly Id:string;
+    public readonly Id: string;
 
-    constructor(id:string) {
+    constructor(id: string) {
         this.Id = id;
     }
 
-    public async RegisterAsync(context: vscode.ExtensionContext): Promise<void>
-    {
+    public async RegisterAsync(context: vscode.ExtensionContext): Promise<void> {
         // Complete registration
         vscode.languages.registerDocumentSymbolProvider(this.Id, this);
     }
@@ -25,51 +24,50 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
         let isWithinData = false;
         let isWithinAsm = false;
         let isWithinFunctionOrMacro = false;
-        let prevLine:vscode.TextLine;
+        let prevLine: vscode.TextLine;
 
         // Scan
         for (var lineIndex = 0; lineIndex < document.lineCount; lineIndex++) {
             // get
-            let line:vscode.TextLine = document.lineAt(lineIndex);
-            
+            let line: vscode.TextLine = document.lineAt(lineIndex);
+
             // extend container range
-			containers.forEach( container => {
+            containers.forEach(container => {
                 // note: for this work correctly (for open methods) set the range we need to set the range to the 
                 // previous row not the current one
-				container.range = new vscode.Range(
-					container.selectionRange.start,
-					prevLine.range.end
-				);
+                container.range = new vscode.Range(
+                    container.selectionRange.start,
+                    prevLine.range.end
+                );
             });
-            
+
             // store (for expanding container)
             prevLine = line;
 
             // validation
             if (line.isEmptyOrWhitespace) { continue; }
 
-			// get line
-			let lineText:string = line.text
-			.slice(line.firstNonWhitespaceCharacterIndex)
-            .replace('\t', ' ');
+            // get line
+            let lineText: string = line.text
+                .slice(line.firstNonWhitespaceCharacterIndex);
 
             // get keywords
-            let keywords:string[] = lineText.split(' ');
+            // just get the first 3 to increase speed (<mainkeyword><space><secondarykeyword>)
+            let keywords: string[] = lineText.split(/[\s\t]+/,3);
             if (keywords.length < 0) { continue; }
-            // get first keyword
-            let firstKeyword: string = keywords[0].toLowerCase();
-    
+            let mainKeyword: string = keywords[0].toLowerCase();
+
             // validation - rem
-            if (firstKeyword.startsWith(';') || firstKeyword.startsWith('rem') || firstKeyword.startsWith('/*') || firstKeyword.startsWith('*/')) { continue; }
+            if (mainKeyword.startsWith(';') || mainKeyword.startsWith('rem')) { continue; }
 
             // prepare
-            let symbolKind:vscode.SymbolKind | undefined = undefined;
-            let isContainer:boolean = false;    
-            let symbolName:string = '';
-            let symbolDetail:string = '';
-            
+            let symbolKind: vscode.SymbolKind | undefined = undefined;
+            let isContainer: boolean = false;
+            let symbolName: string = '';
+            let symbolDetail: string = '';
+
             // Symbols
-            switch (firstKeyword) {
+            switch (mainKeyword) {
                 case 'bank':
                     // initialise
                     symbolKind = vscode.SymbolKind.Class;
@@ -80,8 +78,8 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
                     isWithinFunctionOrMacro = false;
 
                     // set name (append bank number)
-                    symbolName = firstKeyword;
-                    if (keywords[0].length > 1) { symbolName += ` ${keywords[1]}`;} 
+                    symbolName = mainKeyword;
+                    if (keywords[0].length > 1) { symbolName += ` ${keywords[1]}`; }
 
                     // reset container to root?
                     while (containers.length > 0) {
@@ -111,18 +109,18 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
                     break;
                 case 'end':
                     // careful of order here - asm can be within a function/macro
-                    if (isWithinAsm) { 
-                        isWithinAsm = false; 
-                        break; 
+                    if (isWithinAsm) {
+                        isWithinAsm = false;
+                        break;
                     }
-                    if (isWithinData) { 
-                        isWithinData = false; 
-                        break; 
+                    if (isWithinData) {
+                        isWithinData = false;
+                        break;
                     }
-                    if (isWithinFunctionOrMacro) { 
+                    if (isWithinFunctionOrMacro) {
                         isWithinFunctionOrMacro = false;
-                        containers.pop(); 
-                        break; 
+                        containers.pop();
+                        break;
                     }
                     break;
                 case 'asm':
@@ -134,7 +132,8 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
                     if (keywords.length >= 2) {
                         // initialise
                         symbolName = keywords[1];
-                        symbolDetail = `() ${firstKeyword}`;
+                        // append function or macro tag
+                        symbolDetail = `() ${mainKeyword}`;
                         symbolKind = vscode.SymbolKind.Function;
                         isWithinFunctionOrMacro = true;
                         isContainer = true;
@@ -148,16 +147,16 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
                     break;
                 case 'return':
                     // inside function or macro?
-                    if (isWithinMethod || isWithinFunctionOrMacro) { 
+                    if (isWithinMethod || isWithinFunctionOrMacro) {
                         // reset
                         containers.pop();
                         isWithinMethod = false;
-                        isWithinFunctionOrMacro = false; 
+                        isWithinFunctionOrMacro = false;
                     }
                     break;
                 case 'dmahole':
                     // do nothing for now
-                    break;                
+                    break;
                 default:
                     // validate
                     // anything indented at this point does not get processed
@@ -166,16 +165,16 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
                     if (isWithinData || isWithinAsm) { continue; }
 
                     // initialise
-                    let isSubMethod:boolean = firstKeyword.startsWith('_');
+                    let isSubMethod: boolean = mainKeyword.startsWith('_');
                     isContainer = !isSubMethod;
-                    symbolName = keywords[0];  
+                    symbolName = keywords[0];
                     // method or sub-function within method)
                     symbolKind = (isSubMethod ? vscode.SymbolKind.Field : vscode.SymbolKind.Method);
                     if (isSubMethod) { symbolDetail = 'sub'; }
 
                     // are we already in a method (and not a sub-method)
-                    if (isContainer && (isWithinMethod || isWithinFunctionOrMacro)) { containers.pop(); } 
-                    
+                    if (isContainer && (isWithinMethod || isWithinFunctionOrMacro)) { containers.pop(); }
+
                     // set
                     isWithinMethod = true;
                     isWithinFunctionOrMacro = false;
@@ -197,10 +196,9 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
                 // add to store
                 if (containers.length > 0) {
                     // child
-                    containers[containers.length-1].children.push(symbol);
+                    containers[containers.length - 1].children.push(symbol);
                 }
-                else
-                {
+                else {
                     // parent
                     symbols.push(symbol);
                 }
@@ -208,7 +206,7 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
                 // is this a container?
                 if (isContainer) { containers.push(symbol); }
             }
-            
+
         }
 
         // return result

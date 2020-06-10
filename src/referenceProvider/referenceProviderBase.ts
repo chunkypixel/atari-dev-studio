@@ -26,7 +26,7 @@ export abstract class ReferenceProviderBase implements vscode.ReferenceProvider 
         if (!wordRange) { return undefined; }
 
         // get selected word
-        let word = document.getText(wordRange)?.toLowerCase();
+        let word = document.getText(wordRange);
         if (!word) { return undefined;}
 
         // process
@@ -37,21 +37,28 @@ export abstract class ReferenceProviderBase implements vscode.ReferenceProvider 
 
             // get line
 			let lineText:string = line.text
-			.slice(line.firstNonWhitespaceCharacterIndex)
-            .replace('\t', ' ');
+			.slice(line.firstNonWhitespaceCharacterIndex);
 
             // get keywords
-            let keywords:string[] = lineText.split(' ');
+            let keywords: string[] = lineText.split(/[\s\t]+/);
             if (keywords.length < 0) { continue; }
 
             // validate
             for (var keywordIndex = 0; keywordIndex < keywords.length; keywordIndex++) {
                 // Prepare
-                var keyword = keywords[keywordIndex].toLowerCase();
-                if (keyword.startsWith(';') || keyword.startsWith('rem') || keyword.startsWith('/*')) { break; }
+                var keyword = keywords[keywordIndex];
+                //if (keyword.startsWith(';') || keyword.startsWith('rem') || keyword.startsWith('/*') || keyword.startsWith('*/')) { break; }
                 
                 // match?
                 if (keyword.startsWith(word)) {
+                    // validate length
+                    if (keyword.length > word.length) {
+                        // is next character a letter? if so not a full match
+                        // we need to verify this to get exact matches where line is NOT spaced between fields
+                        let char = keyword.substring(word.length, word.length + 1);
+                        if (char !== '=' && char !== ':' && char !== '[' && char !== '{' && char !== '(') { break; }
+                    }
+
                     // position of word on line
                     let wordIndex = line.text.indexOf(keywords[keywordIndex]);
                     if (wordIndex < 0) { wordIndex = 0; }
@@ -66,5 +73,9 @@ export abstract class ReferenceProviderBase implements vscode.ReferenceProvider 
         // return
         return definitions;
     }
+    
+    // export function regexAnyReferenceForWord(searchWord: string): RegExp {
+    //     return new RegExp('^([^"]*)\\b' + searchWord + '\\b');
+    // }
     
 }

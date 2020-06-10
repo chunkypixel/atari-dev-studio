@@ -48,17 +48,16 @@ class DocumentSymbolProviderBase {
             }
             // get line
             let lineText = line.text
-                .slice(line.firstNonWhitespaceCharacterIndex)
-                .replace('\t', ' ');
+                .slice(line.firstNonWhitespaceCharacterIndex);
             // get keywords
-            let keywords = lineText.split(' ');
+            // just get the first 3 to increase speed (<mainkeyword><space><secondarykeyword>)
+            let keywords = lineText.split(/[\s\t]+/, 3);
             if (keywords.length < 0) {
                 continue;
             }
-            // get first keyword
-            let firstKeyword = keywords[0].toLowerCase();
+            let mainKeyword = keywords[0].toLowerCase();
             // validation - rem
-            if (firstKeyword.startsWith(';') || firstKeyword.startsWith('rem') || firstKeyword.startsWith('/*') || firstKeyword.startsWith('*/')) {
+            if (mainKeyword.startsWith(';') || mainKeyword.startsWith('rem')) {
                 continue;
             }
             // prepare
@@ -67,7 +66,7 @@ class DocumentSymbolProviderBase {
             let symbolName = '';
             let symbolDetail = '';
             // Symbols
-            switch (firstKeyword) {
+            switch (mainKeyword) {
                 case 'bank':
                     // initialise
                     symbolKind = vscode.SymbolKind.Class;
@@ -77,7 +76,7 @@ class DocumentSymbolProviderBase {
                     isWithinAsm = false;
                     isWithinFunctionOrMacro = false;
                     // set name (append bank number)
-                    symbolName = firstKeyword;
+                    symbolName = mainKeyword;
                     if (keywords[0].length > 1) {
                         symbolName += ` ${keywords[1]}`;
                     }
@@ -131,7 +130,8 @@ class DocumentSymbolProviderBase {
                     if (keywords.length >= 2) {
                         // initialise
                         symbolName = keywords[1];
-                        symbolDetail = `() ${firstKeyword}`;
+                        // append function or macro tag
+                        symbolDetail = `() ${mainKeyword}`;
                         symbolKind = vscode.SymbolKind.Function;
                         isWithinFunctionOrMacro = true;
                         isContainer = true;
@@ -165,7 +165,7 @@ class DocumentSymbolProviderBase {
                         continue;
                     }
                     // initialise
-                    let isSubMethod = firstKeyword.startsWith('_');
+                    let isSubMethod = mainKeyword.startsWith('_');
                     isContainer = !isSubMethod;
                     symbolName = keywords[0];
                     // method or sub-function within method)
