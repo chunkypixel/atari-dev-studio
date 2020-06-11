@@ -114,7 +114,7 @@ This extension is only available due to the great people of the AtariAge communi
 * dasm - the many contibutors
 * Stella emulator - Stephen Anthony (stephena)
 * A7800 emulator - Mike Saarna (RevEng) and Robert Tuccitto (Trebor)
-* The AtariAge community including Albert, CPUWiz, Random Terrain, Trebor, Synthpopalooza, sramirez2008, Defender_2600 Gemintronic, Karl G, ZeroPage Homebrew, Muddyfunster, TwentySixHundred, Lillapojkenpåön, Andrew Davie, splendidnut, andyjp, sexyUnderwriter, MikeBrownEmplas, Generation2Games, cwieland
+* The AtariAge community including Albert, CPUWiz, Random Terrain, Trebor, Synthpopalooza, sramirez2008, Defender_2600 Gemintronic, Karl G, ZeroPage Homebrew, Muddyfunster, TwentySixHundred, Lillapojkenpåön, Andrew Davie, splendidnut, andyjp, sexyUnderwriter, MikeBrownEmplas, Generation2Games, cwieland, slacker
 * Mats Engstrom (SmallRoomLabs)
 
 ## Languages

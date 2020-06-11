@@ -7,6 +7,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 * Updated A7800 to 4.0 (Windows, Linux, macOS)
 * Added document outline for batari Basic and 7800basic
 * Added Go to Definition and Go to References features for batari Basic and 7800basic
+* Added missing batari Basic keywords: missile0height, missile1height (slacker)
 
 ## 0.5.4
 
