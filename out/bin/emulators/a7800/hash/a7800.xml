@@ -20,22 +20,7 @@
 		</part>
 	</software>
 
-<!-- Chip adding 128K of RAM + POKEY onboard -->
-	<software name="xboard">
-		<description>XBoarD Expansion</description>
-		<year>2005</year>
-		<publisher>&lt;homebrew&gt;</publisher>
-		<part name="cart" interface="a7800_cart">
-			<feature name="slot" value="a78_xboard" />
-			<dataarea name="rom" size="1">
-				<!-- this entry behaves just as passthrough, even if in fact the chips shall be socketed on the PCB! -->
-			</dataarea>
-			<dataarea name="ram" size="131072">
-			</dataarea>
-		</part>
-	</software>
-
-<!-- Chip adding 128K of RAM + POKEY + HighScore onboard -->
+<!-- Unit adding 128K of RAM + POKEY + YM2151 + HighScore onboard -->
 	<software name="xm">
 		<description>XM Expansion Module</description>
 		<year>20XX</year>

@@ -143,13 +143,20 @@ Stella is a multi-platform Atari 2600 VCS emulator released under the GNU Genera
 
 Stella is included as part of this extension with many thanks to Stephen Anthony. Stella is an external project and can be downloaded separately [here](https://stella-emu.github.io). If you enjoy using Stella place consider [donating](https://stella-emu.github.io/donations.html) to ensure it's continued development.
 
-### A7800 (release 188-03)
+### A7800 (release 4.0 = 20200610)
 A7800 is a fork of the MAME Atari 7800 driver, with several enhancements added:
 * Support for emulation of Proline Joysticks, VCS Joysticks, Lightguns, Paddles, Driving Controllers, Keypads, Trak-Balls, Amiga Mice, and ST Mice.
 * Maria DMA timing has been improved further, with the addition of accurate DMA hole penalties.
 * Improved saturated/normalized colors with palette selection.
 * Streamlined UI including menu options to have an Atari 7800 system focus.
 * A bug in the existing RIOT emulation has been fixed.
-* MAME compatibility and syntax has been maintained, to allow for the reuse of MAME configuration files and front-ends.
+* POKEY sound emulation improvements.
+* SALLY (CPU) and MARIA (Graphics chip) performance adjustments.
+* Framerate updated to 50Hz/60Hz.
+* Audio indication of no ROM loaded silenced.
+* BIOS files no longer required and made optional.
+* Implementation of XM control registers updated.
 
-A7800 is included as part of this extension with many thanks to Mike Saarna (RevEng). A7800 is an external project and can be downloaded separately [here](http://7800.8bitdev.org/index.php/Emulators_and_Tools).
+MAME compatibility and syntax has been maintained, to allow for the reuse of MAME configuration files and front-ends.
+
+A7800 is included as part of this extension with many thanks to Mike Saarna (RevEng). A7800 is an external project and can be downloaded separately [here](http://7800.8bitdev.org/index.php/A7800_Emulator). Further information about this release is available here at [AtariAge](https://atariage.com/forums/topic/268458-a7800-the-atari-7800-emulator).

@@ -63,10 +63,10 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
                     // Prepare
                     let architecture = "Linux";
                     if (application.IsMacOS) {
-                        architecture = "OSX";
+                        architecture = "Darwin";
                     }
                     // Set
-                    this.FolderOrPath = path.join(this.FolderOrPath, `a7800.${architecture}-x86_64`);
+                    this.FolderOrPath = path.join(this.FolderOrPath, `a7800.${architecture}`);
                 }
             }
             // Emulator (Other)
