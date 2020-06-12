@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.HoverBase = void 0;
 const vscode = require("vscode");
 const path = require("path");
 const filesystem = require("../filesystem");

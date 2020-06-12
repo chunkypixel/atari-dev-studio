@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Spawn = exports.KillSpawnProcess = exports.KillProcessById = exports.KillProcessByNameAsync = void 0;
 const application = require("./application");
 const cp = require("child_process");
 const find = require("find-process");

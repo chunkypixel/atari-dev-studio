@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SeventyEightHundredBasicFolding = void 0;
 const foldingBase_1 = require("./foldingBase");
 class SeventyEightHundredBasicFolding extends foldingBase_1.FoldingBase {
     constructor() {

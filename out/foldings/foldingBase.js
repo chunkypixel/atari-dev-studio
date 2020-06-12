@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.FoldingBase = void 0;
 const vscode = require("vscode");
 class FoldingBase {
     constructor(id, regionStartRegEx, regionEndRegEx) {

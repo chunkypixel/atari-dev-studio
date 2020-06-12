@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.WorkspaceFolder = exports.WriteFileAsync = exports.ReadFileAsync = exports.ChModAsync = exports.MkDirAsync = exports.FolderExistsAsync = exports.RemoveFileAsync = exports.GetFileStatsAsync = exports.RenameFileAsync = exports.FileExistsAsync = exports.IsRunFromExplorer = exports.GetDocumentAsync = exports.GetFileUriAsync = void 0;
 const vscode = require("vscode");
 const application = require("./application");
 const fs = require("fs");

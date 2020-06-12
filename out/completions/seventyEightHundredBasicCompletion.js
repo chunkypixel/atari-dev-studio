@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SeventyEightHundredBasicCompletion = void 0;
 const vscode = require("vscode");
 const completionBase_1 = require("./completionBase");
 class SeventyEightHundredBasicCompletion extends completionBase_1.CompletionBase {

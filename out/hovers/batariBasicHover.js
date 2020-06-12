@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BatariBasicHover = void 0;
 const hoverBase_1 = require("./hoverBase");
 class BatariBasicHover extends hoverBase_1.HoverBase {
     constructor() {

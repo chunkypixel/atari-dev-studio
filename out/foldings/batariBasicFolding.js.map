@@ -1,1 +1,1 @@
-{"version":3,"file":"batariBasicFolding.js","sourceRoot":"","sources":["../../src/foldings/batariBasicFolding.ts"],"names":[],"mappings":"AAAA,YAAY,CAAC;;AACb,+CAA4C;AAE5C,MAAa,kBAAmB,SAAQ,yBAAW;IAE/C;QACI,KAAK,CAAC,aAAa,EAAE,0BAA0B,EAAE,mBAAmB,CAAC,CAAC;IAC1E,CAAC;CACJ;AALD,gDAKC"}
+{"version":3,"file":"batariBasicFolding.js","sourceRoot":"","sources":["../../src/foldings/batariBasicFolding.ts"],"names":[],"mappings":"AAAA,YAAY,CAAC;;;AACb,+CAA4C;AAE5C,MAAa,kBAAmB,SAAQ,yBAAW;IAE/C;QACI,KAAK,CAAC,aAAa,EAAE,0BAA0B,EAAE,mBAAmB,CAAC,CAAC;IAC1E,CAAC;CACJ;AALD,gDAKC"}

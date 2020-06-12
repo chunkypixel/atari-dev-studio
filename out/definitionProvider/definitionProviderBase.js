@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.DefinitionProviderBase = void 0;
 const vscode = require("vscode");
 class DefinitionProviderBase {
     constructor(id) {
