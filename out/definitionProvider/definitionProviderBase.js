@@ -90,7 +90,8 @@ class DefinitionProviderBase {
             }
             else {
                 // validate method
-                if (mainKeyword === word) {
+                // Ensure we compare actual case
+                if (keywords[0] === word) {
                     // store
                     definitions.push(new vscode.Location(document.uri, new vscode.Position(lineIndex, 0)));
                 }
