@@ -158,15 +158,23 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
                     // initialise
                     symbolKind = vscode.SymbolKind.Null;
                     isContainer = false;
-                    isWithinMethod = false;
                     isWithinData = false;
                     isWithinAsm = false;
-                    isWithinFunctionOrMacro = false;
 
                     // set name (append hole number and noflow)
                     symbolName = mainKeyword;
                     if (keywords[0].length > 1) { symbolName += ` ${keywords[1]}`; }
                     if (keywords[0].length > 2) { symbolDetail = keywords[2]; }
+                    
+                    // inside function or macro?
+                    if (isWithinMethod || isWithinFunctionOrMacro) {
+                        // reset
+                        containers.pop();
+                    }
+
+                    // reset
+                    isWithinMethod = false;
+                    isWithinFunctionOrMacro = false;
                     break;
                 default:
                     // validate
