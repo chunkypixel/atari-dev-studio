@@ -153,7 +153,21 @@ class DocumentSymbolProviderBase {
                     }
                     break;
                 case 'dmahole':
-                    // do nothing for now
+                    // initialise
+                    symbolKind = vscode.SymbolKind.Null;
+                    isContainer = false;
+                    isWithinMethod = false;
+                    isWithinData = false;
+                    isWithinAsm = false;
+                    isWithinFunctionOrMacro = false;
+                    // set name (append hole number and noflow)
+                    symbolName = mainKeyword;
+                    if (keywords[0].length > 1) {
+                        symbolName += ` ${keywords[1]}`;
+                    }
+                    if (keywords[0].length > 2) {
+                        symbolDetail = keywords[2];
+                    }
                     break;
                 default:
                     // validate

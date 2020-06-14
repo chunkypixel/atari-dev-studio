@@ -30,3 +30,8 @@ npm start
 Compiling webpackage source manually
 -----------------------------------
 npm run build
+
+
+A7800 4.0 Blurry Fix
+--------------------
+https://atariage.com/forums/topic/307889-a7800-40-release/?do=findComment&comment=4561680
