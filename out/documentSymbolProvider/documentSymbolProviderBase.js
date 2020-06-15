@@ -26,6 +26,7 @@ class DocumentSymbolProviderBase {
         // prepare
         let symbols = [];
         let containers = [];
+        let isWithinBank = false;
         let isWithinMethod = false;
         let isWithinData = false;
         let isWithinAsm = false;
@@ -72,6 +73,7 @@ class DocumentSymbolProviderBase {
                     // initialise
                     symbolKind = vscode.SymbolKind.Class;
                     isContainer = true;
+                    isWithinBank = true;
                     isWithinMethod = false;
                     isWithinData = false;
                     isWithinAsm = false;
@@ -158,6 +160,8 @@ class DocumentSymbolProviderBase {
                     isContainer = false;
                     isWithinData = false;
                     isWithinAsm = false;
+                    isWithinMethod = false;
+                    isWithinFunctionOrMacro = false;
                     // set name (append hole number and noflow)
                     symbolName = mainKeyword;
                     if (keywords[0].length > 1) {
@@ -166,14 +170,10 @@ class DocumentSymbolProviderBase {
                     if (keywords[0].length > 2) {
                         symbolDetail = keywords[2];
                     }
-                    // inside function or macro?
-                    if (isWithinMethod || isWithinFunctionOrMacro) {
-                        // reset
+                    // reset container to root?
+                    while (containers.length > (isWithinBank ? 1 : 0)) {
                         containers.pop();
                     }
-                    // reset
-                    isWithinMethod = false;
-                    isWithinFunctionOrMacro = false;
                     break;
                 default:
                     // validate
@@ -196,7 +196,9 @@ class DocumentSymbolProviderBase {
                     }
                     // are we already in a method (and not a sub-method)
                     if (isContainer && (isWithinMethod || isWithinFunctionOrMacro)) {
-                        containers.pop();
+                        while (containers.length > (isWithinBank ? 1 : 0)) {
+                            containers.pop();
+                        }
                     }
                     // set
                     isWithinMethod = true;

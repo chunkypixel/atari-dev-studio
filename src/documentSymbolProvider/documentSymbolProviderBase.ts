@@ -20,6 +20,7 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
         // prepare
         let symbols: vscode.DocumentSymbol[] = [];
         let containers: vscode.DocumentSymbol[] = [];
+        let isWithinBank = false;
         let isWithinMethod = false;
         let isWithinData = false;
         let isWithinAsm = false;
@@ -72,6 +73,7 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
                     // initialise
                     symbolKind = vscode.SymbolKind.Class;
                     isContainer = true;
+                    isWithinBank = true;
                     isWithinMethod = false;
                     isWithinData = false;
                     isWithinAsm = false;
@@ -160,21 +162,18 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
                     isContainer = false;
                     isWithinData = false;
                     isWithinAsm = false;
+                    isWithinMethod = false;
+                    isWithinFunctionOrMacro = false;
 
                     // set name (append hole number and noflow)
                     symbolName = mainKeyword;
                     if (keywords[0].length > 1) { symbolName += ` ${keywords[1]}`; }
                     if (keywords[0].length > 2) { symbolDetail = keywords[2]; }
                     
-                    // inside function or macro?
-                    if (isWithinMethod || isWithinFunctionOrMacro) {
-                        // reset
+                    // reset container to root?
+                    while (containers.length > (isWithinBank ? 1 : 0)) {
                         containers.pop();
                     }
-
-                    // reset
-                    isWithinMethod = false;
-                    isWithinFunctionOrMacro = false;
                     break;
                 default:
                     // validate
@@ -192,7 +191,12 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
                     if (isSubMethod) { symbolDetail = 'sub'; }
 
                     // are we already in a method (and not a sub-method)
-                    if (isContainer && (isWithinMethod || isWithinFunctionOrMacro)) { containers.pop(); }
+                    if (isContainer && (isWithinMethod || isWithinFunctionOrMacro)) 
+                    { 
+                        while (containers.length > (isWithinBank ? 1 : 0)) {
+                            containers.pop();
+                        }
+                    }
 
                     // set
                     isWithinMethod = true;
