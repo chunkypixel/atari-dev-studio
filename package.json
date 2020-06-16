@@ -369,8 +369,7 @@
                     "enum": [
                         "Standard Console",
                         "High Score Cartridge",
-                        "XM Expansion Module",
-                        "XBoarD Expansion"
+                        "XM Expansion Module"
                     ],
                     "default": "Standard Console",
                     "description": "Specify the required console configuration:",
