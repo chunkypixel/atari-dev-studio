@@ -59,13 +59,14 @@ export abstract class DefinitionProviderBase implements vscode.DefinitionProvide
                         if (keyword === '=' || keyword.startsWith(';') || keyword.startsWith('rem')) { break; }
 
                         // match?
-                        if (keyword.startsWith(word)) {
+                        if (keyword.includes(word)) {
                             // validate length
-                            if (keyword.length > word.length) {
+                            if (keyword.length !== word.length) {
                                 // is next character a letter? if so not a full match
                                 // we need to verify this to get exact matches where line is NOT spaced between fields
-                                let char = keyword.substring(word.length, word.length + 1);
-                                if (char !== '=' && char !== ':' && char !== '[' && char !== '{' && char !== '(') { break; }
+                                let position = keyword.indexOf(word);
+                                let char = keyword.substring(position + word.length, position + word.length + 1);
+                                if (char !== '' && char !== '=' && char !== ':' && char !== '[' && char !== '{' && char !== '(') { break; }
                             }
 
                             // position of word on line

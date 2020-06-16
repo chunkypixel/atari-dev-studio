@@ -24,12 +24,15 @@ import { SeventyEightHundredBasicFolding } from './foldings/seventyEightHundredB
 import { DocumentSymbolProviderBase } from './documentSymbolProvider/documentSymbolProviderBase';
 import { SeventyEightHundredBasicDocumentSymbolProvider } from './documentSymbolProvider/seventyEightHundredBasicDocumentSymbolProvider';
 import { BatariBasicDocumentSymbolProvider } from './documentSymbolProvider/batariBasicDocumentSymbolProvider';
+import { DasmDocumentSymbolProvider } from './documentSymbolProvider/dasmDocumentSymbolProvider';
 import { DefinitionProviderBase } from './definitionProvider/definitionProviderBase';
 import { SeventyEightHundredBasicDefinitionProvider } from './definitionProvider/seventyEightHundredBasicDefinitionProvider';
 import { BatariBasicDefinitionProvider } from './definitionProvider/batariBasicDefinitionProvider';
+import { DasmDefinitionProvider } from './definitionProvider/dasmDefinitionProvider';
 import { ReferenceProviderBase } from './referenceProvider/referenceProviderBase';
 import { SeventyEightHundredBasicReferenceProvider } from './referenceProvider/seventyEightHundredBasicReferenceProvider';
 import { BatariBasicReferenceProvider } from './referenceProvider/batariBasicReferenceProvider';
+import { DasmReferenceProvider } from './referenceProvider/dasmReferenceProvider';
 
 // -------------------------------------------------------------------------------------
 // Operating System
@@ -149,7 +152,8 @@ export async function RegisterFoldingProvidersAsync(context: vscode.ExtensionCon
 
 export const DocumentSymbolProviders:DocumentSymbolProviderBase[] = [
 	new BatariBasicDocumentSymbolProvider(),
-	new SeventyEightHundredBasicDocumentSymbolProvider()
+	new SeventyEightHundredBasicDocumentSymbolProvider(),
+	new DasmDocumentSymbolProvider()
 ];
 
 export async function RegisterDocumentSymbolProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
@@ -165,7 +169,8 @@ export async function RegisterDocumentSymbolProvidersAsync(context: vscode.Exten
 
 export const DefinitionProviders:DefinitionProviderBase[] = [
 	new BatariBasicDefinitionProvider(),
-	new SeventyEightHundredBasicDefinitionProvider()
+	new SeventyEightHundredBasicDefinitionProvider(),
+	new DasmDefinitionProvider()
 ];
 
 export async function RegisterDefinitionProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
@@ -181,7 +186,8 @@ export async function RegisterDefinitionProvidersAsync(context: vscode.Extension
 
 export const ReferenceProviders:ReferenceProviderBase[] = [
 	new BatariBasicReferenceProvider(),
-	new SeventyEightHundredBasicReferenceProvider()
+	new SeventyEightHundredBasicReferenceProvider(),
+	new DasmReferenceProvider()
 ];
 
 export async function RegisterReferenceProvidersAsync(context: vscode.ExtensionContext): Promise<void> {

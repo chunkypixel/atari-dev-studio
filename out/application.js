@@ -29,10 +29,13 @@ const batariBasicFolding_1 = require("./foldings/batariBasicFolding");
 const seventyEightHundredBasicFolding_1 = require("./foldings/seventyEightHundredBasicFolding");
 const seventyEightHundredBasicDocumentSymbolProvider_1 = require("./documentSymbolProvider/seventyEightHundredBasicDocumentSymbolProvider");
 const batariBasicDocumentSymbolProvider_1 = require("./documentSymbolProvider/batariBasicDocumentSymbolProvider");
+const dasmDocumentSymbolProvider_1 = require("./documentSymbolProvider/dasmDocumentSymbolProvider");
 const seventyEightHundredBasicDefinitionProvider_1 = require("./definitionProvider/seventyEightHundredBasicDefinitionProvider");
 const batariBasicDefinitionProvider_1 = require("./definitionProvider/batariBasicDefinitionProvider");
+const dasmDefinitionProvider_1 = require("./definitionProvider/dasmDefinitionProvider");
 const seventyEightHundredBasicReferenceProvider_1 = require("./referenceProvider/seventyEightHundredBasicReferenceProvider");
 const batariBasicReferenceProvider_1 = require("./referenceProvider/batariBasicReferenceProvider");
+const dasmReferenceProvider_1 = require("./referenceProvider/dasmReferenceProvider");
 // -------------------------------------------------------------------------------------
 // Operating System
 // -------------------------------------------------------------------------------------
@@ -142,7 +145,8 @@ exports.RegisterFoldingProvidersAsync = RegisterFoldingProvidersAsync;
 // -------------------------------------------------------------------------------------
 exports.DocumentSymbolProviders = [
     new batariBasicDocumentSymbolProvider_1.BatariBasicDocumentSymbolProvider(),
-    new seventyEightHundredBasicDocumentSymbolProvider_1.SeventyEightHundredBasicDocumentSymbolProvider()
+    new seventyEightHundredBasicDocumentSymbolProvider_1.SeventyEightHundredBasicDocumentSymbolProvider(),
+    new dasmDocumentSymbolProvider_1.DasmDocumentSymbolProvider()
 ];
 function RegisterDocumentSymbolProvidersAsync(context) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -158,7 +162,8 @@ exports.RegisterDocumentSymbolProvidersAsync = RegisterDocumentSymbolProvidersAs
 // -------------------------------------------------------------------------------------
 exports.DefinitionProviders = [
     new batariBasicDefinitionProvider_1.BatariBasicDefinitionProvider(),
-    new seventyEightHundredBasicDefinitionProvider_1.SeventyEightHundredBasicDefinitionProvider()
+    new seventyEightHundredBasicDefinitionProvider_1.SeventyEightHundredBasicDefinitionProvider(),
+    new dasmDefinitionProvider_1.DasmDefinitionProvider()
 ];
 function RegisterDefinitionProvidersAsync(context) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -174,7 +179,8 @@ exports.RegisterDefinitionProvidersAsync = RegisterDefinitionProvidersAsync;
 // -------------------------------------------------------------------------------------
 exports.ReferenceProviders = [
     new batariBasicReferenceProvider_1.BatariBasicReferenceProvider(),
-    new seventyEightHundredBasicReferenceProvider_1.SeventyEightHundredBasicReferenceProvider()
+    new seventyEightHundredBasicReferenceProvider_1.SeventyEightHundredBasicReferenceProvider(),
+    new dasmReferenceProvider_1.DasmReferenceProvider()
 ];
 function RegisterReferenceProvidersAsync(context) {
     return __awaiter(this, void 0, void 0, function* () {

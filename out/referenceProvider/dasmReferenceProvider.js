@@ -1,27 +1,12 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ReferenceProviderBase = void 0;
+exports.DasmReferenceProvider = void 0;
 const vscode = require("vscode");
-class ReferenceProviderBase {
-    constructor(id) {
-        this.Id = id;
+const referenceProviderBase_1 = require("./referenceProviderBase");
+class DasmReferenceProvider extends referenceProviderBase_1.ReferenceProviderBase {
+    constructor() {
+        super("dasm");
     }
-    RegisterAsync(context) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // Complete registration
-            vscode.languages.registerReferenceProvider(this.Id, this);
-        });
-    }
-    // Used for both 7800basic and batariBasic
     provideReferences(document, position, context, token) {
         // prepare
         let definitions = [];
@@ -37,9 +22,8 @@ class ReferenceProviderBase {
         }
         // process
         for (var lineIndex = 0; lineIndex < document.lineCount; lineIndex++) {
-            // get
-            let line = document.lineAt(lineIndex);
             // validate
+            let line = document.lineAt(lineIndex);
             if (line.isEmptyOrWhitespace) {
                 continue;
             }
@@ -57,13 +41,13 @@ class ReferenceProviderBase {
                 var keyword = keywords[keywordIndex];
                 // match?
                 if (keyword.includes(word)) {
-                    // validate length
                     if (keyword.length !== word.length) {
                         // is next character a letter? if so not a full match
                         // we need to verify this to get exact matches where line is NOT spaced between fields
                         let position = keyword.indexOf(word);
                         let char = keyword.substring(position + word.length, position + word.length + 1);
-                        if (char !== '' && char !== '=' && char !== ':' && char !== '[' && char !== '{' && char !== '(') {
+                        if (char !== '' && char !== '=' && char !== ',' && char !== '(' && char !== ')' &&
+                            char !== '/' && char !== '*' && char !== '+' && char !== '-') {
                             break;
                         }
                     }
@@ -81,5 +65,5 @@ class ReferenceProviderBase {
         return definitions;
     }
 }
-exports.ReferenceProviderBase = ReferenceProviderBase;
-//# sourceMappingURL=referenceProviderBase.js.map
+exports.DasmReferenceProvider = DasmReferenceProvider;
+//# sourceMappingURL=dasmReferenceProvider.js.map

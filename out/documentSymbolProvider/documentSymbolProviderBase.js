@@ -27,7 +27,7 @@ class DocumentSymbolProviderBase {
         let symbols = [];
         let containers = [];
         let isWithinBank = false;
-        let isWithinMethod = false;
+        let isWithinLabel = false;
         let isWithinData = false;
         let isWithinAsm = false;
         let isWithinFunctionOrMacro = false;
@@ -74,13 +74,13 @@ class DocumentSymbolProviderBase {
                     symbolKind = vscode.SymbolKind.Class;
                     isContainer = true;
                     isWithinBank = true;
-                    isWithinMethod = false;
+                    isWithinLabel = false;
                     isWithinData = false;
                     isWithinAsm = false;
                     isWithinFunctionOrMacro = false;
                     // set name (append bank number)
                     symbolName = mainKeyword;
-                    if (keywords[0].length > 1) {
+                    if (keywords.length > 1) {
                         symbolName += ` ${keywords[1]}`;
                     }
                     // reset container to root?
@@ -88,18 +88,18 @@ class DocumentSymbolProviderBase {
                         containers.pop();
                     }
                     break;
-                case 'dim':
-                    // enable this to show variables
-                    //symbolName = keywords[1];
-                    //symbolKind = vscode.SymbolKind.Variable;
-                    //isContainer = false;
-                    break;
-                case 'const':
-                    // enable this to show consts
-                    //symbolName = keywords[1];
-                    //symbolKind = vscode.SymbolKind.Constant;
-                    //isContainer = false;
-                    break;
+                // case 'dim':
+                //     // enable this to show variables
+                //     symbolName = keywords[1];
+                //     symbolKind = vscode.SymbolKind.Variable;
+                //     isContainer = false;
+                //     break;
+                // case 'const':
+                //     // enable this to show consts
+                //     symbolName = keywords[1];
+                //     symbolKind = vscode.SymbolKind.Constant;
+                //     isContainer = false;
+                //     break;
                 case 'data':
                 case 'sdata':
                 case 'alphadata':
@@ -134,23 +134,23 @@ class DocumentSymbolProviderBase {
                         // initialise
                         symbolName = keywords[1];
                         // append function or macro tag
-                        symbolDetail = `() ${mainKeyword}`;
+                        symbolDetail = `${mainKeyword}`;
                         symbolKind = vscode.SymbolKind.Function;
                         isWithinFunctionOrMacro = true;
                         isContainer = true;
-                        // is in method?
-                        if (isWithinMethod) {
+                        // inside label?
+                        if (isWithinLabel) {
                             containers.pop();
-                            isWithinMethod = false;
+                            isWithinLabel = false;
                         }
                     }
                     break;
                 case 'return':
                     // inside function or macro?
-                    if (isWithinMethod || isWithinFunctionOrMacro) {
+                    if (isWithinLabel || isWithinFunctionOrMacro) {
                         // reset
                         containers.pop();
-                        isWithinMethod = false;
+                        isWithinLabel = false;
                         isWithinFunctionOrMacro = false;
                     }
                     break;
@@ -160,7 +160,7 @@ class DocumentSymbolProviderBase {
                     isContainer = false;
                     isWithinData = false;
                     isWithinAsm = false;
-                    isWithinMethod = false;
+                    isWithinLabel = false;
                     isWithinFunctionOrMacro = false;
                     // set name (append hole number and noflow)
                     symbolName = mainKeyword;
@@ -178,7 +178,7 @@ class DocumentSymbolProviderBase {
                 default:
                     // validate
                     // anything indented at this point does not get processed
-                    if (line.text.startsWith(' ')) {
+                    if (line.text.startsWith(' ') || line.text.startsWith('\t')) {
                         continue;
                     }
                     // is within data or asm? if so skip
@@ -186,22 +186,22 @@ class DocumentSymbolProviderBase {
                         continue;
                     }
                     // initialise
-                    let isSubMethod = mainKeyword.startsWith('_');
-                    isContainer = !isSubMethod;
+                    let isSubLabel = mainKeyword.startsWith('_');
+                    isContainer = !isSubLabel;
                     symbolName = keywords[0];
-                    // method or sub-function within method)
-                    symbolKind = (isSubMethod ? vscode.SymbolKind.Field : vscode.SymbolKind.Method);
-                    if (isSubMethod) {
+                    // label or sub-label within label)
+                    symbolKind = (isSubLabel ? vscode.SymbolKind.Field : vscode.SymbolKind.Method);
+                    if (isSubLabel) {
                         symbolDetail = 'sub';
                     }
-                    // are we already in a method (and not a sub-method)
-                    if (isContainer && (isWithinMethod || isWithinFunctionOrMacro)) {
+                    // inside label (and not a sub-label)
+                    if (isContainer && (isWithinLabel || isWithinFunctionOrMacro)) {
                         while (containers.length > (isWithinBank ? 1 : 0)) {
                             containers.pop();
                         }
                     }
                     // set
-                    isWithinMethod = true;
+                    isWithinLabel = true;
                     isWithinFunctionOrMacro = false;
                     isWithinData = false;
                     isWithinAsm = false;
