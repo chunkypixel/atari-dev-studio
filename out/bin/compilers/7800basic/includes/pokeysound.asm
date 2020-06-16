@@ -160,10 +160,14 @@ schedulepokeyX
 
 detectpokeylocation
          ;XBoard/XM...
-         lda #%00011100
-         sta $470 ; tell XCTRL to hit the POKEY enable
-         ldx #1
+         ldx #2
 detectpokeyloop
+         lda XCTRL1s
+         ora #%00010100
+         and POKEYXMMASK,x
+         sta XCTRL1s
+         sta XCTRL1
+
          lda POKEYCHECKLO,x
          sta pokeybaselo
          lda POKEYCHECKHI,x
@@ -178,10 +182,14 @@ foundpokeychip
          sta pokeydetected
          rts
 
+POKEYXMMASK
+         ;     XM POKEY on    XM POKEY off   XM POKEY off
+         .byte %11111111,     %11101111,     %11101111
+
 POKEYCHECKLO
-	.byte <$4000, <$0450
+	.byte <$0450, <$0450, <$4000
 POKEYCHECKHI
-	.byte >$4000, >$0450
+	.byte >$0450, >$0450, >$4000
 
 checkforpokey
          ldy #$0f

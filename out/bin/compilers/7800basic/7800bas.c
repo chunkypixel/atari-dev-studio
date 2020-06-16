@@ -11,7 +11,9 @@
 char stdoutfilename[256];
 FILE *stdoutfilepointer;
 
-#define BASIC_VERSION_INFO "7800basic v0.9"
+extern int currentdmahole;
+
+#define BASIC_VERSION_INFO "7800basic v0.10"
 
 int main(int argc, char *argv[])
 {
@@ -117,6 +119,9 @@ int main(int argc, char *argv[])
 	prerror("couldn't create the 7800.asm file.");
     }
 
+    remove("7800hole.0.asm");
+    remove("7800hole.1.asm");
+    remove("7800hole.2.asm");
 
     create_a78info();		//wipe/create a78 parameter file
 
@@ -243,6 +248,8 @@ int main(int argc, char *argv[])
 
 	keywords(statement);
     }
+
+    printf("DMAHOLEEND%d SET .\n",currentdmahole);
 
     //if stdout is redirected, change it back to 7800.asm so the gameend label goes in the right spot...
     if (strcmp(stdoutfilename, "7800.asm") != 0)

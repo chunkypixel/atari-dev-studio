@@ -221,15 +221,6 @@ savescreenrts
      rts
 
 drawscreen
-     ifconst SPRITECOUNTING
-         lda spritecount
-         cmp maxspritecount
-         bcc skipspritecountsave
-         sta maxspritecount
-skipspritecountsave
-         lda #0
-         sta spritecount
-     endif ; SPRITECOUNTING
 
      lda #0
      sta temp1 ; not B&W if we're here...
@@ -465,7 +456,7 @@ avoxsilentdata
 
 joybuttonhandler
      txa
-     lsr
+     asl
      tay
      lda INPT0,y
      lsr
@@ -473,6 +464,7 @@ joybuttonhandler
      lda INPT1,y
      and #%10000000
      ora sINPT1,x
+     ;eor genesisdetected0,x ; invert INPT1 if genesis is detected
      sta sINPT1,x
 
      lda INPT4,x
@@ -594,11 +586,6 @@ servicesfxchannelsloop
      lda sfx1pointhi,x
      sta inttemp6
 
-     lda sfx1tick,x
-     beq servicesfx_cont1 ; this chunk is over, load the next!
-     dec sfx1tick,x ; frame countdown is non-zero, subtract one
-     lda palfastframe
-     beq servicesfxchannelsloop
      lda sfx1tick,x
      beq servicesfx_cont1 ; this chunk is over, load the next!
      dec sfx1tick,x ; frame countdown is non-zero, subtract one
@@ -770,10 +757,6 @@ skipdrumkitoverride
      rts
 
 plotsprite
-     ifconst SPRITECOUNTING
-         inc spritecount
-     endif
-
  ifconst DOUBLEBUFFER
      lda doublebufferstate
      bne skipplotspritewait
@@ -1072,9 +1055,6 @@ plotcharloopcontinue
      jmp plotcharlooploop
 
 plotcharacters
-     ifconst SPRITECOUNTING
-         inc spritecount
-     endif
  ifconst DOUBLEBUFFER
      lda doublebufferstate
      bne skipplotcharacterswait

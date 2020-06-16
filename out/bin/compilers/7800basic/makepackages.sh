@@ -19,7 +19,7 @@ make dist
 rm -fr packages
 mkdir -p packages/7800basic 2>/dev/null
 
-rm -f samples/*/*.a78 samples/*/*.bin samples/*/*.asm samples/*/*.txt samples/*/*.cfg samples/*/*.h samples/*/includes.7800
+rm -f samples/*/*.a78 samples/*/*.bin samples/*/*bas.asm samples/*/*.txt samples/*/*.cfg samples/*/*.h samples/*/includes.7800
 rm -fr samples/*/cfg samples/*/nvram
 
 #populate architecture neutral stuff into the dist directory

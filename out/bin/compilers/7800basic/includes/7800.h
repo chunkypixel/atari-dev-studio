@@ -127,6 +127,11 @@ TIM64TI  = $29E    ;Interrupt timer 64T                          write-only
 
 ;XM
 XCTRL    = $470    ; 7=YM2151 6=RAM@6k 5=RAM@4k 4=pokey@450 3=hsc 2=cart 1=RoF_bank1 0=RoF_bank2
+XCTRL1    = $470
+XCTRL2    = $478
+XCTRL3    = $47c
+XCTRL4    = $471
+XCTRL5    = $472
 
 ; Pokey register relative locations, since its base may be different
 ; depending on the hardware.

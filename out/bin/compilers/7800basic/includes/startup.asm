@@ -132,6 +132,9 @@ pndetecispal
 
      jsr vblankresync
 
+     lda #%00000100 ; leave cartridge plugged in for any testing
+     sta XCTRL1s
+
      ifconst pokeysupport
          ; pokey support is compiled in, so try to detect it...
          jsr detectpokeylocation
@@ -141,11 +144,6 @@ pndetecispal
      sta port0control
      sta port1control
 
-     ;max sprites displayed in any one frame before drawscreen is called...
-     lda #0
-     sta maxspritecount 
-
- 
      ;Setup port A to read mode
      ;lda #$00
      ;sta SWCHA
@@ -178,9 +176,51 @@ storeAinhsdevice
          jsr silenceavoxvoice
      endif
 
+     ifconst SGRAM
+         ; check if we actually have SGRAM. If not, probe XM for it...
+         ldy #$EA
+         sty $4000
+         ldy $4000
+         cpy #$EA
+         beq skipSGRAMcheck
+             lda XCTRL1s
+             ora #%01100100
+             sta XCTRL1
+             sty $4000
+             ldy $4000
+             cpy #$EA
+             bne skipSGRAMcheck
+                 ;if we're here, XM memory satisfied our RAM requirement
+                 sta XCTRL1s ; save it
+                 lda #$10
+                 sta XCTRL2
+                 sta XCTRL3
+skipSGRAMcheck
+     endif
+
+ ifconst TURNEDOFF
+     ldx #1
+     ldy #3
+joystickdetectloop
+     jsr setonebuttonmode
+     ; ensure we're in one-button mode and check for a genesis controller
+     lda INPT0,y
+     and #$80
+     sta genesisdetected0,x
+     bne skipsetgenesistwobutton
+skipsetgenesis
+     jsr settwobuttonmode
+skipsetgenesistwobutton
+     dey
+     dey
+     dex
+     bpl joystickdetectloop
+ endif
+
+     ldx #1
+     jsr settwobuttonmode
      ldx #0
      jsr settwobuttonmode
-
 
      ifconst bankswitchmode
          ; we need to switch to the first bank before we jump there!

@@ -2,6 +2,13 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.5.6
+
+* Updated to latest 7800basic release v0.10 (Windows, Linux, macOS)
+* Added document outline for dasm (shows labels, sub-labels, macros)
+* Added Go to Definition and Go to References features for dasm
+* Further enhancements to Go to Definition and Go to References features for batari basic and 7800basic
+
 ## 0.5.5
 
 * Updated A7800 to 4.0 (Windows, Linux, macOS) [Removed XBoarD Expansion option from A7800 > Console settings]

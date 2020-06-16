@@ -63,7 +63,8 @@ class ReferenceProviderBase {
                         // we need to verify this to get exact matches where line is NOT spaced between fields
                         let position = keyword.indexOf(word);
                         let char = keyword.substring(position + word.length, position + word.length + 1);
-                        if (char !== '' && char !== '=' && char !== ':' && char !== '[' && char !== '{' && char !== '(') {
+                        if (char !== '' && char !== '=' && char !== ',' && char !== ':' && char !== ';' &&
+                            char !== '[' && char !== '{' && char !== '(') {
                             break;
                         }
                     }

@@ -9,20 +9,55 @@ hiscoremodulestart
          sta avoxdetected
          lda #$0
          sta SWACNT
-        lda avoxdetected
+         lda avoxdetected
          rts
 
 detecthsc
-         ; we check the first 2 bytes of the HSC signature...
-         lda $1002
-         cmp #$68
+         ; check for the HSC ROM signature...
+         lda XCTRL1s 
+         ora #%00001100
+         sta XCTRL1s
+         sta XCTRL1
+         lda $3900
+         cmp #$C6
          bne detecthscfail
-         lda $1003
-         cmp #$83
+         lda $3904
+         cmp #$FE
          bne detecthscfail
+         ; check if it's initialized...
+         ldy #0
+         lda #$ff
+checkhscinit
+         and $1000,y
+         dey
+         bpl checkhscinit
+         cmp #$ff
+         bne hscisalreadyinit
+         ; if we're here, we need to do a minimal HSC init...
+         ldy #$28
+hscinitloop1
+         lda hscheader,y
+         sta $1000,y
+         dey
+         bpl hscinitloop1
+         ldy #$89
+         lda #$7F
+hscinitloop2
+         sta $10B3,y
+         dey
+         cpy #$ff
+         bne hscinitloop2
+hscisalreadyinit
          lda #$ff
          rts
+hscheader
+ .byte $00,$00,$68,$83,$AA,$55,$9C,$FF,$07,$12,$02,$1F,$00,$00,$00,$00
+ .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+ .byte $00,$00,$00,$00,$00,$00,$00,$00,$03
 detecthscfail
+         lda XCTRL1s 
+         and #%11110111
+         sta XCTRL1s 
          lda #0
          rts
      endif ; HSSUPPORT

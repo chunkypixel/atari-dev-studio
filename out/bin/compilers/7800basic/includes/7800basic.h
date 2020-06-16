@@ -390,7 +390,7 @@ tempavox         = $1B3
 doublebufferminimumframetarget    = $1B4
 doublebufferminimumframeindex     = $1B5
 pausedisable     = $1B6
-maxspritecount   = $1B7
+XCTRL1s          = $1B7
 spritecount      = $1B8
 avoxenable       = $1B9
 
@@ -439,8 +439,8 @@ songchannel2stackdepth  = $1DD
 songchannel3stackdepth  = $1DE
 songchannel4stackdepth  = $1DF
 
-palframes    =        $1E0
-palfastframe =        $1E1
+palframes    = $1E0
+palfastframe = $1E1
 
 port0control =        $1E2
 port1control =        $1E3
@@ -506,5 +506,8 @@ keypadmatrix1d       =    $1EB
 mousecodey1          =    $1EB
 trakballcodey1       =    $1EB
 
-; $1EC - $1FF reserved for stack
+genesisdetected0 = $1EC
+genesisdetected1 = $1ED
+
+; $1EE - $1FF reserved for stack
 
