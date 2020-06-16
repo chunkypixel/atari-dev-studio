@@ -121,12 +121,12 @@ This extension is only available due to the great people of the AtariAge communi
 ## Languages
 Atari Dev Studio includes the following programming languages:
 
-### batari Basic (release 1.5 20200307)
+### batari Basic (release 1.5 - 20200307)
 batari Basic created by Fred 'batari' Quimby is a BASIC-like language used in the creation of Atari 2600 games. batari Basic is compiled to generate a binary file that can by used on actual Atari 2600 VCS hardware via cartridge (such as a Harmony or UNO cart) or by using an Atari 2600 VCS emulator such as Stella.
 
 batari Basic is an external project and can be downloaded separately [here](https://github.com/batari-Basic/batari-Basic).  Further information is about this release is available here at [AtariAge](https://atariage.com/forums/topic/300856-official-home-for-batari-basic).
 
-### 7800basic (release 0.10 20200615)
+### 7800basic (release 0.10 - 20200615)
 7800basic is a BASIC-like language for creating Atari 7800 games.  It is a compiled language that runs on a computer, and it creates a binary file that can be run with an Atari 7800 emulator, or the binary file may be used to make a cartridge that will operate on a real Atari 7800. 7800basic is derived from batari basic, a BASIC-like language for creating Atari 2600 games. Special thanks to the bB creator, Fred Quimby, and all of the the bB contributors!
 
 7800basic is included as part of this extension with many thanks to Mike Saarna (RevEng).  7800basic is an external project and can be downloaded separately [here](https://github.com/7800-devtools/7800basic).  Further information about this release is available here at [AtariAge](http://atariage.com/forums/topic/222638-7800basic-beta-the-release-thread).
@@ -144,7 +144,7 @@ Stella is a multi-platform Atari 2600 VCS emulator released under the GNU Genera
 
 Stella is included as part of this extension with many thanks to Stephen Anthony. Stella is an external project and can be downloaded separately [here](https://stella-emu.github.io). If you enjoy using Stella place consider [donating](https://stella-emu.github.io/donations.html) to ensure it's continued development.
 
-### A7800 (release 4.0 = 20200610)
+### A7800 (release 4.0 - 20200610)
 A7800 is a fork of the MAME Atari 7800 driver, with several enhancements added:
 * Support for emulation of Proline Joysticks, VCS Joysticks, Lightguns, Paddles, Driving Controllers, Keypads, Trak-Balls, Amiga Mice, and ST Mice.
 * Maria DMA timing has been improved further, with the addition of accurate DMA hole penalties.
