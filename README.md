@@ -48,7 +48,7 @@ Updates are regularly provided and you will be notified via VS Code when one has
 ## Using Atari Dev Studio
 
 ### Compiling your program
-To display the available extension features press **CTRL+SHIFT+P** to display the **Command Palette**. From the **Command Palette** prompt type **adv** to short-list the available options:
+To display the available extension features press **CTRL+SHIFT+P** to display the **Command Palette**. From the **Command Palette** prompt type **ads** to short-list the available options:
 * ads: Open the Welcome page
 * ads: Compile source code (Shift+F5)
 * ads: Compile source code and run in emulator (F5)
