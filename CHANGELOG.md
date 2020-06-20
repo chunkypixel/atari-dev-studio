@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.5.7
+
+* Added missing batari Basic keywords: ballx, bally, ballheight (Karl G)
+
 ## 0.5.6
 
 * Updated to latest 7800basic release v0.10 (Windows, Linux, macOS)

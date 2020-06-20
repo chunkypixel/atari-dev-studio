@@ -144,9 +144,9 @@
 				"comment": "other keywords"
 			},
 			{
-				"name": "keyword.other.playerandmissile.bb",
-				"match": "\\b(player0|player0x|player0y|player0color|player0height|player1|player1x|player1y|player1color|player1height|missile0|missile0x|missile0y|missile1|missile1x|missile1y|missile0height|missile1height)\\b",
-				"comment": "player and missile keywords"
+				"name": "keyword.other.playerballmissile.bb",
+				"match": "\\b(ballx|bally|ballheight|player0|player0x|player0y|player0color|player0height|player1|player1x|player1y|player1color|player1height|missile0|missile0x|missile0y|missile1|missile1x|missile1y|missile0height|missile1height)\\b",
+				"comment": "player, ball and missile keywords"
 			},		
 			{
 				"name": "keyword.other.playfield.bb",
