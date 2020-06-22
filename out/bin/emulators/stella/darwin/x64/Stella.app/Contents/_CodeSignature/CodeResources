@@ -30,7 +30,7 @@
 		</data>
 		<key>Resources/docs/debugger.html</key>
 		<data>
-		gTjP+/bsRPxgVMcDW9qd/sBSBiE=
+		leK1PUPgsGU1zASDQrfVrN9w1QI=
 		</data>
 		<key>Resources/docs/graphics/cheat.png</key>
 		<data>
@@ -166,7 +166,7 @@
 		</data>
 		<key>Resources/docs/graphics/launcher_options_snapshots.png</key>
 		<data>
-		iZyHpwqfqGV7T++dsL/rbOEubMA=
+		oMiZYkhctEvEgilrwehrqVrekik=
 		</data>
 		<key>Resources/docs/graphics/launcher_override.png</key>
 		<data>
@@ -214,19 +214,19 @@
 		</data>
 		<key>Resources/docs/graphics/options_gameinfo_cartridge.png</key>
 		<data>
-		vuf2JPvlvyb4hcaDtFBEduQ3EEE=
+		2YJy2P//+kr9vdUL5nLfiBLXteU=
 		</data>
 		<key>Resources/docs/graphics/options_gameinfo_console.png</key>
 		<data>
-		qt8fmjLPquHkL5d43qbU0on4sTU=
+		Ji2oxhGZu1iUh0JY8XS/FWDOF/8=
 		</data>
 		<key>Resources/docs/graphics/options_gameinfo_controller.png</key>
 		<data>
-		QGnfVZGEsp9sxCP6dExFwC/1h1A=
+		BtlVR7Q3eKBUuTLyeyfQiM9yPr8=
 		</data>
 		<key>Resources/docs/graphics/options_gameinfo_emulation.png</key>
 		<data>
-		ahgllMW/yVnO3rrhxU52t9mur9M=
+		tdFbAA66eUjuxbBIrJOQuHs8WWI=
 		</data>
 		<key>Resources/docs/graphics/options_misc.png</key>
 		<data>
@@ -302,11 +302,11 @@
 		</data>
 		<key>Resources/docs/index.html</key>
 		<data>
-		CZsK+th1OBwtZdpB2aGkUPBLHcI=
+		EwhPLStCMyhFT1DWqvduadfo2zo=
 		</data>
 		<key>Resources/docs/index_r77.html</key>
 		<data>
-		yBE1j0Ca2hX1xOZtKno4QSedPkU=
+		C9gU5TbKAJMFwlKSdNKWOrYeISw=
 		</data>
 		<key>Resources/en.lproj/InfoPlist.strings</key>
 		<dict>
@@ -399,11 +399,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			gTjP+/bsRPxgVMcDW9qd/sBSBiE=
+			leK1PUPgsGU1zASDQrfVrN9w1QI=
 			</data>
 			<key>hash2</key>
 			<data>
-			OZP5hJ4dodEH89eWXRhO4lxoCY2/pzWVH/ScSqw7cu0=
+			UY4JK3tTFYt68vNElyMVNVIbPPWWqbNPkt+uWRZtsVY=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/cheat.png</key>
@@ -773,11 +773,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			iZyHpwqfqGV7T++dsL/rbOEubMA=
+			oMiZYkhctEvEgilrwehrqVrekik=
 			</data>
 			<key>hash2</key>
 			<data>
-			mbhyzWcIMjtezrhoNz6dUxLBRZANYgiwi21USNNmGxQ=
+			BvTgAciFaOa+L+PUGJOLfYW4xqkC/95n5S4nTxnLre0=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/launcher_override.png</key>
@@ -905,44 +905,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			vuf2JPvlvyb4hcaDtFBEduQ3EEE=
+			2YJy2P//+kr9vdUL5nLfiBLXteU=
 			</data>
 			<key>hash2</key>
 			<data>
-			fC/kij5Ry9zI+FOd0mOb3aMDGSvxRc2yOjZ0b5nVFp4=
+			761TY38Il13kAj0KTizJHwuPcwdmhC7d4ClUJrz0se8=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_gameinfo_console.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			qt8fmjLPquHkL5d43qbU0on4sTU=
+			Ji2oxhGZu1iUh0JY8XS/FWDOF/8=
 			</data>
 			<key>hash2</key>
 			<data>
-			MAukL+dnun0JqtT+WqLuI0p+R14ORprq/B/+gikstlA=
+			pMu9Lr8h0ZxELygCSXPYh1d5MUdVxfVqrd9go4icQNY=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_gameinfo_controller.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			QGnfVZGEsp9sxCP6dExFwC/1h1A=
+			BtlVR7Q3eKBUuTLyeyfQiM9yPr8=
 			</data>
 			<key>hash2</key>
 			<data>
-			3ah8X2Hyt8bPlL/Dt0trlrMfIYJS/h3qjZ65n0KepjU=
+			1HC8XPnFKHWXSaz4tPmupHf5IQNszOhIqcSC2qHiDvQ=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_gameinfo_emulation.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			ahgllMW/yVnO3rrhxU52t9mur9M=
+			tdFbAA66eUjuxbBIrJOQuHs8WWI=
 			</data>
 			<key>hash2</key>
 			<data>
-			HzkaSjhsZsjywowdvfagUwrC7vYmmcUp6RoF5t17sjw=
+			cSr1aC96oUqGyZsAd6GW8SehyJrlpOBXj8yjOf9k7+k=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_misc.png</key>
@@ -1147,22 +1147,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			CZsK+th1OBwtZdpB2aGkUPBLHcI=
+			EwhPLStCMyhFT1DWqvduadfo2zo=
 			</data>
 			<key>hash2</key>
 			<data>
-			aOM7zvi1uCT4njPjyjPU5m1ErMgIXlsD7UMa4yAnQEY=
+			wc+LBa+IbM5k322QkvFNTj3UZmJb1G6PBdWwUMTaNzM=
 			</data>
 		</dict>
 		<key>Resources/docs/index_r77.html</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			yBE1j0Ca2hX1xOZtKno4QSedPkU=
+			C9gU5TbKAJMFwlKSdNKWOrYeISw=
 			</data>
 			<key>hash2</key>
 			<data>
-			ZSTTUUkWDUuxdZZ9Zv0bbPSSs4LBwJdbuBe2MUNkNhM=
+			yTQJLofeGev+ToByTfqQ/1FLvNtwnevl8l6z2zSLOoY=
 			</data>
 		</dict>
 		<key>Resources/en.lproj/InfoPlist.strings</key>
