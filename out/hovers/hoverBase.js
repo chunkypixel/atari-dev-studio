@@ -75,7 +75,8 @@ class HoverBase {
             }
         });
     }
-    provideHover(document, position, token) {
+    provideHover(document, position) {
+        // Prepare
         const validchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
         let word = '';
         let p = position.character;
@@ -88,11 +89,20 @@ class HoverBase {
         if (validchars.indexOf(line[p]) === -1) {
             p++;
         }
-        // Collect string until an invalid charecter is encountered
+        // Collect string until an invalid character is encountered
         while (p < line.length && validchars.indexOf(line[p]) !== -1) {
             word += line[p++];
         }
-        return new vscode.Hover(this.hoverText[word.toUpperCase()]);
+        // Found something to check for?
+        if (word) {
+            // Search and validate
+            let content = this.hoverText[word.toUpperCase()];
+            if (content) {
+                return new vscode.Hover(content);
+            }
+        }
+        // Return
+        return undefined;
     }
 }
 exports.HoverBase = HoverBase;
