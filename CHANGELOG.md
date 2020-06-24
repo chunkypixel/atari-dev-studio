@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.5.8
+
+* Repackage to attempt fixing missing find-process package on macOS (Andrew Davie) 
+
 ## 0.5.7
 
 * Updated Stella to 6.2.1 (Windows, Linux, macOS)
