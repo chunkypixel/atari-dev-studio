@@ -68,6 +68,12 @@ function InitialiseAdsTerminalAsync() {
         exports.AdsTerminal === null || exports.AdsTerminal === void 0 ? void 0 : exports.AdsTerminal.dispose();
         // Create
         exports.AdsTerminal = vscode.window.createTerminal(`${exports.Name}`);
+        // if user closes the terminal, delete our reference:
+        vscode.window.onDidCloseTerminal(event => {
+            if (event.name === exports.Name) {
+                exports.AdsTerminal = undefined;
+            }
+        });
     });
 }
 exports.InitialiseAdsTerminalAsync = InitialiseAdsTerminalAsync;

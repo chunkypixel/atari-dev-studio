@@ -74,6 +74,13 @@ export async function InitialiseAdsTerminalAsync() {
 	
 	// Create
 	AdsTerminal = vscode.window.createTerminal(`${Name}`);
+
+	// if user closes the terminal, delete our reference:
+	vscode.window.onDidCloseTerminal(event => {
+		if (event.name === Name) {
+			AdsTerminal = undefined;
+		}
+	});
 }
 
 // -------------------------------------------------------------------------------------
