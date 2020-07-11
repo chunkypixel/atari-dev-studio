@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.5.8",
+    "version": "0.5.9",
     "icon": "images/icon.png",
     "preview": true,
     "author": "mksmith",
@@ -111,12 +111,14 @@
             },
             {
                 "command": "extension.buildGame",
-                "title": "Compile source code (Shift+F5)",
+                "title": "Compile source code",
+                "icon": "$(play)",
                 "category": "ads"
             },
             {
                 "command": "extension.buildGameAndRun",
-                "title": "Compile source code and run in emulator (F5)",
+                "title": "Compile source code and run in emulator",
+                "icon": "$(rocket)",
                 "category": "ads"
             },
             {
@@ -128,11 +130,13 @@
                 "command": "extension.touchbar.buildGame",
                 "title": "build",
                 "category": "touchbar",
+                "icon": "$(play)",
                 "enablement": "isMac"
             },
             {
                 "command": "extension.touchbar.buildGameAndRun",
                 "title": "build & run",
+                "icon": "$(rocket)",
                 "category": "touchbar",
                 "enablement": "isMac"
             }
@@ -148,6 +152,18 @@
                     "command": "extension.touchbar.buildGameAndRun",
                     "group": "compile",
                     "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript"
+                }
+            ],
+            "editor/title" : [
+                { 
+                    "command" : "extension.buildGame",
+                    "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript",
+                    "group": "1_run@10"
+                },
+                { 
+                    "command" : "extension.buildGameAndRun",
+                    "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript",
+                    "group": "1_run@20"
                 }
             ]
         },

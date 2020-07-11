@@ -138,15 +138,15 @@
 					"comment": "control keywords"
 				},
 				{
-					"name": "keyword.other.78b",
-					"match": "\\b(AUDC0|AUDC1|AUDF0|AUDF1|AUDV0|AUDV1|PAUDF0|joy0any|joy0down|joy0fire|joy0fire0|joy0fire1|joy0left|joy0right|joy0up|joy1any|joy1down|joy1fire|joy1fire0|joy1fire1|joy1left|joy1right|joy1up|switchleftb|switchreset|switchrightb|switchselect|switchpause|2buttonjoy|1buttonjoy|lightgun|paddle|trakball|driving|keypad|stmouse|amigamouse|atarivox|keypad0key0|keypad0key1|keypad0key2|keypad0key3|keypad0key4|keypad0key5|keypad0key6|keypad0key7|keypad0key8|keypad0key9|keypad0keys|keypad0keyh|keypad1key0|keypad1key1|keypad1key2|keypad1key3|keypad1key4|keypad1key5|keypad1key6|keypad1key7|keypad1key8|keypad1key9|keypad1keys|keypad1keyh)\\b",
-					"comment": "other keywords"
-				},
-				{
 					"name": "keyword.commands.78b",
-					"match": "\\b(adjustvisible|alphachars|alphadata|avoxvoice|basepath|basic|boxcollision|changecontrol|characterset|clearscreen|collision|collisionwrap|converttobcd|dictionary|dmahole|drawscreen|drawwait|data|debug|displaymode|dlmemory|doublebuffer|doublewide|extradlmemory|extrawide|hscolorbase|hsdifficultytext|hsgamename|hsgameranks|hsscoresize|hsseconds|hssupport|incbanner|incgraphic|incmapfile|lockzone|loadmemory|loadrambank|loadrombank|mcpdevcart|memcpy|memset|mutesfx|newblock|noflow|pauseroutine|peekchar|pitch|phonetic|playsfx|playsong|plotbanner|plotchars|plotmap|plotmapfile|plotsprite|plotvalue|plotvalueonscreen|plotvaluepage|pokechar|pokeybase|pokeydetected|pokeysound|pokeysupport|psound|raw|reboot|restorescreen|reset|romsize|savescreen|savememory|screenheight|sdata|shakescreen|songtempo|speak|speechdata|speed|sread|stopsong|songdata|tallsprite|tiasfx|trackersupport|tsound|unlockzone|voice|zoneheight|zoneprotection)\\b",
+					"match": "\\b(adjustvisible|alphachars|alphadata|avoxvoice|basepath|basic|boxcollision|characterset|clearscreen|collision|collisionwrap|converttobcd|dictionary|dmahole|drawscreen|drawwait|data|debug|displaymode|dlmemory|doublebuffer|doublewide|extradlmemory|extrawide|hscolorbase|hsdifficultytext|hsgamename|hsgameranks|hsscoresize|hsseconds|hssupport|incbanner|incgraphic|incmapfile|lockzone|loadmemory|loadrambank|loadrombank|mcpdevcart|memcpy|memset|mutesfx|newblock|noflow|pauseroutine|peekchar|pitch|phonetic|playsfx|playsong|plotbanner|plotchars|plotmap|plotmapfile|plotsprite|plotvalue|plotvalueonscreen|plotvaluepage|pokechar|pokeybase|pokeydetected|pokeysound|pokeysupport|psound|raw|reboot|restorescreen|reset|romsize|savescreen|savememory|screenheight|sdata|shakescreen|songtempo|speak|speechdata|speed|sread|stopsong|songdata|tallsprite|tiasfx|trackersupport|tsound|unlockzone|voice|zoneheight|zoneprotection)\\b",
 					"comment": "other keywords"
-				},		
+				},	
+				{ 
+					"name": "keyword.controller.78b",
+					"match": "\\b(changecontrol|drivingboost|mousexonly|paddlerange|paddlescalex2|joy0any|joy0down|joy0fire|joy0fire0|joy0fire1|joy0left|joy0right|joy0up|joy1any|joy1down|joy1fire|joy1fire0|joy1fire1|joy1left|joy1right|joy1up|switchleftb|switchreset|switchrightb|switchselect|switchpause|2buttonjoy|1buttonjoy|lightgun|paddle|trakball|driving|keypad|stmouse|amigamouse|atarivox|keypad0key0|keypad0key1|keypad0key2|keypad0key3|keypad0key4|keypad0key5|keypad0key6|keypad0key7|keypad0key8|keypad0key9|keypad0keys|keypad0keyh|keypad1key0|keypad1key1|keypad1key2|keypad1key3|keypad1key4|keypad1key5|keypad1key6|keypad1key7|keypad1key8|keypad1key9|keypad1keys|keypad1keyh)\\b",
+					"comment": "controller keywords"
+				},	
 				{
 					"name": "keyword.bank.78b",
 					"match": "\\b(bank|bank1|bank2|bank3|bank4|bank5|bank6|bank7|bank8|bank9|bank10|bank11|bank12|bank13|bank14|bank15|bank16|bank17|bank18|bank19|bank20|bank21|bank22|bank23|bank24|otherbank|thisbank)\\b",
@@ -154,7 +154,7 @@
 				},
 				{
 					"name": "keyword.variable.78b",
-					"match": "\\b(lives|gamedifficulty|mono|score0|score1|paldetected|drivingposition0|drivingposition1|temp1|temp2|temp3|temp4|temp5|temp6|var0|var1|var2|var3|var4|var5|var6|var7|var8|var9|var10|var11|var12|var13|var14|var15|var16|var17|var18|var19|var20|var21|var22|var23|var24|var25|var26|var27|var28|var29|var30|var31|var32|var33|var34|var35|var36|var37|var38|var39|var40|var41|var42|var43|var44|var45|var46|var47|var48|var49|var50|var51|var52|var53|var54|var55|var56|var57|var58|var59|var60|var61|var62|var63|var64|var65|var66|var67|var68|var69|var70|var71|var72|var73|var74|var75|var76|var77|var78|var79|var80|var81|var82|var83|var84|var85|var86|var87|var88|var89|var90|var91|var92|var93|var94|var95|var96|var97|var98|var99)\\b",
+					"match": "\\b(lives|gamedifficulty|mono|score0|score1|paldetected|mousexonly|mousex0|mousey0|mousex1|mousey1|temp1|temp2|temp3|temp4|temp5|temp6|var0|var1|var2|var3|var4|var5|var6|var7|var8|var9|var10|var11|var12|var13|var14|var15|var16|var17|var18|var19|var20|var21|var22|var23|var24|var25|var26|var27|var28|var29|var30|var31|var32|var33|var34|var35|var36|var37|var38|var39|var40|var41|var42|var43|var44|var45|var46|var47|var48|var49|var50|var51|var52|var53|var54|var55|var56|var57|var58|var59|var60|var61|var62|var63|var64|var65|var66|var67|var68|var69|var70|var71|var72|var73|var74|var75|var76|var77|var78|var79|var80|var81|var82|var83|var84|var85|var86|var87|var88|var89|var90|var91|var92|var93|var94|var95|var96|var97|var98|var99)\\b",
 					"comment": "variable keywords"
 				},
 				{
@@ -166,6 +166,11 @@
 					"name": "keyword.colors.78b",
 					"match": "\\b(BACKGRND|P0C1|P0C2|P0C3|P1C1|P1C2|P1C3|P2C1|P2C2|P2C3|P3C1|P3C2|P3C3|P4C1|P4C2|P4C3|P5C1|P5C2|P5C3|P6C1|P6C2|P6C3|P7C1|P7C2|P7C3)\\b",
 					"comment": "constant keywords"
+				},
+				{
+					"name": "keyword.other.78b",
+					"match": "\\b(AUDC0|AUDC1|AUDF0|AUDF1|AUDV0|AUDV1|PAUDF0)\\b",
+					"comment": "audio keywords"
 				},
 				{
 					"name": "keyword.directive.78b",
