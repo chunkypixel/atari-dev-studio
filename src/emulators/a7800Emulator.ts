@@ -101,11 +101,12 @@ export class A7800Emulator extends EmulatorBase {
         let command = `"${this.FolderOrPath}"`;
         
         // Args
+        // Make sure we send nodebug where config is being saved
         let args = [
             `${this.Region} -cart1`,
             (this.Console ? `${this.Console} -cart2` : ""),
             `"${this.FileName}"`,
-            (this.Debugger ? `-debug` : ""),
+            (this.Debugger ? `-debug` : "-nodebug"),
             this.Args
         ];
 

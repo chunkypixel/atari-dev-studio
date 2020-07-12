@@ -106,11 +106,12 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
             // Command
             let command = `"${this.FolderOrPath}"`;
             // Args
+            // Make sure we send nodebug where config is being saved
             let args = [
                 `${this.Region} -cart1`,
                 (this.Console ? `${this.Console} -cart2` : ""),
                 `"${this.FileName}"`,
-                (this.Debugger ? `-debug` : ""),
+                (this.Debugger ? `-debug` : "-nodebug"),
                 this.Args
             ];
             // NOTE: This may need to be moved before compilation as it appears MAME is holding onto the launched file.
