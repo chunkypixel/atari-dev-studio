@@ -9,6 +9,11 @@ The following enhancements and changes have been made to Atari Dev Studio:
 * Added **Build** and **Build and Run** buttons to each open document (top right). This is a new enhancement to VS Code 1.47 onawards
 * Enabled write state for A7800 configurations
 
+Sprite Editor
+* Added right-click 'Open in Sprite Editor' pop-up option for .spe files to load sprite editor projects directly from the Explorer window
+* Fixed (hopefully) random/repeated file browser popups when using the Sprite Editor
+* When exporting sprite images to file the active sprite project path is now used for the base save folder
+
 ## 0.5.8
 
 * Repackage to attempt fixing missing find-process package on macOS (Andrew Davie) 

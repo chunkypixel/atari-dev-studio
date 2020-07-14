@@ -32,7 +32,7 @@ class StatusBar {
         if (command === "Full" || command === "Minimum") {
             let itemOptions = [
                 { tooltip: 'Welcome', text: '$(home)', command: 'extension.openWelcomePage' },
-                { tooltip: 'Sprite Editor', text: '$(screen-normal)', command: 'extension.openSpriteEditorPage' },
+                { tooltip: 'Sprite Editor', text: '$(tools)', command: 'extension.openSpriteEditorPage' },
                 { tooltip: 'Compile source code (Shift+F5)', text: '$(play)', command: 'extension.buildGame' },
                 { tooltip: 'Compile source code and run in emulator (F5)', text: '$(rocket)', command: 'extension.buildGameAndRun' }
             ];

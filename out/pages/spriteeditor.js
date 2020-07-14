@@ -21,7 +21,7 @@ class SpriteEditorPage {
     }
     dispose() {
     }
-    openPage(context) {
+    openPage(context, fileUri) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SpriteEditorPage.openPage');
             // Prepare
@@ -66,36 +66,42 @@ class SpriteEditorPage {
                 // Display
                 this.currentPanel.webview.html = content;
             }
+            // Load provided file (via right-click popup in Explorer)?
+            if (fileUri) {
+                this.loadFileContent("loadProject", fileUri);
+            }
             // Capture command messages
             this.currentPanel.webview.onDidReceiveMessage(message => {
                 switch (message.command) {
                     case 'loadProject':
                         this.loadProject(message);
-                        return;
+                        break;
                     case 'saveProject':
                         this.saveProject(message);
-                        return;
+                        break;
                     case 'exportAsPngFile':
                         this.exportAsPngFile(message);
-                        return;
+                        break;
                     case 'exportAsBatariFile':
                         this.exportAsBatariFile(message);
-                        return;
+                        break;
                     case 'exportAsAssemblyFile':
                         this.exportAsAssemblyFile(message);
-                        return;
+                        break;
                     case 'configuration':
                         this.saveConfiguration(message);
-                        return;
+                        break;
                     case 'loadPalette':
                         this.loadPalette(message);
-                        return;
+                        break;
                     case 'savePalette':
                         this.savePalette(message);
-                        return;
+                        break;
+                    default:
+                        // Unknown call - flag
+                        console.log(`debugger:SpriteEditorPage: Unknown command called: ${message.command}`);
+                        break;
                 }
-                // Unknown
-                console.log(`debugger:SpriteEditorPage: Unknown command called: ${message.command}`);
             });
             // Capture dispose
             this.currentPanel.onDidDispose(() => {
@@ -137,419 +143,355 @@ class SpriteEditorPage {
         });
     }
     saveConfiguration(message) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // Prepare
-            let data = message.data;
-            let configurationFileUri = vscode.Uri.file(path.join(this.contentPath, 'spriteeditor.config'));
-            // Process
-            return yield filesystem.WriteFileAsync(configurationFileUri.fsPath, data);
-        });
+        // Prepare
+        let data = message.data;
+        let configurationFileUri = vscode.Uri.file(path.join(this.contentPath, 'spriteeditor.config'));
+        // Process
+        filesystem.WriteFileAsync(configurationFileUri.fsPath, data);
     }
     loadProject(message) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // Prompt user here, get selected file content
-            // and send response back to webview
-            // Prepare
-            let command = message.command;
-            // Get current workspace
-            let defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
-            // Options
-            let options = {
-                canSelectMany: false,
-                openLabel: "Open",
-                defaultUri: defaultUri,
-                filters: {
-                    'Sprite Editor': ['spe'],
-                    'All Files': ['*']
-                }
-            };
-            // Process
-            vscode.window.showOpenDialog(options).then((fileUri) => __awaiter(this, void 0, void 0, function* () {
-                if (fileUri && fileUri[0]) {
-                    // Process
-                    try {
-                        // Load
-                        let data = yield filesystem.ReadFileAsync(fileUri[0].fsPath);
-                        // Result
-                        this.currentPanel.webview.postMessage({
-                            command: command,
-                            status: 'ok',
-                            file: fileUri[0].fsPath,
-                            data: data
-                        });
-                    }
-                    catch (error) {
-                        // Result
-                        this.currentPanel.webview.postMessage({
-                            command: command,
-                            status: 'error',
-                            errorMessage: error
-                        });
-                        return false;
-                    }
-                }
-            }));
-            // Result
-            return true;
+        // Prompt user here, get selected file content
+        // and send response back to webview
+        // Prepare
+        let command = message.command;
+        // Get current workspace
+        let defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
+        // Options
+        let options = {
+            canSelectMany: false,
+            openLabel: "Open",
+            defaultUri: defaultUri,
+            filters: {
+                'Sprite Editor': ['spe'],
+                'All Files': ['*']
+            }
+        };
+        // Process
+        vscode.window.showOpenDialog(options).then(fileUri => {
+            if (fileUri && fileUri[0]) {
+                this.loadFileContent(command, fileUri[0]);
+            }
         });
+        // Result
+        return true;
     }
     saveProject(message) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // If no file provided open in workspace
-            // send response back to webview
-            // Prepare
-            let command = message.command;
-            let file = message.file;
-            let data = message.data;
-            let errorMessage = "";
-            let fileUri = undefined;
-            // Set default path
-            let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
-            // Options
-            let options = {
-                defaultUri: defaultUri,
-                saveLabel: "Save",
-                filters: {
-                    'Sprite Editor': ['spe'],
-                    'All Files': ['*']
-                }
-            };
-            // Process
-            let result = yield vscode.window.showSaveDialog(options);
-            if (result) {
-                fileUri = result;
+        // If no file provided open in workspace
+        // send response back to webview
+        // Prepare
+        let command = message.command;
+        let file = message.file;
+        let data = message.data;
+        let errorMessage = undefined;
+        // Set default path
+        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
+        // Options
+        let options = {
+            defaultUri: defaultUri,
+            saveLabel: "Save",
+            filters: {
+                'Sprite Editor': ['spe'],
+                'All Files': ['*']
             }
+        };
+        // Process
+        vscode.window.showSaveDialog(options).then(fileUri => {
             // Save?
             if (fileUri) {
-                // Process
-                try {
-                    // Prepare
-                    let folder = path.dirname(fileUri.fsPath);
-                    // Save
-                    let result = yield filesystem.MkDirAsync(folder);
-                    if (result) {
-                        result = yield filesystem.WriteFileAsync(fileUri.fsPath, data);
-                    }
-                    // Validate
-                    if (result) {
+                // Prepare
+                let folder = path.dirname(fileUri.fsPath);
+                // Save
+                filesystem.MkDirAsync(folder)
+                    .then(() => {
+                    filesystem.WriteFileAsync(fileUri.fsPath, data)
+                        .then(() => {
                         this.currentPanel.webview.postMessage({
                             command: command,
                             status: 'ok',
                             file: fileUri.fsPath,
                         });
-                        return true;
-                    }
-                    // Set
-                    errorMessage = "Failed to save project";
-                }
-                catch (error) {
-                    errorMessage = error;
-                }
-                // Result
-                this.currentPanel.webview.postMessage({
-                    command: command,
-                    status: 'error',
-                    errorMessage: errorMessage
+                    })
+                        .catch(() => {
+                        errorMessage = `Failed to save project file: ${path.basename(fileUri.fsPath)}`;
+                        this.currentPanel.webview.postMessage({
+                            command: command,
+                            status: 'error',
+                            errorMessage: errorMessage
+                        });
+                    });
+                })
+                    .catch(() => {
+                    errorMessage = "Failed to create folder";
+                    this.currentPanel.webview.postMessage({
+                        command: command,
+                        status: 'error',
+                        errorMessage: errorMessage
+                    });
                 });
-                return false;
             }
-            // Result
-            return true;
         });
     }
     exportAsPngFile(message) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // Prepare
-            let command = message.command;
-            let file = message.file;
-            let data = message.data;
-            let errorMessage = "";
-            let fileUri = undefined;
-            // Get default path
-            let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
-            // Prompt user here
-            let options = {
-                defaultUri: defaultUri,
-                saveLabel: "Export",
-                filters: {
-                    'PNG image': ['png']
-                }
-            };
-            // Process
-            let result = yield vscode.window.showSaveDialog(options);
-            if (result) {
-                fileUri = result;
+        // Prepare
+        let command = message.command;
+        let file = message.file;
+        let data = message.data;
+        let errorMessage = undefined;
+        // Get default path
+        // Assuiming file provided is the project file
+        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
+        // Prompt user here
+        let options = {
+            defaultUri: defaultUri,
+            saveLabel: "Export",
+            filters: {
+                'PNG image': ['png']
             }
+        };
+        // Process
+        vscode.window.showSaveDialog(options).then(fileUri => {
             // Save?
             if (fileUri) {
-                // Process
-                try {
-                    // Prepare
-                    let folder = path.dirname(fileUri.fsPath);
-                    // Save
-                    let result = yield filesystem.MkDirAsync(folder);
-                    if (result) {
-                        result = yield filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data, 'utf8'));
-                    }
-                    // Validate
-                    if (result) {
+                // Prepare
+                let folder = path.dirname(fileUri.fsPath);
+                // Save
+                filesystem.MkDirAsync(folder)
+                    .then(() => {
+                    filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data, 'utf8'))
+                        .then(() => {
                         this.currentPanel.webview.postMessage({
                             command: command,
                             status: 'ok',
-                            file: path.basename(fileUri.fsPath)
+                            file: path.basename(fileUri.fsPath),
                         });
-                        return true;
-                    }
-                    // Set
-                    errorMessage = `Failed to export image file: ${path.basename(fileUri.fsPath)}`;
-                }
-                catch (error) {
-                    errorMessage = error;
-                }
-                // Result
-                this.currentPanel.webview.postMessage({
-                    command: command,
-                    status: 'error',
-                    errorMessage: errorMessage
-                });
-                return false;
-            }
-            // Result
-            return true;
-        });
-    }
-    exportAsBatariFile(message) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // Prepare
-            let command = message.command;
-            let file = message.file;
-            let data = message.data;
-            let errorMessage = "";
-            let fileUri = undefined;
-            // Get default path
-            let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
-            // Prompt user here
-            let options = {
-                defaultUri: defaultUri,
-                saveLabel: "Export",
-                filters: {
-                    'batari Basic': ['bb']
-                }
-            };
-            // Process
-            let result = yield vscode.window.showSaveDialog(options);
-            if (result) {
-                fileUri = result;
-            }
-            // Save?
-            if (fileUri) {
-                // Process
-                try {
-                    // Prepare
-                    let folder = path.dirname(fileUri.fsPath);
-                    // Save
-                    let result = yield filesystem.MkDirAsync(folder);
-                    if (result) {
-                        result = yield filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data, 'utf8'));
-                    }
-                    // Validate
-                    if (result) {
-                        this.currentPanel.webview.postMessage({
-                            command: command,
-                            status: 'ok',
-                            file: path.basename(fileUri.fsPath)
-                        });
-                        return true;
-                    }
-                    // Set
-                    errorMessage = `Failed to export source file: ${path.basename(fileUri.fsPath)}`;
-                }
-                catch (error) {
-                    errorMessage = error;
-                }
-                // Result
-                this.currentPanel.webview.postMessage({
-                    command: command,
-                    status: 'error',
-                    errorMessage: errorMessage
-                });
-                return false;
-            }
-            // Result
-            return true;
-        });
-    }
-    exportAsAssemblyFile(message) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // Prepare
-            let command = message.command;
-            let file = message.file;
-            let data = message.data;
-            let errorMessage = "";
-            let fileUri = undefined;
-            // Get default path
-            let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
-            // Prompt user here
-            let options = {
-                defaultUri: defaultUri,
-                saveLabel: "Export",
-                filters: {
-                    'Assembly': ['asm']
-                }
-            };
-            // Process
-            let result = yield vscode.window.showSaveDialog(options);
-            if (result) {
-                fileUri = result;
-            }
-            // Save?
-            if (fileUri) {
-                // Process
-                try {
-                    // Prepare
-                    let folder = path.dirname(fileUri.fsPath);
-                    // Save
-                    let result = yield filesystem.MkDirAsync(folder);
-                    if (result) {
-                        result = yield filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data, 'utf8'));
-                    }
-                    // Validate
-                    if (result) {
-                        this.currentPanel.webview.postMessage({
-                            command: command,
-                            status: 'ok',
-                            file: path.basename(fileUri.fsPath)
-                        });
-                        return true;
-                    }
-                    // Set
-                    errorMessage = `Failed to export image file: ${path.basename(fileUri.fsPath)}`;
-                }
-                catch (error) {
-                    errorMessage = error;
-                }
-                // Result
-                this.currentPanel.webview.postMessage({
-                    command: command,
-                    status: 'error',
-                    errorMessage: errorMessage
-                });
-                return false;
-            }
-            // Result
-            return true;
-        });
-    }
-    loadPalette(message) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // Prompt user here, get selected file content
-            // and send response back to webview
-            // Prepare
-            let command = message.command;
-            // Get default path
-            let defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
-            // Options
-            let options = {
-                canSelectMany: false,
-                openLabel: "Open",
-                defaultUri: defaultUri,
-                filters: {
-                    'Sprite Editor Palette': ['palette'],
-                    'All Files': ['*']
-                }
-            };
-            // Process
-            vscode.window.showOpenDialog(options).then((fileUri) => __awaiter(this, void 0, void 0, function* () {
-                if (fileUri && fileUri[0]) {
-                    // Process
-                    try {
-                        // Load
-                        let data = yield filesystem.ReadFileAsync(fileUri[0].fsPath);
-                        // Result
-                        this.currentPanel.webview.postMessage({
-                            command: command,
-                            status: 'ok',
-                            file: fileUri[0].fsPath,
-                            data: data
-                        });
-                    }
-                    catch (error) {
-                        // Result
+                    })
+                        .catch(() => {
+                        errorMessage = `Failed to export image file: ${path.basename(fileUri.fsPath)}`;
                         this.currentPanel.webview.postMessage({
                             command: command,
                             status: 'error',
-                            errorMessage: error
+                            errorMessage: errorMessage
                         });
-                        return false;
-                    }
-                }
-            }));
-            // Result
-            return true;
+                    });
+                })
+                    .catch(() => {
+                    errorMessage = "Failed to create folder";
+                    this.currentPanel.webview.postMessage({
+                        command: command,
+                        status: 'error',
+                        errorMessage: errorMessage
+                    });
+                });
+            }
+        });
+    }
+    exportAsBatariFile(message) {
+        // Prepare
+        let command = message.command;
+        let file = message.file;
+        let data = message.data;
+        let errorMessage = undefined;
+        // Get default path
+        // Assuiming file provided is the project file
+        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
+        // Prompt user here
+        let options = {
+            defaultUri: defaultUri,
+            saveLabel: "Export",
+            filters: {
+                'batari Basic': ['bb']
+            }
+        };
+        // Process
+        vscode.window.showSaveDialog(options).then(fileUri => {
+            // Save?
+            if (fileUri) {
+                // Prepare
+                let folder = path.dirname(fileUri.fsPath);
+                // Save
+                filesystem.MkDirAsync(folder)
+                    .then(() => {
+                    filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data, 'utf8'))
+                        .then(() => {
+                        this.currentPanel.webview.postMessage({
+                            command: command,
+                            status: 'ok',
+                            file: path.basename(fileUri.fsPath),
+                        });
+                    })
+                        .catch(() => {
+                        errorMessage = `Failed to export source file: ${path.basename(fileUri.fsPath)}`;
+                        this.currentPanel.webview.postMessage({
+                            command: command,
+                            status: 'error',
+                            errorMessage: errorMessage
+                        });
+                    });
+                })
+                    .catch(() => {
+                    errorMessage = "Failed to create folder";
+                    this.currentPanel.webview.postMessage({
+                        command: command,
+                        status: 'error',
+                        errorMessage: errorMessage
+                    });
+                });
+            }
+        });
+    }
+    exportAsAssemblyFile(message) {
+        // Prepare
+        let command = message.command;
+        let file = message.file;
+        let data = message.data;
+        let errorMessage = undefined;
+        // Get default path
+        // Assuiming file provided is the project file
+        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
+        // Prompt user here
+        let options = {
+            defaultUri: defaultUri,
+            saveLabel: "Export",
+            filters: {
+                'Assembly': ['asm']
+            }
+        };
+        // Process
+        vscode.window.showSaveDialog(options).then(fileUri => {
+            // Save?
+            if (fileUri) {
+                // Prepare
+                let folder = path.dirname(fileUri.fsPath);
+                // Save
+                filesystem.MkDirAsync(folder)
+                    .then(() => {
+                    filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data, 'utf8'))
+                        .then(() => {
+                        this.currentPanel.webview.postMessage({
+                            command: command,
+                            status: 'ok',
+                            file: path.basename(fileUri.fsPath),
+                        });
+                    })
+                        .catch(() => {
+                        errorMessage = `Failed to export image file: ${path.basename(fileUri.fsPath)}`;
+                        this.currentPanel.webview.postMessage({
+                            command: command,
+                            status: 'error',
+                            errorMessage: errorMessage
+                        });
+                    });
+                })
+                    .catch(() => {
+                    errorMessage = "Failed to create folder";
+                    this.currentPanel.webview.postMessage({
+                        command: command,
+                        status: 'error',
+                        errorMessage: errorMessage
+                    });
+                });
+            }
+        });
+    }
+    loadPalette(message) {
+        // Prompt user here, get selected file content
+        // and send response back to webview
+        // Prepare
+        let command = message.command;
+        // Get default path
+        let defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
+        // Options
+        let options = {
+            canSelectMany: false,
+            openLabel: "Open",
+            defaultUri: defaultUri,
+            filters: {
+                'Sprite Editor Palette': ['palette'],
+                'All Files': ['*']
+            }
+        };
+        // Process
+        vscode.window.showOpenDialog(options)
+            .then(fileUri => {
+            if (fileUri && fileUri[0]) {
+                this.loadFileContent(command, fileUri[0]);
+            }
         });
     }
     savePalette(message) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // If no file provided open in workspace
-            // send response back to webview
-            // Prepare
-            let command = message.command;
-            let file = message.file;
-            let data = message.data;
-            let errorMessage = "";
-            let fileUri = undefined;
-            // Get default path
-            let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
-            // Options
-            let options = {
-                defaultUri: defaultUri,
-                saveLabel: "Save",
-                filters: {
-                    'Sprite Editor Palette': ['palette'],
-                    'All Files': ['*']
-                }
-            };
-            // Process
-            let result = yield vscode.window.showSaveDialog(options);
-            if (result) {
-                fileUri = result;
+        // If no file provided open in workspace
+        // send response back to webview
+        // Prepare
+        let command = message.command;
+        let file = message.file;
+        let data = message.data;
+        let errorMessage = undefined;
+        // Get default path
+        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
+        // Options
+        let options = {
+            defaultUri: defaultUri,
+            saveLabel: "Save",
+            filters: {
+                'Sprite Editor Palette': ['palette'],
+                'All Files': ['*']
             }
+        };
+        // Process
+        vscode.window.showSaveDialog(options).then(fileUri => {
             // Save?
             if (fileUri) {
-                // Process
-                try {
-                    // Prepare
-                    let folder = path.dirname(fileUri.fsPath);
-                    // Save
-                    let result = yield filesystem.MkDirAsync(folder);
-                    if (result) {
-                        result = yield filesystem.WriteFileAsync(fileUri.fsPath, data);
-                    }
-                    // Validate
-                    if (result) {
+                // Prepare
+                let folder = path.dirname(fileUri.fsPath);
+                // Save
+                filesystem.MkDirAsync(folder)
+                    .then(() => {
+                    filesystem.WriteFileAsync(fileUri.fsPath, data)
+                        .then(() => {
                         this.currentPanel.webview.postMessage({
                             command: command,
                             status: 'ok',
                             file: fileUri.fsPath,
                         });
-                        return true;
-                    }
-                    // Set
-                    errorMessage = "Failed to save palette";
-                }
-                catch (error) {
-                    errorMessage = error;
-                }
-                // Result
-                this.currentPanel.webview.postMessage({
-                    command: command,
-                    status: 'error',
-                    errorMessage: errorMessage
+                    })
+                        .catch(() => {
+                        errorMessage = `Failed to save palette file: ${path.basename(fileUri.fsPath)}`;
+                        this.currentPanel.webview.postMessage({
+                            command: command,
+                            status: 'error',
+                            errorMessage: errorMessage
+                        });
+                    });
+                })
+                    .catch(() => {
+                    errorMessage = "Failed to create folder";
+                    this.currentPanel.webview.postMessage({
+                        command: command,
+                        status: 'error',
+                        errorMessage: errorMessage
+                    });
                 });
-                return false;
             }
+        });
+    }
+    loadFileContent(command, fileUri) {
+        filesystem.ReadFileAsync(fileUri.fsPath)
+            .then(data => {
             // Result
-            return true;
+            this.currentPanel.webview.postMessage({
+                command: command,
+                status: 'ok',
+                file: fileUri.fsPath,
+                data: data
+            });
+        })
+            .catch(() => {
+            let errorMessage = `Failed to load file: ${path.basename(fileUri.fsPath)}`;
+            this.currentPanel.webview.postMessage({
+                command: command,
+                status: 'error',
+                errorMessage: errorMessage
+            });
         });
     }
 }

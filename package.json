@@ -72,6 +72,15 @@
                     ".h"
                 ],
                 "configuration": "./languages/dasm.language-configuration.json"
+            },
+            {
+                "id": "spe",
+                "aliases": [
+                    "Sprite Editor Project"
+                ],
+                "extensions": [
+                    ".spe"
+                ]
             }
         ],
         "grammars": [
@@ -127,6 +136,11 @@
                 "category": "ads"
             },
             {
+                "command": "extension.openSpriteEditorFile",
+                "title": "Open in Sprite Editor",
+                "icon": "$(tools)"
+            },
+            {
                 "command": "extension.touchbar.buildGame",
                 "title": "build",
                 "category": "touchbar",
@@ -164,6 +178,13 @@
                     "command" : "extension.buildGameAndRun",
                     "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript",
                     "group": "1_run@20"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "when": "resourceLangId == spe",
+                    "command": "extension.openSpriteEditorFile",
+                    "group": "navigation"
                 }
             ]
         },

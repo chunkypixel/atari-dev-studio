@@ -54,6 +54,12 @@ export async function activate(context: vscode.ExtensionContext) {
 		application.KillBuildGame();		
 	});
 
+	// SpriteEditor
+	const openSpriteEditor = vscode.commands.registerCommand('extension.openSpriteEditorFile', async (fileUri: vscode.Uri) => {
+		console.log('User activated command "extension.openSpriteEditorFile"');		
+		spriteEditorPage.openPage(context, fileUri);
+	});
+
 	// Build (touchbar)
 	// Note: apparently the fileUri can be supplied via the command line but we are not going to use it
 	const touchbarBuildGame = vscode.commands.registerCommand('extension.touchbar.buildGame', async (fileUri: vscode.Uri) => {
@@ -71,6 +77,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(buildGame);
 	context.subscriptions.push(buildGameAndRun);
 	context.subscriptions.push(killBuildGame);
+	context.subscriptions.push(openSpriteEditor);
 	// Subscriptions (touchbar)
 	context.subscriptions.push(touchbarBuildGame);
 	context.subscriptions.push(touchbarBuildGameAndRun);	
