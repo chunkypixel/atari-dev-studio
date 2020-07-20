@@ -168,14 +168,14 @@
                     "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript"
                 }
             ],
-            "editor/title" : [
-                { 
-                    "command" : "extension.buildGame",
+            "editor/title": [
+                {
+                    "command": "extension.buildGame",
                     "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript",
                     "group": "1_run@10"
                 },
-                { 
-                    "command" : "extension.buildGameAndRun",
+                {
+                    "command": "extension.buildGameAndRun",
                     "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript",
                     "group": "1_run@20"
                 }
@@ -445,19 +445,19 @@
         "watch": "tsc -watch -p ./"
     },
     "dependencies": {
-        "eslint": "^7.3.0",
+        "eslint": "^7.5.0",
         "find-process": "^1.4.3",
         "minimist": "^1.2.5",
-        "open": "^7.0.4",
+        "open": "^7.1.0",
         "tree-kill": "^1.2.2"
     },
     "devDependencies": {
         "@types/mocha": "^7.0.2",
-        "@types/node": "^14.0.13",
+        "@types/node": "^14.0.23",
         "@types/open": "^6.2.1",
-        "@types/vscode": "^1.46.0",
+        "@types/vscode": "^1.47.0",
         "diff": "^4.0.2",
-        "typescript": "^3.9.5",
+        "typescript": "^3.9.7",
         "vscode-test": "^1.4.0"
     }
 }
