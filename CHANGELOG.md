@@ -6,7 +6,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 * Updated to latest 7800basic release v0.11 (Windows, Linux, macOS)
 * Added new 7800basic keywords: paddlerange, paddlescalex2, drivingboost, mousexonly, mousex0, mousey0, mousex1, mousey1 (RevEng)
-* Added **Build** and **Build and Run** buttons to each open document (top right). This is a new enhancement to VS Code 1.47 onawards
+* Added **Build** and **Build and Run** buttons to each open document (top right).
 * Enabled write state for A7800 configurations
 * Updated internal dev packages
 
