@@ -2,6 +2,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as filesystem from '../filesystem';
+import * as application from '../application';
 import opn = require('open');
 
 export class SpriteEditorPage implements vscode.Disposable {
@@ -20,11 +21,13 @@ export class SpriteEditorPage implements vscode.Disposable {
         let columnToShowIn = vscode.window.activeTextEditor
                                 ? vscode.window.activeTextEditor.viewColumn
                                 : undefined;
+        let isOpen = false;
 
         // Open or create panel?
         if (this.currentPanel) {
             // Open
             this.currentPanel.reveal(columnToShowIn);
+            isOpen = true;
 
         } else {
             // Create
@@ -73,7 +76,11 @@ export class SpriteEditorPage implements vscode.Disposable {
         }
 
         // Load provided file (via right-click popup in Explorer)?
-        if (fileUri) { this.loadFileContent("loadProject", fileUri); }
+        if (fileUri) { 
+            // Put in a delay to ensure editor loading is processed before importing
+            if (!isOpen) { application.delay(1000); }
+            this.loadFileContent("loadProject", fileUri); 
+        }
 
         // Capture command messages
         this.currentPanel.webview.onDidReceiveMessage(
@@ -137,7 +144,7 @@ export class SpriteEditorPage implements vscode.Disposable {
         return text;
     }
 
-    private replaceContentTag(content: string, tag: string, tagContent: any) : string
+    private replaceContentTag(content: string, tag: string, tagContent: any): string
     {
         tag = `%${tag}%`;
         return content.replace(new RegExp(tag, 'g'), tagContent);
