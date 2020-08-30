@@ -18,7 +18,13 @@ if [ ! $? = 0 ] ; then
   exit 1
 fi
 
+echo
+
+
 echo Using \"$EXT\" flavored 7800basic binaries
+echo "  "Location: $(which 7800preprocess$EXT | sed "s/7800preprocess$EXT//g" 2>/dev/null)
+BV=$(7800basic$EXT -v 2>/dev/null)
+echo "  Version: $BV" 
 
 #do dasm separately, because it's distributed separately
 for DASMEXT in "" .$OSTYPE.x64 .$OSTYPE.x86 .$OSTYPE.$ARCH .$OSTYPE ; do
@@ -31,17 +37,19 @@ if [ ! $? = 1 ] ; then
   exit 1
 fi
 
-echo Using \"$DASMEXT\" flavored dasm binary
+echo Using \"$DASMEXT\" flavored dasm binary.
+echo "  "Location: $(which dasm$DASMEXT)
+
+DV=$(dasm$DASMEXT 2>/dev/null | grep ^DASM | head -n1)
+echo "  Version: $DV" 
 
 if [ "$1" = "-v" ] ; then
-  #this is just a version check. pass it along to the 7800basic binary
-  7800basic$EXT -v
+  #this is just a version check. we already displayed the version earlier,
+  #so just exit.
   exit
 fi
 
-
-DV=$(dasm$DASMEXT 2>/dev/null | grep ^DASM | head -n1)
-echo "Using dasm version: $DV (dasm$DASMEXT)" 
+echo
   
 echo "Starting build of $1"
  #7800preprocess$EXT<"$1" | valgrind --tool=memcheck --leak-check=yes 7800basic$EXT -i "$bas7800dir" 

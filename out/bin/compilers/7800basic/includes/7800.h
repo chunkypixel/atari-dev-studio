@@ -118,8 +118,9 @@ SWCHB    = $282    ;Console Switches                             read-write
 CTLSWB   = $283    ;I/O Control for SCHWB                        read-write
 SWBCNT   = $283    ;VCS name for above                           read-write
 
-INTIM    = $284    ;Iterval Timer Read                           read-only
+INTIM    = $284    ;Interval Timer Read                          read-only
 TIM1T    = $294    ;Set 1    CLK Interval (838   nsec/interval)  write-only
+TIMINT   = $295    ;Interval Timer Interrupt                     read-only
 TIM8T    = $295    ;Set 8    CLK Interval (6.7   usec/interval)  write-only
 TIM64T   = $296    ;Set 64   CLK Interval (63.6  usec/interval)  write-only
 T1024T   = $297    ;Set 1024 CLK Interval (858.2 usec/interval)  write-only

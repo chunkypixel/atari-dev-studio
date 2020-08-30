@@ -198,25 +198,6 @@ storeAinhsdevice
 skipSGRAMcheck
      endif
 
- ifconst TURNEDOFF
-     ldx #1
-     ldy #3
-joystickdetectloop
-     jsr setonebuttonmode
-     ; ensure we're in one-button mode and check for a genesis controller
-     lda INPT0,y
-     and #$80
-     sta genesisdetected0,x
-     bne skipsetgenesistwobutton
-skipsetgenesis
-     jsr settwobuttonmode
-skipsetgenesistwobutton
-     dey
-     dey
-     dex
-     bpl joystickdetectloop
- endif
-
      ldx #1
      jsr settwobuttonmode
      ldx #0

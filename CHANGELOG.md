@@ -13,6 +13,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 Sprite Editor
 * Added right-click 'Open in Sprite Editor' pop-up option for .spe files to load sprite editor projects directly from the Explorer window
 * Fixed (hopefully) random/repeated file browser popups when using the Sprite Editor
+* Disabled the Show Project on Startup option (can cause the above issue and also affect the new 'Open in Sprite Editor' feature)
 * When exporting sprite images to file the active sprite project path is now used for the base save folder
 
 ## 0.5.8

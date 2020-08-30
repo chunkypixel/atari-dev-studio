@@ -391,59 +391,45 @@ doublebufferminimumframetarget    = $1B4
 doublebufferminimumframeindex     = $1B5
 pausedisable     = $1B6
 XCTRL1s          = $1B7
-spritecount      = $1B8
-avoxenable       = $1B9
+avoxenable       = $1B8
 
-pokey1frames   = $1BA
-pokey1tick     = $1BB
-pokey2frames   = $1BC
-pokey2tick     = $1BD
-pokey3frames   = $1BE
-pokey3tick     = $1BF
-pokey4frames   = $1C0
-pokey4tick     = $1C1
-pokey1priority = $1C2
-pokey1offset   = $1C3
-pokey2priority = $1C4
-pokey2offset   = $1C5
-pokey3priority = $1C6
-pokey3offset   = $1C7
-pokey4priority = $1C8
-pokey4offset   = $1C9
+songtempo	= $1B9
+songtick	= $1BA
 
-songtempo	= $1CA
-songtick	= $1CB
+songchannel1layer1loops = $1BB
+songchannel2layer1loops = $1BC
+songchannel3layer1loops = $1BD
+songchannel4layer1loops = $1BE
 
-songchannel1layer1loops = $1CC
-songchannel2layer1loops = $1CD
-songchannel3layer1loops = $1CE
-songchannel4layer1loops = $1CF
+songchannel1layer2loops = $1BF
+songchannel2layer2loops = $1C0
+songchannel3layer2loops = $1C1
+songchannel4layer2loops = $1C2
 
-songchannel1layer2loops = $1D0
-songchannel2layer2loops = $1D1
-songchannel3layer2loops = $1D2
-songchannel4layer2loops = $1D3
+songchannel1layer3loops = $1C3
+songchannel2layer3loops = $1C4
+songchannel3layer3loops = $1C5
+songchannel4layer3loops = $1C6
 
-songchannel1layer3loops = $1D4
-songchannel2layer3loops = $1D5
-songchannel3layer3loops = $1D6
-songchannel4layer3loops = $1D7
+songchannel1busywait    = $1C7
+songchannel2busywait    = $1C8
+songchannel3busywait    = $1C9
+songchannel4busywait    = $1CA
 
-songchannel1busywait    = $1D8
-songchannel2busywait    = $1D9
-songchannel3busywait    = $1DA
-songchannel4busywait    = $1DB
+songchannel1stackdepth  = $1CB
+songchannel2stackdepth  = $1CC
+songchannel3stackdepth  = $1CD
+songchannel4stackdepth  = $1CE
 
-songchannel1stackdepth  = $1DC
-songchannel2stackdepth  = $1DD
-songchannel3stackdepth  = $1DE
-songchannel4stackdepth  = $1DF
+palframes    = $1CF
+palfastframe = $1D0
 
-palframes    = $1E0
-palfastframe = $1E1
 
-port0control =        $1E2
-port1control =        $1E3
+port0resolution = $1D1
+port1resolution = $1D2
+
+port0control =        $1D3
+port1control =        $1D4
 
  ; port#control values...
  ;      1 = proline
@@ -458,56 +444,66 @@ port1control =        $1E3
  ;     10 = atarivox
 
  ; controller 0 data...
-paddleposition0     =     $1E4
-keypadmatrix0a      =     $1E4
-drivingposition0    =     $1E4
-trakballx0          =     $1E4
-mousex0             =     $1E4
-lighttgunx0         =     $1E4
+paddleposition0     =     $1D5
+keypadmatrix0a      =     $1D5
+drivingposition0    =     $1D5
+trakballx0          =     $1D5
+mousex0             =     $1D5
+lighttgunx0         =     $1D5
 
  ; controller 1 data...
-paddleposition2     =     $1E5
-keypadmatrix1a      =     $1E5
-drivingposition1    =     $1E5
-trakballx1          =     $1E5
-mousex1             =     $1E5
-lightgunx1          =     $1E5
+paddleposition2     =     $1D6
+keypadmatrix1a      =     $1D6
+drivingposition1    =     $1D6
+trakballx1          =     $1D6
+mousex1             =     $1D6
+lightgunx1          =     $1D6
 
  ; controller 0 altdata...
-paddleposition1     =     $1E6 
-keypadmatrix0b      =     $1E6
-trakbally0          =     $1E6
-mousey0             =     $1E6
-lightguny0          =     $1E6
+paddleposition1     =     $1D7 
+keypadmatrix0b      =     $1D7
+trakbally0          =     $1D7
+mousey0             =     $1D7
+lightguny0          =     $1D7
 
  ; controller 1 altdata...
-paddleposition3     =     $1E7 
-keypadmatrix1b      =     $1E7
-trakbally1          =     $1E7
-mousey1             =     $1E7
-lightguny1          =     $1E7
+paddleposition3     =     $1D8 
+keypadmatrix1b      =     $1D8
+trakbally1          =     $1D8
+mousey1             =     $1D8
+lightguny1          =     $1D8
 
 ; controller state save. for trakball state+dir codes, rotary position codes
-controller0statesave =    $1E8
-mousecodex0          =    $1E8
-trakballcodex0       =    $1E8
-keypadmatrix0c       =    $1E8
+controller0statesave =    $1D9
+paddleprevious0      =    $1D9
+mousecodex0          =    $1D9
+trakballcodex0       =    $1D9
+keypadmatrix0c       =    $1D9
 
-controller1statesave =    $1E9
-mousecodex1          =    $1E9
-trakballcodex1       =    $1E9
-keypadmatrix1c       =    $1E9
+controller1statesave =    $1DA
+paddleprevious2      =    $1DA
+mousecodex1          =    $1DA
+trakballcodex1       =    $1DA
+keypadmatrix1c       =    $1DA
 
-keypadmatrix0d       =    $1EA
-mousecodey0          =    $1EA
-trakballcodey0       =    $1EA
+paddleprevious1      =    $1DB
+keypadmatrix0d       =    $1DB
+mousecodey0          =    $1DB
+trakballcodey0       =    $1DB
 
-keypadmatrix1d       =    $1EB
-mousecodey1          =    $1EB
-trakballcodey1       =    $1EB
+paddleprevious3      =    $1DC
+keypadmatrix1d       =    $1DC
+mousecodey1          =    $1DC
+trakballcodey1       =    $1DC
 
-genesisdetected0 = $1EC
-genesisdetected1 = $1ED
+genesis0detected     =    $1DD
+genesis1detected     =    $1DE
 
-; $1EE - $1FF reserved for stack
+debugVal             =    $1DF
+
+; $1DF - $1E7 reserved TBD
+
+canary               =    $1E8
+
+; $1E9 - $1FF reserved for stack
 

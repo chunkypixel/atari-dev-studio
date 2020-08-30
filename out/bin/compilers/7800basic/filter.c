@@ -99,6 +99,10 @@ char *filterterm[] = {
     "^hiscore.asm",
     "^tracker.asm",
     " Unresolved Symbols",
+    "^SGRAM",
+    "^ALWAYSTERMINATE",
+    "^NODRAWWAIT",
+    "^NOLIMITCHECKING",
     ""
 };
 
