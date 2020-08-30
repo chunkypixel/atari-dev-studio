@@ -13,7 +13,6 @@ exports.SpriteEditorPage = void 0;
 const vscode = require("vscode");
 const path = require("path");
 const filesystem = require("../filesystem");
-const application = require("../application");
 const opn = require("open");
 class SpriteEditorPage {
     constructor() {
@@ -71,10 +70,8 @@ class SpriteEditorPage {
             }
             // Load provided file (via right-click popup in Explorer)?
             if (fileUri) {
-                // Put in a delay to ensure editor loading is processed before importing
-                if (!isOpen) {
-                    application.delay(1000);
-                }
+                // Put in a delay to ensure editor loading is processed before importing??
+                //if (!isOpen) { application.delay(3000); }
                 this.loadFileContent("loadProject", fileUri);
             }
             // Capture command messages

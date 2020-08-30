@@ -140,7 +140,6 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                     }
 
                     // TODO: add list of functions from base source
-
                     return [
                         new vscode.CompletionItem('boxcollision', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('joy0up', vscode.CompletionItemKind.Function),
@@ -159,6 +158,16 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                         new vscode.CompletionItem('joy1fire', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('joy1fire0', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('joy1fire1', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('mousex0', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('mousex1', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('mousey0', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('mousey1', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('drivingposition0', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('drivingposition1', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('paddleposition0', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('paddleposition1', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('paddleposition2', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('paddleposition3', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('pokeydetected', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('switchreset', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('switchselect', vscode.CompletionItemKind.Function),
@@ -349,6 +358,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                         new vscode.CompletionItem('mousexonly', vscode.CompletionItemKind.Method),          
                         new vscode.CompletionItem('avoxvoice', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('mcpdevcart', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('canary', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('basepath', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('hssupport', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('hsgamename', vscode.CompletionItemKind.Method),
