@@ -424,7 +424,6 @@ songchannel4stackdepth  = $1CE
 palframes    = $1CF
 palfastframe = $1D0
 
-
 port0resolution = $1D1
 port1resolution = $1D2
 
@@ -496,14 +495,24 @@ keypadmatrix1d       =    $1DC
 mousecodey1          =    $1DC
 trakballcodey1       =    $1DC
 
-genesis0detected     =    $1DD
-genesis1detected     =    $1DE
+pokey1frames   = $1DD
+pokey1tick     = $1DE
+pokey2frames   = $1DF
+pokey2tick     = $1E0
+pokey3frames   = $1E1
+pokey3tick     = $1E2
+pokey4frames   = $1E3
+pokey4tick     = $1E4
+pokey1priority = $1E5
+pokey1offset   = $1E6
+pokey2priority = $1E7
+pokey2offset   = $1E8
+pokey3priority = $1E9
+pokey3offset   = $1EA
+pokey4priority = $1EB
+pokey4offset   = $1EC
 
-debugVal             =    $1DF
-
-; $1DF - $1E7 reserved TBD
-
-canary               =    $1E8
+canary               =    $1ED
 
 ; $1E9 - $1FF reserved for stack
 
