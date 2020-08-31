@@ -62,7 +62,7 @@ int line;
 int numjsrs;
 int numelses;
 int doingfunction;
-char Areg[50];
+char Areg[200];
 int branchtargetnumber;
 unsigned char graphicsdata[16][256][100];
 char graphicslabels[16][256][80];

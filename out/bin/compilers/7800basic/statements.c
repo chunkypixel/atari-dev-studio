@@ -3853,38 +3853,78 @@ void barf_graphic_file(void)
     if (bankcount == 0)  // non-banked
     {
 	if ((graphicsdatawidth[dmaplain] > 0) || (dmaplain > 0))	//calculate from graphics area...
+        {
 	    printf(" echo \" \",[($%04X - gameend)]d , \"bytes of ROM space left in the main area.\"\n", ADDRBASE);
+	    printf(" if ($%04X - gameend) < 0\n", ADDRBASE);
+            printf("SPACEOVERFLOW SET (SPACEOVERFLOW+1)\n");
+            printf(" endif\n");
+        }
 	else
+        {
 	    printf(" echo \" \",[($%04X - gameend)]d , \"bytes of ROM space left in the main area.\"\n", 0xF000);
+	    printf(" if ($%04X - gameend) < 0\n", 0xF000);
+            printf("SPACEOVERFLOW SET (SPACEOVERFLOW+1)\n");
+            printf(" endif\n");
+        }
     }
     else if ((currentbank + 1) == bankcount) // 0xC000
     {
 
 	if ((graphicsdatawidth[dmaplain] > 0) || (dmaplain > 0))	//calculate from graphics area...
+        {
 	    printf(" echo \" \",[($%04X - .)]d , \"bytes of ROM space left in the main area of bank %d.\"\n", ADDRBASE,
 		   currentbank + 1);
+	    printf(" if ($%04X - .) < 0\n", ADDRBASE);
+            printf("SPACEOVERFLOW SET (SPACEOVERFLOW+1)\n");
+            printf(" endif\n");
+        }
 	else
+        {
 	    printf(" echo \" \",[($%04X - .)]d , \"bytes of ROM space left in the main area of bank %d.\"\n", 0xEFFF,
 		   currentbank + 1);
+	    printf(" if ($%04X - .) < 0\n", 0xEFFF);
+            printf("SPACEOVERFLOW SET (SPACEOVERFLOW+1)\n");
+            printf(" endif\n");
+        }
     }
     else if ((romat4k == 1) && (currentbank == 0)) // 0x4000
     {
 
 	if ((graphicsdatawidth[dmaplain] > 0) || (dmaplain > 0))	//calculate from graphics area...
+        {
 	    printf(" echo \" \",[($%04X - .)]d , \"bytes of ROM space left in the main area of bank %d.\"\n", ADDRBASE,
 		   currentbank + 1);
+	    printf(" if ($%04X - .) < 0\n", ADDRBASE);
+            printf("SPACEOVERFLOW SET (SPACEOVERFLOW+1)\n");
+            printf(" endif\n");
+        }
 	else
+        {
 	    printf(" echo \" \",[($%04X - .)]d , \"bytes of ROM space left in the main area of bank %d.\"\n", 0x7FFF,
 		   currentbank + 1);
+	    printf(" if ($%04X - .) < 0\n", 0x7FFF);
+            printf("SPACEOVERFLOW SET (SPACEOVERFLOW+1)\n");
+            printf(" endif\n");
+        }
     }
     else 
     {
 	if ((graphicsdatawidth[dmaplain] > 0) || (dmaplain > 0))	//calculate from graphics area...
+        {
 	    printf(" echo \" \",[($%04X - .)]d , \"bytes of ROM space left in the main area of bank %d.\"\n", ADDRBASE,
 		   currentbank + 1);
+	    printf(" if ($%04X - .) < 0\n", ADDRBASE);
+            printf("SPACEOVERFLOW SET (SPACEOVERFLOW+1)\n");
+            printf(" endif\n");
+        }
 	else
+        {
 	    printf(" echo \" \",[($%04X - .)]d , \"bytes of ROM space left in the main area of bank %d.\"\n", 0xBFFF,
 		   currentbank + 1);
+	    printf(" if ($%04X - .) < 0\n", 0xBFFF);
+            printf("SPACEOVERFLOW SET (SPACEOVERFLOW+1)\n");
+            printf(" endif\n");
+        }
     }
 
 
@@ -4036,7 +4076,12 @@ void barf_graphic_file(void)
 		}
 
 		if(holefilepointer!=NULL)
+                {
 			printf (" echo \"  \",\"  \",\"  \",\"  \",[(256*WZONEHEIGHT)-(DMAHOLEEND%d - DMAHOLESTART%d)]d , \"bytes of ROM space left in DMA hole %d.\"\n", currentplain,currentplain,currentplain);
+			printf (" if ((256*WZONEHEIGHT)-(DMAHOLEEND%d - DMAHOLESTART%d)) < 0\n", currentplain,currentplain,currentplain);
+                        printf("SPACEOVERFLOW SET (SPACEOVERFLOW+1)\n");
+                        printf(" endif\n");
+                }
 	    }
 	}
 
