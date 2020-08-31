@@ -79,7 +79,7 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
                 let result = true;
                 // Validate
                 if (stderr.includes("Permission denied") ||
-                    (stderr.startsWith("*** WARNING: the file size of") && stderr.endsWith("isn't correct."))) {
+                    stderr.includes("*** WARNING: the file size of")) {
                     // Potential messages received (so far):
                     // Permission denied
                     // *** WARNING: The file size of <file> isn't correct.

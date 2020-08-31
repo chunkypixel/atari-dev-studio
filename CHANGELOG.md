@@ -4,7 +4,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.5.9
 
-* Updated to latest 7800basic release v0.11 (Windows, Linux, macOS)
+* Updated 7800basic to v0.12 (Windows, Linux, macOS)
 * Added new 7800basic keywords: paddlerange, paddlescalex2, drivingboost, mousexonly, mousex0, mousey0, mousex1, mousey1, drivingposition0, drivingposition1, paddleposition0, paddleposition1, paddleposition2, paddleposition3, canary (RevEng)
 * Added **Build** and **Build and Run** buttons to each open document (top right).
 * Enabled write state for A7800 configurations
@@ -13,7 +13,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 Sprite Editor
 * Added right-click 'Open in Sprite Editor' pop-up option for .spe files to load sprite editor projects directly from the Explorer window
 * Fixed (hopefully) random/repeated file browser popups when using the Sprite Editor
-* Disabled the Show Project on Startup option (can cause the above issue and also affect the new 'Open in Sprite Editor' feature)
+* Disabled the Show Project on Startup option (can cause the above issue and also affect the new 'Open in Sprite Editor' feature on first use)
 * When exporting sprite images to file the active sprite project path is now used for the base save folder
 
 ## 0.5.8
@@ -28,7 +28,7 @@ Sprite Editor
 
 ## 0.5.6
 
-* Updated to latest 7800basic release v0.10 (Windows, Linux, macOS)
+* Updated 7800basic to v0.10 (Windows, Linux, macOS)
 * Added document outline for dasm (shows labels, sub-labels, macros)
 * Added Go to Definition and Go to References features for dasm
 * Further enhancements to Go to Definition and Go to References features for batari basic and 7800basic
@@ -51,7 +51,7 @@ Sprite Editor
 
 ## 0.5.2
 
-* Updated to latest 7800basic release v0.9 (Windows, Linux, macOS)
+* Updated 7800basic to v0.9 (Windows, Linux, macOS)
 * Fixed misspelt 7800basic keyword: 528k
 
 ## 0.5.1
@@ -149,21 +149,21 @@ Sprite Editor
 
 ## 0.3.6
 
-* Updated to latest batari Basic release v1.5 (Windows, Linux, macOS)
-* Updated to latest 7800basic release v0.8 (Windows, Linux, macOS)
+* Updated batari Basic to v1.5 (Windows, Linux, macOS)
+* Updated 7800basic to v0.8 (Windows, Linux, macOS)
 * Updated internal dev packages
 
 ## 0.3.5
 
-* Updated to latest dasm release v2.20.13 (Windows, Linux, macOS) 
+* Updated dasm to v2.20.13 (Windows, Linux, macOS) 
 * Added options in the settings for choosing to use the **Default** (built-in) compiler or using a **Custom** one you have provided (batari Basic, 7800basic, dasm). This change will allow you to keep your custom compiler path without having to remove it to revert back to the default built-in one. 
 * Removed setting **atari-dev-studio.compiler.options.defaultCompiler** as it is no longer required (didn't appear to work anyway). Compilation of a file is determined by the language chosen in the editor.
 * Added missing 7800basic keywords: shakescreen, spritesheet (tallsprite), rand
 
 ## 0.3.4
 
-* Updated to latest batari Basic release v1.4 (Windows, Linux, macOS)
-* Updated to latest 7800basic release v0.7 (Windows, Linux, macOS)
+* Updated batari Basic to v1.4 (Windows, Linux, macOS)
+* Updated 7800basic to v0.7 (Windows, Linux, macOS)
 * Re-enabled basic language completion for 7800basic 
 
 ## 0.3.3
@@ -175,13 +175,13 @@ Sprite Editor
 
 ## 0.3.2
 
-* Updated to latest batari Basic release v1.2 (Windows, Linux, macOS)
+* Updated batari Basic to v1.2 (Windows, Linux, macOS)
 
 ## 0.3.1
 
 * Officially (finally!) included compiler and emulator packages for macOS (tested on Mojave).
 * Added Stella 6.0.2 (macOS)
-* Updated to latest dasm release v2.20.12 (Windows, Linux and macOS).
+* Updated dasm to v2.20.12 (Windows, Linux and macOS).
 * Updated internal dev packages 
 
 ## 0.3.0
