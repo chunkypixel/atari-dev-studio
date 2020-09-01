@@ -375,60 +375,75 @@ var97 = $1a1
 var98 = $1a2
 var99 = $1a3
 
-framecounter     = $1A4
-countdownseconds = $1A5
-score0           = $1A6 ; $1A7 $1A8
-score1           = $1A9 ; $1AA $1AB
-pausebuttonflag  = $1AC
-valbufend        = $1AD
-valbufendsave    = $1AE
-finescrollx      = $1AF
-finescrolly      = $1B0
-joybuttonmode    = $1B1 ; used to track any joysticks that were changed to one-button mode
-interruptindex   = $1B2
-tempavox         = $1B3
-doublebufferminimumframetarget    = $1B4
-doublebufferminimumframeindex     = $1B5
-pausedisable     = $1B6
-XCTRL1s          = $1B7
-avoxenable       = $1B8
+ SEG.U "7800basicRAM"
+ ORG $1A4
 
-songtempo	= $1B9
-songtick	= $1BA
+ ; MAX allocation locations are in comments...
+framecounter     DS 1 ; $1A4
+countdownseconds DS 1 ; $1A5
+score0           DS 3 ; $1A6 $1A7 $1A8
+score1           DS 3 ; $1A9 $1AA $1AB
+pausebuttonflag  DS 1 ; $1AC
+valbufend        DS 1 ; $1AD
+valbufendsave    DS 1 ; $1AE
+finescrollx      DS 1 ; $1AF
+finescrolly      DS 1 ; $1B0
+joybuttonmode    DS 1 ; $1B1 ; track joysticks that were changed to one-button mode
+interruptindex   DS 1 ; $1B2
+ 
+ ifconst DOUBLEBUFFER
+doublebufferminimumframetarget DS 1 ; $1B3
+doublebufferminimumframeindex  DS 1 ; $1B4
+ endif 
 
-songchannel1layer1loops = $1BB
-songchannel2layer1loops = $1BC
-songchannel3layer1loops = $1BD
-songchannel4layer1loops = $1BE
+pausedisable     DS 1 ; $1B5
+XCTRL1s          DS 1 ; $1B6
 
-songchannel1layer2loops = $1BF
-songchannel2layer2loops = $1C0
-songchannel3layer2loops = $1C1
-songchannel4layer2loops = $1C2
+ ifconst AVOXVOICE
+avoxenable       DS 1 ; $1B7
+tempavox         DS 1 ; $1B8
+ endif
 
-songchannel1layer3loops = $1C3
-songchannel2layer3loops = $1C4
-songchannel3layer3loops = $1C5
-songchannel4layer3loops = $1C6
+ ifconst MUSICTRACKER
+songtempo	DS 1 ; $1B9
+songtick	DS 1 ; $1BA
 
-songchannel1busywait    = $1C7
-songchannel2busywait    = $1C8
-songchannel3busywait    = $1C9
-songchannel4busywait    = $1CA
+songchannel1layer1loops DS 1 ; $1BB
+songchannel2layer1loops DS 1 ; $1BC
+songchannel3layer1loops DS 1 ; $1BD
+songchannel4layer1loops DS 1 ; $1BE
 
-songchannel1stackdepth  = $1CB
-songchannel2stackdepth  = $1CC
-songchannel3stackdepth  = $1CD
-songchannel4stackdepth  = $1CE
+songchannel1layer2loops DS 1 ; $1BF
+songchannel2layer2loops DS 1 ; $1C0
+songchannel3layer2loops DS 1 ; $1C1
+songchannel4layer2loops DS 1 ; $1C2
 
-palframes    = $1CF
-palfastframe = $1D0
+songchannel1layer3loops DS 1 ; $1C3
+songchannel2layer3loops DS 1 ; $1C4
+songchannel3layer3loops DS 1 ; $1C5
+songchannel4layer3loops DS 1 ; $1C6
 
-port0resolution = $1D1
-port1resolution = $1D2
+songchannel1busywait    DS 1 ; $1C7
+songchannel2busywait    DS 1 ; $1C8
+songchannel3busywait    DS 1 ; $1C9
+songchannel4busywait    DS 1 ; $1CA
 
-port0control =        $1D3
-port1control =        $1D4
+songchannel1stackdepth  DS 1 ; $1CB
+songchannel2stackdepth  DS 1 ; $1CC
+songchannel3stackdepth  DS 1 ; $1CD
+songchannel4stackdepth  DS 1 ; $1CE
+ endif
+
+palframes    DS 1 ; $1CF
+palfastframe DS 1 ; $1D0
+
+ ifconst MOUSESUPPORT
+port0resolution DS 1 ; $1D1
+port1resolution DS 1 ; $1D2
+ endif
+
+port0control DS 1 ; $1D3
+port1control DS 1 ; $1D4
 
  ; port#control values...
  ;      1 = proline
@@ -443,76 +458,93 @@ port1control =        $1D4
  ;     10 = atarivox
 
  ; controller 0 data...
-paddleposition0     =     $1D5
-keypadmatrix0a      =     $1D5
-drivingposition0    =     $1D5
-trakballx0          =     $1D5
-mousex0             =     $1D5
-lighttgunx0         =     $1D5
+paddleposition0     DS 1 ; $1D5
+keypadmatrix0a      =      paddleposition0 
+drivingposition0    =      paddleposition0
+trakballx0          =      paddleposition0
+mousex0             =      paddleposition0
+lighttgunx0         =      paddleposition0
 
  ; controller 1 data...
-paddleposition2     =     $1D6
-keypadmatrix1a      =     $1D6
-drivingposition1    =     $1D6
-trakballx1          =     $1D6
-mousex1             =     $1D6
-lightgunx1          =     $1D6
+paddleposition2     DS 1 ; $1D6
+keypadmatrix1a      =      paddleposition2
+drivingposition1    =      paddleposition2
+trakballx1          =      paddleposition2
+mousex1             =      paddleposition2
+lightgunx1          =      paddleposition2
 
  ; controller 0 altdata...
-paddleposition1     =     $1D7 
-keypadmatrix0b      =     $1D7
-trakbally0          =     $1D7
-mousey0             =     $1D7
-lightguny0          =     $1D7
+paddleposition1     DS 1 ; $1D7 
+keypadmatrix0b      =      paddleposition1
+trakbally0          =      paddleposition1
+mousey0             =      paddleposition1
+lightguny0          =      paddleposition1
 
  ; controller 1 altdata...
-paddleposition3     =     $1D8 
-keypadmatrix1b      =     $1D8
-trakbally1          =     $1D8
-mousey1             =     $1D8
-lightguny1          =     $1D8
+paddleposition3     DS 1 ; $1D8 
+keypadmatrix1b      =      paddleposition3
+trakbally1          =      paddleposition3
+mousey1             =      paddleposition3
+lightguny1          =      paddleposition3
 
 ; controller state save. for trakball state+dir codes, rotary position codes
-controller0statesave =    $1D9
-paddleprevious0      =    $1D9
-mousecodex0          =    $1D9
-trakballcodex0       =    $1D9
-keypadmatrix0c       =    $1D9
+controller0statesave DS 1 ; $1D9
+paddleprevious0      =      controller0statesave
+mousecodex0          =      controller0statesave
+trakballcodex0       =      controller0statesave
+keypadmatrix0c       =      controller0statesave
 
-controller1statesave =    $1DA
-paddleprevious2      =    $1DA
-mousecodex1          =    $1DA
-trakballcodex1       =    $1DA
-keypadmatrix1c       =    $1DA
+controller1statesave DS 1 ; $1DA
+paddleprevious2      =      controller1statesave
+mousecodex1          =      controller1statesave
+trakballcodex1       =      controller1statesave
+keypadmatrix1c       =      controller1statesave
 
-paddleprevious1      =    $1DB
-keypadmatrix0d       =    $1DB
-mousecodey0          =    $1DB
-trakballcodey0       =    $1DB
+paddleprevious1      DS 1 ; $1DB
+keypadmatrix0d       =      paddleprevious1
+mousecodey0          =      paddleprevious1
+trakballcodey0       =      paddleprevious1
 
-paddleprevious3      =    $1DC
-keypadmatrix1d       =    $1DC
-mousecodey1          =    $1DC
-trakballcodey1       =    $1DC
+paddleprevious3      DS 1 ; $1DC
+keypadmatrix1d       =      paddleprevious3
+mousecodey1          =      paddleprevious3
+trakballcodey1       =      paddleprevious3
 
-pokey1frames   = $1DD
-pokey1tick     = $1DE
-pokey2frames   = $1DF
-pokey2tick     = $1E0
-pokey3frames   = $1E1
-pokey3tick     = $1E2
-pokey4frames   = $1E3
-pokey4tick     = $1E4
-pokey1priority = $1E5
-pokey1offset   = $1E6
-pokey2priority = $1E7
-pokey2offset   = $1E8
-pokey3priority = $1E9
-pokey3offset   = $1EA
-pokey4priority = $1EB
-pokey4offset   = $1EC
+ ifconst pokeysupport
+pokey1frames   DS 1 ; $1DD
+pokey1tick     DS 1 ; $1DE
+pokey2frames   DS 1 ; $1DF
+pokey2tick     DS 1 ; $1E0
+pokey3frames   DS 1 ; $1E1
+pokey3tick     DS 1 ; $1E2
+pokey4frames   DS 1 ; $1E3
+pokey4tick     DS 1 ; $1E4
+pokey1priority DS 1 ; $1E5
+pokey1offset   DS 1 ; $1E6
+pokey2priority DS 1 ; $1E7
+pokey2offset   DS 1 ; $1E8
+pokey3priority DS 1 ; $1E9
+pokey3offset   DS 1 ; $1EA
+pokey4priority DS 1 ; $1EB
+pokey4offset   DS 1 ; $1EC
+ endif
 
-canary               =    $1ED
+ ifnconst CANARRYOFF
+canary         DS 1 ; $1ED
+ endif
 
-; $1E9 - $1FF reserved for stack
+ ifnconst bankswitchmode
+   echo "  stack allowance:",[($1FF - .)/2]d,"nested subroutines."
+ else
+   echo "  stack allowance:",[($1FF - .)/3]d,"nested subroutines."
+ endif
+ ifnconst CANARRYOFF
+   echo "  the canary is situated at:",[canary]
+ else
+   echo "  the canary is disabled."
+ endif
+
+; $1EE - $1FF reserved for stack
+
+ SEG "GAME"
 

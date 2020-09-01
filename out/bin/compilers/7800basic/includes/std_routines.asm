@@ -119,10 +119,12 @@ buttonreadloopreturn
 	 endif ; KEYPADSUPPORT
 
 
+ ifconst DOUBLEBUFFER
          lda doublebufferminimumframeindex
          beq skipdoublebufferminimumframeindexadjust
          dec doublebufferminimumframeindex
 skipdoublebufferminimumframeindexadjust
+ endif
 
          pla
          tay
