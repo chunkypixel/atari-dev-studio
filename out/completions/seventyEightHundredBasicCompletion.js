@@ -283,6 +283,23 @@ class SeventyEightHundredBasicCompletion extends completionBase_1.CompletionBase
                     ];
                 }
             }, ' ');
+            // drawhiscores
+            let drawhiscoresProvider = vscode.languages.registerCompletionItemProvider(this.Id, {
+                // return list of available language methods
+                provideCompletionItems(document, position) {
+                    // get all text until the `position` and check if it reads `return `
+                    let linePrefix = document.lineAt(position).text.substr(0, position.character);
+                    if (!linePrefix.endsWith('drawhiscores ')) {
+                        return undefined;
+                    }
+                    return [
+                        new vscode.CompletionItem('attract', vscode.CompletionItemKind.Keyword),
+                        new vscode.CompletionItem('single', vscode.CompletionItemKind.Keyword),
+                        new vscode.CompletionItem('player1', vscode.CompletionItemKind.Keyword),
+                        new vscode.CompletionItem('player2', vscode.CompletionItemKind.Keyword)
+                    ];
+                }
+            }, ' ');
             // tallsprite
             let tallsrpiteModeProvider = vscode.languages.registerCompletionItemProvider(this.Id, {
                 // return list of available language methods
@@ -344,7 +361,7 @@ class SeventyEightHundredBasicCompletion extends completionBase_1.CompletionBase
                 }
             }, ' ');
             // add items           
-            context.subscriptions.push(ifProvider, returnProvider, romsizeProvider, displayModeProvider, shakescreenModeProvider, tallsrpiteModeProvider, setProvider);
+            context.subscriptions.push(ifProvider, returnProvider, romsizeProvider, displayModeProvider, shakescreenModeProvider, drawhiscoresProvider, tallsrpiteModeProvider, setProvider);
         });
     }
 }

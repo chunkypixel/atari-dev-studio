@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.6.1
+
+* Added new 7800basic keywords: drawhiscores (attract|single|player1|player2) (Karl G) and added code completion for item
+* Updated hover tooltips for 7800basic keywords
+
 ## 0.6.0
 
 * Updated 7800basic to v0.14 (Windows, Linux, macOS)

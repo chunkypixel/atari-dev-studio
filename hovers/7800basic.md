@@ -152,6 +152,14 @@
 
 
 
+## CANARY
+
+    set canary state
+
+    state - on, off
+
+
+
 ## DLMEMORY
 
     set dlmemory start_byte_location end_byte_location 
@@ -312,6 +320,15 @@
     value - 0-3 (easy, intermediate, advanced, expert)
 
 
+
+
+## DRAWHISCORES
+
+    drawhiscores state
+
+    state - attract, single, player1, player2
+    
+    
 
 ## ADJUSTVISIBLE
 
