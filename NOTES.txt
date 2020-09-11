@@ -6,6 +6,9 @@ npm install -g vsce
 Creating a packgage
 vsce package 
 
+// VS Code Extension Guides
+https://code.visualstudio.com/api/extension-guides/overview
+
 
 Installing a VSIX package 
 -------------------------

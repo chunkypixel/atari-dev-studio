@@ -65,6 +65,14 @@ export const CompilerOutputChannel: vscode.OutputChannel = vscode.window.createO
 
 // -------------------------------------------------------------------------------------
 // Terminal
+// Information:
+// * https://code.visualstudio.com/updates/v1_49#_terminal-link-providers
+//   we maybe able to capture output!!
+// * https://github.com/microsoft/vscode-extension-samples/tree/master/terminal-sample
+// * features
+//   vscode.window.onDidWriteTerminalData
+//   vscode.window.registerTerminalLinkProvider
+
 // -------------------------------------------------------------------------------------
 export let AdsTerminal: vscode.Terminal | undefined;
 
