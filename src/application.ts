@@ -69,18 +69,22 @@ export const CompilerOutputChannel: vscode.OutputChannel = vscode.window.createO
 export let AdsTerminal: vscode.Terminal | undefined;
 
 export async function InitialiseAdsTerminalAsync() {
-	// Kill existing terminal?
-	AdsTerminal?.dispose();
-	
+	// Already have a terminal?
+	if (AdsTerminal !== undefined && AdsTerminal.processId) { 
+		AdsTerminal?.show(true);
+		return;
+	}
+
 	// Create
 	AdsTerminal = vscode.window.createTerminal(`${Name}`);
 
-	// if user closes the terminal, delete our reference:
-	vscode.window.onDidCloseTerminal(event => {
-		if (event.name === Name) {
+	// User closed a terminal? if so verify it's ours and clear the reference
+	vscode.window.onDidCloseTerminal((terminal) => {
+		if (terminal.name === Name) {
 			AdsTerminal = undefined;
 		}
 	});
+
 }
 
 // -------------------------------------------------------------------------------------

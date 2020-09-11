@@ -64,13 +64,16 @@ exports.ChangeLogUri = vscode.Uri.parse(`https://marketplace.visualstudio.com/it
 exports.CompilerOutputChannel = vscode.window.createOutputChannel("Compiler");
 function InitialiseAdsTerminalAsync() {
     return __awaiter(this, void 0, void 0, function* () {
-        // Kill existing terminal?
-        exports.AdsTerminal === null || exports.AdsTerminal === void 0 ? void 0 : exports.AdsTerminal.dispose();
+        // Already have a terminal?
+        if (exports.AdsTerminal !== undefined && exports.AdsTerminal.processId) {
+            exports.AdsTerminal === null || exports.AdsTerminal === void 0 ? void 0 : exports.AdsTerminal.show(true);
+            return;
+        }
         // Create
         exports.AdsTerminal = vscode.window.createTerminal(`${exports.Name}`);
-        // if user closes the terminal, delete our reference:
-        vscode.window.onDidCloseTerminal(event => {
-            if (event.name === exports.Name) {
+        // User closed a terminal? if so verify it's ours and clear the reference
+        vscode.window.onDidCloseTerminal((terminal) => {
+            if (terminal.name === exports.Name) {
                 exports.AdsTerminal = undefined;
             }
         });
