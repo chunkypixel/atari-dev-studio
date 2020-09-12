@@ -24,6 +24,11 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SeventyEightHundredBasicCompiler.ExecuteCompilerAsync');
+            // Validate compiler files
+            // Note: for anti-virus quarantining
+            if (!(yield this.VerifyCompilerFilesExistsAsync())) {
+                return false;
+            }
             // Premissions
             yield this.RepairFilePermissionsAsync();
             // Compiler options
@@ -113,51 +118,6 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
     //     // Result
     //     return true;
     // }
-    RepairFilePermissionsAsync() {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:SeventyEightHundredBasicCompiler.RepairFilePermissionsAsync');
-            // Validate
-            if (this.CustomFolderOrPath || application.IsWindows) {
-                return true;
-            }
-            // Prepare
-            let platform = "Linux";
-            if (application.IsMacOS) {
-                platform = "Darwin";
-            }
-            // Process
-            let result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, '7800basic.sh'));
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800basic.${platform}.${application.OSArch}`));
-            }
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800filter.${platform}.${application.OSArch}`));
-            }
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800header.${platform}.${application.OSArch}`));
-            }
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800optimize.${platform}.${application.OSArch}`));
-            }
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800postprocess.${platform}.${application.OSArch}`));
-            }
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800preprocess.${platform}.${application.OSArch}`));
-            }
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800sign.${platform}.${application.OSArch}`));
-            }
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `7800makecc2.${platform}.${application.OSArch}`));
-            }
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `dasm.${platform}.${application.OSArch}`));
-            }
-            // Result
-            return result;
-        });
-    }
     RemoveCompilationFilesAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SeventyEightHundredBasicCompiler.RemoveCompilationFiles');
@@ -185,6 +145,29 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             // Result
             return true;
         });
+    }
+    GetCompilerFileList() {
+        // Prepare
+        let command = (application.IsWindows ? "7800bas.bat" : "7800basic.sh");
+        let platform = "";
+        if (application.IsLinux) {
+            platform = ".Linux";
+        }
+        if (application.IsMacOS) {
+            platform = ".Darwin";
+        }
+        let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
+        // Result
+        return [command,
+            `7800basic${platform}${extension}`,
+            `7800filter${platform}${extension}`,
+            `7800header${platform}${extension}`,
+            `7800optimize${platform}${extension}`,
+            `7800postprocess${platform}${extension}`,
+            `7800preprocess${platform}${extension}`,
+            `7800sign${platform}${extension}`,
+            `7800makecc2${platform}${extension}`,
+            `dasm${platform}${extension}`];
     }
 }
 exports.SeventyEightHundredBasicCompiler = SeventyEightHundredBasicCompiler;

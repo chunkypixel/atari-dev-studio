@@ -19,6 +19,10 @@ export class BatariBasicCompiler extends CompilerBase {
     protected async ExecuteCompilerAsync(): Promise<boolean> {
         console.log('debugger:BatariBasicCompiler.ExecuteCompilerAsync');
 
+        // Validate compiler files
+        // Note: for anti-virus quarantining
+        if (!await this.VerifyCompilerFilesExistsAsync()) { return false; }
+
         // Premissions
         await this.RepairFilePermissionsAsync();
 
@@ -129,27 +133,6 @@ export class BatariBasicCompiler extends CompilerBase {
     //     return true;
     // }
 
-    protected async RepairFilePermissionsAsync(): Promise<boolean> {
-        console.log('debugger:BatariBasicCompiler.RepairFilePermissionsAsync'); 
-
-        // Validate
-        if (this.CustomFolderOrPath || application.IsWindows) { return true; }
-
-        // Prepare
-        let platform = "Linux";
-        if (application.IsMacOS) { platform = "Darwin"; }
-
-        // Process
-        let result = await filesystem.ChModAsync(path.join(this.FolderOrPath,'2600basic.sh'));
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`2600basic.${platform}.${application.OSArch}`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`dasm.${platform}.${application.OSArch}`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`bbfilter.${platform}.${application.OSArch}`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`optimize.${platform}.${application.OSArch}`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`postprocess.${platform}.${application.OSArch}`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`preprocess.${platform}.${application.OSArch}`)); }
-        return result;
-    }
-
     protected async RemoveCompilationFilesAsync(): Promise<boolean> {
         console.log('debugger:BatariBasicCompiler.RemoveCompilationFilesAsync');
 
@@ -173,5 +156,24 @@ export class BatariBasicCompiler extends CompilerBase {
 
         // Result
         return true;
+    }
+
+    protected GetCompilerFileList(): string[] {
+        // Prepare
+        let command = (application.IsWindows ? "2600bas.bat" : "2600basic.sh");
+        let platform = "";
+        if (application.IsLinux) { platform = ".Linux"; }
+        if (application.IsMacOS) { platform = ".Darwin"; }
+        let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
+
+        // Result
+        return [command,
+            `2600basic${platform}${extension}`,
+            `bbfilter${platform}${extension}`,
+            `optimize${platform}${extension}`,
+            `postprocess${platform}${extension}`,
+            `preprocess${platform}${extension}`,
+            `dasm${platform}${extension}`];     
+
     }
 }

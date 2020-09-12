@@ -4,6 +4,7 @@ import * as application from '../application';
 import * as filesystem from '../filesystem';
 import * as execute from '../execute';
 import { CompilerBase } from "./compilerBase";
+import { stringify } from 'querystring';
 
 export class SeventyEightHundredBasicCompiler extends CompilerBase {
 
@@ -21,6 +22,10 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
     
     protected async ExecuteCompilerAsync(): Promise<boolean> {
         console.log('debugger:SeventyEightHundredBasicCompiler.ExecuteCompilerAsync');
+
+        // Validate compiler files
+        // Note: for anti-virus quarantining
+        if (!await this.VerifyCompilerFilesExistsAsync()) { return false; }
 
         // Premissions
         await this.RepairFilePermissionsAsync();
@@ -125,32 +130,6 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
     //     return true;
     // }
 
-    protected async RepairFilePermissionsAsync(): Promise<boolean> {
-        console.log('debugger:SeventyEightHundredBasicCompiler.RepairFilePermissionsAsync'); 
-
-        // Validate
-        if (this.CustomFolderOrPath || application.IsWindows) { return true; }
-
-        // Prepare
-        let platform = "Linux";
-        if (application.IsMacOS) { platform = "Darwin"; }
-
-        // Process
-        let result = await filesystem.ChModAsync(path.join(this.FolderOrPath,'7800basic.sh'));
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800basic.${platform}.${application.OSArch}`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800filter.${platform}.${application.OSArch}`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800header.${platform}.${application.OSArch}`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800optimize.${platform}.${application.OSArch}`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800postprocess.${platform}.${application.OSArch}`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800preprocess.${platform}.${application.OSArch}`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800sign.${platform}.${application.OSArch}`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`7800makecc2.${platform}.${application.OSArch}`)); }
-        if (result) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`dasm.${platform}.${application.OSArch}`)); }
-     
-        // Result
-        return result;
-    }
-
     protected async RemoveCompilationFilesAsync(): Promise<boolean> {
         console.log('debugger:SeventyEightHundredBasicCompiler.RemoveCompilationFiles');
 
@@ -180,6 +159,28 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
 
         // Result
         return true;
+    }
+
+    protected GetCompilerFileList(): string[] {
+        // Prepare
+        let command = (application.IsWindows ? "7800bas.bat" : "7800basic.sh");
+        let platform = "";
+        if (application.IsLinux) { platform = ".Linux"; }
+        if (application.IsMacOS) { platform = ".Darwin"; }
+        let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
+
+        // Result
+        return [command,
+            `7800basic${platform}${extension}`,
+            `7800filter${platform}${extension}`,
+            `7800header${platform}${extension}`,
+            `7800optimize${platform}${extension}`,
+            `7800postprocess${platform}${extension}`,
+            `7800preprocess${platform}${extension}`,
+            `7800sign${platform}${extension}`,
+            `7800makecc2${platform}${extension}`,
+            `dasm${platform}${extension}`];     
+
     }
 
 }

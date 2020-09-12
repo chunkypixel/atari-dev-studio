@@ -22,6 +22,11 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:BatariBasicCompiler.ExecuteCompilerAsync');
+            // Validate compiler files
+            // Note: for anti-virus quarantining
+            if (!(yield this.VerifyCompilerFilesExistsAsync())) {
+                return false;
+            }
             // Premissions
             yield this.RepairFilePermissionsAsync();
             // Compiler options
@@ -118,41 +123,6 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     //     // Result
     //     return true;
     // }
-    RepairFilePermissionsAsync() {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:BatariBasicCompiler.RepairFilePermissionsAsync');
-            // Validate
-            if (this.CustomFolderOrPath || application.IsWindows) {
-                return true;
-            }
-            // Prepare
-            let platform = "Linux";
-            if (application.IsMacOS) {
-                platform = "Darwin";
-            }
-            // Process
-            let result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, '2600basic.sh'));
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `2600basic.${platform}.${application.OSArch}`));
-            }
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `dasm.${platform}.${application.OSArch}`));
-            }
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `bbfilter.${platform}.${application.OSArch}`));
-            }
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `optimize.${platform}.${application.OSArch}`));
-            }
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `postprocess.${platform}.${application.OSArch}`));
-            }
-            if (result) {
-                result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `preprocess.${platform}.${application.OSArch}`));
-            }
-            return result;
-        });
-    }
     RemoveCompilationFilesAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:BatariBasicCompiler.RemoveCompilationFilesAsync');
@@ -174,6 +144,26 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             // Result
             return true;
         });
+    }
+    GetCompilerFileList() {
+        // Prepare
+        let command = (application.IsWindows ? "2600bas.bat" : "2600basic.sh");
+        let platform = "";
+        if (application.IsLinux) {
+            platform = ".Linux";
+        }
+        if (application.IsMacOS) {
+            platform = ".Darwin";
+        }
+        let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
+        // Result
+        return [command,
+            `2600basic${platform}${extension}`,
+            `bbfilter${platform}${extension}`,
+            `optimize${platform}${extension}`,
+            `postprocess${platform}${extension}`,
+            `preprocess${platform}${extension}`,
+            `dasm${platform}${extension}`];
     }
 }
 exports.BatariBasicCompiler = BatariBasicCompiler;

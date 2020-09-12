@@ -140,10 +140,67 @@ export abstract class CompilerBase implements vscode.Disposable {
         return true;
     }
 
-    protected async RepairFilePermissionsAsync(): Promise<boolean> {
-        return true;
+    protected async VerifyCompilerFilesExistsAsync(): Promise<boolean> {
+        console.log('debugger:CompilerBase.VerifyCompilerFilesExistsAsync');
+
+        // Prepare
+        let compilerFileList:string[] = this.GetCompilerFileList();
+        let result = true;
+
+        // Process
+        for (let compilerFileName of compilerFileList) {
+            // Prepare
+            let compilerFilePath = path.join(this.FolderOrPath, compilerFileName);
+
+            // Validate
+            if (!await filesystem.FileExistsAsync(compilerFilePath)) {
+                // Not found
+                application.WriteToCompilerTerminal(`ERROR: Unable to locate compiler file '${compilerFileName}'. `);  
+                result = false; 
+            }
+        }
+
+        // Failed?, 
+        if (!result) {
+            let message = "NOTE: your anti-virus software may have quarantined one or more files related to the compiler due to a false/positive test and where this is the case please ensure you whitelist to allow these files to used.  Alternatively try re-installing the extension.";
+            application.WriteToCompilerTerminal(message);  
+        }
+
+        // Result
+        return result;
     }
 
+    protected async RepairFilePermissionsAsync(): Promise<boolean> {
+        console.log('debugger:CompilerBase.RepairFilePermissionsAsync'); 
+
+        // Validate
+        if (this.CustomFolderOrPath || application.IsWindows) { return true; }
+
+        // Prepare
+        let compilerFileList:string[] = this.GetCompilerFileList();
+        let result = true;
+
+        // Process
+        for (let compilerFileName of compilerFileList) {
+            // Prepare
+            let compilerFilePath = path.join(this.FolderOrPath, compilerFileName);
+
+            // Validate
+            if (!await filesystem.ChModAsync(compilerFilePath)) {
+                // Not found
+                application.WriteToCompilerTerminal(`WARNING: Unable to set file permissions for compiler file '${compilerFileName}'. `);  
+                result = false; 
+            }
+        }
+     
+        // Result
+        return result;
+    }
+
+    protected GetCompilerFileList(): string[] {
+        return [];
+    } 
+    
     protected async LoadConfigurationAsync(): Promise<boolean> {
         console.log('debugger:CompilerBase.LoadConfigurationAsync');  
 

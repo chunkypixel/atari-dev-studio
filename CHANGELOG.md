@@ -6,6 +6,8 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 * Added new 7800basic keywords: drawhiscores (attract|single|player1|player2) (Karl G) and added code completion for item
 * Updated hover tooltips for 7800basic keywords
+* Fixed issue with batch file generating multiple terminal windows (Karl G)
+* Added compiler files verification with anti-virus note and consolidated file list with file permission check (batari Basic and 7800basic)
 
 ## 0.6.0
 
