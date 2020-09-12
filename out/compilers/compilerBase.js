@@ -161,6 +161,7 @@ class CompilerBase {
             let compilerFileList = this.GetCompilerFileList();
             let result = true;
             // Process
+            application.WriteToCompilerTerminal(`Verifying compiler files exist...`);
             for (let compilerFileName of compilerFileList) {
                 // Prepare
                 let compilerFilePath = path.join(this.FolderOrPath, compilerFileName);
@@ -191,6 +192,7 @@ class CompilerBase {
             let compilerFileList = this.GetCompilerFileList();
             let result = true;
             // Process
+            application.WriteToCompilerTerminal(`Verifying file permissions...`);
             for (let compilerFileName of compilerFileList) {
                 // Prepare
                 let compilerFilePath = path.join(this.FolderOrPath, compilerFileName);

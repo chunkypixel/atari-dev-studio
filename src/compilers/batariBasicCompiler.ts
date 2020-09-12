@@ -53,7 +53,7 @@ export class BatariBasicCompiler extends CompilerBase {
     
         // Notify
         // Linux and macOS script has this message already
-        if (application.IsWindows) { application.WriteToCompilerTerminal(`Starting build of ${this.FileName}...`, false); } 
+        if (application.IsWindows) { application.WriteToCompilerTerminal(``); application.WriteToCompilerTerminal(`Starting build of ${this.FileName}...`, false); } 
 
         // Compile
         this.IsRunning = true;

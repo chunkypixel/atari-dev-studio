@@ -53,6 +53,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             // Notify
             // Linux and macOS script has this message already
             if (application.IsWindows) {
+                application.WriteToCompilerTerminal(``);
                 application.WriteToCompilerTerminal(`Starting build of ${this.FileName}...`, false);
             }
             // Compile
