@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.6.2
+
+Sprite Editor
+* Fixed error exporting to png images (TwentySixHundred, darryl1970, Muddyfunster)
+
 ## 0.6.1
 
 * Added new 7800basic keywords: drawhiscores (attract|single|player1|player2) (Karl G) and added code completion for item

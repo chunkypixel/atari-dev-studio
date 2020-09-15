@@ -186,7 +186,6 @@ class SpriteEditorPage {
         let command = message.command;
         let file = message.file;
         let data = message.data;
-        let errorMessage = undefined;
         // Set default path
         let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
         // Options
@@ -215,21 +214,19 @@ class SpriteEditorPage {
                             file: fileUri.fsPath,
                         });
                     })
-                        .catch(() => {
-                        errorMessage = `Failed to save project file: ${path.basename(fileUri.fsPath)}`;
+                        .catch((e) => {
                         this.currentPanel.webview.postMessage({
                             command: command,
                             status: 'error',
-                            errorMessage: errorMessage
+                            errorMessage: `Failed to save project '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
                         });
                     });
                 })
-                    .catch(() => {
-                    errorMessage = "Failed to create folder";
+                    .catch((e) => {
                     this.currentPanel.webview.postMessage({
                         command: command,
                         status: 'error',
-                        errorMessage: errorMessage
+                        errorMessage: e.message
                     });
                 });
             }
@@ -240,7 +237,6 @@ class SpriteEditorPage {
         let command = message.command;
         let file = message.file;
         let data = message.data;
-        let errorMessage = undefined;
         // Get default path
         // Assuiming file provided is the project file
         let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
@@ -261,7 +257,9 @@ class SpriteEditorPage {
                 // Save
                 filesystem.MkDirAsync(folder)
                     .then(() => {
-                    filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data, 'utf8'))
+                    // We now send through in base64 to avoid Buffer.from() conversion errors
+                    let convertToBuffer = Buffer.from(data, "base64");
+                    filesystem.WriteFileAsync(fileUri.fsPath, convertToBuffer)
                         .then(() => {
                         this.currentPanel.webview.postMessage({
                             command: command,
@@ -269,21 +267,19 @@ class SpriteEditorPage {
                             file: path.basename(fileUri.fsPath),
                         });
                     })
-                        .catch(() => {
-                        errorMessage = `Failed to export image file: ${path.basename(fileUri.fsPath)}`;
+                        .catch((e) => {
                         this.currentPanel.webview.postMessage({
                             command: command,
                             status: 'error',
-                            errorMessage: errorMessage
+                            errorMessage: `Failed to export image '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
                         });
                     });
                 })
-                    .catch(() => {
-                    errorMessage = "Failed to create folder";
+                    .catch((e) => {
                     this.currentPanel.webview.postMessage({
                         command: command,
                         status: 'error',
-                        errorMessage: errorMessage
+                        errorMessage: e.message
                     });
                 });
             }
@@ -294,7 +290,6 @@ class SpriteEditorPage {
         let command = message.command;
         let file = message.file;
         let data = message.data;
-        let errorMessage = undefined;
         // Get default path
         // Assuiming file provided is the project file
         let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
@@ -323,21 +318,19 @@ class SpriteEditorPage {
                             file: path.basename(fileUri.fsPath),
                         });
                     })
-                        .catch(() => {
-                        errorMessage = `Failed to export source file: ${path.basename(fileUri.fsPath)}`;
+                        .catch((e) => {
                         this.currentPanel.webview.postMessage({
                             command: command,
                             status: 'error',
-                            errorMessage: errorMessage
+                            errorMessage: `Failed to export source file '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
                         });
                     });
                 })
-                    .catch(() => {
-                    errorMessage = "Failed to create folder";
+                    .catch((e) => {
                     this.currentPanel.webview.postMessage({
                         command: command,
                         status: 'error',
-                        errorMessage: errorMessage
+                        errorMessage: e.message
                     });
                 });
             }
@@ -348,7 +341,6 @@ class SpriteEditorPage {
         let command = message.command;
         let file = message.file;
         let data = message.data;
-        let errorMessage = undefined;
         // Get default path
         // Assuiming file provided is the project file
         let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
@@ -377,21 +369,19 @@ class SpriteEditorPage {
                             file: path.basename(fileUri.fsPath),
                         });
                     })
-                        .catch(() => {
-                        errorMessage = `Failed to export image file: ${path.basename(fileUri.fsPath)}`;
+                        .catch((e) => {
                         this.currentPanel.webview.postMessage({
                             command: command,
                             status: 'error',
-                            errorMessage: errorMessage
+                            errorMessage: `Failed to export assembly file '${path.basename(fileUri.fsPath)}' (Error:${e.message})`
                         });
                     });
                 })
-                    .catch(() => {
-                    errorMessage = "Failed to create folder";
+                    .catch((e) => {
                     this.currentPanel.webview.postMessage({
                         command: command,
                         status: 'error',
-                        errorMessage: errorMessage
+                        errorMessage: e.message
                     });
                 });
             }
@@ -429,7 +419,6 @@ class SpriteEditorPage {
         let command = message.command;
         let file = message.file;
         let data = message.data;
-        let errorMessage = undefined;
         // Get default path
         let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
         // Options
@@ -458,21 +447,19 @@ class SpriteEditorPage {
                             file: fileUri.fsPath,
                         });
                     })
-                        .catch(() => {
-                        errorMessage = `Failed to save palette file: ${path.basename(fileUri.fsPath)}`;
+                        .catch((e) => {
                         this.currentPanel.webview.postMessage({
                             command: command,
                             status: 'error',
-                            errorMessage: errorMessage
+                            errorMessage: `Failed to save palette '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
                         });
                     });
                 })
-                    .catch(() => {
-                    errorMessage = "Failed to create folder";
+                    .catch((e) => {
                     this.currentPanel.webview.postMessage({
                         command: command,
                         status: 'error',
-                        errorMessage: errorMessage
+                        errorMessage: e.message
                     });
                 });
             }
@@ -489,12 +476,11 @@ class SpriteEditorPage {
                 data: data
             });
         })
-            .catch(() => {
-            let errorMessage = `Failed to load file: ${path.basename(fileUri.fsPath)}`;
+            .catch((e) => {
             this.currentPanel.webview.postMessage({
                 command: command,
                 status: 'error',
-                errorMessage: errorMessage
+                errorMessage: `Failed to load file '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
             });
         });
     }

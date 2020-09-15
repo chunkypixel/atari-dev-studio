@@ -217,7 +217,6 @@ export class SpriteEditorPage implements vscode.Disposable {
         let command = message!.command;
         let file = message!.file;
         let data = message!.data;
-        let errorMessage = undefined;
 
         // Set default path
         let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
@@ -250,21 +249,19 @@ export class SpriteEditorPage implements vscode.Disposable {
                                     file: fileUri.fsPath,
                                 });                    
                             })
-                            .catch(() => {
-                                errorMessage = `Failed to save project file: ${path.basename(fileUri.fsPath)}`;
+                            .catch((e) => {
                                 this.currentPanel!.webview.postMessage({
                                     command: command,
                                     status: 'error',
-                                    errorMessage: errorMessage
+                                    errorMessage: `Failed to save project '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
                                 });  
                             }); 
                         })
-                    .catch(() => {
-                        errorMessage = "Failed to create folder";
+                    .catch((e) => {
                         this.currentPanel!.webview.postMessage({
                             command: command,
                             status: 'error',
-                            errorMessage: errorMessage
+                            errorMessage: e.message
                         });  
                     });
  
@@ -277,7 +274,6 @@ export class SpriteEditorPage implements vscode.Disposable {
         let command = message!.command;
         let file = message!.file;
         let data = message!.data;
-        let errorMessage = undefined;
 
         // Get default path
         // Assuiming file provided is the project file
@@ -302,7 +298,9 @@ export class SpriteEditorPage implements vscode.Disposable {
                 // Save
                 filesystem.MkDirAsync(folder)
                     .then(() => {
-                        filesystem.WriteFileAsync(fileUri.fsPath, Buffer.from(data,'utf8'))
+                        // We now send through in base64 to avoid Buffer.from() conversion errors
+                        let convertToBuffer = Buffer.from(data,"base64");
+                        filesystem.WriteFileAsync(fileUri.fsPath, convertToBuffer)
                             .then(() => {
                                 this.currentPanel!.webview.postMessage({
                                     command: command,
@@ -310,21 +308,19 @@ export class SpriteEditorPage implements vscode.Disposable {
                                     file: path.basename(fileUri.fsPath),
                                 });                    
                             })
-                            .catch(() => {
-                                errorMessage = `Failed to export image file: ${path.basename(fileUri.fsPath)}`;
+                            .catch((e) => {
                                 this.currentPanel!.webview.postMessage({
                                     command: command,
                                     status: 'error',
-                                    errorMessage: errorMessage
+                                    errorMessage: `Failed to export image '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
                                 });  
                             }); 
                         })
-                    .catch(() => {
-                        errorMessage = "Failed to create folder";
+                    .catch((e) => {
                         this.currentPanel!.webview.postMessage({
                             command: command,
                             status: 'error',
-                            errorMessage: errorMessage
+                            errorMessage: e.message
                         });  
                     });
             }
@@ -336,7 +332,6 @@ export class SpriteEditorPage implements vscode.Disposable {
         let command = message!.command;
         let file = message!.file;
         let data = message!.data;
-        let errorMessage = undefined;
 
         // Get default path
         // Assuiming file provided is the project file
@@ -369,21 +364,19 @@ export class SpriteEditorPage implements vscode.Disposable {
                                     file: path.basename(fileUri.fsPath),
                                 });                    
                             })
-                            .catch(() => {
-                                errorMessage = `Failed to export source file: ${path.basename(fileUri.fsPath)}`;
+                            .catch((e) => {
                                 this.currentPanel!.webview.postMessage({
                                     command: command,
                                     status: 'error',
-                                    errorMessage: errorMessage
+                                    errorMessage: `Failed to export source file '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
                                 });  
                             }); 
                         })
-                    .catch(() => {
-                        errorMessage = "Failed to create folder";
+                    .catch((e) => {
                         this.currentPanel!.webview.postMessage({
                             command: command,
                             status: 'error',
-                            errorMessage: errorMessage
+                            errorMessage: e.message
                         });  
                     });
             }
@@ -396,7 +389,6 @@ export class SpriteEditorPage implements vscode.Disposable {
         let command = message!.command;
         let file = message!.file;
         let data = message!.data;
-        let errorMessage = undefined;
 
         // Get default path
         // Assuiming file provided is the project file
@@ -429,21 +421,19 @@ export class SpriteEditorPage implements vscode.Disposable {
                                     file: path.basename(fileUri.fsPath),
                                 });                    
                             })
-                            .catch(() => {
-                                errorMessage = `Failed to export image file: ${path.basename(fileUri.fsPath)}`;
+                            .catch((e) => {
                                 this.currentPanel!.webview.postMessage({
                                     command: command,
                                     status: 'error',
-                                    errorMessage: errorMessage
+                                    errorMessage: `Failed to export assembly file '${path.basename(fileUri.fsPath)}' (Error:${e.message})`
                                 });  
                             }); 
                         })
-                    .catch(() => {
-                        errorMessage = "Failed to create folder";
+                    .catch((e) => {
                         this.currentPanel!.webview.postMessage({
                             command: command,
                             status: 'error',
-                            errorMessage: errorMessage
+                            errorMessage: e.message
                         });  
                     });
             }
@@ -488,7 +478,6 @@ export class SpriteEditorPage implements vscode.Disposable {
         let command = message!.command;
         let file = message!.file;
         let data = message!.data;
-        let errorMessage = undefined;
 
         // Get default path
         let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
@@ -521,21 +510,19 @@ export class SpriteEditorPage implements vscode.Disposable {
                                     file: fileUri.fsPath,
                                 });                    
                             })
-                            .catch(() => {
-                                errorMessage = `Failed to save palette file: ${path.basename(fileUri.fsPath)}`;
+                            .catch((e) => {
                                 this.currentPanel!.webview.postMessage({
                                     command: command,
                                     status: 'error',
-                                    errorMessage: errorMessage
+                                    errorMessage: `Failed to save palette '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
                                 });  
                             }); 
                         })
-                    .catch(() => {
-                        errorMessage = "Failed to create folder";
+                    .catch((e) => {
                         this.currentPanel!.webview.postMessage({
                             command: command,
                             status: 'error',
-                            errorMessage: errorMessage
+                            errorMessage: e.message
                         });  
                     });
             }
@@ -553,12 +540,11 @@ export class SpriteEditorPage implements vscode.Disposable {
                     data: data
                 });          
             })
-            .catch(() => {
-                let errorMessage = `Failed to load file: ${path.basename(fileUri.fsPath)}`;
+            .catch((e) => {
                 this.currentPanel!.webview.postMessage({
                     command: command,
                     status: 'error',
-                    errorMessage: errorMessage
+                    errorMessage: `Failed to load file '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
                 }); 
             });
     }
