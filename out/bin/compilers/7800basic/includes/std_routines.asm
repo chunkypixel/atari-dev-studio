@@ -53,21 +53,26 @@ skipcanarytriggered
          ifconst LONGCONTROLLERREAD
 longcontrollerreads ; ** controllers that take a lot of time to read. We use much of the visible screen here.
            ldy port1control
-           lda longreadindex,y
-           asl
-           ldy port0control
-           ora longreadindex,y
-           bne beginlongcontrollerreads ; long-read controlers are enabled but not chosen...
-               jmp longcontrollerreadsdone 
-beginlongcontrollerreads
-           tay 
-
-           lda longreadroutinehi,y
+           lda longreadtype,y
+           beq LLRET1
+           tay
+           lda longreadroutinehiP1,y
            sta inttemp4
-           lda longreadroutinelo,y
+           lda longreadroutineloP1,y
            sta inttemp3
-
            jmp (inttemp3)
+LLRET1
+           ldy port0control
+           lda longreadtype,y
+           beq LLRET0
+           tay
+           lda longreadroutinehiP0,y
+           sta inttemp4
+           lda longreadroutineloP0,y
+           sta inttemp3
+           jmp (inttemp3)
+LLRET0
+
 
  ifconst PADDLERANGE
 TIMEVAL = PADDLERANGE
@@ -76,9 +81,6 @@ TIMEVAL = 160
  endif
 TIMEOFFSET = 10
 
-LLRET 
-
-longcontrollerreadsdone
          endif ; LONGCONTROLLERREAD
 
 
@@ -137,37 +139,35 @@ IRQ
 
      ifconst LONGCONTROLLERREAD
 
-longreadindex
+longreadtype
  .byte 0, 0, 0, 1  ; NONE     PROLINE   LIGHTGUN  PADDLE
- .byte 0, 0, 4, 0  ; TRKBALL  VCSSTICK  DRIVING   KEYPAD
- .byte 4, 4, 0     ; STMOUSE  AMOUSE    ATARIVOX
+ .byte 2, 0, 3, 0  ; TRKBALL  VCSSTICK  DRIVING   KEYPAD
+ .byte 3, 3, 0     ; STMOUSE  AMOUSE    ATARIVOX
 
-longreadroutinelo
- .byte <LLRET              ;  0 = no routine
- .byte <paddleport0update  ;  1 = paddle port 0
- .byte <paddleport1update  ;  2 = paddle port 1
- .byte <paddleport01update ;  3 = paddle port 0+1
- .byte <mouse0update       ;  4 = mouse port 0
- .byte <LLRET              ;  5 = impossible  (paddle port 0 + mouse port 0)
- .byte <mouse0update       ;  6 = unsupported (mouse port 0 + paddle port 1)
- .byte <LLRET              ;  7 = impossible  (mouse port 0 + paddle port 1)
- .byte <mouse1update       ;  8 = mouse port 1
- .byte <paddleport0update  ;  9 = unsupported (paddle port 0 + mouse port 1)
- .byte <LLRET              ; 10 = impossible  (mouse port 1 + paddle port 1)
+longreadroutineloP0
+ .byte <LLRET0             ;  0 = no routine
+ .byte <paddleport0update  ;  1 = paddle
+ .byte <trakball0update    ;  2 = trakball
+ .byte <mouse0update       ;  3 = mouse
 
-longreadroutinehi
- .byte >LLRET              ;  0 = no routine
- .byte >paddleport0update  ;  1 = paddle port 0
- .byte >paddleport1update  ;  2 = paddle port 1
- .byte >paddleport01update ;  3 = paddle port 0+1
- .byte >mouse0update       ;  4 = mouse port 0
- .byte >LLRET              ;  5 = impossible  (paddle port 0 + mouse port 0)
- .byte >mouse0update       ;  6 = unsupported (mouse port 0 + paddle port 1)
- .byte >LLRET              ;  7 = impossible  (mouse port 0 + paddle port 1)
- .byte >mouse1update       ;  8 = mouse port 1
- .byte >paddleport0update  ;  9 = unsupported (paddle port 0 + mouse port 1)
- .byte >LLRET              ; 10 = impossible  (mouse port 1 + paddle port 1)
- 
+longreadroutinehiP0
+ .byte >LLRET0             ;  0 = no routine
+ .byte >paddleport0update  ;  1 = paddle
+ .byte >trakball0update    ;  2 = trackball
+ .byte >mouse0update       ;  3 = mouse
+
+longreadroutineloP1
+ .byte <LLRET1             ;  0 = no routine
+ .byte <paddleport1update  ;  1 = paddle
+ .byte <trakball1update    ;  2 = trakball
+ .byte <mouse1update       ;  3 = mouse
+
+longreadroutinehiP1
+ .byte >LLRET1             ;  0 = no routine
+ .byte >paddleport1update  ;  1 = paddle
+ .byte >trakball1update    ;  2 = trackball
+ .byte >mouse1update       ;  3 = mouse
+
 
 SETTIM64T
      bne skipdefaulttime
@@ -306,9 +306,11 @@ pauseroutine
 
  ifnconst SOFTRESETASPAUSEOFF
  ifnconst MOUSESUPPORT
+ ifnconst TRAKBALLSUPPORT
      lda SWCHA ; then check the soft "RESET" joysick code...
      and #%01110000 ; _LDU
      beq pausepressed
+ endif
  endif
  endif
 
@@ -2142,7 +2144,7 @@ mouse0loopcondition
      sta mousey0
   endif
    ; at half resolution we just exit after updating x and y
-   jmp longcontrollerreadsdone
+   jmp LLRET0
 mouse0halveddone
  endif ; PRECISIONMOUSING
 
@@ -2179,7 +2181,7 @@ mousex0resolutionfix
        clc
        adc mousex0
        sta mousex0
-       jmp longcontrollerreadsdone
+       jmp LLRET0
 carryonmouse0boost
     sta mousexdelta
     clc
@@ -2244,7 +2246,7 @@ driving0skipnegate2
 drivingboostdone0
  endif ; DRIVINGBOOST
 
-   jmp longcontrollerreadsdone
+   jmp LLRET0
 
  endif ; MOUSE0SUPPORT
 
@@ -2370,7 +2372,7 @@ mouse1loopcondition
      sta mousey1
   endif
    ; at half resolution we just exit after updating x and y
-   jmp longcontrollerreadsdone
+   jmp LLRET1
 mouse1halveddone
  endif ; PRECISIONMOUSING
 
@@ -2407,7 +2409,7 @@ mousex1resolutionfix
        clc
        adc mousex1
        sta mousex1
-       jmp longcontrollerreadsdone
+       jmp LLRET1
 carryonmouse1boost
     sta mousexdelta
     clc
@@ -2472,18 +2474,189 @@ driving1skipnegate2
 drivingboostdone1
  endif ; DRIVINGBOOST
 
-   jmp longcontrollerreadsdone
+   jmp LLRET1
 
- endif ; MOUSE!SUPPORT
+ endif ; MOUSE1SUPPORT
 
 
+trakball0update
+ ifconst TRAKBALL0SUPPORT
+ ifnconst TRAKTIME
+   ifnconst TRAKXONLY
+     lda #180 ; minimum for x+y
+   else;  !TRAKXONLY
+     lda #100 ; minimum for just x
+   endif; !TRAKXONLY
+ else ; !TRAKTIME
+   lda #TRAKTIME
+ endif ; !TRAKTIME
+   jsr SETTIM64T ; INTIM is in Y
+   ldx #0
+ ifnconst TRAKXONLY
+   ldy #0
+ endif ;  TRAKXONLY
+trakball0updateloop
+   lda SWCHA
+   and #%00110000
+   cmp trakballcodex0
+   sta trakballcodex0
+   beq trakball0movementXdone
+   and #%00010000
+   beq trakball0negativeX
+trakball0positiveX
+                              ;(2 from beq)
+   inx                        ; 2
+   jmp trakball0movementXdone ; 3
+trakball0negativeX
+                              ;(3 from beq)
+   dex                        ; 2
+   nop                        ; 2
+trakball0movementXdone
+
+ ifnconst TRAKXONLY
+      lda SWCHA
+      and #%11000000
+      cmp trakballcodey0
+      sta trakballcodey0
+      beq trakball0movementYdone
+      and #%01000000
+      beq trakball0negativeY
+trakball0positiveY
+                                 ;(2 from beq)
+      iny                        ; 2
+      jmp trakball0movementYdone ; 3
+trakball0negativeY
+                                 ;(3 from beq)
+      dey                        ; 2
+      nop                        ; 2
+trakball0movementYdone
+ endif ; !TRAKXONLY
+
+   lda TIMINT
+   bpl trakball0updateloop
+   lda #0
+   cpx #0
+   beq trakball0skipXadjust
+   clc
+trakball0Xloop
+   adc port0resolution
+   dex
+   bne trakball0Xloop
+   clc
+   adc trakballx0
+   sta trakballx0
+trakball0skipXadjust
+ ifnconst TRAKXONLY
+   lda #0
+   cpy #0
+   beq trakball0skipYadjust
+   clc
+trakball0yloop
+   adc port0resolution
+   dey
+   bne trakball0yloop
+   clc
+   adc trakbally0
+   sta trakbally0
+trakball0skipYadjust
+ endif ; !TRAKXONLY
+
+  jmp LLRET0
+ endif
+
+
+
+trakball1update
+ ifconst TRAKBALL1SUPPORT
+ ifnconst TRAKTIME
+   ifnconst TRAKXONLY
+     lda #180 ; minimum for x+y
+   else;  !TRAKXONLY
+     lda #100 ; minimum for just x
+   endif; !TRAKXONLY
+ else ; !TRAKTIME
+   lda #TRAKTIME
+ endif ; !TRAKTIME
+   jsr SETTIM64T ; INTIM is in Y
+   ldx #0
+ ifnconst TRAKXONLY
+   ldy #0
+ endif ;  TRAKXONLY
+trakball1updateloop
+   lda SWCHA
+   and #%00000011
+   cmp trakballcodex1
+   sta trakballcodex1
+   beq trakball1movementXdone
+   and #%00000001
+   beq trakball1negativeX
+trakball1positiveX
+                              ;(2 from beq)
+   inx                        ; 2
+   jmp trakball1movementXdone ; 3
+trakball1negativeX
+                              ;(3 from beq)
+   dex                        ; 2
+   nop                        ; 2
+trakball1movementXdone
+
+ ifnconst TRAKXONLY
+      lda SWCHA
+      and #%00001100
+      cmp trakballcodey1
+      sta trakballcodey1
+      beq trakball1movementYdone
+      and #%00000100
+      beq trakball1negativeY
+trakball1positiveY
+                                 ;(2 from beq)
+      iny                        ; 2
+      jmp trakball1movementYdone ; 3
+trakball1negativeY
+                                 ;(3 from beq)
+      dey                        ; 2
+      nop                        ; 2
+trakball1movementYdone
+ endif ; !TRAKXONLY
+
+   lda TIMINT
+   bpl trakball1updateloop
+   lda #0
+   cpx #0
+   beq trakball1skipXadjust
+   clc
+trakball1Xloop
+   adc port1resolution
+   dex
+   bne trakball1Xloop
+   clc
+   adc trakballx1
+   sta trakballx1
+trakball1skipXadjust
+ ifnconst TRAKXONLY
+   lda #0
+   cpy #0
+   beq trakball1skipYadjust
+   clc
+trakball1yloop
+   adc port1resolution
+   dey
+   bne trakball1yloop
+   clc
+   adc trakbally1
+   sta trakbally1
+trakball1skipYadjust
+ endif ; !TRAKXONLY
+
+  jmp LLRET1
+ endif
 
 
 paddleport0update
  ifconst PADDLE0SUPPORT
-  lda #0
+  lda #6
   sta VBLANK ; start charging the paddle caps
-  ; lda #0 ; use PADDLE timing
+  lda #0 ; use PADDLE timing
   jsr SETTIM64T ; INTIM is in Y
 
 paddleport0updateloop
@@ -2501,10 +2674,7 @@ skippaddle1setposition
   cpy #TIMEOFFSET
   bcs paddleport0updateloop
 
- ifconst FOURPADDLESUPPORT
-     jsr fourpaddlefixup
- else
-     lda #%10000000
+     lda #%10000110
      sta VBLANK ; dump paddles to ground... this may not be great for genesis controllers
      sec
      lda paddleposition0
@@ -2538,17 +2708,16 @@ skippaddle1setposition
      endif
      sta paddleposition1
  endif ; TWOPADDLESUPPORT
- endif ; !FOURPADDLESUPPORT
 
-  jmp longcontrollerreadsdone
+  jmp LLRET0
  endif
 
 paddleport1update
  ifconst PADDLE1SUPPORT
-  lda #0
+  lda #6
   sta VBLANK ; start charging the paddle caps
 
-  ; lda #0 ; use PADDLE timing
+  lda #0 ; use PADDLE timing
   jsr SETTIM64T ; INTIM is in Y
 
 paddleport1updateloop
@@ -2566,11 +2735,7 @@ skippaddle3setposition
   cpy #TIMEOFFSET
   bcs paddleport1updateloop
 
- ifconst FOURPADDLESUPPORT
-     jsr fourpaddlefixup
- else
-
-     lda #%10000000
+     lda #%10000110
      sta VBLANK ; dump paddles to ground... this may not be great for genesis controllers
      sec
      lda paddleposition2
@@ -2602,88 +2767,10 @@ skippaddle3setposition
          ror
          sta paddleprevious3
      endif
-     sta paddleposition1
+     sta paddleposition3
  endif ; TWOPADDLESUPPORT
- endif ; !FOURPADDLESUPPORT
 
-  jmp longcontrollerreadsdone
- endif
-
-paddleport01update
- ifconst FOURPADDLESUPPORT
-  lda #0
-  sta VBLANK ; start charging the paddle caps
-
-  ; lda #0 ; use PADDLE timing
-  jsr SETTIM64T ; INTIM is in Y
-
-paddleport01updateloop
-  lda INPT0
-  bmi skippaddle0setposition01
-  sty paddleposition0
-skippaddle0setposition01
-  lda INPT1
-  bmi skippaddle1setposition01
-  sty paddleposition1
-skippaddle1setposition01
-  lda INPT2
-  bmi skippaddle0setposition01
-  sty paddleposition2
-skippaddle2setposition01
-  lda INPT3
-  bmi skippaddle3setposition01
-  sty paddleposition3
-skippaddle3setposition01
-  ldy INTIM
-  cpy #TIMEOFFSET
-  bcs paddleport01updateloop
-
-fourpaddlefixup
-     lda #%10000000
-     sta VBLANK ; dump paddles to ground... this may not be great for genesis controllers
-     ldx #1
-paddlefixuploop
-     ; ground paddles if in-use, and correct the positions
-     lda port0control,x
-     cmp #3
-     bne skippaddlefixup
-     lda #%10000000
-     sta VBLANK ; dump paddles to ground... this may not be great for genesis controllers
-     sec
-     lda paddleposition0,x
-     sbc #TIMEOFFSET
- ifconst PADDLESCALEX2
-     asl
- endif
-
- ifnconst PADDLESMOOTHINGOFF
-     clc
-     adc paddleprevious0,x
-     ror
-     sta paddleprevious0,x
- endif
-     sta paddleposition0,x
- ifconst TWOPADDLESUPPORT
-     sec
-     lda paddleposition1,x
-     sbc #TIMEOFFSET
- ifconst PADDLESCALEX2
-     asl
- endif
-
- ifnconst PADDLESMOOTHINGOFF
-     clc
-     adc paddleprevious1,x
-     ror
-     sta paddleprevious1,x
- endif
-     sta paddleposition1,x
- endif
-skippaddlefixup
-     dex
-     bpl paddlefixuploop
-
-  jmp longcontrollerreadsdone
+  jmp LLRET1
  endif
 
 
@@ -2831,7 +2918,7 @@ allpinsinputlut
  .byte $0F, $F0
 
 setonebuttonmode
-   lda #0
+   lda #6 ; in case we're in unlocked-bios mode
    sta VBLANK ; if we were on paddles, the line is grounded out.
    lda #$14
    sta CTLSWB ; set both 2-button disable bits to writable
@@ -2845,7 +2932,7 @@ thisjoy2buttonbit
  .byte $04, $10
 
 settwobuttonmode
-   lda #0
+   lda #6 ; in case we're in unlocked-bios mode
    sta VBLANK ; if we were on paddles, the line is grounded out.
    lda #$14
    sta CTLSWB ; set both 2-button disable bits to writable

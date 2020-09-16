@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.6.3
+
+* Updated 7800basic to v0.15 (Windows, Linux, macOS)
+
 ## 0.6.2
 
 Sprite Editor

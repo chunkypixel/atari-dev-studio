@@ -553,9 +553,18 @@ carryonkeepdisplayinghs
              asl
 hsskipadjustjoystick1
              sta hsswcha
+             lda SWCHB
+             and #%00000010
+             bne hsskipselectswitch
+               lda #%00010000
+               sta hsswcha
+               bne hsdodebouncecheck
+hsskipselectswitch
+             lda hsswcha
              and #%00110000
              cmp #%00110000
              beq hsjoystickskipped
+hsdodebouncecheck
              lda hsjoydebounce
              beq hsdontdebounce
              jmp hspostjoystick
@@ -688,6 +697,13 @@ setuphsinpt1
              dec hsjoydebounce
              bne skipstorefirebuttonstatus
 skipdebounceadjust
+             lda SWCHB
+             and #%00000001
+             bne hscheckresetover
+               lda #$ff
+               sta hsinpt1
+               rts
+hscheckresetover
              ldx hsdisplaymode
              cpx #3
              bne hsskipadjustjoyfire1

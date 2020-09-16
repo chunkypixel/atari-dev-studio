@@ -440,6 +440,11 @@ palfastframe DS 1 ; $1D0
  ifconst MOUSESUPPORT
 port0resolution DS 1 ; $1D1
 port1resolution DS 1 ; $1D2
+ else
+ ifconst TRAKBALLSUPPORT
+port0resolution DS 1 ; $1D1
+port1resolution DS 1 ; $1D2
+ endif
  endif
 
 port0control DS 1 ; $1D3

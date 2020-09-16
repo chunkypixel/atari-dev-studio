@@ -120,13 +120,14 @@ MedianOrderLUTend
 
 	; A macro version of the plotsprite command. 
 	; This trades off rom space for speed.
-	; It also has no training wheels, and is all sharp edges.
+	; It also doesn't check if the visible screen is displayed or not.
+	; It has no training wheels. It is all rusty sharp edges.
 
 .GFXLabel   SET {1}
 .Palette    SET {2} ; constant
 .SpriteX    SET {3} ; variable
 .SpriteY    SET {4} ; variable
-.ByteOffset SET {5} ; variable (in bytes, to mimimize calculation.)
+.ByteOffset SET {5} ; variable 
 
 	lda .SpriteY
         lsr
@@ -145,8 +146,80 @@ MedianOrderLUTend
 	
  	ldy dlend,x ; find the next new object position in this zone
 
-	lda #<.GFXLabel
-	adc .ByteOffset ; carry is clear via asr
+	lda .ByteOffset 
+ if {1}_width = 2
+        asl
+ endif
+ if {1}_width = 3
+        asl
+        adc .ByteOffset
+ endif
+ if {1}_width = 4
+        asl
+        asl
+ endif
+ if {1}_width = 5
+        asl
+        asl
+        adc .ByteOffset
+ endif
+ if {1}_width = 6
+        asl
+        adc .ByteOffset
+        asl
+ endif
+ if {1}_width = 7
+        asl
+        adc .ByteOffset
+        asl
+        adc .ByteOffset
+ endif
+ if {1}_width = 8
+        asl
+        asl
+        asl
+ endif
+ if {1}_width = 9
+        asl
+        asl
+        asl
+        adc .ByteOffset
+ endif
+ if {1}_width = 10
+        asl
+        asl
+        adc .ByteOffset
+        asl
+ endif
+ if {1}_width = 11
+        asl
+        asl
+        adc .ByteOffset
+        asl
+        adc .ByteOffset
+ endif
+ if {1}_width = 12
+        asl
+        adc .ByteOffset
+        asl
+        asl
+ endif
+ if {1}_width = 13
+        asl
+        adc .ByteOffset
+        asl
+        asl
+        adc .ByteOffset
+ endif
+ if {1}_width = 14
+        asl
+        adc .ByteOffset
+        asl
+        adc .ByteOffset
+        asl
+ endif
+
+	adc #<.GFXLabel ; carry is clear via previous asl or asr
         sta (dlpnt),y ; #1 - low byte object address
 
 	iny
@@ -192,8 +265,82 @@ MedianOrderLUTend
 	
  	ldy dlend,x ; find the next new object position in this zone
 
-	lda #<(.GFXLabel-1) ; carry is set, so -1 to compensate
-	adc .ByteOffset
+	lda .ByteOffset
+ if {1}_width = 1
+        clc
+ endif
+ if {1}_width = 2
+        asl ; carry clear
+ endif
+ if {1}_width = 3
+        asl ; carry clear
+        adc .ByteOffset
+ endif
+ if {1}_width = 4
+        asl ; carry clear
+        asl
+ endif
+ if {1}_width = 5
+        asl ; carry clear
+        asl
+        adc .ByteOffset
+ endif
+ if {1}_width = 6
+        asl ; carry clear
+        adc .ByteOffset
+        asl
+ endif
+ if {1}_width = 7
+        asl ; carry clear
+        adc .ByteOffset
+        asl
+ endif
+ if {1}_width = 8
+        asl ; carry clear
+        asl
+        asl
+ endif
+ if {1}_width = 9
+        asl ; carry clear
+        asl
+        asl
+        adc .ByteOffset
+ endif
+ if {1}_width = 10
+        asl ; carry clear
+        asl
+        adc .ByteOffset
+        asl
+ endif
+ if {1}_width = 11
+        asl ; carry clear
+        asl
+        adc .ByteOffset
+        asl
+        adc .ByteOffset
+ endif
+ if {1}_width = 12
+        asl ; carry clear
+        adc .ByteOffset
+        asl
+        asl
+ endif
+ if {1}_width = 13
+        asl ; carry clear
+        adc .ByteOffset
+        asl
+        asl
+        adc .ByteOffset
+ endif
+ if {1}_width = 14
+        asl ; carry clear
+        adc .ByteOffset
+        asl
+        adc .ByteOffset
+        asl
+ endif
+
+	adc #<.GFXLabel
         sta (dlpnt),y ; #1 - low byte object address
 
 	iny

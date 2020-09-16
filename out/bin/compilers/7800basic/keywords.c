@@ -323,7 +323,7 @@ void keywords(char **cstatement)
 	}
 	else if (!strncmp(statement[1], "goto\0", 5))
 	    dogoto(statement);
-	else if (!strncmp(statement[1], "drawhiscores\0", 13))
+	else if (!strncmp(statement[1], "drawhiscores", 11))
 	    drawhiscores(statement);
 	else if (!strncmp(statement[1], "loadmemory\0", 11))
 	    loadmemory(statement);

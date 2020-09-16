@@ -145,5 +145,6 @@ PAUDC2   = $5
 PAUDF3   = $6
 PAUDC3   = $7
 PAUDCTL  = $8    ; Audio Control
+PSTIMER  = $9
 PRANDOM  = $A    ; 17 bit polycounter pseudo random
 PSKCTL   = $F    ; Serial Port control

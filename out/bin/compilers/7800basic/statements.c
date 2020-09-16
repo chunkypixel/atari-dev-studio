@@ -529,15 +529,26 @@ void shakescreen(char **statement)
     {
 	printf("    lda #%%01001111\n");
 	printf("    sta DLLMEM\n");
+	printf("  ifconst DOUBLEBUFFER\n");
+	printf("    ldy doublebufferstate\n");
+	printf("    beq [.+5]\n");
+	printf("    sta.w DLLMEM+DBOFFSET\n");
+	printf("  endif ; DOUBLEBUFFER\n");
+
 	return;
     }
     else
 	prerror("unsupported shakescreen argument");
 
-    printf("        jsr randomize\n");
-    printf("        and #%d\n", shakeamount);
-    printf("        ora #%%01000000\n");
+    printf("    jsr randomize\n");
+    printf("    and #%d\n", shakeamount);
+    printf("    eor #%%01001111\n");
     printf("    sta DLLMEM\n");
+    printf("  ifconst DOUBLEBUFFER\n");
+    printf("    ldy doublebufferstate\n");
+    printf("    beq [.+5]\n");
+    printf("    sta.w DLLMEM+DBOFFSET\n");
+    printf("  endif ; DOUBLEBUFFER\n");
 
 
 }
@@ -2265,6 +2276,8 @@ void changecontrol(char **statement)
     }
     else if (!strcmp(statement[3], "trakball"))
     {
+	strcpy(redefined_variables[numredefvars++], "TRAKBALLSUPPORT = 1");
+	sprintf(constants[numconstants++], "TRAKBALLSUPPORT");
 	printf("  lda #4 ; controller=trakball\n");
 	if (port == 0)
 	{
@@ -2272,7 +2285,11 @@ void changecontrol(char **statement)
 	    printf("  lda #0\n");
 	    printf("  sta trakballcodex0\n");
 	    printf("  sta trakballcodey0\n");
+	    printf("  lda #2\n");
+	    printf("  sta port0resolution\n");
 	    printf("  ldx #0\n");
+	    strcpy(redefined_variables[numredefvars++], "TRAKBALL0SUPPORT = 1");
+	    sprintf(constants[numconstants++], "TRAKBALL0SUPPORT");
 	}
 	else
 	{
@@ -2280,10 +2297,20 @@ void changecontrol(char **statement)
 	    printf("  lda #0\n");
 	    printf("  sta trakballcodex1\n");
 	    printf("  sta trakballcodey1\n");
+	    printf("  lda #2\n");
+	    printf("  sta port1resolution\n");
 	    printf("  ldx #1\n");
+	    strcpy(redefined_variables[numredefvars++], "TRAKBALL1SUPPORT = 1");
+	    sprintf(constants[numconstants++], "TRAKBALL1SUPPORT");
 	}
 	printf("  jsr setportforinput\n");
 	printf("  jsr settwobuttonmode\n");
+        if(longcontrollerread == 0)
+        {
+	    strcpy(redefined_variables[numredefvars++], "LONGCONTROLLERREAD = 1");
+	    sprintf(constants[numconstants++], "LONGCONTROLLERREAD");
+            longcontrollerread=1;
+        }
     }
     else if (!strcmp(statement[3], "keypad"))
     {
@@ -4676,7 +4703,7 @@ int findlabel(char **statement, int i)
 	return 1;
     if (!strncmp(statementcache, "savememory\0", 10))
 	return 1;
-    if (!strncmp(statementcache, "drawhiscroes\0", 13))
+    if (!strncmp(statementcache, "drawhiscores\0", 13))
 	return 1;
     if (!strncmp(statementcache, "memcpy\0", 6))
 	return 1;
@@ -9384,6 +9411,17 @@ void set(char **statement)
 	{
 	    strcpy(redefined_variables[numredefvars++], "pokeysupport = 1");
 	    append_a78info("set pokey@450");
+	    sprintf(constants[numconstants++], "PAUDF0");
+	    sprintf(constants[numconstants++], "PAUDC0");
+	    sprintf(constants[numconstants++], "PAUDF1");
+	    sprintf(constants[numconstants++], "PAUDC1");
+	    sprintf(constants[numconstants++], "PAUDF2");
+	    sprintf(constants[numconstants++], "PAUDC2");
+	    sprintf(constants[numconstants++], "PAUDF3");
+	    sprintf(constants[numconstants++], "PAUDC3");
+	    sprintf(constants[numconstants++], "PAUDCTL");
+	    sprintf(constants[numconstants++], "PRANDOM");
+	    sprintf(constants[numconstants++], "PSKCTL");
 	}
     }
     else if (!strncmp(statement[2], "hscsupport\0", 10))
@@ -9472,6 +9510,22 @@ void set(char **statement)
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "MOUSEXONLY = 1");
+	}
+    }
+    else if (!strncmp(statement[2], "traktime", 9))
+    {
+        char outstr[256];
+	int value = strictatoi(statement[3]);
+        if ((value<1)||(value>240))
+	    prerror("'set traktime must have an argument >0 and <241");
+        sprintf(outstr,"TRAKTIME = %d",value);
+	strcpy(redefined_variables[numredefvars++], outstr);
+    }
+    else if (!strncmp(statement[2], "trakxonly", 10))
+    {
+	if (!strncmp(statement[3], "on", 2))
+	{
+	    strcpy(redefined_variables[numredefvars++], "TRAKXONLY = 1");
 	}
     }
     else if (!strncmp(statement[2], "drivingboost", 12))
