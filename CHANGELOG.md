@@ -2,6 +2,9 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.6.4
+
+* Updated dasm to v2.20.14 (Windows, Linux, macOS)
 ## 0.6.3
 
 * Updated 7800basic to v0.15 (Windows, Linux, macOS)
