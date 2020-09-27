@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as filesystem from '../filesystem';
 import * as application from '../application';
 import opn = require('open');
+import { stringify } from 'querystring';
 
 export class SpriteEditorPage implements vscode.Disposable {
 
@@ -96,6 +97,10 @@ export class SpriteEditorPage implements vscode.Disposable {
 
                     case 'exportAsPngFile':
                         this.exportAsPngFile(message);
+                        break;
+
+                    case 'exportAllAsPngFile':
+                        this.exportAllAsPngFile(message);
                         break;
 
                     case 'exportAsBatariFile':
@@ -316,6 +321,73 @@ export class SpriteEditorPage implements vscode.Disposable {
                                 });  
                             }); 
                         })
+                    .catch((e) => {
+                        this.currentPanel!.webview.postMessage({
+                            command: command,
+                            status: 'error',
+                            errorMessage: e.message
+                        });  
+                    });
+            }
+        });
+    }
+
+    private exportAllAsPngFile(message: any) {
+        // Prepare
+        let command = message!.command;
+        let file = message!.file;
+        let data = message!.data;
+
+        // Get default path
+        // Assuiming file provided is the project file
+        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
+
+        // Prompt user here
+        let options: vscode.OpenDialogOptions = {
+            canSelectMany: false,
+            canSelectFolders: true,
+            canSelectFiles: false,
+            openLabel: "Export (Individual Files)",
+            defaultUri: defaultUri,
+            filters: {
+                'All Files': ['*']
+            }
+        };
+
+        // Process
+        vscode.window.showOpenDialog(options).then(folderUri => {
+            // Save?
+            if (folderUri) {
+                // Prepare
+                let folder = folderUri[0].fsPath;
+
+                // Save
+                filesystem.MkDirAsync(folder)
+                    .then(() => {
+                        // Process each image
+                        for (let i = 0; i < data.count; i++) {
+                            // Loop through each file
+                            let fileName = data.fileName + i + ".png";
+                            let fileUri = vscode.Uri.file(path.join(folder,fileName));
+                            // We now send through in base64 to avoid Buffer.from() conversion errors
+                            let convertToBuffer = Buffer.from(data.sprites[i],"base64");
+                            filesystem.WriteFileAsync(fileUri.fsPath, convertToBuffer)
+                                .then(() => {
+                                    this.currentPanel!.webview.postMessage({
+                                        command: command,
+                                        status: 'ok',
+                                        file: path.basename(fileUri.fsPath),
+                                    });                    
+                                })
+                                .catch((e) => {
+                                    this.currentPanel!.webview.postMessage({
+                                        command: command,
+                                        status: 'error',
+                                        errorMessage: `Failed to export image '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
+                                    });  
+                                }); 
+                        }
+                    })
                     .catch((e) => {
                         this.currentPanel!.webview.postMessage({
                             command: command,

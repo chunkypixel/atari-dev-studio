@@ -2503,6 +2503,10 @@ Spritemate stylesheet
    background-color: rgba(0,0,0,0.5);
  }
  
+ #window-export input#filename {
+  width: 98%;
+ }
+
  table
  {
    width: 100%;
