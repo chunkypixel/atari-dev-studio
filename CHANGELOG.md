@@ -5,6 +5,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 ## 0.6.4
 
 * Updated dasm to v2.20.14 (Windows, Linux, macOS)
+* Updated Stella to v6.3 (Windows, Linux, macOS). Note: Linux 32-bit is currently v6.2
 
 Sprite Editor
 * Added option to export all sprites to individual files
