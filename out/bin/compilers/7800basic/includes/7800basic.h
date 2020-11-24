@@ -534,7 +534,7 @@ pokey4priority DS 1 ; $1EB
 pokey4offset   DS 1 ; $1EC
  endif
 
- ifnconst CANARRYOFF
+ ifnconst CANARYOFF
 canary         DS 1 ; $1ED
  endif
 
@@ -543,7 +543,7 @@ canary         DS 1 ; $1ED
  else
    echo "  stack allowance:",[($1FF - .)/3]d,"nested subroutines."
  endif
- ifnconst CANARRYOFF
+ ifnconst CANARYOFF
    echo "  the canary is situated at:",[canary]
  else
    echo "  the canary is disabled."

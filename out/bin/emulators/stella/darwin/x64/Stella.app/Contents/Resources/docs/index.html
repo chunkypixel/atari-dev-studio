@@ -19,7 +19,7 @@
   <br><br>
   <center><h2><b>A multi-platform Atari 2600 VCS emulator</b></h2></center>
 
-  <center><h4><b>Release 6.3</b></h4></center>
+  <center><h4><b>Release 6.4</b></h4></center>
   <br><br>
 
   <center><h2><b>User's Guide</b></h2></center>
@@ -70,7 +70,7 @@
 
   <br><br><br>
 
-  <center><b>February 1999 - June 2020</b></center>
+  <center><b>February 1999 - November 2020</b></center>
     <center><b>The Stella Team</b></center>
   <center><b><a href="https://stella-emu.github.io">Stella Homepage</a></b></center>
 
@@ -368,7 +368,7 @@
   <p>
   <h3><b><u>Windows</u></b></h3>
 
-  <p>The Windows version of Stella is designed to work on Windows Vista/7/8/10
+  <p>The Windows version of Stella is designed to work on Windows 7/8/10
   with the following:</p>
 
   <ul>
@@ -1806,13 +1806,13 @@
     </tr>
     <tr>
       <td>Save continuous PNG snapshots</br>(per interval defined in <a href="#Snapshots"><b>Snapshot Settings</b></a>)</td>
-      <td>Alt + s</td>
-      <td>Cmd + s</td>
+      <td>Control-Alt + s</td>
+      <td>Control-Cmd + s</td>
     </tr>
     <tr>
       <td>Save continuous PNG snapshots (every frame)</td>
-      <td>Shift-Alt + s</td>
-      <td>Shift-Cmd + s</td>
+      <td>Shift-Control-Alt + s</td>
+      <td>Shift-Control-Cmd + s</td>
     </tr>
 
     <tr>
@@ -1871,20 +1871,18 @@
 
   <table BORDER=2 cellpadding=4>
     <tr><th>Key</th><th>Editor Function</th></tr>
-    <tr><td>Home</td><td>Move cursor to beginning of line</td></tr>
-    <tr><td>End</td><td>Move cursor to end of line</td></tr>
-    <tr><td>Delete</td><td>Remove character to right of cursor</td></tr>
+    <tr><td>Home, Control + a</td><td>Move cursor to beginning of line</td></tr>
+    <tr><td>End, Control + e</td><td>Move cursor to end of line</td></tr>
+    <tr><td>Delete, Control + d</td><td>Remove character to right of cursor</td></tr>
     <tr><td>Backspace</td><td>Remove character to left of cursor</td></tr>
-    <tr><td>Control + a</td><td>Same function as 'Home'</td></tr>
-    <tr><td>Control + e</td><td>Same function as 'End'</td></tr>
-    <tr><td>Control + d</td><td>Same function as 'Delete'</td></tr>
     <tr><td>Control + k</td><td>Remove all characters from cursor to end of line</td></tr>
     <tr><td>Control + u</td><td>Remove all characters from cursor to beginning of line</td></tr>
     <tr><td>Control + w</td><td>Remove entire word to left of cursor</td></tr>
-    <tr><td>Control + Left</td><td>Move cursor to beginning of word to the left</td></tr>
-    <tr><td>Control + Right</td><td>Move cursor to beginning of word to the right</td></tr>
-    <tr><td>Control + c</td><td>Copy entire line to clipboard (not complete)</td></tr>
-    <tr><td>Control + v</td><td>Paste clipboard contents (not complete)</td></tr>
+    <tr><td>Control + Left arrow</td><td>Move cursor to beginning of word to the left</td></tr>
+    <tr><td>Control + Right arrow</td><td>Move cursor to beginning of word to the right</td></tr>
+    <tr><td>Control + c, Control + Insert</td><td>Copy entire line to clipboard</td></tr>
+    <tr><td>Control + v, Shift + Insert</td><td>Paste clipboard contents</td></tr>
+    <tr><td>Control + x, Shift + Delete</td><td>Cut entire line to clipboard</td></tr>
   </table>
   </blockquote></br>
 
@@ -2132,7 +2130,7 @@
       <td><pre>-palette &lt;standard|z26|user|custom&gt;</pre></td>
       <td>Set the palette to either normal Stella, the one used in the z26
         emulator, a user-defined palette, or a custom palette generated
-        from user-defined phase shifts.</td>
+        from user-defined parameters.</td>
     </tr>
 
     <tr>
@@ -2143,6 +2141,36 @@
     <tr>
       <td><pre>-pal.phase_pal &lt;number&gt;</pre></td>
       <td>Adjust phase shift of 'custom' PAL palette.</td>
+    </tr>
+
+    <tr>
+      <td><pre>-pal.red_scale &lt;number&gt;</pre></td>
+      <td>Adjust red scale of 'custom' palette (range -1.0 to 1.0).</td>
+    </tr>
+
+    <tr>
+      <td><pre>-pal.red_shift &lt;number&gt;</pre></td>
+      <td>Adjust red shift of 'custom' palette (range -22.5 to 22.5).</td>
+    </tr>
+
+    <tr>
+      <td><pre>-pal.green_scale &lt;number&gt;</pre></td>
+      <td>Adjust green scale of 'custom' palette (range -1.0 to 1.0).</td>
+    </tr>
+
+    <tr>
+      <td><pre>-pal.green_shift &lt;number&gt;</pre></td>
+      <td>Adjust green shift of 'custom' palette (range -22.5 to 22.5).</td>
+    </tr>
+
+    <tr>
+      <td><pre>-pal.blue_scale &lt;number&gt;</pre></td>
+      <td>Adjust blue scale of 'custom' palette (range -1.0 to 1.0).</td>
+    </tr>
+
+    <tr>
+      <td><pre>-pal.blue_shift &lt;number&gt;</pre></td>
+      <td>Adjust blue shift of 'custom' palette (range -22.5 to 22.5).</td>
     </tr>
 
     <tr>
@@ -3080,8 +3108,11 @@
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
           <tr><td>Palette</td><td>Palette used for emulation mode</td><td>-palette</td></tr>
-          <tr><td>NTSC phase</td><td>Adjust phase shift for 'Custom' NTSC palette</td><td>-pal.phase_ntsc</td></tr>
-          <tr><td>PAL phase</td><td>Adjust phase shift for 'Custom' PAL palette</td><td>-pal.phase_pal</td></tr>
+          <tr><td>NTSC phase</td><td>Adjust phase shift of 'Custom' NTSC palette</td><td>-pal.phase_ntsc</td></tr>
+          <tr><td>PAL phase</td><td>Adjust phase shift of 'Custom' PAL palette</td><td>-pal.phase_pal</td></tr>
+          <tr><td>R</td><td>Adjust red scale and shift of 'Custom' palette</td><td>-pal.red_scale, -pal.red_shift</td></tr>
+          <tr><td>G</td><td>Adjust green scale and shift of 'Custom' palette</td><td>-pal.green_scale, -pal.green_shift</td></tr>
+          <tr><td>B</td><td>Adjust blue scale and shift of 'Custom' palette</td><td>-pal.blue_scale, -pal.blue_shift</td></tr>
           <tr><td>Hue</td><td>Adjust hue of currently selected palette</td><td>-pal.hue</td></tr>
           <tr><td>Saturation</td><td>Adjust saturation of currently selected palette</td><td>-pal.saturation</td></tr>
           <tr><td>Contrast</td><td>Adjust contrast of currently selected palette</td><td>-pal.contrast</td></tr>

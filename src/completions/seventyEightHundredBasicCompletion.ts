@@ -302,6 +302,25 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
             },
             ' ');
 
+        // deprecated 
+        let deprecatedModeProvider = vscode.languages.registerCompletionItemProvider(
+            this.Id,
+            {
+                // return list of available language methods
+                provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+                    // get all text until the `position` and check if it reads `return `
+                    let linePrefix = document.lineAt(position).text.substr(0, position.character);
+                    if (!linePrefix.endsWith('deprecated ')) {
+                        return undefined;
+                    }
+
+                    return [
+                        new vscode.CompletionItem('frameheight', vscode.CompletionItemKind.Value)
+                    ];
+                }
+            },
+            ' ');
+
         // drawhiscores
         let drawhiscoresProvider = vscode.languages.registerCompletionItemProvider(
             this.Id,
@@ -366,6 +385,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                         new vscode.CompletionItem('screenheight', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('extradlmemory', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('dlmemory', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('deprecated', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('collisionwrap', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('plotvalueonscreen', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('plotvaluepage', vscode.CompletionItemKind.Method),
@@ -395,7 +415,8 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
             ' ');
 
         // add items           
-        context.subscriptions.push(ifProvider, returnProvider, romsizeProvider, displayModeProvider, shakescreenModeProvider, drawhiscoresProvider, tallsrpiteModeProvider, setProvider);
+        context.subscriptions.push(ifProvider, returnProvider, romsizeProvider, displayModeProvider, shakescreenModeProvider, 
+            deprecatedModeProvider, drawhiscoresProvider, tallsrpiteModeProvider, setProvider);
     }
 
 }

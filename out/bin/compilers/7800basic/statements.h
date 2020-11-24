@@ -88,6 +88,7 @@ void echo(char **);
 void set(char **);
 void dogoto(char **);
 void drawhiscores(char **);
+void hiscoreload(char **);
 void loadmemory(char **);
 void savememory(char **);
 void loadrombank(char **);

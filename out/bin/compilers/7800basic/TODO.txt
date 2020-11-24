@@ -1,6 +1,4 @@
--get trackball working
--update mouse demo to dynamically change controllers between stmouse, amigamouse, trackball, or joystick
--integrate the macro based PLOTSPRITE
+-bug - banners larger than 128 in 160B don't plot correctly.
+-data with trailing comment and comma's don't get the trailing comma stripped
 -fix tallsprite so it's DASM constants holding state, rather than C globals
--enable plotmap to be wider than 32 bytes (i.e. break it up into 2 plotmaps) , provided the width parameter isn't used.
 -vertical scrolling, in earnest

@@ -114,6 +114,18 @@ pndetecispal
      lda #<DLLMEM
      sta DPPL
 
+     ifconst bankswitchmode
+         ; we need to switch to the first bank as a default. this needs to
+         ; happen before DMA, in case there's a topscreenroutine in bank 0
+         ifconst MCPDEVCART
+             lda #$18 ; xxx11nnn - switch to bank 0
+             sta $3000
+         else
+             lda #0
+             sta $8000
+         endif
+     endif
+
      ; CTRL 76543210
      ; 7 colorburst kill
      ; 6,5 dma ctrl 2=normal DMA, 3=no DMA
@@ -203,17 +215,9 @@ skipSGRAMcheck
      ldx #0
      jsr settwobuttonmode
 
-     ifconst bankswitchmode
-         ; we need to switch to the first bank before we jump there!
-         ifconst MCPDEVCART
-             lda #$18 ; xxx11nnn - switch to bank 0
-             sta $3000
-         else
-             lda #0
-             sta $8000
-         endif
-     endif
-
+ ifnconst .altgamestart
      jmp game
-
+ else
+     jmp .altgamestart
+ endif
 

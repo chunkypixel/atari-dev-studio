@@ -24,13 +24,69 @@
 		<data>
 		xZbpNIOjjwm+uvC2TQaaeS6J0FI=
 		</data>
+		<key>Resources/audio/.deps/ConvolutionBuffer.d</key>
+		<data>
+		MfCiDvkxsqLvAbOG2nM3/RA7izo=
+		</data>
+		<key>Resources/audio/.deps/HighPass.d</key>
+		<data>
+		Y/4wjOKpdvyIrpQgqf4XHlFHKAg=
+		</data>
+		<key>Resources/audio/.deps/LanczosResampler.d</key>
+		<data>
+		E/kdWK0OUzh2yTtHZi30nCQMOZY=
+		</data>
+		<key>Resources/audio/.deps/SimpleResampler.d</key>
+		<data>
+		js7enmJZmXUxN+WWM5rIRWb68oQ=
+		</data>
+		<key>Resources/audio/ConvolutionBuffer.cxx</key>
+		<data>
+		w55Gq8+aaScAUCbvYnmLOv+2AOg=
+		</data>
+		<key>Resources/audio/ConvolutionBuffer.hxx</key>
+		<data>
+		OyC83vYc/gZ8KwghthQ9822lz3A=
+		</data>
+		<key>Resources/audio/HighPass.cxx</key>
+		<data>
+		U0uBJjZacCmwxMTSzJfxe20tP0E=
+		</data>
+		<key>Resources/audio/HighPass.hxx</key>
+		<data>
+		WC6o+C+79W5kPkb7JXRX+iJQGRc=
+		</data>
+		<key>Resources/audio/LanczosResampler.cxx</key>
+		<data>
+		XjW0x/Gc18kj++5KGLU4gv+n1rc=
+		</data>
+		<key>Resources/audio/LanczosResampler.hxx</key>
+		<data>
+		PBkSGZHObPZKR7Kus3bLX1MCjWk=
+		</data>
+		<key>Resources/audio/Resampler.hxx</key>
+		<data>
+		ecxJjAr2m876ECaQQRr4tUR+8zs=
+		</data>
+		<key>Resources/audio/SimpleResampler.cxx</key>
+		<data>
+		So1Rdlw3raOxNCottJMCUMvp3T0=
+		</data>
+		<key>Resources/audio/SimpleResampler.hxx</key>
+		<data>
+		jYhMsVHrGTeR29qmgFOYSlic8Tk=
+		</data>
+		<key>Resources/audio/module.mk</key>
+		<data>
+		NnbBckzWgWW5aBg/zFkcpUZgavw=
+		</data>
 		<key>Resources/docs/R77_readme.txt</key>
 		<data>
 		3rKmh9ZKdrpP+xP60HhILNgLH7c=
 		</data>
 		<key>Resources/docs/debugger.html</key>
 		<data>
-		8aWGzp1gpckqnwtdLhX0FKqL9PU=
+		byPVVg+wujJV2QE6wZ4nmCR2HmU=
 		</data>
 		<key>Resources/docs/graphics/cheat.png</key>
 		<data>
@@ -58,11 +114,11 @@
 		</data>
 		<key>Resources/docs/graphics/debugger_bankcomplex.png</key>
 		<data>
-		uhRyc77vJAkSokeYlQYCrHKqDBw=
+		clThvvr4OZMQPpa7gAwU05BoOQo=
 		</data>
 		<key>Resources/docs/graphics/debugger_banksimple.png</key>
 		<data>
-		MZM+aGB35i5mnwVuGOKg2h96anE=
+		2fNygf1AYJe1WKjknnscS5lPstU=
 		</data>
 		<key>Resources/docs/graphics/debugger_bpstatus.png</key>
 		<data>
@@ -70,7 +126,7 @@
 		</data>
 		<key>Resources/docs/graphics/debugger_cpuregs.png</key>
 		<data>
-		iUuS0jbWFjABgu5IqpBtDJ2osrs=
+		L911rSJ6+w17fWDzRSAo8O3SBi8=
 		</data>
 		<key>Resources/docs/graphics/debugger_dataops.png</key>
 		<data>
@@ -82,11 +138,11 @@
 		</data>
 		<key>Resources/docs/graphics/debugger_iotab.png</key>
 		<data>
-		CeEzf8/3iX7FNKAQeoNSL8NMVXs=
+		pi/a9aj9RP6jOipPZNWOldrlgb8=
 		</data>
 		<key>Resources/docs/graphics/debugger_main.png</key>
 		<data>
-		R/HPMbIebS9aH+lhlnQJrCUzhLY=
+		MY0im8CwO7QDcnMYiZEMJF3xiPA=
 		</data>
 		<key>Resources/docs/graphics/debugger_options.png</key>
 		<data>
@@ -94,19 +150,19 @@
 		</data>
 		<key>Resources/docs/graphics/debugger_ram-dpc.png</key>
 		<data>
-		MLlfpKT4VubqkIAuHZdHUMEftVI=
+		j9NzLylyM/f7gRW2vEHPf/2zExQ=
 		</data>
 		<key>Resources/docs/graphics/debugger_ram-f8sc.png</key>
 		<data>
-		rL7vde/vWscvQ1/ANo8G0uQUjj4=
+		0ABxE5UMWIPendpiPCmCq0pw3ek=
 		</data>
 		<key>Resources/docs/graphics/debugger_ram.png</key>
 		<data>
-		VTdvoIMZb0h4+qpT6OXBW8Z8pEA=
+		/54ZcbKe/CC2cj3QVweO3lG1Rjo=
 		</data>
 		<key>Resources/docs/graphics/debugger_ramsearch.png</key>
 		<data>
-		4QEoYEp0DAyxW1t8X1X4ZtfXMVg=
+		P2HD5J65d5rzbvTlz8YzyKF72YM=
 		</data>
 		<key>Resources/docs/graphics/debugger_rom.png</key>
 		<data>
@@ -118,7 +174,7 @@
 		</data>
 		<key>Resources/docs/graphics/debugger_tiainfo.png</key>
 		<data>
-		d5bx9lRZfZP7Tpzr9d2oFCSBS/4=
+		jn4EVA6xQtmm5Inf69K73pvBVfk=
 		</data>
 		<key>Resources/docs/graphics/debugger_tiaoutcmenu.png</key>
 		<data>
@@ -138,23 +194,23 @@
 		</data>
 		<key>Resources/docs/graphics/eventmapping.png</key>
 		<data>
-		RJOyi6RfP62W7i3xJRrMBe0RSH8=
+		rYZ1uBgknrfGteZY6ZRFJoiYjWE=
 		</data>
 		<key>Resources/docs/graphics/eventmapping_combo.png</key>
 		<data>
-		0vmdywgBa8WlYn0jIqJyZfWxgK0=
+		7Vu869QXmjxiajRBxhP3/lWXrtE=
 		</data>
 		<key>Resources/docs/graphics/eventmapping_devsports.png</key>
 		<data>
-		IKGKzMqQ6BmkHXVwwEHhiJGqClI=
+		NOrGzAh9d0z3zIbV/86ViTLTH78=
 		</data>
 		<key>Resources/docs/graphics/eventmapping_mouse.png</key>
 		<data>
-		osbFcv8eqRdM0CEas53cRSpoA84=
+		9rq9tiAxRQEpdX6YG6vqzVN0I40=
 		</data>
 		<key>Resources/docs/graphics/eventmapping_remap.png</key>
 		<data>
-		LNdI2115FjrKshWpG590ndH0P9o=
+		F9IA4xvAvnYsaC2Sk52VwuaibFU=
 		</data>
 		<key>Resources/docs/graphics/jr_pacman.png</key>
 		<data>
@@ -170,11 +226,11 @@
 		</data>
 		<key>Resources/docs/graphics/launcher_override.png</key>
 		<data>
-		VLOANBejqtDpArHuFe7+swMWBg4=
+		zQo8Sg7d7mTIGMhEt7RLHBZJiYE=
 		</data>
 		<key>Resources/docs/graphics/logs.png</key>
 		<data>
-		LndfeA1Mouvx01jzqKI5eWhL8vs=
+		6e8+ZavPbp4dF9jEpJmdS4qZ6c8=
 		</data>
 		<key>Resources/docs/graphics/options.png</key>
 		<data>
@@ -182,31 +238,31 @@
 		</data>
 		<key>Resources/docs/graphics/options_audio.png</key>
 		<data>
-		MHaT1K3zPIOANLpLJ57YtuWvqvw=
+		O4uHJz3HvH+dUqJHMF5nf2MjAic=
 		</data>
 		<key>Resources/docs/graphics/options_developer.png</key>
 		<data>
-		hM99yex01QivOBiJx9jWwb05+18=
+		Oil5KyhgJzj81wzZ2Zu6YhBf/8g=
 		</data>
 		<key>Resources/docs/graphics/options_developer_debugger.png</key>
 		<data>
-		MKVfJg0zGEoIgtNdO0YAzcZNQDE=
+		s/NJSjLKHRzNzcmRt2rvPbhH7DA=
 		</data>
 		<key>Resources/docs/graphics/options_developer_emulation.png</key>
 		<data>
-		CuBmTkXNPOCn12l+CCisaNZvBfo=
+		PvqZJWnGNMwj5KI6rXT15iL4wvY=
 		</data>
 		<key>Resources/docs/graphics/options_developer_tia.png</key>
 		<data>
-		SOX4nbyM1/48nHiWq/yKm3IbFvQ=
+		eMJt5pFdNeBXBY/kCFJPA+tx91s=
 		</data>
 		<key>Resources/docs/graphics/options_developer_timemachine.png</key>
 		<data>
-		erA2sqRIuXXTh5NNqZvJg1QxiOI=
+		RNnirL5bnq0LqZA0d1+TkEl1els=
 		</data>
 		<key>Resources/docs/graphics/options_developer_video.png</key>
 		<data>
-		VIBxTcpcM9LoaoGPfKE8lMS9KlI=
+		IX3ub5/ahI3BHdH9ZFHxSrGhr4s=
 		</data>
 		<key>Resources/docs/graphics/options_emulation.png</key>
 		<data>
@@ -222,19 +278,19 @@
 		</data>
 		<key>Resources/docs/graphics/options_gameinfo_controller.png</key>
 		<data>
-		R/Y3Y1zYEqt9kjAJLEgjV3W+Xo8=
+		XFpriDxuOt3KCtV/F2zwah9ILGo=
 		</data>
 		<key>Resources/docs/graphics/options_gameinfo_emulation.png</key>
 		<data>
-		tdFbAA66eUjuxbBIrJOQuHs8WWI=
+		lwadmZjdRZyl/2Cvie69eQmk4Sc=
 		</data>
 		<key>Resources/docs/graphics/options_gameinfo_quadtari.png</key>
 		<data>
-		Zlz9sH/kV64LSIECczzk503fTJY=
+		V9GiedAlg7lYyct9y31Fnh1q9s0=
 		</data>
 		<key>Resources/docs/graphics/options_misc.png</key>
 		<data>
-		RlXLGFhizfoRV8RPsI9WrJHlmEY=
+		2kZtkR4y49UL2h0gnPLyUAjcR2I=
 		</data>
 		<key>Resources/docs/graphics/options_misc_classic.png</key>
 		<data>
@@ -250,11 +306,11 @@
 		</data>
 		<key>Resources/docs/graphics/options_ui.png</key>
 		<data>
-		T2kJPxDPP672NLeECxHKYa4PDuE=
+		KMadVVpD9fXSJOWUx+AIVaTTnQ0=
 		</data>
 		<key>Resources/docs/graphics/options_video.png</key>
 		<data>
-		2YJ+aCCny7CXHe0ik3c7hg4tTcM=
+		xYc8YzLyor77Qt4/5P8lhaTjz+o=
 		</data>
 		<key>Resources/docs/graphics/options_video_dbgcolors.png</key>
 		<data>
@@ -262,11 +318,11 @@
 		</data>
 		<key>Resources/docs/graphics/options_video_palettes.png</key>
 		<data>
-		JVKXRuqgorfjDkg+C19YACoVA4o=
+		zlC3m/3IyYkrZn1L7ulFcxMN2ns=
 		</data>
 		<key>Resources/docs/graphics/options_video_tv.png</key>
 		<data>
-		fS7mvlzcrUBjX/aHyLFv/YrQ1IM=
+		MpJfZAM6T/Vyr2Weu6P5IimCsfg=
 		</data>
 		<key>Resources/docs/graphics/pacman.png</key>
 		<data>
@@ -278,7 +334,7 @@
 		</data>
 		<key>Resources/docs/graphics/resources/debugger_main.pdn</key>
 		<data>
-		njDFuAaiu2JjPb+e4bYSYWK6rdo=
+		OTH8W0IUWzPMbglQFM0zJnibpIU=
 		</data>
 		<key>Resources/docs/graphics/romaudit.png</key>
 		<data>
@@ -310,11 +366,11 @@
 		</data>
 		<key>Resources/docs/index.html</key>
 		<data>
-		ZN6VKGCLxB4ppbDRGdCMd8Toqxg=
+		5nyvH2+RfpAXoG5HDaEM0TJwvRs=
 		</data>
 		<key>Resources/docs/index_r77.html</key>
 		<data>
-		3lkuLdAzmbXEHCeZ/edEId7vI8A=
+		ELKZD7duG4vhq3RxUgTkRmoq/qo=
 		</data>
 		<key>Resources/en.lproj/InfoPlist.strings</key>
 		<dict>
@@ -392,6 +448,160 @@
 			vseUNO0ceLNj7LoSNY8zqrwau2ER+uwVCX1tFthwLas=
 			</data>
 		</dict>
+		<key>Resources/audio/.deps/ConvolutionBuffer.d</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			MfCiDvkxsqLvAbOG2nM3/RA7izo=
+			</data>
+			<key>hash2</key>
+			<data>
+			+tTk/PCGr+GZ1aNe87lYc6AIktPDGJdUBXex8qZG7LY=
+			</data>
+		</dict>
+		<key>Resources/audio/.deps/HighPass.d</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Y/4wjOKpdvyIrpQgqf4XHlFHKAg=
+			</data>
+			<key>hash2</key>
+			<data>
+			4sDAoH3HVmirK59TmRNQLtibn8sR9FsHDnRsDwHJlDs=
+			</data>
+		</dict>
+		<key>Resources/audio/.deps/LanczosResampler.d</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			E/kdWK0OUzh2yTtHZi30nCQMOZY=
+			</data>
+			<key>hash2</key>
+			<data>
+			e3StBY5j1vHc6bKy5lLWyEO6QojZHu7uqs7+rScCpCo=
+			</data>
+		</dict>
+		<key>Resources/audio/.deps/SimpleResampler.d</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			js7enmJZmXUxN+WWM5rIRWb68oQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			QA2J9jTS8YXtXhz6eJVOnEfUr7MMUXUasjGfgxRYNM8=
+			</data>
+		</dict>
+		<key>Resources/audio/ConvolutionBuffer.cxx</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			w55Gq8+aaScAUCbvYnmLOv+2AOg=
+			</data>
+			<key>hash2</key>
+			<data>
+			HJaxIwhLJzGEW/b8x4y4X7YqI96hI1PEZ/hQVGm9YiA=
+			</data>
+		</dict>
+		<key>Resources/audio/ConvolutionBuffer.hxx</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			OyC83vYc/gZ8KwghthQ9822lz3A=
+			</data>
+			<key>hash2</key>
+			<data>
+			O8lgX6diwwUGv2QQ2zFcs8xuGwLGT/XhgF/w4B9uZec=
+			</data>
+		</dict>
+		<key>Resources/audio/HighPass.cxx</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			U0uBJjZacCmwxMTSzJfxe20tP0E=
+			</data>
+			<key>hash2</key>
+			<data>
+			JQUe1BYlz4hZj1RBNmv95FZoGPQrGwOQ9Hh4Aq/TI60=
+			</data>
+		</dict>
+		<key>Resources/audio/HighPass.hxx</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			WC6o+C+79W5kPkb7JXRX+iJQGRc=
+			</data>
+			<key>hash2</key>
+			<data>
+			xQrDQxwIJfmYUyfVbWTc6ZzKMro7ePR8AFAniFeQjKQ=
+			</data>
+		</dict>
+		<key>Resources/audio/LanczosResampler.cxx</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			XjW0x/Gc18kj++5KGLU4gv+n1rc=
+			</data>
+			<key>hash2</key>
+			<data>
+			dUChNlh35T7HtWk+90w0bLPkIgzCG7T5dvTM9rHBtYU=
+			</data>
+		</dict>
+		<key>Resources/audio/LanczosResampler.hxx</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			PBkSGZHObPZKR7Kus3bLX1MCjWk=
+			</data>
+			<key>hash2</key>
+			<data>
+			Rvx4xZIokoivkkWtL+KadEtb8pUp6cr/pX+5kPNPOpo=
+			</data>
+		</dict>
+		<key>Resources/audio/Resampler.hxx</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			ecxJjAr2m876ECaQQRr4tUR+8zs=
+			</data>
+			<key>hash2</key>
+			<data>
+			+vMqGeLw8eH4b9HswuS1yNSH2S+81awMpx0wI+9dGfI=
+			</data>
+		</dict>
+		<key>Resources/audio/SimpleResampler.cxx</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			So1Rdlw3raOxNCottJMCUMvp3T0=
+			</data>
+			<key>hash2</key>
+			<data>
+			CWTQkXXLnSYPjP+vF2Nr7iOc97Wz+SSGxemipWwlHyQ=
+			</data>
+		</dict>
+		<key>Resources/audio/SimpleResampler.hxx</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			jYhMsVHrGTeR29qmgFOYSlic8Tk=
+			</data>
+			<key>hash2</key>
+			<data>
+			6KcvST8+Qj2zyoLgds09ej9hlR2HrvKiCaMN0gINvvs=
+			</data>
+		</dict>
+		<key>Resources/audio/module.mk</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			NnbBckzWgWW5aBg/zFkcpUZgavw=
+			</data>
+			<key>hash2</key>
+			<data>
+			/HM7sCbwL4Z9j/4L7asyd+Hp9RBDnRbJCMZGkz98mOY=
+			</data>
+		</dict>
 		<key>Resources/docs/R77_readme.txt</key>
 		<dict>
 			<key>hash</key>
@@ -407,11 +617,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			8aWGzp1gpckqnwtdLhX0FKqL9PU=
+			byPVVg+wujJV2QE6wZ4nmCR2HmU=
 			</data>
 			<key>hash2</key>
 			<data>
-			8Rww8ylSXttMHkTHbGBRe9H7g3Y9EIm5cxdFmRoX+IY=
+			11fcoVUeSjBnqEYusPznhNE6G6ED6UKJ/rYLlscrrug=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/cheat.png</key>
@@ -484,22 +694,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			uhRyc77vJAkSokeYlQYCrHKqDBw=
+			clThvvr4OZMQPpa7gAwU05BoOQo=
 			</data>
 			<key>hash2</key>
 			<data>
-			g1eRYMo7PtxW9R2re2Yq7PaSsegS9UtCnPBb12DCOG8=
+			MC6ahs37WDMzYFwvMeGp8c2ioT0AyzAXJ1R8L6XBFZE=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/debugger_banksimple.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			MZM+aGB35i5mnwVuGOKg2h96anE=
+			2fNygf1AYJe1WKjknnscS5lPstU=
 			</data>
 			<key>hash2</key>
 			<data>
-			ZDwdxLZKbgx+unD+nC2z0D2HDUumBX4CxeUrxvhEj8U=
+			4tDEAVNdSoIHLscym2MQ4HTCNVhpNgS/enH04A01SfU=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/debugger_bpstatus.png</key>
@@ -517,11 +727,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			iUuS0jbWFjABgu5IqpBtDJ2osrs=
+			L911rSJ6+w17fWDzRSAo8O3SBi8=
 			</data>
 			<key>hash2</key>
 			<data>
-			c7QO9NpEV1jTPeT+mDVNoZzRsk2b69Jf2etF4yBGYyc=
+			VWnODF9tNzV5z4Q/Jkumy0HOlILn8DcW22iO1RN1h4s=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/debugger_dataops.png</key>
@@ -550,22 +760,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			CeEzf8/3iX7FNKAQeoNSL8NMVXs=
+			pi/a9aj9RP6jOipPZNWOldrlgb8=
 			</data>
 			<key>hash2</key>
 			<data>
-			uv9R1ce+U/ezVgnhMHBsKWmJh7JS1MzEPqhWom28FmQ=
+			DOqdE7LqwxtkJav/qgtm+wIUj/01xtyjQC2C9WKsMSA=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/debugger_main.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			R/HPMbIebS9aH+lhlnQJrCUzhLY=
+			MY0im8CwO7QDcnMYiZEMJF3xiPA=
 			</data>
 			<key>hash2</key>
 			<data>
-			tL0F46+X1s/NSQWbXa24pB2JEiZXeb6kU+602yyNoLw=
+			ZEER3M/NkKsHnc/dGpjjUd+hyDxc4V0+lmdJtBxmDUE=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/debugger_options.png</key>
@@ -583,44 +793,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			MLlfpKT4VubqkIAuHZdHUMEftVI=
+			j9NzLylyM/f7gRW2vEHPf/2zExQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			jkDgw+QzSr3W2Z5go5PxxhOl4OyDMzxJSD6bpqXA3KY=
+			pbmPr5l3Jfbmck14gFp+xnq6Ee2JXIx2vpeNPuzxu44=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/debugger_ram-f8sc.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			rL7vde/vWscvQ1/ANo8G0uQUjj4=
+			0ABxE5UMWIPendpiPCmCq0pw3ek=
 			</data>
 			<key>hash2</key>
 			<data>
-			3wqJX4zG9BaBwRHncOpwsMiW4OGDgVKAlLVXs+VfbHw=
+			5HSkpuvFJiUFl8IkPcmeOEsl98z3kstN4WBm/+acJUs=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/debugger_ram.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			VTdvoIMZb0h4+qpT6OXBW8Z8pEA=
+			/54ZcbKe/CC2cj3QVweO3lG1Rjo=
 			</data>
 			<key>hash2</key>
 			<data>
-			IJa2USGUPMvrWiwswwusOp+IpzoQyIpggixPlGKiVVQ=
+			GkdjFtfmUvL5MtDiWIvnQ6avgSgJDDLOEITyaQN7BBo=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/debugger_ramsearch.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			4QEoYEp0DAyxW1t8X1X4ZtfXMVg=
+			P2HD5J65d5rzbvTlz8YzyKF72YM=
 			</data>
 			<key>hash2</key>
 			<data>
-			jvgia33cmLjzjOhBPpqIpdAwk5SWFZtx9ikrm5gdcqY=
+			2Mf1fl5irz4btTErnN6lDzLY1UQ01mqkL58QdMP4bPk=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/debugger_rom.png</key>
@@ -649,11 +859,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			d5bx9lRZfZP7Tpzr9d2oFCSBS/4=
+			jn4EVA6xQtmm5Inf69K73pvBVfk=
 			</data>
 			<key>hash2</key>
 			<data>
-			4dAn+lGrc/ZwHkIL59NrzUYmaiUJT5GR0jVWyQukvJs=
+			OdEzztJHHM7BdUhHdQNb9KhB5c3TAj3OLJy9QhnfR8Y=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/debugger_tiaoutcmenu.png</key>
@@ -704,55 +914,55 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			RJOyi6RfP62W7i3xJRrMBe0RSH8=
+			rYZ1uBgknrfGteZY6ZRFJoiYjWE=
 			</data>
 			<key>hash2</key>
 			<data>
-			Di9QpN7kXIpdnBlLGHR7M7AH7Cd1SblcUCRSUpUVUDg=
+			WZrSQ141GhCcNIeCPoSBRmOE3LmteK4FOPpBK+ecWG8=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/eventmapping_combo.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			0vmdywgBa8WlYn0jIqJyZfWxgK0=
+			7Vu869QXmjxiajRBxhP3/lWXrtE=
 			</data>
 			<key>hash2</key>
 			<data>
-			9Q+JhoiEzrYPXFKBShPLRDCDHv96BmUyCQZn0p9W/cc=
+			Z2lvZdZF5c5i5DZlHL6fKTvd9+wS1mlpXHA0KPUTlc4=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/eventmapping_devsports.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			IKGKzMqQ6BmkHXVwwEHhiJGqClI=
+			NOrGzAh9d0z3zIbV/86ViTLTH78=
 			</data>
 			<key>hash2</key>
 			<data>
-			vT+VyyUU9Q5P/ZICR/e8ku2+jh7NAXHIXpsXAt8k+UY=
+			aNWqniSBx8R2oSdPzqx6kbKl5sNYbcjZUoftqbxnqK8=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/eventmapping_mouse.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			osbFcv8eqRdM0CEas53cRSpoA84=
+			9rq9tiAxRQEpdX6YG6vqzVN0I40=
 			</data>
 			<key>hash2</key>
 			<data>
-			EUUEsYjJbo5gVlMNRiFNEJn7Fj3lwzEPCY/vtEr5XJw=
+			06zDS1D/j5xL8EGB2khXHC2+L37nsCcdlziWc4yJxBU=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/eventmapping_remap.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			LNdI2115FjrKshWpG590ndH0P9o=
+			F9IA4xvAvnYsaC2Sk52VwuaibFU=
 			</data>
 			<key>hash2</key>
 			<data>
-			bieyCc2cjUHN6wF2oEIRDCYrmjmPWn+14DPnZhIGiDM=
+			rD1PRrkFsoXJzm5bAmz1kykzFmnh2/SHwDn0iVAf1Sw=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/jr_pacman.png</key>
@@ -792,22 +1002,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			VLOANBejqtDpArHuFe7+swMWBg4=
+			zQo8Sg7d7mTIGMhEt7RLHBZJiYE=
 			</data>
 			<key>hash2</key>
 			<data>
-			Cz0p2tb5LcSIgjbScg7jEhmS3R47tdxZm3W8L+x+/M8=
+			LpbN0zKsNBHSjG30wIzAVUsXG5qmgzgWg7WTBDjg2eE=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/logs.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			LndfeA1Mouvx01jzqKI5eWhL8vs=
+			6e8+ZavPbp4dF9jEpJmdS4qZ6c8=
 			</data>
 			<key>hash2</key>
 			<data>
-			IBC4New9kKiN9y8EnmtmpKhQXIVfPNwPqjnGiPojEVk=
+			vr8rnoBOutd6rz1tekP1gAzURS7qxbKbfDdqSz1V9q0=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options.png</key>
@@ -825,77 +1035,77 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			MHaT1K3zPIOANLpLJ57YtuWvqvw=
+			O4uHJz3HvH+dUqJHMF5nf2MjAic=
 			</data>
 			<key>hash2</key>
 			<data>
-			XOTPSikpUzsL8PBJjSwrrhclHh6wJnrOD96hTtWFCGQ=
+			L2cTEHkOCSzbNiMBjLzq+8ijVb+nHGeTxOjtVGRHCL0=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_developer.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			hM99yex01QivOBiJx9jWwb05+18=
+			Oil5KyhgJzj81wzZ2Zu6YhBf/8g=
 			</data>
 			<key>hash2</key>
 			<data>
-			GVms2o6DgoolsOT6IaNEgSL4uIC5vPxFILGGSgKjuJo=
+			jrz/Gxiur0nAJbdbpP2enzdBVyy8A4U+tFumTz5yJtc=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_developer_debugger.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			MKVfJg0zGEoIgtNdO0YAzcZNQDE=
+			s/NJSjLKHRzNzcmRt2rvPbhH7DA=
 			</data>
 			<key>hash2</key>
 			<data>
-			eu3Sa0nq1ska5LJmOy+BBi3P5lBE8sNmVUFNDk939HE=
+			vokiBfWFCbbDo9mP6GI5YZCxgYXAGmdlnL9fFwDfHB0=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_developer_emulation.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			CuBmTkXNPOCn12l+CCisaNZvBfo=
+			PvqZJWnGNMwj5KI6rXT15iL4wvY=
 			</data>
 			<key>hash2</key>
 			<data>
-			C181Mz295ZDfQ/4Q5OHWOK0L9nj4VgvKC6EtySi1am8=
+			WFjskHnA7/bI+TpHLUCHoidN58ebapc96zROxjWplp8=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_developer_tia.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			SOX4nbyM1/48nHiWq/yKm3IbFvQ=
+			eMJt5pFdNeBXBY/kCFJPA+tx91s=
 			</data>
 			<key>hash2</key>
 			<data>
-			qncTRn1LGlyShSRqJy67blbeCqe5dhZT+6zTxzHhcnk=
+			GPOBGoQjKNthEQzvRnuN5vEkpBhWbvBLwuVvNly2xXg=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_developer_timemachine.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			erA2sqRIuXXTh5NNqZvJg1QxiOI=
+			RNnirL5bnq0LqZA0d1+TkEl1els=
 			</data>
 			<key>hash2</key>
 			<data>
-			FBlsjtHE81Rk61HY9U82BoIbkS8dFRhdDf01ufhLto8=
+			k+kHlA5s2NSY1IOu+BT183EaxPlHAAdASt5sTP3kXUk=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_developer_video.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			VIBxTcpcM9LoaoGPfKE8lMS9KlI=
+			IX3ub5/ahI3BHdH9ZFHxSrGhr4s=
 			</data>
 			<key>hash2</key>
 			<data>
-			mllaNvpHw+V42vz+5yqiWZ5pRDAAyS22/iwqcwgStuI=
+			fY4WVSqvOlZjTYZrITvKETlrqH4+4CGkcceV/a+x2mM=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_emulation.png</key>
@@ -935,44 +1145,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			R/Y3Y1zYEqt9kjAJLEgjV3W+Xo8=
+			XFpriDxuOt3KCtV/F2zwah9ILGo=
 			</data>
 			<key>hash2</key>
 			<data>
-			UndPNd6cpwICyE2TSi+9AuLwYVI9LhtDlbhkZRjHyLk=
+			hU7gXgczv2RuFRn1jUAs61z82eEvqRhg/v6mKL40Rn4=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_gameinfo_emulation.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			tdFbAA66eUjuxbBIrJOQuHs8WWI=
+			lwadmZjdRZyl/2Cvie69eQmk4Sc=
 			</data>
 			<key>hash2</key>
 			<data>
-			cSr1aC96oUqGyZsAd6GW8SehyJrlpOBXj8yjOf9k7+k=
+			GIfLCZy7PoK6AwDx2lGxfPpIx2RNKCekGosb5ATboJc=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_gameinfo_quadtari.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			Zlz9sH/kV64LSIECczzk503fTJY=
+			V9GiedAlg7lYyct9y31Fnh1q9s0=
 			</data>
 			<key>hash2</key>
 			<data>
-			kdnjswnl1t+hwxZKCnpy0uSs+gfLZqAZT8WbVPWhWwU=
+			Rma3HKOmPkDj8KTlXKsWTvQl2ukWjETkTlFk5Ooe7vo=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_misc.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			RlXLGFhizfoRV8RPsI9WrJHlmEY=
+			2kZtkR4y49UL2h0gnPLyUAjcR2I=
 			</data>
 			<key>hash2</key>
 			<data>
-			3gYcZrZ4VcEgj8GMF1gXzOe/bJh+cCk2dYW7scg8mxQ=
+			QsIo78HQZF3uW2KliaIQioJzR59zX3pxdGZeAWehaqA=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_misc_classic.png</key>
@@ -1012,22 +1222,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			T2kJPxDPP672NLeECxHKYa4PDuE=
+			KMadVVpD9fXSJOWUx+AIVaTTnQ0=
 			</data>
 			<key>hash2</key>
 			<data>
-			Ctlccf0EjTj4SDwAE+4jrM8PhlDImg4DZ8byuS7X0HQ=
+			fsTsfqfvSh1rnpMY72wLLfCv3Ud1WirjdUQno5os31Y=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_video.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			2YJ+aCCny7CXHe0ik3c7hg4tTcM=
+			xYc8YzLyor77Qt4/5P8lhaTjz+o=
 			</data>
 			<key>hash2</key>
 			<data>
-			qgwtPiFTaxN8vCrk2wvMErfq7vDmKqnvg3bBr/0Wszo=
+			dqSvDfBqLG3EbyTLr3h07bZdtv6RdzBR2nLucHWd7YU=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_video_dbgcolors.png</key>
@@ -1045,22 +1255,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			JVKXRuqgorfjDkg+C19YACoVA4o=
+			zlC3m/3IyYkrZn1L7ulFcxMN2ns=
 			</data>
 			<key>hash2</key>
 			<data>
-			NwYqlTmOcZIt0V+DKIiPivGP1Neh0dLO3WgIzYt8Q8g=
+			QplhUr1zJ11vWebTzJB1za13FD+0HVq8yrwdOgMa8a4=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_video_tv.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			fS7mvlzcrUBjX/aHyLFv/YrQ1IM=
+			MpJfZAM6T/Vyr2Weu6P5IimCsfg=
 			</data>
 			<key>hash2</key>
 			<data>
-			WZV/JJhxu5yLR0BI2JjNx25A/n8qxaB3nRAYfp35f84=
+			cPVXHwiDD545pkQXYh4VY/OfaOj+stE4pTlpUA4TWZM=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/pacman.png</key>
@@ -1089,11 +1299,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			njDFuAaiu2JjPb+e4bYSYWK6rdo=
+			OTH8W0IUWzPMbglQFM0zJnibpIU=
 			</data>
 			<key>hash2</key>
 			<data>
-			Di+oh4qBp1DKDqFrNELZks7qvNHxo5HDMzF4tSsvfFs=
+			a8rtvZXVsYakhq+6BFVJ3R/RijPZnsbPQbTJILX7e1o=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/romaudit.png</key>
@@ -1177,22 +1387,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ZN6VKGCLxB4ppbDRGdCMd8Toqxg=
+			5nyvH2+RfpAXoG5HDaEM0TJwvRs=
 			</data>
 			<key>hash2</key>
 			<data>
-			xXZ7IXKs++qOFfY/2tOcECNGTIxFDGk5mG/BMHUH8lw=
+			55GtivmNyO81bHURgb+TTK/1qlaWlDUVSquzLlca/U4=
 			</data>
 		</dict>
 		<key>Resources/docs/index_r77.html</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			3lkuLdAzmbXEHCeZ/edEId7vI8A=
+			ELKZD7duG4vhq3RxUgTkRmoq/qo=
 			</data>
 			<key>hash2</key>
 			<data>
-			1T2WKbqx1QcKdCvBRQSIeU5bcMInVSb17iwURRR+PzY=
+			FHhROoomN0WcC9I2w1UmT/FKt9Tz7GCgkwbS/zSQ4MQ=
 			</data>
 		</dict>
 		<key>Resources/en.lproj/InfoPlist.strings</key>

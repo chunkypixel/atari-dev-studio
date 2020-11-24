@@ -24,6 +24,10 @@ NMI
 skipreallyoffvisible
        lda visibleover
        bne carryontopscreenroutine
+       ifconst .bottomscreenroutine
+          jsr .bottomscreenroutine
+       endif
+
        jmp skiptopscreenroutine
 carryontopscreenroutine
          txa ; save X+Y
@@ -134,8 +138,19 @@ skipdoublebufferminimumframeindexadjust
          tax
 skiptopscreenroutine
      pla
-IRQ
      RTI
+
+IRQ ; the only source of non-nmi is the BRK opcode. The only 
+  ifnconst BREAKPROTECTOFF
+     lda #$1A
+     sta BACKGRND
+     lda #$60
+     sta CTRL
+     sta sCTRL
+     .byte $02 ; KIL/JAM
+  else
+     RTI
+  endif
 
      ifconst LONGCONTROLLERREAD
 
@@ -203,6 +218,7 @@ reallyoffvisible
      tya
      pha
      cld
+
 
      jsr uninterruptableroutines
 

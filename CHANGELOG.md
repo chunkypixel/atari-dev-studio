@@ -2,6 +2,15 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.6.5
+
+* Updated 7800basic to v0.16 (Windows, Linux, macOS)
+* Updated Stella to v6.4 (Windows, Linux, macOS). Note: Linux 32-bit is currently v6.2
+* Updated dasm to v2.20.14.1 (64-bit only Windows, Linux, macOS)
+* Added new 7800basic keywords: deprecated (frameheight), hiscoreload
+* Fixed opening initial files via the Open in Sprite Editor pop-up menu in the VS Code Explorer (fingers crossed)
+* Fixed multiple repeated processing on events when using the Sprite Editor (think I actually got it this time - fingers crossed)
+
 ## 0.6.4
 
 * Updated dasm to v2.20.14 (Windows, Linux, macOS)

@@ -28,6 +28,8 @@ int tallspritecount = 0;
 
 int currentdmahole = 0;
 
+int deprecatedframeheight = 0;
+
 #define PNG_DEBUG 3
 #include <png.h>
 
@@ -528,11 +530,11 @@ void shakescreen(char **statement)
     else if (statement[2][0] == 'o')
     {
 	printf("    lda #%%01001111\n");
-	printf("    sta DLLMEM\n");
+	printf("    sta DLLMEM+3\n");
 	printf("  ifconst DOUBLEBUFFER\n");
 	printf("    ldy doublebufferstate\n");
 	printf("    beq [.+5]\n");
-	printf("    sta.w DLLMEM+DBOFFSET\n");
+	printf("    sta.w DLLMEM+DBOFFSET+3\n");
 	printf("  endif ; DOUBLEBUFFER\n");
 
 	return;
@@ -543,11 +545,11 @@ void shakescreen(char **statement)
     printf("    jsr randomize\n");
     printf("    and #%d\n", shakeamount);
     printf("    eor #%%01001111\n");
-    printf("    sta DLLMEM\n");
+    printf("    sta DLLMEM+3\n");
     printf("  ifconst DOUBLEBUFFER\n");
     printf("    ldy doublebufferstate\n");
     printf("    beq [.+5]\n");
-    printf("    sta.w DLLMEM+DBOFFSET\n");
+    printf("    sta.w DLLMEM+DBOFFSET+3\n");
     printf("  endif ; DOUBLEBUFFER\n");
 
 
@@ -660,8 +662,8 @@ void characterset(char **statement)
 
     removeCR(statement[2]);
     printf("    lda #>%s\n", statement[2]);
-    printf("    sta CHARBASE\n");
     printf("    sta sCHARBASE\n\n");
+    printf("    sta CHARBASE\n");
 
     printf("    lda #(%s_mode | %%01100000)\n", statement[2]);
     printf("    sta charactermode\n\n");
@@ -748,12 +750,22 @@ void plotsprite(char **statement)
 
     assertminimumargs(statement, "plotsprite", 4);
 
+    int tsi = gettallspriteindex(statement[2]);
+
     if ((statement[6][0] != 0) && (statement[6][0] != ':') && (statement[6][0] != '0'))
     {
 	removeCR(statement[6]);
 
 	printf("    lda #<%s\n", statement[2]);
-	printf("    ldy #%s_width\n", statement[2]);
+	if ((tsi >= 0) && (tallspritemode != 2) && (deprecatedframeheight==0))
+		printf("    ldy #(%s_width*%d)\n", statement[2],tallspriteheight[tsi]);
+	else if ((statement[6][0] != 0) && (statement[6][0] != ':') && (statement[7][0] != 0) && (statement[7][0] != ':') && (deprecatedframeheight==0))
+        {
+		removeCR(statement[7]);
+		printf("    ldy #(%s_width*%s)\n", statement[2],statement[7]);
+        }
+	else
+		printf("    ldy #%s_width\n", statement[2]);
 	printf("    clc\n");
 	printf("    beq plotspritewidthskip%d\n", templabel);
 	printf("plotspritewidthloop%d\n", templabel);
@@ -813,10 +825,9 @@ void plotsprite(char **statement)
 
     jsr("plotsprite");
 
-    int tsi = gettallspriteindex(statement[2]);
     if ((statement[6][0] != 0) && (statement[6][0] != ':') && (statement[7][0] != 0) && (statement[7][0] != ':'))
     {
-	int tsheight, t;
+	int tsheight, t,s;
 	removeCR(statement[7]);
 	tsheight = atoi(statement[7]);
 	for (t = 1; t < tsheight; t++)
@@ -1003,7 +1014,8 @@ void sinedata(char **statement)
 		printf(" .byte ");
 	}
 	waveindex = (((double) t * wavecycles * 2.0 * M_PI) / (double) wavelength) + (wavephaseoffset * 2.0 * M_PI);
-	value = (sin(waveindex) * ((double) waveamplitude + 0.5)) + (double) waveamplitudeoffset;
+	//value = (sin(waveindex) * ((double) waveamplitude + 0.5)) + (double) waveamplitudeoffset;
+	value = (sin(waveindex) * ((double) waveamplitude) + 0.5) + (double) waveamplitudeoffset;
 	printf("$%02x", (value & 0xff));
 	if ((t % 16 != 15))
 	    printf(",");
@@ -4105,7 +4117,7 @@ void barf_graphic_file(void)
 		if(holefilepointer!=NULL)
                 {
 			printf (" echo \"  \",\"  \",\"  \",\"  \",[(256*WZONEHEIGHT)-(DMAHOLEEND%d - DMAHOLESTART%d)]d , \"bytes of ROM space left in DMA hole %d.\"\n", currentplain,currentplain,currentplain);
-			printf (" if ((256*WZONEHEIGHT)-(DMAHOLEEND%d - DMAHOLESTART%d)) < 0\n", currentplain,currentplain,currentplain);
+			printf (" if ((256*WZONEHEIGHT)-(DMAHOLEEND%d - DMAHOLESTART%d)) < 0\n", currentplain,currentplain);
                         printf("SPACEOVERFLOW SET (SPACEOVERFLOW+1)\n");
                         printf(" endif\n");
                 }
@@ -4705,6 +4717,8 @@ int findlabel(char **statement, int i)
 	return 1;
     if (!strncmp(statementcache, "drawhiscores\0", 13))
 	return 1;
+    if (!strncmp(statementcache, "hiscoreload\0", 12))
+	return 1;
     if (!strncmp(statementcache, "memcpy\0", 6))
 	return 1;
     if (!strncmp(statementcache, "memset\0", 6))
@@ -5014,6 +5028,12 @@ void savememory(char **statement)
 }
 
 
+void hiscoreload(char **statement)
+{
+    //       1     
+    // hiscoreload 
+    printf(" jsr loaddifficultytable\n");
+}
 
 void drawhiscores(char **statement)
 {
@@ -7685,28 +7705,73 @@ void boxcollision(char **statement)
     {
 	//no collision wrapping is selected. we'll work directly with the variables, no prep required.
 	printf("\n");
-	printf("  ldy ");
-	printimmed(statement[6]);
-	printf("%s\n", statement[6]);	//boxy1
-	printf("  lda #(%s-1)\n", statement[8]);	//boxh1
-	printf("  sta temp3\n");
-	printf("  lda #(%s-1)\n", statement[10]);	//boxw1
-	printf("  sta temp4\n");
+
+	// ### boxh1
+	if(isimmed(statement[8]))
+		printf("  ldy #(%s-1)\n", statement[8]);
+	else
+	{
+		printf("  ldy %s\n", statement[8]);
+		printf("  dey\n");
+	}
+	printf("  sty temp3\n");
+
+
+	// ### boxw1
+	if(isimmed(statement[10]))
+		printf("  ldy #(%s-1)\n", statement[10]);
+	else
+	{
+		printf("  ldy %s\n", statement[10]);
+		printf("  dey\n");
+	}
+	printf("  sty temp4\n");
+
+
+	// ### boxx2
 	printf("  lda ");
 	printimmed(statement[12]);
-	printf("%s\n", statement[12]);	//boxx2
+	printf("%s\n", statement[12]);
 	printf("  sta temp5\n");
+
+	// ### boxy2
 	printf("  lda ");
 	printimmed(statement[14]);
-	printf("%s\n", statement[14]);	//boxy2
+	printf("%s\n", statement[14]);
 	printf("  sta temp6\n");
-	printf("  lda #(%s-1)\n", statement[16]);	//boxh2
-	printf("  sta temp7\n");
-	printf("  lda #(%s-1)\n", statement[18]);	//boxw2
-	printf("  sta temp8\n");
+
+	// ### boxh2
+	if(isimmed(statement[16]))
+		printf("  ldy #(%s-1)\n", statement[16]);
+	else
+	{
+		printf("  ldy %s\n", statement[16]);
+		printf("  dey\n");
+	}
+	printf("  sty temp7\n");
+
+
+	// ### boxw2
+	if(isimmed(statement[18]))
+		printf("  ldy #(%s-1)\n", statement[18]);
+	else
+	{
+		printf("  ldy %s\n", statement[18]);
+		printf("  dey\n");
+	}
+	printf("  sty temp8\n");
+
+
+	// ### boxy1
+	printf("  ldy ");
+	printimmed(statement[6]);
+	printf("%s\n", statement[6]);
+
+	// ### boxx1
 	printf("  lda ");
 	printimmed(statement[4]);
-	printf("%s\n", statement[4]);	//boxx1
+	printf("%s\n", statement[4]);
+
 	printf("  jsr boxcollision\n");
 	printf("\n");
     }
@@ -7715,30 +7780,71 @@ void boxcollision(char **statement)
 
 	//collision wrapping is selected. we need to adjust the x and y variables...
 	printf("\n");
+
 	printf("  clc ; one clc only. If we overflow we're screwed anyway.\n");
+
+	// ### boxh1
+	if(isimmed(statement[8]))
+		printf("  ldy #(%s-1)\n", statement[8]);
+	else
+	{
+		printf("  ldy %s)\n", statement[8]);
+		printf("  dey\n");
+	}
+	printf("  sty temp3\n");
+
+
+	// ### boxw1
+	if(isimmed(statement[10]))
+		printf("  ldy #(%s-1)\n", statement[10]);
+	else
+	{
+		printf("  ldy %s\n", statement[10]);
+		printf("  dey\n");
+	}
+	printf("  sty temp4\n");
+
+
+	// ### boxx2
+	printf("  lda ");
+	printimmed(statement[12]);
+	printf("%s\n", statement[12]);
+	printf("  adc #48\n");
+	printf("  sta temp5\n");
+
+	// ### boxy2
+	printf("  lda ");
+	printimmed(statement[14]);
+	printf("%s\n", statement[14]);
+	printf("  adc #((256-WSCREENHEIGHT)/2)\n");
+	printf("  sta temp6\n");
+
+	// ### boxh2
+	if(isimmed(statement[16]))
+		printf("  ldy #(%s-1)\n", statement[16]);
+	else
+	{
+		printf("  ldy %s\n", statement[16]);
+		printf("  dey\n");
+	}
+	printf("  sty temp7\n");
+
+	// ### boxw2
+	if(isimmed(statement[18]))
+		printf("  ldy #(%s-1)\n", statement[18]);
+	else
+	{
+		printf("  ldy %s\n", statement[18]);
+		printf("  dey\n");
+	}
+	printf("  sty temp8\n");
+
 	printf("  lda ");
 	printimmed(statement[6]);
 	printf("%s\n", statement[6]);	//boxy1
 	printf("  adc #((256-WSCREENHEIGHT)/2)\n");
 	printf("  tay\n");
-	printf("  lda #(%s-1)\n", statement[8]);	//boxh1
-	printf("  sta temp3\n");
-	printf("  lda #(%s-1)\n", statement[10]);	//boxw1
-	printf("  sta temp4\n");
-	printf("  lda ");
-	printimmed(statement[12]);
-	printf("%s\n", statement[12]);	//boxx2
-	printf("  adc #48\n");
-	printf("  sta temp5\n");
-	printf("  lda ");
-	printimmed(statement[14]);
-	printf("%s\n", statement[14]);	//boxy2
-	printf("  adc #((256-WSCREENHEIGHT)/2)\n");
-	printf("  sta temp6\n");
-	printf("  lda #(%s-1)\n", statement[16]);	//boxh2
-	printf("  sta temp7\n");
-	printf("  lda #(%s-1)\n", statement[18]);	//boxw2
-	printf("  sta temp8\n");
+
 	printf("  lda ");
 	printimmed(statement[4]);
 	printf("%s\n", statement[4]);	//boxx1
@@ -8886,6 +8992,7 @@ void doublebuffer(char **statement)
 void gosub(char **statement)
 {
     int anotherbank = 0;
+    int permanentreturn = 0;
     invalidate_Areg();
     assertminimumargs(statement, "gosub", 1);
     if (!strncmp(statement[3], "bank", 4))
@@ -8908,8 +9015,14 @@ void gosub(char **statement)
 
     if ((romat4k == 1) && (anotherbank == 0))
     {
-	prerror("bank switch not required to the last bank, since its always present");
+	prerror("bank switch not required to the first bank, since its always present");
     }
+
+    if(romat4k && (currentbank == 0))
+        permanentreturn = 1;
+
+    if(currentbank == (bankcount - 1))
+        permanentreturn = 1;
 
     if (romat4k == 1)
 	anotherbank--;
@@ -8922,14 +9035,18 @@ void gosub(char **statement)
     printf(" lda #<(ret_point%d-1)\n", numjsrs);
     printf(" pha\n");
 
-    //we can detect this from a regular return address, because its less than $100
-    printf(" lda #0\n");
-    printf(" pha\n");
-    if (romat4k == 1)
-	printf(" lda #%d\n", currentbank - 1);
-    else
-	printf(" lda #%d\n", currentbank);
-    printf(" pha\n");
+    // the bank switch return info... don't push this if we're switching from a non-switched bank
+    // we can detect the bank from a regular return address, because its less than $100
+    if (permanentreturn==0)
+    {
+        printf(" lda #0\n");
+        printf(" pha\n");
+        if (romat4k == 1)
+            printf(" lda #%d\n", currentbank - 1);
+        else
+            printf(" lda #%d\n", currentbank);
+        printf(" pha\n");
+    }
 
     printf(" lda #>(.%s-1)\n", statement[2]);
     printf(" pha\n");
@@ -9030,6 +9147,11 @@ void set(char **statement)
 	    tallspritemode = 1;
 	else if (!strncmp(statement[3], "spritesheet", 11))
 	    tallspritemode = 2;
+    }
+    else if (!strncmp(statement[2], "deprecated", 10))
+    {
+	if (!strncmp(statement[3], "frameheight", 11))
+	    deprecatedframeheight = 1;
     }
     else if (!strncmp(statement[2], "dlmemory\0", 8))
     {
@@ -9591,8 +9713,13 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "canary", 6))
     {
-	if (strncmp(statement[3], "on", 2) != 0)
+	if (strncmp(statement[3], "off", 3) != 0)
 	    strcpy(redefined_variables[numredefvars++], "CANARYOFF = 1");
+    }
+    else if (!strncmp(statement[2], "breakprotect", 12))
+    {
+	if (strncmp(statement[3], "off", 3) != 0)
+	    strcpy(redefined_variables[numredefvars++], "BREAKPROTECTOFF = 1");
     }
     else if (!strncmp(statement[2], "optimization", 12))
     {

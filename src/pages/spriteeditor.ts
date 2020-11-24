@@ -14,7 +14,7 @@ export class SpriteEditorPage implements vscode.Disposable {
     public dispose(): void {
     }
 
-    public async openPage(context: vscode.ExtensionContext, fileUri?: vscode.Uri) {
+    public async openPage(context: vscode.ExtensionContext, loadProjectUri?: vscode.Uri) {
         console.log('debugger:SpriteEditorPage.openPage');
         
         // Prepare
@@ -29,6 +29,9 @@ export class SpriteEditorPage implements vscode.Disposable {
             // Open
             this.currentPanel.reveal(columnToShowIn);
             isOpen = true;
+
+            // loading project file?
+            if (loadProjectUri) this.loadFileContent("loadProject", loadProjectUri)
 
         } else {
             // Create
@@ -72,72 +75,78 @@ export class SpriteEditorPage implements vscode.Disposable {
             content = this.replaceContentTag(content, "CONFIGURATION", configuration);
 
             // Display
-            this.currentPanel.webview.html = content;      
+            this.currentPanel.webview.html = content;    
             
+            // Events
+            // NOTE: we only need to configure these once otherwise we get multiple events called
+            
+            // Capture command messages
+            this.currentPanel.webview.onDidReceiveMessage(
+                message => {
+                    switch (message.command) {
+                        case 'loadProject':
+                            this.loadProject(message);
+                            break;
+
+                        case 'saveProject':
+                            this.saveProject(message);
+                            break;
+
+                        case 'exportAsPngFile':
+                            this.exportAsPngFile(message);
+                            break;
+
+                        case 'exportAllAsPngFile':
+                            this.exportAllAsPngFile(message);
+                            break;
+
+                        case 'exportAsBatariFile':
+                            this.exportAsBatariFile(message);
+                            break;
+
+                        case 'exportAsAssemblyFile':
+                            this.exportAsAssemblyFile(message);
+                            break;
+
+                        case 'configuration':
+                            this.saveConfiguration(message);
+                            break;
+
+                        case 'loadPalette':
+                            this.loadPalette(message);
+                            break;
+                        
+                        case 'savePalette':
+                            this.savePalette(message);
+                            break;
+
+                        default:
+                            // Unknown call - flag
+                            console.log(`debugger:SpriteEditorPage: Unknown command called: ${message.command}`);
+                            break;
+                    }
+                }
+            );
+
+            // Capture dispose
+            this.currentPanel.onDidDispose(
+                () => {
+                    this.currentPanel = undefined;
+                },
+                null
+            );
         }
 
         // Load provided file (via right-click popup in Explorer)?
-        if (fileUri) { 
-            // Put in a delay to ensure editor loading is processed before importing??
-            //if (!isOpen) { application.delay(3000); }
-            this.loadFileContent("loadProject", fileUri); 
+        if (loadProjectUri) {
+            // Put in a delay to ensure editor is fully loaded before importing project
+            let delay = (!isOpen ? 500 : 5);
+
+             // Process
+             application.delay(delay).then(_ =>
+                 this.loadFileContent("loadProject", loadProjectUri)
+             )
         }
-
-        // Capture command messages
-        this.currentPanel.webview.onDidReceiveMessage(
-            message => {
-                switch (message.command) {
-                    case 'loadProject':
-                        this.loadProject(message);
-                        break;
-
-                    case 'saveProject':
-                        this.saveProject(message);
-                        break;
-
-                    case 'exportAsPngFile':
-                        this.exportAsPngFile(message);
-                        break;
-
-                    case 'exportAllAsPngFile':
-                        this.exportAllAsPngFile(message);
-                        break;
-
-                    case 'exportAsBatariFile':
-                        this.exportAsBatariFile(message);
-                        break;
-
-                    case 'exportAsAssemblyFile':
-                        this.exportAsAssemblyFile(message);
-                        break;
-
-                    case 'configuration':
-                        this.saveConfiguration(message);
-                        break;
-
-                    case 'loadPalette':
-                        this.loadPalette(message);
-                        break;
-                    
-                    case 'savePalette':
-                        this.savePalette(message);
-                        break;
-
-                    default:
-                        // Unknown call - flag
-                        console.log(`debugger:SpriteEditorPage: Unknown command called: ${message.command}`);
-                        break;
-                }
-            }
-        );
-
-        // Capture dispose
-        this.currentPanel.onDidDispose(
-            () => {
-                this.currentPanel = undefined;
-            },
-            null
-        );
     }
 
     private getNonce() {
