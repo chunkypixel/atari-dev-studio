@@ -416,12 +416,12 @@
     y - y line (zone) co-ordinate
     chars (optional) - number of characters to display 
     extrawide (optional) - display chars twice the width of the character size
-
+ 
 
 
 ## PLOTMAP
 
-    plotmap mapdata palette_# x y width height [map_x_offset] [map_y_offset]
+    plotmap mapdata palette_# x y width height [map_x_offset] [map_y_offset] [map_width]
 
     mapdata - RAM or ROM location of the data to plot onto the screen
     palette_# - index of palette (0-7)
@@ -431,6 +431,7 @@
     height - number of character rows (zones) to plot  
     map_x_offset (optional) - x offset co-ordinate of the area to draw within the larger map 
     map_y_offset (optional) - y offset co-ordinate of the area to draw within the larger map 
+    map_width (optional) - row width of the larger map
 
 
 

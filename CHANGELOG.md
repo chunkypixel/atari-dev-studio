@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.6.6
+
+ * Updated hover tooltips for 7800basic keywords (plotmap)
+ 
 ## 0.6.5
 
 * Updated 7800basic to v0.16 (Windows, Linux, macOS)
