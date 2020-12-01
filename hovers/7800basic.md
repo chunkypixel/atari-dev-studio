@@ -408,7 +408,7 @@
 
 ## PLOTCHARS
 
-    plotchars textdata palette_# x y [chars|extrawide]
+    plotchars textdata palette_# x y [chars|extrawide|singlewide]
 
     textdata - RAM, ROM or literal string 'message' to plot onto the screen 
     palette_# - index of palette (0-7)
@@ -416,7 +416,9 @@
     y - y line (zone) co-ordinate
     chars (optional) - number of characters to display 
     extrawide (optional) - display chars twice the width of the character size
- 
+    singlewide (optional)* - there are special requirements to using this feature. Check the 
+                             7800basic Programming forum for details
+
 
 
 ## PLOTMAP

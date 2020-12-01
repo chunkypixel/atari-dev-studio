@@ -4,7 +4,8 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.6.6
 
- * Updated hover tooltips for 7800basic keywords (plotmap)
+ * Updated hover tooltips for 7800basic keywords (plotmap, plotchars)
+ * Added new 7800basic keywords: singlewide (plotchars)
  
 ## 0.6.5
 
