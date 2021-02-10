@@ -17,7 +17,7 @@ const compilerBase_1 = require("./compilerBase");
 class BatchCompiler extends compilerBase_1.CompilerBase {
     // Features
     constructor() {
-        super("bat", "Batch", ["bat"], [""], "", "");
+        super("bat", "Batch", ["bat"], [""], [""], "", "");
     }
     InitialiseAsync() {
         var _a;

@@ -14,6 +14,7 @@ export abstract class CompilerBase implements vscode.Disposable {
     public readonly Name: string;
     public readonly Extensions: string[];
     public readonly CompiledExtensions: string[];
+    public readonly VerifyCompiledExtensions: string[];
     // Note: these need to be in reverse order compared to how they are read
     public DebuggerExtensions: Map<string, string> = new Map([["-s",".sym"], ["-l",".lst"]]);
     public CustomFolderOrPath: boolean = false;
@@ -28,7 +29,7 @@ export abstract class CompilerBase implements vscode.Disposable {
     public FileName: string = "";
     public CompiledSubFolder: string = "";
     readonly CompiledSubFolderName: string = "bin";
-
+    
     protected GenerateDebuggerFiles: boolean = false;
     protected CleanUpCompilationFiles: boolean = false;
     protected WorkspaceFolder: string = "";
@@ -37,11 +38,14 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected UsingBatchCompiler: boolean = false;
     protected UsingShellScriptCompiler: boolean = false;
 
-    constructor(id: string, name: string, extensions: string[], compiledExtensions: string[], folderOrPath: string, emulator: string) {
+    constructor(id: string, name: string, extensions: string[], compiledExtensions: string[], verifyCompiledExtensions: string[], folderOrPath: string, emulator: string) {
         this.Id = id;
         this.Name = name;
         this.Extensions = extensions;
         this.CompiledExtensions = compiledExtensions;
+        // if no verified compiled extensions then use default
+        this.VerifyCompiledExtensions = verifyCompiledExtensions;
+        if (!verifyCompiledExtensions) this.VerifyCompiledExtensions = compiledExtensions;
         this.DefaultFolderOrPath = folderOrPath;
         this.DefaultEmulator = emulator;
     }
@@ -322,7 +326,7 @@ export abstract class CompilerBase implements vscode.Disposable {
 
         // Verify created file(s)
         application.WriteToCompilerTerminal(`Verifying compiled file(s)...`);
-        for await (let extension of this.CompiledExtensions) {
+        for await (let extension of this.VerifyCompiledExtensions) {
             // Prepare
             let compiledFileName = `${this.FileName}${extension}`;
             let compiledFilePath = path.join(this.WorkspaceFolder, compiledFileName);
@@ -364,11 +368,15 @@ export abstract class CompilerBase implements vscode.Disposable {
             let newPath = path.join(this.CompiledSubFolder, compiledFileName);
 
             // Move compiled file
-            result = await filesystem.RenameFileAsync(oldPath, newPath);
-            if (!result) {
-                // Notify
-                application.WriteToCompilerTerminal(`ERROR: Failed to move file from '${compiledFileName}' to ${this.CompiledSubFolderName} folder`);
-                return false;            
+            // Updated to check as we may now have optional files (7800basic - .CC2)
+            if (await filesystem.FileExistsAsync(oldPath)) {
+                // Process
+                result = await filesystem.RenameFileAsync(oldPath, newPath);
+                if (!result) {
+                    // Notify
+                    application.WriteToCompilerTerminal(`ERROR: Failed to move file from '${compiledFileName}' to ${this.CompiledSubFolderName} folder`);
+                    return false;            
+                }
             }
         }
 

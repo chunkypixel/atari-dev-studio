@@ -12,7 +12,7 @@ export class BatchCompiler extends CompilerBase {
         super("bat",
             "Batch",
             ["bat"],
-            [""],
+            [""],[""],
             "",
             "");
     }

@@ -23,7 +23,7 @@ const application = require("../application");
 const filesystem = require("../filesystem");
 const execute = require("../execute");
 class CompilerBase {
-    constructor(id, name, extensions, compiledExtensions, folderOrPath, emulator) {
+    constructor(id, name, extensions, compiledExtensions, verifyCompiledExtensions, folderOrPath, emulator) {
         // Features
         this.IsRunning = false;
         // Note: these need to be in reverse order compared to how they are read
@@ -45,6 +45,10 @@ class CompilerBase {
         this.Name = name;
         this.Extensions = extensions;
         this.CompiledExtensions = compiledExtensions;
+        // if no verified compiled extensions then use default
+        this.VerifyCompiledExtensions = verifyCompiledExtensions;
+        if (!verifyCompiledExtensions)
+            this.VerifyCompiledExtensions = compiledExtensions;
         this.DefaultFolderOrPath = folderOrPath;
         this.DefaultEmulator = emulator;
     }
@@ -334,7 +338,7 @@ class CompilerBase {
             // Verify created file(s)
             application.WriteToCompilerTerminal(`Verifying compiled file(s)...`);
             try {
-                for (var _b = __asyncValues(this.CompiledExtensions), _c; _c = yield _b.next(), !_c.done;) {
+                for (var _b = __asyncValues(this.VerifyCompiledExtensions), _c; _c = yield _b.next(), !_c.done;) {
                     let extension = _c.value;
                     // Prepare
                     let compiledFileName = `${this.FileName}${extension}`;
@@ -386,11 +390,15 @@ class CompilerBase {
                     let oldPath = path.join(this.WorkspaceFolder, compiledFileName);
                     let newPath = path.join(this.CompiledSubFolder, compiledFileName);
                     // Move compiled file
-                    result = yield filesystem.RenameFileAsync(oldPath, newPath);
-                    if (!result) {
-                        // Notify
-                        application.WriteToCompilerTerminal(`ERROR: Failed to move file from '${compiledFileName}' to ${this.CompiledSubFolderName} folder`);
-                        return false;
+                    // Updated to check as we may now have optional files (7800basic - .CC2)
+                    if (yield filesystem.FileExistsAsync(oldPath)) {
+                        // Process
+                        result = yield filesystem.RenameFileAsync(oldPath, newPath);
+                        if (!result) {
+                            // Notify
+                            application.WriteToCompilerTerminal(`ERROR: Failed to move file from '${compiledFileName}' to ${this.CompiledSubFolderName} folder`);
+                            return false;
+                        }
                     }
                 }
             }

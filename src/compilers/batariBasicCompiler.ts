@@ -11,7 +11,7 @@ export class BatariBasicCompiler extends CompilerBase {
         super("batariBasic",
                 "batari Basic",
                 [".bas",".bb"],
-                [".bin"],
+                [".bin"],[".bin"],
                 path.join(application.Path,"out","bin","compilers","bB"),
                 "Stella");
     }

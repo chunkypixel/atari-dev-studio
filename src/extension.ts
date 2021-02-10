@@ -71,6 +71,12 @@ export async function activate(context: vscode.ExtensionContext) {
 		await application.BuildGameAndRunAsync(fileUri);
 	});
 
+	// ContextHelp
+	const openContextHelp = vscode.commands.registerCommand('extension.openContextHelp', () => {
+		console.log('User activated command "extension.openContextHelp"');
+		application.OpenContextHelp();
+	});
+
 	// Subscriptions (register)
 	context.subscriptions.push(openWelcomePage);
 	context.subscriptions.push(openSpriteEditorPage);
@@ -84,6 +90,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Register the mouse-over hover providers
 	await application.RegisterHoverProvidersAsync(context);
+    await application.RegisterContextHelpsAsync(context);
 
 	// Register region folding providers
 	await application.RegisterFoldingProvidersAsync(context);

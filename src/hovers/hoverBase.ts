@@ -30,7 +30,7 @@ export abstract class HoverBase implements vscode.HoverProvider {
 	//
 	protected async LoadHoverFileAsync(context: vscode.ExtensionContext, filename: string): Promise<void> {
 		const filePath: vscode.Uri = vscode.Uri.file(path.join(context.extensionPath, 'hovers', filename));
-		const filearr = (await filesystem.ReadFileAsync(filePath.fsPath)).toString().split(/\r?\n/);
+		const fileArrary = (await filesystem.ReadFileAsync(filePath.fsPath)).toString().split(/\r?\n/);
 
 		const keypattern = /^([^A-Za-z0-9_]*)([A-Za-z0-9_]+)/; // Pattern for matching the 'key'
 		const delimCnt = 2; // How many contiguous blank lines that must be found betwen keys
@@ -43,7 +43,7 @@ export abstract class HoverBase implements vscode.HoverProvider {
 		// how many contigous blank lines that have passed by.  Since the keyword can be
 		// prefixed by markdown data we need to use a regex to just get the key.
 
-		for (const line of filearr) {
+		for (const line of fileArrary) {
 			let match=line.match(keypattern);
 			// Do we something that looks like a key and also enough blanks passed by?
 			if (match && match[2] && blanks<=0) {  				

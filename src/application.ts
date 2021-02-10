@@ -33,6 +33,9 @@ import { ReferenceProviderBase } from './referenceProvider/referenceProviderBase
 import { SeventyEightHundredBasicReferenceProvider } from './referenceProvider/seventyEightHundredBasicReferenceProvider';
 import { BatariBasicReferenceProvider } from './referenceProvider/batariBasicReferenceProvider';
 import { DasmReferenceProvider } from './referenceProvider/dasmReferenceProvider';
+import { ContextHelpBase } from "./contexthelp/contextHelpBase";
+import { SeventyEightHundredBasicContextHelp } from "./contexthelp/seventyEightHundredBasicContextHelp";
+import { BatariBasicContextHelp } from "./contexthelp/batariBasicContextHelp";
 
 // -------------------------------------------------------------------------------------
 // Operating System
@@ -216,6 +219,22 @@ export async function RegisterReferenceProvidersAsync(context: vscode.ExtensionC
 }
 
 // -------------------------------------------------------------------------------------
+// ContextHelp
+// Language intellisense
+// -------------------------------------------------------------------------------------
+
+export const ContextHelps:ContextHelpBase[] = [
+	new BatariBasicContextHelp(),
+	new SeventyEightHundredBasicContextHelp()
+];
+
+export async function RegisterContextHelpsAsync(context: vscode.ExtensionContext): Promise<void> {
+	for (let contextHelp of ContextHelps) {
+		await contextHelp.RegisterAsync(context);
+	}
+}
+
+// -------------------------------------------------------------------------------------
 // Functions
 // -------------------------------------------------------------------------------------
 export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
@@ -251,6 +270,21 @@ export function KillBuildGame(): void {
 			compiler.Kill();
 		}
 	}		
+}
+
+export async function OpenContextHelp(): Promise<void> {
+	// Get active editor
+	var activeEditor = vscode.window.activeTextEditor;
+	if (!activeEditor) { return; }
+	
+	// Find context help (based on language of chosen file)
+	for (let contextHelp of ContextHelps) {
+		if (contextHelp.Id === activeEditor?.document.languageId) {
+			// Get position of cursor
+			var position = activeEditor.selection.start;
+			await contextHelp.OpenContextHelpAtCursorAsync(activeEditor.document, position);
+		}
+	}
 }
 
 export function WriteToCompilerTerminal(message: string, writeToLog: boolean = false): void {

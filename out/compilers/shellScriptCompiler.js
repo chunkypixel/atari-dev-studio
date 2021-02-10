@@ -17,7 +17,7 @@ const compilerBase_1 = require("./compilerBase");
 class ShellScriptCompiler extends compilerBase_1.CompilerBase {
     // Features
     constructor() {
-        super("shellscript", "Shell Script", ["sh"], [""], "", "");
+        super("shellscript", "Shell Script", ["sh"], [""], [""], "", "");
     }
     InitialiseAsync() {
         var _a;

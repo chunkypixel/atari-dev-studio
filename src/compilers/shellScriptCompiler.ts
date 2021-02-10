@@ -12,7 +12,7 @@ export class ShellScriptCompiler extends CompilerBase {
         super("shellscript",
             "Shell Script",
             ["sh"],
-            [""],
+            [""],[""],
             "",
             "");
     }

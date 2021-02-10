@@ -17,7 +17,7 @@ const compilerBase_1 = require("./compilerBase");
 class MakeCompiler extends compilerBase_1.CompilerBase {
     // Features
     constructor() {
-        super("makefile", "makefile", ["makefile"], [""], "", "");
+        super("makefile", "makefile", ["makefile"], [""], [""], "", "");
     }
     InitialiseAsync() {
         var _a;

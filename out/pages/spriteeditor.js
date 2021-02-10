@@ -117,7 +117,7 @@ class SpriteEditorPage {
             // Load provided file (via right-click popup in Explorer)?
             if (loadProjectUri) {
                 // Put in a delay to ensure editor is fully loaded before importing project
-                let delay = (!isOpen ? 500 : 5);
+                let delay = (!isOpen ? 750 : 5);
                 // Process
                 application.delay(delay).then(_ => this.loadFileContent("loadProject", loadProjectUri));
             }

@@ -15,7 +15,7 @@ export class DasmCompiler extends CompilerBase {
         super("dasm",
                 "dasm",
                 [".dasm",".asm",".a",".h"],
-                [".bin"],
+                [".bin"],[".bin"],
                 path.join(application.Path,"out","bin","compilers","dasm"),
                 "Stella");           
     }

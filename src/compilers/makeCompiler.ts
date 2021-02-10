@@ -12,7 +12,7 @@ export class MakeCompiler extends CompilerBase {
         super("makefile",
             "makefile",
             ["makefile"],
-            [""],
+            [""],[""],
             "",
             "");
     }

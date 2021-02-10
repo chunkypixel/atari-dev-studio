@@ -17,7 +17,7 @@ const execute = require("../execute");
 const compilerBase_1 = require("./compilerBase");
 class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
     constructor() {
-        super("7800basic", "7800basic", [".bas", ".78b"], [".a78", ".bin"], path.join(application.Path, "out", "bin", "compilers", "7800basic"), "A7800");
+        super("7800basic", "7800basic", [".bas", ".78b"], [".a78", ".bin", ".bin.CC2"], [".a78", ".bin"], path.join(application.Path, "out", "bin", "compilers", "7800basic"), "A7800");
         // Debugger extensions
         this.DebuggerExtensions = new Map([["-s", ".symbol.txt"], ["-l", ".list.txt"]]);
     }

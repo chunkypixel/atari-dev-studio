@@ -75,6 +75,11 @@ function activate(context) {
             console.log('User activated command "extension.touchbar.buildGameAndRun"');
             yield application.BuildGameAndRunAsync(fileUri);
         }));
+        // ContextHelp
+        const openContextHelp = vscode.commands.registerCommand('extension.openContextHelp', () => {
+            console.log('User activated command "extension.openContextHelp"');
+            application.OpenContextHelp();
+        });
         // Subscriptions (register)
         context.subscriptions.push(openWelcomePage);
         context.subscriptions.push(openSpriteEditorPage);
@@ -87,6 +92,7 @@ function activate(context) {
         context.subscriptions.push(touchbarBuildGameAndRun);
         // Register the mouse-over hover providers
         yield application.RegisterHoverProvidersAsync(context);
+        yield application.RegisterContextHelpsAsync(context);
         // Register region folding providers
         yield application.RegisterFoldingProvidersAsync(context);
         // Register intellisence features

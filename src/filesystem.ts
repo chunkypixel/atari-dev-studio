@@ -76,7 +76,7 @@ export function RenameFileAsync(oldName: string, newName: string): Promise<boole
     }); 
 }
 
-export function GetFileStatsAsync(path: string): Promise<fs.Stats> {
+export function GetFileStatsAsync(path: string): Promise<any> {
     console.log('debugger:filesystem.GetFileStatsAsync');
     
     return new Promise((resolve, reject) => {

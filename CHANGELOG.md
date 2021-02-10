@@ -2,6 +2,13 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.6.7
+
+ * Updated Stella to v6.5.1 (Windows, Linux, macOS). Note: Linux 32-bit is currently v6.2
+ * #39 [Done] Added Command Palette option 'ads: Open the Sprite Editor'
+ * #33 [InProgress] Added F1 context help for batariBasic and 7800basic linking to RandomTerrain's support pages (set cursor at word and press F1 to display help content if found)
+ * #40 [Done] Added check for 7800basic *.CC2 files (produced for 144k ROMS) to copy file into bin folder  
+ 
 ## 0.6.6
 
  * Updated hover tooltips for 7800basic keywords (plotmap, plotchars)

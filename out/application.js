@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delay = exports.ShowStartupMessagesAsync = exports.GetConfiguration = exports.ShowErrorPopup = exports.ShowInformationPopup = exports.ShowWarningPopup = exports.WriteToCompilerTerminal = exports.KillBuildGame = exports.BuildGameAndRunAsync = exports.BuildGameAsync = exports.RegisterReferenceProvidersAsync = exports.ReferenceProviders = exports.RegisterDefinitionProvidersAsync = exports.DefinitionProviders = exports.RegisterDocumentSymbolProvidersAsync = exports.DocumentSymbolProviders = exports.RegisterFoldingProvidersAsync = exports.Foldings = exports.RegisterCompletionProvidersAsync = exports.Completions = exports.RegisterHoverProvidersAsync = exports.Hovers = exports.Emulators = exports.Compilers = exports.InitialiseAdsTerminalAsync = exports.AdsTerminal = exports.CompilerOutputChannel = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSArch = exports.OSPlatform = void 0;
+exports.delay = exports.ShowStartupMessagesAsync = exports.GetConfiguration = exports.ShowErrorPopup = exports.ShowInformationPopup = exports.ShowWarningPopup = exports.WriteToCompilerTerminal = exports.OpenContextHelp = exports.KillBuildGame = exports.BuildGameAndRunAsync = exports.BuildGameAsync = exports.RegisterContextHelpsAsync = exports.ContextHelps = exports.RegisterReferenceProvidersAsync = exports.ReferenceProviders = exports.RegisterDefinitionProvidersAsync = exports.DefinitionProviders = exports.RegisterDocumentSymbolProvidersAsync = exports.DocumentSymbolProviders = exports.RegisterFoldingProvidersAsync = exports.Foldings = exports.RegisterCompletionProvidersAsync = exports.Completions = exports.RegisterHoverProvidersAsync = exports.Hovers = exports.Emulators = exports.Compilers = exports.InitialiseAdsTerminalAsync = exports.AdsTerminal = exports.CompilerOutputChannel = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSArch = exports.OSPlatform = void 0;
 const vscode = require("vscode");
 const filesystem = require("./filesystem");
 const os = require("os");
@@ -36,6 +36,8 @@ const dasmDefinitionProvider_1 = require("./definitionProvider/dasmDefinitionPro
 const seventyEightHundredBasicReferenceProvider_1 = require("./referenceProvider/seventyEightHundredBasicReferenceProvider");
 const batariBasicReferenceProvider_1 = require("./referenceProvider/batariBasicReferenceProvider");
 const dasmReferenceProvider_1 = require("./referenceProvider/dasmReferenceProvider");
+const seventyEightHundredBasicContextHelp_1 = require("./contexthelp/seventyEightHundredBasicContextHelp");
+const batariBasicContextHelp_1 = require("./contexthelp/batariBasicContextHelp");
 // -------------------------------------------------------------------------------------
 // Operating System
 // -------------------------------------------------------------------------------------
@@ -200,6 +202,22 @@ function RegisterReferenceProvidersAsync(context) {
 }
 exports.RegisterReferenceProvidersAsync = RegisterReferenceProvidersAsync;
 // -------------------------------------------------------------------------------------
+// ContextHelp
+// Language intellisense
+// -------------------------------------------------------------------------------------
+exports.ContextHelps = [
+    new batariBasicContextHelp_1.BatariBasicContextHelp(),
+    new seventyEightHundredBasicContextHelp_1.SeventyEightHundredBasicContextHelp()
+];
+function RegisterContextHelpsAsync(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (let contextHelp of exports.ContextHelps) {
+            yield contextHelp.RegisterAsync(context);
+        }
+    });
+}
+exports.RegisterContextHelpsAsync = RegisterContextHelpsAsync;
+// -------------------------------------------------------------------------------------
 // Functions
 // -------------------------------------------------------------------------------------
 function BuildGameAsync(fileUri) {
@@ -245,6 +263,24 @@ function KillBuildGame() {
     }
 }
 exports.KillBuildGame = KillBuildGame;
+function OpenContextHelp() {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Get active editor
+        var activeEditor = vscode.window.activeTextEditor;
+        if (!activeEditor) {
+            return;
+        }
+        // Find context help (based on language of chosen file)
+        for (let contextHelp of exports.ContextHelps) {
+            if (contextHelp.Id === (activeEditor === null || activeEditor === void 0 ? void 0 : activeEditor.document.languageId)) {
+                // Get position of cursor
+                var position = activeEditor.selection.start;
+                yield contextHelp.OpenContextHelpAtCursorAsync(activeEditor.document, position);
+            }
+        }
+    });
+}
+exports.OpenContextHelp = OpenContextHelp;
 function WriteToCompilerTerminal(message, writeToLog = false) {
     exports.CompilerOutputChannel.appendLine(message);
     if (writeToLog) {
