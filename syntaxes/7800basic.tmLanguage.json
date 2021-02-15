@@ -139,7 +139,7 @@
 				},
 				{
 					"name": "keyword.other.78b",
-					"match": "\\b(adjustvisible|alphachars|alphadata|avoxvoice|basepath|basic|boxcollision|characterset|canary|clearscreen|collision|collisionwrap|converttobcd|deprecated|dictionary|dmahole|drawscreen|drawwait|drawhiscores|data|debug|displaymode|dlmemory|doublebuffer|doublewide|extradlmemory|extrawide|hiscoreload|hscolorbase|hsdifficultytext|hsgamename|hsgameranks|hsscoresize|hsseconds|hssupport|incbanner|incgraphic|incmapfile|lockzone|loadmemory|loadrambank|loadrombank|mcpdevcart|memcpy|memset|mutesfx|newblock|noflow|pauseroutine|peekchar|pitch|phonetic|playsfx|playsong|plotbanner|plotchars|plotmap|plotmapfile|plotsprite|plotvalue|plotvalueonscreen|plotvaluepage|pokechar|pokeybase|pokeydetected|pokeysound|pokeysupport|psound|raw|reboot|restorescreen|reset|romsize|savescreen|savememory|screenheight|sdata|shakescreen|singlewide|songtempo|speak|speechdata|speed|sread|stopsong|songdata|tallsprite|tiasfx|trackersupport|tsound|unlockzone|voice|zoneheight|zoneprotection)\\b",
+					"match": "\\b(adjustvisible|alphachars|alphadata|avoxvoice|basepath|basic|boxcollision|characterset|canary|clearscreen|collision|collisionwrap|converttobcd|deprecated|dictionary|dmahole|drawscreen|drawwait|drawhiscores|data|debug|displaymode|dlmemory|doublebuffer|doublewide|extradlmemory|extrawide|hiscoreload|hiscoreclear|hscolorbase|hsdifficultytext|hsgamename|hsgameranks|hsscoresize|hsseconds|hssupport|incbanner|incgraphic|incmapfile|lockzone|loadmemory|loadrambank|loadrombank|mcpdevcart|memcpy|memset|mutesfx|newblock|noflow|pauseroutine|peekchar|pitch|phonetic|playsfx|playsong|plotbanner|plotchars|plotmap|plotmapfile|plotsprite|plotvalue|plotvalueonscreen|plotvaluepage|pokechar|pokeybase|pokeydetected|pokeysound|pokeysupport|psound|raw|reboot|restorescreen|reset|romsize|savescreen|savememory|screenheight|sdata|shakescreen|singlewide|sizeof|songtempo|speak|speechdata|speed|sread|stopsong|songdata|tallsprite|tiasfx|trackersupport|tsound|unlockzone|voice|zoneheight|zoneprotection)\\b",
 					"comment": "other keywords"
 				},	
 				{ 
@@ -164,7 +164,7 @@
 				},
 				{
 					"name": "keyword.constant.78b",
-					"match": "\\b(on|off|lo|med|hi|flip|frameheight|tv|spritesheet|ntsc|pal|repeat|160A|160B|320A|320B|320C|320D|16k|32k|48k|128k|128kRAM|128kBANKRAM|144k|256k|256kRAM|256kBANKRAM|272k|512k|512kRAM|512kBANKRAM|528k|attract|single|player1|player2)\\b",
+					"match": "\\b(on|off|lo|med|hi|flip|frameheight|tv|spritesheet|ntsc|pal|repeat|160A|160B|320A|320B|320C|320D|16k|32k|48k|128k|128kRAM|128kBANKRAM|144k|256k|256kRAM|256kBANKRAM|272k|512k|512kRAM|512kBANKRAM|528k|attract|single|player1|player2|player2joy1)\\b",
 					"comment": "constant keywords"
 				},
 				{

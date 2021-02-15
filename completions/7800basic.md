@@ -13,7 +13,7 @@ doublebuffer
 doublewide
 drawscreen
 drawwait
-drawhighscore
+drawhiscores
 extradlmemory
 gamedifficulty
 hscolorbase
@@ -69,6 +69,7 @@ pokeysound
 pokeysupport
 psound
 savememory
+sizeof
 speak
 stopsong
 tallsprite

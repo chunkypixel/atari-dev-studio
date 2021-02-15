@@ -19,10 +19,10 @@ detecthsc
          sta XCTRL1s
          sta XCTRL1
          lda $3900
-         cmp #$C6
+         eor #$C6
          bne detecthscfail
          lda $3904
-         cmp #$FE
+         eor #$FE
          bne detecthscfail
          ; check if it's initialized...
          ldy #0
@@ -193,7 +193,7 @@ plothsinitialsloop
              lda #((HSSCOREY+2)/(WZONEHEIGHT/8))
              sta temp5 ; Y
              jsr plotcharacters
-             ldy hsdisplaymode ; 0=attact mode, 1=player eval, 2=player 1 eval, 3=player 2 player eval
+             ldy hsdisplaymode ; 0=attact mode, 1=player eval, 2=player 1 eval, 3=player 2 player eval, 4=player 2 player evel (joy1)
              bne carronwithscoreevaluation
              jmp donoscoreevaluation
 carronwithscoreevaluation
@@ -211,7 +211,7 @@ carronwithscoreevaluation
              sta temp5 ; Y
              jsr plotcharacters
 
-             ldy hsdisplaymode ; 0=attact mode, 1=player eval, 2=player 1 eval, 3=player 2 player eval
+             ldy hsdisplaymode ; 0=attact mode, 1=player eval, 2=player 1 eval, 3=player 2 player eval, 4=player 2 player evel (joy1)
              dey
              ;plot the current player score...
              lda #(32-SCORESIZE) ; palette=0*32 
@@ -768,14 +768,14 @@ sfx_hslettertick
              .byte $00,$00,$00
 
 highscorelabeladjust1
-             .byte (80-(14*2)-(SCORESIZE*2)),(80-(16*2)-(SCORESIZE*2)),(80-(16*2)-(SCORESIZE*2))
+             .byte (80-(14*2)-(SCORESIZE*2)),(80-(16*2)-(SCORESIZE*2)),(80-(16*2)-(SCORESIZE*2)),(80-(16*2)-(SCORESIZE*2))
 highscorelabeladjust2
-             .byte (80+(14*2)-(SCORESIZE*2)),(80+(16*2)-(SCORESIZE*2)),(80+(16*2)-(SCORESIZE*2))
+             .byte (80+(14*2)-(SCORESIZE*2)),(80+(16*2)-(SCORESIZE*2)),(80+(16*2)-(SCORESIZE*2)),(80+(16*2)-(SCORESIZE*2))
 
 scorevarlo
-             .byte <(score0+((6-SCORESIZE)/2)),<(score0+((6-SCORESIZE)/2)),<(score1+((6-SCORESIZE)/2))
+             .byte <(score0+((6-SCORESIZE)/2)),<(score0+((6-SCORESIZE)/2)),<(score1+((6-SCORESIZE)/2)),<(score1+((6-SCORESIZE)/2))
 scorevarhi
-             .byte >(score0+((6-SCORESIZE)/2)),>(score0+((6-SCORESIZE)/2)),>(score1+((6-SCORESIZE)/2))
+             .byte >(score0+((6-SCORESIZE)/2)),>(score0+((6-SCORESIZE)/2)),>(score1+((6-SCORESIZE)/2)),>(score1+((6-SCORESIZE)/2))
 
              ifnconst HSNOLEVELNAMES
 highscoredifficultytextlo
@@ -803,9 +803,9 @@ HSHIGHSCOREStext
              endif ; HSNOLEVELNAMES
 
 highscorelabeltextlo
-             .byte <player0label, <player1label, <player2label
+             .byte <player0label, <player1label, <player2label, <player2label
 highscorelabeltexthi
-             .byte >player0label, >player1label, >player2label
+             .byte >player0label, >player1label, >player2label, >player2label
 
 player0label
              .byte $0f,$0b,$00,$18,$04,$11,$1d,$12,$02,$0e,$11,$04,$1a,$1d,$1d
@@ -940,6 +940,7 @@ loaddifficultytableHSC
          cmp #$7F
          bne loaddifficultytableHSCcontinue
          ;there was an error. use a new RAM table instead...
+         jsr initializeHSCtableentry
          jmp cleardifficultytablemem
 loaddifficultytableHSCcontinue
          ; parse the data into the HS memory...

@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.6.8
+
+* Updated 7800basic to v0.17 (Windows, Linux, macOS)
+* Added new 7800basic keywords: sizeof, hiscoreclear, player2joy1 (drawhiscores)
+* Updated 7800basic hover, contexthelp and completions lists
+ 
 ## 0.6.7
 
  * Updated Stella to v6.5.1 (Windows, Linux, macOS). Note: Linux 32-bit is currently v6.2

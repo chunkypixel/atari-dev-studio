@@ -43,12 +43,10 @@ carryontopscreenroutine
          beq skipcanarytriggered
          lda #$45
          sta BACKGRND
-         lda #$60
-         sta CTRL
-         sta sCTRL
-         .byte $02 ; KIL/JAM
- endif
+         jmp skipbrkolorset ; common crash dump routine, if available
 skipcanarytriggered
+ endif
+
          inc frameslost ; this is balanced with a "dec frameslost" when drawscreen is called.
 
        ; ** Other important routines that need to regularly run, and can run onscreen.
@@ -140,14 +138,104 @@ skiptopscreenroutine
      pla
      RTI
 
-IRQ ; the only source of non-nmi is the BRK opcode. The only 
+IRQ ; the only source of non-nmi interrupt should be the BRK opcode.
   ifnconst BREAKPROTECTOFF
      lda #$1A
      sta BACKGRND
-     lda #$60
-     sta CTRL
-     sta sCTRL
-     .byte $02 ; KIL/JAM
+skipbrkolorset
+skipbrkdetected
+         lda #$60
+         sta sCTRL
+         sta CTRL
+     ifnconst hiscorefont
+         .byte $02 ; KIL/JAM
+      else ; hiscorefont is present
+      ifconst CRASHDUMP
+         bit MSTAT
+         bpl skipbrkdetected ; wait for vblank to ensure we're clear of NMI
+
+         ifconst dumpbankswitch
+           lda dumpbankswitch
+           pha
+         endif
+
+         ; bankswitch if needed, to get to the hiscore font
+         ifconst bankswitchmode
+           ifconst included.hiscore.asm.bank
+             ifconst MCPDEVCART
+               lda #($18 | included.hiscore.asm.bank)
+               sta $3000
+             else
+               lda #(included.hiscore.asm.bank)
+               sta $8000
+             endif
+           endif ; included.hiscore.asm.bank
+         endif ; bankswitchmode
+
+	ifconst DOUBLEBUFFER
+         ;turn off double-buffering, if on...
+          lda #>DLLMEM
+          sta DPPH
+          lda #<DLLMEM
+          sta DPPL
+        endif
+
+         lda #$00
+         sta P0C2
+
+         ;update the second-from-top DL...
+         ldy #8
+NMIupdatetopDL
+         lda show2700,y
+         sta ZONE1ADDRESS,y
+         dey
+         bpl NMIupdatetopDL
+
+         ; the hiscore font is present, so we try to output the stack
+         ldy #0
+copystackloop
+         pla
+         pha
+         lsr
+         lsr
+         lsr
+         lsr
+         tax
+         lda hiscorehexlut,x
+         sta $2700,y
+         iny
+
+         pla
+         and #$0F
+         tax
+         lda hiscorehexlut,x
+         sta $2700,y
+         iny
+
+         lda #27 ; period
+         sta $2700,y
+         iny
+
+         cpy #30
+         bne copystackloop
+
+         lda #>hiscorefont
+         sta CHARBASE
+         sta sCHARBASE
+         lda #%01000011 ;Enable DMA, mode=320A
+         sta CTRL
+         sta sCTRL
+         .byte $02 ; KIL/JAM
+hiscorehexlut
+        ;        0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
+         .byte  33, 34, 35, 36, 37, 38, 39, 40, 41, 42,  0,  1,  2,  3,  4,  5
+show2700
+        ;       lo   mode         hi   width=29  x   EODL
+         .byte $00, %01100000,   $27,  3,       20,  0,0,0
+      else ; CRASHDUMP
+         .byte $02 ; KIL/JAM
+      endif ; crashdump
+      endif ; hiscorefont
   else
      RTI
   endif
@@ -1468,6 +1556,7 @@ pvnibble2char_skipnibbleextra
   endif ; USED_PLOTVALUEEXTRA
 
 boxcollision
+ ifconst BOXCOLLISION
      ; the worst case cycle-time for the code below is 43 cycles.
      ; unfortunately, prior to getting here we've burned 44 cycles in argument setup. eep!
 
@@ -1516,6 +1605,7 @@ yesboxcollision
 noboxcollision
      clc ;2
      rts ;6
+ endif ; BOXCOLLISION
 
 randomize
      lda rand
@@ -1627,6 +1717,9 @@ div16_2
 
      ifconst bankswitchmode
 BS_jsr
+         ifconst dumpbankswitch
+             sta dumpbankswitch
+         endif
          ifconst MCPDEVCART
              ora #$18
              sta $3000
@@ -1640,6 +1733,9 @@ BS_jsr
 
 BS_return
          pla ; bankswitch bank
+         ifconst dumpbankswitch
+             sta dumpbankswitch
+         endif
          ifconst BANKRAM
              sta currentbank
              ora currentrambank

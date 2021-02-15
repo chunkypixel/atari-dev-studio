@@ -3,6 +3,8 @@
 int linenumber=1;
 //void yyerror(char *);  
 %}    
+%option nounput
+%option noinput
 %x scomment
 %x mcomment
 %x endmcomment
@@ -39,19 +41,16 @@ int linenumber=1;
 <scomment>. ;
 <scomment>\n {linenumber++;printf("\n");BEGIN(INITIAL);}
 
-"rem" {printf("rem");BEGIN(comment);}
-<comment>^\n* printf("%s",yytext);
-<comment>\n {linenumber++;printf("\n");BEGIN(INITIAL);}
-
-"echo" {printf("echo");BEGIN(comment);}
-<comment>^\n* printf("%s",yytext);
-<comment>\n {linenumber++;printf("\n");BEGIN(INITIAL);}
-
 [ \t\r]+"/*" {BEGIN(mcomment);}
 "/*" {BEGIN(mcomment);}
 <mcomment>"*/" {BEGIN(INITIAL);}
 <mcomment>. ;
 <mcomment>\n {linenumber++;printf("\n");}
+
+"rem" {printf("rem");BEGIN(comment);}
+"echo" {printf("echo");BEGIN(comment);}
+<comment>^\n* printf("%s",yytext);
+<comment>\n {linenumber++;printf("\n");BEGIN(INITIAL);}
 
 <endmcomment>. ;
 <endmcomment>\n {linenumber++;BEGIN(INITIAL);}
@@ -160,7 +159,7 @@ int linenumber=1;
 
 ".asm" printf("%s",yytext);
 "extra"[0-9]+: printf("%s",yytext);
-"step"[ ]+"-" printf("step -",yytext);
+"step"[ ]+"-" printf("step -");
 "#"            printf("%s", yytext);  
 "$"            printf("%s", yytext);  
 "%"            printf("%s", yytext);  
@@ -198,4 +197,4 @@ int linenumber=1;
 .               {fprintf(stderr,"(%d) Parse error: unrecognized character \"%s\"\n",linenumber,yytext);  exit(1);}
 %%
   int yywrap(void) {      return 1;  } 
-main(){yylex();}
+int main(){yylex();}

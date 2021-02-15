@@ -334,7 +334,7 @@
 
     drawhiscores state
 
-    state - attract, single, player1, player2
+    state - attract, single, player1, player2, player2joy1
     
     
 
@@ -746,3 +746,12 @@
     variable_# - variable to load from detected high score device (maximum of 25 variables)
 
 
+
+## SIZEOF
+
+   sizeof label
+
+   label - returns the size of a 7800basic routine or data structure at compile time
+
+
+   

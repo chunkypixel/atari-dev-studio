@@ -97,6 +97,8 @@ canary|set_canary
 breakprotect|set_breakprotect
 mcpdevcart|set_mcpdevcart
 basepath|set_basepath
+drawhiscores|high_score_support
+gamedifficulty|high_score_support
 hssupport|set_hssupport
 hsseconds|set_hsseconds
 hsscoresize|set_hsscoresize

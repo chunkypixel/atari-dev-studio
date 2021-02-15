@@ -195,7 +195,6 @@ i2c_txbyteloop
         rts
 
 
-
 i2c_rxbyte
         I2C_DEBUGCOL    $56
 

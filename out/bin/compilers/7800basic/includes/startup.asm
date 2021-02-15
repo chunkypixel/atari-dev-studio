@@ -20,6 +20,7 @@ start
      sta OFFSET
   ifnconst NOTIALOCK
      sta INPTCTRL
+     sta BACKGRND ; black default, in case a flash cart is using something else
   endif
      ldx #$FF
      txs
@@ -114,36 +115,6 @@ pndetecispal
      lda #<DLLMEM
      sta DPPL
 
-     ifconst bankswitchmode
-         ; we need to switch to the first bank as a default. this needs to
-         ; happen before DMA, in case there's a topscreenroutine in bank 0
-         ifconst MCPDEVCART
-             lda #$18 ; xxx11nnn - switch to bank 0
-             sta $3000
-         else
-             lda #0
-             sta $8000
-         endif
-     endif
-
-     ; CTRL 76543210
-     ; 7 colorburst kill
-     ; 6,5 dma ctrl 2=normal DMA, 3=no DMA
-     ; 4 character width 1=2 byte chars, 0=1 byte chars
-     ; 3 border control 0=background color border, 1=black border
-     ; 2 kangaroo mode 0=transparancy, 1=kangaroo
-     ; 1,0 read mode 0=160x2/160x4 1=N/A 2=320B/320D 3=320A/320C
-
-     ifconst DOUBLEWIDE
-         lda #%01010000 ;Enable DMA, mode=160x2/160x4, 2x character width
-     else
-         lda #%01000000 ;Enable DMA, mode=160x2/160x4
-     endif
-     sta CTRL
-     sta sCTRL
-
-     jsr vblankresync
-
      lda #%00000100 ; leave cartridge plugged in for any testing
      sta XCTRL1s
 
@@ -162,6 +133,23 @@ pndetecispal
      ;sta CTLSWA
 
      ifconst HSSUPPORT
+       ifconst bankswitchmode
+         ifconst included.hiscore.asm.bank
+           ifconst MCPDEVCART
+             lda #($18 | included.hiscore.asm.bank) 
+             ifconst dumpbankswitch
+                 sta dumpbankswitch
+             endif
+             sta $3000
+           else
+             lda #(included.hiscore.asm.bank)
+             ifconst dumpbankswitch
+                 sta dumpbankswitch
+             endif
+             sta $8000
+           endif
+         endif ; included.hiscore.asm.bank
+       endif ; bankswitchmode
          ; try to detect HSC
          jsr detecthsc
          and #1
@@ -182,7 +170,7 @@ storeAinhsdevice
          sta hsdifficulty
          sta hsgameslot
          sta hsnewscoreline
-     endif
+     endif ; HSSUPPORT
 
      ifconst AVOXVOICE
          jsr silenceavoxvoice
@@ -209,6 +197,45 @@ storeAinhsdevice
                  sta XCTRL3
 skipSGRAMcheck
      endif
+
+     ifconst bankswitchmode
+         ; we need to switch to the first bank as a default. this needs to
+         ; happen before DMA, in case there's a topscreenroutine in bank 0
+         ifconst MCPDEVCART
+             lda #$18 ; xxx11nnn - switch to bank 0
+             ifconst dumpbankswitch
+                 sta dumpbankswitch
+             endif
+             sta $3000
+         else
+             lda #0
+             ifconst dumpbankswitch
+                 sta dumpbankswitch
+             endif
+             sta $8000
+         endif
+     endif
+
+     ; CTRL 76543210
+     ; 7 colorburst kill
+     ; 6,5 dma ctrl 2=normal DMA, 3=no DMA
+     ; 4 character width 1=2 byte chars, 0=1 byte chars
+     ; 3 border control 0=background color border, 1=black border
+     ; 2 kangaroo mode 0=transparancy, 1=kangaroo
+     ; 1,0 read mode 0=160x2/160x4 1=N/A 2=320B/320D 3=320A/320C
+
+     ifconst DOUBLEWIDE
+         lda #%01010000 ;Enable DMA, mode=160x2/160x4, 2x character width
+     else
+         lda #%01000000 ;Enable DMA, mode=160x2/160x4
+     endif
+
+     jsr waitforvblankstart ; give the some vblank time to minimally update the display
+
+     sta CTRL
+     sta sCTRL
+
+     jsr vblankresync
 
      ldx #1
      jsr settwobuttonmode

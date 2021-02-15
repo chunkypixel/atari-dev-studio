@@ -7,6 +7,8 @@ char *mychar;
 
 //void yyerror(char *);  
 %}    
+%option nounput
+%option noinput
 %x rlda
 %%    
 [ \t]+ putchar(' ');
@@ -47,4 +49,4 @@ char *mychar;
 .      {       printf("%s", yytext);}
 %%
   int yywrap(void) {      return 1;  } 
-main(){yylex();}
+int main(){yylex();}

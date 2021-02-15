@@ -278,7 +278,7 @@ int switchjoy(char *input_source)
 float immed_fixpoint(char *fixpointval)
 {
     int i = findpoint(fixpointval);
-    if (i == 50)
+    if (i == 500)
 	return 0;		// failsafe
     char decimalpart[50];
     fixpointval[i] = '\0';
@@ -289,10 +289,10 @@ float immed_fixpoint(char *fixpointval)
 int findpoint(char *item)	// determine if fixed point var
 {
     int i;
-    for (i = 0; i < 50; ++i)
+    for (i = 0; i < 500; ++i)
     {
 	if (item[i] == '\0')
-	    return 50;
+	    return 500;
 	if (item[i] == '.')
 	    return i;
     }
@@ -326,7 +326,7 @@ void printfrac(char *item)
 	}
     }
     // must be immediate value
-    if (findpoint(item) < 50)
+    if (findpoint(item) < 500)
 	printf("#%d\n", (int) (immed_fixpoint(item) * 256.0));
     else
 	printf("#0\n");
@@ -343,7 +343,7 @@ int isfixpoint(char *item)
     for (i = 0; i < numfixpoint44; ++i)
 	if (!strcmp(item, fixpoint44[0][i]))
 	    return 4;
-    if (findpoint(item) < 50)
+    if (findpoint(item) < 500)
 	return 12;
     return 0;
 }
@@ -827,7 +827,7 @@ void plotsprite(char **statement)
 
     if ((statement[6][0] != 0) && (statement[6][0] != ':') && (statement[7][0] != 0) && (statement[7][0] != ':'))
     {
-	int tsheight, t,s;
+	int tsheight, t;
 	removeCR(statement[7]);
 	tsheight = atoi(statement[7]);
 	for (t = 1; t < tsheight; t++)
@@ -2018,6 +2018,7 @@ void tsound(char **statement)
     if ((channel < 0) || (channel > 1))
 	prerror("illegal channel for tsound");
     nextindex = 4;
+    printf(" ifnconst NOTIALOCKMUTE\n");
     if (statement[nextindex][0] == ',')
 	nextindex = nextindex + 1;
     else
@@ -2040,7 +2041,10 @@ void tsound(char **statement)
     }
     removeCR(statement[nextindex]);
     if (statement[nextindex][0] == '\0')
+    {
+        printf(" endif ; NOTIALOCKMUTE\n");
 	return;
+    }
     if (statement[nextindex][0] == ',')
 	nextindex = nextindex + 1;
     else
@@ -2051,6 +2055,7 @@ void tsound(char **statement)
 	printf(" sta AUDV%d\n", channel);
 	nextindex = nextindex + 2;
     }
+    printf(" endif ; NOTIALOCKMUTE\n");
 }
 
 void psound(char **statement)
@@ -2440,6 +2445,7 @@ void playsfx(char **statement)
     removeCR(statement[2]);
     removeCR(statement[3]);
 
+    printf(" ifnconst NOTIALOCKMUTE\n");
     printf("    lda #1\n");
     printf("    sta sfxschedulelock\n");
 
@@ -2468,6 +2474,7 @@ void playsfx(char **statement)
     printf("    jsr schedulesfx\n");
     printf("    lda #0\n");
     printf("    sta sfxschedulelock\n");
+    printf(" endif ; NOTIALOCKMUTE\n");
 }
 
 void mutesfx(char **statement)
@@ -2484,7 +2491,9 @@ void mutesfx(char **statement)
     }
     else if (strncmp(statement[2], "tia", 3) == 0)
     {
+        printf(" ifnconst NOTIALOCKMUTE\n");
 	printf("         jsr mutetia\n");
+        printf(" endif ; NOTIALOCKMUTE\n");
     }
 }
 
@@ -2781,7 +2790,7 @@ void add_graphic(char **statement, int incbanner)
     }
 
     //check if the user is setting the color mode...
-    if ((statement[3][0] != 0) && (statement[3][0] != ':'))
+    if ((statement[3][0] != 0) && (statement[3][0] != ':') && (statement[3][0] != ';'))
     {
 	removeCR(statement[3]);
 	if (strcasecmp(statement[3], "160A") == 0)
@@ -2837,7 +2846,7 @@ void add_graphic(char **statement, int incbanner)
     }
 
     //chech if the user is reordering the color indexes of the imported graphic
-    if (statement[4][0] != 0)
+    if ((statement[4][0] != 0) && (statement[3][0] != ':')&& (statement[3][0] != ';'))
     {
 	for (t = 0; t < 16; t++)
 	{
@@ -3811,8 +3820,13 @@ void add_includes(char *myinclude)
 
 void add_inline(char *myinclude)
 {
+    removeCR(myinclude);
     printf(" include %s\n", myinclude);
     printf("included.%s = 1\n", myinclude);
+    if ((bankcount&1)&&(currentbank>0))
+        printf("included.%s.bank = %d\n", myinclude,currentbank-1);
+    else
+        printf("included.%s.bank = %d\n", myinclude,currentbank);
 }
 
 void init_includes(char *path)
@@ -4719,6 +4733,8 @@ int findlabel(char **statement, int i)
 	return 1;
     if (!strncmp(statementcache, "hiscoreload\0", 12))
 	return 1;
+    if (!strncmp(statementcache, "hiscoreclear\0", 13))
+	return 1;
     if (!strncmp(statementcache, "memcpy\0", 6))
 	return 1;
     if (!strncmp(statementcache, "memset\0", 6))
@@ -5035,6 +5051,16 @@ void hiscoreload(char **statement)
     printf(" jsr loaddifficultytable\n");
 }
 
+void hiscoreclear(char **statement)
+{
+    //       1     
+    // hiscoreclear 
+    printf(" jsr loaddifficultytable\n");
+    printf(" jsr cleardifficultytablemem\n");
+    printf(" jsr savedifficultytable\n");
+}
+
+
 void drawhiscores(char **statement)
 {
     //       1        2
@@ -5069,6 +5095,14 @@ void drawhiscores(char **statement)
     else if (strcmp(statement[2], "player2") == 0)
     {
 	printf(" lda #3\n");
+	printf(" sta hsdisplaymode\n");
+	printf(" jsr loaddifficultytable\n");
+	printf(" jsr hscdrawscreen\n");
+	printf(" jsr savedifficultytable\n");
+    }
+    else if (strcmp(statement[2], "player2joy1") == 0)
+    {
+	printf(" lda #4\n");
 	printf(" sta hsdisplaymode\n");
 	printf(" jsr loaddifficultytable\n");
 	printf(" jsr hscdrawscreen\n");
@@ -6529,7 +6563,7 @@ void dim(char **statement)
     char fixpointvar2[50];
     // check for fixedpoint variables
     i = findpoint(statement[4]);
-    if (i < 50)
+    if (i < 500)
     {
 	removeCR(statement[4]);
 	strcpy(fixpointvar2, statement[4]);
@@ -6737,6 +6771,15 @@ void doend()
 	prerror("extraneous end statement found");
 }
 
+void dosizeof(char **statement)
+{
+    //         1           2 
+    //     sizeof    somelabel
+    removeCR(statement[2]);
+    if ((statement[2] == 0) || (statement[2][0] == 0))
+	prerror("missing argument in sizeof statement");
+    printf(" echo \" \",\"SIZEOF(%s):\",[* - %s]d,[* - .%s]d,\"bytes\"\n", statement[2],statement[2],statement[2]);
+}
 
 void ifconst(char **statement)
 {
@@ -7693,6 +7736,14 @@ void boxcollision(char **statement)
 
 
     invalidate_Areg();
+
+    // enable the compile-time optional code
+    if (boxcollisionused == 0)
+    {
+	strcpy(redefined_variables[numredefvars++], "BOXCOLLISION = 1");
+	boxcollisionused = 1;
+    }
+
 
     for (t = 4; t < 19; t = t + 2)
     {
@@ -9207,6 +9258,9 @@ void set(char **statement)
 	    if ((statement[strindex] != 0) && (statement[strindex][0] != 0))
 	    {
 		removeCR(statement[strindex]);
+                char *EOS = strrchr(statement[strindex],'\'');
+		if(EOS)
+                    *EOS = 0;
 		strdelchr(statement[strindex], '\'');
 		if (strindex > 3)
 		    fprintf(outfile, ", ");
@@ -9260,6 +9314,14 @@ void set(char **statement)
 		    if (s > 0)
 			fprintf(outfile, ",");
 		    fprintf(outfile, "$%02x", 27);
+		    s++;
+		}
+		if (c == '"')
+		{
+
+		    if (s > 0)
+			fprintf(outfile, ",");
+		    fprintf(outfile, "$%02x", 30);
 		    s++;
 		}
 		if ((c >= '0') && (c <= '9'))
@@ -9348,6 +9410,14 @@ void set(char **statement)
 		    if (s > 0)
 			fprintf(outfile, ",");
 		    fprintf(outfile, "$%02x", 28);
+		    s++;
+		}
+		if (c == '"')
+		{
+
+		    if (s > 0)
+			fprintf(outfile, ",");
+		    fprintf(outfile, "$%02x", 30);
 		    s++;
 		}
 
@@ -9715,6 +9785,11 @@ void set(char **statement)
     {
 	if (strncmp(statement[3], "off", 3) != 0)
 	    strcpy(redefined_variables[numredefvars++], "CANARYOFF = 1");
+    }
+    else if (!strncmp(statement[2], "crashdump", 6))
+    {
+	if (strncmp(statement[3], "off", 3) != 0)
+	    strcpy(redefined_variables[numredefvars++], "CRASHDUMP = 1");
     }
     else if (!strncmp(statement[2], "breakprotect", 12))
     {

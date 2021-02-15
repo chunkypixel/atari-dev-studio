@@ -377,3 +377,13 @@ MedianOrderLUTend
 .PLOTSPRITEend
  ENDM
 
+ MAC SIZEOF
+
+	; echo's the size difference between the current address and the
+	; a label that was passed as an argument. This is a quick way to
+	; determine the size of a structure.
+
+.NAME SETSTR {1}
+        echo " The Size of",.NAME,"is:",[* - {1}]d,[* - {2}]d,"bytes."
+  ENDM
+

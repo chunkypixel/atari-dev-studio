@@ -18,9 +18,10 @@ void prerror(char *format, ...);
 int main(int argc, char **argv)
 {
     char filenamein[1024];
-    char filenameout[1028];
-    FILE *in, *out;
-    int bank;
+    char filenameout1[1028];
+    char filenameout2[1028];
+    FILE *in, *out1, *out2;
+    int bank,t;
     char bankbuffer[16384];
     long gamesize;
 
@@ -29,8 +30,10 @@ int main(int argc, char **argv)
     if ((argc < 2) || (argv[argc - 1][0] == '-'))
 	usage(argv[0]);
     strncpy(filenamein, argv[argc - 1], 1024);
-    strncpy(filenameout, argv[argc - 1], 1024);
-    strcat(filenameout, ".CC2");
+    strncpy(filenameout1, argv[argc - 1], 1024);
+    strncpy(filenameout2, argv[argc - 1], 1024);
+    strcat(filenameout1, ".CC2");
+    strcat(filenameout2, ".versa");
 
     in = fopen(filenamein, "rb");
     if (in == NULL)
@@ -52,9 +55,12 @@ int main(int argc, char **argv)
 	exit(0);
     }
 
-    out = fopen(filenameout, "wb");
-    if (out == NULL)
-	prerror("Couldn't open '%s' for writing.\n", filenameout);
+    out1 = fopen(filenameout1, "wb");
+    if (out1 == NULL)
+	prerror("Couldn't open '%s' for writing.\n", filenameout1);
+    out2 = fopen(filenameout2, "wb");
+    if (out2 == NULL)
+	prerror("Couldn't open '%s' for writing.\n", filenameout2);
 
     for (bank = 0; bank < 9; bank++)
     {
@@ -67,14 +73,23 @@ int main(int argc, char **argv)
 	}
 	if (fread(bankbuffer, 16384, 1, in) < 1)
 	    prerror("Problem reading from '%s'.\n", filenamein);
-	if (fwrite(bankbuffer, 16384, 1, out) < 1)
-	    prerror("Problem writing to '%s'.\n", filenameout);
+	if (fwrite(bankbuffer, 16384, 1, out1) < 1)
+	    prerror("Problem writing to '%s'.\n", filenameout1);
+	if (fwrite(bankbuffer, 16384, 1, out2) < 1)
+	    prerror("Problem writing to '%s'.\n", filenameout2);
     }
 
-    fclose(in);
-    fclose(out);
+    //versa is identical to cc2, but needs the first bank duped for padding
+    for(t=0;t<7;t++)
+	if (fwrite(bankbuffer, 16384, 1, out2) < 1)
+	    prerror("Problem writing to '%s'.\n", filenameout2);
 
-    printf("  Created ROM '%s' for CC2 compatibility.\n", filenameout);
+    fclose(in);
+    fclose(out1);
+    fclose(out2);
+
+    printf("  Created ROM '%s' for CC2 compatibility.\n", filenameout1);
+    printf("  Created ROM '%s' for versa compatibility.\n", filenameout2);
 
 }
 

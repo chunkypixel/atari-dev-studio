@@ -308,6 +308,8 @@ void keywords(char **cstatement)
 	    doelse();
 	else if (!strncmp(statement[1], "#endif\0", 6))
 	    endif();
+	else if (!strncmp(statement[1], "sizeof\0", 6))
+	    dosizeof(statement);
 	else if (!strncmp(statement[1], "includesfile\0", 13))
 	    create_includes(statement[2]);
 	else if (!strncmp(statement[1], "include\0", 7))
@@ -325,6 +327,8 @@ void keywords(char **cstatement)
 	    dogoto(statement);
 	else if (!strncmp(statement[1], "hiscoreload", 11))
 	    hiscoreload(statement);
+	else if (!strncmp(statement[1], "hiscoreclear", 12))
+	    hiscoreclear(statement);
 	else if (!strncmp(statement[1], "drawhiscores", 11))
 	    drawhiscores(statement);
 	else if (!strncmp(statement[1], "loadmemory\0", 11))

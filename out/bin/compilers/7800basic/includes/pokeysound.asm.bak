@@ -51,7 +51,7 @@ playpokeysfxAcont2
 
          ; *** FREQUENCY
          lda (pokey1pointlo,x)
-         sta inttemp1
+         sta temp1
          clc
          adc pokey1offset,x ; take into account any pitch modification
          sta (pokeybaselo),y ; PAUDF0,0
@@ -79,7 +79,7 @@ skippokeyhiinc2
          iny
          sta (pokeybaselo),y
 
-         ora inttemp1 ; check if F|C|V=0
+         ora temp1 ; check if F|C|V=0
          beq zeropokeypoint ; if so, we're at the end of the sound.
 
          ; advance the pointer +1, on to the next sound chunk
@@ -109,7 +109,7 @@ schedulespokeysearch
 
          ; if we're here, all 4 channels are presently playing a sound...
          ldy #1
-         lda (sfxinstrumentlo),y ; peek at the priority of this sfx...
+         lda (temp1),y ; peek at the priority of this sfx...
          bne schedulepokeysfxcont1
          rts ; ...and skip it if it's 0 priority
 schedulepokeysfxcont1
@@ -135,17 +135,17 @@ findlowprioritypokeyloopcontinue
 schedulepokeyX
          ;called with X=2*pokey channel to play on...
          ldy #1 ; get priority and sound-resolution (in frames)
-         lda (sfxinstrumentlo),y
+         lda (temp1),y
          sta pokey1priority,x
          iny
-         lda (sfxinstrumentlo),y
+         lda (temp1),y
          sta pokey1frames,x
 
-         lda sfxinstrumentlo
+         lda temp1
          clc
          adc #3
          sta pokey1pointlo,x
-         lda sfxinstrumenthi
+         lda temp2
          adc #0
          sta pokey1pointhi,x
          lda temp3
