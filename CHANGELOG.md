@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.6.9
+
+ * Updated Stella to v6.5.2 (Windows, Linux [Deb], macOS). Note: Linux 32-bit is currently v6.2
+ * Added check for 7800basic *.versa files to copy file into bin folder  
+
 ## 0.6.8
 
 * Updated 7800basic to v0.17 (Windows, Linux, macOS)

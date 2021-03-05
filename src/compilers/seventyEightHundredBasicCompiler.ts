@@ -12,7 +12,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         super("7800basic",
                 "7800basic",
                 [".bas",".78b"],
-                [".a78",".bin",".bin.CC2"],[".a78",".bin"],
+                [".a78",".bin",".bin.CC2",".bin.versa"],[".a78",".bin"],
                 path.join(application.Path,"out","bin","compilers","7800basic"),
                 "A7800");
         

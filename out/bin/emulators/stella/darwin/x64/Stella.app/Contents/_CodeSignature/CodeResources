@@ -28,17 +28,21 @@
 		<data>
 		3rKmh9ZKdrpP+xP60HhILNgLH7c=
 		</data>
+		<key>Resources/docs/basic_settings.png</key>
+		<data>
+		HVUjjBnUNc0qH2Z1o8Mq4wgMIak=
+		</data>
+		<key>Resources/docs/commandsmenu_r77.png</key>
+		<data>
+		+2DRLjR3wFTlA5nJPuqF9mfR+EI=
+		</data>
 		<key>Resources/docs/debugger.html</key>
 		<data>
-		Gj3w4fnenZxW6+FW+JyRas1WlVQ=
+		NUA2P6hePeFEUjIdEk+IOLO8Hqs=
 		</data>
 		<key>Resources/docs/graphics/Stella_icon.png</key>
 		<data>
 		4XgUIO7NVFqw2inKpEAq70kCnHc=
-		</data>
-		<key>Resources/docs/graphics/basic_settings.png</key>
-		<data>
-		HVUjjBnUNc0qH2Z1o8Mq4wgMIak=
 		</data>
 		<key>Resources/docs/graphics/cheat.png</key>
 		<data>
@@ -55,10 +59,6 @@
 		<key>Resources/docs/graphics/commandmenu.png</key>
 		<data>
 		LjvTeWrZ5BOplCnagQlu1Uptg9Q=
-		</data>
-		<key>Resources/docs/graphics/commandsmenu_r77.png</key>
-		<data>
-		+2DRLjR3wFTlA5nJPuqF9mfR+EI=
 		</data>
 		<key>Resources/docs/graphics/console.png</key>
 		<data>
@@ -334,11 +334,11 @@
 		</data>
 		<key>Resources/docs/index.html</key>
 		<data>
-		tI8nhK88RuL/E3Ui9bFKU68L14k=
+		hilTqy7rv/Dot0LoIaXbEFHEhGk=
 		</data>
 		<key>Resources/docs/index_r77.html</key>
 		<data>
-		auFPQM+FVuRxj8/iGGgc5n/V5XM=
+		XPfCl3j3KaiDDKNSKASrYkbalVE=
 		</data>
 		<key>Resources/en.lproj/InfoPlist.strings</key>
 		<dict>
@@ -427,15 +427,37 @@
 			IyXMpclzMhNRCHUBGgFbsyiZP5q6ONYS9XmPlK190FA=
 			</data>
 		</dict>
+		<key>Resources/docs/basic_settings.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			HVUjjBnUNc0qH2Z1o8Mq4wgMIak=
+			</data>
+			<key>hash2</key>
+			<data>
+			iWnVdVYaNh+PpKynO8gNO6sJbbYBVTqjUcIWO7EpWc8=
+			</data>
+		</dict>
+		<key>Resources/docs/commandsmenu_r77.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			+2DRLjR3wFTlA5nJPuqF9mfR+EI=
+			</data>
+			<key>hash2</key>
+			<data>
+			7i4kMeUa4TwGsQWDXByr7ZTeaTKCPYwRAkD4FxT48zE=
+			</data>
+		</dict>
 		<key>Resources/docs/debugger.html</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			Gj3w4fnenZxW6+FW+JyRas1WlVQ=
+			NUA2P6hePeFEUjIdEk+IOLO8Hqs=
 			</data>
 			<key>hash2</key>
 			<data>
-			LpxoUriVOmtu1xYSuwJiRgz226RzQw+PKs8N4a4BiaA=
+			4lyLM17wn5yQLKcJK4uWetK7FkWvK3zlpstDP/ttdB0=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/Stella_icon.png</key>
@@ -447,17 +469,6 @@
 			<key>hash2</key>
 			<data>
 			n4XrcjGWAEKnZM1zZgCz2/qGPmcxzlH8ZNzGyj7aQ9M=
-			</data>
-		</dict>
-		<key>Resources/docs/graphics/basic_settings.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			HVUjjBnUNc0qH2Z1o8Mq4wgMIak=
-			</data>
-			<key>hash2</key>
-			<data>
-			iWnVdVYaNh+PpKynO8gNO6sJbbYBVTqjUcIWO7EpWc8=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/cheat.png</key>
@@ -502,17 +513,6 @@
 			<key>hash2</key>
 			<data>
 			HN3zXo8Z+zcpJ8vbM9ytGkb05Fh+Kqt2D1zDwIAptE8=
-			</data>
-		</dict>
-		<key>Resources/docs/graphics/commandsmenu_r77.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			+2DRLjR3wFTlA5nJPuqF9mfR+EI=
-			</data>
-			<key>hash2</key>
-			<data>
-			7i4kMeUa4TwGsQWDXByr7ZTeaTKCPYwRAkD4FxT48zE=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/console.png</key>
@@ -1267,22 +1267,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			tI8nhK88RuL/E3Ui9bFKU68L14k=
+			hilTqy7rv/Dot0LoIaXbEFHEhGk=
 			</data>
 			<key>hash2</key>
 			<data>
-			XrMCLgIaQQXglPlsj/DxC7Az5FJCTUGEuPI3grE2Z4w=
+			Hm2mkP2z3RJV1hf5xIIgc7SrCRm2c/Q7E098aasAoYU=
 			</data>
 		</dict>
 		<key>Resources/docs/index_r77.html</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			auFPQM+FVuRxj8/iGGgc5n/V5XM=
+			XPfCl3j3KaiDDKNSKASrYkbalVE=
 			</data>
 			<key>hash2</key>
 			<data>
-			jtGZMamqbGjpehZIYCs6Ljx+IChP1YRrnHYnKxepMjk=
+			hn4knWbGeNV1wKexcIoImL5Tbxliyek4HZDZXsndRx8=
 			</data>
 		</dict>
 		<key>Resources/en.lproj/InfoPlist.strings</key>
