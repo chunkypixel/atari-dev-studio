@@ -75,6 +75,9 @@ char *filterterm[] = {
     "^0.topscreenroutine",
     "^0.bottomscreenroutine",
     "^0.altgamestart",
+    "_main2 ",
+    "_main3 ",
+    "_main4 ",
     "^ATOMICSPRITEUPDATE",
     "^FINESCROLLENABLED",
     "^AVOXVOICE",
@@ -128,6 +131,10 @@ char *filterterm[] = {
     "^ALWAYSTERMINATE",
     "^NODRAWWAIT",
     "^NOLIMITCHECKING",
+    "^INFO: Label",
+    "^CRASHDUMP",
+    "^BREAKPROTECT",
+    "^dumpbankswitch",
     ""
 };
 

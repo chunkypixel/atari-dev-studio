@@ -12,7 +12,7 @@
 //      7800header - a simple app to generate/interrogate a a78 header.
 //                      Michael Saarna (aka RevEng@AtariAge)
 
-#define HEADER_VERSION_INFO "7800header 0.10"
+#define HEADER_VERSION_INFO "7800header 0.13"
 
 void usage(char *binaryname);
 uint32_t phtole32(uint32_t value);
@@ -143,9 +143,11 @@ int main(int argc, char **argv)
 	    myheader.controller1 = 1;
 	if (myheader.controller2 > 9)
 	    myheader.controller2 = 1;
-	myheader.tvformat &= 1;
+        if(myheader.version<3)
+	    myheader.tvformat &= 1;
 	myheader.saveperipheral &= 3;
 	myheader.xm &= 1;
+	myheader.version = 3;
     }
 
 
@@ -169,10 +171,11 @@ int main(int argc, char **argv)
 	printf("          \"name game name\" Set the game name in the header.\n");
 	printf("          \"exit\"           Exit the utility. Unsaved changes will be lost.\n");
 	printf("\n");
-	printf("Options:  rom@4000 ram@4000 bank6@4000 pokey@450 pokey@4000 mram@4000\n");
-	printf("          supergame supergameram supergamebankram absolute activision\n");
-	printf("          tvpal tvntsc savekey hsc xm 7800joy1 7800joy2 lightgun1 lightgun2\n");
-	printf("          paddle1 paddle2 tball1 tball2 2600joy1 2600joy2 driving1 driving2\n");
+	printf("Options:  rom@4000 ram@4000 bank6@4000 pokey@450 pokey@4000 mram@4000 \n");
+	printf("          pokey@440 ym2151@460 supergame supergameram supergamebankram\n");
+	printf("          absolute activision souper tvpal tvntsc composite savekey\n");
+	printf("          hsc xm 7800joy1 7800joy2 lightgun1 lightgun2 paddle1 paddle2\n");
+	printf("          tball1 tball2 2600joy1 2600joy2 driving1 driving2\n");
 	printf("          keypad1 keypad2 stmouse1 stmouse2 amouse1 amouse2\n");
 	printf("> ");
 
@@ -321,7 +324,7 @@ void setupheaderdefaults()
     headergamesize = phtole32(gamesize);
 
     // a78 header format version...
-    myheader.version = 1;
+    myheader.version = 3;
 
     strncpy(myheader.console, "ATARI7800        ", 16);
     strncpy(myheader.gamename, "My Game                          ", 32);
@@ -331,15 +334,20 @@ void setupheaderdefaults()
     myheader.romsize3 = (headergamesize >> 8) & 0xff;
     myheader.romsize4 = (headergamesize >> 0) & 0xff;
 
-    // bit 0    = pokey at $4000
-    // bit 1    = supergame bank switched
-    // bit 2    = supergame ram at $4000
-    // bit 3    = rom at $4000
-    // bit 4    = bank 6 at $4000
-    // bit 5    = supergame banked ram
-    // bit 6    = pokey at $450
-    // bit 7    = mirror ram at $4000
-    // bit 8-15 = special
+    // bit 0     = pokey at $4000
+    // bit 1     = supergame bank switched
+    // bit 2     = supergame ram at $4000
+    // bit 3     = rom at $4000
+    // bit 4     = bank 6 at $4000
+    // bit 5     = supergame banked ram
+    // bit 6     = pokey at $450
+    // bit 7     = mirror ram at $4000
+    // bit 8     = activision banking
+    // bit 9     = absolute banking
+    // bit 10    = pokey at $440
+    // bit 11    = ym2151 at $440/$441
+    // bit 12    = souper
+    // bit 12-15 = special
     myheader.carttype1 = 0;
     myheader.carttype2 = 0;
 
@@ -422,6 +430,7 @@ void setunset(char *command)
 	    myheader.carttype2 = myheader.carttype2 | 2;
 	    setunset("unset activision");
 	    setunset("unset absolute");
+	    setunset("unset souper");
 	}
 	else
 	{
@@ -517,6 +526,7 @@ void setunset(char *command)
 	    myheader.carttype1 = myheader.carttype1 | 1;
 	    setunset("unset absolute");
 	    setunset("unset supergame");
+	    setunset("unset souper");
 	}
 	else
 	    myheader.carttype1 = myheader.carttype1 & (1 ^ 0xff);
@@ -528,23 +538,58 @@ void setunset(char *command)
 	    myheader.carttype1 = myheader.carttype1 | 2;
 	    setunset("unset activision");
 	    setunset("unset supergame");
+	    setunset("unset souper");
 	}
 	else
 	    myheader.carttype1 = myheader.carttype1 & (2 ^ 0xff);
     }
+    else if (strcmp(noun, "souper") == 0)
+    {
+	if (set)
+	{
+	    myheader.carttype1 = myheader.carttype1 | 16;
+	    setunset("unset activision");
+	    setunset("unset absolute");
+	    setunset("unset supergame");
+	}
+	else
+	    myheader.carttype1 = myheader.carttype1 & (16 ^ 0xff);
+    }
+
+    else if (strcmp(noun, "pokey@440") == 0)
+    {
+	if (set)
+	    myheader.carttype1 = myheader.carttype1 | 4;
+	else
+	    myheader.carttype1 = myheader.carttype1 & (4 ^ 0xff);
+    }
+    else if (strcmp(noun, "ym2151@460") == 0)
+    {
+	if (set)
+	    myheader.carttype1 = myheader.carttype1 | 8;
+	else
+	    myheader.carttype1 = myheader.carttype1 & (8 ^ 0xff);
+    }
     else if (strcmp(noun, "tvpal") == 0)
     {
 	if (set)
-	    myheader.tvformat = 1;
+	    myheader.tvformat = myheader.tvformat | 1;
 	else
-	    myheader.tvformat = 0;
+	    myheader.tvformat = myheader.tvformat & 0xfe;
     }
     else if (strcmp(noun, "tvntsc") == 0)
     {
 	if (set)
-	    myheader.tvformat = 0;
+	    myheader.tvformat = myheader.tvformat & 0xfe;
 	else
-	    myheader.tvformat = 1;
+	    myheader.tvformat = myheader.tvformat | 1;
+    }
+    else if (strcmp(noun, "composite") == 0)
+    {
+	if (set)
+	    myheader.tvformat = myheader.tvformat | 2;
+	else
+	    myheader.tvformat = myheader.tvformat & 0xfd;
     }
     else if (strcmp(noun, "savekey") == 0)
     {
@@ -787,6 +832,12 @@ void report(void)
 	printf("Activision ");
     if ((myheader.carttype1 & 2) > 0)
 	printf("Absolute ");
+    if ((myheader.carttype1 & 4) > 0)
+	printf("pokey@440 ");
+    if ((myheader.carttype1 & 8) > 0)
+	printf("ym2151@460 ");
+    if ((myheader.carttype1 & 16) > 0)
+	printf("souper ");
     printf("\n");
 
     printf("    controllers        : ");
@@ -850,12 +901,13 @@ void report(void)
     printf("\n");
 
     printf("    tv format          : ");
-    if (myheader.tvformat == 0)
+    if ((myheader.tvformat & 1) == 0)
 	printf("NTSC");
-    else if (myheader.tvformat == 1)
+    else if ((myheader.tvformat & 1) == 1)
 	printf("PAL");
-    else
-	printf("unknown");
+    if (myheader.tvformat & 2)
+	printf(" composite");
+   
     printf("\n\n");
 }
 

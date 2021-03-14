@@ -534,9 +534,25 @@ pokey4priority DS 1 ; $1EB
 pokey4offset   DS 1 ; $1EC
  endif
 
- ifnconst CANARYOFF
-canary         DS 1 ; $1ED
+ ; see if we need an interrupthold byte...
+INTERRUPTNEEDED SET 0
+ ifconst .topscreenroutine
+INTERRUPTNEEDED SET 1
  endif
+ ifconst .bottomscreenroutine
+INTERRUPTNEEDED SET 1
+ endif
+ ifconst .userinterrupt
+INTERRUPTNEEDED SET 1
+ endif
+ if INTERRUPTNEEDED = 1
+interrupthold  DS 1 ; $1ED
+ endif
+
+ ifnconst CANARYOFF
+canary         DS 1 ; $1EF
+ endif
+
 
  ifnconst bankswitchmode
    echo "  stack allowance:",[($1FF - .)/2]d,"nested subroutines."

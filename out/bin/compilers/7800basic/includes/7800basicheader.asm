@@ -22,9 +22,6 @@ BD48K   = %00000010
 BD1800  = %00000101
 BD4000  = %00000110
 
- ifconst ROM16K
- ;BEADHEADER = 1
- endif
  ifconst ROM32K
 BEADHEADER = 1
  endif

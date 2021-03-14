@@ -13,7 +13,7 @@ FILE *stdoutfilepointer;
 
 extern int currentdmahole;
 
-#define BASIC_VERSION_INFO "7800basic v0.17"
+#define BASIC_VERSION_INFO "7800basic v0.18"
 
 int main(int argc, char *argv[])
 {

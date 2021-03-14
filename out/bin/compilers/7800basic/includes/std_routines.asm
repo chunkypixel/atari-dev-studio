@@ -11,6 +11,7 @@ DEBUGDRAW      = $C1
 NMI
      ;VISIBLEOVER is 255 while the screen is drawn, and 0 right after the visible screen is done.
      pha ; save A
+     cld
      lda visibleover
      eor #255
      sta visibleover
@@ -18,6 +19,10 @@ NMI
          and #$93
          sta BACKGRND
      endif
+     txa ; save X
+     pha
+     tya ; save Y
+     pha
      dec interruptindex 
      bne skipreallyoffvisible
      jmp reallyoffvisible
@@ -25,18 +30,18 @@ skipreallyoffvisible
        lda visibleover
        bne carryontopscreenroutine
        ifconst .bottomscreenroutine
+          lda interrupthold
+          beq skipbottomroutine
           jsr .bottomscreenroutine
+skipbottomroutine
        endif
-
-       jmp skiptopscreenroutine
+       jmp NMIexit
 carryontopscreenroutine
-         txa ; save X+Y
-         pha
-         tya
-         pha
-         cld
  ifconst .topscreenroutine
+         lda interrupthold
+         beq skiptoproutine
          jsr .topscreenroutine
+skiptoproutine
  endif
  ifnconst CANARYOFF
          lda canary
@@ -129,14 +134,8 @@ buttonreadloopreturn
          dec doublebufferminimumframeindex
 skipdoublebufferminimumframeindexadjust
  endif
-
-         pla
-         tay
-         pla
-         tax
-skiptopscreenroutine
-     pla
-     RTI
+  
+     jmp NMIexit
 
 IRQ ; the only source of non-nmi interrupt should be the BRK opcode.
   ifnconst BREAKPROTECTOFF
@@ -301,23 +300,20 @@ reallyoffvisible
      lda #3
      sta interruptindex
 
-     txa
-     pha
-     tya
-     pha
-     cld
-
-
      jsr uninterruptableroutines
 
      ifconst .userinterrupt
+         lda interrupthold
+         beq skipuserintroutine
          jsr .userinterrupt
+skipuserintroutine
      endif
 
      ifconst KEYPADSUPPORT
          jsr keypadcolumnread
      endif
 
+NMIexit
      pla
      tay
      pla
@@ -368,6 +364,11 @@ savescreenrts
      rts
 
 drawscreen
+
+  ifconst interrupthold
+     lda #$FF
+     sta interrupthold ; if the user called drawscreen, we're ready for interrupts
+  endif
 
      lda #0
      sta temp1 ; not B&W if we're here...
@@ -1977,18 +1978,22 @@ skiphidoublebufferadjust
      rts
 
 waitforvblankstart
-visibleoverwait
+vblankendwait
      BIT MSTAT
-     bpl visibleoverwait
+     bmi vblankendwait
 vblankstartwait
      BIT MSTAT
-     bmi vblankstartwait
+     bpl vblankstartwait
      rts
 
      ifconst DOUBLEBUFFER
 flipdisplaybufferreturn
      rts
 flipdisplaybuffer
+ ifconst interrupthold
+     lda #$FF
+     sta interrupthold
+ endif
      lda doublebufferstate
      beq flipdisplaybufferreturn ; exit if we're not in double-buffer
 

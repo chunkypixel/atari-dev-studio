@@ -4893,8 +4893,8 @@ void data(char **statement)
     strcpy(constants[numconstants++], consthilo); // record to queue
     snprintf(consthilo,200,"%s_hi",statement[2]);
     strcpy(constants[numconstants++], consthilo); // record to queue
-    printf("%s_lo = #<%s\n",statement[2],statement[2]);
-    printf("%s_hi = #>%s\n",statement[2],statement[2]);
+    printf("%s_lo SET #<%s\n",statement[2],statement[2]);
+    printf("%s_hi SET #>%s\n",statement[2],statement[2]);
 }
 
 void speak(char **statement)

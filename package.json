@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.6.9",
+    "version": "0.7.0",
     "icon": "images/icon.png",
     "preview": false,
     "author": "mksmith",
