@@ -47,7 +47,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>Stella-emu</string>
 	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.5.2</string>
+	<string>6.5.3</string>
 	<key>CFBundleName</key>
 	<string>Stella</string>
 	<key>CFBundlePackageType</key>
@@ -59,7 +59,7 @@
 		<string>MacOSX</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>6.5.2</string>
+	<string>6.5.3</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>

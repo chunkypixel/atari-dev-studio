@@ -21,7 +21,7 @@
     <img src="graphics/stella_icon.png">
     <h2><b>A multi-platform Atari 2600 VCS emulator</b></h2>
 
-    <h4><b>Release 6.5.2</b></h4>
+    <h4><b>Release 6.5.3</b></h4>
     <br>
 
     <h2><b>User's Guide</b></h2>
@@ -74,7 +74,7 @@
 
   <br><br><br>
 
-  <center><b>February 1999 - January 2021</b></center>
+  <center><b>February 1999 - April 2021</b></center>
     <center><b>The Stella Team</b></center>
   <center><b><a href="https://stella-emu.github.io">Stella Homepage</a></b></center>
 
@@ -337,7 +337,7 @@
   <p>
   <h3><b><u>General</u> (required for all versions of Stella)</b></h3>
   <ul>
-    <li>SDL version 2.0.3 or greater, latest version highly recommended</li>
+    <li>SDL version 2.0.5 or greater, latest version highly recommended</li>
     <li>15/16 bit color minimum; 24/32 bit color graphics card highly recommended</li>
     <li>Enough RAM for the OS + 256MB RAM for the emulation; 512MB+ highly recommended</li>
     <li>Joysticks or gamepads are highly recommended</li>
@@ -613,6 +613,10 @@
   as the function keys and display the current state. You may find this useful if
   you cannot remember all the function key events, or you wish to use Stella
   without a keyboard (ie, in a standalone gaming system).</p>
+
+  <p>Note: Clicking the `?` at the top right opens this document at the related
+  paragraph. This works for almost all dialogs. There is also a hotkey defined
+  for help (see <b><a href="#Hotkeys">Hotkeys</a></b>)).</p>
   </blockquote></br>
 
   <h2><b><a name="Keyboard">Keyboard Layout</a></b></h2>
@@ -1318,7 +1322,7 @@
     <tr><td>Shift </td><td>Shift (left or right) </td></tr>
     <tr><td>Enter </td><td>Return/Enter </td></tr>
     <tr><td>Space </td><td>Space </td></tr>
-    <tr><td>Func-Space </td><td>Shift + Backspace </td></tr>
+    <tr><td>Func-Space </td><td>Backspace </td></tr>
     <tr><td>+ </td><td>+ or Shift + 1 </td></tr>
     <tr><td>- </td><td>- or Shift + 2</td></tr>
     <tr><td>* </td><td>Shift + 3 </td></tr>
@@ -1776,12 +1780,12 @@
     </tr>
 
     <tr>
-      <td>Switch mouse to <i>previous</i> controller emulation mode</br>(see <b><a href="#Controller">Controller Properties</a></b>)</td>
+      <td>Switch mouse to <i>previous</i> controller emulation mode</br>(see <b><a href="#ControllerProps">Controller Properties</a></b>)</td>
       <td>Shift-Control + 0</td>
       <td>Shift-Control + 0</td>
     </tr>
     <tr>
-      <td>Switch mouse to <i>next</i> controller emulation modes</br>(see <b><a href="#Controller">Controller Properties</a></b>)</td>
+      <td>Switch mouse to <i>next</i> controller emulation modes</br>(see <b><a href="#ControllerProps">Controller Properties</a></b>)</td>
       <td>Control + 0</td>
       <td>Control + 0</td>
     </tr>
@@ -1998,8 +2002,8 @@
     </tr>
     <tr>
       <td>Emulate 'frying' effect</td>
-      <td>Backspace</td>
-      <td>Backspace</td>
+      <td>Shift + Backspace</td>
+      <td>Shift + Backspace</td>
     </tr>
     <tr>
       <td><i>Decrease</i> emulation speed (disables 'Turbo' mode)</td>
@@ -2091,6 +2095,11 @@
       <th>Function</th>
       <th>Key (Standard)</th>
       <th>Key (macOS)</th>
+    </tr>
+    <tr>
+      <td>Open context-sensitive help</td>
+      <td>F1</td>
+      <td>Shift-Cmd + ?</td>
     </tr>
     <tr>
       <td>Move Up</td>
@@ -2575,7 +2584,7 @@
     </tr>
   </table>
 
-  <p>For details how to configure high scores definintions for a game see
+  <p>For details how to configure high scores definitions for a game see
   <a href="#HighScoreProps"><b>High Scores Properties</b></a></h2>.</p>
   </blockquote></br>
 
@@ -3344,7 +3353,7 @@
 
     <tr>
       <td><pre>-bs &lt;type&gt;</pre></td>
-      <td>Set "Cart.Type" property. See the <a href="#Emulation"><b>Emulation Properties</b></a> section
+      <td>Set "Cart.Type" property. See the <a href="#EmulationProps"><b>Emulation Properties</b></a> section
         for valid types.</td>
     </tr>
 
@@ -3385,7 +3394,7 @@
 
     <tr>
       <td><pre>-lc &lt;type&gt;</pre></td>
-      <td>Set "Controller.Left" property. See the <a href="#Controller"><b>Controller Properties</b></a>
+      <td>Set "Controller.Left" property. See the <a href="#ControllerProps"><b>Controller Properties</b></a>
         section for valid types.</td>
     </tr>
 
@@ -3403,7 +3412,7 @@
 
     <tr>
       <td><pre>-rc &lt;type&gt;</pre></td>
-      <td>Set "Controller.Right" property. See the <a href="#Controller"><b>Controller Properties</b></a>
+      <td>Set "Controller.Right" property. See the <a href="#ControllerProps"><b>Controller Properties</b></a>
         section for valid types.</td>
     </tr>
 
@@ -3423,7 +3432,7 @@
     <tr>
       <td><pre>-bc &lt;type&gt;</pre></td>
       <td>Set both "Controller.Left" and "Controller.Right" properties.
-        See the <a href="#Controller"><b>Controller Properties</b></a> section for valid types.</td>
+        See the <a href="#ControllerProps"><b>Controller Properties</b></a> section for valid types.</td>
     </tr>
 
     <tr>
@@ -3450,12 +3459,12 @@
     <tr>
       <td><pre>-ma &lt;Auto|XY&gt;</pre></td>
       <td>Set "Controller.MouseAxis" property.
-        See the <a href="#Controller"><b>Controller Properties</b></a> section for valid types.</td>
+        See the <a href="#ControllerProps"><b>Controller Properties</b></a> section for valid types.</td>
     </tr>
 
     <tr>
       <td><pre>-format &lt;format&gt;</pre></td>
-      <td>Set "Display.Format" property. See the <a href="#Emulation"><b>Emulation Properties</b></a> section
+      <td>Set "Display.Format" property. See the <a href="#EmulationProps"><b>Emulation Properties</b></a> section
         for valid formats.</td></td>
     </tr>
 
@@ -3610,7 +3619,7 @@
   <p><b>Options Menu</b> dialog:<br><br>
   <img src="graphics/options.png">
   <br><br>
-  <p><b><a name="VideoAudio">Video & Audio Settings</a></b> dialog (Display):</p>
+  <p><b><a name="VideoAudio">Video & Audio Settings</a></b> dialog <a name="VideoAudioDisplay">(Display):</a></p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/options_video.png"></td>
@@ -3636,7 +3645,7 @@
   </table>
   <br>
 
-  <p><b>Video & Audio Settings</b> dialog (Palettes):</p>
+  <p><b>Video & Audio Settings</b> dialog <a name="VideoAudioPalettes">(Palettes):</a></p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/options_video_palettes.png"></td>
@@ -3661,7 +3670,7 @@
   </table>
   <br>
 
-  <p><b>Video & Audio Settings</b> dialog (TV Effects):</p>
+  <p><b>Video & Audio Settings</b> dialog <a name="VideoAudioEffects">(TV Effects)</a>:</p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/options_video_tv.png"></td>
@@ -3687,7 +3696,7 @@
   </table>
   <br>
 
-  <p><b>Video & Audio Settings</b> dialog (Audio):</p>
+  <p><b>Video & Audio Settings</b> dialog <a name="VideoAudioAudio">(Audio)</a>:</p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/options_audio.png"></td>
@@ -3732,7 +3741,7 @@
   </table>
   <br>
 
-  <p><b>Emulation</b> dialog:</p>
+  <p><b><a name="Emulation">Emulation</a></b> dialog:</p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/options_emulation.png"></td>
@@ -3769,7 +3778,7 @@
   </table>
   <br>
 
-  <p><b>Input Settings</b> dialog:</p>
+  <p><b><a name="Input">Input Settings</a></b> dialog:</p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/eventmapping.png"></td>
@@ -3807,7 +3816,6 @@
     </tr>
     <tr>
       <td colspan="3"><center><img src="graphics/options_misc_light.png"></center></td>
-
     </tr>
   </table>
   <br>
@@ -3824,7 +3832,11 @@
   <p><b>Snapshot Settings</b> dialog:</p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
-      <td><img src="graphics/launcher_options_snapshots.png"></td>
+      <td>
+        <img src="graphics/launcher_options_snapshots.png">
+        <br><br>
+        A snapshot archive can be downloaded <a href="https://stella-emu.github.io/stella-snapshots.zip">here</a>.
+      </td>
       <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
@@ -3840,7 +3852,7 @@
     </tr>
   </table>
   <br>
-  <p><b>Developer Settings</b> dialog:</p>
+  <p><b><a name="Developer">Developer Settings</a></b> dialog:</p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/options_developer.png"></td>
@@ -3851,7 +3863,7 @@
     </tr>
   </table>
   <br>
-  <p><b>Game Properties</b> dialog:</p>
+  <p><b><a name="GameProperties">Game Properties</a></b> dialog:</p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/options_gameinfo_emulation.png"></td>
@@ -3862,7 +3874,7 @@
     </tr>
   </table>
   <br>
-  <p><b>Audit ROMs</b> dialog:</p>
+  <p><b><a name="Audit">Audit ROMs</a></b> dialog:</p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/romaudit.png"></td>
@@ -3923,7 +3935,7 @@
   <img src="graphics/eventmapping.png">
   <img src="graphics/eventmapping_remap.png">
 
-  <p>Finally there is a 'Combo' button in the 'Emulation Events' tab, accessible
+  <p>Finally there is a <a name="Combo">'Combo'</a> button in the 'Emulation Events' tab, accessible
   only when a Combo event has been selected from the list of events on the left.
   Clicking 'Combo' will show a dialog similar to the following:</p>
   <img src="graphics/eventmapping_combo.png">
@@ -3934,7 +3946,7 @@
 
   </p></br>
 
-  <p><b>Device and port</b> settings can be configured under the 'Devices & Ports' tab, shown below:</p>
+  <p><b><a name="DevicesPorts">Device and port</a></b> settings can be configured under the 'Devices & Ports' tab, shown below:</p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/eventmapping_devsports.png"></td>
@@ -3961,7 +3973,7 @@
     </tr>
   </table>
 
-  <p><b>Mouse</b> settings can be configured under the 'Mouse' tab, shown below:</p>
+  <p><b><a name="Mouse">Mouse</a></b> settings can be configured under the 'Mouse' tab, shown below:</p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/eventmapping_mouse.png"></td>
@@ -3998,7 +4010,7 @@
   <p>Stella supports viewing snapshots and ROM properties of the currently
   selected ROM in the ROM launcher. Support is automatic, as long as your
   image directory contains snapshots in the appropriate format. An
-  archive of updated snapshots will be available on the Stella webpage.
+  <a href="https://stella-emu.github.io/stella-snapshots.zip">archive</a> of updated snapshots is available on the Stella webpage.
   This archive may be updated periodically as new ROMs are found, and also
   for each new release of Stella. In case no snapshot is found, you can
   provide a default image named 'default_snapshot.png'.
@@ -4053,7 +4065,7 @@
   contains the following items:</p>
 
   <p><ol>
-    <li><p><b>Power-on options</b>: Selecting this option shows a dialog whereby
+    <li><p><b><a name="PowerOn">Power-on options</a></b>: Selecting this option shows a dialog whereby
     ROM properties can be temporarily overridden, and joystick/console buttons can be
     temporarily held down. Selecting options from this dialog will cause all ROMs launched
     after that to use those properties you specify. Clicking <b>Defaults</b> will disable
@@ -4127,8 +4139,8 @@
   </blockquote></br>
 
   <h2><b><a name="Adaptor">Stelladaptor/2600-daptor Support</a></b></h2>
-  <blockquote>
 
+  <blockquote>                                  H
   <p>Stella supports real Atari 2600 joysticks, paddles, driving controllers
   and trackballs (CX22/CX80 'Trak-Ball', Atari and Amiga mouse) using the
   <a href="http://www.grandideastudio.com/stelladaptor-2600">Stelladaptor</a> and
@@ -4225,7 +4237,7 @@
   Two sets ('Player settings', 'Developer settings') allow easy adjustment of all settings
   for different use cases (playing or developing games) at once.</p>
 
-  <p><b>Developer Settings</b> dialog (Emulator)</p>
+  <p><b>Developer Settings</b> dialog <a name="DeveloperEmulator">(Emulator)</a></p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/options_developer_emulation.png"></td>
@@ -4262,7 +4274,7 @@
     </tr>
   </table>
 
-  <p><b>Developer Settings</b> dialog (TIA):</p>
+  <p><b>Developer Settings</b> dialog <a name="DeveloperTIA">(TIA):</a></p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/options_developer_tia.png"></td>
@@ -4292,7 +4304,7 @@
     </tr>
   </table>
 
-  <p><b>Developer Settings</b> dialog (Video):</p>
+  <p><b>Developer Settings</b> dialog <a name="DeveloperVideo">(Video)</a>:</p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/options_developer_video.png"></td>
@@ -4319,7 +4331,7 @@
     </tr>
   </table>
 
-  <p><b>Developer Settings</b> dialog (Time Machine)</p>
+  <p><b>Developer Settings</b> dialog <a name="DeveloperTimeMachine">(Time Machine)</a></p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/options_developer_timemachine.png"></td>
@@ -4374,7 +4386,7 @@
     </tr>
   </table>
 
-  <p><b>Developer Settings</b> dialog (Debugger)</p>
+  <p><b>Developer Settings</b> dialog <a name="DeveloperDebugger">(Debugger)</a></p>
   <table border="5" cellpadding="2" frame="box" rules="none">
     <tr>
       <td><img src="graphics/options_developer_debugger.png"></td>
@@ -4669,7 +4681,7 @@ Ms Pac-Man (Stella extended codes):
 
   <p>Stella supports the properties described below:</p>
 
-  <h3><a name="Emulation"><b>Emulation Properties</b></a></h3>
+  <h3><a name="EmulationProps"><b>Emulation Properties</b></a></h3>
   <p>
     <img src="graphics/options_gameinfo_emulation.png">
   </p>
@@ -4796,7 +4808,7 @@ Ms Pac-Man (Stella extended codes):
   <p><b>Note:</b> Items marked as '*' are deprecated, and will probably be
   removed in a future release.</p>
 -->
-  <h3><a name="Consoler"><b>Console Properties</b></a></h3>
+  <h3><a name="ConsoleProps"><b>Console Properties</b></a></h3>
   <p>
     <img src="graphics/options_gameinfo_console.png">
   </p>
@@ -4822,7 +4834,7 @@ Ms Pac-Man (Stella extended codes):
   </table>
   </br>
 
-  <h3><a name="Controller"><b>Controller Properties</b></a></h3>
+  <h3><a name="ControllerProps"><b>Controller Properties</b></a></h3>
   <p>
     <img src="graphics/options_gameinfo_controller.png">
   </p>
@@ -4842,7 +4854,7 @@ Ms Pac-Man (Stella extended codes):
         <tr><td>Paddles </td><td>Standard paddle controllers for use with games such as Breakout and Warlords. One pair of controller per connector (allows for 4-player Warlords).</td></tr>
         <tr><td>Paddles_IAxis &#185</td><td>Same as Paddles, except the axes are inverted.</td></tr>
         <tr><td>Paddles_IAxDr &#185</td><td>Same as Paddles, except both the axes and direction of movement are inverted.</td></tr>
-        <tr><td>Driving &#185 </td><td>Looks like a paddle, but allows 360ï¿½ movement. Only one unit per connector, unlike paddles which were sold in pairs.</td></tr>
+        <tr><td>Driving &#185 </td><td>Looks like a paddle, but allows 360° movement. Only one unit per connector, unlike paddles which were sold in pairs.</td></tr>
         <tr><td>Keyboard</td><td>Also known as the Star Raiders controller, functionally identical to the Kid's Controller and Keyboard Controller. Game included an overlay with commands, for use with Star Raiders.</td></tr>
         <tr><td>AmigaMouse</td><td>Commodore Amiga computer mouse.</td></tr>
         <tr><td>AtariMouse</td><td>Atari ST computer mouse.</td></tr>
@@ -4934,7 +4946,7 @@ Ms Pac-Man (Stella extended codes):
         <tr><th>&nbsp;Type&nbsp;</th><th>Description</th></tr>
         <tr><td>Joystick</td><td>Atari's famous black joystick that was originally included with the system.</td></tr>
         <tr><td>Paddles </td><td>Standard paddle controllers, only (up to 8) fire buttons supported for QuadTari.</td></tr>
-        <tr><td>Driving</td><td>Looks like a paddle, but allows 360ï¿½ movement. Only one unit per connector, unlike paddles which were sold in pairs.</td></tr>
+        <tr><td>Driving</td><td>Looks like a paddle, but allows 360&#176; movement. Only one unit per connector, unlike paddles which were sold in pairs.</td></tr>
         <tr><td><a href="https://atariage.com/store/index.php?l=product_detail&p=1045">AtariVox</a></td><td>A SpeakJet based unlimited-vocabulary speech/sound synthesizer with 32K EEPROM.</td></tr>
         <tr><td>SaveKey</td><td>A 32K EEPROM for saving high scores, etc. (the EEPROM portion of an AtariVox).</td></tr>
       </table></td>
@@ -4942,7 +4954,7 @@ Ms Pac-Man (Stella extended codes):
   </table>
   </br>
 
-  <h3><a name="Cartridge"><b>Cartridge Properties</b></h3></a>
+  <h3><a name="CartridgeProps"><b>Cartridge Properties</b></h3></a>
   <p>
     <img src="graphics/options_gameinfo_cartridge.png">
   </p>
@@ -5018,7 +5030,7 @@ Ms Pac-Man (Stella extended codes):
         <tr><td>Note</td><td>Allows defining some free text which explains the high scores properties.</td></tr>
       </table>
       <p>To find the required definition values, you can use Stella's built-in <a href="debugger.html">debugger</a>.
-      Please share your results, so that we can extend the list of supported games.</p>
+      Please share your results, so that we can extend the <b><a href="#HighScoreGames">list</a></b> of supported games.</p>
       <p>Note: To verify the definitions, the current values of the addresses and the resulting score are displayed.</p>
       </td>
     </tr>
