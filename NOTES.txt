@@ -20,6 +20,7 @@ Installing a VSIX package
 Adding/Updating node packages
 -----------------------------------
 npm install
+npm update
 
 Compiling extension source manually
 -----------------------------------

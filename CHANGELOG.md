@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.7.2
+
+ * Updated internal dev packages
+
 ## 0.7.1
 
  * Updated Stella to v6.5.3 (Windows, Linux [Deb], macOS). Note: Linux 32-bit is currently v6.2

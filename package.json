@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.7.1",
+    "version": "0.7.2",
     "icon": "images/icon.png",
     "preview": false,
     "author": "mksmith",
@@ -452,19 +452,19 @@
         "watch": "tsc -watch -p ./"
     },
     "dependencies": {
-        "eslint": "^7.19.0",
+        "eslint": "^7.26.0",
         "find-process": "^1.4.4",
         "minimist": "^1.2.5",
-        "open": "^7.4.0",
+        "open": "^8.0.8",
         "tree-kill": "^1.2.2"
     },
     "devDependencies": {
-        "@types/mocha": "^8.2.0",
-        "@types/node": "^14.14.25",
+        "@types/mocha": "^8.2.2",
+        "@types/node": "^15.0.2",
         "@types/open": "^6.2.1",
         "@types/vscode": "^1.53.0",
         "diff": "^5.0.0",
-        "typescript": "^4.1.4",
+        "typescript": "^4.2.4",
         "vscode-test": "^1.5.0"
     }
 }
