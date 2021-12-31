@@ -173,10 +173,10 @@ int main(int argc, char **argv)
 	printf("\n");
 	printf("Options:  rom@4000 ram@4000 bank6@4000 pokey@450 pokey@4000 mram@4000 \n");
 	printf("          pokey@440 ym2151@460 supergame supergameram supergamebankram\n");
-	printf("          absolute activision souper tvpal tvntsc composite savekey\n");
-	printf("          hsc xm 7800joy1 7800joy2 lightgun1 lightgun2 paddle1 paddle2\n");
-	printf("          tball1 tball2 2600joy1 2600joy2 driving1 driving2\n");
-	printf("          keypad1 keypad2 stmouse1 stmouse2 amouse1 amouse2\n");
+	printf("          absolute activision souper bankset tvpal tvntsc composite\n");
+	printf("          7800joy1 7800joy2 lightgun1 lightgun2 paddle1 paddle2\n");
+	printf("          tball1 tball2 2600joy1 2600joy2 driving1 driving2 keypad1\n");
+	printf("          keypad2 stmouse1 stmouse2 amouse1 amouse2 hsc savekey xm\n");
 	printf("> ");
 
 	if (fgets(usercommand, 1024, stdin))
@@ -527,6 +527,7 @@ void setunset(char *command)
 	    setunset("unset absolute");
 	    setunset("unset supergame");
 	    setunset("unset souper");
+	    setunset("unset bankset");
 	}
 	else
 	    myheader.carttype1 = myheader.carttype1 & (1 ^ 0xff);
@@ -539,6 +540,7 @@ void setunset(char *command)
 	    setunset("unset activision");
 	    setunset("unset supergame");
 	    setunset("unset souper");
+	    setunset("unset bankset");
 	}
 	else
 	    myheader.carttype1 = myheader.carttype1 & (2 ^ 0xff);
@@ -551,10 +553,28 @@ void setunset(char *command)
 	    setunset("unset activision");
 	    setunset("unset absolute");
 	    setunset("unset supergame");
+	    setunset("unset bankset");
 	}
 	else
 	    myheader.carttype1 = myheader.carttype1 & (16 ^ 0xff);
     }
+    else if (strcmp(noun, "bankset") == 0)
+    {
+	if (set)
+	{
+	    myheader.carttype1 = myheader.carttype1 | 32;
+	    setunset("unset activision");
+	    setunset("unset absolute");
+	    setunset("unset souper");
+	}
+	else
+        {
+	    myheader.carttype1 = myheader.carttype1 & (32 ^ 0xff);
+            if(gamesize>131071)
+                setunset("set supergame");
+        }
+    }
+
 
     else if (strcmp(noun, "pokey@440") == 0)
     {
@@ -837,7 +857,9 @@ void report(void)
     if ((myheader.carttype1 & 8) > 0)
 	printf("ym2151@460 ");
     if ((myheader.carttype1 & 16) > 0)
-	printf("souper ");
+	printf("Souper ");
+    if ((myheader.carttype1 & 32) > 0)
+	printf("Bankset ");
     printf("\n");
 
     printf("    controllers        : ");

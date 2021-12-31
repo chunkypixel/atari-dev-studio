@@ -534,6 +534,12 @@ pokey4priority DS 1 ; $1EB
 pokey4offset   DS 1 ; $1EC
  endif
 
+ ifconst pokeykeysupport
+pokeylastkeycode   DS 1
+pokeykeycode       DS 1
+pokeykeydebounce   DS 1
+ endif
+
  ; see if we need an interrupthold byte...
 INTERRUPTNEEDED SET 0
  ifconst .topscreenroutine

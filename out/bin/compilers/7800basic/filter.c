@@ -36,6 +36,7 @@ char *filterterm[] = {
     "^USED_PLOTVALUEEXTRA",
     "^DOUBLEWIDE ",
     "^ZONEHEIGHT ",
+    "^BOXCOLLISION ",
     "^ROM48K ",
     "^ROM16K ",
     "^ROM8K ",

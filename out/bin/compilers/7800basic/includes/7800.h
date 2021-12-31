@@ -47,6 +47,8 @@
 
 INPTCTRL = $01     ;Input control. In same address space as TIA. write-only
 VBLANK   = $01     ;VBLANK. D7=1:dump paddle caps to ground.     write-only
+_WSYNC   = $02     ;Wait for HSync                               write-only
+_RSYNC   = $03     ;Reset HSync                                  write-only
 INPT0    = $08     ;Paddle Control Input 0                       read-only
 INPT1    = $09     ;Paddle Control Input 1                       read-only
 INPT2    = $0A     ;Paddle Control Input 2                       read-only

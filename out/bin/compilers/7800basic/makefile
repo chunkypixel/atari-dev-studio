@@ -4,8 +4,8 @@ CHMOD=chmod
 CP=cp
 RM=rm
 #CFLAGS for valgrind...
-#CFLAGS= -g -O0
-CFLAGS=-O0 -Wall
+CFLAGS= -g -O0
+#CFLAGS=-O0 -Wall
 CC=cc
 LEX=lex
 LEXFLAGS=-t

@@ -697,9 +697,15 @@ buttonhandlerlo
      .byte <joybuttonhandler    ; 10=atarivox
 
 drawwait
-     lda visibleover
-     bne drawwait ; make sure the visible screen isn't being drawn
+     bit visibleover ; 255 if screen is being drawn, 0 when not.
+     bmi drawwait ; make sure the visible screen isn't being drawn
      rts
+
+drawoverwait
+     bit visibleover ; 255 if screen is being drawn, 0 when not.
+     bpl drawoverwait ; make sure the visible screen is being drawn
+     rts
+
 
 mutetia
      lda #0
@@ -728,6 +734,9 @@ servicesfxchannelsloop
      endif
      beq servicesfxchannelsdone
 
+     lda sfxschedulelock ; =1 if locked
+     bne servicesfxchannelsdone ; exit if a pointer may be mid-way change
+
      lda sfx1pointlo,x
      sta inttemp5
      ora sfx1pointhi,x
@@ -740,6 +749,28 @@ servicesfxchannelsloop
      dec sfx1tick,x ; frame countdown is non-zero, subtract one
      jmp servicesfxchannelsloop
 servicesfx_cont1
+
+     ldy #1 ; check to see if they're changing the frame countdown
+     lda (inttemp5),y
+     cmp #$10
+     bne servicesfx_cont1a
+     ldy #2
+     lda (inttemp5),y
+     sta sfx1frames,x ; change the frame countdown
+     lda #0
+     sta sfx1tick,x
+     ; advance the sound pointer by 3...
+     lda sfx1pointlo,x
+     clc
+     adc #3
+     sta sfx1pointlo,x
+     lda sfx1pointhi,x
+     adc #0
+     sta sfx1pointhi,x
+     ; and then fetch another sample for this channel...
+     dex 
+     jmp servicesfxchannelsloop
+servicesfx_cont1a
 
      lda sfx1frames,x ; set the frame countdown for this sound chunk
      sta sfx1tick,x
@@ -1755,9 +1786,11 @@ checkselectswitch
      lda SWCHB ; first check the real select switch...
      and #%00000010
  ifnconst MOUSESUPPORT
+ ifnconst TRAKBALLSUPPORT
      beq checkselectswitchreturn ; switch is pressed
      lda SWCHA ; then check the soft "select" joysick code...
      and #%10110000 ; R_DU
+ endif ; TRAKBALLSUPPORT
  endif ; MOUSESUPPORT
 checkselectswitchreturn
      rts
@@ -1766,9 +1799,11 @@ checkresetswitch
      lda SWCHB ; first check the real reset switch...
      and #%00000001
  ifnconst MOUSESUPPORT
+ ifnconst TRAKBALLSUPPORT
      beq checkresetswitchreturn ; switch is pressed
      lda SWCHA ; then check the soft "reset" joysick code...
      and #%01110000 ; _LDU
+ endif ; TRAKBALLSUPPORT
  endif ; MOUSESUPPORT
 checkresetswitchreturn
      rts

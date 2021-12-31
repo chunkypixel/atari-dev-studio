@@ -493,21 +493,21 @@ class CompilerBase {
         });
     }
     GetWorkspaceFolder() {
+        var _a;
         console.log('debugger:CompilerBase.getWorkspaceFolder');
         // Issue: Get actual document first as the workspace
         //        is not the best option when file is in a subfolder
         //        of the chosen workspace
         // Document
+        let uri = (_a = this.Document) === null || _a === void 0 ? void 0 : _a.uri;
         if (this.Document) {
             return path.dirname(this.Document.fileName);
         }
         // Workspace (last resort)
-        if (vscode.workspace.workspaceFolders) {
-            if (this.Document) {
-                let workspaceFolder = vscode.workspace.getWorkspaceFolder(this.Document.uri);
-                if (workspaceFolder) {
-                    return workspaceFolder.uri.fsPath;
-                }
+        if (vscode.workspace.workspaceFolders && uri) {
+            let workspaceFolder = vscode.workspace.getWorkspaceFolder(uri);
+            if (workspaceFolder) {
+                return workspaceFolder.uri.fsPath;
             }
             return vscode.workspace.workspaceFolders[0].uri.fsPath;
         }

@@ -147,16 +147,6 @@ int linenumber=1;
 <setquotestart>['] {printf("%s",yytext);BEGIN(set);}
 <setquotestart>^\n* printf("%s",yytext);
 
-"player"[0123456789-]+: {printf("%s",yytext);BEGIN(player);}
-<player>^"\nend" printf("%s",yytext);
-<player>"\nend" {linenumber++;printf("\nend");BEGIN(INITIAL);}
-<player>"\n" {linenumber++;printf("\n");}
-
-"lives:" {printf("%s",yytext);BEGIN(lives);}
-<lives>^"\nend" printf("%s",yytext);
-<lives>"\nend" {linenumber++;printf("\nend");BEGIN(INITIAL);}
-<lives>"\n" {linenumber++;printf("\n");}
-
 ".asm" printf("%s",yytext);
 "extra"[0-9]+: printf("%s",yytext);
 "step"[ ]+"-" printf("step -");
@@ -197,4 +187,5 @@ int linenumber=1;
 .               {fprintf(stderr,"(%d) Parse error: unrecognized character \"%s\"\n",linenumber,yytext);  exit(1);}
 %%
   int yywrap(void) {      return 1;  } 
-int main(){yylex();}
+extern int yy_flex_debug;
+int main(){yy_flex_debug = 1;yylex();}

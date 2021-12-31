@@ -27,58 +27,21 @@ start
 
      ;************** Clear Memory
 
-     ldx #$40
-     lda #$00
-crloop1     
-     sta $00,x ;Clear zero page
-     sta $100,x ;Clear page 1
-     inx
-     bne crloop1
-
-
-     ldy #$00 ;Clear Ram
-     lda #$18 ;Start at $1800
-     sta $81 
-     lda #$00
+ ; ** Clear 1800-27FF, pg0+pg1 memory.
+ClearMemPages
+     lda #0
+     tay ; y=0
      sta $80
-crloop3
-     lda #$00
+     ldx #$18
+ClearMemPagesLoop
+     stx $81 ; needed for when we step on ZP memory
      sta ($80),y ;Store data
      iny ;Next byte
-     bne crloop3 ;Branch if not done page
-     inc $81 ;Next page
-     lda $81
-     cmp #$20 ;End at $1FFF
-     bne crloop3 ;Branch if not
-
-     ldy #$00 ;Clear Ram
-     lda #$22 ;Start at $2200
-     sta $81 
-     lda #$00
-     sta $80
-crloop4
-     lda #$00
-     sta ($80),y ;Store data
-     iny ;Next byte
-     bne crloop4 ;Branch if not done page
-     inc $81 ;Next page
-     lda $81
-     cmp #$27 ;End at $27FF
-     bne crloop4 ;Branch if not
-
-     ldx #$00
-     lda #$00
-crloop5     ;Clear 2100-213F, 2000-203F
-     sta $2000,x
-     sta $2100,x
+     bne ClearMemPagesLoop
      inx
-     cpx #$40
-     bne crloop5
-
-     sta $80
+     cpx #$28
+     bne ClearMemPagesLoop
      sta $81
-     sta $82
-     sta $83
 
      ;seed random number with hopefully-random timer value
      lda #1

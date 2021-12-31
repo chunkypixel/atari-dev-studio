@@ -41,6 +41,48 @@
                 REPEND
             ENDM
 
+
+;-------------------------------------------------------------------------------
+; FRACSLEEP duration
+; Based on Thomas Jentzsch's SLEEP macro, but takes cycles*2 to allow for
+; 7800 based 0.5 cycle sleep.
+
+            MAC FRACSLEEP            ;usage: FRACSLEEP n (n>1)
+.CYCLES     SET {1}
+
+                IF .CYCLES < 4
+                    ECHO "MACRO ERROR: 'FRACSLEEP': Duration must be > 4"
+                    ERR
+                ENDIF
+                IF .CYCLES = 5
+                    ECHO "MACRO ERROR: 'FRACSLEEP': Duration = 5 is impossible"
+                    ERR
+                ENDIF
+
+                IF .CYCLES & 1
+                    IFNCONST NO_ILLEGAL_OPCODES
+                        nop $0 ; TIA access is 3.5 cycles
+                    ELSE
+                        bit $0 ; TIA access is 3.5 cycles
+                    ENDIF
+.CYCLES             SET .CYCLES - 7
+                ENDIF
+ 
+                IF .CYCLES & 2
+                    IFNCONST NO_ILLEGAL_OPCODES
+                        nop $80
+                    ELSE
+                        bit $80
+                    ENDIF
+.CYCLES             SET .CYCLES - 6
+                ENDIF
+            
+                REPEAT .CYCLES / 4
+                    nop
+                REPEND
+            ENDM
+
+
 ;-------------------------------------------------------
 ; SET_POINTER
 ; Original author: Manuel Rotschkar

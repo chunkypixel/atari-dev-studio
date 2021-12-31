@@ -6,11 +6,11 @@
 	<dict>
 		<key>Resources/Info.plist</key>
 		<data>
-		HzcsMReVY4hkAmRRhq33mT4RJKI=
+		WjxEf7JV68HAeMdbj6e6QQ/ZHSQ=
 		</data>
 		<key>Resources/License.txt</key>
 		<data>
-		VILsZtXQ+SRYtfG2XJ8ZtkKItSU=
+		s91T1Kwm3AMSbQtGQrmCGovO9hU=
 		</data>
 		<key>Resources/ReadMe.txt</key>
 		<data>
@@ -18,7 +18,7 @@
 		</data>
 		<key>Resources/default.metallib</key>
 		<data>
-		4BwgaOSOLU3sjhjYkfLYp8Bg0y0=
+		u7DhzcJRXLKuXpZWAXg5EvjyPQU=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -27,7 +27,7 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			N5FKSaB7CEeZTK1MpiD7f6uGGVA=
+			sREHG3yrddjWFGtXKbVRbyrpBTU=
 			</data>
 			<key>requirement</key>
 			<string>identifier "org.libsdl.hidapi" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = EH385AYQ6F</string>
@@ -36,22 +36,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			HzcsMReVY4hkAmRRhq33mT4RJKI=
+			WjxEf7JV68HAeMdbj6e6QQ/ZHSQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			uxXlzWLUJvw0jtalQpV/AuYjmwBhNOdWqO8HCdMqAY4=
+			CboKYIrEHpy6G8tI0LbHzs922I6jbqKnB8pjRM1/09U=
 			</data>
 		</dict>
 		<key>Resources/License.txt</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			VILsZtXQ+SRYtfG2XJ8ZtkKItSU=
+			s91T1Kwm3AMSbQtGQrmCGovO9hU=
 			</data>
 			<key>hash2</key>
 			<data>
-			Y68o5ttLrQEravu8qDEelhBjWJJDm9cuZ33qP6cPjB4=
+			Y1CgmkCNqrRO4L6QBkaOL0A3reSeBWGRk676hb4lOtI=
 			</data>
 		</dict>
 		<key>Resources/ReadMe.txt</key>
@@ -69,11 +69,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			4BwgaOSOLU3sjhjYkfLYp8Bg0y0=
+			u7DhzcJRXLKuXpZWAXg5EvjyPQU=
 			</data>
 			<key>hash2</key>
 			<data>
-			bs9aWIr93QMzHkPmqydkE8toDd+BGAITxZX+AC17FSk=
+			qu5diHTF2iWNOOI37LG4qJJ9+q2aFsZR3ndkM4dclq0=
 			</data>
 		</dict>
 	</dict>

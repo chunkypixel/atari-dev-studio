@@ -455,17 +455,16 @@ export abstract class CompilerBase implements vscode.Disposable {
         //        of the chosen workspace
 
         // Document
+        let uri = this.Document?.uri;
         if (this.Document) { return path.dirname(this.Document.fileName); }
 
         // Workspace (last resort)
-        if (vscode.workspace.workspaceFolders) {
-            if (this.Document) {
-                let workspaceFolder = vscode.workspace.getWorkspaceFolder(this.Document!.uri);
+        if (vscode.workspace.workspaceFolders && uri) {
+                let workspaceFolder = vscode.workspace.getWorkspaceFolder(uri)
                 if (workspaceFolder) {
                     return workspaceFolder.uri.fsPath;
                 }
-            }
-            return vscode.workspace.workspaceFolders[0].uri.fsPath;
+                return vscode.workspace.workspaceFolders[0].uri.fsPath;
         }
         return "";
     }
