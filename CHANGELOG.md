@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.7.3
+
+* Updated 7800basic keyword and hover lists
+* Reviewed 6502 hover list
+
 ## 0.7.2
 
 * Updated 7800basic to v0.19 (Windows, Linux, macOS)

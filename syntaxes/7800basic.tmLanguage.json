@@ -144,7 +144,7 @@
 				},	
 				{ 
 					"name": "keyword.controller.78b",
-					"match": "\\b(changecontrol|drivingboost|mousexonly|paddlerange|paddlescalex2|joy0any|joy0down|joy0fire|joy0fire0|joy0fire1|joy0left|joy0right|joy0up|joy1any|joy1down|joy1fire|joy1fire0|joy1fire1|joy1left|joy1right|joy1up|switchleftb|switchreset|switchrightb|switchselect|switchpause|2buttonjoy|1buttonjoy|lightgun|paddle|trakball|driving|keypad|stmouse|amigamouse|atarivox|keypad0key0|keypad0key1|keypad0key2|keypad0key3|keypad0key4|keypad0key5|keypad0key6|keypad0key7|keypad0key8|keypad0key9|keypad0keys|keypad0keyh|keypad1key0|keypad1key1|keypad1key2|keypad1key3|keypad1key4|keypad1key5|keypad1key6|keypad1key7|keypad1key8|keypad1key9|keypad1keys|keypad1keyh)\\b",
+					"match": "\\b(changecontrol|drivingboost|mousexonly|paddlerange|paddlepair|paddlescalex2|joy0any|joy0down|joy0fire|joy0fire0|joy0fire1|joy0left|joy0right|joy0up|joy1any|joy1down|joy1fire|joy1fire0|joy1fire1|joy1left|joy1right|joy1up|switchleftb|switchreset|switchrightb|switchselect|switchpause|2buttonjoy|1buttonjoy|lightgun|paddle|trakball|driving|keypad|stmouse|amigamouse|atarivox|keypad0key0|keypad0key1|keypad0key2|keypad0key3|keypad0key4|keypad0key5|keypad0key6|keypad0key7|keypad0key8|keypad0key9|keypad0keys|keypad0keyh|keypad1key0|keypad1key1|keypad1key2|keypad1key3|keypad1key4|keypad1key5|keypad1key6|keypad1key7|keypad1key8|keypad1key9|keypad1keys|keypad1keyh)\\b",
 					"comment": "controller keywords"
 				},	
 				{

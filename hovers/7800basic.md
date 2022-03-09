@@ -253,6 +253,30 @@
 
 
 
+## PADDLERANGE
+
+   set paddlerange range
+
+   range - 1 to 240
+
+
+
+## PADDLEPAIR
+
+   set paddlepair state
+
+   state - on, off
+
+
+
+## PADDLESCALEX2
+
+   set paddlescalex2 state
+
+   state - on, off
+
+
+
 ## BASEPATH
 
     set basepath directory_path

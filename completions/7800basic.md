@@ -54,6 +54,9 @@ mcpdevcart
 newblock
 pauseroutine
 peekchar
+paddlepair
+paddlerange
+paddlescalex2
 playsfx
 playsong
 plotbanner
