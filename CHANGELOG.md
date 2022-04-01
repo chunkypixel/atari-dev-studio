@@ -4,6 +4,8 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.7.3
 
+* Updated A7800 to v5.0 (Windows, Linux, macOS)
+* Added additional A7800 machine target configuration selections to the settings (a7800dev & a7800pdev)
 * Updated 7800basic keyword and hover lists
 * Reviewed 6502 hover list
 

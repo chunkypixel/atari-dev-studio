@@ -399,9 +399,11 @@
                         "Atari 7800 (NTSC) Cool",
                         "Atari 7800 (NTSC) Warm",
                         "Atari 7800 (NTSC) Hot",
+                        "Atari 7800 (NTSC) Developer Mode",
                         "Atari 7800 (PAL) Cool",
                         "Atari 7800 (PAL) Warm",
-                        "Atari 7800 (PAL) Hot"
+                        "Atari 7800 (PAL) Hot",
+                        "Atari 7800 (PAL) Developer Mode"
                     ],
                     "default": "Atari 7800 (NTSC) Cool",
                     "description": "Specify the required console region:",
