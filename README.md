@@ -148,19 +148,22 @@ Stella is a multi-platform Atari 2600 VCS emulator released under the GNU Genera
 
 Stella is included as part of this extension with many thanks to Stephen Anthony. Stella is an external project and can be downloaded separately [here](https://stella-emu.github.io). If you enjoy using Stella place consider [donating](https://stella-emu.github.io/donations.html) to ensure it's continued development.
 
-### A7800 (release 5.0 - 20220401)
+### A7800 (release 5.1 - 20220502)
 A7800 is a fork of the MAME Atari 7800 driver, with several enhancements added:
 * Support for emulation of Proline Joysticks, VCS Joysticks, Lightguns, Paddles, Driving Controllers, Keypads, Trak-Balls, Amiga Mice, and ST Mice.
 * Maria DMA timing has been improved further, with the addition of accurate DMA hole penalties.
-* Improved saturated/normalized colors with palette selection.
+* Selectable and improved palettes with enhanced screen options.
 * Streamlined UI including menu options to have an Atari 7800 system focus.
 * A bug in the existing RIOT emulation has been fixed.
 * POKEY sound emulation improvements.
 * SALLY (CPU) and MARIA (Graphics chip) performance adjustments.
-* Framerate updated to 50Hz/60Hz.
 * Audio indication of no ROM loaded silenced.
 * BIOS files no longer required and made optional.
 * Implementation of XM control registers updated.
+* Graphical register updates made mid-scanline are now displayed mid-scanline.
+* Bankset bankswitching support added.
+* POKEY@800 added for non-banked, supergame, and bankset formats.
+* Machine targets a7800dev and a7800pdev added, which display DMA usage per-scanline.
 
 MAME compatibility and syntax has been maintained, to allow for the reuse of MAME configuration files and front-ends.
 

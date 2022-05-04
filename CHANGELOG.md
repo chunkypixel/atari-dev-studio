@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.7.4
+
+* Updated internal packages (requires VS Code v1.66.0 or better)
+* Updated A7800 to v5.1 (Windows, Linux, macOS)
+
 ## 0.7.3
 
 * Updated A7800 to v5.0 (Windows, Linux, macOS)
