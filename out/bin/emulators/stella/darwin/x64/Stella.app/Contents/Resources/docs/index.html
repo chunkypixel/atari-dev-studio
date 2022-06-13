@@ -21,7 +21,7 @@
     <img src="graphics/stella_icon.png">
     <h2><b>A multi-platform Atari 2600 VCS emulator</b></h2>
 
-    <h4><b>Release 6.6</b></h4>
+    <h4><b>Release 6.7</b></h4>
     <br>
 
     <h2><b>User's Guide</b></h2>
@@ -55,6 +55,7 @@
         <li><a href="#ROMInfo">ROM Launcher</a></li>
         <ul>
           <li><a href="#ROMInfoViewer">ROM Launcher Viewer</a></li>
+          <li><a href="#FavoriteROMs">Favorite ROMs and Directories</a></li>
           <li><a href="#ROMLauncherContextMenu">ROM Launcher Context Menu</a></li>
         </ul>
         <li><a href="#ROMAudit">ROM Audit Mode</a></li>
@@ -74,7 +75,7 @@
 
   <br><br><br>
 
-  <center><b>February 1999 - November 2021</b></center>
+  <center><b>February 1999 - June 2022</b></center>
     <center><b>The Stella Team</b></center>
   <center><b><a href="https://stella-emu.github.io">Stella Homepage</a></b></center>
 
@@ -307,6 +308,7 @@
       TIA sprites and collisions for each object separately</li>
     <li>Full system state save/load functionality</li>
     <li>Automatic save state creation ('Time Machine') which allows moving back and forth in the recorded timeline</li>
+    <li>Tracking of user favorites and popular or recently played ROMs.</li>
     <li>High scores saving (internal or via PlusROM High Score Club)</li>
     <li>Cross-platform UI including a built-in ROM launcher frontend</li>
     <li>Built-in extensive debugger, including static analysis with the Distella disassembler
@@ -352,7 +354,6 @@
   the following:</p>
   <ul>
     <li>i386 or x86_64 class machine, with 32 or 64-bit distribution</li>
-    <li>OpenGL capable video card</li>
     <li>Other architectures (MIPS, PPC, PPC64, etc.) have been confirmed to work,
       but aren't as well tested as i386/x86_64</li>
     <li>GNU g++ v/7 or Clang v/5 (with C++17 support) and the make utility are required for compiling the Stella source code</li>
@@ -366,19 +367,17 @@
   <ul>
     <li>macOS 10.7 or above</li>
     <li>64-bit Intel processor</li>
-    <li>OpenGL capable video card</li>
     <li>Xcode 8.0 is required to compile the Stella source code</li>
   </ul>
 
   <p>
   <h3><b><u>Windows</u></b></h3>
 
-  <p>The Windows version of Stella is designed to work on Windows 7/8/10
+  <p>The Windows version of Stella is designed to work on Windows 7/8/10/11
   with the following:</p>
 
   <ul>
-    <li>Direct3D or OpenGL capable video card</li>
-    <li>Visual C++ 2017/2019 Community is required to compile the Stella source code</li>
+    <li>Visual C++ 2019 Community is required to compile the Stella source code</li>
   </ul>
 
   <p>
@@ -576,7 +575,7 @@
   <p>At this point, you may want to set the locations for snapshot images. This
   is described in more detail in <b><a href="#ROMInfo">ROM Launcher</a></b>.
   These settings are optional, and can be left at the defaults if you won't be
-  using snapshots in the ROM launcher. </p>
+  using snapshots in the ROM launcher.</p>
 
   <p>You can start emulation by selecting a ROM and pressing 'Enter' or clicking 'Select',
   or double-clicking a ROM. Note that some games require you to 'Reset' the console
@@ -588,7 +587,7 @@
   for more information. To exit a game and re-enter the ROM launcher, press the 'Escape'
   key.</p>
 
-  <p>Using the 'Search' textbox in the upper-right of the ROM launcher, the
+  <p>Using the 'Search' textbox in the upper row of the ROM launcher, the
   listing can be narrowed down, showing only the ROMs that match the pattern
   you enter.</p>
 
@@ -604,8 +603,8 @@
   <p>While playing a game, normally one would use the keyboard shortcuts for controlling the
   'virtual' switches in Stella (ie, the commands associated with the
   function keys as described in
-  <b>Getting Started - <a href="#Keyboard">Keyboard Layout</a></b>).
-  However, another alternative is available. Pressing the '\' key toggles
+  <b>Playing a Game - <a href="#Hotkeys">Hotkeys</a></b>).
+  However, another alternative is available. Pressing the '\' key (default) toggles
   a command menu dialog as follows:</p>
   <p><img src="graphics/commandmenu.png"></p>
 
@@ -616,7 +615,7 @@
 
   <p>Note: Clicking the `?` at the top right opens this document at the related
   paragraph. This works for almost all dialogs. There is also a hotkey defined
-  for help (see <b><a href="#Hotkeys">Hotkeys</a></b>)).</p>
+  for help (see <b><a href="#Hotkeys">Hotkeys</a></b>).</p>
   </blockquote></br>
 
   <h2><b><a name="Keyboard">Keyboard Layout</a></b></h2>
@@ -647,33 +646,33 @@
     </tr>
 
     <tr>
-      <td>Exit emulator</td>
+      <td>Exit Stella</td>
       <td>Control + Q</td>
       <td>Cmd + Q</td>
     </tr>
 
     <tr>
-      <td>Exit game mode/enter launcher mode</td>
+      <td>Exit game, enter <b><a href="#ROMInfo">ROM Launcher</a></b></td>
       <td>Escape</td>
       <td>Escape</td>
     </tr>
 
     <tr>
-      <td>Enter/exit <a href="#Options"><b>options</b></a> mode</td>
+      <td>Enter/exit <a href="#Options"><b>Options Menu</b></a></td>
       <td>Tab/Escape</td>
       <td>Tab/Escape</td>
     </tr>
 
     <tr>
-      <td>Enter/exit <a href="#CommandMenu"><b>command</b></a> mode</td>
-      <td>Backslash (\)</td>
-      <td>Backslash (\)</td>
+      <td>Enter/exit <a href="#CommandMenu"><b>Command Menu</b></a> </td>
+      <td>Backslash (\)/Escape</td>
+      <td>Backslash (\)/Escape</td>
     </tr>
 
     <tr>
-      <td>Enter/exit debugger</td>
-      <td>Backquote (`)</td>
-      <td>Backquote (`)</td>
+      <td>Enter/exit <a href="debugger.html"><b>Debugger</b></a></td>
+      <td>Backquote (`)/Escape</td>
+      <td>Backquote (`)/Escape</td>
     </tr>
 
     <tr>
@@ -780,18 +779,17 @@
 
   </table>
 
-
+  </br>
   <p><b>Joystick/Booster Grip Controller (can be remapped)</b></p>
 
-  <table BORDER=2>
+  <table style="border: hidden">
     <tr>
-      <th>Left Joystick</th>
-      <th>Right Joystick</th>
-    </tr>
+      <td style="padding: 0px">
+        <table>
+          <tr>
+            <th colspan=2>Left Joystick</th>
+          </tr>
 
-    <tr>
-      <td>
-        <table BORDER=1 cellpadding=4>
           <tr>
             <th>Function</th>
             <th>Key</th>
@@ -799,43 +797,47 @@
 
           <tr>
             <td>Joystick Up</td>
-            <td>Up arrow</td>
+            <td>Up arrow, Keypad 8</td>
           </tr>
 
           <tr>
             <td>Joystick Down</td>
-            <td>Down arrow</td>
+            <td>Down arrow, Keypad 2</td>
           </tr>
 
           <tr>
             <td>Joystick Left</td>
-            <td>Left arrow</td>
+            <td>Left arrow, Keypad 4</td>
           </tr>
 
           <tr>
             <td>Joystick Right</td>
-            <td>Right arrow</td>
+            <td>Right arrow, Keypad 6</td>
           </tr>
 
           <tr>
             <td>Fire Button</td>
-            <td>Left Control, Space</td>
+            <td>Left Control, Space, Keypad 5</td>
           </tr>
 
           <tr>
             <td>Top Booster Button</td>
-            <td>4</td>
+            <td>Right Shift, 4, Keypad 9</td>
           </tr>
 
           <tr>
             <td>Handle Grip Trigger</td>
-            <td>5</td>
+            <td>Right Control, 5, Keypad 3</td>
           </tr>
         </table>
       </td>
+      <td style="border: hidden"></td>
+      <td style="padding: 0px">
+        <table>
+          <tr>
+            <th colspan=2>Right Joystick</th>
+          </tr>
 
-      <td>
-        <table BORDER=1 cellpadding=4>
           <tr>
             <th>Function</th>
             <th>Key</th>
@@ -880,17 +882,17 @@
     </tr>
   </table>
 
+  </br>
   <p><b>Sega Genesis Controller (cannot be remapped, always associated with joystick and Booster Grip controllers)</b></p>
 
-  <table BORDER=2>
+  <table style="border: hidden">
     <tr>
-      <th>Left Pad</th>
-      <th>Right Pad</th>
-    </tr>
+      <td style="padding: 0px">
+        <table>
+          <tr>
+            <th colspan=2>Left Pad</th>
+          </tr>
 
-    <tr>
-      <td>
-        <table BORDER=1 cellpadding=4>
           <tr>
             <th>Function</th>
             <th>Key</th>
@@ -927,9 +929,13 @@
           </tr>
         </table>
       </td>
+      <td style="border: hidden"></td>
+      <td style="padding: 0px">
+        <table>
+          <tr>
+            <th colspan=2>Right Pad</th>
+          </tr>
 
-      <td>
-        <table BORDER=1 cellpadding=4>
           <tr>
             <th>Function</th>
             <th>Key</th>
@@ -969,120 +975,113 @@
     </tr>
   </table>
 
-  <p><b>Driving Controller (cannot be remapped, always associated with joystick controller)</b></p>
+  </br>
+  <p><b>Driving Controller (can be remapped)</b></p>
 
-  <table BORDER=2>
+  <table style="border: hidden">
     <tr>
-      <th>Left Driving</th>
-      <th>Right Driving</th>
-    </tr>
+      <td style="padding: 0px">
+        <table>
+          <tr>
+            <th colspan=2>Left Driving</th>
+          </tr>
 
-    <tr>
-      <td>
-        <table BORDER=1 cellpadding=4>
           <tr>
             <th>Function</th>
             <th>Key</th>
           </tr>
 
           <tr>
-            <td>Left Direction</td>
-            <td>Same as Left Joystick 'Left'</td>
+            <td>Counter Clockwise</td>
+            <td>Left arrow, Keypad 4</td>
           </tr>
 
           <tr>
-            <td>Right Direction</td>
-            <td>Same as Left Joystick 'Right'</td>
+            <td>Clockwise</td>
+            <td>Right arrow, Keypad 6</td>
           </tr>
 
           <tr>
             <td>Fire Button</td>
-            <td>Same as Left Joystick 'Fire'</td>
+            <td>Left Control, Space, Keypad 5</td>
           </tr>
         </table>
       </td>
-
-      <td>
-        <table BORDER=1 cellpadding=4>
+      <td style="border: hidden"></td>
+      <td style="padding: 0px">
+        <table>
+          <tr>
+            <th colspan=2>Right Driving</th>
+          </tr>
           <tr>
             <th>Function</th>
             <th>Key</th>
           </tr>
 
           <tr>
-            <td>Left Direction</td>
-            <td>Same as Right Joystick 'Left'</td>
+            <td>Counter Clockwise</td>
+            <td>G</td>
           </tr>
 
           <tr>
-            <td>Right Direction</td>
-            <td>Same as Right Joystick 'Right'</td>
+            <td>Clockwise</td>
+            <td>J</td>
           </tr>
 
           <tr>
             <td>Fire Button</td>
-            <td>Same as Right Joystick 'Fire'</td>
+            <td>F</td>
           </tr>
         </table>
       </td>
     </tr>
   </table>
 
+  </br>
   <p><b>Trackball Controller (uses mouse, left port only)</b></p>
 
-  <table BORDER=2>
+  <table>
     <tr>
-      <th>Left Trackball</th>
+      <th colspan=2>Left Trackball</th>
     </tr>
     <tr>
-      <td>
-        <table BORDER=1 cellpadding=4>
-          <tr>
-            <th>Function</th>
-            <th>Key</th>
-          </tr>
-          <tr>
-            <td>Fire Button</td>
-            <td>Same as Left Joystick 'Fire'</td>
-          </tr>
-        </table>
-      </td>
+      <th>Function</th>
+      <th>Key</th>
+    </tr>
+    <tr>
+      <td>Fire Button</td>
+      <td>Same as Left Joystick 'Fire'</td>
     </tr>
   </table>
 
+  </br>
   <p><b>Light Gun Controller (uses mouse, left port only)</b></p>
 
-  <table BORDER=2>
+  <table>
     <tr>
-      <th>Left Light Gun</th>
+      <th colspan=2>Left Light Gun</th>
     </tr>
     <tr>
-      <td>
-        <table BORDER=1 cellpadding=4>
-          <tr>
-            <th>Function</th>
-            <th>Key</th>
-          </tr>
-          <tr>
-            <td>Fire Button</td>
-            <td>Same as Left Joystick 'Fire'</td>
-          </tr>
-        </table>
-      </td>
+      <th>Function</th>
+      <th>Key</th>
+    </tr>
+    <tr>
+      <td>Fire Button</td>
+      <td>Same as Left Joystick 'Fire'</td>
     </tr>
   </table>
 
+  </br>
   <p><b>Paddle Controller digital emulation (can be remapped)</b></p>
 
-  <table BORDER=2>
+  <table style="border: hidden">
     <tr>
-      <th>Left Paddles</th>
-      <th>Right Paddles</th>
-    </tr>
+      <td style="padding: 0px">
+        <table>
+          <tr>
+            <th colspan=2>Left Paddles</th>
+          </tr>
 
-    <tr>
-      <td>
-        <table BORDER=1 cellpadding=4>
           <tr>
             <th>Function</th>
             <th>Key</th>
@@ -1100,7 +1099,7 @@
 
           <tr>
             <td>Paddle A Fire</td>
-            <td>Left Control, Space</td>
+            <td>Left Control, Space, Keypad 5</td>
           </tr>
 
           <tr>
@@ -1115,13 +1114,17 @@
 
           <tr>
             <td>Paddle B Fire</td>
-            <td>4</td>
+            <td>Right Control, 4</td>
           </tr>
         </table>
       </td>
+      <td style="border: hidden"></td>
+      <td style="padding: 0px">
+        <table>
+          <tr>
+            <th colspan=2>Right Paddles</th>
+          </tr>
 
-      <td>
-        <table BORDER=1 cellpadding=4>
           <tr>
             <th>Function</th>
             <th>Key</th>
@@ -1161,17 +1164,17 @@
     </tr>
   </table>
 
+  </br>
   <p><b>Keyboard Controller (can be remapped)</b></p>
 
-  <table BORDER=2>
+  <table style="border: hidden">
     <tr>
-      <th>Left Keyboard</th>
-      <th>Right Keyboard</th>
-    </tr>
+      <td style="padding: 0px">
+        <table>
+          <tr>
+            <th colspan=2>Left Keyboard</th>
+          </tr>
 
-    <tr>
-      <td>
-        <table BORDER=1 cellpadding=4>
           <tr>
             <th>Pad Button</th>
             <th>Key</th>
@@ -1238,9 +1241,13 @@
           </tr>
         </table>
       </td>
+      <td style="border: hidden"></td>
+      <td style="padding: 0px">
+        <table>
+          <tr>
+            <th colspan=2>Right Keyboard</th>
+          </tr>
 
-      <td>
-        <table BORDER=1 cellpadding=4>
           <tr>
             <th>Pad Button</th>
             <th>Key</th>
@@ -1310,9 +1317,10 @@
     </tr>
   </table>
 
+  </br>
   <p><b>CompuMate Controller (cannot be remapped)</b></p>
 
-  <table BORDER=2 cellpadding=4>
+  <table BORDER=2>
     <tr><th>CompuMate</th> <th>Key</th></tr>
     <tr><td>0 - 9 </td><td>0 - 9 </td></tr>
     <tr><td>A - Z </td><td>A - Z </td></tr>
@@ -1336,6 +1344,7 @@
 
   </table>
 
+  </br>
   <p><b>Audio & Video Keys (can be remapped)</b></p>
   <table BORDER=2 cellpadding=4>
     <tr>
@@ -1440,6 +1449,7 @@
     </tr>
   </table>
 
+  </br>
   <p><b>Palettes Keys (can be remapped)</b></p>
   <table BORDER=2 cellpadding=4>
     <tr>
@@ -1490,6 +1500,7 @@
     </tr>
   </table>
 
+  </br>
   <p><b>TV effects Keys (can be remapped)</b></p>
 
   <table BORDER=2 cellpadding=4>
@@ -1574,6 +1585,7 @@
     </tr>
   </table>
 
+  </br>
   <p><b>Input Devices & Ports Keys (can be remapped)</b></p>
 
   <table BORDER=2 cellpadding=4>
@@ -1660,6 +1672,11 @@
       <td>Control + F5</td>
     </tr>
 
+    <tr>
+      <td>Toggle autofire</td>
+      <td>Alt + A</td>
+      <td>Cmd + A</td>
+    </tr>
     <tr>
       <td><i>Decrease</i> autofire rate</td>
       <td>Shift-Control + A</td>
@@ -1840,6 +1857,7 @@
     </tr>
   </table>
 
+  </br>
   <a name="DeveloperKeys"></a>
   <p><b>Developer Keys (can be remapped)</b></p>
 
@@ -1965,6 +1983,18 @@
     </tr>
 
     <tr>
+      <td><i>Decrease</i> TV jitter sensitivity</td>
+      <td>Shift-Control-Alt + J</td>
+      <td>Shift-Control-Cmd + J</td>
+    </tr>
+
+    <tr>
+      <td><i>Increase</i> TV jitter sensitivity</td>
+      <td>Control-Alt + J</td>
+      <td>Control-Cmd + J</td>
+    </tr>
+
+    <tr>
       <td><i>Decrease</i> TV jitter roll time</td>
       <td>Shift-Control + J</td>
       <td>Shift-Control + J</td>
@@ -1983,6 +2013,7 @@
     </tr>
   </table>
 
+  </br>
   <p><b><a name="GlobalKeys">Global Keys</a> (can be remapped)</b></p>
   <p>These keys allow selecting and changing settings without having to remember
     the dedicated hotkeys. The global keys are grouped by 'Audio & Video',
@@ -2033,6 +2064,7 @@
     </ul>
   </p>
 
+  </br>
   <p><b>Other Emulation Keys (can be remapped)</b></p>
 
   <table BORDER=2 cellpadding=4>
@@ -2099,7 +2131,7 @@
       <td>Shift + T to enter, Shift + T/Escape to exit and continue with emulation</td>
     </tr>
     <tr>
-      <td>Playback the <a href="#TimeMachine"><b>Time Machine</b></a> from current state (without sound, from the TM dialog only)</td>
+      <td>Playback the <a href="#TimeMachine"><b>Time Machine</b></a> from current state (from the TM dialog only)</td>
       <td>Space</td>
       <td>Space</td>
     </tr>
@@ -2146,6 +2178,7 @@
 
   </table>
 
+  </br>
   <p><b>UI Keys (can be remapped)</b></p>
 
   <table BORDER=2 cellpadding=4>
@@ -2240,13 +2273,14 @@
       <td>Cmd + Return</td>
     </tr>
     <tr>
-      <td>Exit emulator</td>
+      <td>Exit Stella</td>
       <td>Control + Q</td>
       <td>Cmd + Q</td>
     </tr>
   </table>
 
-  <p><b>Additional Launcher Keys (cannot be remapped)</b></p>
+  </br>
+  <p><b>Additional Launcher Keys (most cannot be remapped)</b></p>
   <table BORDER=2 cellpadding=4>
     <tr>
       <th>Function</th>
@@ -2254,9 +2288,39 @@
       <th>Key (macOS)</th>
     </tr>
     <tr>
+      <td>Go to initial directory (also in other file dialogs)</td>
+      <td>Alt + Home</td>
+      <td>Alt + Home</td>
+    </tr>
+    <tr>
+      <td>Go to previous directory in history (also in other file dialogs)</td>
+      <td>Alt + Left arrow</td>
+      <td>Alt + Left arrow</td>
+    </tr>
+    <tr>
+      <td>Go to next directory in history (also in other file dialogs)</td>
+      <td>Alt + Right arrow</td>
+      <td>Alt + Right arrow</td>
+    </tr>
+    <tr>
       <td>Go to parent directory (also in other file dialogs)</td>
-      <td>Backspace</td>
-      <td>Backspace</td>
+      <td>Backspace, Alt + Up arrow</td>
+      <td>Backspace, Alt + Up arrow</td>
+    </tr>
+    <tr>
+      <td>Remove from 'Recently Played' or 'Most Popular' folder</td>
+      <td>Control + X</td>
+      <td>Control + X</td>
+    </tr>
+    <tr>
+      <td>Toggle favorite</td>
+      <td>Control + F</td>
+      <td>Control + F</td>
+    </tr>
+    <tr>
+      <td>Open Game properties dialog</td>
+      <td>Control + G</td>
+      <td>Control + G</td>
     </tr>
     <tr>
       <td>Open Power-On options dialog</td>
@@ -2269,12 +2333,38 @@
       <td>Control + H</td>
     </tr>
     <tr>
+      <td>Toggle file extensions display</td>
+      <td>Control + E</td>
+      <td>Control + E</td>
+    </tr>
+    <tr>
+      <td>Toggle search ROMs in subdirectories too</td>
+      <td>Control + D</td>
+      <td>Control + D</td>
+    </tr>
+    <tr>
+      <td>Toggle show all files</td>
+      <td>Control + A</td>
+      <td>Control + A</td>
+    </tr>
+    <tr>
+      <td>Toggle favorites sorting (normal or alternative)</td>
+      <td>Control + S</td>
+      <td>Control + S</td>
+    </tr>
+    <tr>
       <td>Reload ROM listing</td>
       <td>Control + R</td>
       <td>Control + R</td>
     </tr>
+    <tr>
+      <td>Open Options dialog</td>
+      <td>Control + O</td>
+      <td>Control + O</td>
+    </tr>
   </table>
 
+  </br>
   <p><b>UI Keys in Text Editing areas (cannot be remapped)</b></p>
 
   <table BORDER=2 cellpadding=4>
@@ -2419,7 +2509,7 @@
 
   <table BORDER=2 cellpadding=4>
     <tr>
-      <th>&nbsp;</th>
+      <th></th>
       <th colspan="5">Computer</th>
     </tr>
     <tr>
@@ -2605,10 +2695,10 @@
   score of the first player can be saved.</p>
 
   <p><b>High Scores</b> dialog:</p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
       <td><img src="graphics/highscores.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
       <table border="1" cellpadding="4">
         <tr><th>Item</th><th>Description</th></tr>
@@ -2678,7 +2768,7 @@
     </tr>
 
     <tr>
-      <td><pre>-video &lt;direct3d|opengl|opengles2|opengles|software&gt;</pre></td>
+      <td><pre>-video &lt;direct3d|metal|opengl|opengles2|opengles|software&gt;</pre></td>
       <td>Use the given rendering backend (where applicable); default is the best available
           mode detected.</td>
     </tr>
@@ -2796,6 +2886,11 @@
       <td>Enable or disable display of message in the UI. Note that messages
         indicating serious errors override this setting, and are always
         shown.</td>
+    </tr>
+    <tr>
+      <td><pre>-autopause &lt;1|0&gt;</pre></td>
+      <td>Enable or disable automatic pause/continue of emulation when
+        Stella loses/gains focus.</td>
     </tr>
     <tr>
       <td><pre>-pausedim &lt;1|0&gt;</pre></td>
@@ -3049,6 +3144,11 @@
     </tr>
 
     <tr>
+      <td><pre>-autofire &lt;1|0&gt;</pre></td>
+      <td>Set auto fire mode on or off.</td>
+    </tr>
+
+    <tr>
       <td><pre>-autofirerate &lt;0 - 30&gt;</pre></td>
       <td>Automatic trigger rate of the fire buttons in Hz (0 = disabled)</td>
     </tr>
@@ -3214,9 +3314,40 @@
     </tr>
 
     <tr>
+      <td><pre>-launcherbuttons &lt;1|0&gt;</pre></td>
+      <td>Enable bottom buttons in the ROM launcher.</td>
+    </tr>
+
+    <tr>
       <td><pre>-launcherroms &lt;1|0&gt;</pre></td>
       <td>Specifies whether to show ROMs only (the default) or all
         files in the ROM launcher.</td>
+    </tr>
+
+    <tr>
+      <td><pre>-launcherextensions &lt;1|0&gt;</pre></td>
+      <td>Display file extensions in the ROM launcher.</td>
+    </tr>
+
+    <tr>
+      <td><pre>-launchersubdirs &lt;1|0&gt;</pre></td>
+      <td>Specifies whether the ROM launcher lists files from current
+        directory only or all subdirectories too.</td>
+    </tr>
+
+    <tr>
+      <td><pre>-favorites &lt;1|0&gt;</pre></td>
+      <td>Enable favorites tracking and display.</td>
+    </tr>
+
+    <tr>
+      <td><pre>-altsorting &lt;1|0&gt;</pre></td>
+      <td>Use alternative sorting in virtual favorites folders.</td>
+    </tr>
+
+    <tr>
+      <td><pre>-maxrecentroms &lt;number&gt;</pre></td>
+      <td>Set number of ROMs tracked in 'Recently Played' folder (default = 20).</td>
     </tr>
 
     <tr>
@@ -3660,8 +3791,8 @@
       <td>When enabled, each external access (AtariVox/SaveKey EEPROM, PlusROM, Supercharger...)
         is signalled by a message.</td>
     </tr><tr>
-      <td><pre>-dev.tia.type &lt;standard|koolaidman|cosmicark|</br>  pesco|quickstep|indy500|heman|custom&gt;</pre></td>
-      <td>Set emulated TIA type.</td>
+      <td><pre>-dev.tia.type &lt;standard|koolaidman|</br>  cosmicark|pesco|quickstep|matchie|</br>  indy500|heman|custom&gt;</pre></td>
+      <td>Set emulated TIA type. Only with 'custom' the following TIA options become relevant.</td>
     </tr><tr>
       <td><pre>-dev.tia.plinvphase &lt;1|0&gt;</pre></td>
       <td>Enable/disable inverted HMOVE clock phase for players (Kool Aid Man glitch).</td>
@@ -3678,6 +3809,9 @@
       <td><pre>-dev.tia.delaypfcolor &lt;1|0&gt;</pre></td>
       <td>Enable/disable playfield color delayed by one color clock (colored step borders in Quick Step!).</td>
     </tr><tr>
+      <td><pre>-dev.tia.pfscoreglitch &lt;1|0&gt;</pre></td>
+      <td>Enable/disable earlier playfield score mode color color switch (center vertical line in Matchie).</td>
+    </tr><tr>
       <td><pre>-dev.tia.delaybkcolor &lt;1|0&gt;</pre></td>
       <td>Enable/disable background color delayed by one color clock (stray pixels in Indy 500 menu hack).</td>
     </tr><tr>
@@ -3691,9 +3825,12 @@
       <td>Enable TV jitter/roll effect, when there are too many or too few scanlines
         per frame.</td>
     </tr><tr>
+      <td><pre>-&lt;plr.|dev.&gt;tv.jitter_sense &lt;1 - 10&gt;</pre></td>
+      <td>When TV jitter/roll effect is enabled, determines the sensitivy to varying frame timings.</td>
+    </tr><tr>
       <td><pre>-&lt;plr.|dev.&gt;tv.jitter_recovery &lt;1 - 20&gt;</pre></td>
-      <td>When TV jitter/roll effect is enabled, determines how long to delay recovery
-        time (recovery spread over multiple frames).</td>
+      <td>When TV jitter/roll effect is enabled, determines the recovery time for screen rolling
+        (recovery spread over multiple frames).</td>
     </tr><tr>
       <td><pre>-&lt;plr.|dev.&gt;colorloss &lt;1|0&gt;</pre></td>
       <td>Enable/disable the PAL color-loss effect.</td>
@@ -3702,7 +3839,7 @@
       <td>Enable/disable the fixed debug colors.</td>
     </tr><tr>
       <td><pre>-&lt;plr.|dev.&gt;timemachine &lt;1|0&gt;</pre></td>
-      <td>Enable/disable the Time Machine</td>
+      <td>Enable/disable the Time Machine.</td>
     </tr><tr>
       <td><pre>-&lt;plr.|dev.&gt;tm.size &lt;20 - 1000&gt;</pre></td>
       <td>Define the Time Machine buffer size.</td>
@@ -3734,10 +3871,10 @@
   <img src="graphics/options.png">
   <br><br>
   <p><b><a name="VideoAudio">Video & Audio Settings</a></b> dialog <a name="VideoAudioDisplay">(Display):</a></p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
-      <td><img src="graphics/options_video.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top"><img src="graphics/options_video.png"></td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
@@ -3760,10 +3897,10 @@
   <br>
 
   <p><b>Video & Audio Settings</b> dialog <a name="VideoAudioPalettes">(Palettes):</a></p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
-      <td><img src="graphics/options_video_palettes.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top"><img src="graphics/options_video_palettes.png"></td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
@@ -3784,10 +3921,10 @@
   <br>
 
   <p><b>Video & Audio Settings</b> dialog <a name="VideoAudioEffects">(TV Effects)</a>:</p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
-      <td><img src="graphics/options_video_tv.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top"><img src="graphics/options_video_tv.png"></td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
@@ -3812,10 +3949,10 @@
   <br>
 
   <p><b>Video & Audio Settings</b> dialog <a name="VideoAudioAudio">(Audio)</a>:</p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
-      <td><img src="graphics/options_audio.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top"><img src="graphics/options_audio.png"></td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
@@ -3857,10 +3994,10 @@
   <br>
 
   <p><b><a name="Emulation">Emulation</a></b> dialog:</p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
-      <td><img src="graphics/options_emulation.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top"><img src="graphics/options_emulation.png"></td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
@@ -3870,6 +4007,10 @@
           <tr><td>Multi-threading</td><td>Enable multi-threaded rendering</td><td>-threads</td></tr>
           <tr><td>Fast SuperCharger load</td><td>Skip progress loading bars for SuperCharger ROMs</td><td>-fastscbios</td></tr>
           <tr><td>Show UI messages</td><td>Overlay UI messages onscreen</td><td>-uimessages</td></tr>
+          <tr><td>
+            Automatic pause</td><td>Enable or disable automatic pause/continue of emulation
+            when Stella loses/gains focus.</td><td>-autopause
+          </td></tr>
           <tr><td>Confirm exiting...</td><td>Display a popup when emulation is exited</td><td>-confirmexit</td></tr>
           <tr>
             <td>When entering/exiting emulation:</td>
@@ -3894,20 +4035,21 @@
   <br>
 
   <p><b><a name="Input">Input Settings</a></b> dialog:</p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
-      <td><img src="graphics/eventmapping.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top"><img src="graphics/eventmapping.png"></td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top"><br>This dialog is described in further detail in
       <b>Advanced Configuration - <a href="#Remapping">Event Remapping</a></b>.</td>
     </tr>
   </table>
   <br>
+
   <p><b><a name="UserInterface">User Interface Settings</b></a> dialog (2 tabs):</p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
-      <td><img src="graphics/options_misc.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top"><img src="graphics/options_misc.png"></td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
@@ -3924,9 +4066,9 @@
         </table>
       </td>
     </tr>
-    <tr>
+    <tr style="border:hidden">
       <td><img src="graphics/options_misc_dark.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td><img src="graphics/options_misc_classic.png"></td>
     </tr>
     <tr>
@@ -3934,10 +4076,10 @@
     </tr>
   </table>
   <br>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
       <td><img src="graphics/options_ui.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top"><br>This tab is described in further detail in
         <b>Advanced Configuration - <a href="#ROMInfo">ROM Launcher</a></b>.</td>
     </tr>
@@ -3945,14 +4087,14 @@
   <br>
   <a name="Snapshots"></a>
   <p><b>Snapshot Settings</b> dialog:</p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
-      <td>
+      <td valign="top">
         <img src="graphics/launcher_options_snapshots.png">
         <br><br>
         A snapshot archive can be downloaded <a href="https://stella-emu.github.io/stella-snapshots.zip">here</a>.
       </td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
@@ -3968,10 +4110,10 @@
   </table>
   <br>
   <p><b><a name="Developer">Developer Settings</a></b> dialog:</p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
       <td><img src="graphics/options_developer.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top"><br>This tab is described in further detail in
         <b>Advanced Configuration - <a href="#Debugger">Developer Options/Integrated Debugger</a></b>.</td>
       </td>
@@ -3979,10 +4121,10 @@
   </table>
   <br>
   <p><b><a name="GameProperties">Game Properties</a></b> dialog:</p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
       <td><img src="graphics/options_gameinfo_emulation.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top"><br>This dialog allows you to change all ROM properties
         as described in <b>Advanced Configuration - <a href="#Properties">Game Properties</a></b>.
       </td>
@@ -3990,10 +4132,10 @@
   </table>
   <br>
   <p><b><a name="Audit">Audit ROMs</a></b> dialog:</p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
       <td><img src="graphics/romaudit.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top"><br>This dialog is described in further detail in
         <b>Advanced Configuration - <a href="#ROMAudit">ROM Audit Mode</a></b>.</td>
     </tr>
@@ -4045,6 +4187,7 @@
 
   <p>The following screenshots illustrate the event remapping process:<br><br>
   <img src="graphics/eventmapping.png">
+  &nbsp;&nbsp;
   <img src="graphics/eventmapping_remap.png">
 
   <p>Finally there is a <a name="Combo">'Combo'</a> button in the 'Emulation Events' tab, accessible
@@ -4059,10 +4202,10 @@
   </p></br>
 
   <p><b><a name="DevicesPorts">Device and port</a></b> settings can be configured under the 'Devices & Ports' tab, shown below:</p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
-      <td><img src="graphics/eventmapping_devsports.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top"><img src="graphics/eventmapping_devsports.png"></td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
@@ -4079,7 +4222,8 @@
                   </td><td>-dejitter.base</td></tr>
           <tr><td>(Analog paddle) Dejitter reaction</td><td>Strength of paddle reaction to fast paddle movements, suppresses paddle jitter</td><td>-dejitter.diff</td></tr>
           <tr><td>Digital paddle sensitivity</td><td>Sensitivity used when emulating a paddle using a digital device</td><td>-dsense</td></tr>
-          <tr><td>Autofire rate</td><td>Automatic trigger rate of the fire buttons in Hz</td><td>-autofirerate</td></tr>
+          <tr><td>Autofire</td><td>Set auto fire mode on or off</td><td>-autofire</td></tr>
+          <tr><td>(Autofire) Rate</td><td>Automatic trigger rate of the fire buttons in Hz</td><td>-autofirerate</td></tr>
           <tr><td>Allow all 4 directions ...</td><td>Allow all 4 joystick directions to be pressed simultaneously</td><td>-joyallow4</td></tr>
           <tr><td>Use modifier key combos</td><td>Enable using modifier keys in keyboard actions</td><td>-modcombo</td></tr>
           <tr><td>Swap Stelladaptor ports</td><td>Swap the order of the detected Stelladaptors/2600-daptors (see <b>Advanced Configuration - <a href="#Adaptor">Stelladaptor/2600-daptor Support</a></b>)</td><td>-saport</td></tr>
@@ -4092,10 +4236,10 @@
   </table>
 
   <p><b><a name="Mouse">Mouse</a></b> settings can be configured under the 'Mouse' tab, shown below:</p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
       <td><img src="graphics/eventmapping_mouse.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
@@ -4143,25 +4287,19 @@
   <p>The following snapshots illustrate the various font sizes and rom info
   widths:</p>
 
-  <p>ROM Info Viewer width at 40%, UI sized 800x480, small launcher font:</p>
+  <p>ROM Info Viewer width at 40%, UI sized 800x480, small launcher font, bottom buttons enabled:</p>
   <img src="graphics/rominfo_1x_small.png">
 
-  <p>ROM Info Viewer width at 32%, UI sized 1000x720, medium launcher font:</p>
+  <p>ROM Info Viewer width at 32%, UI sized 900x720, medium launcher font, bottom buttons disabled::</p>
   <img src="graphics/rominfo_1x_large.png">
 
-  <p>ROM Info Viewer width at 50% , UI sized 1280x900, large launcher font:</p>
+  <p>ROM Info Viewer width at 50% , UI sized 1280x900, large launcher font, bottom buttons disabled::</p>
   <img src="graphics/rominfo_2x_small.png">
 
-  <p>The dialog items at the top can be used to define the listed files:</p>
+  <p>The dialog items at the top can be used to define the listed files and to navigate your folders:</p>
 
   <ul>
     <li>
-      The 'Show all files' checkbox allows displaying files which do not
-      have a valid ROM extension.
-    </li><li>
-      If 'Incl. subdirectories' is checked, Stella will list matching files
-      from all subdirectories too.
-    </li><li>
       The 'Filter' text box can be used to narrow down the results in the
       ROM listing. When this box is empty, all files are shown. Typing
       characters here will show only those files that match that
@@ -4173,55 +4311,131 @@
       wildcards. E.g. for '(198?)*atari' only ROMs from the 1980s made by
       Atari will be listed.
     </li>
+    <li>
+    <img src="graphics/show_roms.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px">
+    <img src="graphics/show_all.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px; margin-right: 4px">
+      Display either files which do have a valid ROM extension or all files.
+    </li><li>
+    <img src="graphics/show_current_dir.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px">
+    <img src="graphics/show_sub_dirs.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px; margin-right: 4px">
+      Display either files from current directory only or all subdirectories too.
+    </li><li>
+    <img src="graphics/open_help.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px; margin-right: 4px">
+      Open this help for the launcher.
+    </li><li>
+    <img src="graphics/navigation_buttons.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px; margin-right: 4px">
+      Quick folder navigation buttons; the path display allows direct navigation by clicking an element.
+    </li><li>
+    <img src="graphics/reload_list.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px; margin-right: 4px">
+      Reload the list.
+    </li>
   </ul>
+  </br>
+
+  <h3><b><a name="FavoriteROMs">Favorite ROMs and Directories</a></b></h3>
+  Stella allows to manually favor ROMs and directories and also automatially
+  tracks all played ROMs. These ROMs are presented in three virtual directories:
+  <ul>
+    <li>
+      <p><b>Favorites</b>: Lists all ROMs and directories manually favored by
+      the user (see
+      <b><a href="#ROMLauncherContextMenu">ROM Launcher Context Menu</a></b>).
+      </p>
+    </li>
+    <li>
+      <p><b>Recently Played</b>: Contains the recently played ROMs. By default
+      the latest 20 ROMs are tracked (the <b><a href="#CommandLine">Command Line</a></b>
+      parameter '-maxrecentroms' allows changing the number of tracked ROMs).</p>
+    </li>
+    <li>
+      <p><b>Most Popular</b>: Stella automatically creates a list of most
+      frequently and lately played ROMs. This list is presented here.</p>
+    </li>
+  </ul>
+  <p>The directories are only displayed when they are not empty (e.g. no
+  favored ROMs) and are only present in the current ROM path. Their default ROM
+  sort order can be changed (see
+  <b><a href="#ROMLauncherContextMenu">ROM Launcher Context Menu</a></b>).</p>
   </br>
 
   <h3><b><a name="ROMLauncherContextMenu">ROM Launcher Context Menu</a></b></h3>
 
-  <p>The ROM launcher also contains a context menu, selected by clicking the
-  right mouse button in the ROM list. This context menu
-  contains the following items:</p>
+  <p>The ROM launcher also contains a context menu, opened by clicking the
+  right mouse button in the ROM list or by a long controller button press.
+  This context menu can contain the following items:</p>
 
-  <p><ol>
-    <li><p><b><a name="PowerOn">Power-on options</a></b>: Selecting this option shows a dialog whereby
-    ROM properties can be temporarily overridden, and joystick/console buttons can be
-    temporarily held down. Selecting options from this dialog will cause all ROMs launched
-    after that to use those properties you specify. Clicking <b>Defaults</b> will disable
-    its functionality, and use ROM properties as defined by the ROM itself. The dialog is as
-    follows (see <b>Advanced Configuration - <a href="#Properties">Game Properties</a></b>
-    for more information concerning ROM properties):</p>
-    <table border="5" cellpadding="2" frame="box" rules="none">
-      <tr>
-        <td><img src="graphics/launcher_override.png"></td>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-        <td valign="top">
-          <table border="1" cellpadding="4">
-            <tr><th>Item</th><th>For more information,<br>see <a href="#CommandLine">Commandline</a></th></tr>
-            <tr><td>Bankswitch type</td><td>-bs</td></tr>
-            <tr><td>TV type</td><td>-tv</td></tr>
-            <tr><td>Left difficulty</td><td>-ld</td></tr>
-            <tr><td>Right difficulty</td><td>-rd</td></tr>
-            <tr><td>Startup mode</td><td>-debug</td></tr>
-            <tr><td>Left joy items</td><td>-holdjoy0</td></tr>
-            <tr><td>Right joy items</td><td>-holdjoy1</td></tr>
-            <tr><td>Console: Select</td><td>-holdselect</td></tr>
-            <tr><td>Console: Reset</td><td>-holdreset</td></tr>
-          </table>
-          <p></p>
-        </td>
-      </tr>
-    </table>
-    <p>This dialog can also be opened by pressing 'Control + P'.</p>
+  <p><ul>
+    <li>
+      <p><b>Remove from recently played/most popular</b> (or 'Control + X'):
+        Removes the selected ROM from the current virtual folder.</p>
     </li>
-    <li><b>High scores</b>: This option displays the <a href="#HighScores">
-    High Scores</a> dialog for the selected ROM. Only available if high score
-    properties have been setup for the ROM. Also available via 'Control + H' keys combo.</li>
+    <li>
+      <p><b>Add to/remove from favorites</b> (or 'Control + F'): Toggles the
+        favorite state of the selected ROM or directory.</p>
     </li>
-    <br><li><b>Reload listing</b>: Selecting this performs a reload of the
-    current listing. It is an alternative to pressing the 'Control + R'
-    key combo.</li>
-  </ol></p>
+    <li>
+      <p><b>Game properties</b> (or 'Control + G'): Opens the
+        <b><a href="#Properties">Game properties</a></b> dialog.</p>
+    </li>
+    <li><p><b><a name="PowerOn">Power-on options</a></b> (or 'Control + P'):
+      Opens a dialog whereby ROM properties can be temporarily overridden, and
+      joystick/console buttons can be temporarily held down. Selecting options
+      from this dialog will cause all ROMs launched after that to use those
+      properties you specify. Clicking <b>Defaults</b> will disable its
+      functionality, and use ROM properties as defined by the ROM itself. The dialog is as
+      follows (see <b>Advanced Configuration - <a href="#Properties">Game Properties</a></b>
+      for more information concerning ROM properties):</p>
+      <table style="border:hidden">
+        <tr>
+          <td><img src="graphics/launcher_override.png"></td>
+          <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td valign="top">
+            <table border="1" cellpadding="4">
+              <tr><th>Item</th><th>For more information,<br>see <a href="#CommandLine">Commandline</a></th></tr>
+              <tr><td>Bankswitch type</td><td>-bs</td></tr>
+              <tr><td>TV type</td><td>-tv</td></tr>
+              <tr><td>Left difficulty</td><td>-ld</td></tr>
+              <tr><td>Right difficulty</td><td>-rd</td></tr>
+              <tr><td>Startup mode</td><td>-debug</td></tr>
+              <tr><td>Left joy items</td><td>-holdjoy0</td></tr>
+              <tr><td>Right joy items</td><td>-holdjoy1</td></tr>
+              <tr><td>Console: Select</td><td>-holdselect</td></tr>
+              <tr><td>Console: Reset</td><td>-holdreset</td></tr>
+            </table>
+            <p></p>
+          </td>
+        </tr>
+      </table>
+    </li>
+    <li>
+      <p><b>High scores</b> (or 'Control + H'): Opens the
+      <b><a href="#HighScores"></b>High Scores</a> dialog for the selected ROM.
+      Only available if high score properties have been setup for the ROM.</p>
+    </li>
+    <li>
+      <p><b>Enable/disable file extensions</b> (or 'Control + E'): Toggles the
+      display of the file extensions.</p>
+    </li>
+    <li>
+      <p><b>Toggle alternative sorting</b> (or 'Control + S'): Toggles
+      alternative sorting in the virtual directories.</p>
+    </li>
+    <li>
+      <p><b>Show all files/only ROMs</b> (or 'Control + A'): Toggles display of
+      non-ROM files.</p>
+    </li>
+    <li>
+      <p><b>Include/exclude subdirectories</b> (or 'Control + D'): Toggles searching
+      of ROMs in current directory only or all subdirectories too.</p>
+    </li>
+    <li>
+      <p><b>Reload listing</b> (or 'Control + R'): Performs a reload of the
+      current file listing. </p>
+    </li>
+  </ul></p>
   </blockquote></br>
+
+
 
   <h2><b><a name="ROMAudit">ROM Audit Mode</a></b></h2>
   <blockquote>
@@ -4356,10 +4570,10 @@
   for different use cases (playing or developing games) at once.</p>
 
   <p><b>Developer Settings</b> dialog <a name="DeveloperEmulator">(Emulator)</a></p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
-      <td><img src="graphics/options_developer_emulation.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top"><img src="graphics/options_developer_emulation.png"></td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr>
@@ -4440,10 +4654,10 @@
   </table>
 
   <p><b>Developer Settings</b> dialog <a name="DeveloperTIA">(TIA):</a></p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
-      <td><img src="graphics/options_developer_tia.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top"><img src="graphics/options_developer_tia.png"></td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
     <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
@@ -4453,10 +4667,10 @@
     <tr><td>Inverted HMOVE clock...</td><td>Emulates the Kool-Aid Man
       collision and Cosmic Ark stars glitches for the given objects.</td>
       <td>-dev.tia.plinvphase</br>-dev.tia.msinvphase</br>-dev.tia.blinvphase</td></tr>
-    <tr><td>Delayed Playfield</td><td>Emulates playfield register changes delayed
+    <tr><td>Delayed Playfield</td><td>Emulates playfield changes moved
       by one color clock. This e.g. causes glitches in Pesco (stray playfield
-      pixel) and Quick Step! (colored step borders).</td>
-      <td>-dev.tia.delaypfbits</br>-dev.tia.delaypfcolor</td></tr>
+      pixel), Quick Step! (colored step borders) and Matchie (vertical line at pixel 79).</td>
+      <td>-dev.tia.delaypfbits</br>-dev.tia.delaypfcolor</br>-dev.tia.pfscoreglitch</td></tr>
     <tr><td>Delayed Background</td><td>Emulates background color register changes delayed
       by one color clock. This causes stray pixel in the Indy 500 menu hack.</td>
       <td>-dev.tia.delaybkcolor</td></tr>
@@ -4470,14 +4684,15 @@
   </table>
 
   <p><b>Developer Settings</b> dialog <a name="DeveloperVideo">(Video)</a>:</p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
-      <td><img src="graphics/options_developer_video.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top"><img src="graphics/options_developer_video.png"></td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
           <tr><td>Jitter/roll effect</td><td>Emulate screen roll with inconsistent scanline count</td><td>-plr.tv.jitter<br/>-dev.tv.jitter</td></tr>
+          <tr><td>(Jitter/roll) Sensitivity</td><td>Determines sensitivity for screen rolling</td><td><span style="white-space:nowrap">-plr.tv.jitter_sense<br/>-dev.tv.jitter_sense</span></td></tr>
           <tr><td>(Jitter/roll) Recovery</td><td>Determines recovery time for screen rolling</td><td><span style="white-space:nowrap">-plr.tv.jitter_recovery<br/>-dev.tv.jitter_recovery</span></td></tr>
           <tr><td>PAL color-loss</td><td>Use PAL color-loss effect</td><td>-plr.colorloss<br/>-dev.colorloss</td></tr>
           <tr><td>Debug colors</td><td>Use fixed debug colors</td><td>-plr.debugcolors<br/>-dev.debugcolors</td></tr>
@@ -4497,10 +4712,10 @@
   </table>
 
   <p><b>Developer Settings</b> dialog <a name="DeveloperTimeMachine">(Time Machine)</a></p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
-      <td><img src="graphics/options_developer_timemachine.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top"><img src="graphics/options_developer_timemachine.png"></td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr>
@@ -4552,10 +4767,10 @@
   </table>
 
   <p><b>Developer Settings</b> dialog <a name="DeveloperDebugger">(Debugger)</a></p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
-      <td><img src="graphics/options_developer_debugger.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top"><img src="graphics/options_developer_debugger.png"></td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
@@ -4790,10 +5005,10 @@ Ms Pac-Man (Stella extended codes):
   you to see this information from within the UI. This can be selected from the main
   Options menu, where it is labelled "System Logs". Clicking on the button will show
   a window similar to the following:</p>
-  <table border="5" cellpadding="2" frame="box" rules="none">
+  <table style="border:hidden">
     <tr>
       <td><img src="graphics/logs.png"></td>
-      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>For more information,<br>see <a href="#CommandLine">Commandline</a></th></tr>
@@ -4862,7 +5077,8 @@ Ms Pac-Man (Stella extended codes):
       are not fully supported in the debugger.
       <table cellpadding="2" border="1">
         <tr><th>&nbsp;Type&nbsp;</th><th>Description</th><th>File Extension<br>(to force type)</th></tr>
-        <tr><td>0840 </td><td>8K ECONObanking </td><td>.084, .0840</td></tr>
+        <tr><td>0840 </td><td>8K EconoBanking</td><td>.084, .0840</td></tr>
+        <tr><td>0FA0 </td><td>8K Fotomania</td><td>.0FA, .0FA0</td></tr>
         <tr><td>2IN1 &#185;</td><td>4-64K Multicart (2 games)</td><td>.2N1 </td></tr>
         <tr><td>4IN1 &#185;</td><td>8-64K Multicart (4 games)</td><td>.4N1 </td></tr>
         <tr><td>8IN1 &#185;</td><td>16-64K Multicart (8 games)</td><td>.8N1 </td></tr>
@@ -4930,10 +5146,10 @@ Ms Pac-Man (Stella extended codes):
       by using one of the following pattern in the filename.
       <table cellpadding="2" border="1">
         <tr><th>&nbsp;Format&nbsp;</th><th>Filename Pattern (to force format)</th></tr>
-        <tr><td>NTSC</td><td>NTSC, NTSC60, NTSC 60, NTSC-60</td></tr>
+        <tr><td>NTSC</td><td>NTSC, NTSC60, NTSC 60, NTSC-60, PAL-M</td></tr>
         <tr><td>PAL</td><td>PAL, PAL50, PAL 50, PAL-50</td></tr>
         <tr><td>SECAM &#185;</td><td>SECAM, SECAM50, SECAM 50, SECAM-50</td></tr>
-        <tr><td>NTSC50 &#185;</td><td>NTSC50, NTSC 50, NTSC-50</td></tr>
+        <tr><td>NTSC50 &#185;</td><td>NTSC50, NTSC 50, NTSC-50, PAL-N</td></tr>
         <tr><td>PAL60 &#185;</td><td>PAL60, PAL 60, PAL-60</td></tr>
         <tr><td>SECAM60 &#185;</td><td>SECAM60, SECAM 60, SECAM-60</td></tr>
       </table></td>

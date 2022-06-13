@@ -16,12 +16,12 @@ export class A7800Emulator extends EmulatorBase {
     // Hopefully one-day I'll work out how to hot-load into settings
     // so we can dynamically configure
     protected readonly RegionList: Map<string, string> = new Map([
-        ["Atari 7800 (NTSC) Cool","a7800"], 
-        ["Atari 7800 (NTSC) Warm","a7800u1"],
+        ["Atari 7800 (NTSC) Cool","a7800u1"], 
+        ["Atari 7800 (NTSC) Warm","a7800"],
         ["Atari 7800 (NTSC) Hot","a7800u2"],
         ["Atari 7800 (NTSC) Developer Mode","a7800dev"],
-        ["Atari 7800 (PAL) Cool","a7800p"],
-        ["Atari 7800 (PAL) Warm","a7800pu1"],
+        ["Atari 7800 (PAL) Cool","a7800pu1"],
+        ["Atari 7800 (PAL) Warm","a7800p"],
         ["Atari 7800 (PAL) Hot","a7800pu2"],
         ["Atari 7800 (PAL) Developer Mode","a7800pdev"]
     ]);

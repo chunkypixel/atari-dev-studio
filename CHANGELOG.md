@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.7.5
+
+* Updated Stella to v6.7.0 (Windows, Linux [Deb], macOS). Note: Linux 32-bit is currently v6.2
+* Fixed issue with A7800 Warm and Cool definitions being switched (both NTSC and PAL)
+
 ## 0.7.4
 
 * Updated internal packages (requires VS Code v1.66.0 or better)

@@ -14,7 +14,7 @@
 		</data>
 		<key>Resources/Credits.html</key>
 		<data>
-		CpGY5I6ir+aK4gm+VLeU/cbTyIc=
+		ZkJRdATvSNfSl5t/tZEP8pF33ug=
 		</data>
 		<key>Resources/SDLMain.nib</key>
 		<data>
@@ -38,7 +38,7 @@
 		</data>
 		<key>Resources/docs/debugger.html</key>
 		<data>
-		F7z95OGHMPEnyHcMxrBvpjQZFq0=
+		f/haEeoqdNn0pF5vKf9DPoBr924=
 		</data>
 		<key>Resources/docs/graphics/Stella_icon.png</key>
 		<data>
@@ -158,7 +158,7 @@
 		</data>
 		<key>Resources/docs/graphics/eventmapping_devsports.png</key>
 		<data>
-		wgF1lkJ4Vz5ncnm/+Ft39THhJ7k=
+		9KLtzUu9etOicCev4QCBgh5GwfU=
 		</data>
 		<key>Resources/docs/graphics/eventmapping_mouse.png</key>
 		<data>
@@ -178,7 +178,7 @@
 		</data>
 		<key>Resources/docs/graphics/launcher.png</key>
 		<data>
-		e1AhG7kfr7lKwOY7XacWtYCblFM=
+		nxL2tS31T4ZSgPJWG2S4KRcLQeo=
 		</data>
 		<key>Resources/docs/graphics/launcher_options_snapshots.png</key>
 		<data>
@@ -191,6 +191,14 @@
 		<key>Resources/docs/graphics/logs.png</key>
 		<data>
 		SGc6ORo0/1rcM5IOoPesFp4Bd6A=
+		</data>
+		<key>Resources/docs/graphics/navigation_buttons.png</key>
+		<data>
+		B/EBnzEHwXXYg3R1K+YW6zyeVP4=
+		</data>
+		<key>Resources/docs/graphics/open_help.png</key>
+		<data>
+		IVObsYt1pw61mxGP+fmPkXStmrs=
 		</data>
 		<key>Resources/docs/graphics/options.png</key>
 		<data>
@@ -214,7 +222,7 @@
 		</data>
 		<key>Resources/docs/graphics/options_developer_tia.png</key>
 		<data>
-		wzGmFr69gJ0Ep8UU2Sq3yXgfIy8=
+		un5acGs1cL53xuEf45FfX8b+yfs=
 		</data>
 		<key>Resources/docs/graphics/options_developer_timemachine.png</key>
 		<data>
@@ -222,11 +230,11 @@
 		</data>
 		<key>Resources/docs/graphics/options_developer_video.png</key>
 		<data>
-		XKgfn1CfTPV5vc1W2r9aSEha/hg=
+		2aTGGkmPbdPY/ngM7sjdzGTsp2U=
 		</data>
 		<key>Resources/docs/graphics/options_emulation.png</key>
 		<data>
-		o7HYlGbw5439e+x2+i+8xogRSD0=
+		VZu2ijWe0/XdpsgbkShmunQQLZo=
 		</data>
 		<key>Resources/docs/graphics/options_gameinfo_cartridge.png</key>
 		<data>
@@ -270,7 +278,7 @@
 		</data>
 		<key>Resources/docs/graphics/options_ui.png</key>
 		<data>
-		nzuVAkcdCx/AgzxnR6RqP51P6T0=
+		UyzJP2FWZVK4am8IKet+64032MU=
 		</data>
 		<key>Resources/docs/graphics/options_video.png</key>
 		<data>
@@ -292,6 +300,10 @@
 		<data>
 		wIHsq3RTIIRsL/xkPsaLy1GO4+A=
 		</data>
+		<key>Resources/docs/graphics/reload_list.png</key>
+		<data>
+		o/sqAhrTUgLDgMNzKnRCN5NWFYc=
+		</data>
 		<key>Resources/docs/graphics/resources/debugger_main.pdn</key>
 		<data>
 		Vy3q3HWmZ0S+XifmBfNZ1cgf7C0=
@@ -306,19 +318,35 @@
 		</data>
 		<key>Resources/docs/graphics/rominfo_1x_large.png</key>
 		<data>
-		U3fNBWaPSa2jibfGfxD3mc/WXh4=
+		1iBk105vWbA3BCQcEi+lbsucZ64=
 		</data>
 		<key>Resources/docs/graphics/rominfo_1x_small.png</key>
 		<data>
-		yTKccVWoOy33LaclT7uZu3hpmgk=
+		q0omCLOHZuzSiU+koDlubunvz/8=
 		</data>
 		<key>Resources/docs/graphics/rominfo_2x_small.png</key>
 		<data>
-		Hv6bAM4Oz2pookS+OJDD880HnQo=
+		AxruXvESo9gfpHYBJkdYHb8c+jw=
 		</data>
 		<key>Resources/docs/graphics/secret_quest.png</key>
 		<data>
 		oy11177ua9b4auo0oAQ7+RPVwgQ=
+		</data>
+		<key>Resources/docs/graphics/show_all.png</key>
+		<data>
+		Iy/e+AFyg0vU9KuHfWyiL4Kc+Wk=
+		</data>
+		<key>Resources/docs/graphics/show_current_dir.png</key>
+		<data>
+		MbcqFq7utXRNXF/O+xTkk7B4Sb0=
+		</data>
+		<key>Resources/docs/graphics/show_roms.png</key>
+		<data>
+		xAkwqOg2LPjNVBam4fuXIx3psdA=
+		</data>
+		<key>Resources/docs/graphics/show_sub_dirs.png</key>
+		<data>
+		7mTVqA6APdxZ5EB2rp4V+J85Zi0=
 		</data>
 		<key>Resources/docs/graphics/space_invaders.png</key>
 		<data>
@@ -330,11 +358,11 @@
 		</data>
 		<key>Resources/docs/index.html</key>
 		<data>
-		xi4Xhe6b70oaCq0O9Elo/jWjaKQ=
+		kaefiIeGrvggeNG2NyZcB3/gdY8=
 		</data>
 		<key>Resources/docs/index_r77.html</key>
 		<data>
-		a4vYVJTt1yVAeyFJ/Uy+Ioz/lMo=
+		sU4G421ADVIKvtGxNYK29N4ydbw=
 		</data>
 		<key>Resources/en.lproj/InfoPlist.strings</key>
 		<dict>
@@ -352,10 +380,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			wpChaAxNo2zPfLSxPLKvmbFINIY=
+			QSkxlhiwp0aZKyc3lxfK7Ua9bBI=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"f95b82069bbd94a26e121b46e0d792fd2e95b6b9" or cdhash H"c290a1680c4da36ccf7cb4b13cb2af99b1483486" or cdhash H"567cd3a5d6dda888ff2fe262f64b220b8ba7390a" or cdhash H"2fd5981ee9a8f700f4d2b4f05fac0efc89bdc8a4"</string>
+			<string>cdhash H"59b988f76ac147b175e881e52620128b3a499610" or cdhash H"4129319618b0a746992b27379717caed46bd6c12" or cdhash H"b7f2ae960d91c42f40df1f07d18df1f0f554ae4f" or cdhash H"90d87d80cba006a39f9772f4c9af120d895073c6"</string>
 		</dict>
 		<key>Resources/AboutBox.nib</key>
 		<dict>
@@ -383,11 +411,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			CpGY5I6ir+aK4gm+VLeU/cbTyIc=
+			ZkJRdATvSNfSl5t/tZEP8pF33ug=
 			</data>
 			<key>hash2</key>
 			<data>
-			RipNuSzSm3YIDr4qAjAOFJ+g2P5K5nV1VkzyY1G8Ra8=
+			ZHsD3EeCDg5zbyGSBIWhKf8qXZonQjQGHd52Fno1bV0=
 			</data>
 		</dict>
 		<key>Resources/SDLMain.nib</key>
@@ -449,11 +477,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			F7z95OGHMPEnyHcMxrBvpjQZFq0=
+			f/haEeoqdNn0pF5vKf9DPoBr924=
 			</data>
 			<key>hash2</key>
 			<data>
-			9VRPuDvLW2KHQ3Dzq8ijxpaqiP8Fzluiy/T4ZuwjriM=
+			DV69UB2Sg/wUFcdpzGxa7vmbkuMuf68AXM37KjOgF6Y=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/Stella_icon.png</key>
@@ -779,11 +807,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			wgF1lkJ4Vz5ncnm/+Ft39THhJ7k=
+			9KLtzUu9etOicCev4QCBgh5GwfU=
 			</data>
 			<key>hash2</key>
 			<data>
-			NaF69UcqcrKPa7bU15TlMUyXUr2EfdB7mOK1NBN6rFw=
+			Qy8qJdyYPC+emDR9y2zjc99244C878qI7SPU1UZn3/U=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/eventmapping_mouse.png</key>
@@ -834,11 +862,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			e1AhG7kfr7lKwOY7XacWtYCblFM=
+			nxL2tS31T4ZSgPJWG2S4KRcLQeo=
 			</data>
 			<key>hash2</key>
 			<data>
-			o7USeZ1zhM0nnSzUd0kYL1e9bjBfBCz88XxqYfIiZu4=
+			xzRt+Pft0+YMZM4C7ElwOFizONwjjAHkbtC1J+8MVLs=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/launcher_options_snapshots.png</key>
@@ -872,6 +900,28 @@
 			<key>hash2</key>
 			<data>
 			tZ0tahNzwhc9QcwS0MFlrZeH7xUthxQpFkSCa3I0Ug0=
+			</data>
+		</dict>
+		<key>Resources/docs/graphics/navigation_buttons.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			B/EBnzEHwXXYg3R1K+YW6zyeVP4=
+			</data>
+			<key>hash2</key>
+			<data>
+			6kwI4W2CrPv2Htc7JmJQ/C4KC7WkPTWkHVClUaHDb4I=
+			</data>
+		</dict>
+		<key>Resources/docs/graphics/open_help.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			IVObsYt1pw61mxGP+fmPkXStmrs=
+			</data>
+			<key>hash2</key>
+			<data>
+			PXF7cnmo820mYrhnpGU7Gr5AQigdZGSkE110ul9ZIWs=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options.png</key>
@@ -933,11 +983,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			wzGmFr69gJ0Ep8UU2Sq3yXgfIy8=
+			un5acGs1cL53xuEf45FfX8b+yfs=
 			</data>
 			<key>hash2</key>
 			<data>
-			OKuVqFbQbNxN03krTg1Yotzs5fNSXC/SKjUr6aH1yWc=
+			1G8DNuDUTB0OdITAqMxD17GjNrJn9/AoATTfZdg5+Zk=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_developer_timemachine.png</key>
@@ -955,22 +1005,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			XKgfn1CfTPV5vc1W2r9aSEha/hg=
+			2aTGGkmPbdPY/ngM7sjdzGTsp2U=
 			</data>
 			<key>hash2</key>
 			<data>
-			gzFoEKSFZpfseEoU3Enq6IvKB4HERkqbACFFV+XdoQs=
+			RsqbU7B8qj88z58PDqX+fpgTrnYBkMQEBwanbXfC+wM=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_emulation.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			o7HYlGbw5439e+x2+i+8xogRSD0=
+			VZu2ijWe0/XdpsgbkShmunQQLZo=
 			</data>
 			<key>hash2</key>
 			<data>
-			Bs7V6hmfZvHbODJKhqdokvQt6bnCNiPWq4kpGqIeHKM=
+			TYtCzCpdKF0hcewMq4H+MAg2zrhFI8EL9hF5uklUSkQ=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_gameinfo_cartridge.png</key>
@@ -1087,11 +1137,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			nzuVAkcdCx/AgzxnR6RqP51P6T0=
+			UyzJP2FWZVK4am8IKet+64032MU=
 			</data>
 			<key>hash2</key>
 			<data>
-			n4nkO2Lce5WpMwZ/yu1iniFhsJpkes05RUNYlrMK4Pk=
+			r2b8b+ADS4E8Oetbe+mpLxFCi8kguFIe6lQVtYt/I/U=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/options_video.png</key>
@@ -1149,6 +1199,17 @@
 			+EXElzBUJikpxtT+DFnFXhGFc7AOXbXnGKAIrpxuYtI=
 			</data>
 		</dict>
+		<key>Resources/docs/graphics/reload_list.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			o/sqAhrTUgLDgMNzKnRCN5NWFYc=
+			</data>
+			<key>hash2</key>
+			<data>
+			2Qr+j+161BUQOcdXEshdrEi4lvSZBoivvi7tcZUgV/0=
+			</data>
+		</dict>
 		<key>Resources/docs/graphics/resources/debugger_main.pdn</key>
 		<dict>
 			<key>hash</key>
@@ -1186,33 +1247,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			U3fNBWaPSa2jibfGfxD3mc/WXh4=
+			1iBk105vWbA3BCQcEi+lbsucZ64=
 			</data>
 			<key>hash2</key>
 			<data>
-			254ADP8Rh56ylSc781IlCVhfyE5ijohRGRIt/7/W3iA=
+			8GMVSann13BaB57MJ6vgc5tAuTH94OY3GiInI1efbzI=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/rominfo_1x_small.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			yTKccVWoOy33LaclT7uZu3hpmgk=
+			q0omCLOHZuzSiU+koDlubunvz/8=
 			</data>
 			<key>hash2</key>
 			<data>
-			nyXwj63bi5xnLDHmBQfGej7VrVymxfDg/+0H4dvSPfQ=
+			t10Pbql+mp/ZOxWnnii1XQSigWXbRfyGvGHKEvO9OnU=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/rominfo_2x_small.png</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			Hv6bAM4Oz2pookS+OJDD880HnQo=
+			AxruXvESo9gfpHYBJkdYHb8c+jw=
 			</data>
 			<key>hash2</key>
 			<data>
-			97hVRcDaoVFbQMcIvrQn+l4zhpRTl5Ybx/q8W7802GU=
+			A9AaVtrwVF0/oTajdhGZNmqB38WgMm3sJftUyCOLt5A=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/secret_quest.png</key>
@@ -1224,6 +1285,50 @@
 			<key>hash2</key>
 			<data>
 			JPLk4/vIi4pgbOK9VvPr9CKq8mWAt3Z7gmqCyeQgiG8=
+			</data>
+		</dict>
+		<key>Resources/docs/graphics/show_all.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Iy/e+AFyg0vU9KuHfWyiL4Kc+Wk=
+			</data>
+			<key>hash2</key>
+			<data>
+			7ZlNfiLidfkhB5190Dc6s4I4CP1AAvqf3WZTMkpX34Q=
+			</data>
+		</dict>
+		<key>Resources/docs/graphics/show_current_dir.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			MbcqFq7utXRNXF/O+xTkk7B4Sb0=
+			</data>
+			<key>hash2</key>
+			<data>
+			Tyg6H9SAcFbbyw0M2KGPSzTX9xSqAUPIacNuO13L1I8=
+			</data>
+		</dict>
+		<key>Resources/docs/graphics/show_roms.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			xAkwqOg2LPjNVBam4fuXIx3psdA=
+			</data>
+			<key>hash2</key>
+			<data>
+			4OuQILUIz2vAuSDUyqS0RnLctnchXGAMxUS0TfY2xrU=
+			</data>
+		</dict>
+		<key>Resources/docs/graphics/show_sub_dirs.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			7mTVqA6APdxZ5EB2rp4V+J85Zi0=
+			</data>
+			<key>hash2</key>
+			<data>
+			AqLaWlfFdd21OWSNaUkJgyHsPg5Uyzu2H5XhONiLQ9I=
 			</data>
 		</dict>
 		<key>Resources/docs/graphics/space_invaders.png</key>
@@ -1252,22 +1357,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			xi4Xhe6b70oaCq0O9Elo/jWjaKQ=
+			kaefiIeGrvggeNG2NyZcB3/gdY8=
 			</data>
 			<key>hash2</key>
 			<data>
-			BEcj5is0UBcLjDrHBFwF8qhHFHjhGnljCNsTP2rZgrQ=
+			K2kOqAZC6JWRQiyaxgMvfOvwT1YLsxVo+/+TOy1Bddw=
 			</data>
 		</dict>
 		<key>Resources/docs/index_r77.html</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			a4vYVJTt1yVAeyFJ/Uy+Ioz/lMo=
+			sU4G421ADVIKvtGxNYK29N4ydbw=
 			</data>
 			<key>hash2</key>
 			<data>
-			RD+XyXPc5gd1rJ0Kxb3gd6XQdy9qX/VVUBygm+w1kKQ=
+			Xe4cEqrjsd/GmM4/V6RMtLmBZ5OgIXm/LryEwHHS2A8=
 			</data>
 		</dict>
 		<key>Resources/en.lproj/InfoPlist.strings</key>
