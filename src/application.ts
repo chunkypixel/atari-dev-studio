@@ -81,7 +81,7 @@ export let AdsTerminal: vscode.Terminal | undefined;
 
 export async function InitialiseAdsTerminalAsync() {
 	// Already have a terminal?
-	if (AdsTerminal !== undefined && AdsTerminal.processId) { 
+	if (AdsTerminal !== undefined && await AdsTerminal.processId) { 
 		AdsTerminal?.show(true);
 		return;
 	}

@@ -67,7 +67,7 @@ exports.CompilerOutputChannel = vscode.window.createOutputChannel("Compiler");
 function InitialiseAdsTerminalAsync() {
     return __awaiter(this, void 0, void 0, function* () {
         // Already have a terminal?
-        if (exports.AdsTerminal !== undefined && exports.AdsTerminal.processId) {
+        if (exports.AdsTerminal !== undefined && (yield exports.AdsTerminal.processId)) {
             exports.AdsTerminal === null || exports.AdsTerminal === void 0 ? void 0 : exports.AdsTerminal.show(true);
             return;
         }

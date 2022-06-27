@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.7.6
+
+* Updated A7800 to v5.2 (Windows, Linux, macOS)
+
 ## 0.7.5
 
 * Updated Stella to v6.7.0 (Windows, Linux [Deb], macOS). Note: Linux 32-bit is currently v6.2
