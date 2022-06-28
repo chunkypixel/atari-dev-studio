@@ -125,7 +125,7 @@ This extension is only available due to the great people of the AtariAge communi
 ## Languages
 Atari Dev Studio includes the following programming languages:
 
-### batari Basic (release 1.5 - 20200307)
+### batari Basic (release 1.6 - 20220626)
 batari Basic created by Fred 'batari' Quimby is a BASIC-like language used in the creation of Atari 2600 games. batari Basic is compiled to generate a binary file that can by used on actual Atari 2600 VCS hardware via cartridge (such as a Harmony or UNO cart) or by using an Atari 2600 VCS emulator such as Stella.
 
 batari Basic is an external project and can be downloaded separately [here](https://github.com/batari-Basic/batari-Basic).  Further information is about this release is available here at [AtariAge](https://atariage.com/forums/topic/300856-official-home-for-batari-basic).

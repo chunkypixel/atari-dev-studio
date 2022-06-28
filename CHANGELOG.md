@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.7.7
+
+* Updated batari Basic to v1.6 (Windows, Linux, macOS)
+
 ## 0.7.6
 
 * Updated A7800 to v5.2 (Windows, Linux, macOS)

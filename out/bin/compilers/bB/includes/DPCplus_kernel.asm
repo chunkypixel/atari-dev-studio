@@ -90,6 +90,11 @@ setloopfrac
      lda DF5FRACDATA ; priming read
      lda DF7FRACDATA ; priming read
 
+
+     LDA DF6FRACDATA ; priming read (so first bg color value won't be read twice)
+
+     LDA DF4FRACDATA ; priming read (so first pf color value won't be read twice)
+
      ldx SpriteGfxIndex
      lda _NUSIZ1,x ; top NUSIZ/REFP
      sta NUSIZ1
@@ -301,7 +306,14 @@ exit
      ldx #255
      stx FASTFETCH
      sta WSYNC
-     lda #2
+     ifconst qtcontroller
+        lda qtcontroller
+        lsr    ; bit 0 in carry
+        lda #4
+        ror    ; carry into top of A
+     else
+        lda #2
+     endif ; qtcontroller
      STA VBLANK
      lda #OVERSCAN_LINES
      sta TIM64T

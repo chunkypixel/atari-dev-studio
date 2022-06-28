@@ -7,7 +7,7 @@
 #include "statements.h"
 #include "keywords.h"
 #include <math.h>
-#define BB_VERSION_INFO "batari Basic v1.5 (c)2020\n"
+#define BB_VERSION_INFO "batari Basic v1.6 (c)2022\n"
 
 int bank = 1;
 
@@ -26,8 +26,8 @@ int main(int argc, char *argv[])
     char *includes_file = "default.inc";
     char *filename = "2600basic_variable_redefs.h";
     char *path = 0;
-    char def[50][100];
-    char defr[50][100];
+    char def[500][100];
+    char defr[500][100];
     char finalcode[500];
     char *codeadd;
     char mycode[500];
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
 		defcount = 0;
 		while (1)
 		{
-		    if (defcount++ > 50)
+		    if (defcount++ > 500)
 		    {
 			fprintf(stderr, "(%d) Infinitely repeating definition or too many instances of a definition\n",
 				bbgetline());
@@ -217,6 +217,12 @@ int main(int argc, char *argv[])
 	    doend();
 
 	keywords(statement);
+        if(numconstants==(MAXCONSTANTS-1))
+        { 
+		fprintf(stderr, "(%d) Maximum number of constants exceeded.\n", bbgetline());
+		exit(1);
+        }
+
     }
     bank = bbank();
     bs = bbs();
