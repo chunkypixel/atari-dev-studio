@@ -168,3 +168,14 @@ A7800 is a fork of the MAME Atari 7800 driver, with several enhancements added:
 MAME compatibility and syntax has been maintained, to allow for the reuse of MAME configuration files and front-ends.
 
 A7800 is included as part of this extension with many thanks to Mike Saarna (RevEng). A7800 is an external project and can be downloaded separately [here](http://7800.8bitdev.org/index.php/A7800_Emulator). Further information about this release is available here at [AtariAge](https://atariage.com/forums/topic/268458-a7800-the-atari-7800-emulator).
+
+#### A7800 Linux
+
+The following libraries may be required for Linux users:
+
+TESTED ON UBUNTU 22.04 LTS (12/07/2022)
+> sudo apt-get install -y libsdl2-2.0-0
+
+> sudo apt-get install -y libqt5widgets5
+
+> sudo apt-get install -y libsdl2-ttf-2.0-0
