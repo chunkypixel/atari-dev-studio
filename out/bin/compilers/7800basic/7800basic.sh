@@ -71,5 +71,5 @@ dasm$DASMEXT $1.asm -I"$bas7800dir/includes" -f3 -l"$1.list.txt" -s"$1.symbol.tx
 7800sign$EXT -w "$1.bin"
 7800header$EXT -o -f a78info.cfg "$1.bin"
 7800makecc2$EXT "$1.bin"
-	
+  
 exit 0
