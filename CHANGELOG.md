@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.7.9
+
+* Converted 7800basic.sh to unix fomat (dos2unix) - thanks KarlG
+
 ## 0.7.8
 
 * Updated batari Basic to v1.7 (Windows, Linux, macOS)
