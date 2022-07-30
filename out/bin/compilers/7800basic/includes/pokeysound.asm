@@ -157,7 +157,38 @@ schedulepokeyX
          ; pokey detection routine. we check for pokey in the XBOARD/XM location,
          ; and the standard $4000 location.
          ; if pokey the pokey is present, this routine will reset it.
+ ifconst pokeyaddress
+detectpokeylocation
+     lda #<pokeyaddress
+     sta pokeybaselo
+     lda #>pokeyaddress
+     sta pokeybasehi
+     lda #$ff
+     sta pokeydetected
 
+ if pokeyaddress = $450
+     lda XCTRL1s
+     ora #%00010100
+     sta XCTRL1s
+     sta XCTRL1
+ endif
+
+
+     lda #0
+     ldy #15
+clearpokeyloop
+     sta (pokeybase),y
+     dey
+     bpl clearpokeyloop
+     ; take pokey out of reset...
+     ldy #PSKCTL
+     lda #3
+     sta (pokeybase),y
+     ldy #PAUDCTL
+     lda #0
+     sta (pokeybase),y
+     rts
+ else ; !pokeyaddress
 detectpokeylocation
          ;XBoard/XM...
          ldx #2
@@ -250,8 +281,10 @@ nopokeydetected
          dec pokeydetected ; pokeydetected=#$ff
          rts
 
+ endif ; !pokeyaddress
+
 pokeysoundmoduleend
 
- echo "  pokeysound assembly: ",[(pokeysoundmoduleend-pokeysoundmodulestart)]d," bytes"
+ echo "  (pokeysound module is using ",[(pokeysoundmoduleend-pokeysoundmodulestart)]d," bytes)"
 
  endif

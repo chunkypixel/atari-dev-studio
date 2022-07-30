@@ -28,7 +28,12 @@ int tallspritecount = 0;
 
 int currentdmahole = 0;
 
+int banksetrom = 0;
+
+#define BANKSETASM "banksetrom.asm"
+
 int deprecatedframeheight = 0;
+int deprecated160bindexes = 0;
 
 #define PNG_DEBUG 3
 #include <png.h>
@@ -247,6 +252,275 @@ int switchjoy(char *input_source)
 	printf(" bit sINPT3\n");
 	return 3;
     }
+
+    // SNES2ATARI byte bits...
+    // At the end:      7      6      5      4      3      2      1      0
+    // snes2atari0lo:   A      X     LSH    RSH     -      -      -      -
+    // snes2atari0hi:   B      Y    SELECT START    UP    DOWN   LEFT  RIGHT
+
+    if (!strncmp(input_source, "snes0any\0", 8))
+    {
+	printf(" lda snes2atari0hi\n");
+	printf(" and snes2atari0lo\n");
+	printf(" eor #$FF\n");
+	return 4;
+    }
+    if (!strncmp(input_source, "snes0up\0", 7))
+    {
+	printf(" lda snes2atari0hi\n");
+	printf(" and #%%00001000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes0down\0", 9))
+    {
+	printf(" lda snes2atari0hi\n");
+	printf(" and #%%00000100\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes0left\0", 9))
+    {
+	printf(" lda snes2atari0hi\n");
+	printf(" and #%%00000010\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes0right\0", 10))
+    {
+	printf(" lda snes2atari0hi\n");
+	printf(" and #%%00000001\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes0A\0", 6))
+    {
+	printf(" lda snes2atari0lo\n");
+	printf(" and #%%10000000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes0X\0", 6))
+    {
+	printf(" lda snes2atari0lo\n");
+	printf(" and #%%01000000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes0lsh\0", 8))
+    {
+	printf(" lda snes2atari0lo\n");
+	printf(" and #%%00100000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes0rsh\0", 8))
+    {
+	printf(" lda snes2atari0lo\n");
+	printf(" and #%%00010000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes0B\0", 6))
+    {
+	printf(" lda snes2atari0hi\n");
+	printf(" and #%%10000000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes0Y\0", 6))
+    {
+	printf(" lda snes2atari0hi\n");
+	printf(" and #%%01000000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes0select\0", 11))
+    {
+	printf(" lda snes2atari0hi\n");
+	printf(" and #%%00100000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes0start\0", 10))
+    {
+	printf(" lda snes2atari0hi\n");
+	printf(" and #%%00010000\n");
+	return 0;
+    }
+
+    // SNES2ATARI byte bits...
+    // At the end:      7      6      5      4      3      2      1      0
+    // snes2atari0lo:   A      X     LSH    RSH     -      -      -      -
+    // snes2atari0hi:   B      Y    SELECT START    UP    DOWN   LEFT  RIGHT
+
+    if (!strncmp(input_source, "snes1any\0", 8))
+    {
+	printf(" lda snes2atari1hi\n");
+	printf(" and snes2atari1lo\n");
+	printf(" eor #$FF\n");
+	return 4;
+    }
+    if (!strncmp(input_source, "snes1up\0", 7))
+    {
+	printf(" lda snes2atari1hi\n");
+	printf(" and #%%00001000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes1down\0", 9))
+    {
+	printf(" lda snes2atari1hi\n");
+	printf(" and #%%00000100\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes1left\0", 9))
+    {
+	printf(" lda snes2atari1hi\n");
+	printf(" and #%%00000010\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes1right\0", 10))
+    {
+	printf(" lda snes2atari1hi\n");
+	printf(" and #%%00000001\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes1A\0", 6))
+    {
+	printf(" lda snes2atari1lo\n");
+	printf(" and #%%10000000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes1X\0", 6))
+    {
+	printf(" lda snes2atari1lo\n");
+	printf(" and #%%01000000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes1lsh\0", 8))
+    {
+	printf(" lda snes2atari1lo\n");
+	printf(" and #%%00100000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes1rsh\0", 8))
+    {
+	printf(" lda snes2atari1lo\n");
+	printf(" and #%%00010000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes1B\0", 6))
+    {
+	printf(" lda snes2atari1hi\n");
+	printf(" and #%%10000000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes1Y\0", 6))
+    {
+	printf(" lda snes2atari1hi\n");
+	printf(" and #%%01000000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes1select\0", 11))
+    {
+	printf(" lda snes2atari1hi\n");
+	printf(" and #%%00100000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes1start\0", 10))
+    {
+	printf(" lda snes2atari1hi\n");
+	printf(" and #%%00010000\n");
+	return 0;
+    }
+
+
+    // SNES2ATARI byte bits...
+    // At the end:      7      6      5      4      3      2      1      0
+    // snes2atari0lo:   A      X     LSH    RSH     -      -      -      -
+    // snes2atari0hi:   B      Y    SELECT START    UP    DOWN   LEFT  RIGHT
+
+    if (!strncmp(input_source, "snes#any\0", 8))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0hi,x\n");
+	printf(" and snes2atari0lo,x\n");
+	printf(" eor #$FF\n");
+	return 4;
+    }
+    if (!strncmp(input_source, "snes#up\0", 7))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0hi,x\n");
+	printf(" and #%%00001000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes#down\0", 9))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0hi,x\n");
+	printf(" and #%%00000100\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes#left\0", 9))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0hi,x\n");
+	printf(" and #%%00000010\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes#right\0", 10))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0hi,x\n");
+	printf(" and #%%00000001\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes#A\0", 6))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0lo,x\n");
+	printf(" and #%%10000000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes#X\0", 6))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0lo,x\n");
+	printf(" and #%%01000000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes#lsh\0", 8))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0lo,x\n");
+	printf(" and #%%00100000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes#rsh\0", 8))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0lo,x\n");
+	printf(" and #%%00010000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes#B\0", 6))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0hi,x\n");
+	printf(" and #%%10000000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes#Y\0", 6))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0hi,x\n");
+	printf(" and #%%01000000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes#select\0", 11))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0hi,x\n");
+	printf(" and #%%00100000\n");
+	return 0;
+    }
+    if (!strncmp(input_source, "snes#start\0", 10))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0hi,x\n");
+	printf(" and #%%00010000\n");
+	return 0;
+    }
     if (!strncmp(input_source, "keypad", 6))
     {
 	// 1 2 3   keypad layout
@@ -352,6 +626,7 @@ void set_romsize(char *size)
 {
     if (!strncmp(size, "32k\0", 3))
     {
+        romsize=32;
 	strcpy(redefined_variables[numredefvars++], "ROM32K = 1");
 	if (strncmp(size + 3, "RAM", 3) == 0)
 	{
@@ -362,19 +637,28 @@ void set_romsize(char *size)
 
     else if (!strncmp(size, "16k\0", 3))
     {
+        romsize=16;
 	strcpy(redefined_variables[numredefvars++], "ROM16K = 1");
     }
     else if (!strncmp(size, "8k\0", 2))
     {
+        romsize=8;
 	strcpy(redefined_variables[numredefvars++], "ROM8K = 1");
     }
 
     else if (!strncmp(size, "48k\0", 3))
     {
+        romsize=48;
 	strcpy(redefined_variables[numredefvars++], "ROM48K = 1");
     }
-    else if (!strncmp(size, "144k\0", 4))
+    else if (!strncmp(size, "52k\0", 3))
     {
+        romsize=52;
+	strcpy(redefined_variables[numredefvars++], "ROM52K = 1");
+    }
+   else if (!strncmp(size, "144k\0", 4))
+    {
+        romsize=144;
 	strcpy(redefined_variables[numredefvars++], "ROM144K = 1");
 	strcpy(redefined_variables[numredefvars++], "ROMAT4K = 1");
 	strcpy(redefined_variables[numredefvars++], "bankswitchmode = 9");
@@ -386,10 +670,12 @@ void set_romsize(char *size)
     }
     else if (!strncmp(size, "128k\0", 4))
     {
+        romsize=128;
 	strcpy(redefined_variables[numredefvars++], "ROM128K = 1");
 	strcpy(redefined_variables[numredefvars++], "bankswitchmode = 8");
 	bankcount = 8;
 	currentbank = 0;
+	append_a78info("set supergame");
 	if (strncmp(size + 4, "BANKRAM", 7) == 0)
 	{
 	    append_a78info("set supergamebankram");
@@ -401,11 +687,10 @@ void set_romsize(char *size)
 	    append_a78info("set supergameram");
 	    strcpy(redefined_variables[numredefvars++], "SGRAM = 1");
 	}
-	else
-	    append_a78info("set supergame");
     }
     else if (!strncmp(size, "256k\0", 4))
     {
+        romsize=256;
 	strcpy(redefined_variables[numredefvars++], "ROM256K = 1");
 	strcpy(redefined_variables[numredefvars++], "bankswitchmode = 16");
 	bankcount = 16;
@@ -426,6 +711,7 @@ void set_romsize(char *size)
     }
     else if (!strncmp(size, "272k\0", 4))
     {
+        romsize=272;
 	strcpy(redefined_variables[numredefvars++], "ROM272K = 1");
 	strcpy(redefined_variables[numredefvars++], "ROMAT4K = 1");
 	strcpy(redefined_variables[numredefvars++], "bankswitchmode = 17");
@@ -437,6 +723,7 @@ void set_romsize(char *size)
     }
     else if (!strncmp(size, "512k\0", 4))
     {
+        romsize=512;
 	strcpy(redefined_variables[numredefvars++], "ROM512K = 1");
 	strcpy(redefined_variables[numredefvars++], "bankswitchmode = 32");
 	bankcount = 32;
@@ -457,6 +744,7 @@ void set_romsize(char *size)
     }
     else if (!strncmp(size, "528k\0", 4))
     {
+        romsize=528;
 	strcpy(redefined_variables[numredefvars++], "ROM528K = 1");
 	strcpy(redefined_variables[numredefvars++], "ROMAT4K = 1");
 	strcpy(redefined_variables[numredefvars++], "bankswitchmode = 33");
@@ -583,13 +871,13 @@ void bank(char **statement)
     // 2.issue ORG,RORG
     currentbank = requestedbank;
     if (romat4k == 1)
-	printf(" ORG $%04X,0\n", (currentbank + 1) * 0x4000);
+        orgprintf(" ORG $%04X,0\n", (currentbank + 1) * 0x4000);
     else
-	printf(" ORG $%04X,0\n", (currentbank + 2) * 0x4000);
+        orgprintf(" ORG $%04X,0\n", (currentbank + 2) * 0x4000);
     if (currentbank == (bankcount - 1))	//last bank
-	printf(" RORG $C000\n");
+        orgprintf(" RORG $C000\n");
     else
-	printf(" RORG $8000\n");
+        orgprintf(" RORG $8000\n");
 }
 
 void dmahole(char **statement)
@@ -601,6 +889,12 @@ void dmahole(char **statement)
     int noflow = FALSE;
 
     assertminimumargs(statement, "dmahole", 1);
+
+    if(banksetrom==1)
+    {
+	prwarn("the dmahole command was ignored. dmahole isn't supported with banksets.");
+        return;
+    }
 
     removeCR(statement[2]);
     removeCR(statement[3]);
@@ -1046,8 +1340,23 @@ int inlinealphadata(char **statement)
 	if (statement[2][t] == '^')
 	    statement[2][t] = ' ';
 
-    printf("	JMP skipalphadata%d\n", templabel);
-    printf("alphadata%d\n", templabel);
+    if (banksetrom == 0)
+    {
+        printf("	JMP skipalphadata%d\n", templabel);
+        printf("alphadata%d\n", templabel);
+    }
+    else
+    {
+        char banklabel[32];
+        int  stringsize;
+        snprintf(banklabel,32,"alphadata%d", templabel);
+        for (t = 1; (statement[2][t] != '\'') && (statement[2][t] != '\0'); t++)
+            ;
+        stringsize=t-1;
+        if ((doublewide==1)||(strncmp(statement[6], "extrawide", 9) == 0))
+            stringsize=stringsize*2;
+        banksetdataopen(banklabel,stringsize);
+    }
 
     for (t = 1; (statement[2][t] != '\'') && (statement[2][t] != '\0'); t++)
     {
@@ -1066,16 +1375,79 @@ int inlinealphadata(char **statement)
 	}
 	if (quotelen > 32)
 	    prerror("greater than 32 characters used in plotchars statement");
-	printf(" .byte (<%s + $%02x)\n", currentcharset, charoffset);
+	gfxprintf(" .byte (<%s + $%02x)\n", currentcharset, charoffset);
 	if (strncmp(statement[6], "extrawide", 9) == 0)
 	{
-	    printf(" .byte (<%s + $%02x)\n", currentcharset, charoffset + 1);
+            gfxprintf(" .byte (<%s + $%02x)\n", currentcharset, charoffset + 1);
 	}
     }
-    printf("skipalphadata%d\n", templabel);
+    if(banksetrom==0)
+    {
+        printf("skipalphadata%d\n", templabel);
+    }
+    else
+    {
+        banksetdataclose();
+    }
     sprintf(statement[2], "alphadata%d", templabel);
     templabel++;
     return (quotelen);
+}
+
+int banksetdataopen(char *datalabel, int sizeofdata)
+{
+    // utility function. updatates the bankset assembly with an ORG between the
+    // graphics banks
+    static long banksetdatastart   = -1;
+    static long banksetdatacurrent = -1;
+    static int banksetbank = 0;
+
+    if(banksetdatastart == -1)
+    {
+        // This is the first time we were called. Setup the start address for where 
+        // we'll stuff string data. We don't start at the very bottom of the rom,
+        // because dmaholes don't exist that far down, and we want to leave rom
+        // between gfx areas as zero, so sprites can go there.
+
+        banksetdatastart = 0x8000 + (zoneheight * 256) ;
+        banksetdatacurrent = banksetdatastart;
+    }
+
+    // check if the user has bankswitched since we were last called. If so, change
+    // change our address to the start of the current bank...
+    if( banksetbank != currentbank )
+    {
+        banksetdatastart = 0x8000 + (zoneheight * 256) + (currentbank * 0x4000) ;
+        banksetdatacurrent = banksetdatastart;
+    }
+
+    // check if storing this data would overflow the dmaplain. If so, advance to
+    // to the next plain.
+    if ( (banksetdatacurrent + sizeofdata) >= (banksetdatastart + (zoneheight * 256) ) )
+    {
+        banksetdatastart = banksetdatastart + (2 * zoneheight * 256);
+        banksetdatacurrent = banksetdatastart;
+    }
+    
+    gfxprintf("BANKSETSAVEORG set .\n");
+    gfxprintf("    ORG $%X \n",banksetdatacurrent);
+
+    // set data label to memory address it's found at
+    if(bankcount==0)
+        snprintf(redefined_variables[numredefvars++],99, "%s = $%lX\n",datalabel,banksetdatacurrent);
+    else if(currentbank<(bankcount-1)) // if we're not in the last bank, $8000 is the base.
+        snprintf(redefined_variables[numredefvars++],99, "%s = $%lX\n",datalabel,banksetdatacurrent-(currentbank*0x4000));
+    else // if we're in the last bank, $c000 is the base
+        snprintf(redefined_variables[numredefvars++],99, "%s = $%lX\n",datalabel,banksetdatacurrent-(currentbank*0x4000)+0x4000);
+        
+    // advance to the next bit of empty rom
+    banksetdatacurrent = banksetdatacurrent + sizeofdata;
+}
+
+
+void banksetdataclose(void)
+{
+    gfxprintf("    ORG (BANKSETSAVEORG)\n");
 }
 
 void plotchars(char **statement)
@@ -2154,17 +2526,22 @@ void psound(char **statement)
 
 }
 
+void snesdetect()
+{
+    printf(" jsr SNES_AUTODETECT\n");
+    if(!isimmed("SNES2ATARISUPPORT"))
+    {
+        strcpy(redefined_variables[numredefvars++], "SNES2ATARISUPPORT = 1");
+        sprintf(constants[numconstants++], "SNES2ATARISUPPORT");
+    }
+}
+
 void changecontrol(char **statement)
 {
     //   1            2     3
     // changecontrol 0|1 controltype
 
     int port;
-    static int mousesupport = 0;
-    static int keypadsupport = 0;
-    static int paddlesupport = 0;
-    static int longcontrollerread = 0;
-
 
     assertminimumargs(statement, "changecontrol", 2);
     removeCR(statement[2]);
@@ -2221,6 +2598,26 @@ void changecontrol(char **statement)
 	printf("  jsr setportforinput\n");
 	printf("  jsr setonebuttonmode\n");
     }
+    else if (!strcmp(statement[3], "snes"))
+    {
+	printf("  lda #11 ; controller=snes2atari\n");
+	if (port == 0)
+	{
+	    printf("  sta port0control\n");
+	    printf("  ldx #0\n");
+	}
+	else
+	{
+	    printf("  sta port1control\n");
+	    printf("  ldx #1\n");
+	}
+	printf("  jsr setportforinput\n");
+	printf("  jsr setonebuttonmode\n");
+
+	strcpy(redefined_variables[numredefvars++], "SNES2ATARISUPPORT = 1");
+	sprintf(constants[numconstants++], "SNES2ATARISUPPORT");
+    }
+
     else if (!strcmp(statement[3], "lightgun"))
     {
 	printf("  lda #2 ; controller=lightgun\n");
@@ -2240,43 +2637,30 @@ void changecontrol(char **statement)
 
     if (!strcmp(statement[3], "paddle"))
     {
-        if(paddlesupport == 0)
+    	if (!isimmed("PADDLESUPPORT"))
 	{
-            paddlesupport = paddlesupport | (port+1);
 	    strcpy(redefined_variables[numredefvars++], "PADDLESUPPORT = 1");
 	    sprintf(constants[numconstants++], "PADDLESUPPORT");
-            if(port == 0)
-            {
-	        strcpy(redefined_variables[numredefvars++], "PADDLE0SUPPORT = 1");
-	        sprintf(constants[numconstants++], "PADDLE0SUPPORT");
-            }
-            else
-            {
-	        strcpy(redefined_variables[numredefvars++], "PADDLE1SUPPORT = 1");
-	        sprintf(constants[numconstants++], "PADDLE1SUPPORT");
-            }
-        }
-        else if((paddlesupport|(port+1)) == 0) // check to see if both ports can be controlled with paddles
+	}
+	if ((port==0) && (!isimmed("PADDLE0SUPPORT")) )
 	{
-            paddlesupport = paddlesupport | (port+1);
+	    strcpy(redefined_variables[numredefvars++], "PADDLE0SUPPORT = 1");
+	    sprintf(constants[numconstants++], "PADDLE0SUPPORT");
+	}
+	if ((port==1) && (!isimmed("PADDLE1SUPPORT")) )
+        {
+	    strcpy(redefined_variables[numredefvars++], "PADDLE1SUPPORT = 1");
+	    sprintf(constants[numconstants++], "PADDLE1SUPPORT");
+        }
+	if( (isimmed("PADDLE1SUPPORT"))&&(isimmed("PADDLE1SUPPORT")) && (!isimmed("FOURPADDLESUPPORT")) )
+	{
 	    strcpy(redefined_variables[numredefvars++], "FOURPADDLESUPPORT = 1"); // if so, enable four paddle reads
 	    sprintf(constants[numconstants++], "FOURPADDLESUPPORT");
-            if(port == 0)
-            {
-	        strcpy(redefined_variables[numredefvars++], "PADDLE0SUPPORT = 1");
-	        sprintf(constants[numconstants++], "PADDLE0SUPPORT");
-            }
-            else
-            {
-	        strcpy(redefined_variables[numredefvars++], "PADDLE1SUPPORT = 1");
-	        sprintf(constants[numconstants++], "PADDLE1SUPPORT");
-            }
-        }
-        if(longcontrollerread == 0)
+	}
+	if (!isimmed("LONGCONTROLLERREAD"))
         {
 	    strcpy(redefined_variables[numredefvars++], "LONGCONTROLLERREAD = 1");
 	    sprintf(constants[numconstants++], "LONGCONTROLLERREAD");
-            longcontrollerread=1;
         }
 	printf("  lda #3 ; controller=paddle\n");
 	if (port == 0)
@@ -2293,8 +2677,11 @@ void changecontrol(char **statement)
     }
     else if (!strcmp(statement[3], "trakball"))
     {
-	strcpy(redefined_variables[numredefvars++], "TRAKBALLSUPPORT = 1");
-	sprintf(constants[numconstants++], "TRAKBALLSUPPORT");
+	if (!isimmed("TRAKBALLSUPPORT"))
+	{
+	    strcpy(redefined_variables[numredefvars++], "TRAKBALLSUPPORT = 1");
+	    sprintf(constants[numconstants++], "TRAKBALLSUPPORT");
+        }
 	printf("  lda #4 ; controller=trakball\n");
 	if (port == 0)
 	{
@@ -2305,8 +2692,12 @@ void changecontrol(char **statement)
 	    printf("  lda #2\n");
 	    printf("  sta port0resolution\n");
 	    printf("  ldx #0\n");
-	    strcpy(redefined_variables[numredefvars++], "TRAKBALL0SUPPORT = 1");
-	    sprintf(constants[numconstants++], "TRAKBALL0SUPPORT");
+
+	    if (!isimmed("TRAKBALL0SUPPORT"))
+            {
+	        strcpy(redefined_variables[numredefvars++], "TRAKBALL0SUPPORT = 1");
+	        sprintf(constants[numconstants++], "TRAKBALL0SUPPORT");
+            }
 	}
 	else
 	{
@@ -2317,23 +2708,24 @@ void changecontrol(char **statement)
 	    printf("  lda #2\n");
 	    printf("  sta port1resolution\n");
 	    printf("  ldx #1\n");
-	    strcpy(redefined_variables[numredefvars++], "TRAKBALL1SUPPORT = 1");
-	    sprintf(constants[numconstants++], "TRAKBALL1SUPPORT");
+	    if (!isimmed("TRAKBALL1SUPPORT"))
+            {
+	        strcpy(redefined_variables[numredefvars++], "TRAKBALL1SUPPORT = 1");
+	        sprintf(constants[numconstants++], "TRAKBALL1SUPPORT");
+            }
 	}
 	printf("  jsr setportforinput\n");
 	printf("  jsr settwobuttonmode\n");
-        if(longcontrollerread == 0)
+	if (!isimmed("LONGCONTROLLERREAD"))
         {
 	    strcpy(redefined_variables[numredefvars++], "LONGCONTROLLERREAD = 1");
 	    sprintf(constants[numconstants++], "LONGCONTROLLERREAD");
-            longcontrollerread=1;
         }
     }
     else if (!strcmp(statement[3], "keypad"))
     {
-        if(keypadsupport==0)
+	if (!isimmed("KEYPADSUPPORT"))
         {
-            keypadsupport=1;
             strcpy(redefined_variables[numredefvars++], "KEYPADSUPPORT = 1");
 	    sprintf(constants[numconstants++], "KEYPADSUPPORT");
         }
@@ -2353,38 +2745,23 @@ void changecontrol(char **statement)
     }
     else if ( (!strcmp(statement[3], "stmouse")) || (!strcmp(statement[3], "amigamouse")) || (!strcmp(statement[3], "driving")) )
     {
-        if(mousesupport == 0)
+	if (!isimmed("MOUSESUPPORT"))
 	{
-            mousesupport = mousesupport | (port+1);
 	    strcpy(redefined_variables[numredefvars++], "MOUSESUPPORT = 1");
 	    sprintf(constants[numconstants++], "MOUSESUPPORT");
-            if(port==0)
-            {
-	        strcpy(redefined_variables[numredefvars++], "MOUSE0SUPPORT = 1");
-	        sprintf(constants[numconstants++], "MOUSE0SUPPORT");
-            }
-            else
-            {
-	        strcpy(redefined_variables[numredefvars++], "MOUSE1SUPPORT = 1");
-	        sprintf(constants[numconstants++], "MOUSE1SUPPORT");
-            }
         }
-        else if ( (mousesupport|(port+1))==0) // one port was enable previously
+        if((port==0)&&(!isimmed("MOUSE0SUPPORT")))
         {
-            if(port==0)
-            {
-	        strcpy(redefined_variables[numredefvars++], "MOUSE0SUPPORT = 1");
-	        sprintf(constants[numconstants++], "MOUSE0SUPPORT");
-            }
-            else
-            {
-	        strcpy(redefined_variables[numredefvars++], "MOUSE1SUPPORT = 1");
-	        sprintf(constants[numconstants++], "MOUSE1SUPPORT");
-            }
+	    strcpy(redefined_variables[numredefvars++], "MOUSE0SUPPORT = 1");
+	    sprintf(constants[numconstants++], "MOUSE0SUPPORT");
         }
-        if(longcontrollerread == 0)
+        if((port==1)&&(!isimmed("MOUSE1SUPPORT")))
         {
-            longcontrollerread=1;
+	    strcpy(redefined_variables[numredefvars++], "MOUSE1SUPPORT = 1");
+	    sprintf(constants[numconstants++], "MOUSE1SUPPORT");
+        }
+	if (!isimmed("LONGCONTROLLERREAD"))
+        {
 	    strcpy(redefined_variables[numredefvars++], "LONGCONTROLLERREAD = 1");
 	    sprintf(constants[numconstants++], "LONGCONTROLLERREAD");
         }
@@ -2519,7 +2896,7 @@ void fixfilename(char *filename)
 
     if ((filename[0] != '/') && (filename[0] != '\\') && (incbasepath[0] != 0))
     {
-	char temppath[500];
+	char temppath[1024];
 
 	//the path is relative, and basepath is defined. We'll add on the basepath
 
@@ -2590,7 +2967,9 @@ void incmapfile(char **statement)
     for (t = (strlen(datalabelname) - 3); t > 0; t--)
 	if (strcasecmp(datalabelname + t, ".tmx") == 0)
 	    datalabelname[t] = 0;
-    printf("	JMP skipmapdata%d\n", templabel);
+
+    if (!(optimization & 4))
+        printf("	JMP skipmapdata%d\n", templabel);
 
     printf("%s\n", datalabelname);
 
@@ -2802,6 +3181,21 @@ void add_graphic(char **statement, int incbanner)
 	{
 	    graphiccolormode = MODE160B;
 	    palettestatement = 17;
+	    if (deprecated160bindexes == 1)
+    	    {
+                s = 1;
+                for (t = 1; t < 12; t++)
+                {
+                    if (s % 4 == 0)
+                        s = s + 1;
+                    graphiccolorindex[t] = s;
+                    s = s + 1;
+                }
+                graphiccolorindex[12] = 15;
+                graphiccolorindex[13] = 4;
+                graphiccolorindex[14] = 8;
+                graphiccolorindex[15] = 12;
+	    }
 	}
 	else if (strcasecmp(statement[3], "320A") == 0)
 	{
@@ -2846,7 +3240,7 @@ void add_graphic(char **statement, int incbanner)
 	}
     }
 
- if (strcasecmp(statement[3], "160B") == 0)
+ if ((strcasecmp(statement[3], "160B") == 0) && (deprecated160bindexes == 0))
     {
 	// We need to reorder the color indexes some more. For 160B the 7800 makes color
 	// indexes 0, 4, 8, and 12 transparent, but a 16 color PNG will likely have
@@ -2963,7 +3357,7 @@ void add_graphic(char **statement, int incbanner)
 	{
 	    for (t = 0; t < (height / zoneheight); t++)
 	    {
-		char indexstr[1024];
+		char indexstr[1124];
 
 		// Now read the png into memory...
 		incgraphic(statement[2], offset);
@@ -3867,12 +4261,23 @@ void barf_graphic_file(void)
 	DMASIZE = 8192;
     if (bankcount == 0)
     {
-	BANKSTART = 0xE000;
+        if((banksetrom==1)&&(zoneheight==8))
+	    BANKSTART = 0xF000;
+        else
+	    BANKSTART = 0xE000;
     }
     else if (currentbank == (bankcount - 1)) // last bank
     {
-	BANKSTART = 0xE000;
-	REALSTART = 0x8000;
+        if((banksetrom==1)&&(zoneheight==8))
+        {
+	    BANKSTART = 0xF000;
+	    REALSTART = 0x9000;
+        }
+        else
+        {
+	    BANKSTART = 0xE000;
+	    REALSTART = 0x8000;
+        }
     }
     else if ((romat4k == 1) && (currentbank == 0))
     {
@@ -3918,7 +4323,7 @@ void barf_graphic_file(void)
 
     if (bankcount == 0)  // non-banked
     {
-	if ((graphicsdatawidth[dmaplain] > 0) || (dmaplain > 0))	//calculate from graphics area...
+	if (((graphicsdatawidth[dmaplain] > 0) || (dmaplain > 0)) && (banksetrom==0)) //calculate from graphics area...
         {
 	    printf(" echo \" \",[($%04X - gameend)]d , \"bytes of ROM space left in the main area.\"\n", ADDRBASE);
 	    printf(" if ($%04X - gameend) < 0\n", ADDRBASE);
@@ -3936,7 +4341,7 @@ void barf_graphic_file(void)
     else if ((currentbank + 1) == bankcount) // 0xC000
     {
 
-	if ((graphicsdatawidth[dmaplain] > 0) || (dmaplain > 0))	//calculate from graphics area...
+	if (((graphicsdatawidth[dmaplain] > 0) || (dmaplain > 0)) && (banksetrom==0))	//calculate from graphics area...
         {
 	    printf(" echo \" \",[($%04X - .)]d , \"bytes of ROM space left in the main area of bank %d.\"\n", ADDRBASE,
 		   currentbank + 1);
@@ -3956,7 +4361,7 @@ void barf_graphic_file(void)
     else if ((romat4k == 1) && (currentbank == 0)) // 0x4000
     {
 
-	if ((graphicsdatawidth[dmaplain] > 0) || (dmaplain > 0))	//calculate from graphics area...
+	if (((graphicsdatawidth[dmaplain] > 0) || (dmaplain > 0)) && (banksetrom==0))	//calculate from graphics area...
         {
 	    printf(" echo \" \",[($%04X - .)]d , \"bytes of ROM space left in the main area of bank %d.\"\n", ADDRBASE,
 		   currentbank + 1);
@@ -3975,7 +4380,7 @@ void barf_graphic_file(void)
     }
     else
     {
-	if ((graphicsdatawidth[dmaplain] > 0) || (dmaplain > 0))	//calculate from graphics area...
+	if (((graphicsdatawidth[dmaplain] > 0) || (dmaplain > 0)) && (banksetrom==0))	//calculate from graphics area...
         {
 	    printf(" echo \" \",[($%04X - .)]d , \"bytes of ROM space left in the main area of bank %d.\"\n", ADDRBASE,
 		   currentbank + 1);
@@ -3992,8 +4397,6 @@ void barf_graphic_file(void)
             printf(" endif\n");
         }
     }
-
-
 
     if ((graphicsdatawidth[dmaplain] > 0) || (dmaplain > 0))	//only process if the incgraphic command was encountered.
     {
@@ -4027,11 +4430,11 @@ void barf_graphic_file(void)
 	    for (s = zoneheight - 1; s >= 0; s--)
 	    {
 		if (bankcount == 0)
-		    printf("\n ORG $%04X,0  ; *************\n", ADDRBASE);
+		    gfxprintf("\n ORG $%04X,0  ; *************\n", ADDRBASE);
 		else
 		{
-		    printf("\n ORG $%04X,0  ; *************\n", ABADDRBASE);
-		    printf("\n RORG $%04X ; *************\n", ADDRBASE);
+		    gfxprintf("\n ORG $%04X,0  ; *************\n", ABADDRBASE);
+		    gfxprintf("\n RORG $%04X ; *************\n", ADDRBASE);
 		}
 
 		for (t = 0; t < graphicsdatawidth[currentplain]; t++)
@@ -4041,7 +4444,8 @@ void barf_graphic_file(void)
 			runi = 0;
 			if (s == (zoneheight - 1))
 			{
-			    printf("\n%s\n       HEX ", graphicslabels[currentplain][t]);
+                            printf("\n%s = $%X\n",graphicslabels[currentplain][t],t+ADDRBASE);
+			    gfxprintf("\n%s\n       HEX ", graphicslabels[currentplain][t]);
 			    if ((linewidth + strlen(graphicslabels[currentplain][t])) > 60)
 			    {
 				linewidth = 0;
@@ -4051,14 +4455,14 @@ void barf_graphic_file(void)
 			    linewidth = linewidth + strlen(graphicslabels[currentplain][t]);
 			}
 			else
-			    printf("\n;%s\n       HEX ", graphicslabels[currentplain][t]);
+			    gfxprintf("\n;%s\n       HEX ", graphicslabels[currentplain][t]);
 		    }
-		    printf("%02x", graphicsdata[currentplain][t][s]);
+		    gfxprintf("%02x", graphicsdata[currentplain][t][s]);
 		    runi++;
 		    if ((runi % 32 == 0) && ((t + 1) < graphicsdatawidth[currentplain]))
-			printf("\n       HEX ");
+			gfxprintf("\n       HEX ");
 		}
-		printf("\n");
+		gfxprintf("\n");
 		ADDRBASE = ADDRBASE + 256;
 		if (bankcount > 0)
 		    ABADDRBASE = ABADDRBASE + 256;
@@ -4099,11 +4503,11 @@ void barf_graphic_file(void)
 		    prinfo("bank #%d, DMA hole #%d starts @ $%04X", currentbank + 1, currentplain, ADDRBASE);
 
 		if (bankcount == 0)
-		    printf("\n ORG $%04X,0  ; *************\n", ADDRBASE);
+		    gfxprintf("\n ORG $%04X,0  ; *************\n", ADDRBASE);
 		else
 		{
-		    printf("\n ORG $%04X,0  ; *************\n", ABADDRBASE);
-		    printf("\n RORG $%04X ; *************\n", ADDRBASE);
+		    gfxprintf("\n ORG $%04X,0  ; *************\n", ABADDRBASE);
+		    gfxprintf("\n RORG $%04X ; *************\n", ADDRBASE);
 		}
 
 		FILE *holefilepointer;
@@ -4402,7 +4806,7 @@ void mul(char **statement, int bits)
     // this will attempt to output optimized code depending on the multiplicand
     int multiplicand = strictatoi(statement[6]);
     int tempstorage = 0;
-    // we will optimize specifically for 2,3,5,7,9
+    // we will optimize specifically for 2,3,5,7,9,11
     if (bits == 16)
     {
 	printf("	ldx #0\n");
@@ -4410,7 +4814,50 @@ void mul(char **statement, int bits)
     }
     while (multiplicand != 1)
     {
-	if (!(multiplicand % 9))
+	if (!(multiplicand % 11))
+	{
+	    if (tempstorage)
+	    {
+		strcpy(statement[4], "temp2");
+		printf("	sta temp2\n");
+	    }
+	    multiplicand /= 11;
+	    printf("	asl\n");
+	    if (bits == 16)
+		printf("  rol temp1\n");
+	    printf("	asl\n");
+	    if (bits == 16)
+		printf("  rol temp1\n");
+	    printf("	clc\n");
+	    printf("	adc ");
+	    printimmed(statement[4]);
+	    printf("%s\n", statement[4]);
+	    if (bits == 16)
+	    {
+		printf("	tax\n");
+		printf("	lda temp1\n");
+		printf("	adc #0\n");
+		printf("	sta temp1\n");
+		printf("	txa\n");
+	    }
+	    printf("	asl\n");
+	    if (bits == 16)
+		printf("  rol temp1\n");
+	    printf("	clc\n");
+	    printf("	adc ");
+	    printimmed(statement[4]);
+	    printf("%s\n", statement[4]);
+	    if (bits == 16)
+	    {
+		printf("	tax\n");
+		printf("	lda temp1\n");
+		printf("	adc #0\n");
+		printf("	sta temp1\n");
+		printf("	txa\n");
+	    }
+	    tempstorage = 1;
+	}
+	else if (!(multiplicand % 9))
 	{
 	    if (tempstorage)
 	    {
@@ -4721,6 +5168,8 @@ int findlabel(char **statement, int i)
     if (!strncmp(statementcache, "peekchar\0", 8))
 	return 1;
     if (!strncmp(statementcache, "pokechar\0", 8))
+	return 1;
+    if (!strncmp(statementcache, "snesdetect\0", 10))
 	return 1;
     if (!strncmp(statementcache, "displaymode\0", 11))
 	return 1;
@@ -5181,7 +5630,7 @@ int getnotelength(char *command)
 
 int getnoteoctave(char *command)
 {
-    // ** Return an absolue note index from a note+octave
+    // ** Return an absolute note index from a note+octave
     // ** If so, return its code, otherwise return negative.
 
     int notevalue;
@@ -5230,7 +5679,7 @@ int getpatternloops(char *patternname)
 void songdata(char **statement)
 {
     char data[1001];		// allow for long lines
-    char savepatternname[100];
+    char savepatternname[200];
     char songstatements[200][100];
     char *wordstart;
     int s;
@@ -5469,7 +5918,7 @@ void songdata(char **statement)
 	printf("   .word $0000\n");
 	printf(" endif\n");
     }
-    printf(" echo \"   \",[(. - songdatastart_%s)]d , \"bytes of ROM used by the song '%s'\"\n", statement[2],
+    printf(" echo \" \",\"(tracker song '%s' used \" ,[(. - songdatastart_%s)]d , \"bytes)\"\n", statement[2],
 	   statement[2]);
 
     if (!(optimization & 4))
@@ -6906,6 +7355,9 @@ void doif(char **statement)
 	|| (!strncmp(statement[2], "keypad0key\0", 10))
 	|| (!strncmp(statement[2], "keypad1key\0", 10))
 	|| (!strncmp(statement[2], "switch\0", 6))
+	|| (!strncmp(statement[2], "snes0\0", 5))
+	|| (!strncmp(statement[2], "snes1\0", 5))
+	|| (!strncmp(statement[2], "snes#\0", 5))
 	|| (!strncmp(statement[2], "softswitches\0", 12))
 	|| (!strncmp(statement[2], "softselect\0", 10)) || (!strncmp(statement[2], "softreset\0", 9)))
     {
@@ -6947,12 +7399,19 @@ void doif(char **statement)
 		else
 		    bne(statement[4]);
 	    }
-	    else if (i == 5)	// bvs/bvc
+	    else if (i == 5)	// bvs/bvc
 	    {
 		if (not)
 		    bvc(statement[4]);
 		else
 		    bvs(statement[4]);
+	    }
+	    else if (i == 6)	// beq/bne
+	    {
+		if (not)
+		    bne(statement[4]);
+		else
+		    beq(statement[4]);
 	    }
 
 
@@ -6989,7 +7448,7 @@ void doif(char **statement)
 		else
 		    printf("	BPL ");
 	    }
-	    else if (i == 4)	// bmi/bpl
+	    else if (i == 4)	// bne/beq
 	    {
 		if (not)
 		    printf("	BNE ");
@@ -7002,6 +7461,13 @@ void doif(char **statement)
 		    printf("	BVS ");
 		else
 		    printf("	BVC ");
+	    }
+	    else if (i == 6)	// beq/bne
+	    {
+		if (not)
+		    printf("	BEQ ");
+		else
+		    printf("	BNE ");
 	    }
 
 	    printf(".skip%s\n", statement[0]);
@@ -7163,7 +7629,7 @@ void doif(char **statement)
     }
     if (i < 200)		// found array
     {
-	// extract expression in parantheses - for now just whole numbers allowed
+	// extract expression in parentheses - for now just whole numbers allowed
 	bit = (int) statement[2][i - 1] - '0';
 	if ((bit > 9) || (bit < 0))
 	{
@@ -8223,7 +8689,7 @@ void let(char **cstatement)
     if (i < 200)		// found bit
     {
 	strcpy(Areg, "invalid");
-	// extract expression in parantheses - for now just whole numbers allowed
+	// extract expression in parentheses - for now just whole numbers allowed
 	bit = (int) statement[2][i - 1] - '0';
 	if ((bit > 9) || (bit < 0))
 	{
@@ -9173,6 +9639,15 @@ void set(char **statement)
     {
 	set_romsize(statement[3]);
     }
+    else if (!strncmp(statement[2], "bankset\0", 7))
+    {
+	if (!strncmp(statement[3], "on", 2))
+        {
+	    strcpy(redefined_variables[numredefvars++], "BANKSETROM = 1");
+	    banksetrom=1; 
+            append_a78info("set bankset");
+        }
+    }
     else if (!strncmp(statement[2], "softresetpause\0", 15))
     {
 	if (!strncmp(statement[3], "off", 3))
@@ -9216,6 +9691,8 @@ void set(char **statement)
     {
 	if (!strncmp(statement[3], "frameheight", 11))
 	    deprecatedframeheight = 1;
+	if (!strncmp(statement[3], "160bindexes", 11))
+	    deprecated160bindexes = 1;
     }
     else if (!strncmp(statement[2], "dlmemory\0", 8))
     {
@@ -9603,19 +10080,45 @@ void set(char **statement)
 	    append_a78info("set xm");
 	}
     }
-    else if (!strncmp(statement[2], "trackersupport", 6))
+    else if (!strncmp(statement[2], "trackersupport", 14))
     {
 	if (!strncmp(statement[3], "basic", 5))
 	{
 	    strcpy(redefined_variables[numredefvars++], "MUSICTRACKER = 1");
 	}
+	else if (!strncmp(statement[3], "rmt", 3))
+	{
+	    strcpy(redefined_variables[numredefvars++], "RMT = 1");
+	}
     }
-    else if (!strncmp(statement[2], "pokeysupport\0", 12))
+    else if (!strncmp(statement[2], "rmtvolume", 9))
     {
 	if (!strncmp(statement[3], "on", 2))
 	{
+	    strcpy(redefined_variables[numredefvars++], "RMTVOLUME = 1");
+	    strcpy(redefined_variables[numredefvars++], "FOURBITFADE = 1");
+        }
+    }
+    else if (!strncmp(statement[2], "tiavolume", 9))
+    {
+	if (!strncmp(statement[3], "on", 2))
+	{
+	    strcpy(redefined_variables[numredefvars++], "TIAVOLUME = 1");
+	    strcpy(redefined_variables[numredefvars++], "FOURBITFADE = 1");
+        }
+    }
+    else if (!strncmp(statement[2], "fourbitfade", 11))
+    {
+	if (!strncmp(statement[3], "on", 2))
+	{
+	    strcpy(redefined_variables[numredefvars++], "FOURBITFADE = 1");
+        }
+    }
+    else if (!strncmp(statement[2], "pokeysupport", 12))
+    {
+	if (strncmp(statement[3], "off", 3))
+        {
 	    strcpy(redefined_variables[numredefvars++], "pokeysupport = 1");
-	    append_a78info("set pokey@450");
 	    sprintf(constants[numconstants++], "PAUDF0");
 	    sprintf(constants[numconstants++], "PAUDC0");
 	    sprintf(constants[numconstants++], "PAUDF1");
@@ -9627,9 +10130,34 @@ void set(char **statement)
 	    sprintf(constants[numconstants++], "PAUDCTL");
 	    sprintf(constants[numconstants++], "PRANDOM");
 	    sprintf(constants[numconstants++], "PSKCTL");
+
+            if ((!strncmp(statement[3], "on", 2))||(!strncmp(statement[3], "auto", 4)))
+            {
+                strcpy(redefined_variables[numredefvars++], "pokeysupport = 1");
+                append_a78info("set pokey@450");
+            }
+            else if (!strncmp(statement[3], "$450", 4))
+            {
+                strcpy(redefined_variables[numredefvars++], "pokeysupport = 1");
+	        strcpy(redefined_variables[numredefvars++], "pokeyaddress = $450");
+                append_a78info("set pokey@450");
+            }
+            else if (!strncmp(statement[3], "$800", 4))
+            {
+                strcpy(redefined_variables[numredefvars++], "pokeysupport = 1");
+	        strcpy(redefined_variables[numredefvars++], "pokeyaddress = $800");
+                append_a78info("set pokey@800");
+            }
+            else if (!strncmp(statement[3], "$4000", 5))
+            {
+                strcpy(redefined_variables[numredefvars++], "pokeysupport = 1");
+	        strcpy(redefined_variables[numredefvars++], "pokeyaddress = $4000");
+                append_a78info("set pokey@4000");
+            }
 	}
+
     }
-    else if (!strncmp(statement[2], "hscsupport\0", 10))
+    else if (!strncmp(statement[2], "hscsupport", 10))
     {
 	if (!strncmp(statement[3], "on", 2))
 	{
@@ -10031,6 +10559,59 @@ void restorescreen(void)
     invalidate_Areg();
     jsr("restorescreen");
 }
+
+void orgprintf(char *format, ...)
+{
+    //    orgprintf()
+    //    printf to stdout. If the bankset format is selected,
+    //    then *also* printf to the bankset asm file.
+
+    char buffer[4096];
+    va_list args;
+    va_start(args, format);
+    vsnprintf(buffer, 4095, format, args);
+    va_end(args);
+
+    printf("%s",buffer);
+
+    if (banksetrom == 0)
+        return;
+
+    FILE *banksetout;
+    banksetout=fopen(BANKSETASM,"ab");
+    if(banksetout==NULL)
+        prerror("Couldn't open bankset assembly file %s for update\n",BANKSETASM);
+    fprintf(banksetout, "%s", buffer);
+    fclose(banksetout);
+}
+
+void gfxprintf(char *format, ...)
+{
+    // gfxprintf() 
+    //    print the gfx assembly code to *either* stdout or the bankset assembly file,
+    //    (depending if banksets are selected or not)
+
+    char buffer[4096];
+    va_list args;
+    va_start(args, format);
+    vsnprintf(buffer, 4095, format, args);
+    va_end(args);
+
+    if (banksetrom == 0)
+    {
+        printf("%s",buffer);
+        return;
+    }
+
+    FILE *banksetout;
+    banksetout=fopen(BANKSETASM,"ab");
+    if(banksetout==NULL)
+        prerror("Couldn't open bankset assembly file %s for update\n",BANKSETASM);
+    fprintf(banksetout, "%s", buffer);
+    fclose(banksetout);
+}
+
+
 
 void prinfo(char *format, ...)
 {

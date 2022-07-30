@@ -485,6 +485,8 @@ void keywords(char **cstatement)
 	    doreboot();
 	else if (!strncmp(statement[1], "changecontrol\0", 14))
 	    changecontrol(statement);
+	else if (!strncmp(statement[1], "snesdetect\0", 10))
+	    snesdetect();
 	else if (!strncmp(statement[1], "plotvalue\0", 9))
 	    plotvalue(statement);
 	else if (!strncmp(statement[1], "displaymode\0", 11))

@@ -1,6 +1,9 @@
  ; Provided under the CC0 license. See the included LICENSE.txt for details.
 
      ifconst HSSUPPORT
+
+hiscorestart
+
 detectatarivoxeeprom
 hiscoremodulestart
          ; do a test to see if atarivox eeprom can be accessed, and save results
@@ -859,7 +862,7 @@ memdeviceisntHSC
          jmp loaddifficultytableAVOX
 
 savedifficultytable
-         ;*** we need to check wich device we should use...
+         ;*** we need to check which device we should use...
          lda hsdevice
          bne savedifficultytablerealdevice
          rts ; its a ram device
@@ -1162,8 +1165,6 @@ cleardifficultytablememloop
          rts
 hiscoremoduleend
 
- echo "  hiscore assembly: ",[(hiscoremoduleend-hiscoremodulestart)]d," bytes"
-
  ifconst DOUBLEWIDE
 plotvaluedw
 plotdigitcount     = temp6
@@ -1223,5 +1224,7 @@ pvnibble2char_skipnibbledw
      endif
  endif ; DOUBLEWIDE
 
+hiscoreend
+   echo "  (hiscore module is using ",[(hiscoreend-hiscorestart)]d," bytes)"
      endif ; HSSUPPORT
 

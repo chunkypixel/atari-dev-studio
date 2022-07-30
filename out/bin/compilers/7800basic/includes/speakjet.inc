@@ -47,7 +47,7 @@ SERIAL_RDYMASK  equ     $02
 
         sec     ; start bit
 .byteout_loop
-        ; put carry flag into bit 0 of SWACNT, perserving other bits
+        ; put carry flag into bit 0 of SWACNT, preserving other bits
         lda     SWACNT          ; 4
         and     #$fe            ; 2 6
         adc     #$00            ; 2 8

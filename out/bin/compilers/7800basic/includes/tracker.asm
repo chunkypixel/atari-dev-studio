@@ -2,6 +2,9 @@
 
 
  ifconst MUSICTRACKER
+
+trackerstart
+
 	; ** songtempo lists how many 256ths of a frame a 16th note lasts
 	; ** the player operates on a 16th note grid.
 
@@ -430,5 +433,9 @@ LOWC = 14
 	.byte 8,15	; b
 
 	include "tiadrumkit.asm"
+
+trackerend
+
+ echo "  (tracker module is using ",[(trackerend-trackerstart)]d," bytes)"
 
  endif ;MUSICTRACKER

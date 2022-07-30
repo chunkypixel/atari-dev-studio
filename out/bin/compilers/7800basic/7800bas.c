@@ -13,7 +13,7 @@ FILE *stdoutfilepointer;
 
 extern int currentdmahole;
 
-#define BASIC_VERSION_INFO "7800basic v0.19"
+#define BASIC_VERSION_INFO "7800basic v0.20"
 
 int main(int argc, char *argv[])
 {
@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
     condpart = 0;
     ongosub = 0;
     decimal = 0;
+    romsize = 0;
     romat4k = 0;
     bankcount = 0;
     currentbank = 0;
@@ -124,9 +125,13 @@ int main(int argc, char *argv[])
 
     printf("SPACEOVERFLOW SET 0\n");
 
+    // these asm files are produced dynamically, so as to allow out-of-order
+    // assembly with dasm. Their mere presence will affect the compile process
+    // so we start off by wiping them, if they exist from a previous compile.
     remove("7800hole.0.asm");
     remove("7800hole.1.asm");
     remove("7800hole.2.asm");
+    remove("banksetrom.asm");
 
     create_a78info();		//wipe/create a78 parameter file
 
@@ -252,6 +257,11 @@ int main(int argc, char *argv[])
 	    doend();
 
 	keywords(statement);
+        if(numconstants==(MAXCONSTANTS-1))
+        {
+            fprintf(stderr, "(%d) Maximum number of constants exceeded.\n", bbgetline());
+            exit(1);
+        }
     }
 
     printf("DMAHOLEEND%d SET .\n",currentdmahole);

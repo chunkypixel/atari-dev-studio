@@ -8,7 +8,7 @@ CFLAGS=-O0 -m64
 LEX=lex
 LEXFLAGS=-t
 
-all:  7800basic.${ARCH} 7800preprocess.${ARCH} 7800postprocess.${ARCH} 7800filter.${ARCH} 7800optimize.${ARCH} 7800header.${ARCH} 7800sign.${ARCH} 7800makecc2.${ARCH}
+all:  7800basic.${ARCH} 7800preprocess.${ARCH} 7800postprocess.${ARCH} 7800filter.${ARCH} 7800optimize.${ARCH} 7800header.${ARCH} 7800sign.${ARCH} 7800makecc2.${ARCH} snip.${ARCH}
 
 7800basic.${ARCH}: 7800bas.c statements.c keywords.c statements.h keywords.h atarivox.h 
 	${CC} ${CFLAGS} -o 7800basic.${ARCH} 7800bas.c statements.c keywords.c -L${LDIR}/lib -I${LDIR}/include -lpng -lz -lm
@@ -35,11 +35,14 @@ all:  7800basic.${ARCH} 7800preprocess.${ARCH} 7800postprocess.${ARCH} 7800filte
 7800sign.${ARCH}: 7800sign.c
 	${CC} ${CFLAGS} -o 7800sign.${ARCH} 7800sign.c
 
+snip.${ARCH}: snip.c
+	${CC} ${CFLAGS} -o snip.${ARCH} snip.c
+
 7800makecc2.${ARCH}: 7800makecc2.c
 	${CC} ${CFLAGS} -o 7800makecc2.${ARCH} 7800makecc2.c
 
 install:   all
 
 clean:
-	rm -f 7800basic.${ARCH} 7800preprocess.${ARCH} 7800postprocess.${ARCH} 7800optimize.${ARCH} 7800header.${ARCH} 7800sign.${ARCH} 7800filter.${ARCH} 7800makecc2.${ARCH}
+	rm -f 7800basic.${ARCH} 7800preprocess.${ARCH} 7800postprocess.${ARCH} 7800optimize.${ARCH} 7800header.${ARCH} 7800sign.${ARCH} snip.${ARCH} 7800filter.${ARCH} 7800makecc2.${ARCH}
 

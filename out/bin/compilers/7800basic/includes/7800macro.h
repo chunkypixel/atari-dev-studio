@@ -12,7 +12,7 @@
 ; Usage: BOXCOLLISIONCHECK x1var,y1var,w1var,h1var,x2var,y2var,w2var,h2var
 ;
 
-            MAC BOXCOLLISIONCHECK
+ MAC BOXCOLLISIONCHECK
 .boxx1    SET {1}
 .boxy1    SET {2}
 .boxw1    SET {3}
@@ -56,7 +56,43 @@
      clc ;2
 .checkdone
 
-            ENDM
+ ENDM
+
+; QBOXCOLLISIONCHECK
+; author: unknown
+;
+; A general bounding box collision check. compares 2 rectangles of differing size
+; and shape for overlap. Carry is CLEAR for collision detected, SET for none.
+; 
+; Usage: QBOXCOLLISIONCHECK x1var,y1var,w1var,h1var,x2var,y2var,w2var,h2var
+;
+ MAC QBOXCOLLISIONCHECK
+.boxx1    SET {1}
+.boxy1    SET {2}
+.boxw1    SET {3}
+.boxh1    SET {4}
+.boxx2    SET {5}
+.boxy2    SET {6}
+.boxw2    SET {7}
+.boxh2    SET {8}
+
+	lda .boxx2
+	clc
+	adc #.boxw2
+	sbc .boxx1
+	cmp #.boxw1+.boxw2-1
+	bcs .qboxcollisiondone
+	;if we're here, carry is clear
+ 	lda .boxy2
+	adc #.boxh2
+	sbc .boxy1
+	cmp #.boxh1+.boxh2-1
+.qboxcollisiondone
+	rol ; temp for testing - invert carry...
+	eor #1
+	ror
+ ENDM
+
 
  MAC MEDIAN3
 

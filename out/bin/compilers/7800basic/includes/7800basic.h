@@ -168,7 +168,6 @@ songdatahi = $be
 
 inactivechannelcount = $bf
 
-
 songchannel1transpose    = $c0
 songchannel2transpose    = $c1
 songchannel3transpose    = $c2
@@ -469,6 +468,7 @@ drivingposition0    =      paddleposition0
 trakballx0          =      paddleposition0
 mousex0             =      paddleposition0
 lighttgunx0         =      paddleposition0
+snes2atari0lo       =      paddleposition0
 
  ; controller 1 data...
 paddleposition2     DS 1 ; $1D6
@@ -477,6 +477,7 @@ drivingposition1    =      paddleposition2
 trakballx1          =      paddleposition2
 mousex1             =      paddleposition2
 lightgunx1          =      paddleposition2
+snes2atari1lo       =      paddleposition2
 
  ; controller 0 altdata...
 paddleposition1     DS 1 ; $1D7 
@@ -484,6 +485,7 @@ keypadmatrix0b      =      paddleposition1
 trakbally0          =      paddleposition1
 mousey0             =      paddleposition1
 lightguny0          =      paddleposition1
+snes2atari0hi       =      paddleposition1
 
  ; controller 1 altdata...
 paddleposition3     DS 1 ; $1D8 
@@ -491,6 +493,7 @@ keypadmatrix1b      =      paddleposition3
 trakbally1          =      paddleposition3
 mousey1             =      paddleposition3
 lightguny1          =      paddleposition3
+snes2atari1hi       =      paddleposition3
 
 ; controller state save. for trakball state+dir codes, rotary position codes
 controller0statesave DS 1 ; $1D9
@@ -498,12 +501,14 @@ paddleprevious0      =      controller0statesave
 mousecodex0          =      controller0statesave
 trakballcodex0       =      controller0statesave
 keypadmatrix0c       =      controller0statesave
+snesdetected0        =      controller0statesave
 
 controller1statesave DS 1 ; $1DA
 paddleprevious2      =      controller1statesave
 mousecodex1          =      controller1statesave
 trakballcodex1       =      controller1statesave
 keypadmatrix1c       =      controller1statesave
+snesdetected1        =      controller1statesave
 
 paddleprevious1      DS 1 ; $1DB
 keypadmatrix0d       =      paddleprevious1
@@ -538,6 +543,27 @@ pokey4offset   DS 1 ; $1EC
 pokeylastkeycode   DS 1
 pokeykeycode       DS 1
 pokeykeydebounce   DS 1
+ endif
+
+ ifconst RMT
+rasterpause        DS 1
+ endif ; RMT
+ ifconst RMTVOLUME
+rmtvolume          DS 1
+ endif ; RMTVOLUME
+ ifconst TIAVOLUME
+tiavolume          DS 1
+ endif ; TIAVOLUME
+
+ ifconst FOURBITFADE
+fourbittemp1          DS 1
+fourbitfadevalue      DS 1
+fourbittemp1int       DS 1
+fourbitfadevalueint   DS 1
+ endif ; FOURBITFADE
+
+ ifconst SNES2ATARISUPPORT
+snesport           DS 1
  endif
 
  ; see if we need an interrupthold byte...

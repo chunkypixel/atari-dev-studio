@@ -95,6 +95,13 @@ TIMEOFFSET = 10
          ifconst MUSICTRACKER
            jsr servicesong
          endif ; MUSICTRACKER
+         ifconst RMT
+           lda rasterpause
+           beq skiprasterupdate
+           jsr RASTERMUSICTRACKER+3
+skiprasterupdate
+RMT_Iend
+         endif
 
          inc framecounter
          lda framecounter
@@ -244,7 +251,7 @@ show2700
 longreadtype
  .byte 0, 0, 0, 1  ; NONE     PROLINE   LIGHTGUN  PADDLE
  .byte 2, 0, 3, 0  ; TRKBALL  VCSSTICK  DRIVING   KEYPAD
- .byte 3, 3, 0     ; STMOUSE  AMOUSE    ATARIVOX
+ .byte 3, 3, 0, 0  ; STMOUSE  AMOUSE    ATARIVOX  SNES
 
 longreadroutineloP0
  .byte <LLRET0             ;  0 = no routine
@@ -635,6 +642,117 @@ joybuttonhandler
 twobuttonmask
  .byte %00000100,%00010000
 
+ ifconst SNES2ATARISUPPORT
+
+SNES_CLOCK_PORT_BIT
+   .byte $10,$01 
+SNES_CTLSWA_MASK
+   .byte $30,$03
+SNES_CTLSWA_SIGNAL
+   .byte $C0,$0C
+SWCHA_DIRMASK
+   .byte $F0,$0F
+SWCHA_INVDIRMASK
+   .byte $0F,$F0
+
+    ; Probe each port for SNES, and see if autodetection succeeds anywhere.
+SNES_AUTODETECT
+     ldx #1
+SNES_AUTODETECT_LOOP
+     lda #1 ; proline
+     sta port0control,x
+     jsr setportforinput
+     jsr setonebuttonmode
+     jsr SNES_READ
+     lda snesdetected0,x
+     bne SNES_AUTODETECT_FOUND
+     ; detection failed
+     jsr setportforinput
+     jsr settwobuttonmode
+     dex
+     bpl SNES_AUTODETECT_LOOP
+     rts
+SNES_AUTODETECT_FOUND
+     lda #11 ; formally set the snes controller
+     sta port0control,x
+     stx snesport
+     rts
+ endif ; SNES2ATARISUPPORT
+     
+snes2atarihandler
+ ifconst SNES2ATARISUPPORT
+SNES2ATARI
+     jsr SNES_READ 
+     jmp buttonreadloopreturn
+
+SNES_READ
+     ; x=0 for left port, x=1 for right
+
+     ; Start by checking if any port directions are pressed. 
+     ; Abort the autodetect for this port if so, as snes2atari doesn't ground any 
+     ; direction pins. if directions are pressed and the port is changed to output,
+     ; that means the output is direct-shorted, and nobody seems to know if riot's
+     ; output mode has current protection.
+
+     lda SWCHA
+     ora SWCHA_INVDIRMASK,x
+     eor SWCHA_DIRMASK,x
+     beq SNES_ABORT
+
+     lda port0control,x
+     cmp #11 ; snes
+     bne snes2atari_signal_go ; if this is a first auto-detection read, go ahead and signal
+     lda snesdetected0,x 
+     bne snes2atari_signal_skip ; if snes was available in previous frames, skip signalling
+snes2atari_signal_go
+         jsr SNES2ATARI_SIGNAL
+snes2atari_signal_skip
+
+     lda SNES_CTLSWA_MASK,x
+     sta CTLSWA    ; enable pins UP/DOWN to work as outputs
+     lda #$0
+     sta SWCHA     ; make both latch and clock down
+     ldy #16 ; 16 bits 
+SNES2ATARILOOP
+         rol INPT4,x     ; sample data into carry
+         lda SNES_CLOCK_PORT_BIT,x
+         sta SWCHA     ; clock low
+         rol snes2atari0lo,x
+         rol snes2atari0hi,x
+         lda #0
+         sta SWCHA     ; clock high
+         dey           ; next bit
+     bne SNES2ATARILOOP
+     rol INPT4,x         ; 17th bit should be lo if controller is there.
+     rol                 ; 17th snes bit into A low bit
+     eor snes2atari0lo,x ; 16th bit should be hi if controller is there.
+     and #1
+     sta snesdetected0,x
+     beq SNES_STOP_CLOCK ; if snes isn't detected, leave port in default state
+     stx snesport ; snesport keeps the index of the latest autodetected controller
+     lda SNES_CLOCK_PORT_BIT,x
+SNES_STOP_CLOCK
+     sta SWCHA     ; clock low
+     sta CTLSWA    ; set port bits to input avoid conflict with other drivers
+     rts
+SNES_ABORT
+     sta snesdetected0,x
+     rts
+SNES2ATARI_SIGNAL
+     ; signal to SNES2ATARI++ that we want SNES mode...
+     lda SNES_CTLSWA_SIGNAL,x
+     sta CTLSWA  
+     lda #0 
+     sta SWCHA
+     ldy #0
+SNES_SIGNAL_LOOP
+     dey
+     bne SNES_SIGNAL_LOOP
+     lda #$FF
+     sta SWCHA
+     rts
+ endif
+
 gunbuttonhandler ; outside of the conditional, so our button handler LUT is valid
  ifconst LIGHTGUNSUPPORT
      cpx #0
@@ -670,6 +788,7 @@ controlsusing2buttoncode
      .byte 0 ; 08=st mouse/cx80
      .byte 0 ; 09=amiga mouse
      .byte 1 ; 10=atarivox
+     .byte 0 ; 11=snes2atari
 
 buttonhandlerhi
      .byte 0                    ; 00=no controller plugged in
@@ -683,6 +802,7 @@ buttonhandlerhi
      .byte >mousebuttonhandler  ; 08=st mouse
      .byte >mousebuttonhandler  ; 09=amiga mouse
      .byte >joybuttonhandler    ; 10=atarivox
+     .byte >snes2atarihandler   ; 11=snes
 buttonhandlerlo
      .byte 0                    ; 00=no controller plugged in
      .byte <joybuttonhandler    ; 01=proline joystick
@@ -695,6 +815,7 @@ buttonhandlerlo
      .byte <mousebuttonhandler  ; 08=st mouse
      .byte <mousebuttonhandler  ; 09=amiga mouse
      .byte <joybuttonhandler    ; 10=atarivox
+     .byte <snes2atarihandler   ; 11=snes
 
 drawwait
      bit visibleover ; 255 if screen is being drawn, 0 when not.
@@ -813,7 +934,14 @@ exitmusictracker
      sta inttemp2
      iny
 sfxvolumeentrypt
+ ifconst TIAVOLUME
+     lda tiavolume
+     sta fourbitfadevalueint
+ endif ; TIAVOLUME
      lda (inttemp5),y
+ ifconst TIAVOLUME
+     jsr fourbitfadeint
+ endif ; TIAVOLUME
      sta AUDV0,x
      cmp #$10
      bcs sfxsoundloop ; AUDV0>$0F means the sound is looped while priority is active

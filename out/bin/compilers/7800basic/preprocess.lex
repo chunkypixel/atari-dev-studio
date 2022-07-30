@@ -55,10 +55,12 @@ int linenumber=1;
 <endmcomment>. ;
 <endmcomment>\n {linenumber++;BEGIN(INITIAL);}
 
+"_asm"            printf("%s", yytext);  
 "asm" {printf("%s",yytext);BEGIN(asm);}
 <asm>"\nend" {linenumber++;printf("\nend");BEGIN(INITIAL);}
 <asm>"\n" {linenumber++;printf("\n");}
 
+"_sdata"            printf("%s", yytext);  
 "sdata" {printf("%s",yytext);BEGIN(sdata);}
 <sdata>"=" printf(" %s ", yytext);  
 <sdata>[ \t]+ putchar(' ');
@@ -66,6 +68,7 @@ int linenumber=1;
 <sdata>"\nend" {linenumber++;printf("\nend");BEGIN(INITIAL);}
 <sdata>"\n" {linenumber++;printf("\n");}
 
+"_data"            printf("%s", yytext);  
 "data" {printf("%s",yytext);BEGIN(data);}
 <data>^"\nend" printf("%s",yytext);
 <data>"\nend" {linenumber++;printf("\nend");BEGIN(INITIAL);}
@@ -84,6 +87,7 @@ int linenumber=1;
 <alphadata>"\nend" {linenumber++;printf("\nend");BEGIN(INITIAL);}
 <alphadata>"\n" {linenumber++;printf("\n");}
 
+"_speechdata"            printf("%s", yytext);  
 "speechdata" {printf("%s",yytext);BEGIN(speechdata);}
 <speechdata>['] {printf("%s",yytext);BEGIN(speechquotestart);}
 <speechdata>^"\nend" printf("%s",yytext);
@@ -96,6 +100,7 @@ int linenumber=1;
 <speechquotestart>['] {printf("%s",yytext);BEGIN(speechdata);}
 <speechquotestart>^\n* printf("%s",yytext);
 
+"_songdata"            printf("%s", yytext);  
 "songdata" {printf("%s",yytext);BEGIN(songdata);}
 <songdata>['] {printf("%s",yytext);BEGIN(songquotestart);}
 <songdata>^"\nend" printf("%s",yytext);
@@ -118,6 +123,7 @@ int linenumber=1;
 <plotquotestart>['] {printf("%s",yytext);BEGIN(INITIAL);}
 <plotquotestart>^\n* printf("%s",yytext);
 
+"_include"            printf("%s", yytext);  
 "include" {printf("%s",yytext);BEGIN(includes);}
 <includes>^\n* printf("%s",yytext);
 <includes>\n {linenumber++;printf("\n");BEGIN(INITIAL);}
@@ -138,6 +144,7 @@ int linenumber=1;
 <plotmapfile>^\n* printf("%s",yytext);
 <plotmapfile>\n {linenumber++;printf("\n");BEGIN(INITIAL);}
 
+"_set"            printf("%s", yytext);  
 "set" {printf("%s",yytext);BEGIN(set);}
 <set>['] {printf("%s",yytext);BEGIN(setquotestart);}
 <set>^\n* printf("%s",yytext);

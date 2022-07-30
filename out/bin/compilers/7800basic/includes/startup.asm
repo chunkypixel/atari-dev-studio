@@ -78,9 +78,6 @@ pndetecispal
      lda #<DLLMEM
      sta DPPL
 
-     lda #%00000100 ; leave cartridge plugged in for any testing
-     sta XCTRL1s
-
      ifconst pokeysupport
          ; pokey support is compiled in, so try to detect it...
          jsr detectpokeylocation
@@ -139,27 +136,20 @@ storeAinhsdevice
          jsr silenceavoxvoice
      endif
 
-     ifconst SGRAM
-         ; check if we actually have SGRAM. If not, probe XM for it...
-         ldy #$EA
-         sty $4000
-         ldy $4000
-         cpy #$EA
-         beq skipSGRAMcheck
-             lda XCTRL1s
-             ora #%01100100
-             sta XCTRL1
-             sty $4000
-             ldy $4000
-             cpy #$EA
-             bne skipSGRAMcheck
-                 ;if we're here, XM memory satisfied our RAM requirement
-                 sta XCTRL1s ; save it
-                 lda #$10
-                 sta XCTRL2
-                 sta XCTRL3
-skipSGRAMcheck
-     endif
+     ifconst RMT
+         ifconst RMTVOLUME
+             lda #$F0 ; default to full RMT volume
+             sta rmtvolume
+             ifconst TIAVOLUME
+                 sta tiavolume
+             endif ; TIAVOLUME
+         endif ; RMTVOLUME
+     else  ; !RMT
+         ifconst TIAVOLUME
+             lda #$F0 ; default to full TIA volume
+             sta tiavolume
+         endif ; TIAVOLUME
+     endif ; RMT
 
      ifconst bankswitchmode
          ; we need to switch to the first bank as a default. this needs to
@@ -184,7 +174,7 @@ skipSGRAMcheck
      ; 6,5 dma ctrl 2=normal DMA, 3=no DMA
      ; 4 character width 1=2 byte chars, 0=1 byte chars
      ; 3 border control 0=background color border, 1=black border
-     ; 2 kangaroo mode 0=transparancy, 1=kangaroo
+     ; 2 kangaroo mode 0=transparency, 1=kangaroo
      ; 1,0 read mode 0=160x2/160x4 1=N/A 2=320B/320D 3=320A/320C
 
      ifconst DOUBLEWIDE

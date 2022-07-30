@@ -9,7 +9,7 @@
 ; available at https://github.com/dasm-assembler/dasm
 
 
-; ******************** 7800 Hardware Adresses ***************************
+; ******************** 7800 Hardware Addresses ***************************
 ;
 ;       MEMORY MAP USAGE OF THE 7800
 ;
@@ -36,7 +36,7 @@
 ;	2100 - 213F	RAM
 ;	2140 - 21FF	RAM block 1 (mirror of 0140-01ff)
 ;	2200 - 27FF	RAM
-;	2800 - 2FFF	mirror of 1800-27ff
+;	2800 - 2FFF	unavailable to external devices (bios bus-conflict)
 ;	3000 - 3FFF	unused address space
 ;	4000 - FF7F	potential cartridge address space
 ;	FF80 - FFF9	RESERVED FOR ENCRYPTION

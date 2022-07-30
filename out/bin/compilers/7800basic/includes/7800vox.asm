@@ -8,6 +8,8 @@
 
      ifconst HSSUPPORT
 
+_7800voxstart
+
 AVoxReadBytes
          sta temp8
          jsr i2c_startwrite
@@ -75,6 +77,10 @@ AVoxDetect
 
          include "i2c7800.inc"
          I2C_SUBS temp9
+
+_7800voxend
+
+ echo "  (7800vox module is using ",[(_7800voxend-_7800voxstart)]d," bytes)"
 
      endif
 

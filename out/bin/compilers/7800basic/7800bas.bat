@@ -11,6 +11,10 @@ goto nooptimize
 :nooptimize
 dasm "%~f1.asm" -I"%bas7800dir%"/includes -f3 -l"%~f1.list.txt" -o"%~f1.bin" | 7800filter
 7800sign -w "%~f1.bin"
+if not exist banksetrom.asm goto nobankset
+  dasm "%bas7800dir%"/includes/banksetskeleton.asm  -I"%bas7800dir%"/includes -f3 -l"%~f1.list.txt" -o"banksetrom.bin" | 7800filter
+  copy /b "%~f1.bin"+"banksetrom.bin" "%~f1.bin"
+:nobankset
 7800header -o -f a78info.cfg "%~f1.bin"
 7800makecc2 "%~f1.bin"
 goto end
