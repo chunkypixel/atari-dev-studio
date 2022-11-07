@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.8.1
+
+* Updated WebView pages (Welcome and Sprite Editor) to work under updated **Content Security Policy** conditions 
+* Updated internal dev packages (requires VS Code 1.73 or better)
+
 ## 0.8.0
 
 * Updated 7800basic to v0.20 (Windows, Linux, macOS)

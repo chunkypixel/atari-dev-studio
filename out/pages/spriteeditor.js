@@ -18,7 +18,6 @@ const opn = require("open");
 class SpriteEditorPage {
     constructor() {
         this.currentPanel = undefined;
-        this.contentPath = "";
     }
     dispose() {
     }
@@ -26,7 +25,7 @@ class SpriteEditorPage {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SpriteEditorPage.openPage');
             // Prepare
-            this.contentPath = path.join(context.extensionPath, 'out', 'content', 'pages', 'spriteeditor');
+            let contentUri = vscode.Uri.file(path.join(context.extensionPath, 'out', 'content', 'pages', 'spriteeditor'));
             let columnToShowIn = vscode.window.activeTextEditor
                 ? vscode.window.activeTextEditor.viewColumn
                 : undefined;
@@ -45,29 +44,30 @@ class SpriteEditorPage {
                 this.currentPanel = vscode.window.createWebviewPanel('webpage', 'Sprite Editor', columnToShowIn || vscode.ViewColumn.One, {
                     enableScripts: true,
                     retainContextWhenHidden: true,
-                    localResourceRoots: [vscode.Uri.file(this.contentPath)]
+                    localResourceRoots: [contentUri]
                 });
                 // Content
-                let startPagePath = vscode.Uri.file(path.join(this.contentPath, 'index.html'));
+                let startPagePath = vscode.Uri.joinPath(contentUri, 'index.html');
                 let content = yield filesystem.ReadFileAsync(startPagePath.fsPath);
                 let nonce = this.getNonce();
                 // Script
-                let scriptJsPath = vscode.Uri.file(path.join(this.contentPath, 'main.js'));
-                let scriptJsUri = scriptJsPath.with({ scheme: 'vscode-resource' });
+                let scriptJsPath = vscode.Uri.joinPath(contentUri, 'main.js');
+                let scriptJsUri = this.currentPanel.webview.asWebviewUri(scriptJsPath);
                 // Style
-                let styleCssPath = vscode.Uri.file(path.join(this.contentPath, 'main.css'));
-                let styleCssUri = styleCssPath.with({ scheme: 'vscode-resource' });
+                let styleCssPath = vscode.Uri.joinPath(contentUri, 'main.css');
+                let styleCssUri = this.currentPanel.webview.asWebviewUri(styleCssPath);
                 // Extension
-                let basePath = vscode.Uri.file(this.contentPath);
-                let basePathUri = basePath.with({ scheme: 'vscode-resource' }).toString() + '/';
+                //let basePath = vscode.Uri.file(this.contentPath);
+                //let basePathUri = basePath.with({ scheme: 'vscode-resource' }).toString() + '/';
                 // Configuration
-                let configuration = yield this.loadConfiguration();
+                let configuration = yield this.loadConfiguration(startPagePath);
                 // Update tags in content
                 content = this.replaceContentTag(content, "APPNAME", "Sprite Editor");
                 content = this.replaceContentTag(content, "NONCE", nonce);
+                content = this.replaceContentTag(content, "CSPSOURCE", this.currentPanel.webview.cspSource);
                 content = this.replaceContentTag(content, "SCRIPTJSURI", scriptJsUri);
                 content = this.replaceContentTag(content, "STYLECSSURI", styleCssUri);
-                content = this.replaceContentTag(content, "BASEPATHURI", basePathUri);
+                content = this.replaceContentTag(content, "BASEPATHURI", contentUri.path + "/");
                 content = this.replaceContentTag(content, "CONFIGURATION", configuration);
                 // Display
                 this.currentPanel.webview.html = content;
@@ -95,7 +95,7 @@ class SpriteEditorPage {
                             this.exportAsAssemblyFile(message);
                             break;
                         case 'configuration':
-                            this.saveConfiguration(message);
+                            this.saveConfiguration(contentUri, message);
                             break;
                         case 'loadPalette':
                             this.loadPalette(message);
@@ -144,10 +144,10 @@ class SpriteEditorPage {
             catch (_a) { }
         });
     }
-    loadConfiguration() {
+    loadConfiguration(contentUri) {
         return __awaiter(this, void 0, void 0, function* () {
             // Process
-            let configurationFileUri = vscode.Uri.file(path.join(this.contentPath, 'spriteeditor.config'));
+            let configurationFileUri = vscode.Uri.joinPath(contentUri, 'spriteeditor.config');
             let data = yield filesystem.ReadFileAsync(configurationFileUri.fsPath);
             // Return BASE64
             if (data) {
@@ -156,10 +156,10 @@ class SpriteEditorPage {
             return "";
         });
     }
-    saveConfiguration(message) {
+    saveConfiguration(contentUri, message) {
         // Prepare
         let data = message.data;
-        let configurationFileUri = vscode.Uri.file(path.join(this.contentPath, 'spriteeditor.config'));
+        let configurationFileUri = vscode.Uri.joinPath(contentUri, 'spriteeditor.config');
         // Process
         filesystem.WriteFileAsync(configurationFileUri.fsPath, data);
     }

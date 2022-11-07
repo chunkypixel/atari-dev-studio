@@ -25,7 +25,7 @@ class WelcomePage {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:WelcomePage.openPage');
             // Prepare
-            let contentPath = path.join(context.extensionPath, 'out', 'content', 'pages', 'welcome');
+            let contentUri = vscode.Uri.file(path.join(context.extensionPath, 'out', 'content', 'pages', 'welcome'));
             let columnToShowIn = vscode.window.activeTextEditor
                 ? vscode.window.activeTextEditor.viewColumn
                 : undefined;
@@ -38,23 +38,25 @@ class WelcomePage {
                 // Create
                 this.currentPanel = vscode.window.createWebviewPanel('webpage', `${application.DisplayName}`, columnToShowIn || vscode.ViewColumn.One, {
                     enableScripts: true,
-                    localResourceRoots: [vscode.Uri.file(contentPath)]
+                    localResourceRoots: [contentUri]
                 });
                 // Content
-                let startPagePath = vscode.Uri.file(path.join(contentPath.toString(), 'index.html'));
+                let startPagePath = vscode.Uri.joinPath(contentUri, 'index.html');
                 let content = yield filesystem.ReadFileAsync(startPagePath.fsPath);
                 let nonce = this.getNonce();
                 // Script
-                let scriptJsPath = vscode.Uri.file(path.join(contentPath.toString(), 'script.js'));
-                let scriptJsUri = scriptJsPath.with({ scheme: 'vscode-resource' });
+                let scriptJsPath = vscode.Uri.joinPath(contentUri, 'script.js');
+                let scriptJsUri = this.currentPanel.webview.asWebviewUri(scriptJsPath);
                 // Style
-                let styleCssPath = vscode.Uri.file(path.join(contentPath.toString(), 'style.css'));
-                let styleCssUri = styleCssPath.with({ scheme: 'vscode-resource' });
+                let styleCssPath = vscode.Uri.joinPath(contentUri, 'style.css');
+                let styleCssUri = this.currentPanel.webview.asWebviewUri(styleCssPath);
                 // Update tags in content
                 content = this.replaceContentTag(content, "APPDISPLAYNAME", application.DisplayName);
                 content = this.replaceContentTag(content, "APPDESCRIPTION", application.Description);
                 content = this.replaceContentTag(content, "APPVERSION", application.Version);
                 content = this.replaceContentTag(content, "NONCE", nonce);
+                content = this.replaceContentTag(content, "CSPSOURCE", this.currentPanel.webview.cspSource);
+                content = this.replaceContentTag(content, "BASEPATHURI", contentUri.path + "/");
                 content = this.replaceContentTag(content, "SCRIPTJSURI", scriptJsUri);
                 content = this.replaceContentTag(content, "STYLECSSURI", styleCssUri);
                 // Set

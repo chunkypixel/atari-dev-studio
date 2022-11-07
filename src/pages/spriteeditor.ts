@@ -9,7 +9,6 @@ import { stringify } from 'querystring';
 export class SpriteEditorPage implements vscode.Disposable {
 
     protected currentPanel: vscode.WebviewPanel | undefined = undefined;
-    protected contentPath: string = "";
 
     public dispose(): void {
     }
@@ -18,7 +17,7 @@ export class SpriteEditorPage implements vscode.Disposable {
         console.log('debugger:SpriteEditorPage.openPage');
         
         // Prepare
-        this.contentPath = path.join(context.extensionPath, 'out', 'content', 'pages', 'spriteeditor');
+        let contentUri = vscode.Uri.file(path.join(context.extensionPath, 'out', 'content', 'pages', 'spriteeditor'));
         let columnToShowIn = vscode.window.activeTextEditor
                                 ? vscode.window.activeTextEditor.viewColumn
                                 : undefined;
@@ -42,36 +41,37 @@ export class SpriteEditorPage implements vscode.Disposable {
                 {
                     enableScripts: true,
                     retainContextWhenHidden: true,
-                    localResourceRoots: [vscode.Uri.file(this.contentPath)]
+                    localResourceRoots: [contentUri]
                 }
             );
 
             // Content
-            let startPagePath = vscode.Uri.file(path.join(this.contentPath,'index.html'));
+            let startPagePath = vscode.Uri.joinPath(contentUri,'index.html');
             let content = await filesystem.ReadFileAsync(startPagePath.fsPath);
             let nonce = this.getNonce();
             
             // Script
-            let scriptJsPath = vscode.Uri.file(path.join(this.contentPath, 'main.js'));
-            let scriptJsUri = scriptJsPath.with({ scheme: 'vscode-resource' });
+            let scriptJsPath = vscode.Uri.joinPath(contentUri, 'main.js');
+            let scriptJsUri = this.currentPanel.webview.asWebviewUri(scriptJsPath);
 
             // Style
-            let styleCssPath = vscode.Uri.file(path.join(this.contentPath, 'main.css'));
-            let styleCssUri = styleCssPath.with({ scheme: 'vscode-resource' });
+            let styleCssPath = vscode.Uri.joinPath(contentUri, 'main.css');
+            let styleCssUri = this.currentPanel.webview.asWebviewUri(styleCssPath);
 
             // Extension
-            let basePath = vscode.Uri.file(this.contentPath);
-            let basePathUri = basePath.with({ scheme: 'vscode-resource' }).toString() + '/';
+            //let basePath = vscode.Uri.file(this.contentPath);
+            //let basePathUri = basePath.with({ scheme: 'vscode-resource' }).toString() + '/';
 
             // Configuration
-            let configuration = await this.loadConfiguration();
+            let configuration = await this.loadConfiguration(startPagePath);
 
             // Update tags in content
             content = this.replaceContentTag(content, "APPNAME", "Sprite Editor");
             content = this.replaceContentTag(content, "NONCE", nonce);
+            content = this.replaceContentTag(content, "CSPSOURCE", this.currentPanel.webview.cspSource);
             content = this.replaceContentTag(content, "SCRIPTJSURI", scriptJsUri);
             content = this.replaceContentTag(content, "STYLECSSURI", styleCssUri);
-            content = this.replaceContentTag(content, "BASEPATHURI", basePathUri);
+            content = this.replaceContentTag(content, "BASEPATHURI", contentUri.path +"/");
             content = this.replaceContentTag(content, "CONFIGURATION", configuration);
 
             // Display
@@ -109,7 +109,7 @@ export class SpriteEditorPage implements vscode.Disposable {
                             break;
 
                         case 'configuration':
-                            this.saveConfiguration(message);
+                            this.saveConfiguration(contentUri, message);
                             break;
 
                         case 'loadPalette':
@@ -172,9 +172,9 @@ export class SpriteEditorPage implements vscode.Disposable {
         catch {}
     }
 
-    private async loadConfiguration(): Promise<string> {
+    private async loadConfiguration(contentUri : vscode.Uri): Promise<string> {
         // Process
-        let configurationFileUri = vscode.Uri.file(path.join(this.contentPath, 'spriteeditor.config'));
+        let configurationFileUri = vscode.Uri.joinPath(contentUri, 'spriteeditor.config');
         let data = await filesystem.ReadFileAsync(configurationFileUri.fsPath);
 
         // Return BASE64
@@ -182,10 +182,10 @@ export class SpriteEditorPage implements vscode.Disposable {
         return "";
     }
 
-    private saveConfiguration(message: any) {
+    private saveConfiguration(contentUri : vscode.Uri, message: any) {
         // Prepare
         let data = message!.data;
-        let configurationFileUri = vscode.Uri.file(path.join(this.contentPath, 'spriteeditor.config'));
+        let configurationFileUri = vscode.Uri.joinPath(contentUri, 'spriteeditor.config');
 
         // Process
         filesystem.WriteFileAsync(configurationFileUri.fsPath, data); 
