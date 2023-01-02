@@ -134,7 +134,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                 // return list of available language methods
                 provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
                     // get all text until the `position` and check if it reads `if `
-                    let linePrefix = document.lineAt(position).text.substr(0, position.character);
+                    let linePrefix = document.lineAt(position).text.substring(0, position.character);
                     if (!linePrefix.endsWith('if ')) {
                         return undefined;
                     }
@@ -209,7 +209,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                 // return list of available language methods
                 provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
                     // get all text until the `position` and check if it reads `return `
-                    let linePrefix = document.lineAt(position).text.substr(0, position.character);
+                    let linePrefix = document.lineAt(position).text.substring(0, position.character);
                     if (!linePrefix.endsWith('return ')) {
                         return undefined;
                     }
@@ -230,7 +230,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                 // return list of available language methods
                 provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
                     // get all text until the `position` and check if it reads `return `
-                    let linePrefix = document.lineAt(position).text.substr(0, position.character);
+                    let linePrefix = document.lineAt(position).text.substring(0, position.character);
                     if (!linePrefix.endsWith('romsize ')) {
                         return undefined;
                     }
@@ -263,7 +263,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                 // return list of available language methods
                 provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
                     // get all text until the `position` and check if it reads `return `
-                    let linePrefix = document.lineAt(position).text.substr(0, position.character);
+                    let linePrefix = document.lineAt(position).text.substring(0, position.character);
                     if (!linePrefix.endsWith('displaymode ')) {
                         return undefined;
                     }
@@ -287,7 +287,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                 // return list of available language methods
                 provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
                     // get all text until the `position` and check if it reads `return `
-                    let linePrefix = document.lineAt(position).text.substr(0, position.character);
+                    let linePrefix = document.lineAt(position).text.substring(0, position.character);
                     if (!linePrefix.endsWith('shakescreen ')) {
                         return undefined;
                     }
@@ -309,13 +309,14 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                 // return list of available language methods
                 provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
                     // get all text until the `position` and check if it reads `return `
-                    let linePrefix = document.lineAt(position).text.substr(0, position.character);
+                    let linePrefix = document.lineAt(position).text.substring(0, position.character);
                     if (!linePrefix.endsWith('deprecated ')) {
                         return undefined;
                     }
 
                     return [
-                        new vscode.CompletionItem('frameheight', vscode.CompletionItemKind.Value)
+                        new vscode.CompletionItem('frameheight', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('160bindexes', vscode.CompletionItemKind.Value)
                     ];
                 }
             },
@@ -328,7 +329,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                 // return list of available language methods
                 provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
                     // get all text until the `position` and check if it reads `return `
-                    let linePrefix = document.lineAt(position).text.substr(0, position.character);
+                    let linePrefix = document.lineAt(position).text.substring(0, position.character);
                     if (!linePrefix.endsWith('drawhiscores ')) {
                         return undefined;
                     }
@@ -350,7 +351,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                 // return list of available language methods
                 provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
                     // get all text until the `position` and check if it reads `return `
-                    let linePrefix = document.lineAt(position).text.substr(0, position.character);
+                    let linePrefix = document.lineAt(position).text.substring(0, position.character);
                     if (!linePrefix.endsWith('tallsprite ')) {
                         return undefined;
                     }
@@ -371,7 +372,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                 // return list of available language methods
                 provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
                     // get all text until the `position` and check if it reads `set `
-                    let linePrefix = document.lineAt(position).text.substr(0, position.character);
+                    let linePrefix = document.lineAt(position).text.substring(0, position.character);
                     if (!linePrefix.endsWith('set ')) {
                         return undefined;
                     }
@@ -402,6 +403,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                         new vscode.CompletionItem('mcpdevcart', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('canary', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('basepath', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('banksets', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('hssupport', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('hsgamename', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('hsseconds', vscode.CompletionItemKind.Method),

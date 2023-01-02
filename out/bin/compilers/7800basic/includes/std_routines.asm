@@ -130,9 +130,9 @@ buttonreadloopreturn
          dex
          bpl buttonreadloop
 
-	 ifconst KEYPADSUPPORT
-           jsr keypadrowselect
-	 endif ; KEYPADSUPPORT
+	 ;ifconst KEYPADSUPPORT
+         ;  jsr keypadrowselect
+	 ;endif ; KEYPADSUPPORT
 
 
  ifconst DOUBLEBUFFER
@@ -318,6 +318,7 @@ skipuserintroutine
 
      ifconst KEYPADSUPPORT
          jsr keypadcolumnread
+         jsr keypadrowselect
      endif
 
 NMIexit
@@ -416,14 +417,55 @@ pauseroutine
          bit SWCHB
          beq pausepressed
 
+ ifnconst SOFTPAUSEOFF
  ifnconst SOFTRESETASPAUSEOFF
  ifnconst MOUSESUPPORT
  ifnconst TRAKBALLSUPPORT
+     lda port0control
+     cmp #11
+     bne skipsoftpause
      lda SWCHA ; then check the soft "RESET" joysick code...
      and #%01110000 ; _LDU
      beq pausepressed
+skipsoftpause
  endif
  endif
+ endif
+ endif
+ ifconst SNES0PAUSE
+     lda port0control
+     cmp #11
+     bne skipsnes0pause
+     lda snesdetected0
+     beq skipsnes0pause
+     lda snes2atari0hi
+     and #%00010000
+     beq pausepressed
+skipsnes0pause
+ endif
+ ifconst SNES1PAUSE
+
+     lda port1control
+     cmp #11
+     bne skipsnes1pause
+     lda snesdetected1
+     beq skipsnes1pause
+     lda snes2atari1hi
+     and #%00010000
+     beq pausepressed
+skipsnes1pause
+ endif
+ ifconst SNESNPAUSE
+     ldx snesport
+     lda port0control,x
+     cmp #11
+     bne skipsnesNpause
+     lda snesdetected0,x
+     beq skipsnesNpause
+     lda snes2atari0hi,x
+     and #%00010000
+     beq pausepressed
+skipsnesNpause
  endif
 
          ;pause isn't pressed
@@ -582,6 +624,16 @@ skippalframeadjusting
 servicesongwasnotmissed
      endif ; MUSICTRACKER
 
+     ifconst RMT
+           lda palfastframe
+           beq skiprasterupdate2
+           lda rasterpause
+           beq skiprasterupdate2
+           jsr RASTERMUSICTRACKER+3
+skiprasterupdate2
+     endif
+
+
      rts
 
 serviceatarivoxqueue
@@ -710,8 +762,16 @@ snes2atari_signal_skip
 
      lda SNES_CTLSWA_MASK,x
      sta CTLSWA    ; enable pins UP/DOWN to work as outputs
+     sta SWCHA     ; latch+clock high
+     nop
+     nop
+     nop
+     nop
+     nop
+     nop
+     nop
      lda #$0
-     sta SWCHA     ; make both latch and clock down
+     sta SWCHA     ; latch and clock low
      ldy #16 ; 16 bits 
 SNES2ATARILOOP
          rol INPT4,x     ; sample data into carry
@@ -1913,26 +1973,42 @@ BS_return
 checkselectswitch
      lda SWCHB ; first check the real select switch...
      and #%00000010
+ ifnconst SOFTPAUSEOFF
  ifnconst MOUSESUPPORT
  ifnconst TRAKBALLSUPPORT
      beq checkselectswitchreturn ; switch is pressed
+     lda port0control
+     cmp #11
+     bne checkselectsoftswitch
+     lda #$ff
+     rts
+checkselectsoftswitch
      lda SWCHA ; then check the soft "select" joysick code...
      and #%10110000 ; R_DU
  endif ; TRAKBALLSUPPORT
  endif ; MOUSESUPPORT
+ endif ; SOFTPAUSEOFF
 checkselectswitchreturn
      rts
 
 checkresetswitch
      lda SWCHB ; first check the real reset switch...
      and #%00000001
+ ifnconst SOFTPAUSEOFF
  ifnconst MOUSESUPPORT
  ifnconst TRAKBALLSUPPORT
      beq checkresetswitchreturn ; switch is pressed
+     lda port0control
+     cmp #11
+     bne checkresetsoftswitch
+     lda #$ff
+     rts
+checkresetsoftswitch
      lda SWCHA ; then check the soft "reset" joysick code...
      and #%01110000 ; _LDU
  endif ; TRAKBALLSUPPORT
  endif ; MOUSESUPPORT
+ endif ; SOFTPAUSEOFF
 checkresetswitchreturn
      rts
 
@@ -3096,6 +3172,7 @@ mousebuttonhandler ; outside of conditional, for button-handler LUT
  ifconst KEYPADSUPPORT
    ; ** select keypad rows 0 to 3 over 4 frames...
 keypadrowselect
+   inc keypadcounter
    ldy #0
    lda port0control
    cmp #7
@@ -3108,18 +3185,21 @@ skipport0val
    iny
    iny ; y=y+2
 skipport1val
+ cpy #0 
+ beq exitkeypadrowselect 
    lda keyrowdirectionmask,y
    sta CTLSWA
    tya
    asl
    asl
    sta inttemp1
-   lda framecounter
+   lda keypadcounter
    and #3
    ora inttemp1
    tax
    lda keyrowselectvalue,x
    sta SWCHA
+exitkeypadrowselect
    rts
 
 keyrowdirectionmask
@@ -3141,7 +3221,7 @@ keypadcolumnread
    lda port0control
    cmp #7
    bne skipkeypadcolumnread0
-   lda framecounter
+   lda keypadcounter
    and #3
    asl ; x2 because keypad variables are interleaved
    tax
@@ -3164,7 +3244,7 @@ skipkeypadcolumnread0
    lda port1control
    cmp #7
    bne skipkeypadcolumnread1
-   lda framecounter
+   lda keypadcounter
    and #3
    asl ; x2 because keypad variables are interleaved
    tax

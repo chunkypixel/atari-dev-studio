@@ -120,3 +120,4 @@ BANK_WAS_SET SET 1
    ORG $8000,0 ; default is 32K
  endif
 
+START_OF_ROM = .

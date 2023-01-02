@@ -13,7 +13,7 @@ FILE *stdoutfilepointer;
 
 extern int currentdmahole;
 
-#define BASIC_VERSION_INFO "7800basic v0.20"
+#define BASIC_VERSION_INFO "7800basic v0.21"
 
 int main(int argc, char *argv[])
 {
@@ -132,6 +132,7 @@ int main(int argc, char *argv[])
     remove("7800hole.1.asm");
     remove("7800hole.2.asm");
     remove("banksetrom.asm");
+    remove("banksetstrings.asm");
 
     create_a78info();		//wipe/create a78 parameter file
 

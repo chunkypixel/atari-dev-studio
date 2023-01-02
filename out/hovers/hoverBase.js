@@ -102,7 +102,7 @@ class HoverBase {
             }
         }
         // Return
-        return undefined;
+        return;
     }
 }
 exports.HoverBase = HoverBase;

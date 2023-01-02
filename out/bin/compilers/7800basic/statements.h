@@ -115,8 +115,6 @@ void shakescreen(char **statement);
 void changecontrol(char **statement);
 void snesdetect();
 int inlinealphadata(char **statement);
-int banksetdataopen(char *datalabel, int sizeofdata);
-void banksetdataclose(void);
 void incgraphic(char *file_name, int offset);
 void newblock();
 void voice(char **statement);

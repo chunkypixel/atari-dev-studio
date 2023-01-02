@@ -71,7 +71,7 @@ export abstract class HoverBase implements vscode.HoverProvider {
 
 	}
 
-	provideHover(document: vscode.TextDocument, position: vscode.Position): vscode.ProviderResult<vscode.Hover> {
+	provideHover(document: vscode.TextDocument, position: vscode.Position): vscode.ProviderResult<vscode.Hover> | undefined {
 		// Prepare
 		const validchars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
 		let word='';
@@ -93,6 +93,6 @@ export abstract class HoverBase implements vscode.HoverProvider {
 		}
 
 		// Return
-		return undefined;
+		return;
 	}
 }

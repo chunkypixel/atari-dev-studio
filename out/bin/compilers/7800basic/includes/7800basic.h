@@ -73,6 +73,7 @@ hscolorchaseindex = $213B
 visibleDLLstart   = $213C
 overscanDLLstart  = $213D
 frameslost        = $213E
+hsreturn          = $213F
 
 
 rand       = $40
@@ -564,6 +565,10 @@ fourbitfadevalueint   DS 1
 
  ifconst SNES2ATARISUPPORT
 snesport           DS 1
+ endif
+
+ ifconst KEYPADSUPPORT
+keypadcounter      DS 1
  endif
 
  ; see if we need an interrupthold byte...

@@ -12,7 +12,7 @@
 //      7800header - a simple app to generate/interrogate a a78 header.
 //                      Michael Saarna (aka RevEng@AtariAge)
 
-#define HEADER_VERSION_INFO "7800header 0.15"
+#define HEADER_VERSION_INFO "7800header 0.16"
 
 void usage(char *binaryname);
 uint32_t phtole32(uint32_t value);
@@ -139,9 +139,9 @@ int main(int argc, char **argv)
     //fix bits that shouldn't be set in the header
     if (printinfo == 0)
     {
-	if (myheader.controller1 > 9)
+	if (myheader.controller1 > 11)
 	    myheader.controller1 = 1;
-	if (myheader.controller2 > 9)
+	if (myheader.controller2 > 11)
 	    myheader.controller2 = 1;
         if(myheader.version<3)
 	    myheader.tvformat &= 1;
@@ -174,9 +174,9 @@ int main(int argc, char **argv)
 	printf("Options:  rom@4000 bank6@4000 pokey@440 pokey@450 pokey@800 pokey@4000\n");
 	printf("   ram@4000 mram@4000 hram@4000 ym2151@460 supergame bankram\n");
 	printf("   absolute activision souper bankset tvpal tvntsc composite\n");
-	printf("   7800joy1 7800joy2 lightgun1 lightgun2 paddle1 paddle2\n");
-	printf("   tball1 tball2 2600joy1 2600joy2 driving1 driving2 keypad1\n");
-	printf("   keypad2 stmouse1 stmouse2 amouse1 amouse2 hsc savekey xm\n");
+	printf("   7800joy1 7800joy2 lightgun1 lightgun2 paddle1 paddle2 tball1 tball2\n");
+	printf("   2600joy1 2600joy2 driving1 driving2 keypad1 keypad2 stmouse1 stmouse2\n");
+	printf("   amouse1 amouse2 snes1 snes2 hsc savekey xm\n");
 	printf("> ");
 
 	if (fgets(usercommand, 1024, stdin))
@@ -773,6 +773,21 @@ void setunset(char *command)
 	    myheader.controller2 = 0;
     }
 
+    else if (strcmp(noun, "snes1") == 0)
+    {
+	if (set)
+	    myheader.controller1 = 11;
+	else if (myheader.controller1 == 11)
+	    myheader.controller1 = 0;
+    }
+    else if (strcmp(noun, "snes2") == 0)
+    {
+	if (set)
+	    myheader.controller2 = 11;
+	else if (myheader.controller2 == 11)
+	    myheader.controller2 = 0;
+    }
+
 }
 
 void loadfile(char *filename)
@@ -896,6 +911,8 @@ void report(void)
 	printf("stmouse1 ");
     if (myheader.controller1 == 9)
 	printf("amouse1 ");
+    if (myheader.controller1 == 11)
+	printf("snes1 ");
     if (myheader.controller2 == 0)
 	printf("none ");
     if (myheader.controller2 == 1)
@@ -916,6 +933,8 @@ void report(void)
 	printf("stmouse2 ");
     if (myheader.controller2 == 9)
 	printf("amouse2 ");
+    if (myheader.controller2 == 11)
+	printf("snes2 ");
 
     printf("\n");
 

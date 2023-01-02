@@ -3,7 +3,7 @@
 Legal Stuff
 -----------
 
-   7800basic is created by Michael Saarna, copyright 2013-2020.
+   7800basic is created by Michael Saarna.
    7800basic is derived from the batari Basic compiler for the 2600, 
    which was created by Fred Quimby. (aka batari)
 

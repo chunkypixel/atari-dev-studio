@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.8.2
+
+* Updated 7800basic to v0.21 (Windows, Linux, macOS)
+* Updated 7800basic keyword, hover and context help lists
+
 ## 0.8.1
 
 * Updated WebView pages (Welcome and Sprite Editor) to work under updated **Content Security Policy** conditions 

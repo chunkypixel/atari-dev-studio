@@ -108,7 +108,7 @@
 
     set deprecated value
 
-    value - frameheight
+    value - frameheight, 160bindexes
 
 
 
@@ -282,6 +282,14 @@
     set basepath directory_path
 
     directory_path - relative path to files to be included on compilation
+
+
+
+## BANKSETS
+
+    set banksets state
+
+    state - on, off
 
 
 
@@ -577,7 +585,19 @@
     changecontrol port controltype
 
     port - left or right (0-1)
-    controltype - 2buttonjoy (default), 1buttonjoy, lightgun, paddle, trakball, driving, keypad, stmouse, amigamouse, atarivox)
+    controltype - 2buttonjoy (default), 1buttonjoy, snes, lightgun, paddle, trakball, driving, keypad, stmouse, amigamouse, atarivox)
+
+
+
+## PORT0CONTROL
+
+    if port0control = 11 && snesdetected0 then goto skipsnesdetect
+
+
+
+## PORT1CONTROL
+
+    if port1control = 11 && snesdetected1 then goto skipsnesdetect
 
 
 
@@ -674,6 +694,151 @@
 ## JOY1FIRE1
 
     if joy1fire1 then ...
+
+
+## SNESDETECT
+
+    snesdetect
+
+
+
+## SNESDETECTED0
+
+    if port0control = 11 && snesdetected0 then goto skipsnesdetect
+
+
+
+## SNESDETECTED1
+
+    if port1control = 11 && snesdetected1 then goto skipsnesdetect
+
+
+
+## SNES
+
+    if snes#? then ...
+
+    ? - up,down,left,right,A,B,X,Y,lsh,rsh,any
+
+
+
+## SNES0UP
+
+    if snes0up then ...
+
+
+
+## SNES0DOWN
+
+    if snes0down then ...
+
+
+
+## SNES0LEFT
+
+    if snes0left then ...
+
+
+
+## SNES0RIGHT
+
+    if snes0right then ...
+
+
+
+## SNES0A
+
+    if snes0A then ...
+
+
+
+## SNES0B
+
+    if snes0B then ...
+
+
+
+## SNES0X
+
+    if snes0X then ...
+
+
+
+## SNES0Y
+
+    if snes0Y then ...
+
+
+
+## SNES0LSH
+
+    if snes0lsh then ...
+
+
+
+## SNES0RSH
+
+    if snes0rsh then ...
+
+
+
+## SNES1UP
+
+    if snes1up then ...
+
+
+
+## SNES1DOWN
+
+    if snes1down then ...
+
+
+
+## SNES1LEFT
+
+    if snes1left then ...
+
+
+
+## SNES1RIGHT
+
+    if snes1right then ...
+
+
+
+## SNES1A
+
+    if snes1A then ...
+
+
+
+## SNES1B
+
+    if snes1B then ...
+
+
+
+## SNES1X
+
+    if snes1X then ...
+
+
+
+## SNES1Y
+
+    if snes1Y then ...
+
+
+
+## SNES1LSH
+
+    if snes1lsh then ...
+
+
+
+## SNES1RSH
+
+    if snes1rsh then ...
 
 
 

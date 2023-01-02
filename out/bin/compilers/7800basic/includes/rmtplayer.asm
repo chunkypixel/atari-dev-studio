@@ -1198,6 +1198,8 @@ SetPokey
         jsr fourbitfadeint
  endif
 	stx POKEY_BASE+$00+0
+	stx POKEY_BASE+$00+0
+	sta POKEY_BASE+$01+0
 	sta POKEY_BASE+$01+0
 
 	ldx trackn_audf+1
@@ -1206,6 +1208,8 @@ SetPokey
         jsr fourbitfadeint
  endif
 	stx POKEY_BASE+$00+2
+	stx POKEY_BASE+$00+2
+	sta POKEY_BASE+$01+2
 	sta POKEY_BASE+$01+2
 
 	ldx trackn_audf+2
@@ -1214,6 +1218,8 @@ SetPokey
         jsr fourbitfadeint
  endif
 	stx POKEY_BASE+$00+4
+	stx POKEY_BASE+$00+4
+	sta POKEY_BASE+$01+4
 	sta POKEY_BASE+$01+4
 
 	ldx trackn_audf+3
@@ -1222,8 +1228,11 @@ SetPokey
         jsr fourbitfadeint
  endif
 	stx POKEY_BASE+$00+6
+	stx POKEY_BASE+$00+6
+	sta POKEY_BASE+$01+6
 	sta POKEY_BASE+$01+6
 
+	sty POKEY_BASE+$08
 	sty POKEY_BASE+$08
 
 	EIF
@@ -1386,6 +1395,7 @@ ei4
 	jmp returnfromInstrumentsEffects
 
 rmtmoduleend
- echo "  (rmtplayer module is using ",[(rmtmoduleend-rmtmodulestart)]d," bytes)"
+ echo "  (rmtplayer module is using ",[(rmtmoduleend-rmtmodulestart)]d," bytes of rom)"
+ echo "  (rmtplayer module is using ",[(MEMLOC-RMTRAM-1)]d," bytes of ram)"
 
  endif ; RMT

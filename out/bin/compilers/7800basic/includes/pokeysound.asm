@@ -148,7 +148,7 @@ schedulepokeyX
          lda sfxinstrumenthi
          adc #0
          sta pokey1pointhi,x
-         lda temp3
+         lda sfxpitchoffset
          sta pokey1offset,x
          lda #0
          sta pokey1tick,x

@@ -69,7 +69,7 @@ class CompilerBase {
         });
     }
     BuildGameAndRunAsync(document) {
-        var e_1, _a;
+        var _a, e_1, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             // Process
             let result = yield this.BuildGameAsync(document);
@@ -83,19 +83,26 @@ class CompilerBase {
             }
             try {
                 // Get emulator
-                for (var _b = __asyncValues(application.Emulators), _c; _c = yield _b.next(), !_c.done;) {
-                    let emulator = _c.value;
-                    if (emulator.Id === this.Emulator) {
-                        // Note: first extension should be the one which is to be launched
-                        let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
-                        return yield emulator.RunGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
+                for (var _d = true, _e = __asyncValues(application.Emulators), _f; _f = yield _e.next(), _a = _f.done, !_a;) {
+                    _c = _f.value;
+                    _d = false;
+                    try {
+                        let emulator = _c;
+                        if (emulator.Id === this.Emulator) {
+                            // Note: first extension should be the one which is to be launched
+                            let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                            return yield emulator.RunGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
+                        }
+                    }
+                    finally {
+                        _d = true;
                     }
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
@@ -328,7 +335,7 @@ class CompilerBase {
         });
     }
     VerifyCompiledFileSizeAsync() {
-        var e_2, _a;
+        var _a, e_2, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.VerifyCompiledFileSize');
             // Validate
@@ -338,25 +345,32 @@ class CompilerBase {
             // Verify created file(s)
             application.WriteToCompilerTerminal(`Verifying compiled file(s)...`);
             try {
-                for (var _b = __asyncValues(this.VerifyCompiledExtensions), _c; _c = yield _b.next(), !_c.done;) {
-                    let extension = _c.value;
-                    // Prepare
-                    let compiledFileName = `${this.FileName}${extension}`;
-                    let compiledFilePath = path.join(this.WorkspaceFolder, compiledFileName);
-                    // Validate
-                    let fileStats = yield filesystem.GetFileStatsAsync(compiledFilePath);
-                    if (fileStats && fileStats.size > 0) {
-                        continue;
+                for (var _d = true, _e = __asyncValues(this.VerifyCompiledExtensions), _f; _f = yield _e.next(), _a = _f.done, !_a;) {
+                    _c = _f.value;
+                    _d = false;
+                    try {
+                        let extension = _c;
+                        // Prepare
+                        let compiledFileName = `${this.FileName}${extension}`;
+                        let compiledFilePath = path.join(this.WorkspaceFolder, compiledFileName);
+                        // Validate
+                        let fileStats = yield filesystem.GetFileStatsAsync(compiledFilePath);
+                        if (fileStats && fileStats.size > 0) {
+                            continue;
+                        }
+                        // Failed
+                        application.WriteToCompilerTerminal(`ERROR: Failed to create compiled file '${compiledFileName}'.`);
+                        return false;
                     }
-                    // Failed
-                    application.WriteToCompilerTerminal(`ERROR: Failed to create compiled file '${compiledFileName}'.`);
-                    return false;
+                    finally {
+                        _d = true;
+                    }
                 }
             }
             catch (e_2_1) { e_2 = { error: e_2_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
                 finally { if (e_2) throw e_2.error; }
             }
@@ -365,7 +379,7 @@ class CompilerBase {
         });
     }
     MoveFilesToBinFolderAsync() {
-        var e_3, _a, e_4, _b;
+        var _a, e_3, _b, _c, _d, e_4, _e, _f;
         return __awaiter(this, void 0, void 0, function* () {
             // Note: generateDebuggerFile - there are different settings for each compiler
             console.log('debugger:CompilerBase.MoveFilesToBinFolder');
@@ -383,29 +397,36 @@ class CompilerBase {
             // Move compiled file(s)
             application.WriteToCompilerTerminal(`Moving compiled file(s) to '${this.CompiledSubFolderName}' folder...`);
             try {
-                for (var _c = __asyncValues(this.CompiledExtensions), _d; _d = yield _c.next(), !_d.done;) {
-                    let extension = _d.value;
-                    // Prepare
-                    let compiledFileName = `${this.FileName}${extension}`;
-                    let oldPath = path.join(this.WorkspaceFolder, compiledFileName);
-                    let newPath = path.join(this.CompiledSubFolder, compiledFileName);
-                    // Move compiled file
-                    // Updated to check as we may now have optional files (7800basic - .CC2)
-                    if (yield filesystem.FileExistsAsync(oldPath)) {
-                        // Process
-                        result = yield filesystem.RenameFileAsync(oldPath, newPath);
-                        if (!result) {
-                            // Notify
-                            application.WriteToCompilerTerminal(`ERROR: Failed to move file from '${compiledFileName}' to ${this.CompiledSubFolderName} folder`);
-                            return false;
+                for (var _g = true, _h = __asyncValues(this.CompiledExtensions), _j; _j = yield _h.next(), _a = _j.done, !_a;) {
+                    _c = _j.value;
+                    _g = false;
+                    try {
+                        let extension = _c;
+                        // Prepare
+                        let compiledFileName = `${this.FileName}${extension}`;
+                        let oldPath = path.join(this.WorkspaceFolder, compiledFileName);
+                        let newPath = path.join(this.CompiledSubFolder, compiledFileName);
+                        // Move compiled file
+                        // Updated to check as we may now have optional files (7800basic - .CC2)
+                        if (yield filesystem.FileExistsAsync(oldPath)) {
+                            // Process
+                            result = yield filesystem.RenameFileAsync(oldPath, newPath);
+                            if (!result) {
+                                // Notify
+                                application.WriteToCompilerTerminal(`ERROR: Failed to move file from '${compiledFileName}' to ${this.CompiledSubFolderName} folder`);
+                                return false;
+                            }
                         }
+                    }
+                    finally {
+                        _g = true;
                     }
                 }
             }
             catch (e_3_1) { e_3 = { error: e_3_1 }; }
             finally {
                 try {
-                    if (_d && !_d.done && (_a = _c.return)) yield _a.call(_c);
+                    if (!_g && !_a && (_b = _h.return)) yield _b.call(_h);
                 }
                 finally { if (e_3) throw e_3.error; }
             }
@@ -414,26 +435,33 @@ class CompilerBase {
                 // Move all debugger files?
                 application.WriteToCompilerTerminal(`Moving debugger file(s) to '${this.CompiledSubFolderName}' folder...`);
                 try {
-                    for (var _e = __asyncValues(this.DebuggerExtensions), _f; _f = yield _e.next(), !_f.done;) {
-                        let [arg, extension] = _f.value;
-                        // Prepare
-                        let debuggerFile = `${this.FileName}${extension}`;
-                        let oldPath = path.join(this.WorkspaceFolder, debuggerFile);
-                        let newPath = path.join(this.CompiledSubFolder, debuggerFile);
-                        // Move compiled file?
-                        if (yield filesystem.FileExistsAsync(oldPath)) {
-                            result = yield filesystem.RenameFileAsync(oldPath, newPath);
-                            if (!result) {
-                                // Notify            
-                                application.WriteToCompilerTerminal(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);
+                    for (var _k = true, _l = __asyncValues(this.DebuggerExtensions), _m; _m = yield _l.next(), _d = _m.done, !_d;) {
+                        _f = _m.value;
+                        _k = false;
+                        try {
+                            let [arg, extension] = _f;
+                            // Prepare
+                            let debuggerFile = `${this.FileName}${extension}`;
+                            let oldPath = path.join(this.WorkspaceFolder, debuggerFile);
+                            let newPath = path.join(this.CompiledSubFolder, debuggerFile);
+                            // Move compiled file?
+                            if (yield filesystem.FileExistsAsync(oldPath)) {
+                                result = yield filesystem.RenameFileAsync(oldPath, newPath);
+                                if (!result) {
+                                    // Notify            
+                                    application.WriteToCompilerTerminal(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);
+                                }
                             }
+                        }
+                        finally {
+                            _k = true;
                         }
                     }
                 }
                 catch (e_4_1) { e_4 = { error: e_4_1 }; }
                 finally {
                     try {
-                        if (_f && !_f.done && (_b = _e.return)) yield _b.call(_e);
+                        if (!_k && !_d && (_e = _l.return)) yield _e.call(_l);
                     }
                     finally { if (e_4) throw e_4.error; }
                 }
@@ -443,26 +471,33 @@ class CompilerBase {
         });
     }
     RemoveDebuggerFilesAsync(folder) {
-        var e_5, _a;
+        var _a, e_5, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.RemoveDebuggerFilesAsync');
             try {
                 // Process
-                for (var _b = __asyncValues(this.DebuggerExtensions), _c; _c = yield _b.next(), !_c.done;) {
-                    let [arg, extension] = _c.value;
-                    // Prepare
-                    let debuggerFile = `${this.FileName}${extension}`;
-                    let debuggerFilePath = path.join(folder, debuggerFile);
-                    // Process
-                    if (yield filesystem.FileExistsAsync(debuggerFilePath)) {
-                        yield filesystem.RemoveFileAsync(debuggerFilePath);
+                for (var _d = true, _e = __asyncValues(this.DebuggerExtensions), _f; _f = yield _e.next(), _a = _f.done, !_a;) {
+                    _c = _f.value;
+                    _d = false;
+                    try {
+                        let [arg, extension] = _c;
+                        // Prepare
+                        let debuggerFile = `${this.FileName}${extension}`;
+                        let debuggerFilePath = path.join(folder, debuggerFile);
+                        // Process
+                        if (yield filesystem.FileExistsAsync(debuggerFilePath)) {
+                            yield filesystem.RemoveFileAsync(debuggerFilePath);
+                        }
+                    }
+                    finally {
+                        _d = true;
                     }
                 }
             }
             catch (e_5_1) { e_5 = { error: e_5_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
                 finally { if (e_5) throw e_5.error; }
             }

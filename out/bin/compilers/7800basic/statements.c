@@ -31,6 +31,7 @@ int currentdmahole = 0;
 int banksetrom = 0;
 
 #define BANKSETASM "banksetrom.asm"
+#define BANKSETSTRINGSASM "banksetstrings.asm"
 
 int deprecatedframeheight = 0;
 int deprecated160bindexes = 0;
@@ -258,13 +259,29 @@ int switchjoy(char *input_source)
     // snes2atari0lo:   A      X     LSH    RSH     -      -      -      -
     // snes2atari0hi:   B      Y    SELECT START    UP    DOWN   LEFT  RIGHT
 
-    if (!strncmp(input_source, "snes0any\0", 8))
+    if (!strncmp(input_source, "snes0any\0", 9))
     {
 	printf(" lda snes2atari0hi\n");
 	printf(" and snes2atari0lo\n");
 	printf(" eor #$FF\n");
 	return 4;
     }
+    if (!strncmp(input_source, "snes0anyABXY\0", 12))
+    {
+	printf(" lda snes2atari0hi\n");
+	printf(" and snes2atari0lo\n");
+	printf(" ora #%%00111111\n");
+	printf(" eor #$FF\n");
+	return 4;
+    }
+    if (!strncmp(input_source, "snes0anymove\0", 12))
+    {
+	printf(" lda snes2atari0hi\n");
+	printf(" ora #%%11110000\n");
+	printf(" eor #$FF\n");
+	return 4;
+    }
+
     if (!strncmp(input_source, "snes0up\0", 7))
     {
 	printf(" lda snes2atari0hi\n");
@@ -343,10 +360,25 @@ int switchjoy(char *input_source)
     // snes2atari0lo:   A      X     LSH    RSH     -      -      -      -
     // snes2atari0hi:   B      Y    SELECT START    UP    DOWN   LEFT  RIGHT
 
-    if (!strncmp(input_source, "snes1any\0", 8))
+    if (!strncmp(input_source, "snes1any\0", 9))
     {
 	printf(" lda snes2atari1hi\n");
 	printf(" and snes2atari1lo\n");
+	printf(" eor #$FF\n");
+	return 4;
+    }
+    if (!strncmp(input_source, "snes1anyABXY\0", 12))
+    {
+	printf(" lda snes2atari1hi\n");
+	printf(" and snes2atari1lo\n");
+	printf(" ora #%%00111111\n");
+	printf(" eor #$FF\n");
+	return 4;
+    }
+    if (!strncmp(input_source, "snes1anymove\0", 12))
+    {
+	printf(" lda snes2atari1hi\n");
+	printf(" ora #%%11110000\n");
 	printf(" eor #$FF\n");
 	return 4;
     }
@@ -429,7 +461,7 @@ int switchjoy(char *input_source)
     // snes2atari0lo:   A      X     LSH    RSH     -      -      -      -
     // snes2atari0hi:   B      Y    SELECT START    UP    DOWN   LEFT  RIGHT
 
-    if (!strncmp(input_source, "snes#any\0", 8))
+    if (!strncmp(input_source, "snes#any\0", 9))
     {
 	printf(" ldx snesport\n");
 	printf(" lda snes2atari0hi,x\n");
@@ -437,6 +469,24 @@ int switchjoy(char *input_source)
 	printf(" eor #$FF\n");
 	return 4;
     }
+    if (!strncmp(input_source, "snes#anyABXY\0", 12))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0hi,x\n");
+	printf(" and snes2atari0lo,x\n");
+	printf(" ora #%%00111111\n");
+	printf(" eor #$FF\n");
+	return 4;
+    }
+    if (!strncmp(input_source, "snes#anymove\0", 12))
+    {
+	printf(" ldx snesport\n");
+	printf(" lda snes2atari0hi,x\n");
+	printf(" ora #%%11110000\n");
+	printf(" eor #$FF\n");
+	return 4;
+    }
+
     if (!strncmp(input_source, "snes#up\0", 7))
     {
 	printf(" ldx snesport\n");
@@ -678,7 +728,7 @@ void set_romsize(char *size)
 	append_a78info("set supergame");
 	if (strncmp(size + 4, "BANKRAM", 7) == 0)
 	{
-	    append_a78info("set supergamebankram");
+	    append_a78info("set bankram");
 	    strcpy(redefined_variables[numredefvars++], "SGRAM = 1");
 	    strcpy(redefined_variables[numredefvars++], "BANKRAM = 1");
 	}
@@ -695,6 +745,7 @@ void set_romsize(char *size)
 	strcpy(redefined_variables[numredefvars++], "bankswitchmode = 16");
 	bankcount = 16;
 	currentbank = 0;
+	append_a78info("set supergame");
 	if (strncmp(size + 4, "BANKRAM", 7) == 0)
 	{
 	    append_a78info("set supergamebankram");
@@ -728,6 +779,7 @@ void set_romsize(char *size)
 	strcpy(redefined_variables[numredefvars++], "bankswitchmode = 32");
 	bankcount = 32;
 	currentbank = 0;
+	append_a78info("set supergame");
 	if (strncmp(size + 4, "BANKRAM", 7) == 0)
 	{
 	    append_a78info("set supergamebankram");
@@ -868,6 +920,10 @@ void bank(char **statement)
     // 1. dump and clear any incgraphics from the current bank before changing
     barf_graphic_file();
 
+    orgprintf(" if START_OF_ROM = . ; avoid dasm empty start-rom truncation.\n");
+    orgprintf("     .byte 0\n");
+    orgprintf(" endif\n");
+
     // 2.issue ORG,RORG
     currentbank = requestedbank;
     if (romat4k == 1)
@@ -878,6 +934,16 @@ void bank(char **statement)
         orgprintf(" RORG $C000\n");
     else
         orgprintf(" RORG $8000\n");
+
+    // a bit kludgey, but we need this module in the first bit of the last bankset bank
+    // instead of the last 4k, where it goes normally.
+    if ( (banksetrom==1) && (currentbank == (bankcount - 1)))
+    {
+        // gfxprint only outputs to the bankset bank, when the bankset scheme is used.
+        gfxprintf("     ifnconst included.hiscore.asm\n");
+        gfxprintf("         include hiscore.asm\n");
+        gfxprintf("     endif ; included.hiscore.asm\n");
+    }
 }
 
 void dmahole(char **statement)
@@ -1343,20 +1409,8 @@ int inlinealphadata(char **statement)
     if (banksetrom == 0)
     {
         printf("	JMP skipalphadata%d\n", templabel);
-        printf("alphadata%d\n", templabel);
     }
-    else
-    {
-        char banklabel[32];
-        int  stringsize;
-        snprintf(banklabel,32,"alphadata%d", templabel);
-        for (t = 1; (statement[2][t] != '\'') && (statement[2][t] != '\0'); t++)
-            ;
-        stringsize=t-1;
-        if ((doublewide==1)||(strncmp(statement[6], "extrawide", 9) == 0))
-            stringsize=stringsize*2;
-        banksetdataopen(banklabel,stringsize);
-    }
+    gfxprintf("alphadata%d\n", templabel);
 
     for (t = 1; (statement[2][t] != '\'') && (statement[2][t] != '\0'); t++)
     {
@@ -1385,69 +1439,9 @@ int inlinealphadata(char **statement)
     {
         printf("skipalphadata%d\n", templabel);
     }
-    else
-    {
-        banksetdataclose();
-    }
     sprintf(statement[2], "alphadata%d", templabel);
     templabel++;
     return (quotelen);
-}
-
-int banksetdataopen(char *datalabel, int sizeofdata)
-{
-    // utility function. updatates the bankset assembly with an ORG between the
-    // graphics banks
-    static long banksetdatastart   = -1;
-    static long banksetdatacurrent = -1;
-    static int banksetbank = 0;
-
-    if(banksetdatastart == -1)
-    {
-        // This is the first time we were called. Setup the start address for where 
-        // we'll stuff string data. We don't start at the very bottom of the rom,
-        // because dmaholes don't exist that far down, and we want to leave rom
-        // between gfx areas as zero, so sprites can go there.
-
-        banksetdatastart = 0x8000 + (zoneheight * 256) ;
-        banksetdatacurrent = banksetdatastart;
-    }
-
-    // check if the user has bankswitched since we were last called. If so, change
-    // change our address to the start of the current bank...
-    if( banksetbank != currentbank )
-    {
-        banksetdatastart = 0x8000 + (zoneheight * 256) + (currentbank * 0x4000) ;
-        banksetdatacurrent = banksetdatastart;
-    }
-
-    // check if storing this data would overflow the dmaplain. If so, advance to
-    // to the next plain.
-    if ( (banksetdatacurrent + sizeofdata) >= (banksetdatastart + (zoneheight * 256) ) )
-    {
-        banksetdatastart = banksetdatastart + (2 * zoneheight * 256);
-        banksetdatacurrent = banksetdatastart;
-    }
-    
-    gfxprintf("BANKSETSAVEORG set .\n");
-    gfxprintf("    ORG $%X \n",banksetdatacurrent);
-
-    // set data label to memory address it's found at
-    if(bankcount==0)
-        snprintf(redefined_variables[numredefvars++],99, "%s = $%lX\n",datalabel,banksetdatacurrent);
-    else if(currentbank<(bankcount-1)) // if we're not in the last bank, $8000 is the base.
-        snprintf(redefined_variables[numredefvars++],99, "%s = $%lX\n",datalabel,banksetdatacurrent-(currentbank*0x4000));
-    else // if we're in the last bank, $c000 is the base
-        snprintf(redefined_variables[numredefvars++],99, "%s = $%lX\n",datalabel,banksetdatacurrent-(currentbank*0x4000)+0x4000);
-        
-    // advance to the next bit of empty rom
-    banksetdatacurrent = banksetdatacurrent + sizeofdata;
-}
-
-
-void banksetdataclose(void)
-{
-    gfxprintf("    ORG (BANKSETSAVEORG)\n");
 }
 
 void plotchars(char **statement)
@@ -2953,6 +2947,9 @@ void incmapfile(char **statement)
     char datalabelname[256];
     char datavalues[256][256];
     int s, t;
+    int thisdatabankset;
+
+    thisdatabankset = 0;
 
     assertminimumargs(statement, "incmapfile", 1);
 
@@ -2968,10 +2965,17 @@ void incmapfile(char **statement)
 	if (strcasecmp(datalabelname + t, ".tmx") == 0)
 	    datalabelname[t] = 0;
 
-    if (!(optimization & 4))
-        printf("	JMP skipmapdata%d\n", templabel);
+    if ((banksetrom) && (strncmp(datalabelname,"bset_",5)==0))
+        thisdatabankset = 1;
 
-    printf("%s\n", datalabelname);
+    if (!thisdatabankset)
+        if (!(optimization & 4))
+            printf("    JMP skipmapdata%d\n", templabel);
+
+    if (!thisdatabankset)
+        printf("%s\n", datalabelname);
+    else
+        gfxprintf("%s\n", datalabelname);
 
     //default data value is the "0" character...
     for (t = 0; t < 256; t++)
@@ -3023,7 +3027,10 @@ void incmapfile(char **statement)
 	if (keyword != NULL)
 	{
 	    gid = atoi(keyword + 10);
-	    printf("%s", datavalues[gid]);
+            if (!thisdatabankset)
+	         printf("%s", datavalues[gid]);
+            else
+	         gfxprintf("%s", datavalues[gid]);
 	}
 
 	keyword = strstr(line, "<data encoding=\"");
@@ -3049,7 +3056,9 @@ void incmapfile(char **statement)
     }
     fclose(fp);
 
-    printf("skipmapdata%d\n", templabel);
+    if (!thisdatabankset)
+        printf("skipmapdata%d\n", templabel);
+
     templabel = templabel + 1;
 }
 
@@ -4229,11 +4238,16 @@ void add_inline(char *myinclude)
 {
     removeCR(myinclude);
     printf(" include %s\n", myinclude);
-    printf("included.%s = 1\n", myinclude);
+    sprintf(redefined_variables[numredefvars++], "included.%s = 1", myinclude);
     if ((bankcount&1)&&(currentbank>0))
         printf("included.%s.bank = %d\n", myinclude,currentbank-1);
     else
         printf("included.%s.bank = %d\n", myinclude,currentbank);
+    if ((banksetrom==1)&&(strncmp(myinclude,"hiscore.asm",11)==0))
+    {
+        // gfxprint only outputs to the bankset bank, when the bankset scheme is used.
+        gfxprintf(" include %s\n", myinclude);
+    }
 }
 
 void init_includes(char *path)
@@ -4405,6 +4419,9 @@ void barf_graphic_file(void)
 	{
 	    prerror("graphics overrun in bank %d", currentbank);
 	}
+        orgprintf(" if START_OF_ROM = . ; avoid dasm empty start-rom truncation.\n");
+        orgprintf("     .byte 0\n");
+        orgprintf(" endif\n");
 	for (currentplain = 0; currentplain <= dmaplain; currentplain++)
 	{
 	    if (bankcount == 0)
@@ -5301,22 +5318,26 @@ void data(char **statement)
     char **deallocdata_length;
     int i, j;
 
+    int thisdatabankset;
+
+    thisdatabankset = 0;
+
     assertminimumargs(statement, "data", 1);
 
-    data_length = (char **) malloc(sizeof(char *) * 200);
-    for (i = 0; i < 200; ++i)
-    {
-	data_length[i] = (char *) malloc(sizeof(char) * 200);
-	for (j = 0; j < 200; ++j)
-	    data_length[i][j] = '\0';
-    }
-    deallocdata_length = data_length;
     removeCR(statement[2]);
 
-    if (!(optimization & 4))
-	printf("	JMP .skip%s\n", statement[0]);
+    if ((banksetrom) && (strncmp(statement[2],"bset_",5)==0))
+        thisdatabankset = 1;
 
-    printf("%s\n", statement[2]);
+    if (!thisdatabankset)
+        if (!(optimization & 4))
+            printf("    JMP .skip%s\n", statement[0]);
+
+    if(!thisdatabankset)
+        printf("%s\n", statement[2]);
+    else
+        gfxprintf("%s\n", statement[2]);
+
     while (1)
     {
 	if (((!fgets(data, 200, stdin))
@@ -5336,27 +5357,42 @@ void data(char **statement)
 	    if (((int) data[i] < 14) && ((int) data[i] != 9))
 		i = 200;
 	}
-	if (i < 200)
-	    printf("	.byte %s\n", data);
+        if (i < 200)
+        {
+            if(!thisdatabankset)
+                printf("    .byte %s\n", data);
+            else
+                gfxprintf("    .byte %s\n", data);
+        }
     }
-    printf(".skip%s\n", statement[0]);
-    strcpy(data_length[0], " ");
-    strcpy(data_length[1], "const");
-    sprintf(data_length[2], "%s_length", statement[2]);
-    strcpy(data_length[3], "=");
-    sprintf(data_length[4], ".skip%s-%s", statement[0], statement[2]);
-    strcpy(data_length[5], "\n");
-    data_length[6][0] = '\0';
-    keywords(data_length);
-    freemem(deallocdata_length);
+
+    if(!thisdatabankset)
+    {
+        printf(".skip%s\n", statement[0]);
+        printf("%s_length = [. - %s]\n", statement[2],statement[2]);
+    }
+    else
+    {
+        gfxprintf("%s_length = [. - %s]\n", statement[2],statement[2]);
+    }
+    sprintf(constants[numconstants++], "%s_length",statement[2]);
 
     char consthilo[200];
     snprintf(consthilo,200,"%s_lo",statement[2]);
     strcpy(constants[numconstants++], consthilo); // record to queue
     snprintf(consthilo,200,"%s_hi",statement[2]);
     strcpy(constants[numconstants++], consthilo); // record to queue
-    printf("%s_lo SET #<%s\n",statement[2],statement[2]);
-    printf("%s_hi SET #>%s\n",statement[2],statement[2]);
+
+    if(!thisdatabankset)
+    {
+        printf("%s_lo SET #<%s\n",statement[2],statement[2]);
+        printf("%s_hi SET #>%s\n",statement[2],statement[2]);
+    }
+    else
+    {
+        gfxprintf("%s_lo SET #<%s\n",statement[2],statement[2]);
+        gfxprintf("%s_hi SET #>%s\n",statement[2],statement[2]);
+    }
 }
 
 void speak(char **statement)
@@ -6712,24 +6748,26 @@ void alphadata(char **statement)
     char *alphachr, *alphaend;
     int charoffset;
     int i, j;
+    int thisdatabankset;
 
-    data_length = (char **) malloc(sizeof(char *) * 200);
-    for (i = 0; i < 200; ++i)
-    {
-	data_length[i] = (char *) malloc(sizeof(char) * 200);
-	for (j = 0; j < 200; ++j)
-	    data_length[i][j] = '\0';
-    }
-    deallocdata_length = data_length;
+    thisdatabankset = 0;
 
     removeCR(statement[3]);
     removeCR(statement[4]);
 
-    if (!(optimization & 4))
-	printf("	JMP .skip%s\n", statement[0]);
+    if ((banksetrom) && (strncmp(statement[2],"bset_",5)==0))
+        thisdatabankset = 1;
+
+    if (!thisdatabankset)
+        if (!(optimization & 4))
+            printf("    JMP .skip%s\n", statement[0]);
     // if optimization level >=4 then data cannot be placed inline with code!
 
-    printf("%s\n", statement[2]);
+    if(!thisdatabankset)
+        printf("%s\n", statement[2]);
+    else
+        gfxprintf("%s\n", statement[2]);
+
     while (1)
     {
 	if (((!fgets(data, 200, stdin))
@@ -6763,24 +6801,39 @@ void alphadata(char **statement)
 	    if (strncmp(statement[4], "extrawide", 9) == 0)
 		charoffset = charoffset * 2;
 
-	    printf(" .byte (<%s + $%02x)", statement[3], charoffset);
-	    if (strncmp(statement[4], "extrawide", 9) == 0)
-		printf(", (<%s + $%02x)", statement[3], charoffset + 1);
-	    if (alphachr[1] != '\0')
-		printf("\n");
+            if(!thisdatabankset)
+            {
+	        printf(" .byte (<%s + $%02x)", statement[3], charoffset);
+	        if (strncmp(statement[4], "extrawide", 9) == 0)
+                    printf(", (<%s + $%02x)", statement[3], charoffset + 1);
+                if (alphachr[1] != '\0')
+                    printf("\n");
+            }
+            else
+            {
+	        gfxprintf(" .byte (<%s + $%02x)", statement[3], charoffset);
+	        if (strncmp(statement[4], "extrawide", 9) == 0)
+                    gfxprintf(", (<%s + $%02x)", statement[3], charoffset + 1);
+                if (alphachr[1] != '\0')
+                    gfxprintf("\n");
+            }
 	}
-	printf("\n");
+        if(!thisdatabankset)
+	    printf("\n");
+        else
+	    gfxprintf("\n");
     }
-    printf(".skip%s\n", statement[0]);
-    strcpy(data_length[0], " ");
-    strcpy(data_length[1], "const");
-    sprintf(data_length[2], "%s_length", statement[2]);
-    strcpy(data_length[3], "=");
-    sprintf(data_length[4], ".skip%s-%s", statement[0], statement[2]);
-    strcpy(data_length[5], "\n");
-    data_length[6][0] = '\0';
-    keywords(data_length);
-    freemem(deallocdata_length);
+    if(!thisdatabankset)
+    {
+        printf(".skip%s\n", statement[0]);
+        printf("%s_length = [. - %s]\n", statement[2],statement[2]);
+    }
+    else
+    {
+        gfxprintf("%s_length = [. - %s]\n", statement[2],statement[2]);
+    }
+    sprintf(constants[numconstants++], "%s_length",statement[2]);
+
 }
 
 int lookupcharacter(char mychar)
@@ -9653,6 +9706,21 @@ void set(char **statement)
 	if (!strncmp(statement[3], "off", 3))
 	    strcpy(redefined_variables[numredefvars++], "SOFTRESETASPAUSEOFF = 1");
     }
+    else if (!strncmp(statement[2], "snes0pause\0", 10))
+    {
+	if (!strncmp(statement[3], "on", 2))
+	    strcpy(redefined_variables[numredefvars++], "SNES0PAUSE = 1");
+    }
+    else if (!strncmp(statement[2], "snes1pause\0", 10))
+    {
+	if (!strncmp(statement[3], "on", 2))
+	    strcpy(redefined_variables[numredefvars++], "SNES1PAUSE = 1");
+    }
+    else if (!strncmp(statement[2], "snes#pause\0", 10))
+    {
+	if (!strncmp(statement[3], "on", 2))
+	    strcpy(redefined_variables[numredefvars++], "SNESNPAUSE = 1");
+    }
     else if (!strncmp(statement[2], "basepath\0", 7))
     {
 	removeCR(statement[3]);	//remove CR from the filename, if present
@@ -9741,6 +9809,7 @@ void set(char **statement)
 	if (outfile == NULL)
 	    prerror("couldn't create 7800hsgamediffnames.asm file.");
 	sprintf(redefined_variables[numredefvars++], "HSCUSTOMLEVELNAMES = 1");
+	fprintf(outfile, "\n    ifnconst isBANKSETBANK\n");
 	fprintf(outfile, "highscoredifficultytextlen\n");
 	fprintf(outfile, "  .byte ");
 	for (strindex = 3; strindex < 7; strindex++)
@@ -9757,6 +9826,8 @@ void set(char **statement)
 		fprintf(outfile, "%d", (int) strlen(statement[strindex]));
 	    }
 	}
+	fprintf(outfile, "\n    endif ; isBANKSETBANK\n");
+	fprintf(outfile, "\n    ifconst HSCHARSHERE\n");
 
 	for (strindex = 3; strindex < 7; strindex++)
 	{
@@ -9825,6 +9896,7 @@ void set(char **statement)
 	    }
 	}
 	fprintf(outfile, "\n");
+	fprintf(outfile, "\n    endif ; HSCHARSHERE\n");
 	fclose(outfile);
 
     }
@@ -9949,6 +10021,7 @@ void set(char **statement)
 	sprintf(redefined_variables[numredefvars++], "HSGAMERANKS = 1");
 	removeCR(statement[3]);	//remove CR from the name
 	tmpval[2] = 0;
+	fprintf(outfile, "\n ifconst HSCHARSHERE\n");
 	while ((statement[strindex] != 0) && (statement[strindex][0] != 0))
 	{
 	    //save these for later. we need to output them in individual tables...
@@ -10028,6 +10101,8 @@ void set(char **statement)
 	    removeCR(statement[strindex]);	//remove CR from the name
 	}
 
+	fprintf(outfile, "\n endif ; HSCHARSHERE\n");
+	fprintf(outfile, "\n ifnconst isBANKSETBANK\n");
 	fprintf(outfile, "\nranklabellengths\n .byte ");
 	for (s = 0; s < count; s++)
 	{
@@ -10061,6 +10136,7 @@ void set(char **statement)
 		fprintf(outfile, "$%02x", val[t][s]);
 	    }
 	}
+	fprintf(outfile, "\n endif ;  isBANKSETBANK\n");
 	fprintf(outfile, "\n");
 	fclose(outfile);
 
@@ -10153,6 +10229,11 @@ void set(char **statement)
                 strcpy(redefined_variables[numredefvars++], "pokeysupport = 1");
 	        strcpy(redefined_variables[numredefvars++], "pokeyaddress = $4000");
                 append_a78info("set pokey@4000");
+            }
+            else // some other address
+            {
+                strcpy(redefined_variables[numredefvars++], "pokeysupport = 1");
+                snprintf(redefined_variables[numredefvars++],30,"pokeyaddress = %s",statement[3]);
             }
 	}
 
