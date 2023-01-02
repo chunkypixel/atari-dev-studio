@@ -923,6 +923,7 @@ void bank(char **statement)
     orgprintf(" if START_OF_ROM = . ; avoid dasm empty start-rom truncation.\n");
     orgprintf("     .byte 0\n");
     orgprintf(" endif\n");
+    orgprintf("START_OF_ROM SET 0 ; scuttle so we always fail subsequent banks\n");
 
     // 2.issue ORG,RORG
     currentbank = requestedbank;
@@ -4422,6 +4423,7 @@ void barf_graphic_file(void)
         orgprintf(" if START_OF_ROM = . ; avoid dasm empty start-rom truncation.\n");
         orgprintf("     .byte 0\n");
         orgprintf(" endif\n");
+        orgprintf("START_OF_ROM SET 0 ; scuttle so we always fail subsequent banks\n");
 	for (currentplain = 0; currentplain <= dmaplain; currentplain++)
 	{
 	    if (bankcount == 0)

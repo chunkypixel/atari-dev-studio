@@ -12,6 +12,11 @@
     endif
   endif
 
+  if START_OF_ROM = .
+      .byte 0
+  endif
+START_OF_ROM SET 0
+
   ; FF7E/FF7F contains the 7800basic crc checksum word
 
   ; FF80 - FFF7 contains the 7800 encryption key 
