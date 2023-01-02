@@ -145,10 +145,15 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`a78info.cfg`));
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`7800basic_variable_redefs.h`));
             // DMAHole
-            // Not sure how many here??
-            for (let index = 0; index < 25; index++) {
+            for (let index = 0; index < 3; index++) {
                 await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`7800hole.${index}.asm`));
             }
+            // Banksets
+            await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`banksetrom.asm`));
+            await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`banksetrom.bin`));
+            await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`banksetrom.list.txt`));
+            await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`banksetrom.symbol.txt`));
+
         }
 
         // Debugger files (from workspace not bin)
@@ -179,7 +184,10 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
             `7800preprocess${platform}${extension}`,
             `7800sign${platform}${extension}`,
             `7800makecc2${platform}${extension}`,
-            `dasm${platform}${extension}`];     
+            `7800rmtfix${platform}${extension}`,
+            `dasm${platform}${extension}`,
+            `banksetsymbols${platform}${extension}`,
+            `snip${platform}${extension}`];     
 
     }
 
