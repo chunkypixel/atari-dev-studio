@@ -26,6 +26,7 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected Configuration: vscode.WorkspaceConfiguration | undefined;
     public Document: vscode.TextDocument | undefined;
 
+    public CompilerVersion: number = 0.0;
     public FileName: string = "";
     public CompiledSubFolder: string = "";
     readonly CompiledSubFolderName: string = "bin";
@@ -140,6 +141,9 @@ export abstract class CompilerBase implements vscode.Disposable {
             await this.RemoveDebuggerFilesAsync(this.CompiledSubFolder); 
         }
 
+        // Read compiler version (if used)
+        await this.GetCompilerVersionAsync();
+
          // Result
         return true;
     }
@@ -201,6 +205,9 @@ export abstract class CompilerBase implements vscode.Disposable {
      
         // Result
         return result;
+    }
+
+    protected async GetCompilerVersionAsync(): Promise<void> { 
     }
 
     protected GetCompilerFileList(): string[] {

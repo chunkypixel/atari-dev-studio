@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SeventyEightHundredBasicCompiler = void 0;
+const vscode = require("vscode");
 const path = require("path");
 const application = require("../application");
 const filesystem = require("../filesystem");
@@ -20,6 +21,20 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
         super("7800basic", "7800basic", [".bas", ".78b"], [".a78", ".bin", ".bin.CC2", ".bin.versa"], [".a78", ".bin"], path.join(application.Path, "out", "bin", "compilers", "7800basic"), "A7800");
         // Debugger extensions
         this.DebuggerExtensions = new Map([["-s", ".symbol.txt"], ["-l", ".list.txt"]]);
+    }
+    GetCompilerVersionAsync() {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Prepare
+            const filePath = vscode.Uri.file(path.join(this.FolderOrPath, 'release.dat'));
+            this.CompilerVersion = 0.21;
+            // attempt to read contents
+            if (yield (filesystem.FileExistsAsync(filePath.fsPath))) {
+                let fileContent = (yield filesystem.ReadFileAsync(filePath.fsPath)).toString().split(/\r?\n/);
+                if (!fileContent.any && application.isNumber(fileContent[0])) {
+                    this.CompilerVersion = parseFloat(fileContent[0]);
+                }
+            }
+        });
     }
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -111,13 +126,6 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             return executeResult;
         });
     }
-    // protected LoadConfiguration(): boolean {
-    //     console.log('debugger:BatariBasicCompiler.LoadConfiguration');  
-    //     // Base
-    //     if (!super.LoadConfiguration()) return false;
-    //     // Result
-    //     return true;
-    // }
     RemoveCompilationFilesAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SeventyEightHundredBasicCompiler.RemoveCompilationFiles');
@@ -161,20 +169,37 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             platform = ".Darwin";
         }
         let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
-        // Result
-        return [command,
-            `7800basic${platform}${extension}`,
-            `7800filter${platform}${extension}`,
-            `7800header${platform}${extension}`,
-            `7800optimize${platform}${extension}`,
-            `7800postprocess${platform}${extension}`,
-            `7800preprocess${platform}${extension}`,
-            `7800sign${platform}${extension}`,
-            `7800makecc2${platform}${extension}`,
-            `7800rmtfix${platform}${extension}`,
-            `dasm${platform}${extension}`,
-            `banksetsymbols${platform}${extension}`,
-            `snip${platform}${extension}`];
+        // Validate compiler version to determine list of required files
+        if (this.CompilerVersion >= 0.22) {
+            // version 0.22 and greater added:
+            // - 7800rmtfix
+            // - banksetsymbols
+            return [command,
+                `7800basic${platform}${extension}`,
+                `7800filter${platform}${extension}`,
+                `7800header${platform}${extension}`,
+                `7800optimize${platform}${extension}`,
+                `7800postprocess${platform}${extension}`,
+                `7800preprocess${platform}${extension}`,
+                `7800sign${platform}${extension}`,
+                `7800makecc2${platform}${extension}`,
+                `7800rmtfix${platform}${extension}`,
+                `dasm${platform}${extension}`,
+                `banksetsymbols${platform}${extension}`];
+        }
+        else {
+            // up to version 0.21 (default)
+            return [command,
+                `7800basic${platform}${extension}`,
+                `7800filter${platform}${extension}`,
+                `7800header${platform}${extension}`,
+                `7800optimize${platform}${extension}`,
+                `7800postprocess${platform}${extension}`,
+                `7800preprocess${platform}${extension}`,
+                `7800sign${platform}${extension}`,
+                `7800makecc2${platform}${extension}`,
+                `dasm${platform}${extension}`];
+        }
     }
 }
 exports.SeventyEightHundredBasicCompiler = SeventyEightHundredBasicCompiler;

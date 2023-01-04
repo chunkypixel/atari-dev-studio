@@ -32,6 +32,7 @@ class CompilerBase {
         this.FolderOrPath = "";
         this.Args = "";
         this.Emulator = "";
+        this.CompilerVersion = 0.0;
         this.FileName = "";
         this.CompiledSubFolder = "";
         this.CompiledSubFolderName = "bin";
@@ -161,6 +162,8 @@ class CompilerBase {
             if (!this.UsingMakeFileCompiler && !this.UsingBatchCompiler && !this.UsingShellScriptCompiler) {
                 yield this.RemoveDebuggerFilesAsync(this.CompiledSubFolder);
             }
+            // Read compiler version (if used)
+            yield this.GetCompilerVersionAsync();
             // Result
             return true;
         });
@@ -216,6 +219,10 @@ class CompilerBase {
             }
             // Result
             return result;
+        });
+    }
+    GetCompilerVersionAsync() {
+        return __awaiter(this, void 0, void 0, function* () {
         });
     }
     GetCompilerFileList() {

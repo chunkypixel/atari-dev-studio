@@ -1,10 +1,10 @@
 "use strict";
+import * as vscode from 'vscode';
 import * as path from 'path';
 import * as application from '../application';
 import * as filesystem from '../filesystem';
 import * as execute from '../execute';
 import { CompilerBase } from "./compilerBase";
-import { stringify } from 'querystring';
 
 export class SeventyEightHundredBasicCompiler extends CompilerBase {
 
@@ -20,6 +20,20 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         this.DebuggerExtensions = new Map([["-s",".symbol.txt"],["-l",".list.txt"]]);
     }
     
+    protected async GetCompilerVersionAsync(): Promise<void> {
+		// Prepare
+        const filePath: vscode.Uri = vscode.Uri.file(path.join(this.FolderOrPath, 'release.dat'));
+        this.CompilerVersion = 0.21;
+
+        // attempt to read contents
+        if (await (filesystem.FileExistsAsync(filePath.fsPath))) {
+            let fileContent = (await filesystem.ReadFileAsync(filePath.fsPath)).toString().split(/\r?\n/); 
+            if (!fileContent.any && application.isNumber(fileContent[0])) { 
+                this.CompilerVersion = parseFloat(fileContent[0]); 
+            }
+        }
+    }
+
     protected async ExecuteCompilerAsync(): Promise<boolean> {
         console.log('debugger:SeventyEightHundredBasicCompiler.ExecuteCompilerAsync');
 
@@ -120,16 +134,6 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         return executeResult;
     }
 
-    // protected LoadConfiguration(): boolean {
-    //     console.log('debugger:BatariBasicCompiler.LoadConfiguration');  
-
-    //     // Base
-    //     if (!super.LoadConfiguration()) return false;
-
-    //     // Result
-    //     return true;
-    // }
-
     protected async RemoveCompilationFilesAsync(): Promise<boolean> {
         console.log('debugger:SeventyEightHundredBasicCompiler.RemoveCompilationFiles');
 
@@ -174,20 +178,37 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         if (application.IsMacOS) { platform = ".Darwin"; }
         let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
 
-        // Result
-        return [command,
-            `7800basic${platform}${extension}`,
-            `7800filter${platform}${extension}`,
-            `7800header${platform}${extension}`,
-            `7800optimize${platform}${extension}`,
-            `7800postprocess${platform}${extension}`,
-            `7800preprocess${platform}${extension}`,
-            `7800sign${platform}${extension}`,
-            `7800makecc2${platform}${extension}`,
-            `7800rmtfix${platform}${extension}`,
-            `dasm${platform}${extension}`,
-            `banksetsymbols${platform}${extension}`,
-            `snip${platform}${extension}`];     
+        // Validate compiler version to determine list of required files
+        if (this.CompilerVersion >= 0.22) {
+            // version 0.22 and greater added:
+            // - 7800rmtfix
+            // - banksetsymbols
+            return [command,
+                `7800basic${platform}${extension}`,
+                `7800filter${platform}${extension}`,
+                `7800header${platform}${extension}`,
+                `7800optimize${platform}${extension}`,
+                `7800postprocess${platform}${extension}`,
+                `7800preprocess${platform}${extension}`,
+                `7800sign${platform}${extension}`,
+                `7800makecc2${platform}${extension}`,
+                `7800rmtfix${platform}${extension}`,
+                `dasm${platform}${extension}`,
+                `banksetsymbols${platform}${extension}`];  
+        } else {
+           // up to version 0.21 (default)
+           return [command,
+                `7800basic${platform}${extension}`,
+                `7800filter${platform}${extension}`,
+                `7800header${platform}${extension}`,
+                `7800optimize${platform}${extension}`,
+                `7800postprocess${platform}${extension}`,
+                `7800preprocess${platform}${extension}`,
+                `7800sign${platform}${extension}`,
+                `7800makecc2${platform}${extension}`,
+                `dasm${platform}${extension}`];          
+        }
+   
 
     }
 
