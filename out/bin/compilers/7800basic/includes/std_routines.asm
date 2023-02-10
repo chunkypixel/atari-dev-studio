@@ -2195,6 +2195,12 @@ createvisiblezonesloop
      endif ; DOUBLEBUFFER
      inx
      lda DLPOINTH,y
+ ifconst BANKSET_DL_IN_CARTRAM
+     ; with bankset cart ram, we added $8000 to the DL address so plot functions would hit the write-address
+     ; but now we need to subtract that $8000 location to give Maria the normal address
+     sec
+     sbc #$80  
+ endif ; BANKSET_DL_IN_CARTRAM
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
        sta DLLMEM+DBOFFSET,x
@@ -2270,6 +2276,7 @@ skipminimumframecode
      lda NewPageflipoffset,x
      sta doublebufferdloffset
 
+ ifnconst BANKSET_DL_IN_CARTRAM
      lda doublebufferbufferdirty
      beq flipdisplaybufferreturn
 
@@ -2311,6 +2318,7 @@ copybuffercharsloop
      bpl copybufferzoneloop
      lda #0
      sta doublebufferbufferdirty
+ endif ; ! BANKSET_DL_IN_CARTRAM
      rts
 
 doublebufferoff

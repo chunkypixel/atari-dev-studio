@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.8.4
+
+* Updated 7800basic to v0.23 (Windows, Linux, macOS)
+
 ## 0.8.3
 
 * Fixed 7800basic compilation process to verify release version to determine list of compiler files to validate

@@ -674,6 +674,11 @@ int isfixpoint(char *item)
 
 void set_romsize(char *size)
 {
+    static int romsize_already_set = 0;
+    if (romsize_already_set)
+	prerror("rom size was specified more than once.");
+    romsize_already_set = 1;
+    
     if (!strncmp(size, "32k\0", 3))
     {
         romsize=32;
@@ -734,7 +739,10 @@ void set_romsize(char *size)
 	}
 	else if (strncmp(size + 4, "RAM", 3) == 0)
 	{
-	    append_a78info("set supergameram");
+            if(banksetrom)
+	        append_a78info("set hram@4000");
+            else
+	        append_a78info("set supergameram");
 	    strcpy(redefined_variables[numredefvars++], "SGRAM = 1");
 	}
     }
@@ -754,7 +762,10 @@ void set_romsize(char *size)
 	}
 	else if (strncmp(size + 4, "RAM", 3) == 0)
 	{
-	    append_a78info("set supergameram");
+            if(banksetrom)
+	        append_a78info("set hram@4000");
+            else
+	        append_a78info("set supergameram");
 	    strcpy(redefined_variables[numredefvars++], "SGRAM = 1");
 	}
 	else
@@ -9767,8 +9778,18 @@ void set(char **statement)
     else if (!strncmp(statement[2], "dlmemory\0", 8))
     {
 	assertminimumargs(statement + 1, "set dlmemory", 2);	//+1 to skip "dlmemory"
-	printf("DLMEMSTART = %s\n", statement[3]);
-	printf("DLMEMEND   = %s\n", statement[4]);
+	removeCR(statement[4]);	//remove CR if present
+        if(banksetrom)
+        {
+	    printf("DLMEMSTART = (%s + $8000)\n", statement[3]);
+	    printf("DLMEMEND   = (%s + $8000)\n", statement[4]);
+	    strcpy(redefined_variables[numredefvars++], "BANKSET_DL_IN_CARTRAM = 1");
+        }
+        else
+        {
+	    printf("DLMEMSTART = %s\n", statement[3]);
+	    printf("DLMEMEND   = %s\n", statement[4]);
+        }
     }
     else if (!strncmp(statement[2], "hssupport\0", 10))
     {
