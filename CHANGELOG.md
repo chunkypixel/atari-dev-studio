@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.8.5
+
+* Fixed 7800basic keyword bankset references for syntax highlighting, hover and contaxt help
+
 ## 0.8.4
 
 * Updated 7800basic to v0.23 (Windows, Linux, macOS)

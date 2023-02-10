@@ -285,9 +285,9 @@
 
 
 
-## BANKSETS
+## BANKSET
 
-    set banksets state
+    set bankset state
 
     state - on, off
 
