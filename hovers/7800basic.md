@@ -94,6 +94,9 @@
 
     size - 16k, 32k, 48k, 128k, 128kRAM, 128kBANKRAM, 144k, 256k, 256kRAM, 256kBANKRAM, 272k, 512k, 512kRAM, 512kBANKRAM, 528k
 
+    NOTE: it is recommended 'set bankset on' is located at the top of your set list (or at least before any use of both 'set romsize' and 'set dlmemory').  
+
+
 
 
 ## DOUBLEWIDE
@@ -174,6 +177,9 @@
 
     start_byte_location
     end_byte_location
+
+    NOTE: it is recommended 'set bankset on' is located at the top of your set list (or at least before any use of both 'set romsize' and 'set dlmemory').  
+
 
 
 ## COLLISIONWRAP
@@ -290,6 +296,8 @@
     set bankset state
 
     state - on, off
+
+    NOTE: it is recommended 'set bankset on' is located at the top of your set list (or at least before any use of both 'set romsize' and 'set dlmemory').  
 
 
 
