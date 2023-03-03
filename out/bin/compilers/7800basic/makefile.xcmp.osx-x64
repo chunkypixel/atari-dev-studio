@@ -55,5 +55,5 @@ banksetsymbols.${ARCH}: banksetsymbols.c
 install:   all
 
 clean:
-	rm -f 7800basic.${ARCH} 7800preprocess.${ARCH} 7800postprocess.${ARCH} 7800optimize.${ARCH} 7800header.${ARCH} 7800sign.${ARCH} snip.${ARCH} banksetsymbols.${ARCH} 7800rmtfix.${ARCH} 7800filter.${ARCH} 7800makecc2.${ARCH}
+	rm -f 7800basic.${ARCH} 7800preprocess.${ARCH} 7800postprocess.${ARCH} 7800optimize.${ARCH} 7800header.${ARCH} 7800sign.${ARCH} snip.${ARCH} banksetsymbols.${ARCH} 7800rmtfix.${ARCH} 7800filter.${ARCH} 7800makecc2.${ARCH} 7800rmtfix.${ARCH} lz4raw.${ARCH} snip.${ARCH}
 

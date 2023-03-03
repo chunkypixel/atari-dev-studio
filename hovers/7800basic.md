@@ -94,7 +94,7 @@
 
     size - 16k, 32k, 48k, 128k, 128kRAM, 128kBANKRAM, 144k, 256k, 256kRAM, 256kBANKRAM, 272k, 512k, 512kRAM, 512kBANKRAM, 528k
 
-    NOTE: it is recommended 'set bankset on' is located at the top of your set list (or at least before any use of both 'set romsize' and 'set dlmemory').  
+    NOTE: it is recommended 'set bankset on' is located at the top of your set list (or at least before any use of both 'set romsize' and 'set extradlmemory').  
 
 
 
@@ -161,6 +161,8 @@
 
     state - on, off
 
+    NOTE: it is recommended 'set bankset on' is located at the top of your set list (or at least before any use of both 'set romsize' and 'set extradlmemory').  The use of 'set dlmemory' is incompatible with bankset roms and is not available when turned on.   
+
 
 
 ## CANARY
@@ -178,7 +180,7 @@
     start_byte_location
     end_byte_location
 
-    NOTE: it is recommended 'set bankset on' is located at the top of your set list (or at least before any use of both 'set romsize' and 'set dlmemory').  
+    NOTE: it is recommended 'set bankset on' is located at the top of your set list (or at least before any use of both 'set romsize' and 'set extradlmemory').  The use of 'set dlmemory' is incompatible with bankset roms and is not available when turned on.  
 
 
 
@@ -227,9 +229,9 @@
 
 
 
-## POKEYDETECTED
+## TIAVOLUME
 
-    if pokeydetected then ...
+    set tiavolume on
 
 
 
@@ -297,7 +299,39 @@
 
     state - on, off
 
-    NOTE: it is recommended 'set bankset on' is located at the top of your set list (or at least before any use of both 'set romsize' and 'set dlmemory').  
+    NOTE: it is recommended 'set bankset on' is located at the top of your set list (or at least before any use of both 'set romsize' and 'set extradlmemory').  The use of 'set dlmemory' is incompatible with bankset roms and is not available when turned on.
+
+
+
+## DUMPGRAPHICS
+
+    set dumpgraphics $####
+
+    $#### - address of dump ie. $6000
+
+
+
+## SNES0PAUSE
+
+    set snes0pause on
+
+
+
+## SNES1PAUSE
+
+    set snes1pause on
+
+
+
+## SNES#PAUSE
+
+    set snes#pause on
+    
+
+
+## POKEYDETECTED
+
+    if pokeydetected then ...
 
 
 
@@ -413,6 +447,12 @@
     filename.png - file name of the graphic to include
     graphics mode (optional) - 160A (default), 160B, 320A, 320B, 320C, 320D
     color # (optional) - MARIA color index
+
+
+
+## INCBIN
+
+    incbin filename.xxx
 
 
 
@@ -952,3 +992,19 @@
 
 
    
+## SETFADE
+
+    setfade value
+
+    value - variable containing fade value (0-255)
+
+
+
+## GETFADE
+
+    PXCX = getfade(color[,black])
+
+    color - value of base color ($00-$ff)
+    value (optional) - "black" argument zeroes the hue nibble
+
+

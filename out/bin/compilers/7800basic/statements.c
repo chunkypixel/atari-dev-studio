@@ -30,11 +30,16 @@ int currentdmahole = 0;
 
 int banksetrom = 0;
 
+int fourbitfade_alreadyused = 0;
+
 #define BANKSETASM "banksetrom.asm"
 #define BANKSETSTRINGSASM "banksetstrings.asm"
 
 int deprecatedframeheight = 0;
 int deprecated160bindexes = 0;
+
+int dumpgraphics = 0;
+int dumpgraphicsaddr = 0;
 
 #define PNG_DEBUG 3
 #include <png.h>
@@ -2293,6 +2298,61 @@ void barfmultiplicationtables(void)
 
 }
 
+void getfade(char **statement)
+{
+
+    //   4       5     6   7   8     9
+    // getfade   (   value , "black" )
+
+    if ( (statement[7][0] != ')') && (statement[9][0] != ')'))
+	prerror("bad argument count for getfade");
+
+    if (!fourbitfade_alreadyused)
+    {
+        fourbitfade_alreadyused=1;
+        strcpy(redefined_variables[numredefvars++], "FOURBITFADE = 1");
+    }
+
+    templabel++;
+    if ( (statement[7][0] != ')') && (statement[9][0] == ')') && (statement[8][0] == 'b') )
+    {
+        printf("    lda fourbitfadevalue\n");
+        printf("    beq .fadezeroskip%d\n",templabel);
+    }
+    printf("    lda ");
+    printimmed(statement[6]);
+    printf("%s\n", statement[6]);
+    printf("    jsr fourbitfade\n");
+    printf(".fadezeroskip%d\n",templabel);
+    strcpy(Areg, "invalid");
+
+}
+
+void setfade(char **statement)
+{
+
+    //   1      2
+    // setfade  value
+
+    assertminimumargs(statement, "setfade", 1);
+
+    if (!fourbitfade_alreadyused)
+    {
+        fourbitfade_alreadyused=1;
+        strcpy(redefined_variables[numredefvars++], "FOURBITFADE = 1");
+    }
+
+    printf("    lda ");
+    printimmed(statement[2]);
+    printf("%s\n", statement[2]);
+    printf("    asl\n");
+    printf("    asl\n");
+    printf("    asl\n");
+    printf("    asl\n");
+    printf("    sta fourbitfadevalue\n");
+    strcpy(Areg, "invalid");
+}
+
 void peekchar(char **statement)
 {
     //   4      5   6   7 8 9  10 11 12    13 14     15
@@ -4273,6 +4333,9 @@ void init_includes(char *path)
 
 void barf_graphic_file(void)
 {
+    static int dumpgraphics_index = 0;
+    FILE *dumpgraphics_fileout;
+    char dumpgraphics_filename[256];
     int s, t, currentplain;
     int linewidth;
     int runi;
@@ -4451,11 +4514,25 @@ void barf_graphic_file(void)
 	    }
 	    fprintf(stderr, "\n");
 	    if (bankcount == 0)
+            {
 		prinfo("GFX Block #%d starts @ $%04X", currentplain, ADDRBASE);
+            }
 	    else
+            {
 		prinfo("bank #%d, GFX Block #%d starts @ $%04X", currentbank + 1, currentplain, ADDRBASE);
+            }
+            if(dumpgraphics)
+            {
+                snprintf(dumpgraphics_filename,255,"dump_gfx_%02d.bin",dumpgraphics_index);
+		prinfo("dumping GFX Block to \"%s\"",dumpgraphics_filename);
+                dumpgraphics_fileout = fopen(dumpgraphics_filename,"wb");
+                if(dumpgraphics_fileout==NULL)
+	            prerror("couldn't open file for dumping graphics block");
+            }
 	    linewidth = 0;
 	    fprintf(stderr, "       ");
+
+            char dumpgraphics_data[256];
 
 	    for (s = zoneheight - 1; s >= 0; s--)
 	    {
@@ -4466,6 +4543,9 @@ void barf_graphic_file(void)
 		    gfxprintf("\n ORG $%04X,0  ; *************\n", ABADDRBASE);
 		    gfxprintf("\n RORG $%04X ; *************\n", ADDRBASE);
 		}
+
+                if(dumpgraphics)
+                    memset(dumpgraphics_data,0,256);
 
 		for (t = 0; t < graphicsdatawidth[currentplain]; t++)
 		{
@@ -4488,12 +4568,16 @@ void barf_graphic_file(void)
 			    gfxprintf("\n;%s\n       HEX ", graphicslabels[currentplain][t]);
 		    }
 		    gfxprintf("%02x", graphicsdata[currentplain][t][s]);
+                    if(dumpgraphics)
+                        dumpgraphics_data[t]=graphicsdata[currentplain][t][s];
 		    runi++;
 		    if ((runi % 32 == 0) && ((t + 1) < graphicsdatawidth[currentplain]))
 			gfxprintf("\n       HEX ");
 		}
 		gfxprintf("\n");
 		ADDRBASE = ADDRBASE + 256;
+                if(dumpgraphics)
+                    fwrite(dumpgraphics_data,1,256,dumpgraphics_fileout);
 		if (bankcount > 0)
 		    ABADDRBASE = ABADDRBASE + 256;
 	    }
@@ -4506,6 +4590,9 @@ void barf_graphic_file(void)
 		prinfo("bank #%d, GFX block #%d has %d bytes left (%d x %d bytes)\n", currentbank + 1, currentplain,
 		       (256 - graphicsdatawidth[currentplain]) * zoneheight, (256 - graphicsdatawidth[currentplain]),
 		       zoneheight);
+
+            if(dumpgraphics)
+                fclose(dumpgraphics_fileout);
 
 	    // if we're in a DMA hole, report on it and barf any code that was saved for it...
 	    if ((currentplain < dmaplain)
@@ -4583,24 +4670,39 @@ void barf_graphic_file(void)
                         printf(" endif\n");
                 }
 	    }
-	}
 
-	for (currentplain = 0; currentplain <= dmaplain; currentplain++)
-	{
+            if(dumpgraphics)
+            {
+                snprintf(dumpgraphics_filename,255,"dump_gfx_%02d.asm",dumpgraphics_index);
+                dumpgraphics_fileout = fopen(dumpgraphics_filename,"wb");
+                if(dumpgraphics_fileout==NULL)
+	            prerror("couldn't open file for dumping graphics assembly");
+            }
+
 	    //stick extra graphic info into variable defines
 	    for (t = 0; t < 256; t++)
 	    {
 		if (graphicslabels[currentplain][t][0] != 0)
 		{
-		    sprintf(redefined_variables[numredefvars++], "%s_width = $%02x", graphicslabels[currentplain][t],
-			    graphicsinfo[currentplain][t]);
-		    sprintf(redefined_variables[numredefvars++], "%s_width_twoscompliment = $%02x",
-			    graphicslabels[currentplain][t], ((0 - (graphicsinfo[currentplain][t])) & 31));
-		    sprintf(redefined_variables[numredefvars++], "%s_mode = $%02x", graphicslabels[currentplain][t],
-			    graphicsmode[currentplain][t]);
+		    sprintf(redefined_variables[numredefvars++], "%s_width = $%02x", graphicslabels[currentplain][t], graphicsinfo[currentplain][t]);
+		    sprintf(redefined_variables[numredefvars++], "%s_width_twoscompliment = $%02x", graphicslabels[currentplain][t], ((0 - (graphicsinfo[currentplain][t])) & 31));
+		    sprintf(redefined_variables[numredefvars++], "%s_mode = $%02x", graphicslabels[currentplain][t], graphicsmode[currentplain][t]);
+                    if(dumpgraphics)
+                    {
+		        fprintf(dumpgraphics_fileout, "%s = $%04x\n", graphicslabels[currentplain][t], dumpgraphicsaddr+t);
+		        fprintf(dumpgraphics_fileout, "%s_width = $%02x\n", graphicslabels[currentplain][t], graphicsinfo[currentplain][t]);
+		        fprintf(dumpgraphics_fileout, "%s_width_twoscompliment = $%02x\n", graphicslabels[currentplain][t], ((0 - (graphicsinfo[currentplain][t])) & 31));
+                        fprintf(dumpgraphics_fileout, "%s_mode = $%02x\n", graphicslabels[currentplain][t], graphicsmode[currentplain][t]);
+                    }
 		}
 	    }
-	}
+
+            if(dumpgraphics)
+                fclose(dumpgraphics_fileout);
+
+            dumpgraphics_index++;
+
+	} // currentplain loop, 0 to dmaplain
 
 
 	if (bankcount > 0)
@@ -7329,6 +7431,16 @@ void endif(void)
     printf(" endif\n");
 }
 
+void incbin(char **statement)
+{
+    //         1           2
+    //     incbin    somelabel
+    removeCR(statement[2]);
+    if ((statement[2] == 0) || (statement[2][0] == 0))
+	prerror("missing argument in incbin statement");
+    printf(" incbin %s\n", statement[2]);
+}
+
 
 void doif(char **statement)
 {
@@ -9294,6 +9406,8 @@ void let(char **cstatement)
 		sread(statement);
 	    else if (!strncmp(statement[4], "peekchar\0", 8))
 		peekchar(statement);
+	    else if (!strncmp(statement[4], "getfade\0", 10))
+		getfade(statement);
 	    else
 		callfunction(statement);
 	}
@@ -9671,6 +9785,7 @@ void set(char **statement)
 {
     if (!strncasecmp(statement[2], "tv\0", 2))
     {
+	assertminimumargs(statement, "set tv", 1);
 	if (!strncasecmp(statement[3], "ntsc\0", 4))
 	{
 	    strcpy(redefined_variables[numredefvars++], "NTSC = 1");
@@ -9686,6 +9801,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "smartbranching\0", 14))
     {
+	assertminimumargs(statement, "set smartbranching", 1);
 	if (!strncmp(statement[3], "on", 2))
 	    smartbranching = 1;
 	else
@@ -9693,6 +9809,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "collisionwrap\0", 13))
     {
+	assertminimumargs(statement, "set collisionwrap", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "collisionwrap = 1");
@@ -9703,10 +9820,19 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "romsize\0", 7))
     {
+	assertminimumargs(statement, "set romsize", 1);
 	set_romsize(statement[3]);
+    }
+    else if (!strncmp(statement[2], "dumpgraphics\0", 12))
+    {
+	assertminimumargs(statement, "set dumpgraphics", 1);
+	removeCR(statement[3]);	//remove CR if present
+	dumpgraphics = 1;
+        dumpgraphicsaddr = strictatoi (statement[3]);
     }
     else if (!strncmp(statement[2], "bankset\0", 7))
     {
+	assertminimumargs(statement, "set bankset", 1);
 	if (!strncmp(statement[3], "on", 2))
         {
 	    strcpy(redefined_variables[numredefvars++], "BANKSETROM = 1");
@@ -9716,31 +9842,37 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "softresetpause\0", 15))
     {
+	assertminimumargs(statement, "set softresetpause", 1);
 	if (!strncmp(statement[3], "off", 3))
 	    strcpy(redefined_variables[numredefvars++], "SOFTRESETASPAUSEOFF = 1");
     }
     else if (!strncmp(statement[2], "snes0pause\0", 10))
     {
+	assertminimumargs(statement, "set snes0pause", 1);
 	if (!strncmp(statement[3], "on", 2))
 	    strcpy(redefined_variables[numredefvars++], "SNES0PAUSE = 1");
     }
     else if (!strncmp(statement[2], "snes1pause\0", 10))
     {
+	assertminimumargs(statement, "set snes1pause", 1);
 	if (!strncmp(statement[3], "on", 2))
 	    strcpy(redefined_variables[numredefvars++], "SNES1PAUSE = 1");
     }
     else if (!strncmp(statement[2], "snes#pause\0", 10))
     {
+	assertminimumargs(statement, "set snes#pause", 1);
 	if (!strncmp(statement[3], "on", 2))
 	    strcpy(redefined_variables[numredefvars++], "SNESNPAUSE = 1");
     }
     else if (!strncmp(statement[2], "basepath\0", 7))
     {
+	assertminimumargs(statement, "set basepath", 1);
 	removeCR(statement[3]);	//remove CR from the filename, if present
 	strcpy(incbasepath, statement[3]);
     }
     else if (!strncmp(statement[2], "avoxvoice\0", 9))
     {
+	assertminimumargs(statement, "set avoxvoice", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "AVOXVOICE = 1");
@@ -9754,6 +9886,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "extradlmemory\0", 13))
     {
+	assertminimumargs(statement, "set extradlmemory", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "EXTRADLMEMORY = 1");
@@ -9761,6 +9894,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "tallsprite\0", 10))
     {
+	assertminimumargs(statement, "set tallsprite", 1);
 	if (!strncmp(statement[3], "off", 3))
 	    tallspritemode = 0;
 	else if (!strncmp(statement[3], "on", 2))
@@ -9780,11 +9914,7 @@ void set(char **statement)
 	assertminimumargs(statement + 1, "set dlmemory", 2);	//+1 to skip "dlmemory"
 	removeCR(statement[4]);	//remove CR if present
         if(banksetrom)
-        {
-	    printf("DLMEMSTART = (%s + $8000)\n", statement[3]);
-	    printf("DLMEMEND   = (%s + $8000)\n", statement[4]);
-	    strcpy(redefined_variables[numredefvars++], "BANKSET_DL_IN_CARTRAM = 1");
-        }
+	    prerror("\"set dlmemory\" isn't compatibl with banksets.");
         else
         {
 	    printf("DLMEMSTART = %s\n", statement[3]);
@@ -9793,6 +9923,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "hssupport\0", 10))
     {
+	assertminimumargs(statement, "set hssupport", 1);
 	removeCR(statement[3]);	//remove CR from the filename, if present
 	if ((statement[3] == 0) || (statement[3][0] == 0))
 	    prerror("'set hssupport' requires an argument");
@@ -9925,18 +10056,21 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "hscolorbase", 12))
     {
+	assertminimumargs(statement, "set hscolorbase", 1);
 	int hscolorval;
 	hscolorval = strictatoi(statement[3]);
 	sprintf(redefined_variables[numredefvars++], "HSCOLORCHASESTART = %d", hscolorval);
     }
     else if (!strncmp(statement[2], "hsseconds", 10))
     {
+	assertminimumargs(statement, "set hsseconds", 1);
 	int hsseconds;
 	hsseconds = strictatoi(statement[3]);
 	sprintf(redefined_variables[numredefvars++], "HSSECONDS = %d", hsseconds);
     }
     else if (!strncmp(statement[2], "hsscoresize", 11))
     {
+	assertminimumargs(statement, "set hsscoresize", 1);
 	int hsscoresize;
 	hsscoresize = strictatoi(statement[3]);
 	if ((hsscoresize < 1) || (hsscoresize > 6))
@@ -9946,6 +10080,8 @@ void set(char **statement)
 
     else if (!strncmp(statement[2], "hsgamename", 10))
     {
+	assertminimumargs(statement, "set hsgamename", 1);
+
 	FILE *outfile;
 	int s = 0, t = 0, strindex = 3, c;
 	outfile = fopen("7800hsgamename.asm", "w");
@@ -10167,6 +10303,7 @@ void set(char **statement)
 
     else if (!strncmp(statement[2], "tiasfx", 6))
     {
+	assertminimumargs(statement, "set tiasfx", 1);
 	if (!strncmp(statement[3], "mono", 4))
 	{
 	    strcpy(redefined_variables[numredefvars++], "TIASFXMONO = 1");
@@ -10174,6 +10311,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "xm", 2))
     {
+	assertminimumargs(statement, "set xm", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    append_a78info("set xm");
@@ -10181,6 +10319,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "trackersupport", 14))
     {
+	assertminimumargs(statement, "set trackersupport", 1);
 	if (!strncmp(statement[3], "basic", 5))
 	{
 	    strcpy(redefined_variables[numredefvars++], "MUSICTRACKER = 1");
@@ -10192,6 +10331,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "rmtvolume", 9))
     {
+	assertminimumargs(statement, "set rmtvolume", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "RMTVOLUME = 1");
@@ -10200,6 +10340,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "tiavolume", 9))
     {
+	assertminimumargs(statement, "set tiavolume", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "TIAVOLUME = 1");
@@ -10208,6 +10349,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "fourbitfade", 11))
     {
+	assertminimumargs(statement, "set fourbitfade", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "FOURBITFADE = 1");
@@ -10215,6 +10357,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "pokeysupport", 12))
     {
+	assertminimumargs(statement, "set pokeysupport", 1);
 	if (strncmp(statement[3], "off", 3))
         {
 	    strcpy(redefined_variables[numredefvars++], "pokeysupport = 1");
@@ -10263,6 +10406,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "hscsupport", 10))
     {
+	assertminimumargs(statement, "set hscsupport", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    append_a78info("set hsc");
@@ -10271,6 +10415,7 @@ void set(char **statement)
 
     else if (!strncmp(statement[2], "doublewide", 10))
     {
+	assertminimumargs(statement, "set doublewide", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "DOUBLEWIDE = 1");
@@ -10279,6 +10424,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "plotvalueonscreen", 17))
     {
+	assertminimumargs(statement, "set plotvalueonscreen", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "plotvalueonscreen = 1");
@@ -10286,6 +10432,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "frameskipfix", 12))
     {
+	assertminimumargs(statement, "set frameskipfix", 1);
 	if ((!strncmp(statement[3], "on", 2)) || (!strncmp(statement[3], "strong", 5)))
 	{
 	    strcpy(redefined_variables[numredefvars++], "FRAMESKIPGLITCHFIX = 1");
@@ -10297,6 +10444,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "zoneprotection", 14))
     {
+	assertminimumargs(statement, "set zoneprotection", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "CHECKOVERWRITE = 1");
@@ -10305,6 +10453,7 @@ void set(char **statement)
 
     else if (!strncmp(statement[2], "pauseroutine", 12))
     {
+	assertminimumargs(statement, "set pauseroutine", 1);
 	if (!strncmp(statement[3], "off", 3))
 	{
 	    strcpy(redefined_variables[numredefvars++], "pauseroutineoff = 1");
@@ -10312,6 +10461,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "paddlerange", 11))
     {
+	assertminimumargs(statement, "set paddlerange", 1);
         char outstr[256];
 	int value = strictatoi(statement[3]);
         if ((value<1)||(value>240))
@@ -10321,6 +10471,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "paddlepair", 10))
     {
+	assertminimumargs(statement, "set paddlepair", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "TWOPADDLESUPPORT = 1");
@@ -10328,6 +10479,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "paddlescalex2", 13))
     {
+	assertminimumargs(statement, "set paddlescalex2", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "PADDLESCALEX2 = 1");
@@ -10335,6 +10487,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "mousetime", 9))
     {
+	assertminimumargs(statement, "set mousetime", 1);
         char outstr[256];
 	int value = strictatoi(statement[3]);
         if ((value<1)||(value>240))
@@ -10344,6 +10497,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "mousexonly", 10))
     {
+	assertminimumargs(statement, "set mousexonly", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "MOUSEXONLY = 1");
@@ -10351,6 +10505,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "traktime", 9))
     {
+	assertminimumargs(statement, "set traktime", 1);
         char outstr[256];
 	int value = strictatoi(statement[3]);
         if ((value<1)||(value>240))
@@ -10360,6 +10515,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "trakxonly", 10))
     {
+	assertminimumargs(statement, "set trakxonly", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "TRAKXONLY = 1");
@@ -10367,6 +10523,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "drivingboost", 12))
     {
+	assertminimumargs(statement, "set drivingboost", 1);
 	if (!strncmp(statement[3], "on", 2))
 	{
 	    strcpy(redefined_variables[numredefvars++], "DRIVINGBOOST = 1");
@@ -10374,6 +10531,7 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "screenheight", 12))
     {
+	assertminimumargs(statement, "set screenheight", 1);
 	if (!strncmp(statement[3], "192", 3))
 	{
 	    strcpy(redefined_variables[numredefvars++], "SCREENHEIGHT = 192");
@@ -10408,6 +10566,7 @@ void set(char **statement)
 
     else if (!strncmp(statement[2], "zoneheight", 10))
     {
+	assertminimumargs(statement, "set zoneheight", 1);
 	if (!strncmp(statement[3], "8", 1))
 	{
 	    strcpy(redefined_variables[numredefvars++], "ZONEHEIGHT = 8");
@@ -10423,26 +10582,31 @@ void set(char **statement)
     }
     else if (!strncmp(statement[2], "mcpdevcart", 10))
     {
+	assertminimumargs(statement, "set mcpdevcart", 1);
 	if (strncmp(statement[3], "off", 3) != 0)
 	    strcpy(redefined_variables[numredefvars++], "MCPDEVCART = 1");
     }
     else if (!strncmp(statement[2], "canary", 6))
     {
+	assertminimumargs(statement, "set canary", 1);
 	if (strncmp(statement[3], "off", 3) != 0)
 	    strcpy(redefined_variables[numredefvars++], "CANARYOFF = 1");
     }
     else if (!strncmp(statement[2], "crashdump", 6))
     {
+	assertminimumargs(statement, "set crashdump", 1);
 	if (strncmp(statement[3], "off", 3) != 0)
 	    strcpy(redefined_variables[numredefvars++], "CRASHDUMP = 1");
     }
     else if (!strncmp(statement[2], "breakprotect", 12))
     {
+	assertminimumargs(statement, "set breakprotect", 1);
 	if (strncmp(statement[3], "off", 3) != 0)
 	    strcpy(redefined_variables[numredefvars++], "BREAKPROTECTOFF = 1");
     }
     else if (!strncmp(statement[2], "optimization", 12))
     {
+	assertminimumargs(statement, "set optimization", 1);
 	if (!strncmp(statement[3], "speed", 5))
 	{
 	    optimization |= 1;

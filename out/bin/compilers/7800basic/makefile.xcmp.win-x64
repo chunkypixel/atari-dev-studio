@@ -53,5 +53,5 @@ banksetsymbols.Windows.x64.exe: banksetsymbols.c
 install:        all
 
 clean:
-	rm -f 7800basic.Windows.x64.exe 7800preprocess.Windows.x64.exe 7800postprocess.Windows.x64.exe 7800optimize.Windows.x64.exe 7800header.Windows.x64.exe 7800sign.Windows.x64.exe 7800filter.Windows.x64.exe 7800makecc2.Windows.x64.exe snip.Windows.x64.exe banksetsymbols.Windows.x64.exe 7800rmtfix.Windows.x64.exe
+	rm -f 7800basic.Windows.x64.exe 7800preprocess.Windows.x64.exe 7800postprocess.Windows.x64.exe 7800optimize.Windows.x64.exe 7800header.Windows.x64.exe 7800sign.Windows.x64.exe 7800filter.Windows.x64.exe 7800makecc2.Windows.x64.exe snip.Windows.x64.exe banksetsymbols.Windows.x64.exe 7800rmtfix.Windows.x64.exe lz4raw.Windows.x64.exe
 

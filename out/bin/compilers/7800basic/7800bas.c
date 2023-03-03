@@ -13,7 +13,7 @@ FILE *stdoutfilepointer;
 
 extern int currentdmahole;
 
-#define BASIC_VERSION_INFO "7800basic v0.23"
+#define BASIC_VERSION_INFO "7800basic v0.24"
 
 int main(int argc, char *argv[])
 {
@@ -133,6 +133,18 @@ int main(int argc, char *argv[])
     remove("7800hole.2.asm");
     remove("banksetrom.asm");
     remove("banksetstrings.asm");
+
+    char removefile[256];
+    int t;
+    for(t=0;t<100;t++)
+    {
+        sprintf(removefile,"dump_gfx_%02d.bin",t);
+        if(remove(removefile))
+            break;
+        sprintf(removefile,"dump_gfx_%02d.asm",t);
+            remove(removefile);
+    }
+    
 
     create_a78info();		//wipe/create a78 parameter file
 

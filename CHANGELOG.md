@@ -2,9 +2,15 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.8.6
+
+* Updated 7800basic to v0.24 (Windows, Linux, macOS)
+* Updated 7800 references for syntax highlighting and hover
+* Added option to send binary to emulator or cart on launch (experitmental)
+
 ## 0.8.5
 
-* Fixed 7800basic keyword bankset references for syntax highlighting, hover and contaxt help
+* Fixed 7800basic keyword bankset references for syntax highlighting, hover and context help
 
 ## 0.8.4
 

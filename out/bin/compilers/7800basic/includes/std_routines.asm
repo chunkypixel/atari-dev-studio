@@ -646,6 +646,13 @@ skipvoxprocessing
          rts
 
 processavoxvoice
+    ifconst HSSUPPORT
+         ; ** we skip speech if hi-score is on and no vox was detected
+         ; ** this is to avoid later collision with snes pads.
+         lda hsdevice
+         and #2
+         beq processavoxvoicereturn
+    endif ; HSSUPPORT
          lda avoxenable
          bne avoxfixport
          SPKOUT tempavox
@@ -656,6 +663,7 @@ avoxfixport
          rts
 silenceavoxvoice
          SPEAK avoxsilentdata
+processavoxvoicereturn
          rts
 avoxsilentdata
          .byte 31,255
@@ -709,7 +717,18 @@ SWCHA_INVDIRMASK
 
     ; Probe each port for SNES, and see if autodetection succeeds anywhere.
 SNES_AUTODETECT
+ ifconst HSSUPPORT
+     ; ** an atarivox might be plugged in, so we skip scanning the second
+     ; ** port for a snes if vox was detected...
+     lda hsdevice ; b1 high means atarivox/savekey was detected
+     lsr
+     and #1
+     eor #1
+     tax
+ else
      ldx #1
+ endif ; HSSUPPORT
+
 SNES_AUTODETECT_LOOP
      lda #1 ; proline
      sta port0control,x
@@ -749,7 +768,9 @@ SNES_READ
      lda SWCHA
      ora SWCHA_INVDIRMASK,x
      eor SWCHA_DIRMASK,x
-     beq SNES_ABORT
+     bne SNES_READ_cont1
+     jmp SNES_ABORT
+SNES_READ_cont1
 
      lda port0control,x
      cmp #11 ; snes
@@ -760,8 +781,17 @@ snes2atari_signal_go
          jsr SNES2ATARI_SIGNAL
 snes2atari_signal_skip
 
-     lda SNES_CTLSWA_MASK,x
+     ;lda SNES_CTLSWA_MASK,x
+
+     lda CTLSWA
+     and SWCHA_INVDIRMASK,x ; preserve othr nibble
+     ora SNES_CTLSWA_MASK,x
      sta CTLSWA    ; enable pins UP/DOWN to work as outputs
+
+     lda SWCHA
+     and SWCHA_INVDIRMASK,x ; preserve othr nibble
+     ora SNES_CTLSWA_MASK,x
+
      sta SWCHA     ; latch+clock high
      nop
      nop
@@ -770,17 +800,21 @@ snes2atari_signal_skip
      nop
      nop
      nop
-     lda #$0
+     lda SWCHA
+     and SWCHA_INVDIRMASK,x ; preserve othr nibble
      sta SWCHA     ; latch and clock low
      ldy #16 ; 16 bits 
 SNES2ATARILOOP
          rol INPT4,x     ; sample data into carry
-         lda SNES_CLOCK_PORT_BIT,x
+         lda SWCHA 
+         and SWCHA_INVDIRMASK,x ; preserve othr nibble
+         ora SNES_CLOCK_PORT_BIT,x
          sta SWCHA     ; clock low
          rol snes2atari0lo,x
          rol snes2atari0hi,x
-         lda #0
-         sta SWCHA     ; clock high
+         lda SWCHA
+         and SWCHA_INVDIRMASK,x ; preserve othr nibble
+         sta SWCHA     ; latch and clock low
          dey           ; next bit
      bne SNES2ATARILOOP
      rol INPT4,x         ; 17th bit should be lo if controller is there.
@@ -790,9 +824,14 @@ SNES2ATARILOOP
      sta snesdetected0,x
      beq SNES_STOP_CLOCK ; if snes isn't detected, leave port in default state
      stx snesport ; snesport keeps the index of the latest autodetected controller
-     lda SNES_CLOCK_PORT_BIT,x
+     lda SWCHA
+     and SWCHA_INVDIRMASK,x ; preserve othr nibble
+     ora SNES_CLOCK_PORT_BIT,x
 SNES_STOP_CLOCK
      sta SWCHA     ; clock low
+     lda CTLSWA
+     and SWCHA_INVDIRMASK,x ; preserve othr nibble
+     ora SNES_CLOCK_PORT_BIT,x
      sta CTLSWA    ; set port bits to input avoid conflict with other drivers
      rts
 SNES_ABORT
@@ -800,15 +839,19 @@ SNES_ABORT
      rts
 SNES2ATARI_SIGNAL
      ; signal to SNES2ATARI++ that we want SNES mode...
-     lda SNES_CTLSWA_SIGNAL,x
+     lda CTLSWA
+     and SWCHA_INVDIRMASK,x ; preserve othr nibble
+     ora SNES_CTLSWA_SIGNAL,x
      sta CTLSWA  
-     lda #0 
+     lda CTLSWA
+     and SWCHA_INVDIRMASK,x ; preserve othr nibble
      sta SWCHA
      ldy #0
 SNES_SIGNAL_LOOP
      dey
      bne SNES_SIGNAL_LOOP
-     lda #$FF
+     lda SWCHA
+     ora SWCHA_DIRMASK,x
      sta SWCHA
      rts
  endif
@@ -996,6 +1039,10 @@ exitmusictracker
 sfxvolumeentrypt
  ifconst TIAVOLUME
      lda tiavolume
+     asl
+     asl
+     asl
+     asl
      sta fourbitfadevalueint
  endif ; TIAVOLUME
      lda (inttemp5),y

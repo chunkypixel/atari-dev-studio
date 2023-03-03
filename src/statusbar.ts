@@ -39,7 +39,7 @@ class StatusBar {
                 { tooltip: 'Welcome', text: '$(home)', command: 'extension.openWelcomePage' },
                 { tooltip: 'Sprite Editor', text: '$(tools)', command: 'extension.openSpriteEditorPage' },
                 { tooltip: 'Compile source code (Shift+F5)', text: '$(play)', command: 'extension.buildGame' },
-                { tooltip: 'Compile source code and run in emulator (F5)', text: '$(rocket)', command: 'extension.buildGameAndRun'}
+                { tooltip: 'Compile source code and launch [via emulator or cart] (F5)', text: '$(rocket)', command: 'extension.buildGameAndRun'}
             ];
             itemOptions.forEach(option => this.createItem(option));
         }

@@ -45,8 +45,13 @@ for OSARCH in linux@Linux osx@Darwin win@Windows ; do
 			  rm packages/7800AsmDevKit/7800asm* 
 			  rm packages/7800AsmDevKit/7800makecc2* 
 			  rm packages/7800AsmDevKit/7800sign
+			  rm packages/7800AsmDevKit/banksetsymbols*
+			  rm packages/7800AsmDevKit/snip*
+			  rm packages/7800AsmDevKit/lz4raw*
+			  rm packages/7800AsmDevKit/7800rmtfix*
 			  rm packages/7800AsmDevKit/dasm
 			  rm packages/7800AsmDevKit/7800header
+			  rm packages/7800AsmDevKit/install*
                         done
                         (cd packages ; zip -r 7800AsmDevKit-$ERELEASE-$OS-$BITS.zip 7800AsmDevKit)
 			for FILE in *"$ARCH"."$BITS".exe ; do
@@ -75,6 +80,11 @@ for OSARCH in linux@Linux osx@Darwin win@Windows ; do
 			  rm packages/7800AsmDevKit/7800sign.exe
 			  rm packages/7800AsmDevKit/dasm.exe
 			  rm packages/7800AsmDevKit/7800header.exe
+			  rm packages/7800AsmDevKit/banksetsymbols*
+			  rm packages/7800AsmDevKit/snip*
+			  rm packages/7800AsmDevKit/7800rmtfix*
+			  rm packages/7800AsmDevKit/lz4raw*
+			  rm packages/7800AsmDevKit/install*
 
                         (cd packages ; tar --numeric-owner -cvzf 7800AsmDevKit-$ERELEASE-$OS-$BITS.tar.gz 7800AsmDevKit)
 			for FILE in *"$ARCH"."$BITS" ; do

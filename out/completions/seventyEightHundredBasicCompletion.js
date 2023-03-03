@@ -350,6 +350,7 @@ class SeventyEightHundredBasicCompletion extends completionBase_1.CompletionBase
                         new vscode.CompletionItem('extradlmemory', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('dlmemory', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('deprecated', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('dumpgraphics', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('collisionwrap', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('plotvalueonscreen', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('plotvaluepage', vscode.CompletionItemKind.Method),
@@ -358,6 +359,7 @@ class SeventyEightHundredBasicCompletion extends completionBase_1.CompletionBase
                         new vscode.CompletionItem('pokeysound', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('pokeysupport', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('tiasfx', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('tiavolume', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('paddlerange', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('paddlescalex2', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('drivingboost', vscode.CompletionItemKind.Method),
@@ -373,7 +375,10 @@ class SeventyEightHundredBasicCompletion extends completionBase_1.CompletionBase
                         new vscode.CompletionItem('hsscoresize', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('hscolorbase', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('hsdifficultytext', vscode.CompletionItemKind.Method),
-                        new vscode.CompletionItem('hsgameranks', vscode.CompletionItemKind.Method)
+                        new vscode.CompletionItem('hsgameranks', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('snes0pause', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('snes1pause', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('snes#pause', vscode.CompletionItemKind.Method)
                     ];
                 }
             }, ' ');

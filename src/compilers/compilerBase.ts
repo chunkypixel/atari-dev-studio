@@ -39,6 +39,8 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected UsingBatchCompiler: boolean = false;
     protected UsingShellScriptCompiler: boolean = false;
 
+    protected LaunchEmulatorOrCartOption: string = "";
+
     constructor(id: string, name: string, extensions: string[], compiledExtensions: string[], verifyCompiledExtensions: string[], folderOrPath: string, emulator: string) {
         this.Id = id;
         this.Name = name;
@@ -76,12 +78,26 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Make doesn't use an emulator - user must provide their own
         if (this.Emulator === '' || (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler)) { return true; }
 
-        // Get emulator
-        for await (let emulator of application.Emulators) {
-            if (emulator.Id === this.Emulator) {
-                // Note: first extension should be the one which is to be launched
-                let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
-                return await emulator.RunGameAsync(path.join(this.CompiledSubFolder,compiledFileName));
+        // Launch what?
+        if (this.LaunchEmulatorOrCartOption === "Emulator") {
+            // Get emulator
+            for await (let emulator of application.Emulators) {
+                if (emulator.Id === this.Emulator) {
+                    // Note: first extension should be the one which is to be launched
+                    let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                    return await emulator.RunGameAsync(path.join(this.CompiledSubFolder,compiledFileName));
+                }
+            }
+        }
+        else 
+        { 
+            // Get serial
+            for await (let serial of application.Serials) {    
+                if (serial.Id === this.LaunchEmulatorOrCartOption) {
+                    // Note: first extension should be the one which is to be launched
+                    let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                    return await serial.SendGameAsync(path.join(this.CompiledSubFolder,compiledFileName));
+                }
             }
         }
 
@@ -118,6 +134,9 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Configuration
         result = await this.LoadConfigurationAsync();
         if (!result) { return false; }
+        
+        // Launch emulator or cart
+        this.LaunchEmulatorOrCartOption = this.Configuration.get<string>(`launch.emulatorOrCart`,"Emulator");
 
         // Activate output window?
         if (!this.Configuration.get<boolean>(`editor.preserveCodeEditorFocus`))  {

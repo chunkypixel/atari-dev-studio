@@ -36,6 +36,8 @@ import { DasmReferenceProvider } from './referenceProvider/dasmReferenceProvider
 import { ContextHelpBase } from "./contexthelp/contextHelpBase";
 import { SeventyEightHundredBasicContextHelp } from "./contexthelp/seventyEightHundredBasicContextHelp";
 import { BatariBasicContextHelp } from "./contexthelp/batariBasicContextHelp";
+import { SeventyEightHundredGDSerial } from './serial/SeventyEightHundredGDSerial';
+import { SerialBase } from './serial/serialBase';
 
 // -------------------------------------------------------------------------------------
 // Operating System
@@ -121,6 +123,14 @@ export const Emulators:EmulatorBase[] = [
 ];
 
 // -------------------------------------------------------------------------------------
+// Serial
+// Language intellisense
+// -------------------------------------------------------------------------------------
+export const Serials:SerialBase[] = [
+	new SeventyEightHundredGDSerial()
+];
+
+// -------------------------------------------------------------------------------------
 // Hovers
 // Language tooltips
 // -------------------------------------------------------------------------------------
@@ -140,7 +150,6 @@ export async function RegisterHoverProvidersAsync(context: vscode.ExtensionConte
 // Completion
 // Language intellisense
 // -------------------------------------------------------------------------------------
-
 export const Completions:CompletionBase[] = [
 	new SeventyEightHundredBasicCompletion()
 ];
@@ -155,7 +164,6 @@ export async function RegisterCompletionProvidersAsync(context: vscode.Extension
 // Region Folding
 // Language intellisense
 // -------------------------------------------------------------------------------------
-
 export const Foldings:FoldingBase[] = [
 	new BatariBasicFolding(),
 	new SeventyEightHundredBasicFolding()
@@ -171,7 +179,6 @@ export async function RegisterFoldingProvidersAsync(context: vscode.ExtensionCon
 // DocumentSymbolProviders
 // Language intellisense
 // -------------------------------------------------------------------------------------
-
 export const DocumentSymbolProviders:DocumentSymbolProviderBase[] = [
 	new BatariBasicDocumentSymbolProvider(),
 	new SeventyEightHundredBasicDocumentSymbolProvider(),
@@ -188,7 +195,6 @@ export async function RegisterDocumentSymbolProvidersAsync(context: vscode.Exten
 // DefinitionProviders
 // Language intellisense
 // -------------------------------------------------------------------------------------
-
 export const DefinitionProviders:DefinitionProviderBase[] = [
 	new BatariBasicDefinitionProvider(),
 	new SeventyEightHundredBasicDefinitionProvider(),
@@ -205,7 +211,6 @@ export async function RegisterDefinitionProvidersAsync(context: vscode.Extension
 // ReferenceProviders
 // Language intellisense
 // -------------------------------------------------------------------------------------
-
 export const ReferenceProviders:ReferenceProviderBase[] = [
 	new BatariBasicReferenceProvider(),
 	new SeventyEightHundredBasicReferenceProvider(),
@@ -222,7 +227,6 @@ export async function RegisterReferenceProvidersAsync(context: vscode.ExtensionC
 // ContextHelp
 // Language intellisense
 // -------------------------------------------------------------------------------------
-
 export const ContextHelps:ContextHelpBase[] = [
 	new BatariBasicContextHelp(),
 	new SeventyEightHundredBasicContextHelp()

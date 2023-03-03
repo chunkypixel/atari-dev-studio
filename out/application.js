@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isNumber = exports.delay = exports.ShowStartupMessagesAsync = exports.GetConfiguration = exports.ShowErrorPopup = exports.ShowInformationPopup = exports.ShowWarningPopup = exports.WriteToCompilerTerminal = exports.OpenContextHelp = exports.KillBuildGame = exports.BuildGameAndRunAsync = exports.BuildGameAsync = exports.RegisterContextHelpsAsync = exports.ContextHelps = exports.RegisterReferenceProvidersAsync = exports.ReferenceProviders = exports.RegisterDefinitionProvidersAsync = exports.DefinitionProviders = exports.RegisterDocumentSymbolProvidersAsync = exports.DocumentSymbolProviders = exports.RegisterFoldingProvidersAsync = exports.Foldings = exports.RegisterCompletionProvidersAsync = exports.Completions = exports.RegisterHoverProvidersAsync = exports.Hovers = exports.Emulators = exports.Compilers = exports.InitialiseAdsTerminalAsync = exports.AdsTerminal = exports.CompilerOutputChannel = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSArch = exports.OSPlatform = void 0;
+exports.isNumber = exports.delay = exports.ShowStartupMessagesAsync = exports.GetConfiguration = exports.ShowErrorPopup = exports.ShowInformationPopup = exports.ShowWarningPopup = exports.WriteToCompilerTerminal = exports.OpenContextHelp = exports.KillBuildGame = exports.BuildGameAndRunAsync = exports.BuildGameAsync = exports.RegisterContextHelpsAsync = exports.ContextHelps = exports.RegisterReferenceProvidersAsync = exports.ReferenceProviders = exports.RegisterDefinitionProvidersAsync = exports.DefinitionProviders = exports.RegisterDocumentSymbolProvidersAsync = exports.DocumentSymbolProviders = exports.RegisterFoldingProvidersAsync = exports.Foldings = exports.RegisterCompletionProvidersAsync = exports.Completions = exports.RegisterHoverProvidersAsync = exports.Hovers = exports.Serials = exports.Emulators = exports.Compilers = exports.InitialiseAdsTerminalAsync = exports.AdsTerminal = exports.CompilerOutputChannel = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSArch = exports.OSPlatform = void 0;
 const vscode = require("vscode");
 const filesystem = require("./filesystem");
 const os = require("os");
@@ -38,6 +38,7 @@ const batariBasicReferenceProvider_1 = require("./referenceProvider/batariBasicR
 const dasmReferenceProvider_1 = require("./referenceProvider/dasmReferenceProvider");
 const seventyEightHundredBasicContextHelp_1 = require("./contexthelp/seventyEightHundredBasicContextHelp");
 const batariBasicContextHelp_1 = require("./contexthelp/batariBasicContextHelp");
+const SeventyEightHundredGDSerial_1 = require("./serial/SeventyEightHundredGDSerial");
 // -------------------------------------------------------------------------------------
 // Operating System
 // -------------------------------------------------------------------------------------
@@ -101,6 +102,13 @@ exports.Compilers = [
 exports.Emulators = [
     new stellaEmulator_1.StellaEmulator(),
     new a7800Emulator_1.A7800Emulator()
+];
+// -------------------------------------------------------------------------------------
+// Serial
+// Language intellisense
+// -------------------------------------------------------------------------------------
+exports.Serials = [
+    new SeventyEightHundredGDSerial_1.SeventyEightHundredGDSerial()
 ];
 // -------------------------------------------------------------------------------------
 // Hovers

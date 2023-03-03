@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.8.5",
+    "version": "0.8.6",
     "icon": "images/icon.png",
     "preview": false,
     "author": "mksmith",
@@ -131,7 +131,7 @@
             },
             {
                 "command": "extension.buildGameAndRun",
-                "title": "Compile source code and run in emulator",
+                "title": "Compile source code and launch [via emulator or cart]",
                 "icon": "$(rocket)",
                 "category": "ads"
             },
@@ -236,6 +236,16 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Whether to clear the previous output window before build is triggered.",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.launch.emulatorOrCart": {
+                    "type": "string",
+                    "enum": [
+                        "Emulator",
+                        "7800GD"
+                    ],
+                    "default": "Emulator",
+                    "description": "After build is complete specify where to send the binary on launch (Windows Only)",
                     "scope": "resource"
                 },
                 "atari-dev-studio.compiler.options.defaultCompiler": {
@@ -439,14 +449,6 @@
             }
         }
     },
-    "activationEvents": [
-        "*",
-        "onCommand:extension.openWelcomePage",
-        "onCommand:extension.buildGame",
-        "onCommand:extension.buildGameAndRun",
-        "onCommand:extension.killBuildGame",
-        "onCommand:extension.openSpriteEditor"
-    ],
     "main": "./out/extension.js",
     "scripts": {
         "vscode:prepublish": "npm run compile",

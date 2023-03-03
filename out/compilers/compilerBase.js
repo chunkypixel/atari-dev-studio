@@ -42,6 +42,7 @@ class CompilerBase {
         this.UsingMakeFileCompiler = false;
         this.UsingBatchCompiler = false;
         this.UsingShellScriptCompiler = false;
+        this.LaunchEmulatorOrCartOption = "";
         this.Id = id;
         this.Name = name;
         this.Extensions = extensions;
@@ -70,7 +71,7 @@ class CompilerBase {
         });
     }
     BuildGameAndRunAsync(document) {
-        var _a, e_1, _b, _c;
+        var _a, e_1, _b, _c, _d, e_2, _e, _f;
         return __awaiter(this, void 0, void 0, function* () {
             // Process
             let result = yield this.BuildGameAsync(document);
@@ -82,30 +83,60 @@ class CompilerBase {
             if (this.Emulator === '' || (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler)) {
                 return true;
             }
-            try {
-                // Get emulator
-                for (var _d = true, _e = __asyncValues(application.Emulators), _f; _f = yield _e.next(), _a = _f.done, !_a;) {
-                    _c = _f.value;
-                    _d = false;
-                    try {
-                        let emulator = _c;
-                        if (emulator.Id === this.Emulator) {
-                            // Note: first extension should be the one which is to be launched
-                            let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
-                            return yield emulator.RunGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
+            // Launch what?
+            if (this.LaunchEmulatorOrCartOption === "Emulator") {
+                try {
+                    // Get emulator
+                    for (var _g = true, _h = __asyncValues(application.Emulators), _j; _j = yield _h.next(), _a = _j.done, !_a;) {
+                        _c = _j.value;
+                        _g = false;
+                        try {
+                            let emulator = _c;
+                            if (emulator.Id === this.Emulator) {
+                                // Note: first extension should be the one which is to be launched
+                                let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                                return yield emulator.RunGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
+                            }
+                        }
+                        finally {
+                            _g = true;
                         }
                     }
-                    finally {
-                        _d = true;
+                }
+                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                finally {
+                    try {
+                        if (!_g && !_a && (_b = _h.return)) yield _b.call(_h);
                     }
+                    finally { if (e_1) throw e_1.error; }
                 }
             }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
-            finally {
+            else {
                 try {
-                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
+                    // Get serial
+                    for (var _k = true, _l = __asyncValues(application.Serials), _m; _m = yield _l.next(), _d = _m.done, !_d;) {
+                        _f = _m.value;
+                        _k = false;
+                        try {
+                            let serial = _f;
+                            if (serial.Id === this.LaunchEmulatorOrCartOption) {
+                                // Note: first extension should be the one which is to be launched
+                                let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                                return yield serial.SendGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
+                            }
+                        }
+                        finally {
+                            _k = true;
+                        }
+                    }
                 }
-                finally { if (e_1) throw e_1.error; }
+                catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                finally {
+                    try {
+                        if (!_k && !_d && (_e = _l.return)) yield _e.call(_l);
+                    }
+                    finally { if (e_2) throw e_2.error; }
+                }
             }
             // Not found
             application.WriteToCompilerTerminal(`Unable to find emulator '${this.Emulator}' to launch game.`);
@@ -137,6 +168,8 @@ class CompilerBase {
             if (!result) {
                 return false;
             }
+            // Launch emulator or cart
+            this.LaunchEmulatorOrCartOption = this.Configuration.get(`launch.emulatorOrCart`, "Emulator");
             // Activate output window?
             if (!this.Configuration.get(`editor.preserveCodeEditorFocus`)) {
                 if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) {
@@ -342,7 +375,7 @@ class CompilerBase {
         });
     }
     VerifyCompiledFileSizeAsync() {
-        var _a, e_2, _b, _c;
+        var _a, e_3, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.VerifyCompiledFileSize');
             // Validate
@@ -374,19 +407,19 @@ class CompilerBase {
                     }
                 }
             }
-            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            catch (e_3_1) { e_3 = { error: e_3_1 }; }
             finally {
                 try {
                     if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
-                finally { if (e_2) throw e_2.error; }
+                finally { if (e_3) throw e_3.error; }
             }
             // Result
             return true;
         });
     }
     MoveFilesToBinFolderAsync() {
-        var _a, e_3, _b, _c, _d, e_4, _e, _f;
+        var _a, e_4, _b, _c, _d, e_5, _e, _f;
         return __awaiter(this, void 0, void 0, function* () {
             // Note: generateDebuggerFile - there are different settings for each compiler
             console.log('debugger:CompilerBase.MoveFilesToBinFolder');
@@ -430,12 +463,12 @@ class CompilerBase {
                     }
                 }
             }
-            catch (e_3_1) { e_3 = { error: e_3_1 }; }
+            catch (e_4_1) { e_4 = { error: e_4_1 }; }
             finally {
                 try {
                     if (!_g && !_a && (_b = _h.return)) yield _b.call(_h);
                 }
-                finally { if (e_3) throw e_3.error; }
+                finally { if (e_4) throw e_4.error; }
             }
             // Process?
             if (this.GenerateDebuggerFiles) {
@@ -465,12 +498,12 @@ class CompilerBase {
                         }
                     }
                 }
-                catch (e_4_1) { e_4 = { error: e_4_1 }; }
+                catch (e_5_1) { e_5 = { error: e_5_1 }; }
                 finally {
                     try {
                         if (!_k && !_d && (_e = _l.return)) yield _e.call(_l);
                     }
-                    finally { if (e_4) throw e_4.error; }
+                    finally { if (e_5) throw e_5.error; }
                 }
             }
             // Return
@@ -478,7 +511,7 @@ class CompilerBase {
         });
     }
     RemoveDebuggerFilesAsync(folder) {
-        var _a, e_5, _b, _c;
+        var _a, e_6, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.RemoveDebuggerFilesAsync');
             try {
@@ -501,12 +534,12 @@ class CompilerBase {
                     }
                 }
             }
-            catch (e_5_1) { e_5 = { error: e_5_1 }; }
+            catch (e_6_1) { e_6 = { error: e_6_1 }; }
             finally {
                 try {
                     if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
-                finally { if (e_5) throw e_5.error; }
+                finally { if (e_6) throw e_6.error; }
             }
             // Result
             return true;

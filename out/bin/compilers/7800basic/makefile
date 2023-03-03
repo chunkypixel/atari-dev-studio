@@ -72,7 +72,7 @@ distclean:
 install: all
 
 clean:
-	${RM} -f 7800basic 7800preprocess 7800postprocess 7800filter 7800optimize 7800header 7800sign snip banksetsymbols 7800makecc2
+	${RM} -f 7800basic 7800preprocess 7800postprocess 7800filter 7800optimize 7800header 7800sign snip banksetsymbols 7800makecc2 7800rmtfix lz4raw snip
 
 love:
 	@echo "not war"
