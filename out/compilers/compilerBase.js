@@ -83,60 +83,64 @@ class CompilerBase {
             if (this.Emulator === '' || (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler)) {
                 return true;
             }
-            // Launch what?
-            if (this.LaunchEmulatorOrCartOption === "Emulator") {
-                try {
-                    // Get emulator
-                    for (var _g = true, _h = __asyncValues(application.Emulators), _j; _j = yield _h.next(), _a = _j.done, !_a;) {
-                        _c = _j.value;
-                        _g = false;
-                        try {
-                            let emulator = _c;
-                            if (emulator.Id === this.Emulator) {
-                                // Note: first extension should be the one which is to be launched
-                                let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
-                                return yield emulator.RunGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
+            // Use/Try serial (windows only)
+            if (this.LaunchEmulatorOrCartOption != "Emulator") {
+                // Try serial (windows only)
+                if (application.IsWindows) {
+                    try {
+                        // Find
+                        for (var _g = true, _h = __asyncValues(application.Serials), _j; _j = yield _h.next(), _a = _j.done, !_a;) {
+                            _c = _j.value;
+                            _g = false;
+                            try {
+                                let serial = _c;
+                                if (serial.Id === this.LaunchEmulatorOrCartOption) {
+                                    // Match
+                                    let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                                    return yield serial.SendGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
+                                }
+                            }
+                            finally {
+                                _g = true;
                             }
                         }
-                        finally {
-                            _g = true;
+                    }
+                    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                    finally {
+                        try {
+                            if (!_g && !_a && (_b = _h.return)) yield _b.call(_h);
                         }
+                        finally { if (e_1) throw e_1.error; }
                     }
                 }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                finally {
+                // Advise
+                application.WriteToCompilerTerminal(`Launching is currently only supported for the 7800GD cart on Windows.`);
+                application.WriteToCompilerTerminal(``);
+            }
+            try {
+                // Try emulator
+                for (var _k = true, _l = __asyncValues(application.Emulators), _m; _m = yield _l.next(), _d = _m.done, !_d;) {
+                    _f = _m.value;
+                    _k = false;
                     try {
-                        if (!_g && !_a && (_b = _h.return)) yield _b.call(_h);
+                        let emulator = _f;
+                        if (emulator.Id === this.Emulator) {
+                            // Note: first extension should be the one which is to be launched
+                            let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                            return yield emulator.RunGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
+                        }
                     }
-                    finally { if (e_1) throw e_1.error; }
+                    finally {
+                        _k = true;
+                    }
                 }
             }
-            else {
+            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            finally {
                 try {
-                    // Get serial
-                    for (var _k = true, _l = __asyncValues(application.Serials), _m; _m = yield _l.next(), _d = _m.done, !_d;) {
-                        _f = _m.value;
-                        _k = false;
-                        try {
-                            let serial = _f;
-                            if (serial.Id === this.LaunchEmulatorOrCartOption) {
-                                // Note: first extension should be the one which is to be launched
-                                let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
-                                return yield serial.SendGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
-                            }
-                        }
-                        finally {
-                            _k = true;
-                        }
-                    }
+                    if (!_k && !_d && (_e = _l.return)) yield _e.call(_l);
                 }
-                catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                finally {
-                    try {
-                        if (!_k && !_d && (_e = _l.return)) yield _e.call(_l);
-                    }
-                    finally { if (e_2) throw e_2.error; }
-                }
+                finally { if (e_2) throw e_2.error; }
             }
             // Not found
             application.WriteToCompilerTerminal(`Unable to find emulator '${this.Emulator}' to launch game.`);

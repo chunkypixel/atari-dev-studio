@@ -78,26 +78,31 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Make doesn't use an emulator - user must provide their own
         if (this.Emulator === '' || (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler)) { return true; }
 
-        // Launch what?
-        if (this.LaunchEmulatorOrCartOption === "Emulator") {
-            // Get emulator
-            for await (let emulator of application.Emulators) {
-                if (emulator.Id === this.Emulator) {
-                    // Note: first extension should be the one which is to be launched
-                    let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
-                    return await emulator.RunGameAsync(path.join(this.CompiledSubFolder,compiledFileName));
+        // Use/Try serial (windows only)
+        if (this.LaunchEmulatorOrCartOption != "Emulator") {
+            // Try serial (windows only)
+            if (application.IsWindows) {
+                // Find
+                for await (let serial of application.Serials) {    
+                    if (serial.Id === this.LaunchEmulatorOrCartOption) {
+                        // Match
+                        let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                        return await serial.SendGameAsync(path.join(this.CompiledSubFolder,compiledFileName));
+                    }
                 }
             }
+
+            // Advise
+            application.WriteToCompilerTerminal(`Launching is currently only supported for the 7800GD cart on Windows.`);
+            application.WriteToCompilerTerminal(``);
         }
-        else 
-        { 
-            // Get serial
-            for await (let serial of application.Serials) {    
-                if (serial.Id === this.LaunchEmulatorOrCartOption) {
-                    // Note: first extension should be the one which is to be launched
-                    let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
-                    return await serial.SendGameAsync(path.join(this.CompiledSubFolder,compiledFileName));
-                }
+
+        // Try emulator
+        for await (let emulator of application.Emulators) {
+            if (emulator.Id === this.Emulator) {
+                // Note: first extension should be the one which is to be launched
+                let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                return await emulator.RunGameAsync(path.join(this.CompiledSubFolder,compiledFileName));
             }
         }
 
