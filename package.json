@@ -449,6 +449,14 @@
             }
         }
     },
+    "activationEvents": [
+        "*",
+        "onCommand:extension.openWelcomePage",
+        "onCommand:extension.buildGame",
+        "onCommand:extension.buildGameAndRun",
+        "onCommand:extension.killBuildGame",
+        "onCommand:extension.openSpriteEditor"
+    ],
     "main": "./out/extension.js",
     "scripts": {
         "vscode:prepublish": "npm run compile",
