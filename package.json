@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.8.6",
+    "version": "0.8.7",
     "icon": "images/icon.png",
     "preview": false,
     "author": "mksmith",
@@ -246,6 +246,18 @@
                     ],
                     "default": "Emulator",
                     "description": "After build is complete specify where to send the binary on launch (Windows Only)",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.launch.emulatorOrCartComPort": {
+                    "type": "string",
+                    "enum": [
+                        "Com1",
+                        "Com2",
+                        "Com3",
+                        "Com4"
+                    ],
+                    "default": "Com4",
+                    "description": "When launching your build to the 7800GD specify which COM port your cart is communicating on (Windows Only)",
                     "scope": "resource"
                 },
                 "atari-dev-studio.compiler.options.defaultCompiler": {

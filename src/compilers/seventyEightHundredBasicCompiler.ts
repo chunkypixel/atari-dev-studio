@@ -18,6 +18,8 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         
         // Debugger extensions
         this.DebuggerExtensions = new Map([["-s",".symbol.txt"],["-l",".list.txt"]]);
+        // Launch options
+        this.LaunchEmulatorOrCartOptionAvailable = true;
     }
     
     protected async GetCompilerVersionAsync(): Promise<void> {
@@ -28,7 +30,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         // attempt to read contents
         if (await (filesystem.FileExistsAsync(filePath.fsPath))) {
             let fileContent = (await filesystem.ReadFileAsync(filePath.fsPath)).toString().split(/\r?\n/); 
-            if (!fileContent.any && application.isNumber(fileContent[0])) { 
+            if (!fileContent.any && application.IsNumber(fileContent[0])) { 
                 this.CompilerVersion = parseFloat(fileContent[0]); 
             }
         }

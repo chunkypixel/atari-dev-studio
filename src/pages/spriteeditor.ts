@@ -143,9 +143,9 @@ export class SpriteEditorPage implements vscode.Disposable {
             let delay = (!isOpen ? 750 : 5);
 
              // Process
-             application.delay(delay).then(_ =>
+            await application.Delay(delay).then(_ =>
                  this.loadFileContent("loadProject", loadProjectUri)
-             )
+            )
         }
     }
 

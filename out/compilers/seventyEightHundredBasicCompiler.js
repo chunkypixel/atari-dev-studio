@@ -21,6 +21,8 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
         super("7800basic", "7800basic", [".bas", ".78b"], [".a78", ".bin", ".bin.CC2", ".bin.versa"], [".a78", ".bin"], path.join(application.Path, "out", "bin", "compilers", "7800basic"), "A7800");
         // Debugger extensions
         this.DebuggerExtensions = new Map([["-s", ".symbol.txt"], ["-l", ".list.txt"]]);
+        // Launch options
+        this.LaunchEmulatorOrCartOptionAvailable = true;
     }
     GetCompilerVersionAsync() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -30,7 +32,7 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             // attempt to read contents
             if (yield (filesystem.FileExistsAsync(filePath.fsPath))) {
                 let fileContent = (yield filesystem.ReadFileAsync(filePath.fsPath)).toString().split(/\r?\n/);
-                if (!fileContent.any && application.isNumber(fileContent[0])) {
+                if (!fileContent.any && application.IsNumber(fileContent[0])) {
                     this.CompilerVersion = parseFloat(fileContent[0]);
                 }
             }

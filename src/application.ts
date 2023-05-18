@@ -373,10 +373,10 @@ export async function ShowStartupMessagesAsync(): Promise<void> {
 			});
 }
 
-export function delay(ms: number) {
+export function Delay(ms: number) {
 	return new Promise( resolve => setTimeout(resolve, ms) );
 }
 
-export function isNumber(numStr: string) {
+export function IsNumber(numStr: string) {
 	return !isNaN(parseFloat(numStr)) && !isNaN(+numStr)
-  }
+}

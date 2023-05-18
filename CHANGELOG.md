@@ -4,7 +4,8 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.8.7
 
-* Cleanups to send binary to emulator or cart on launch option (added Windows validation check)
+* Cleanups to sending binary to emulator or cart on launch option (added Windows validation and Language check)
+* Added settings option to specifiy port the cart launch option is communicating on
 
 ## 0.8.6
 

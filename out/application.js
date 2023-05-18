@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isNumber = exports.delay = exports.ShowStartupMessagesAsync = exports.GetConfiguration = exports.ShowErrorPopup = exports.ShowInformationPopup = exports.ShowWarningPopup = exports.WriteToCompilerTerminal = exports.OpenContextHelp = exports.KillBuildGame = exports.BuildGameAndRunAsync = exports.BuildGameAsync = exports.RegisterContextHelpsAsync = exports.ContextHelps = exports.RegisterReferenceProvidersAsync = exports.ReferenceProviders = exports.RegisterDefinitionProvidersAsync = exports.DefinitionProviders = exports.RegisterDocumentSymbolProvidersAsync = exports.DocumentSymbolProviders = exports.RegisterFoldingProvidersAsync = exports.Foldings = exports.RegisterCompletionProvidersAsync = exports.Completions = exports.RegisterHoverProvidersAsync = exports.Hovers = exports.Serials = exports.Emulators = exports.Compilers = exports.InitialiseAdsTerminalAsync = exports.AdsTerminal = exports.CompilerOutputChannel = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSArch = exports.OSPlatform = void 0;
+exports.IsNumber = exports.Delay = exports.ShowStartupMessagesAsync = exports.GetConfiguration = exports.ShowErrorPopup = exports.ShowInformationPopup = exports.ShowWarningPopup = exports.WriteToCompilerTerminal = exports.OpenContextHelp = exports.KillBuildGame = exports.BuildGameAndRunAsync = exports.BuildGameAsync = exports.RegisterContextHelpsAsync = exports.ContextHelps = exports.RegisterReferenceProvidersAsync = exports.ReferenceProviders = exports.RegisterDefinitionProvidersAsync = exports.DefinitionProviders = exports.RegisterDocumentSymbolProvidersAsync = exports.DocumentSymbolProviders = exports.RegisterFoldingProvidersAsync = exports.Foldings = exports.RegisterCompletionProvidersAsync = exports.Completions = exports.RegisterHoverProvidersAsync = exports.Hovers = exports.Serials = exports.Emulators = exports.Compilers = exports.InitialiseAdsTerminalAsync = exports.AdsTerminal = exports.CompilerOutputChannel = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSArch = exports.OSPlatform = void 0;
 const vscode = require("vscode");
 const filesystem = require("./filesystem");
 const os = require("os");
@@ -366,12 +366,12 @@ function ShowStartupMessagesAsync() {
     });
 }
 exports.ShowStartupMessagesAsync = ShowStartupMessagesAsync;
-function delay(ms) {
+function Delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-exports.delay = delay;
-function isNumber(numStr) {
+exports.Delay = Delay;
+function IsNumber(numStr) {
     return !isNaN(parseFloat(numStr)) && !isNaN(+numStr);
 }
-exports.isNumber = isNumber;
+exports.IsNumber = IsNumber;
 //# sourceMappingURL=application.js.map

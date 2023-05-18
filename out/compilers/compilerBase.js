@@ -43,6 +43,7 @@ class CompilerBase {
         this.UsingBatchCompiler = false;
         this.UsingShellScriptCompiler = false;
         this.LaunchEmulatorOrCartOption = "";
+        this.LaunchEmulatorOrCartOptionAvailable = false;
         this.Id = id;
         this.Name = name;
         this.Extensions = extensions;
@@ -85,8 +86,16 @@ class CompilerBase {
             }
             // Use/Try serial (windows only)
             if (this.LaunchEmulatorOrCartOption != "Emulator") {
-                // Try serial (windows only)
-                if (application.IsWindows) {
+                // Validate
+                if (!this.LaunchEmulatorOrCartOptionAvailable) {
+                    // NOT AVAILABLE FOR LANGUAGE - Advise
+                    application.WriteToCompilerTerminal(`Warning: Launching to 7800GD cart is not available for the ${this.Name} language - reverting to emulator...`);
+                }
+                else if (!application.IsWindows) {
+                    // WINDOWS ONLY - Advise
+                    application.WriteToCompilerTerminal(`Warning: Launching to 7800GD cart is currently only available for Windows - reverting to emulator...`);
+                }
+                else {
                     try {
                         // Find
                         for (var _g = true, _h = __asyncValues(application.Serials), _j; _j = yield _h.next(), _a = _j.done, !_a;) {
@@ -113,9 +122,6 @@ class CompilerBase {
                         finally { if (e_1) throw e_1.error; }
                     }
                 }
-                // Advise
-                application.WriteToCompilerTerminal(`Launching is currently only supported for the 7800GD cart on Windows.`);
-                application.WriteToCompilerTerminal(``);
             }
             try {
                 // Try emulator
@@ -192,6 +198,7 @@ class CompilerBase {
                     result = yield this.Document.save();
                 }
             }
+            // Failed?
             if (!result) {
                 return false;
             }
@@ -280,6 +287,7 @@ class CompilerBase {
             this.WorkspaceFolder = this.GetWorkspaceFolder();
             this.FileName = path.basename(this.Document.fileName);
             // Validate compilers
+            console.log('debugger:CompilerBase.LoadConfigurationAsync.ValidateCompiler');
             let defaultCompiler = this.Configuration.get(`compiler.${this.Id}.defaultCompiler`);
             if (defaultCompiler === "Make") {
                 // Only working in dasm currently

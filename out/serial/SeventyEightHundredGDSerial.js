@@ -21,13 +21,16 @@ class SeventyEightHundredGDSerial extends serialBase_1.SerialBase {
     ExecuteSerialAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SeventyEightHundredGDSerial.ExecuteSerialAsync');
+            // Load
+            var configuration = application.GetConfiguration();
+            var comPort = configuration.get(`launch.emulatorOrCartComPort`, "Emulator").toLowerCase();
             // Prepare
             application.CompilerOutputChannel.appendLine('');
             // Command
             let command = `"${this.FolderOrPath}"`;
             // Args
             let args = [
-                `-com com4`,
+                `-com ${comPort}`,
                 `-run "${this.FileName}"`
             ];
             // Process

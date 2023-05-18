@@ -40,6 +40,7 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected UsingShellScriptCompiler: boolean = false;
 
     protected LaunchEmulatorOrCartOption: string = "";
+    protected LaunchEmulatorOrCartOptionAvailable: boolean = false;
 
     constructor(id: string, name: string, extensions: string[], compiledExtensions: string[], verifyCompiledExtensions: string[], folderOrPath: string, emulator: string) {
         this.Id = id;
@@ -80,8 +81,16 @@ export abstract class CompilerBase implements vscode.Disposable {
 
         // Use/Try serial (windows only)
         if (this.LaunchEmulatorOrCartOption != "Emulator") {
-            // Try serial (windows only)
-            if (application.IsWindows) {
+            // Validate
+            if (!this.LaunchEmulatorOrCartOptionAvailable) {
+                // NOT AVAILABLE FOR LANGUAGE - Advise
+                application.WriteToCompilerTerminal(`Warning: Launching to 7800GD cart is not available for the ${this.Name} language - reverting to emulator...`);
+            
+            } else if (!application.IsWindows) {
+                // WINDOWS ONLY - Advise
+                application.WriteToCompilerTerminal(`Warning: Launching to 7800GD cart is currently only available for Windows - reverting to emulator...`);
+
+            } else {
                 // Find
                 for await (let serial of application.Serials) {    
                     if (serial.Id === this.LaunchEmulatorOrCartOption) {
@@ -91,10 +100,6 @@ export abstract class CompilerBase implements vscode.Disposable {
                     }
                 }
             }
-
-            // Advise
-            application.WriteToCompilerTerminal(`Launching is currently only supported for the 7800GD cart on Windows.`);
-            application.WriteToCompilerTerminal(``);
         }
 
         // Try emulator
@@ -155,9 +160,13 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Save files?
         if (this.Configuration.get<boolean>(`editor.saveAllFilesBeforeRun`))  {
             result = await vscode.workspace.saveAll();
+
         } else if (this.Configuration.get<boolean>(`editor.saveFileBeforeRun`)) {
-            if (this.Document) { result = await this.Document.save(); }
+            if (this.Document) { 
+                result = await this.Document.save(); 
+            }
         }
+        // Failed?
         if (!result) { return false; }
 
         // Remove old debugger files before build
@@ -255,6 +264,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         this.FileName = path.basename(this.Document!.fileName);
 
         // Validate compilers
+        console.log('debugger:CompilerBase.LoadConfigurationAsync.ValidateCompiler');  
         let defaultCompiler = this.Configuration!.get<string>(`compiler.${this.Id}.defaultCompiler`);
         if (defaultCompiler === "Make") {
             // Only working in dasm currently

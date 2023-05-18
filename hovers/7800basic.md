@@ -225,7 +225,7 @@
 
     set pokeysupport state
 
-    state - on, off
+    state - on, off, $450, $800, $4000
 
 
 

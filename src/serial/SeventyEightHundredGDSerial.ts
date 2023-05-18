@@ -13,6 +13,10 @@ export class SeventyEightHundredGDSerial extends SerialBase {
     protected async ExecuteSerialAsync(): Promise<boolean> {
         console.log('debugger:SeventyEightHundredGDSerial.ExecuteSerialAsync');
 
+        // Load
+        var configuration = application.GetConfiguration();
+        var comPort = configuration.get<string>(`launch.emulatorOrCartComPort`,"Emulator").toLowerCase();
+
         // Prepare
         application.CompilerOutputChannel.appendLine(''); 
          
@@ -21,7 +25,7 @@ export class SeventyEightHundredGDSerial extends SerialBase {
 
         // Args
         let args = [
-            `-com com4`,
+            `-com ${comPort}`,
             `-run "${this.FileName}"`]
 
         // Process
