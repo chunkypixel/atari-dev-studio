@@ -13,7 +13,7 @@
 // Now, since the files in the final asm can be different, and it doesn't
 // make sense to require the user to create a new batch file/shell script.
 
-int main(int argc, char *argv[])
+int main (int argc, char *argv[])
 {
     FILE *includesfile;
     FILE *asmfile;
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     int writebBfile[17] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     int i;
     int j;
-    while ((i = getopt(argc, argv, "i:")) != -1)
+    while ((i = getopt (argc, argv, "i:")) != -1)
     {
 	switch (i)
 	{
@@ -34,67 +34,67 @@ int main(int argc, char *argv[])
 	    path[0] = '\0';
 	    break;
 	case 'i':
-	    strcpy(path, optarg);
+	    strcpy (path, optarg);
 	}
     }
-    if ((path[strlen(path) - 1] == '\\') || (path[strlen(path) - 1] == '/'))
-	strcat(path, "includes/");
+    if ((path[strlen (path) - 1] == '\\') || (path[strlen (path) - 1] == '/'))
+	strcat (path, "includes/");
     else
-	strcat(path, "/includes/");
-    if ((includesfile = fopen("includes.7800", "r")) == NULL)	// open file
+	strcat (path, "/includes/");
+    if ((includesfile = fopen ("includes.7800", "r")) == NULL)	// open file
     {
-	fprintf(stderr, "Cannot open includes.7800 for reading\n");
-	exit(1);
+	fprintf (stderr, "Cannot open includes.7800 for reading\n");
+	exit (1);
     }
-    readbBfile = (char ***) malloc(sizeof(char **) * 17);
+    readbBfile = (char ***) malloc (sizeof (char **) * 17);
 
 //  while (fgets(line,5000,includesfile))
     while (1)
     {
-	if (fscanf(includesfile, "%s", line) == EOF)
+	if (fscanf (includesfile, "%s", line) == EOF)
 	    break;
-	if ((!strncmp(line, "bB", 2)) && (line[2] != '.'))
+	if ((!strncmp (line, "bB", 2)) && (line[2] != '.'))
 	{
 	    i = (int) (line[2]) - 48;
 	    for (j = 1; j < writebBfile[i]; ++j)
-		printf("%s", readbBfile[i][j]);
+		printf ("%s", readbBfile[i][j]);
 	    continue;
 	}
 	else
 	{
-	    strcpy(prepend, path);
-	    strcat(prepend, line);
-	    if ((asmfile = fopen(line, "r")) == NULL)	// try file w/o includes path
+	    strcpy (prepend, path);
+	    strcat (prepend, line);
+	    if ((asmfile = fopen (line, "r")) == NULL)	// try file w/o includes path
 	    {
-		if ((asmfile = fopen(prepend, "r")) == NULL)	// open file
+		if ((asmfile = fopen (prepend, "r")) == NULL)	// open file
 		{
-		    fprintf(stderr, "Cannot open %s for reading\n", line);
-		    exit(1);
+		    fprintf (stderr, "Cannot open %s for reading\n", line);
+		    exit (1);
 		}
 	    }
-	    else if (strncmp(line, "bB\0", 2))
+	    else if (strncmp (line, "bB\0", 2))
 	    {
-		fprintf(stderr, "User-defined %s found in current directory\n", line);
+		fprintf (stderr, "User-defined %s found in current directory\n", line);
 	    }
 	}
-	while (fgets(asmline, 5000, asmfile))
+	while (fgets (asmline, 5000, asmfile))
 	{
-	    if (!strncmp(asmline, "; bB.asm file is split here", 20))
+	    if (!strncmp (asmline, "; bB.asm file is split here", 20))
 	    {
 		writebBfile[bB]++;
-		readbBfile[bB] = (char **) malloc(sizeof(char *) * 50000);
-		readbBfile[bB][writebBfile[bB]] = (char *) malloc(strlen(line) + 3);
-		sprintf(readbBfile[bB][writebBfile[bB]], ";%s\n", line);
+		readbBfile[bB] = (char **) malloc (sizeof (char *) * 50000);
+		readbBfile[bB][writebBfile[bB]] = (char *) malloc (strlen (line) + 3);
+		sprintf (readbBfile[bB][writebBfile[bB]], ";%s\n", line);
 	    }
 	    if (!writebBfile[bB])
-		printf("%s", asmline);
+		printf ("%s", asmline);
 	    else
 	    {
-		readbBfile[bB][++writebBfile[bB]] = (char *) malloc(strlen(asmline) + 3);
-		sprintf(readbBfile[bB][writebBfile[bB]], "%s", asmline);
+		readbBfile[bB][++writebBfile[bB]] = (char *) malloc (strlen (asmline) + 3);
+		sprintf (readbBfile[bB][writebBfile[bB]], "%s", asmline);
 	    }
 	}
-	fclose(asmfile);
+	fclose (asmfile);
 	if (writebBfile[bB])
 	    bB++;
 	// if (writebBfile) fclose(bBfile);

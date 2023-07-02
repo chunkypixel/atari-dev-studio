@@ -434,21 +434,22 @@ songchannel3stackdepth  DS 1 ; $1CD
 songchannel4stackdepth  DS 1 ; $1CE
  endif
 
-palframes    DS 1 ; $1CF
-palfastframe DS 1 ; $1D0
+palframes     DS 1
+ntscslowframe DS 1
+palfastframe  DS 1
 
  ifconst MOUSESUPPORT
-port0resolution DS 1 ; $1D1
-port1resolution DS 1 ; $1D2
+port0resolution DS 1
+port1resolution DS 1
  else
  ifconst TRAKBALLSUPPORT
-port0resolution DS 1 ; $1D1
-port1resolution DS 1 ; $1D2
+port0resolution DS 1
+port1resolution DS 1
  endif
  endif
 
-port0control DS 1 ; $1D3
-port1control DS 1 ; $1D4
+port0control DS 1
+port1control DS 1
 
  ; port#control values...
  ;      1 = proline
@@ -463,7 +464,7 @@ port1control DS 1 ; $1D4
  ;     10 = atarivox
 
  ; controller 0 data...
-paddleposition0     DS 1 ; $1D5
+paddleposition0     DS 1
 keypadmatrix0a      =      paddleposition0 
 drivingposition0    =      paddleposition0
 trakballx0          =      paddleposition0
@@ -472,7 +473,7 @@ lighttgunx0         =      paddleposition0
 snes2atari0lo       =      paddleposition0
 
  ; controller 1 data...
-paddleposition2     DS 1 ; $1D6
+paddleposition2     DS 1
 keypadmatrix1a      =      paddleposition2
 drivingposition1    =      paddleposition2
 trakballx1          =      paddleposition2
@@ -481,7 +482,7 @@ lightgunx1          =      paddleposition2
 snes2atari1lo       =      paddleposition2
 
  ; controller 0 altdata...
-paddleposition1     DS 1 ; $1D7 
+paddleposition1     DS 1
 keypadmatrix0b      =      paddleposition1
 trakbally0          =      paddleposition1
 mousey0             =      paddleposition1
@@ -489,7 +490,7 @@ lightguny0          =      paddleposition1
 snes2atari0hi       =      paddleposition1
 
  ; controller 1 altdata...
-paddleposition3     DS 1 ; $1D8 
+paddleposition3     DS 1
 keypadmatrix1b      =      paddleposition3
 trakbally1          =      paddleposition3
 mousey1             =      paddleposition3
@@ -497,47 +498,47 @@ lightguny1          =      paddleposition3
 snes2atari1hi       =      paddleposition3
 
 ; controller state save. for trakball state+dir codes, rotary position codes
-controller0statesave DS 1 ; $1D9
+controller0statesave DS 1
 paddleprevious0      =      controller0statesave
 mousecodex0          =      controller0statesave
 trakballcodex0       =      controller0statesave
 keypadmatrix0c       =      controller0statesave
 snesdetected0        =      controller0statesave
 
-controller1statesave DS 1 ; $1DA
+controller1statesave DS 1
 paddleprevious2      =      controller1statesave
 mousecodex1          =      controller1statesave
 trakballcodex1       =      controller1statesave
 keypadmatrix1c       =      controller1statesave
 snesdetected1        =      controller1statesave
 
-paddleprevious1      DS 1 ; $1DB
+paddleprevious1      DS 1
 keypadmatrix0d       =      paddleprevious1
 mousecodey0          =      paddleprevious1
 trakballcodey0       =      paddleprevious1
 
-paddleprevious3      DS 1 ; $1DC
+paddleprevious3      DS 1
 keypadmatrix1d       =      paddleprevious3
 mousecodey1          =      paddleprevious3
 trakballcodey1       =      paddleprevious3
 
  ifconst pokeysupport
-pokey1frames   DS 1 ; $1DD
-pokey1tick     DS 1 ; $1DE
-pokey2frames   DS 1 ; $1DF
-pokey2tick     DS 1 ; $1E0
-pokey3frames   DS 1 ; $1E1
-pokey3tick     DS 1 ; $1E2
-pokey4frames   DS 1 ; $1E3
-pokey4tick     DS 1 ; $1E4
-pokey1priority DS 1 ; $1E5
-pokey1offset   DS 1 ; $1E6
-pokey2priority DS 1 ; $1E7
-pokey2offset   DS 1 ; $1E8
-pokey3priority DS 1 ; $1E9
-pokey3offset   DS 1 ; $1EA
-pokey4priority DS 1 ; $1EB
-pokey4offset   DS 1 ; $1EC
+pokey1frames   DS 1
+pokey1tick     DS 1
+pokey2frames   DS 1
+pokey2tick     DS 1
+pokey3frames   DS 1
+pokey3tick     DS 1
+pokey4frames   DS 1
+pokey4tick     DS 1
+pokey1priority DS 1
+pokey1offset   DS 1
+pokey2priority DS 1
+pokey2offset   DS 1
+pokey3priority DS 1
+pokey3offset   DS 1
+pokey4priority DS 1
+pokey4offset   DS 1
  endif
 
  ifconst pokeykeysupport
@@ -583,13 +584,12 @@ INTERRUPTNEEDED SET 1
 INTERRUPTNEEDED SET 1
  endif
  if INTERRUPTNEEDED = 1
-interrupthold  DS 1 ; $1ED
+interrupthold  DS 1
  endif
 
  ifnconst CANARYOFF
-canary         DS 1 ; $1EF
+canary         DS 1
  endif
-
 
  ifnconst bankswitchmode
    echo "  stack allowance:",[($1FF - .)/2]d,"nested subroutines."

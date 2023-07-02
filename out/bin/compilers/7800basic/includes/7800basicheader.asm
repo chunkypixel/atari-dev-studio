@@ -3,7 +3,7 @@
      processor 6502
 
      include "7800basic.h"
-     include "7800basic_variable_redefs.h"
+     include "7800_extravars.h"
 
      ; BEADHEADER... disabled for now
      ; A BEAD header gets automatically incorportated into the ROM header. 

@@ -1,11 +1,11 @@
- ; Provided under the CC0 license. See the included LICENSE.txt for details.
+     ; Provided under the CC0 license. See the included LICENSE.txt for details.
 
      ;standard routimes needed for pretty much all games
 
      ; some definitions used with "set debug color"
-DEBUGCALC      = $91
+DEBUGCALC     = $91
 DEBUGWASTE     = $41
-DEBUGDRAW      = $C1
+DEBUGDRAW     = $C1
 
      ;NMI and IRQ handlers
 NMI
@@ -27,272 +27,273 @@ NMI
      bne skipreallyoffvisible
      jmp reallyoffvisible
 skipreallyoffvisible
-       lda visibleover
-       bne carryontopscreenroutine
-       ifconst .bottomscreenroutine
-          lda interrupthold
-          beq skipbottomroutine
-          jsr .bottomscreenroutine
+     lda visibleover
+     bne carryontopscreenroutine
+     ifconst .bottomscreenroutine
+         lda interrupthold
+         beq skipbottomroutine
+         jsr .bottomscreenroutine
 skipbottomroutine
-       endif
-       jmp NMIexit
+     endif
+     jmp NMIexit
 carryontopscreenroutine
- ifconst .topscreenroutine
+     ifconst .topscreenroutine
          lda interrupthold
          beq skiptoproutine
          jsr .topscreenroutine
 skiptoproutine
- endif
- ifnconst CANARYOFF
+     endif
+     ifnconst CANARYOFF
          lda canary
          beq skipcanarytriggered
          lda #$45
          sta BACKGRND
          jmp skipbrkolorset ; common crash dump routine, if available
 skipcanarytriggered
- endif
+     endif
 
-         inc frameslost ; this is balanced with a "dec frameslost" when drawscreen is called.
+     inc frameslost ; this is balanced with a "dec frameslost" when drawscreen is called.
 
-       ; ** Other important routines that need to regularly run, and can run onscreen.
-       ; ** Atarivox can't go here, because Maria might interrupt it while it's bit-banging.
+     ; ** Other important routines that need to regularly run, and can run onscreen.
+     ; ** Atarivox can't go here, because Maria might interrupt it while it's bit-banging.
 
-         ifconst LONGCONTROLLERREAD
-longcontrollerreads ; ** controllers that take a lot of time to read. We use much of the visible screen here.
-           ldy port1control
-           lda longreadtype,y
-           beq LLRET1
-           tay
-           lda longreadroutinehiP1,y
-           sta inttemp4
-           lda longreadroutineloP1,y
-           sta inttemp3
-           jmp (inttemp3)
+     ifconst LONGCONTROLLERREAD
+longcontrollerreads         ; ** controllers that take a lot of time to read. We use much of the visible screen here.
+         ldy port1control
+         lda longreadtype,y
+         beq LLRET1
+         tay
+         lda longreadroutinehiP1,y
+         sta inttemp4
+         lda longreadroutineloP1,y
+         sta inttemp3
+         jmp (inttemp3)
 LLRET1
-           ldy port0control
-           lda longreadtype,y
-           beq LLRET0
-           tay
-           lda longreadroutinehiP0,y
-           sta inttemp4
-           lda longreadroutineloP0,y
-           sta inttemp3
-           jmp (inttemp3)
+         ldy port0control
+         lda longreadtype,y
+         beq LLRET0
+         tay
+         lda longreadroutinehiP0,y
+         sta inttemp4
+         lda longreadroutineloP0,y
+         sta inttemp3
+         jmp (inttemp3)
 LLRET0
 
 
- ifconst PADDLERANGE
-TIMEVAL = PADDLERANGE
- else
-TIMEVAL = 160
- endif
-TIMEOFFSET = 10
+         ifconst PADDLERANGE
+TIMEVAL             = PADDLERANGE
+         else
+TIMEVAL             = 160
+         endif
+TIMEOFFSET         = 10
 
-         endif ; LONGCONTROLLERREAD
+     endif ; LONGCONTROLLERREAD
 
 
-         jsr servicesfxchannels 
-         ifconst MUSICTRACKER
-           jsr servicesong
-         endif ; MUSICTRACKER
-         ifconst RMT
-           lda rasterpause
-           beq skiprasterupdate
-           jsr RASTERMUSICTRACKER+3
+     jsr servicesfxchannels 
+     ifconst MUSICTRACKER
+         jsr servicesong
+     endif ; MUSICTRACKER
+     ifconst RMT
+         ifnconst RMTOFFSPEED
+             ifconst RMTPALSPEED
+                 lda ntscslowframe
+                 bne skiprasterupdate
+             endif
+         endif
+         lda rasterpause
+         beq skiprasterupdate
+         jsr RASTERMUSICTRACKER+3
 skiprasterupdate
 RMT_Iend
-         endif
+     endif
 
-         inc framecounter
-         lda framecounter
-         and #63
-         bne skipcountdownseconds
-         lda countdownseconds
-         beq skipcountdownseconds
-         dec countdownseconds
+     inc framecounter
+     lda framecounter
+     and #63
+     bne skipcountdownseconds
+     lda countdownseconds
+     beq skipcountdownseconds
+     dec countdownseconds
 skipcountdownseconds
 
-         ldx #1
+     ldx #1
 buttonreadloop
-         txa
-         pha
-         ldy port0control,x
-         lda buttonhandlerlo,y
-         sta inttemp3
-         lda buttonhandlerhi,y
-         sta inttemp4
-	 ora inttemp3
-         beq buttonreadloopreturn
-         jmp (inttemp3)
+     txa
+     pha
+     ldy port0control,x
+     lda buttonhandlerlo,y
+     sta inttemp3
+     lda buttonhandlerhi,y
+     sta inttemp4
+     ora inttemp3
+     beq buttonreadloopreturn
+     jmp (inttemp3)
 buttonreadloopreturn
-         pla
-         tax
-         dex
-         bpl buttonreadloop
+     pla
+     tax
+     dex
+     bpl buttonreadloop
 
-	 ;ifconst KEYPADSUPPORT
-         ;  jsr keypadrowselect
-	 ;endif ; KEYPADSUPPORT
-
-
- ifconst DOUBLEBUFFER
+     ifconst DOUBLEBUFFER
          lda doublebufferminimumframeindex
          beq skipdoublebufferminimumframeindexadjust
          dec doublebufferminimumframeindex
 skipdoublebufferminimumframeindexadjust
- endif
-  
+     endif
+     
      jmp NMIexit
 
-IRQ ; the only source of non-nmi interrupt should be the BRK opcode.
-  ifnconst BREAKPROTECTOFF
-     lda #$1A
-     sta BACKGRND
+IRQ     ; the only source of non-nmi interrupt should be the BRK opcode.
+     ifnconst BREAKPROTECTOFF
+         lda #$1A
+         sta BACKGRND
 skipbrkolorset
 skipbrkdetected
          lda #$60
          sta sCTRL
          sta CTRL
-     ifnconst hiscorefont
-         .byte $02 ; KIL/JAM
-      else ; hiscorefont is present
-      ifconst CRASHDUMP
-         bit MSTAT
-         bpl skipbrkdetected ; wait for vblank to ensure we're clear of NMI
+         ifnconst hiscorefont
+             .byte $02 ; KIL/JAM
+         else ; hiscorefont is present
+             ifconst CRASHDUMP
+                 bit MSTAT
+                 bpl skipbrkdetected ; wait for vblank to ensure we're clear of NMI
 
-         ifconst dumpbankswitch
-           lda dumpbankswitch
-           pha
-         endif
+                 ifconst dumpbankswitch
+                     lda dumpbankswitch
+                     pha
+                 endif
 
-         ; bankswitch if needed, to get to the hiscore font
-         ifconst bankswitchmode
-           ifconst included.hiscore.asm.bank
-             ifconst MCPDEVCART
-               lda #($18 | included.hiscore.asm.bank)
-               sta $3000
-             else
-               lda #(included.hiscore.asm.bank)
-               sta $8000
-             endif
-           endif ; included.hiscore.asm.bank
-         endif ; bankswitchmode
+                 ; bankswitch if needed, to get to the hiscore font
+                 ifconst bankswitchmode
+                     ifconst included.hiscore.asm.bank
+                         ifconst MCPDEVCART
+                             lda #($18 | included.hiscore.asm.bank)
+                             sta $3000
+                         else
+                             lda #(included.hiscore.asm.bank)
+                             sta $8000
+                         endif
+                     endif ; included.hiscore.asm.bank
+                 endif ; bankswitchmode
 
-	ifconst DOUBLEBUFFER
-         ;turn off double-buffering, if on...
-          lda #>DLLMEM
-          sta DPPH
-          lda #<DLLMEM
-          sta DPPL
-        endif
+                 ifconst DOUBLEBUFFER
+                     ;turn off double-buffering, if on...
+                     lda #>DLLMEM
+                     sta DPPH
+                     lda #<DLLMEM
+                     sta DPPL
+                 endif
 
-         lda #$00
-         sta P0C2
+                 lda #$00
+                 sta P0C2
 
-         ;update the second-from-top DL...
-         ldy #8
+                 ;update the second-from-top DL...
+                 ldy #8
 NMIupdatetopDL
-         lda show2700,y
-         sta ZONE1ADDRESS,y
-         dey
-         bpl NMIupdatetopDL
+                 lda show2700,y
+                 sta ZONE1ADDRESS,y
+                 dey
+                 bpl NMIupdatetopDL
 
-         ; the hiscore font is present, so we try to output the stack
-         ldy #0
+                 ; the hiscore font is present, so we try to output the stack
+                 ldy #0
 copystackloop
-         pla
-         pha
-         lsr
-         lsr
-         lsr
-         lsr
-         tax
-         lda hiscorehexlut,x
-         sta $2700,y
-         iny
+                 pla
+                 pha
+                 lsr
+                 lsr
+                 lsr
+                 lsr
+                 tax
+                 lda hiscorehexlut,x
+                 sta $2700,y
+                 iny
 
-         pla
-         and #$0F
-         tax
-         lda hiscorehexlut,x
-         sta $2700,y
-         iny
+                 pla
+                 and #$0F
+                 tax
+                 lda hiscorehexlut,x
+                 sta $2700,y
+                 iny
 
-         lda #27 ; period
-         sta $2700,y
-         iny
+                 lda #27 ; period
+                 sta $2700,y
+                 iny
 
-         cpy #30
-         bne copystackloop
+                 cpy #30
+                 bne copystackloop
 
-         lda #>hiscorefont
-         sta CHARBASE
-         sta sCHARBASE
-         lda #%01000011 ;Enable DMA, mode=320A
-         sta CTRL
-         sta sCTRL
-         .byte $02 ; KIL/JAM
+                 lda #>hiscorefont
+                 sta CHARBASE
+                 sta sCHARBASE
+                 lda #%01000011 ;Enable DMA, mode=320A
+                 sta CTRL
+                 sta sCTRL
+                 .byte $02 ; KIL/JAM
 hiscorehexlut
-        ;        0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
-         .byte  33, 34, 35, 36, 37, 38, 39, 40, 41, 42,  0,  1,  2,  3,  4,  5
+                 ; 0 1 2 3 4 5 6 7 8 9 A B C D E F
+                 .byte 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 0, 1, 2, 3, 4, 5
 show2700
-        ;       lo   mode         hi   width=29  x   EODL
-         .byte $00, %01100000,   $27,  3,       20,  0,0,0
-      else ; CRASHDUMP
-         .byte $02 ; KIL/JAM
-      endif ; crashdump
-      endif ; hiscorefont
-  else
-     RTI
-  endif
+                 ; lo mode hi width=29 x EODL
+                 .byte $00, %01100000, $27, 3, 20, 0,0,0
+             else ; CRASHDUMP
+                 .byte $02 ; KIL/JAM
+             endif ; crashdump
+         endif ; hiscorefont
+     else
+         RTI
+     endif
 
      ifconst LONGCONTROLLERREAD
 
 longreadtype
- .byte 0, 0, 0, 1  ; NONE     PROLINE   LIGHTGUN  PADDLE
- .byte 2, 0, 3, 0  ; TRKBALL  VCSSTICK  DRIVING   KEYPAD
- .byte 3, 3, 0, 0  ; STMOUSE  AMOUSE    ATARIVOX  SNES
+         .byte 0, 0, 0, 1 ; NONE PROLINE LIGHTGUN PADDLE
+         .byte 2, 0, 3, 0 ; TRKBALL VCSSTICK DRIVING KEYPAD
+         .byte 3, 3, 0, 0 ; STMOUSE AMOUSE ATARIVOX SNES
 
 longreadroutineloP0
- .byte <LLRET0             ;  0 = no routine
- .byte <paddleport0update  ;  1 = paddle
- .byte <trakball0update    ;  2 = trakball
- .byte <mouse0update       ;  3 = mouse
+         .byte <LLRET0 ; 0 = no routine
+         .byte <paddleport0update ; 1 = paddle
+         .byte <trakball0update ; 2 = trakball
+         .byte <mouse0update ; 3 = mouse
 
 longreadroutinehiP0
- .byte >LLRET0             ;  0 = no routine
- .byte >paddleport0update  ;  1 = paddle
- .byte >trakball0update    ;  2 = trackball
- .byte >mouse0update       ;  3 = mouse
+         .byte >LLRET0 ; 0 = no routine
+         .byte >paddleport0update ; 1 = paddle
+         .byte >trakball0update ; 2 = trackball
+         .byte >mouse0update ; 3 = mouse
 
 longreadroutineloP1
- .byte <LLRET1             ;  0 = no routine
- .byte <paddleport1update  ;  1 = paddle
- .byte <trakball1update    ;  2 = trakball
- .byte <mouse1update       ;  3 = mouse
+         .byte <LLRET1 ; 0 = no routine
+         .byte <paddleport1update ; 1 = paddle
+         .byte <trakball1update ; 2 = trakball
+         .byte <mouse1update ; 3 = mouse
 
 longreadroutinehiP1
- .byte >LLRET1             ;  0 = no routine
- .byte >paddleport1update  ;  1 = paddle
- .byte >trakball1update    ;  2 = trackball
- .byte >mouse1update       ;  3 = mouse
+         .byte >LLRET1 ; 0 = no routine
+         .byte >paddleport1update ; 1 = paddle
+         .byte >trakball1update ; 2 = trackball
+         .byte >mouse1update ; 3 = mouse
 
 
 SETTIM64T
-     bne skipdefaulttime
- ifnconst PADDLESMOOTHINGOFF
-     lda #(TIMEVAL+TIMEOFFSET+1)
- else
-     lda #(TIMEVAL+TIMEOFFSET)
- endif
+         bne skipdefaulttime
+         ifnconst PADDLESMOOTHINGOFF
+             lda #(TIMEVAL+TIMEOFFSET+1)
+         else
+             lda #(TIMEVAL+TIMEOFFSET)
+         endif
 skipdefaulttime
-     tay
-     dey
+         tay
+         dey
 .setTIM64Tloop
-     sta TIM64T
-     cpy INTIM
-     bne .setTIM64Tloop
-     rts
+         sta TIM64T
+         cpy INTIM
+         bne .setTIM64Tloop
+         rts
      endif ; LONGCONTROLLERREAD
 
 reallyoffvisible
@@ -362,21 +363,21 @@ savescreenloop
      bpl savescreenloop
      lda valbufend
      sta valbufendsave
-  ifconst DOUBLEBUFFER
-     lda doublebufferstate
-     beq savescreenrts
-     lda #1
-     sta doublebufferbufferdirty
+     ifconst DOUBLEBUFFER
+         lda doublebufferstate
+         beq savescreenrts
+         lda #1
+         sta doublebufferbufferdirty
 savescreenrts
-  endif ; DOUBLEBUFFER
+     endif ; DOUBLEBUFFER
      rts
 
 drawscreen
 
-  ifconst interrupthold
-     lda #$FF
-     sta interrupthold ; if the user called drawscreen, we're ready for interrupts
-  endif
+     ifconst interrupthold
+         lda #$FF
+         sta interrupthold ; if the user called drawscreen, we're ready for interrupts
+     endif
 
      lda #0
      sta temp1 ; not B&W if we're here...
@@ -396,7 +397,7 @@ drawscreenwait
      jsr terminatedisplaylist
 
      ifnconst pauseroutineoff
-        jsr pauseroutine
+         jsr pauseroutine
      endif ; pauseroutineoff
 
      ; Make sure the visible screen has *started* before we exit. That way we can rely on drawscreen
@@ -417,56 +418,56 @@ pauseroutine
          bit SWCHB
          beq pausepressed
 
- ifnconst SOFTPAUSEOFF
- ifnconst SOFTRESETASPAUSEOFF
- ifnconst MOUSESUPPORT
- ifnconst TRAKBALLSUPPORT
-     lda port0control
-     cmp #11
-     bne skipsoftpause
-     lda SWCHA ; then check the soft "RESET" joysick code...
-     and #%01110000 ; _LDU
-     beq pausepressed
+         ifnconst SOFTPAUSEOFF
+             ifnconst SOFTRESETASPAUSEOFF
+                 ifnconst MOUSESUPPORT
+                     ifnconst TRAKBALLSUPPORT
+                         lda port0control
+                         cmp #11
+                         bne skipsoftpause
+                         lda SWCHA ; then check the soft "RESET" joysick code...
+                         and #%01110000 ; _LDU
+                         beq pausepressed
 skipsoftpause
- endif
- endif
- endif
- endif
- ifconst SNES0PAUSE
-     lda port0control
-     cmp #11
-     bne skipsnes0pause
-     lda snesdetected0
-     beq skipsnes0pause
-     lda snes2atari0hi
-     and #%00010000
-     beq pausepressed
+                     endif
+                 endif
+             endif
+         endif
+         ifconst SNES0PAUSE
+             lda port0control
+             cmp #11
+             bne skipsnes0pause
+             lda snesdetected0
+             beq skipsnes0pause
+             lda snes2atari0hi
+             and #%00010000
+             beq pausepressed
 skipsnes0pause
- endif
- ifconst SNES1PAUSE
+         endif
+         ifconst SNES1PAUSE
 
-     lda port1control
-     cmp #11
-     bne skipsnes1pause
-     lda snesdetected1
-     beq skipsnes1pause
-     lda snes2atari1hi
-     and #%00010000
-     beq pausepressed
+             lda port1control
+             cmp #11
+             bne skipsnes1pause
+             lda snesdetected1
+             beq skipsnes1pause
+             lda snes2atari1hi
+             and #%00010000
+             beq pausepressed
 skipsnes1pause
- endif
- ifconst SNESNPAUSE
-     ldx snesport
-     lda port0control,x
-     cmp #11
-     bne skipsnesNpause
-     lda snesdetected0,x
-     beq skipsnesNpause
-     lda snes2atari0hi,x
-     and #%00010000
-     beq pausepressed
+         endif
+         ifconst SNESNPAUSE
+             ldx snesport
+             lda port0control,x
+             cmp #11
+             bne skipsnesNpause
+             lda snesdetected0,x
+             beq skipsnesNpause
+             lda snes2atari0hi,x
+             and #%00010000
+             beq pausepressed
 skipsnesNpause
- endif
+         endif
 
          ;pause isn't pressed
          lda #0
@@ -535,29 +536,29 @@ carryonpausing
      endif ; pauseroutineoff
 
 
- ifconst DOUBLEBUFFER
+     ifconst DOUBLEBUFFER
 skipterminatedisplaylistreturn
-     rts
- endif ; DOUBLEBUFFER
+         rts
+     endif ; DOUBLEBUFFER
 terminatedisplaylist
- ifconst DOUBLEBUFFER
-     lda doublebufferstate
-     bne skipterminatedisplaylistreturn ; double-buffering runs it's own DL termination code
- endif ; DOUBLEBUFFER
+     ifconst DOUBLEBUFFER
+         lda doublebufferstate
+         bne skipterminatedisplaylistreturn ; double-buffering runs it's own DL termination code
+     endif ; DOUBLEBUFFER
 terminatedisplaybuffer
      ;add DL end entry on each DL
      ldx #(WZONECOUNT-1)
 dlendloop
      lda DLPOINTL,x
- ifconst DOUBLEBUFFER
-     clc
-     adc doublebufferdloffset
- endif ; DOUBLEBUFFER
+     ifconst DOUBLEBUFFER
+         clc
+         adc doublebufferdloffset
+     endif ; DOUBLEBUFFER
      sta dlpnt
      lda DLPOINTH,x
- ifconst DOUBLEBUFFER
-     adc #0
- endif ; DOUBLEBUFFER
+     ifconst DOUBLEBUFFER
+         adc #0
+     endif ; DOUBLEBUFFER
      sta dlpnt+1
      ldy dlend,x
      lda #$00
@@ -586,53 +587,56 @@ dlendthiszonedone
      dex
      bpl dlendloop
 
- ifnconst pauseroutineoff
-     jsr pauseroutine
- endif ; pauseroutineoff
+     ifnconst pauseroutineoff
+         jsr pauseroutine
+     endif ; pauseroutineoff
      rts
 
 uninterruptableroutines
      ; this is for routines that must happen off the visible screen, each frame.
 
      ifconst AVOXVOICE
-       jsr serviceatarivoxqueue
+         jsr serviceatarivoxqueue
      endif
 
      lda #0
      sta palfastframe
-     lda paldetected
-     beq skippalframeadjusting
-     ; ** PAL console is detected. we increment palframes to accurately count 5 frames,
-     ldx palframes
-     inx
-     cpx #5
+     sta ntscslowframe
+     ldx paldetected ; 0=ntsc 1=pal
+     ldy palframes
+     iny
+     cpy #5
      bne palframeskipdone
-     inc palfastframe
-     ldx #0
+     lda paldetected
+     inc ntscslowframe,x
+     ldy #0
 palframeskipdone
-     stx palframes
+     sty palframes
 skippalframeadjusting
 
      ifconst MUSICTRACKER
-     ; We normally run the servicesong routine from the top-screen interrupt, but if it
-     ; happens to interrupt the scheduling of a sound effect in the game code, we skip it.
-     ; If that happens, we try again here. Chances are very small we'll run into the same
-     ; problem twice, and if we do, we just drop a musical note or two.
-     lda sfxschedulemissed
-     beq servicesongwasnotmissed
+         ; We normally run the servicesong routine from the top-screen interrupt, but if it
+         ; happens to interrupt the scheduling of a sound effect in the game code, we skip it.
+         ; If that happens, we try again here. Chances are very small we'll run into the same
+         ; problem twice, and if we do, we just drop a musical note or two.
+         lda sfxschedulemissed
+         beq servicesongwasnotmissed
          jsr servicesong
 servicesongwasnotmissed
      endif ; MUSICTRACKER
 
      ifconst RMT
-           lda palfastframe
-           beq skiprasterupdate2
-           lda rasterpause
-           beq skiprasterupdate2
-           jsr RASTERMUSICTRACKER+3
+         ifnconst RMTPALSPEED
+             ifnconst RMTOFFSPEED
+                 lda palfastframe
+                 beq skiprasterupdate2
+                 lda rasterpause
+                 beq skiprasterupdate2
+                 jsr RASTERMUSICTRACKER+3
 skiprasterupdate2
+             endif
+         endif
      endif
-
 
      rts
 
@@ -646,13 +650,13 @@ skipvoxprocessing
          rts
 
 processavoxvoice
-    ifconst HSSUPPORT
-         ; ** we skip speech if hi-score is on and no vox was detected
-         ; ** this is to avoid later collision with snes pads.
-         lda hsdevice
-         and #2
-         beq processavoxvoicereturn
-    endif ; HSSUPPORT
+         ifconst HSSUPPORT
+             ; ** we skip speech if hi-score is on and no vox was detected
+             ; ** this is to avoid later collision with snes pads.
+             lda hsdevice
+             and #2
+             beq processavoxvoicereturn
+         endif ; HSSUPPORT
          lda avoxenable
          bne avoxfixport
          SPKOUT tempavox
@@ -668,7 +672,7 @@ processavoxvoicereturn
 avoxsilentdata
          .byte 31,255
      else
-     	rts
+         rts
      endif ; AVOXVOICE
 
 joybuttonhandler
@@ -700,184 +704,184 @@ joybuttonhandler
      jmp buttonreadloopreturn
 
 twobuttonmask
- .byte %00000100,%00010000
+     .byte %00000100,%00010000
 
- ifconst SNES2ATARISUPPORT
+     ifconst SNES2ATARISUPPORT
 
 SNES_CLOCK_PORT_BIT
-   .byte $10,$01 
+         .byte $10,$01 
 SNES_CTLSWA_MASK
-   .byte $30,$03
+         .byte $30,$03
 SNES_CTLSWA_SIGNAL
-   .byte $C0,$0C
+         .byte $C0,$0C
 SWCHA_DIRMASK
-   .byte $F0,$0F
+         .byte $F0,$0F
 SWCHA_INVDIRMASK
-   .byte $0F,$F0
+         .byte $0F,$F0
 
-    ; Probe each port for SNES, and see if autodetection succeeds anywhere.
+         ; Probe each port for SNES, and see if autodetection succeeds anywhere.
 SNES_AUTODETECT
- ifconst HSSUPPORT
-     ; ** an atarivox might be plugged in, so we skip scanning the second
-     ; ** port for a snes if vox was detected...
-     lda hsdevice ; b1 high means atarivox/savekey was detected
-     lsr
-     and #1
-     eor #1
-     tax
- else
-     ldx #1
- endif ; HSSUPPORT
+         ifconst HSSUPPORT
+             ; ** an atarivox might be plugged in, so we skip scanning the second
+             ; ** port for a snes if vox was detected...
+             lda hsdevice ; b1 high means atarivox/savekey was detected
+             lsr
+             and #1
+             eor #1
+             tax
+         else
+             ldx #1
+         endif ; HSSUPPORT
 
 SNES_AUTODETECT_LOOP
-     lda #1 ; proline
-     sta port0control,x
-     jsr setportforinput
-     jsr setonebuttonmode
-     jsr SNES_READ
-     lda snesdetected0,x
-     bne SNES_AUTODETECT_FOUND
-     ; detection failed
-     jsr setportforinput
-     jsr settwobuttonmode
-     dex
-     bpl SNES_AUTODETECT_LOOP
-     rts
+         lda #1 ; proline
+         sta port0control,x
+         jsr setportforinput
+         jsr setonebuttonmode
+         jsr SNES_READ
+         lda snesdetected0,x
+         bne SNES_AUTODETECT_FOUND
+         ; detection failed
+         jsr setportforinput
+         jsr settwobuttonmode
+         dex
+         bpl SNES_AUTODETECT_LOOP
+         rts
 SNES_AUTODETECT_FOUND
-     lda #11 ; formally set the snes controller
-     sta port0control,x
-     stx snesport
-     rts
- endif ; SNES2ATARISUPPORT
+         lda #11 ; formally set the snes controller
+         sta port0control,x
+         stx snesport
+         rts
+     endif ; SNES2ATARISUPPORT
      
 snes2atarihandler
- ifconst SNES2ATARISUPPORT
+     ifconst SNES2ATARISUPPORT
 SNES2ATARI
-     jsr SNES_READ 
-     jmp buttonreadloopreturn
+         jsr SNES_READ 
+         jmp buttonreadloopreturn
 
 SNES_READ
-     ; x=0 for left port, x=1 for right
+         ; x=0 for left port, x=1 for right
 
-     ; Start by checking if any port directions are pressed. 
-     ; Abort the autodetect for this port if so, as snes2atari doesn't ground any 
-     ; direction pins. if directions are pressed and the port is changed to output,
-     ; that means the output is direct-shorted, and nobody seems to know if riot's
-     ; output mode has current protection.
+         ; Start by checking if any port directions are pressed. 
+         ; Abort the autodetect for this port if so, as snes2atari doesn't ground any 
+         ; direction pins. if directions are pressed and the port is changed to output,
+         ; that means the output is direct-shorted, and nobody seems to know if riot's
+         ; output mode has current protection.
 
-     lda SWCHA
-     ora SWCHA_INVDIRMASK,x
-     eor SWCHA_DIRMASK,x
-     bne SNES_READ_cont1
-     jmp SNES_ABORT
+         lda SWCHA
+         ora SWCHA_INVDIRMASK,x
+         eor SWCHA_DIRMASK,x
+         bne SNES_READ_cont1
+         jmp SNES_ABORT
 SNES_READ_cont1
 
-     lda port0control,x
-     cmp #11 ; snes
-     bne snes2atari_signal_go ; if this is a first auto-detection read, go ahead and signal
-     lda snesdetected0,x 
-     bne snes2atari_signal_skip ; if snes was available in previous frames, skip signalling
+         lda port0control,x
+         cmp #11 ; snes
+         bne snes2atari_signal_go ; if this is a first auto-detection read, go ahead and signal
+         lda snesdetected0,x 
+         bne snes2atari_signal_skip ; if snes was available in previous frames, skip signalling
 snes2atari_signal_go
          jsr SNES2ATARI_SIGNAL
 snes2atari_signal_skip
 
-     ;lda SNES_CTLSWA_MASK,x
+         ;lda SNES_CTLSWA_MASK,x
 
-     lda CTLSWA
-     and SWCHA_INVDIRMASK,x ; preserve othr nibble
-     ora SNES_CTLSWA_MASK,x
-     sta CTLSWA    ; enable pins UP/DOWN to work as outputs
+         lda CTLSWA
+         and SWCHA_INVDIRMASK,x ; preserve othr nibble
+         ora SNES_CTLSWA_MASK,x
+         sta CTLSWA ; enable pins UP/DOWN to work as outputs
 
-     lda SWCHA
-     and SWCHA_INVDIRMASK,x ; preserve othr nibble
-     ora SNES_CTLSWA_MASK,x
+         lda SWCHA
+         and SWCHA_INVDIRMASK,x ; preserve othr nibble
+         ora SNES_CTLSWA_MASK,x
 
-     sta SWCHA     ; latch+clock high
-     nop
-     nop
-     nop
-     nop
-     nop
-     nop
-     nop
-     lda SWCHA
-     and SWCHA_INVDIRMASK,x ; preserve othr nibble
-     sta SWCHA     ; latch and clock low
-     ldy #16 ; 16 bits 
+         sta SWCHA ; latch+clock high
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         nop
+         lda SWCHA
+         and SWCHA_INVDIRMASK,x ; preserve othr nibble
+         sta SWCHA ; latch and clock low
+         ldy #16 ; 16 bits 
 SNES2ATARILOOP
-         rol INPT4,x     ; sample data into carry
+         rol INPT4,x ; sample data into carry
          lda SWCHA 
          and SWCHA_INVDIRMASK,x ; preserve othr nibble
          ora SNES_CLOCK_PORT_BIT,x
-         sta SWCHA     ; clock low
+         sta SWCHA ; clock low
          rol snes2atari0lo,x
          rol snes2atari0hi,x
          lda SWCHA
          and SWCHA_INVDIRMASK,x ; preserve othr nibble
-         sta SWCHA     ; latch and clock low
-         dey           ; next bit
-     bne SNES2ATARILOOP
-     rol INPT4,x         ; 17th bit should be lo if controller is there.
-     rol                 ; 17th snes bit into A low bit
-     eor snes2atari0lo,x ; 16th bit should be hi if controller is there.
-     and #1
-     sta snesdetected0,x
-     beq SNES_STOP_CLOCK ; if snes isn't detected, leave port in default state
-     stx snesport ; snesport keeps the index of the latest autodetected controller
-     lda SWCHA
-     and SWCHA_INVDIRMASK,x ; preserve othr nibble
-     ora SNES_CLOCK_PORT_BIT,x
+         sta SWCHA ; latch and clock low
+         dey ; next bit
+         bne SNES2ATARILOOP
+         rol INPT4,x ; 17th bit should be lo if controller is there.
+         rol ; 17th snes bit into A low bit
+         eor snes2atari0lo,x ; 16th bit should be hi if controller is there.
+         and #1
+         sta snesdetected0,x
+         beq SNES_STOP_CLOCK ; if snes isn't detected, leave port in default state
+         stx snesport ; snesport keeps the index of the latest autodetected controller
+         lda SWCHA
+         and SWCHA_INVDIRMASK,x ; preserve othr nibble
+         ora SNES_CLOCK_PORT_BIT,x
 SNES_STOP_CLOCK
-     sta SWCHA     ; clock low
-     lda CTLSWA
-     and SWCHA_INVDIRMASK,x ; preserve othr nibble
-     ora SNES_CLOCK_PORT_BIT,x
-     sta CTLSWA    ; set port bits to input avoid conflict with other drivers
-     rts
+         sta SWCHA ; clock low
+         lda CTLSWA
+         and SWCHA_INVDIRMASK,x ; preserve othr nibble
+         ora SNES_CLOCK_PORT_BIT,x
+         sta CTLSWA ; set port bits to input avoid conflict with other drivers
+         rts
 SNES_ABORT
-     sta snesdetected0,x
-     rts
+         sta snesdetected0,x
+         rts
 SNES2ATARI_SIGNAL
-     ; signal to SNES2ATARI++ that we want SNES mode...
-     lda CTLSWA
-     and SWCHA_INVDIRMASK,x ; preserve othr nibble
-     ora SNES_CTLSWA_SIGNAL,x
-     sta CTLSWA  
-     lda CTLSWA
-     and SWCHA_INVDIRMASK,x ; preserve othr nibble
-     sta SWCHA
-     ldy #0
+         ; signal to SNES2ATARI++ that we want SNES mode...
+         lda CTLSWA
+         and SWCHA_INVDIRMASK,x ; preserve othr nibble
+         ora SNES_CTLSWA_SIGNAL,x
+         sta CTLSWA 
+         lda CTLSWA
+         and SWCHA_INVDIRMASK,x ; preserve othr nibble
+         sta SWCHA
+         ldy #0
 SNES_SIGNAL_LOOP
-     dey
-     bne SNES_SIGNAL_LOOP
-     lda SWCHA
-     ora SWCHA_DIRMASK,x
-     sta SWCHA
-     rts
- endif
+         dey
+         bne SNES_SIGNAL_LOOP
+         lda SWCHA
+         ora SWCHA_DIRMASK,x
+         sta SWCHA
+         rts
+     endif
 
-gunbuttonhandler ; outside of the conditional, so our button handler LUT is valid
- ifconst LIGHTGUNSUPPORT
-     cpx #0
-     bne secondportgunhandler
+gunbuttonhandler     ; outside of the conditional, so our button handler LUT is valid
+     ifconst LIGHTGUNSUPPORT
+         cpx #0
+         bne secondportgunhandler
 firstportgunhandler
-     lda SWCHA
-     asl 
-     asl 
-     asl ; shift D4 to D7
-     and #%10000000
-     eor #%10000000
-     sta sINPT1
-     jmp buttonreadloopreturn
+         lda SWCHA
+         asl 
+         asl 
+         asl ; shift D4 to D7
+         and #%10000000
+         eor #%10000000
+         sta sINPT1
+         jmp buttonreadloopreturn
 secondportgunhandler
-     lda SWCHA
-     lsr ; shift D0 into carry
-     lsr ; shift carry into D7
-     and #%10000000
-     eor #%10000000
-     sta sINPT3
-     jmp buttonreadloopreturn
- endif ; LIGHTGUNSUPPORT
+         lda SWCHA
+         lsr ; shift D0 into carry
+         lsr ; shift carry into D7
+         and #%10000000
+         eor #%10000000
+         sta sINPT3
+         jmp buttonreadloopreturn
+     endif ; LIGHTGUNSUPPORT
 
 controlsusing2buttoncode
      .byte 0 ; 00=no controller plugged in
@@ -894,31 +898,31 @@ controlsusing2buttoncode
      .byte 0 ; 11=snes2atari
 
 buttonhandlerhi
-     .byte 0                    ; 00=no controller plugged in
-     .byte >joybuttonhandler    ; 01=proline joystick
-     .byte >gunbuttonhandler    ; 02=lightgun
+     .byte 0 ; 00=no controller plugged in
+     .byte >joybuttonhandler ; 01=proline joystick
+     .byte >gunbuttonhandler ; 02=lightgun
      .byte >paddlebuttonhandler ; 03=paddle
-     .byte >joybuttonhandler    ; 04=trakball
-     .byte >joybuttonhandler    ; 05=vcs joystick
-     .byte >joybuttonhandler    ; 06=driving control
-     .byte 0                    ; 07=keypad
-     .byte >mousebuttonhandler  ; 08=st mouse
-     .byte >mousebuttonhandler  ; 09=amiga mouse
-     .byte >joybuttonhandler    ; 10=atarivox
-     .byte >snes2atarihandler   ; 11=snes
+     .byte >joybuttonhandler ; 04=trakball
+     .byte >joybuttonhandler ; 05=vcs joystick
+     .byte >joybuttonhandler ; 06=driving control
+     .byte 0 ; 07=keypad
+     .byte >mousebuttonhandler ; 08=st mouse
+     .byte >mousebuttonhandler ; 09=amiga mouse
+     .byte >joybuttonhandler ; 10=atarivox
+     .byte >snes2atarihandler ; 11=snes
 buttonhandlerlo
-     .byte 0                    ; 00=no controller plugged in
-     .byte <joybuttonhandler    ; 01=proline joystick
-     .byte <gunbuttonhandler    ; 02=lightgun 
+     .byte 0 ; 00=no controller plugged in
+     .byte <joybuttonhandler ; 01=proline joystick
+     .byte <gunbuttonhandler ; 02=lightgun 
      .byte <paddlebuttonhandler ; 03=paddle
-     .byte <joybuttonhandler    ; 04=trakball
-     .byte <joybuttonhandler    ; 05=vcs joystick
-     .byte <joybuttonhandler    ; 06=driving control
-     .byte 0                    ; 07=keypad
-     .byte <mousebuttonhandler  ; 08=st mouse
-     .byte <mousebuttonhandler  ; 09=amiga mouse
-     .byte <joybuttonhandler    ; 10=atarivox
-     .byte <snes2atarihandler   ; 11=snes
+     .byte <joybuttonhandler ; 04=trakball
+     .byte <joybuttonhandler ; 05=vcs joystick
+     .byte <joybuttonhandler ; 06=driving control
+     .byte 0 ; 07=keypad
+     .byte <mousebuttonhandler ; 08=st mouse
+     .byte <mousebuttonhandler ; 09=amiga mouse
+     .byte <joybuttonhandler ; 10=atarivox
+     .byte <snes2atarihandler ; 11=snes
 
 drawwait
      bit visibleover ; 255 if screen is being drawn, 0 when not.
@@ -1037,18 +1041,18 @@ exitmusictracker
      sta inttemp2
      iny
 sfxvolumeentrypt
- ifconst TIAVOLUME
-     lda tiavolume
-     asl
-     asl
-     asl
-     asl
-     sta fourbitfadevalueint
- endif ; TIAVOLUME
+     ifconst TIAVOLUME
+         lda tiavolume
+         asl
+         asl
+         asl
+         asl
+         sta fourbitfadevalueint
+     endif ; TIAVOLUME
      lda (inttemp5),y
- ifconst TIAVOLUME
-     jsr fourbitfadeint
- endif ; TIAVOLUME
+     ifconst TIAVOLUME
+         jsr fourbitfadeint
+     endif ; TIAVOLUME
      sta AUDV0,x
      cmp #$10
      bcs sfxsoundloop ; AUDV0>$0F means the sound is looped while priority is active
@@ -1172,24 +1176,24 @@ skipdrumkitoverride
      rts
 
 plotsprite
- ifnconst NODRAWWAIT
- ifconst DOUBLEBUFFER
-     lda doublebufferstate
-     bne skipplotspritewait
- endif ; DOUBLEBUFFER
- ifconst DEBUGWAITCOLOR
-   lda #$41
-   sta BACKGRND
- endif
+     ifnconst NODRAWWAIT
+         ifconst DOUBLEBUFFER
+             lda doublebufferstate
+             bne skipplotspritewait
+         endif ; DOUBLEBUFFER
+         ifconst DEBUGWAITCOLOR
+             lda #$41
+             sta BACKGRND
+         endif
 plotspritewait
-     lda visibleover
-     bne plotspritewait
+         lda visibleover
+         bne plotspritewait
 skipplotspritewait
- ifconst DEBUGWAITCOLOR
-   lda #$0
-   sta BACKGRND
- endif
- endif
+         ifconst DEBUGWAITCOLOR
+             lda #$0
+             sta BACKGRND
+         endif
+     endif
 
      ;arguments: 
      ; temp1=lo graphicdata 
@@ -1208,40 +1212,40 @@ skipplotspritewait
 
      tax
 
- ifnconst NOLIMITCHECKING
+     ifnconst NOLIMITCHECKING
 
-     ; the next block allows for vertical masking, and ensures we don't overwrite non-DL memory
+         ; the next block allows for vertical masking, and ensures we don't overwrite non-DL memory
 
-     cmp #WZONECOUNT
+         cmp #WZONECOUNT
 
-     bcc continueplotsprite1 ; the sprite is fully on-screen, so carry on...
-     ; otherwise, check to see if the bottom half is in zone 0...
+         bcc continueplotsprite1 ; the sprite is fully on-screen, so carry on...
+         ; otherwise, check to see if the bottom half is in zone 0...
 
-     if WZONEHEIGHT = 16
-         cmp #15
-     else
-         cmp #31
-     endif
+         if WZONEHEIGHT = 16
+             cmp #15
+         else
+             cmp #31
+         endif
 
-     bne exitplotsprite1
-     ldx #0
-     jmp continueplotsprite2
+         bne exitplotsprite1
+         ldx #0
+         jmp continueplotsprite2
 exitplotsprite1
-     rts
+         rts
 
 continueplotsprite1
      endif
 
      lda DLPOINTL,x ;Get pointer to DL that this sprite starts in
- ifconst DOUBLEBUFFER
-     clc
-     adc doublebufferdloffset
- endif ; DOUBLEBUFFER
+     ifconst DOUBLEBUFFER
+         clc
+         adc doublebufferdloffset
+     endif ; DOUBLEBUFFER
      sta dlpnt
      lda DLPOINTH,x
- ifconst DOUBLEBUFFER
-     adc #0
- endif ; DOUBLEBUFFER
+     ifconst DOUBLEBUFFER
+         adc #0
+     endif ; DOUBLEBUFFER
      sta dlpnt+1
 
      ;Create DL entry for upper part of sprite
@@ -1306,24 +1310,24 @@ checkcontinueplotsprite2
 
      inx ;Next region
 
- ifnconst NOLIMITCHECKING
-     cpx #WZONECOUNT
+     ifnconst NOLIMITCHECKING
+         cpx #WZONECOUNT
 
-     bcc continueplotsprite2 ; the second half of the sprite is fully on-screen, so carry on...
-     rts
+         bcc continueplotsprite2 ; the second half of the sprite is fully on-screen, so carry on...
+         rts
 continueplotsprite2
- endif
+     endif
 
      lda DLPOINTL,x ;Get pointer to next DL
- ifconst DOUBLEBUFFER
-     clc
-     adc doublebufferdloffset
- endif ; DOUBLEBUFFER
+     ifconst DOUBLEBUFFER
+         clc
+         adc doublebufferdloffset
+     endif ; DOUBLEBUFFER
      sta dlpnt
      lda DLPOINTH,x
- ifconst DOUBLEBUFFER
-     adc #0
- endif ; DOUBLEBUFFER
+     ifconst DOUBLEBUFFER
+         adc #0
+     endif ; DOUBLEBUFFER
      sta dlpnt+1
      ldy dlend,x ;Get the index to the end of this DL
 
@@ -1389,15 +1393,15 @@ lockzonex
          cpy #DLLASTOBJ
          beq lockzonexreturn ; the zone is either stuffed or locked. abort!
          lda DLPOINTL,x
- ifconst DOUBLEBUFFER
-     clc
-     adc doublebufferdloffset
- endif ; DOUBLEBUFFER
+         ifconst DOUBLEBUFFER
+             clc
+             adc doublebufferdloffset
+         endif ; DOUBLEBUFFER
          sta dlpnt
          lda DLPOINTH,x
- ifconst DOUBLEBUFFER
-         adc #0
- endif ; DOUBLEBUFFER
+         ifconst DOUBLEBUFFER
+             adc #0
+         endif ; DOUBLEBUFFER
          sta dlpnt+1
          iny
          lda #0
@@ -1417,15 +1421,15 @@ unlockzonex
          cpy #DLLASTOBJ
          bne unlockzonexreturn ; if the zone isn't stuffed, it's not locked. abort!
          lda DLPOINTL,x
- ifconst DOUBLEBUFFER
-     clc
-     adc doublebufferdloffset
- endif ; DOUBLEBUFFER
+         ifconst DOUBLEBUFFER
+             clc
+             adc doublebufferdloffset
+         endif ; DOUBLEBUFFER
          sta dlpnt
          lda DLPOINTH,x
- ifconst DOUBLEBUFFER
-         adc #0
- endif ; DOUBLEBUFFER
+         ifconst DOUBLEBUFFER
+             adc #0
+         endif ; DOUBLEBUFFER
          sta dlpnt+1
          dey
          ;ldy #(DLLASTOBJ-1)
@@ -1441,21 +1445,21 @@ plotcharloop
      ; ** format is: lo_data, hi_data, palette|width, x, y
      ; ** format ends with lo_data | hi_data = 0
 
- ifconst DOUBLEBUFFER
-     lda doublebufferstate
-     bne skipplotcharloopwait
- endif ; DOUBLEBUFFER
- ifconst DEBUGWAITCOLOR
-   lda #$61
-   sta BACKGRND
- endif
+     ifconst DOUBLEBUFFER
+         lda doublebufferstate
+         bne skipplotcharloopwait
+     endif ; DOUBLEBUFFER
+     ifconst DEBUGWAITCOLOR
+         lda #$61
+         sta BACKGRND
+     endif
 plotcharloopwait
      lda visibleover
      bne plotcharloopwait
- ifconst DEBUGWAITCOLOR
-   lda #0
-   sta BACKGRND
- endif
+     ifconst DEBUGWAITCOLOR
+         lda #0
+         sta BACKGRND
+     endif
 skipplotcharloopwait
 plotcharlooploop
      ldy #0
@@ -1489,20 +1493,20 @@ plotcharloopcontinue
      jmp plotcharlooploop
 
 plotcharacters
- ifconst DOUBLEBUFFER
-     lda doublebufferstate
-     bne skipplotcharacterswait
- endif ; DOUBLEBUFFER
- ifconst DEBUGWAITCOLOR
-   lda #$41
-   sta BACKGRND
- endif
+     ifconst DOUBLEBUFFER
+         lda doublebufferstate
+         bne skipplotcharacterswait
+     endif ; DOUBLEBUFFER
+     ifconst DEBUGWAITCOLOR
+         lda #$41
+         sta BACKGRND
+     endif
 plotcharacterswait
      lda visibleover
      bne plotcharacterswait
- ifconst DEBUGWAITCOLOR
-   sta BACKGRND
- endif
+     ifconst DEBUGWAITCOLOR
+         sta BACKGRND
+     endif
 skipplotcharacterswait
      ;arguments: 
      ; temp1=lo charactermap
@@ -1528,15 +1532,15 @@ plotcharactersskipentry
 
      tax
      lda DLPOINTL,x ;Get pointer to DL that the characters are in
- ifconst DOUBLEBUFFER
-     clc
-     adc doublebufferdloffset
- endif ; DOUBLEBUFFER
+     ifconst DOUBLEBUFFER
+         clc
+         adc doublebufferdloffset
+     endif ; DOUBLEBUFFER
      sta dlpnt
      lda DLPOINTH,x
- ifconst DOUBLEBUFFER
-     adc #0
- endif ; DOUBLEBUFFER
+     ifconst DOUBLEBUFFER
+         adc #0
+     endif ; DOUBLEBUFFER
      sta dlpnt+1
 
      ;Create DL entry for the characters
@@ -1576,259 +1580,259 @@ continueplotcharacters
 
      ifconst plotvalueonscreen
 plotcharacterslive
-     ; a version of plotcharacters that draws live and minimally disrupts the screen...
+         ; a version of plotcharacters that draws live and minimally disrupts the screen...
 
-     ;arguments: 
-     ; temp1=lo charactermap
-     ; temp2=hi charactermap
-     ; temp3=palette | width byte
-     ; temp4=x
-     ; temp5=y
+         ;arguments: 
+         ; temp1=lo charactermap
+         ; temp2=hi charactermap
+         ; temp3=palette | width byte
+         ; temp4=x
+         ; temp5=y
 
-     lda temp5 ;Y position
+         lda temp5 ;Y position
 
-     tax
-     lda DLPOINTL,x ;Get pointer to DL that the characters are in
- ifconst DOUBLEBUFFER
-     clc
-     adc doublebufferdloffset
- endif ; DOUBLEBUFFER
-     sta dlpnt
-     lda DLPOINTH,x
- ifconst DOUBLEBUFFER
-     adc #0
- endif ; DOUBLEBUFFER
-     sta dlpnt+1
+         tax
+         lda DLPOINTL,x ;Get pointer to DL that the characters are in
+         ifconst DOUBLEBUFFER
+             clc
+             adc doublebufferdloffset
+         endif ; DOUBLEBUFFER
+         sta dlpnt
+         lda DLPOINTH,x
+         ifconst DOUBLEBUFFER
+             adc #0
+         endif ; DOUBLEBUFFER
+         sta dlpnt+1
 
-     ;Create DL entry for the characters
+         ;Create DL entry for the characters
 
-     ldy dlend,x ;Get the index to the end of this DL
+         ldy dlend,x ;Get the index to the end of this DL
 
-     ifconst CHECKOVERWRITE
-         cpy #DLLASTOBJ
-         bne continueplotcharacterslive
-         rts
+         ifconst CHECKOVERWRITE
+             cpy #DLLASTOBJ
+             bne continueplotcharacterslive
+             rts
 continueplotcharacterslive
-     endif
+         endif
 
-     lda temp1 ; character map data, lo byte
-     sta (dlpnt),y ;(1) store low address
+         lda temp1 ; character map data, lo byte
+         sta (dlpnt),y ;(1) store low address
 
-     iny
-     ; we don't add the second byte yet, since the charmap could briefly
-     ; render without a proper character map address, width, or position.
-     lda charactermode 
-     sta (dlpnt),y ;(2) store mode
+         iny
+         ; we don't add the second byte yet, since the charmap could briefly
+         ; render without a proper character map address, width, or position.
+         lda charactermode 
+         sta (dlpnt),y ;(2) store mode
 
-     iny
-     lda temp2 ; character map, hi byte
-     sta (dlpnt),y ;(3) store high address
+         iny
+         lda temp2 ; character map, hi byte
+         sta (dlpnt),y ;(3) store high address
 
-     iny
-     lda temp3 ;palette|width
-     sta (dlpnt),y ;(4) store palette|width
+         iny
+         lda temp3 ;palette|width
+         sta (dlpnt),y ;(4) store palette|width
 
-     iny
-     lda temp4 ;Horizontal position
-     sta (dlpnt),y ;(5) store horizontal position
+         iny
+         lda temp4 ;Horizontal position
+         sta (dlpnt),y ;(5) store horizontal position
 
-     iny
-     sty dlend,x ; save display list end byte
+         iny
+         sty dlend,x ; save display list end byte
 
-     rts
+         rts
      endif ;plotcharacterslive
 
- ifconst USED_PLOTVALUE
+     ifconst USED_PLOTVALUE
 plotvalue
-     ; calling 7800basic command:
-     ; plotvalue digit_gfx palette variable/data number_of_digits screen_x screen_y
-     ; ...displays the variable as BCD digits
-     ;
-     ; asm sub arguments: 
-     ; temp1=lo charactermap
-     ; temp2=hi charactermap
-     ; temp3=palette | width byte
-     ; temp4=x
-     ; temp5=y
-     ; temp6=number of digits
-     ; temp7=lo variable
-     ; temp8=hi variable
-     ; temp9=character mode
+         ; calling 7800basic command:
+         ; plotvalue digit_gfx palette variable/data number_of_digits screen_x screen_y
+         ; ...displays the variable as BCD digits
+         ;
+         ; asm sub arguments: 
+         ; temp1=lo charactermap
+         ; temp2=hi charactermap
+         ; temp3=palette | width byte
+         ; temp4=x
+         ; temp5=y
+         ; temp6=number of digits
+         ; temp7=lo variable
+         ; temp8=hi variable
+         ; temp9=character mode
 
-plotdigitcount     = temp6
+plotdigitcount         = temp6
 
-     ifconst ZONELOCKS
-         ldx temp5
-         ldy dlend,x
-         cpy #DLLASTOBJ
-         bne carryonplotvalue
-         rts
+         ifconst ZONELOCKS
+             ldx temp5
+             ldy dlend,x
+             cpy #DLLASTOBJ
+             bne carryonplotvalue
+             rts
 carryonplotvalue
-     endif
+         endif
 
-     lda #0
-     tay
-     ldx valbufend
+         lda #0
+         tay
+         ldx valbufend
 
-     lda plotdigitcount
-     and #1
-     beq pvnibble2char
-     lda #0
-     sta VALBUFFER,x ; just in case we skip this digit
-     beq pvnibble2char_skipnibble
+         lda plotdigitcount
+         and #1
+         beq pvnibble2char
+         lda #0
+         sta VALBUFFER,x ; just in case we skip this digit
+         beq pvnibble2char_skipnibble
 
 pvnibble2char
-     ; high nibble...
-     lda (temp7),y
-     and #$f0 
-     lsr
-     lsr
-     lsr
-     ifnconst DOUBLEWIDE ; multiply value by 2 for double-width
+         ; high nibble...
+         lda (temp7),y
+         and #$f0 
          lsr
-     endif
+         lsr
+         lsr
+         ifnconst DOUBLEWIDE ; multiply value by 2 for double-width
+             lsr
+         endif
 
-     clc
-     adc temp1 ; add the offset to character graphics to our value
-     sta VALBUFFER,x
-     inx
-     dec plotdigitcount
+         clc
+         adc temp1 ; add the offset to character graphics to our value
+         sta VALBUFFER,x
+         inx
+         dec plotdigitcount
 
 pvnibble2char_skipnibble
-     ; low nibble...
-     lda (temp7),y
-     and #$0f 
-     ifconst DOUBLEWIDE ; multiply value by 2 for double-width
-         asl
-     endif
-     clc
-     adc temp1 ; add the offset to character graphics to our value
-     sta VALBUFFER,x 
-     inx
-     iny
+         ; low nibble...
+         lda (temp7),y
+         and #$0f 
+         ifconst DOUBLEWIDE ; multiply value by 2 for double-width
+             asl
+         endif
+         clc
+         adc temp1 ; add the offset to character graphics to our value
+         sta VALBUFFER,x 
+         inx
+         iny
 
-     dec plotdigitcount
-     bne pvnibble2char
+         dec plotdigitcount
+         bne pvnibble2char
 
-     ;point to the start of our valuebuffer
-     clc
-     lda #<VALBUFFER
-     adc valbufend
-     sta temp1
-     lda #>VALBUFFER
-     adc #0
-     sta temp2
+         ;point to the start of our valuebuffer
+         clc
+         lda #<VALBUFFER
+         adc valbufend
+         sta temp1
+         lda #>VALBUFFER
+         adc #0
+         sta temp2
 
-     ;advance valbufend to the end of our value buffer
-     stx valbufend
+         ;advance valbufend to the end of our value buffer
+         stx valbufend
 
-     ifnconst plotvalueonscreen
-         jmp plotcharacters
-     else
-         jmp plotcharacterslive
-     endif
+         ifnconst plotvalueonscreen
+             jmp plotcharacters
+         else
+             jmp plotcharacterslive
+         endif
 
-  endif ; USED_PLOTVALUE
+     endif ; USED_PLOTVALUE
 
 
- ifconst USED_PLOTVALUEEXTRA
-plotdigitcount     = temp6
+     ifconst USED_PLOTVALUEEXTRA
+plotdigitcount         = temp6
 plotvalueextra
-     ; calling 7800basic command:
-     ; plotvalue digit_gfx palette variable/data number_of_digits screen_x screen_y
-     ; ...displays the variable as BCD digits
-     ;
-     ; asm sub arguments: 
-     ; temp1=lo charactermap
-     ; temp2=hi charactermap
-     ; temp3=palette | width byte
-     ; temp4=x
-     ; temp5=y
-     ; temp6=number of digits
-     ; temp7=lo variable
-     ; temp8=hi variable
+         ; calling 7800basic command:
+         ; plotvalue digit_gfx palette variable/data number_of_digits screen_x screen_y
+         ; ...displays the variable as BCD digits
+         ;
+         ; asm sub arguments: 
+         ; temp1=lo charactermap
+         ; temp2=hi charactermap
+         ; temp3=palette | width byte
+         ; temp4=x
+         ; temp5=y
+         ; temp6=number of digits
+         ; temp7=lo variable
+         ; temp8=hi variable
 
-     lda #0
-     tay
-     ldx valbufend
-     ifnconst plotvalueonscreen
-         sta VALBUFFER,x
-     endif
+         lda #0
+         tay
+         ldx valbufend
+         ifnconst plotvalueonscreen
+             sta VALBUFFER,x
+         endif
 
-     lda plotdigitcount
-     and #1
-     
-     bne pvnibble2char_skipnibbleextra
+         lda plotdigitcount
+         and #1
+         
+         bne pvnibble2char_skipnibbleextra
 
 pvnibble2charextra
-     ; high nibble...
-     lda (temp7),y
-     and #$f0 
-     lsr
-     lsr
-     ifnconst DOUBLEWIDE ; multiply value by 2 for double-width
+         ; high nibble...
+         lda (temp7),y
+         and #$f0 
          lsr
-     endif
-     clc
-     adc temp1 ; add the offset to character graphics to our value
-     sta VALBUFFER,x
-     inx
+         lsr
+         ifnconst DOUBLEWIDE ; multiply value by 2 for double-width
+             lsr
+         endif
+         clc
+         adc temp1 ; add the offset to character graphics to our value
+         sta VALBUFFER,x
+         inx
 
-     ; second half of the digit
-     clc
-     adc #1
-     sta VALBUFFER,x
-     inx
+         ; second half of the digit
+         clc
+         adc #1
+         sta VALBUFFER,x
+         inx
 
 pvnibble2char_skipnibbleextra
-     ; low nibble...
-     lda (temp7),y
-     and #$0f 
-     ifconst DOUBLEWIDE ; multiply value by 2 for double-width
+         ; low nibble...
+         lda (temp7),y
+         and #$0f 
+         ifconst DOUBLEWIDE ; multiply value by 2 for double-width
+             asl
+         endif
          asl
-     endif
-     asl
 
-     clc
-     adc temp1 ; add the offset to character graphics to our value
-     sta VALBUFFER,x 
-     inx
+         clc
+         adc temp1 ; add the offset to character graphics to our value
+         sta VALBUFFER,x 
+         inx
 
-     clc
-     adc #1
-     sta VALBUFFER,x
-     inx
-     iny
+         clc
+         adc #1
+         sta VALBUFFER,x
+         inx
+         iny
 
-     dec plotdigitcount
-     bne pvnibble2charextra
+         dec plotdigitcount
+         bne pvnibble2charextra
 
-     ;point to the start of our valuebuffer
-     clc
-     lda #<VALBUFFER
-     adc valbufend
-     sta temp1
-     lda #>VALBUFFER
-     adc #0
-     sta temp2
+         ;point to the start of our valuebuffer
+         clc
+         lda #<VALBUFFER
+         adc valbufend
+         sta temp1
+         lda #>VALBUFFER
+         adc #0
+         sta temp2
 
-     ;advance valbufend to the end of our value buffer
-     stx valbufend
+         ;advance valbufend to the end of our value buffer
+         stx valbufend
 
-     ifnconst plotvalueonscreen
-         jmp plotcharacters
-     else
-         jmp plotcharacterslive
-     endif
-  endif ; USED_PLOTVALUEEXTRA
+         ifnconst plotvalueonscreen
+             jmp plotcharacters
+         else
+             jmp plotcharacterslive
+         endif
+     endif ; USED_PLOTVALUEEXTRA
 
 boxcollision
- ifconst BOXCOLLISION
-     ; the worst case cycle-time for the code below is 43 cycles.
-     ; unfortunately, prior to getting here we've burned 44 cycles in argument setup. eep!
+     ifconst BOXCOLLISION
+         ; the worst case cycle-time for the code below is 43 cycles.
+         ; unfortunately, prior to getting here we've burned 44 cycles in argument setup. eep!
 
-;__boxx1 = accumulator
-;__boxy1 = y
+         ;__boxx1 = accumulator
+         ;__boxy1 = y
 __boxw1 = temp3
 __boxh1 = temp4
 
@@ -1838,41 +1842,41 @@ __boxw2 = temp7
 __boxh2 = temp8
 
 DoXCollisionCheck
-     ;lda __boxx1 ; skipped. already in the accumulator
-     cmp __boxx2          ;3
-     bcs X1isbiggerthanX2 ;2/3
+         ;lda __boxx1 ; skipped. already in the accumulator
+         cmp __boxx2 ;3
+         bcs X1isbiggerthanX2 ;2/3
 X2isbiggerthanX1
-     ; carry is clear
-     adc __boxw1 ;3
-     cmp __boxx2 ;3
-     bcs DoYCollisionCheck ;3/2
-     rts ;6 - carry clear, no collision
+         ; carry is clear
+         adc __boxw1 ;3
+         cmp __boxx2 ;3
+         bcs DoYCollisionCheck ;3/2
+         rts ;6 - carry clear, no collision
 X1isbiggerthanX2
-     clc ;2
-     sbc __boxw2 ;3
-     cmp __boxx2 ;3
-     bcs noboxcollision ;3/2
+         clc ;2
+         sbc __boxw2 ;3
+         cmp __boxx2 ;3
+         bcs noboxcollision ;3/2
 DoYCollisionCheck
-     tya ; 2 ; use to be "lda __boxy1"
-     cmp __boxy2 ;3
-     bcs Y1isbiggerthanY2 ;3/2
+         tya ; 2 ; use to be "lda __boxy1"
+         cmp __boxy2 ;3
+         bcs Y1isbiggerthanY2 ;3/2
 Y2isbiggerthanY1
-     ; carry is clear
-     adc __boxh1 ;3
-     cmp __boxy2 ;3
-     rts ;6 
+         ; carry is clear
+         adc __boxh1 ;3
+         cmp __boxy2 ;3
+         rts ;6 
 Y1isbiggerthanY2
-     clc ;2
-     sbc __boxh2 ;3
-     cmp __boxy2 ;3
-     bcs noboxcollision ;3/2
+         clc ;2
+         sbc __boxh2 ;3
+         cmp __boxy2 ;3
+         bcs noboxcollision ;3/2
 yesboxcollision
-     sec ;2
-     rts ;6
+         sec ;2
+         rts ;6
 noboxcollision
-     clc ;2
-     rts ;6
- endif ; BOXCOLLISION
+         clc ;2
+         rts ;6
+     endif ; BOXCOLLISION
 
 randomize
      lda rand
@@ -1885,8 +1889,8 @@ noeor
      eor rand16
      rts
 
- ; *** bcd conversion routine courtesy Omegamatrix
- ; *** http://atariage.com/forums/blog/563/entry-10832-hex-to-bcd-conversion-0-99/
+     ; *** bcd conversion routine courtesy Omegamatrix
+     ; *** http://atariage.com/forums/blog/563/entry-10832-hex-to-bcd-conversion-0-99/
 converttobcd
      ;value to convert is in the accumulator
      sta temp1
@@ -2020,42 +2024,42 @@ BS_return
 checkselectswitch
      lda SWCHB ; first check the real select switch...
      and #%00000010
- ifnconst SOFTPAUSEOFF
- ifnconst MOUSESUPPORT
- ifnconst TRAKBALLSUPPORT
-     beq checkselectswitchreturn ; switch is pressed
-     lda port0control
-     cmp #11
-     bne checkselectsoftswitch
-     lda #$ff
-     rts
+     ifnconst SOFTPAUSEOFF
+         ifnconst MOUSESUPPORT
+             ifnconst TRAKBALLSUPPORT
+                 beq checkselectswitchreturn ; switch is pressed
+                 lda port0control
+                 cmp #11
+                 bne checkselectsoftswitch
+                 lda #$ff
+                 rts
 checkselectsoftswitch
-     lda SWCHA ; then check the soft "select" joysick code...
-     and #%10110000 ; R_DU
- endif ; TRAKBALLSUPPORT
- endif ; MOUSESUPPORT
- endif ; SOFTPAUSEOFF
+                 lda SWCHA ; then check the soft "select" joysick code...
+                 and #%10110000 ; R_DU
+             endif ; TRAKBALLSUPPORT
+         endif ; MOUSESUPPORT
+     endif ; SOFTPAUSEOFF
 checkselectswitchreturn
      rts
 
 checkresetswitch
      lda SWCHB ; first check the real reset switch...
      and #%00000001
- ifnconst SOFTPAUSEOFF
- ifnconst MOUSESUPPORT
- ifnconst TRAKBALLSUPPORT
-     beq checkresetswitchreturn ; switch is pressed
-     lda port0control
-     cmp #11
-     bne checkresetsoftswitch
-     lda #$ff
-     rts
+     ifnconst SOFTPAUSEOFF
+         ifnconst MOUSESUPPORT
+             ifnconst TRAKBALLSUPPORT
+                 beq checkresetswitchreturn ; switch is pressed
+                 lda port0control
+                 cmp #11
+                 bne checkresetsoftswitch
+                 lda #$ff
+                 rts
 checkresetsoftswitch
-     lda SWCHA ; then check the soft "reset" joysick code...
-     and #%01110000 ; _LDU
- endif ; TRAKBALLSUPPORT
- endif ; MOUSESUPPORT
- endif ; SOFTPAUSEOFF
+                 lda SWCHA ; then check the soft "reset" joysick code...
+                 and #%01110000 ; _LDU
+             endif ; TRAKBALLSUPPORT
+         endif ; MOUSESUPPORT
+     endif ; SOFTPAUSEOFF
 checkresetswitchreturn
      rts
 
@@ -2076,62 +2080,62 @@ finescrolldlls
          rts
      endif ; FINESCROLLENABLED
 
-  ifconst USED_ADJUSTVISIBLE
+     ifconst USED_ADJUSTVISIBLE
 adjustvisible
-     ; called with temp1=first visible zone *3, temp2=last visible zone *3
-     jsr waitforvblankstart ; ensure vblank just started
-     ldx visibleDLLstart
+         ; called with temp1=first visible zone *3, temp2=last visible zone *3
+         jsr waitforvblankstart ; ensure vblank just started
+         ldx visibleDLLstart
 findfirstinterrupt
-     lda DLLMEM,x
-     bmi foundfirstinterrupt
-     inx
-     inx
-     inx
-     bne findfirstinterrupt
+         lda DLLMEM,x
+         bmi foundfirstinterrupt
+         inx
+         inx
+         inx
+         bne findfirstinterrupt
 foundfirstinterrupt
-     and #%01111111 ; clear the interrupt bit
-     sta DLLMEM,x
-     ifconst DOUBLEBUFFER
-       sta DLLMEM+DBOFFSET,x
-     endif ; DOUBLEBUFFER
-     ldx overscanDLLstart
+         and #%01111111 ; clear the interrupt bit
+         sta DLLMEM,x
+         ifconst DOUBLEBUFFER
+             sta DLLMEM+DBOFFSET,x
+         endif ; DOUBLEBUFFER
+         ldx overscanDLLstart
 findlastinterrupt
-     lda DLLMEM,x
-     bmi foundlastinterrupt
-     dex
-     dex
-     dex
-     bne findlastinterrupt
+         lda DLLMEM,x
+         bmi foundlastinterrupt
+         dex
+         dex
+         dex
+         bne findlastinterrupt
 foundlastinterrupt
-     and #%01111111 ; clear the interrupt bit
-     sta DLLMEM,x
-     ifconst DOUBLEBUFFER
-       sta DLLMEM+DBOFFSET,x
-     endif ; DOUBLEBUFFER
-     ;now we need to set the new interrupts
-     clc
-     lda temp1
-     adc visibleDLLstart
-     tax
-     lda DLLMEM,x
-     ora #%10000000
-     sta DLLMEM,x
-     ifconst DOUBLEBUFFER
-       sta DLLMEM+DBOFFSET,x
-     endif ; DOUBLEBUFFER
-     clc
-     lda temp2
-     adc visibleDLLstart
-     tax
-     lda DLLMEM,x
-     ora #%10000000
-     sta DLLMEM,x
-     ifconst DOUBLEBUFFER
-       sta DLLMEM+DBOFFSET,x
-     endif ; DOUBLEBUFFER
-     jsr vblankresync
-     rts
-  endif ; USED_ADJUSTVISIBLE
+         and #%01111111 ; clear the interrupt bit
+         sta DLLMEM,x
+         ifconst DOUBLEBUFFER
+             sta DLLMEM+DBOFFSET,x
+         endif ; DOUBLEBUFFER
+         ;now we need to set the new interrupts
+         clc
+         lda temp1
+         adc visibleDLLstart
+         tax
+         lda DLLMEM,x
+         ora #%10000000
+         sta DLLMEM,x
+         ifconst DOUBLEBUFFER
+             sta DLLMEM+DBOFFSET,x
+         endif ; DOUBLEBUFFER
+         clc
+         lda temp2
+         adc visibleDLLstart
+         tax
+         lda DLLMEM,x
+         ora #%10000000
+         sta DLLMEM,x
+         ifconst DOUBLEBUFFER
+             sta DLLMEM+DBOFFSET,x
+         endif ; DOUBLEBUFFER
+         jsr vblankresync
+         rts
+     endif ; USED_ADJUSTVISIBLE
 
 vblankresync
      jsr waitforvblankstart ; ensure vblank just started
@@ -2162,7 +2166,7 @@ createallgamedllscontinue
      ora #%10000000 ; NMI 1 - start of visible screen
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+DBOFFSET,x
+         sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
 
      ldx overscanDLLstart
@@ -2171,7 +2175,7 @@ createallgamedllscontinue
      and #%11110011 ; change this to a 1-line DLL, so there's time enough for the "deeper overscan" DLL
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+DBOFFSET,x
+         sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
 
      inx
@@ -2182,7 +2186,7 @@ createallgamedllscontinue
      ora #%10000000 ; NMI 3 - deeper overscan
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+DBOFFSET,x
+         sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
 
      rts
@@ -2214,19 +2218,19 @@ createnonvisibledllsreturn
 createblankdllentry
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+DBOFFSET,x
+         sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
      inx
      lda #$21 ; blank
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+DBOFFSET,x
+         sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
      inx
      lda #$00
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+DBOFFSET,x
+         sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
      inx
      rts 
@@ -2238,28 +2242,28 @@ createvisiblezonesloop
      ora #(WZONEHEIGHT * 4) ; set Holey DMA for 8 or 16 tall zones
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+DBOFFSET,x
+         sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
      inx
      lda DLPOINTH,y
- ifconst BANKSET_DL_IN_CARTRAM
-     ; with bankset cart ram, we added $8000 to the DL address so plot functions would hit the write-address
-     ; but now we need to subtract that $8000 location to give Maria the normal address
-     sec
-     sbc #$80  
- endif ; BANKSET_DL_IN_CARTRAM
+     ifconst BANKSET_DL_IN_CARTRAM
+         ; with bankset cart ram, we added $8000 to the DL address so plot functions would hit the write-address
+         ; but now we need to subtract that $8000 location to give Maria the normal address
+         sec
+         sbc #$80 
+     endif ; BANKSET_DL_IN_CARTRAM
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       sta DLLMEM+DBOFFSET,x
+         sta DLLMEM+DBOFFSET,x
      endif ; DOUBLEBUFFER
      inx
      lda DLPOINTL,y
      sta DLLMEM,x
      ifconst DOUBLEBUFFER
-       clc
-       adc #DOUBLEBUFFEROFFSET
-       sta DLLMEM+DBOFFSET,x
-       bcc skiphidoublebufferadjust  ; dlls are big endian, so we need to fix the hi byte after-the-fact...
+         clc
+         adc #DOUBLEBUFFEROFFSET
+         sta DLLMEM+DBOFFSET,x
+         bcc skiphidoublebufferadjust ; dlls are big endian, so we need to fix the hi byte after-the-fact...
          inc DLLMEM+DBOFFSET-1,x
 skiphidoublebufferadjust
      endif ; DOUBLEBUFFER
@@ -2280,1083 +2284,1083 @@ vblankstartwait
 
      ifconst DOUBLEBUFFER
 flipdisplaybufferreturn
-     rts
+         rts
 flipdisplaybuffer
- ifconst interrupthold
-     lda #$FF
-     sta interrupthold
- endif
-     lda doublebufferstate
-     beq flipdisplaybufferreturn ; exit if we're not in double-buffer
+         ifconst interrupthold
+             lda #$FF
+             sta interrupthold
+         endif
+         lda doublebufferstate
+         beq flipdisplaybufferreturn ; exit if we're not in double-buffer
 
-     jsr terminatedisplaybuffer ; terminate the working buffer before we flip
+         jsr terminatedisplaybuffer ; terminate the working buffer before we flip
 
-     lda doublebufferstate
-     lsr ; /2, so we'll see 0 or 1, rather than 1 or 3
-     tax
+         lda doublebufferstate
+         lsr ; /2, so we'll see 0 or 1, rather than 1 or 3
+         tax
 
-     ; ensure we don't flip mid-display. otherwise the displayed DL will be the one the game is working on.
+         ; ensure we don't flip mid-display. otherwise the displayed DL will be the one the game is working on.
 
 flipdisplaybufferwait1
-     lda visibleover
-     beq flipdisplaybufferwait1
+         lda visibleover
+         beq flipdisplaybufferwait1
 
 flipdisplaybufferwait
-     lda visibleover
-     bne flipdisplaybufferwait
+         lda visibleover
+         bne flipdisplaybufferwait
 
-     lda doublebufferminimumframetarget
-     beq skipminimumframecode
-     lda doublebufferminimumframeindex
-     bne flipdisplaybufferwait1
-     lda doublebufferminimumframetarget
-     sta doublebufferminimumframeindex
+         lda doublebufferminimumframetarget
+         beq skipminimumframecode
+         lda doublebufferminimumframeindex
+         bne flipdisplaybufferwait1
+         lda doublebufferminimumframetarget
+         sta doublebufferminimumframeindex
 skipminimumframecode
 
-     lda DLLMEMLutHi,x
-     sta DPPH
-     lda DLLMEMLutLo,x
-     sta DPPL
+         lda DLLMEMLutHi,x
+         sta DPPH
+         lda DLLMEMLutLo,x
+         sta DPPL
 
-     lda NewPageflipstate,x
-     sta doublebufferstate
-     lda NewPageflipoffset,x
-     sta doublebufferdloffset
+         lda NewPageflipstate,x
+         sta doublebufferstate
+         lda NewPageflipoffset,x
+         sta doublebufferdloffset
 
- ifnconst BANKSET_DL_IN_CARTRAM
-     lda doublebufferbufferdirty
-     beq flipdisplaybufferreturn
+         ifnconst BANKSET_DL_IN_CARTRAM
+             lda doublebufferbufferdirty
+             beq flipdisplaybufferreturn
 
-     ; The doublebuffer buffer is dirty, so the game code must have issued a savescreen recently.
-     ; To make savescreen work with the new working buffer, we need to copy over the saved objects
-     ; from the displayed buffer to the working buffer...
+             ; The doublebuffer buffer is dirty, so the game code must have issued a savescreen recently.
+             ; To make savescreen work with the new working buffer, we need to copy over the saved objects
+             ; from the displayed buffer to the working buffer...
 
-     lda doublebufferdloffset
-     eor #DOUBLEBUFFEROFFSET
-     sta temp6 ; make temp6 the anti-doublebufferdloffset variable
-  
-     ldx #(WZONECOUNT-1)
+             lda doublebufferdloffset
+             eor #DOUBLEBUFFEROFFSET
+             sta temp6 ; make temp6 the anti-doublebufferdloffset variable
+             
+             ldx #(WZONECOUNT-1)
 copybufferzoneloop
 
-     lda DLPOINTL,x
-     clc
-     adc doublebufferdloffset
-     sta temp1
-     lda DLPOINTH,x
-     adc #0
-     sta temp2
+             lda DLPOINTL,x
+             clc
+             adc doublebufferdloffset
+             sta temp1
+             lda DLPOINTH,x
+             adc #0
+             sta temp2
 
-     lda DLPOINTL,x
-     clc
-     adc temp6
-     sta temp3
-     lda DLPOINTH,x
-     adc #0
-     sta temp4
+             lda DLPOINTL,x
+             clc
+             adc temp6
+             sta temp3
+             lda DLPOINTH,x
+             adc #0
+             sta temp4
 
-     lda dlendsave,x
-     tay
+             lda dlendsave,x
+             tay
 copybuffercharsloop
-     lda (temp3),y
-     sta (temp1),y
-     dey
-     bpl copybuffercharsloop
-     dex
-     bpl copybufferzoneloop
-     lda #0
-     sta doublebufferbufferdirty
- endif ; ! BANKSET_DL_IN_CARTRAM
-     rts
+             lda (temp3),y
+             sta (temp1),y
+             dey
+             bpl copybuffercharsloop
+             dex
+             bpl copybufferzoneloop
+             lda #0
+             sta doublebufferbufferdirty
+         endif ; ! BANKSET_DL_IN_CARTRAM
+         rts
 
 doublebufferoff
-     lda #1
-     sta doublebufferstate
-     jsr flipdisplaybuffer
-     lda #0
-     sta doublebufferstate
-     sta doublebufferdloffset
-     rts
+         lda #1
+         sta doublebufferstate
+         jsr flipdisplaybuffer
+         lda #0
+         sta doublebufferstate
+         sta doublebufferdloffset
+         rts
 
 DLLMEMLutLo
-  .byte <DLLMEM,<(DLLMEM+DBOFFSET)
+         .byte <DLLMEM,<(DLLMEM+DBOFFSET)
 DLLMEMLutHi
-  .byte >DLLMEM,>(DLLMEM+DBOFFSET)
+         .byte >DLLMEM,>(DLLMEM+DBOFFSET)
 NewPageflipstate
-  .byte 3,1
+         .byte 3,1
 NewPageflipoffset
-  .byte DOUBLEBUFFEROFFSET,0
+         .byte DOUBLEBUFFEROFFSET,0
 
      endif ; DOUBLEBUFFER
 
- ifconst MOUSESUPPORT
+     ifconst MOUSESUPPORT
 
 rotationalcompare
-     ; old =   00     01      10     11
-     .byte     $00,   $01,   $ff,   $00  ; new=00
-     .byte     $ff,   $00,   $00,   $01  ; new=01
-     .byte     $01,   $00,   $00,   $ff  ; new=10
-     .byte     $00,   $ff,   $01,   $00  ; new=11
+         ; old = 00 01 10 11
+         .byte $00, $01, $ff, $00 ; new=00
+         .byte $ff, $00, $00, $01 ; new=01
+         .byte $01, $00, $00, $ff ; new=10
+         .byte $00, $ff, $01, $00 ; new=11
 
-   ;  0000YyXx st mouse
+         ; 0000YyXx st mouse
 
-   ;  0000xyXY amiga mouse
+         ; 0000xyXY amiga mouse
 
- ifconst MOUSEXONLY
-amigatoataribits ; swap bits 1 and 4...
-  .byte %0000, %0000, %0010, %0010
-  .byte %0000, %0000, %0010, %0010
-  .byte %0001, %0001, %0011, %0011
-  .byte %0001, %0001, %0011, %0011
+         ifconst MOUSEXONLY
+amigatoataribits             ; swap bits 1 and 4...
+             .byte %0000, %0000, %0010, %0010
+             .byte %0000, %0000, %0010, %0010
+             .byte %0001, %0001, %0011, %0011
+             .byte %0001, %0001, %0011, %0011
 
-; null change bits
-  .byte %0000, %0001, %0010, %0011
-  .byte %0000, %0001, %0010, %0011
-  .byte %0000, %0001, %0010, %0011
-  .byte %0000, %0001, %0010, %0011
+             ; null change bits
+             .byte %0000, %0001, %0010, %0011
+             .byte %0000, %0001, %0010, %0011
+             .byte %0000, %0001, %0010, %0011
+             .byte %0000, %0001, %0010, %0011
 
- else  ; !MOUSEXONLY
+         else ; !MOUSEXONLY
 
-amigatoataribits ; swap bits 1 and 4...
-  .byte %0000, %1000, %0010, %1010
-  .byte %0100, %1100, %0110, %1110
-  .byte %0001, %1001, %0011, %1011
-  .byte %0101, %1101, %0111, %1111
-; null change bits
-  .byte %0000, %0001, %0010, %0011
-  .byte %0100, %0101, %0110, %0111
-  .byte %1000, %1001, %1010, %1011
-  .byte %1100, %1101, %1110, %1111
- endif ; !MOUSEXONLY
+amigatoataribits             ; swap bits 1 and 4...
+             .byte %0000, %1000, %0010, %1010
+             .byte %0100, %1100, %0110, %1110
+             .byte %0001, %1001, %0011, %1011
+             .byte %0101, %1101, %0111, %1111
+             ; null change bits
+             .byte %0000, %0001, %0010, %0011
+             .byte %0100, %0101, %0110, %0111
+             .byte %1000, %1001, %1010, %1011
+             .byte %1100, %1101, %1110, %1111
+         endif ; !MOUSEXONLY
 
- endif ; MOUSESUPPORT
+     endif ; MOUSESUPPORT
 
 mouse0update
- ifconst MOUSE0SUPPORT
+     ifconst MOUSE0SUPPORT
 
-mousetableselect   = inttemp2
-mousexdelta        = inttemp3
-mouseydelta        = inttemp4
-lastSWCHA          = inttemp6
+mousetableselect         = inttemp2
+mousexdelta         = inttemp3
+mouseydelta         = inttemp4
+lastSWCHA         = inttemp6
 
-   ;  0000YyXx st mouse
-   ;  0000xyXY amiga mouse
+         ; 0000YyXx st mouse
+         ; 0000xyXY amiga mouse
 
-   lda #$ff
-   sta lastSWCHA
+         lda #$ff
+         sta lastSWCHA
 
-   ldy port0control
+         ldy port0control
 
-   lda #%00010000
-   cpy #9 ; AMIGA?
-   bne skipamigabitsfix0
-   lda #0
+         lda #%00010000
+         cpy #9 ; AMIGA?
+         bne skipamigabitsfix0
+         lda #0
 skipamigabitsfix0
-   sta mousetableselect
-   ifconst DRIVINGBOOST
-   cpy #6  ; DRIVING?
-   bne skipdriving0setup
-     ; swap mousex0 and mousey0. mousex seen by the 7800basic program
-     ; trails the actual mousex0, so we can smoothly interpolate toward
-     ; the actual position. This actual position is stored in mousey0 
-     ; after the driver has run.
-     ldx mousex0
-     lda mousey0
-     stx mousey0
-     sta mousex0
+         sta mousetableselect
+         ifconst DRIVINGBOOST
+             cpy #6 ; DRIVING?
+             bne skipdriving0setup
+             ; swap mousex0 and mousey0. mousex seen by the 7800basic program
+             ; trails the actual mousex0, so we can smoothly interpolate toward
+             ; the actual position. This actual position is stored in mousey0 
+             ; after the driver has run.
+             ldx mousex0
+             lda mousey0
+             stx mousey0
+             sta mousex0
 skipdriving0setup
-   endif ; DRIVINGBOOST
+         endif ; DRIVINGBOOST
 
-   lda #0
-   sta mousexdelta
-   sta mouseydelta
+         lda #0
+         sta mousexdelta
+         sta mouseydelta
 
- ifnconst MOUSETIME
-   ifnconst MOUSEXONLY
-     lda #180 ; minimum for x+y
-   else
-     lda #100 ; minimum for just x
-   endif
- else
-   lda #MOUSETIME
- endif
-   jsr SETTIM64T ; INTIM is in Y
+         ifnconst MOUSETIME
+             ifnconst MOUSEXONLY
+                 lda #180 ; minimum for x+y
+             else
+                 lda #100 ; minimum for just x
+             endif
+         else
+             lda #MOUSETIME
+         endif
+         jsr SETTIM64T ; INTIM is in Y
 
 mouse0updateloop
-   lda SWCHA
-   asr #%11110000 ; Undocumented. A = A & #IMM, then LSR A.
-   cmp lastSWCHA
-   beq mouse0loopcondition
-   sta lastSWCHA
-   lsr
-   lsr
-   lsr
+         lda SWCHA
+         asr #%11110000 ; Undocumented. A = A & #IMM, then LSR A.
+         cmp lastSWCHA
+         beq mouse0loopcondition
+         sta lastSWCHA
+         lsr
+         lsr
+         lsr
 
-   ora mousetableselect ; atari/amiga decoding table selection
+         ora mousetableselect ; atari/amiga decoding table selection
 
-   ; st mice encode on different bits/joystick-lines than amiga mice...
-   ;  0000YyXx st mouse
-   ;  0000xyXY amiga mouse
-   ; ...so can shuffle the amiga bits to reuse the st driver.
-   tay
-   lax amigatoataribits,y
+         ; st mice encode on different bits/joystick-lines than amiga mice...
+         ; 0000YyXx st mouse
+         ; 0000xyXY amiga mouse
+         ; ...so can shuffle the amiga bits to reuse the st driver.
+         tay
+         lax amigatoataribits,y
 
- ifnconst MOUSEXONLY
-     ; first the Y...
-     and #%00001100
-     ora mousecodey0
-     tay
-     lda rotationalcompare,y
-     clc 
-     adc mouseydelta
-     sta mouseydelta
-     tya
-     lsr
-     lsr
-     sta mousecodey0
-     txa
-      ; ...then the X...
-     and #%00000011
-     tax
- endif ; !MOUSEXONLY
+         ifnconst MOUSEXONLY
+             ; first the Y...
+             and #%00001100
+             ora mousecodey0
+             tay
+             lda rotationalcompare,y
+             clc 
+             adc mouseydelta
+             sta mouseydelta
+             tya
+             lsr
+             lsr
+             sta mousecodey0
+             txa
+             ; ...then the X...
+             and #%00000011
+             tax
+         endif ; !MOUSEXONLY
 
-   asl
-   asl
-   ora mousecodex0
-   tay
-   lda rotationalcompare,y
-   adc mousexdelta ; carry was clear by previous ASL
-   sta mousexdelta
-   stx mousecodex0
+         asl
+         asl
+         ora mousecodex0
+         tay
+         lda rotationalcompare,y
+         adc mousexdelta ; carry was clear by previous ASL
+         sta mousexdelta
+         stx mousecodex0
 mouse0loopcondition
-   lda TIMINT
-   bpl mouse0updateloop
+         lda TIMINT
+         bpl mouse0updateloop
 
-   ; *** adapt to selected device resolution. 
-   ldx port0control
+         ; *** adapt to selected device resolution. 
+         ldx port0control
 
- ifconst PRECISIONMOUSING
-   ldy port0resolution
-   bne mouse0halveddone
-     cpx #6 ; half-resolution is no good for driving wheels
-     beq mouse0halveddone 
-     ; resolution=0 is half mouse resolution, necessary for precision 
-     ; mousing on a 160x240 screen with a 1000 dpi mouse.
+         ifconst PRECISIONMOUSING
+             ldy port0resolution
+             bne mouse0halveddone
+             cpx #6 ; half-resolution is no good for driving wheels
+             beq mouse0halveddone 
+             ; resolution=0 is half mouse resolution, necessary for precision 
+             ; mousing on a 160x240 screen with a 1000 dpi mouse.
 
-     lda mousexdelta
-     cmp #$80
-     ror ; do a signed divide by 2.
-     clc
-     adc mousex0
-     sta mousex0
-  ifnconst MOUSEXONLY
-     lda mouseydelta
-     clc
-     adc mousey0
-     sta mousey0
-  endif
-   ; at half resolution we just exit after updating x and y
-   jmp LLRET0
+             lda mousexdelta
+             cmp #$80
+             ror ; do a signed divide by 2.
+             clc
+             adc mousex0
+             sta mousex0
+             ifnconst MOUSEXONLY
+                 lda mouseydelta
+                 clc
+                 adc mousey0
+                 sta mousey0
+             endif
+             ; at half resolution we just exit after updating x and y
+             jmp LLRET0
 mouse0halveddone
- endif ; PRECISIONMOUSING
+         endif ; PRECISIONMOUSING
 
-  ifnconst MOUSEXONLY
-     asl mouseydelta ; *2 because Y resolution is finer
-     ldy port0resolution
-     dey
-     lda #0 
+         ifnconst MOUSEXONLY
+             asl mouseydelta ; *2 because Y resolution is finer
+             ldy port0resolution
+             dey
+             lda #0 
 mousey0resolutionfix
-     clc
-     adc mouseydelta 
-     dey
-     bpl mousey0resolutionfix
-     clc
-     adc mousey0
-     sta mousey0
-  endif ; MOUSEXONLY
+             clc
+             adc mouseydelta 
+             dey
+             bpl mousey0resolutionfix
+             clc
+             adc mousey0
+             sta mousey0
+         endif ; MOUSEXONLY
 
-   ldy port0resolution
-   dey
-   lda #0
+         ldy port0resolution
+         dey
+         lda #0
 mousex0resolutionfix
-   clc
-   adc mousexdelta 
-   dey
-   bpl mousex0resolutionfix
- ifnconst DRIVINGBOOST
-    clc
-    adc mousex0
-    sta mousex0
- else
-    cpx #6
-    beq carryonmouse0boost
-       clc
-       adc mousex0
-       sta mousex0
-       jmp LLRET0
+         clc
+         adc mousexdelta 
+         dey
+         bpl mousex0resolutionfix
+         ifnconst DRIVINGBOOST
+             clc
+             adc mousex0
+             sta mousex0
+         else
+             cpx #6
+             beq carryonmouse0boost
+             clc
+             adc mousex0
+             sta mousex0
+             jmp LLRET0
 carryonmouse0boost
-    sta mousexdelta
-    clc
-    adc mousecodey0
-    sta mousecodey0
-    clc
-    adc mousex0 
-    tay         ; save the target X
-    adc mousey0 ; average in the smoothly-trailing X
-    ror         
-    sta mousex0 ; mousex0 now has the smoothly trailing X
-    sty mousey0 ; and mousey0 has the the target X
+             sta mousexdelta
+             clc
+             adc mousecodey0
+             sta mousecodey0
+             clc
+             adc mousex0 
+             tay ; save the target X
+             adc mousey0 ; average in the smoothly-trailing X
+             ror 
+             sta mousex0 ; mousex0 now has the smoothly trailing X
+             sty mousey0 ; and mousey0 has the the target X
 
-     ; check to see if the coordinate wrapped. If so, undo the averaging code.
-     ; A has mousex0, the smoothly trailing X
-     sbc mousey0 ; less the target X
-     bpl skipabsolutedrive0
-     eor #$ff
+             ; check to see if the coordinate wrapped. If so, undo the averaging code.
+             ; A has mousex0, the smoothly trailing X
+             sbc mousey0 ; less the target X
+             bpl skipabsolutedrive0
+             eor #$ff
 skipabsolutedrive0
-     cmp #64 ; just an unreasonably large change
-     bcc skipdrivewrapfix0
-     sty mousex0 ; if X wrapped, we catch the trailing X up to the target X
+             cmp #64 ; just an unreasonably large change
+             bcc skipdrivewrapfix0
+             sty mousex0 ; if X wrapped, we catch the trailing X up to the target X
 skipdrivewrapfix0
 
-       ; get rid of the tweening if the distance travelled was very small
-       lda mousexdelta
-       cmp port0resolution
-       bcs skipbetweenfix0
-           lda mousex0
-           sta mousey0
+             ; get rid of the tweening if the distance travelled was very small
+             lda mousexdelta
+             cmp port0resolution
+             bcs skipbetweenfix0
+             lda mousex0
+             sta mousey0
 skipbetweenfix0
 
 drivingboostreductioncheck0
-       ; The below code amounts to mousecodey0=mousecodey0-(mousecodey0/8)
-       ; +ve mousecodey0 is converted to -ve to do the calculation, and then
-       ; negated again because truncation during BCD math results in 
-       ; differing magnitudes, depending if the value is  +ve or -ve.
+             ; The below code amounts to mousecodey0=mousecodey0-(mousecodey0/8)
+             ; +ve mousecodey0 is converted to -ve to do the calculation, and then
+             ; negated again because truncation during BCD math results in 
+             ; differing magnitudes, depending if the value is +ve or -ve.
 driving0fix
-       lax mousecodey0
-       cmp #$80
-       bcs driving0skipnegate1
-         eor #$FF
-         adc #1 
-         sta mousecodey0
+             lax mousecodey0
+             cmp #$80
+             bcs driving0skipnegate1
+             eor #$FF
+             adc #1 
+             sta mousecodey0
 driving0skipnegate1
-       cmp #$80
-       ror
-       cmp #$80
-       ror
-       cmp #$80
-       ror
-       sta inttemp1
-       lda mousecodey0
-       sec
-       sbc inttemp1
-       cpx #$80
-       bcs driving0skipnegate2
-         eor #$FF
-         adc #1 
+             cmp #$80
+             ror
+             cmp #$80
+             ror
+             cmp #$80
+             ror
+             sta inttemp1
+             lda mousecodey0
+             sec
+             sbc inttemp1
+             cpx #$80
+             bcs driving0skipnegate2
+             eor #$FF
+             adc #1 
 driving0skipnegate2
-       sta mousecodey0
+             sta mousecodey0
 drivingboostdone0
- endif ; DRIVINGBOOST
+         endif ; DRIVINGBOOST
 
-   jmp LLRET0
+         jmp LLRET0
 
- endif ; MOUSE0SUPPORT
+     endif ; MOUSE0SUPPORT
 
 mouse1update
- ifconst MOUSE1SUPPORT
+     ifconst MOUSE1SUPPORT
 
-mousetableselect   = inttemp2
-mousexdelta        = inttemp3
-mouseydelta        = inttemp4
-lastSWCHA          = inttemp6
+mousetableselect         = inttemp2
+mousexdelta         = inttemp3
+mouseydelta         = inttemp4
+lastSWCHA         = inttemp6
 
-   ;  0000YyXx st mouse
-   ;  0000xyXY amiga mouse
+         ; 0000YyXx st mouse
+         ; 0000xyXY amiga mouse
 
-   lda #$ff
-   sta lastSWCHA
+         lda #$ff
+         sta lastSWCHA
 
-   ldy port1control
+         ldy port1control
 
-   lda #%00010000
-   cpy #9 ; AMIGA?
-   bne skipamigabitsfix1
-   lda #0
+         lda #%00010000
+         cpy #9 ; AMIGA?
+         bne skipamigabitsfix1
+         lda #0
 skipamigabitsfix1
-   sta mousetableselect
-   ifconst DRIVINGBOOST
-   cpy #6  ; DRIVING?
-   bne skipdriving1setup
-     ; swap mousex1 and mousey1. mousex seen by the 7800basic program
-     ; trails the actual mousex1, so we can smoothly interpolate toward
-     ; the actual position. This actual position is stored in mousey1 
-     ; after the driver has run.
-     ldx mousex1
-     lda mousey1
-     stx mousey1
-     sta mousex1
+         sta mousetableselect
+         ifconst DRIVINGBOOST
+             cpy #6 ; DRIVING?
+             bne skipdriving1setup
+             ; swap mousex1 and mousey1. mousex seen by the 7800basic program
+             ; trails the actual mousex1, so we can smoothly interpolate toward
+             ; the actual position. This actual position is stored in mousey1 
+             ; after the driver has run.
+             ldx mousex1
+             lda mousey1
+             stx mousey1
+             sta mousex1
 skipdriving1setup
-   endif ; DRIVINGBOOST
+         endif ; DRIVINGBOOST
 
-   lda #0
-   sta mousexdelta
-   sta mouseydelta
+         lda #0
+         sta mousexdelta
+         sta mouseydelta
 
- ifnconst MOUSETIME
-   ifnconst MOUSEXONLY
-     lda #180 ; minimum for x+y
-   else
-     lda #100 ; minimum for just x
-   endif
- else
-   lda #MOUSETIME
- endif
-   jsr SETTIM64T ; INTIM is in Y
+         ifnconst MOUSETIME
+             ifnconst MOUSEXONLY
+                 lda #180 ; minimum for x+y
+             else
+                 lda #100 ; minimum for just x
+             endif
+         else
+             lda #MOUSETIME
+         endif
+         jsr SETTIM64T ; INTIM is in Y
 
 mouse1updateloop
-   lda SWCHA
-   and #%00001111 
-   cmp lastSWCHA
-   beq mouse1loopcondition
-   sta lastSWCHA
+         lda SWCHA
+         and #%00001111 
+         cmp lastSWCHA
+         beq mouse1loopcondition
+         sta lastSWCHA
 
-   ora mousetableselect ; atari/amiga decoding table selection
+         ora mousetableselect ; atari/amiga decoding table selection
 
-   ; st mice encode on different bits/joystick-lines than amiga mice...
-   ;  0000YyXx st mouse
-   ;  0000xyXY amiga mouse
-   ; ...so can shuffle the amiga bits to reuse the st driver.
-   tay
-   lax amigatoataribits,y
+         ; st mice encode on different bits/joystick-lines than amiga mice...
+         ; 0000YyXx st mouse
+         ; 0000xyXY amiga mouse
+         ; ...so can shuffle the amiga bits to reuse the st driver.
+         tay
+         lax amigatoataribits,y
 
- ifnconst MOUSEXONLY
-     ; first the Y...
-     and #%00001100
-     ora mousecodey1
-     tay
-     lda rotationalcompare,y
-     clc 
-     adc mouseydelta
-     sta mouseydelta
-     tya
-     lsr
-     lsr
-     sta mousecodey1
-     txa
-      ; ...then the X...
-     and #%00000011
-     tax
- endif ; !MOUSEXONLY
+         ifnconst MOUSEXONLY
+             ; first the Y...
+             and #%00001100
+             ora mousecodey1
+             tay
+             lda rotationalcompare,y
+             clc 
+             adc mouseydelta
+             sta mouseydelta
+             tya
+             lsr
+             lsr
+             sta mousecodey1
+             txa
+             ; ...then the X...
+             and #%00000011
+             tax
+         endif ; !MOUSEXONLY
 
-   asl
-   asl
-   ora mousecodex1
-   tay
-   lda rotationalcompare,y
-   adc mousexdelta ; carry was clear by previous ASL
-   sta mousexdelta
-   stx mousecodex1
+         asl
+         asl
+         ora mousecodex1
+         tay
+         lda rotationalcompare,y
+         adc mousexdelta ; carry was clear by previous ASL
+         sta mousexdelta
+         stx mousecodex1
 mouse1loopcondition
-   lda TIMINT
-   bpl mouse1updateloop
+         lda TIMINT
+         bpl mouse1updateloop
 
-   ; *** adapt to selected device resolution. 
-   ldx port1control
+         ; *** adapt to selected device resolution. 
+         ldx port1control
 
- ifconst PRECISIONMOUSING
-   ldy port1resolution
-   bne mouse1halveddone
-     cpx #6 ; half-resolution is no good for driving wheels
-     beq mouse1halveddone 
-     ; resolution=0 is half mouse resolution, necessary for precision 
-     ; mousing on a 160x240 screen with a 1000 dpi mouse.
+         ifconst PRECISIONMOUSING
+             ldy port1resolution
+             bne mouse1halveddone
+             cpx #6 ; half-resolution is no good for driving wheels
+             beq mouse1halveddone 
+             ; resolution=0 is half mouse resolution, necessary for precision 
+             ; mousing on a 160x240 screen with a 1000 dpi mouse.
 
-     lda mousexdelta
-     cmp #$80
-     ror ; do a signed divide by 2.
-     clc
-     adc mousex1
-     sta mousex1
-  ifnconst MOUSEXONLY
-     lda mouseydelta
-     clc
-     adc mousey1
-     sta mousey1
-  endif
-   ; at half resolution we just exit after updating x and y
-   jmp LLRET1
+             lda mousexdelta
+             cmp #$80
+             ror ; do a signed divide by 2.
+             clc
+             adc mousex1
+             sta mousex1
+             ifnconst MOUSEXONLY
+                 lda mouseydelta
+                 clc
+                 adc mousey1
+                 sta mousey1
+             endif
+             ; at half resolution we just exit after updating x and y
+             jmp LLRET1
 mouse1halveddone
- endif ; PRECISIONMOUSING
+         endif ; PRECISIONMOUSING
 
-  ifnconst MOUSEXONLY
-     asl mouseydelta ; *2 because Y resolution is finer
-     ldy port1resolution
-     dey
-     lda #0 
+         ifnconst MOUSEXONLY
+             asl mouseydelta ; *2 because Y resolution is finer
+             ldy port1resolution
+             dey
+             lda #0 
 mousey1resolutionfix
-     clc
-     adc mouseydelta 
-     dey
-     bpl mousey1resolutionfix
-     clc
-     adc mousey1
-     sta mousey1
-  endif ; MOUSEXONLY
+             clc
+             adc mouseydelta 
+             dey
+             bpl mousey1resolutionfix
+             clc
+             adc mousey1
+             sta mousey1
+         endif ; MOUSEXONLY
 
-   ldy port1resolution
-   dey
-   lda #0
+         ldy port1resolution
+         dey
+         lda #0
 mousex1resolutionfix
-   clc
-   adc mousexdelta 
-   dey
-   bpl mousex1resolutionfix
- ifnconst DRIVINGBOOST
-    clc
-    adc mousex1
-    sta mousex1
- else
-    cpx #6
-    beq carryonmouse1boost
-       clc
-       adc mousex1
-       sta mousex1
-       jmp LLRET1
+         clc
+         adc mousexdelta 
+         dey
+         bpl mousex1resolutionfix
+         ifnconst DRIVINGBOOST
+             clc
+             adc mousex1
+             sta mousex1
+         else
+             cpx #6
+             beq carryonmouse1boost
+             clc
+             adc mousex1
+             sta mousex1
+             jmp LLRET1
 carryonmouse1boost
-    sta mousexdelta
-    clc
-    adc mousecodey1
-    sta mousecodey1
-    clc
-    adc mousex1
-    tay         ; save the target X
-    adc mousey1 ; average in the smoothly-trailing X
-    ror         
-    sta mousex1 ; mousex0 now has the smoothly trailing X
-    sty mousey1 ; and mousey0 has the the target X
+             sta mousexdelta
+             clc
+             adc mousecodey1
+             sta mousecodey1
+             clc
+             adc mousex1
+             tay ; save the target X
+             adc mousey1 ; average in the smoothly-trailing X
+             ror 
+             sta mousex1 ; mousex0 now has the smoothly trailing X
+             sty mousey1 ; and mousey0 has the the target X
 
-     ; check to see if the coordinate wrapped. If so, undo the averaging code.
-     ; A has mousex1, the smoothly trailing X
-     sbc mousey1 ; less the target X
-     bpl skipabsolutedrive1
-     eor #$ff
+             ; check to see if the coordinate wrapped. If so, undo the averaging code.
+             ; A has mousex1, the smoothly trailing X
+             sbc mousey1 ; less the target X
+             bpl skipabsolutedrive1
+             eor #$ff
 skipabsolutedrive1
-     cmp #64 ; just an unreasonably large change
-     bcc skipdrivewrapfix1
-     sty mousex1 ; if X wrapped, we catch the trailing X up to the target X
+             cmp #64 ; just an unreasonably large change
+             bcc skipdrivewrapfix1
+             sty mousex1 ; if X wrapped, we catch the trailing X up to the target X
 skipdrivewrapfix1
 
-       ; get rid of the tweening if the distance travelled was very small
-       lda mousexdelta
-       cmp port1resolution
-       bcs skipbetweenfix1
-           lda mousex1
-           sta mousey1
+             ; get rid of the tweening if the distance travelled was very small
+             lda mousexdelta
+             cmp port1resolution
+             bcs skipbetweenfix1
+             lda mousex1
+             sta mousey1
 skipbetweenfix1
 
 drivingboostreductioncheck1
-       ; The below code amounts to mousecodey0=mousecodey0-(mousecodey0/8)
-       ; +ve mousecodey0 is converted to -ve to do the calculation, and then
-       ; negated again because truncation during BCD math results in 
-       ; differing magnitudes, depending if the value is  +ve or -ve.
+             ; The below code amounts to mousecodey0=mousecodey0-(mousecodey0/8)
+             ; +ve mousecodey0 is converted to -ve to do the calculation, and then
+             ; negated again because truncation during BCD math results in 
+             ; differing magnitudes, depending if the value is +ve or -ve.
 driving1fix
-       lax mousecodey1
-       cmp #$80
-       bcs driving0skipnegate1
-         eor #$FF
-         adc #1 
-         sta mousecodey1
+             lax mousecodey1
+             cmp #$80
+             bcs driving0skipnegate1
+             eor #$FF
+             adc #1 
+             sta mousecodey1
 driving0skipnegate1
-       cmp #$80
-       ror
-       cmp #$80
-       ror
-       cmp #$80
-       ror
-       sta inttemp1
-       lda mousecodey1
-       sec
-       sbc inttemp1
-       cpx #$80
-       bcs driving1skipnegate2
-         eor #$FF
-         adc #1 
+             cmp #$80
+             ror
+             cmp #$80
+             ror
+             cmp #$80
+             ror
+             sta inttemp1
+             lda mousecodey1
+             sec
+             sbc inttemp1
+             cpx #$80
+             bcs driving1skipnegate2
+             eor #$FF
+             adc #1 
 driving1skipnegate2
-       sta mousecodey1
+             sta mousecodey1
 drivingboostdone1
- endif ; DRIVINGBOOST
+         endif ; DRIVINGBOOST
 
-   jmp LLRET1
+         jmp LLRET1
 
- endif ; MOUSE1SUPPORT
+     endif ; MOUSE1SUPPORT
 
 
 trakball0update
- ifconst TRAKBALL0SUPPORT
- ifnconst TRAKTIME
-   ifnconst TRAKXONLY
-     lda #180 ; minimum for x+y
-   else;  !TRAKXONLY
-     lda #100 ; minimum for just x
-   endif; !TRAKXONLY
- else ; !TRAKTIME
-   lda #TRAKTIME
- endif ; !TRAKTIME
-   jsr SETTIM64T ; INTIM is in Y
-   ldx #0
- ifnconst TRAKXONLY
-   ldy #0
- endif ;  TRAKXONLY
+     ifconst TRAKBALL0SUPPORT
+         ifnconst TRAKTIME
+             ifnconst TRAKXONLY
+                 lda #180 ; minimum for x+y
+             else; !TRAKXONLY
+                 lda #100 ; minimum for just x
+             endif; !TRAKXONLY
+         else ; !TRAKTIME
+             lda #TRAKTIME
+         endif ; !TRAKTIME
+         jsr SETTIM64T ; INTIM is in Y
+         ldx #0
+         ifnconst TRAKXONLY
+             ldy #0
+         endif ; TRAKXONLY
 trakball0updateloop
-   lda SWCHA
-   and #%00110000
-   cmp trakballcodex0
-   sta trakballcodex0
-   beq trakball0movementXdone
-   and #%00010000
-   beq trakball0negativeX
+         lda SWCHA
+         and #%00110000
+         cmp trakballcodex0
+         sta trakballcodex0
+         beq trakball0movementXdone
+         and #%00010000
+         beq trakball0negativeX
 trakball0positiveX
-                              ;(2 from beq)
-   inx                        ; 2
-   jmp trakball0movementXdone ; 3
+         ;(2 from beq)
+         inx ; 2
+         jmp trakball0movementXdone ; 3
 trakball0negativeX
-                              ;(3 from beq)
-   dex                        ; 2
-   nop                        ; 2
+         ;(3 from beq)
+         dex ; 2
+         nop ; 2
 trakball0movementXdone
 
- ifnconst TRAKXONLY
-      lda SWCHA
-      and #%11000000
-      cmp trakballcodey0
-      sta trakballcodey0
-      beq trakball0movementYdone
-      and #%01000000
-      beq trakball0negativeY
+         ifnconst TRAKXONLY
+             lda SWCHA
+             and #%11000000
+             cmp trakballcodey0
+             sta trakballcodey0
+             beq trakball0movementYdone
+             and #%01000000
+             beq trakball0negativeY
 trakball0positiveY
-                                 ;(2 from beq)
-      iny                        ; 2
-      jmp trakball0movementYdone ; 3
+             ;(2 from beq)
+             iny ; 2
+             jmp trakball0movementYdone ; 3
 trakball0negativeY
-                                 ;(3 from beq)
-      dey                        ; 2
-      nop                        ; 2
+             ;(3 from beq)
+             dey ; 2
+             nop ; 2
 trakball0movementYdone
- endif ; !TRAKXONLY
+         endif ; !TRAKXONLY
 
-   lda TIMINT
-   bpl trakball0updateloop
-   lda #0
-   cpx #0
-   beq trakball0skipXadjust
-   clc
+         lda TIMINT
+         bpl trakball0updateloop
+         lda #0
+         cpx #0
+         beq trakball0skipXadjust
+         clc
 trakball0Xloop
-   adc port0resolution
-   dex
-   bne trakball0Xloop
-   clc
-   adc trakballx0
-   sta trakballx0
+         adc port0resolution
+         dex
+         bne trakball0Xloop
+         clc
+         adc trakballx0
+         sta trakballx0
 trakball0skipXadjust
- ifnconst TRAKXONLY
-   lda #0
-   cpy #0
-   beq trakball0skipYadjust
-   clc
+         ifnconst TRAKXONLY
+             lda #0
+             cpy #0
+             beq trakball0skipYadjust
+             clc
 trakball0yloop
-   adc port0resolution
-   dey
-   bne trakball0yloop
-   clc
-   adc trakbally0
-   sta trakbally0
+             adc port0resolution
+             dey
+             bne trakball0yloop
+             clc
+             adc trakbally0
+             sta trakbally0
 trakball0skipYadjust
- endif ; !TRAKXONLY
+         endif ; !TRAKXONLY
 
-  jmp LLRET0
- endif
+         jmp LLRET0
+     endif
 
 
 
 trakball1update
- ifconst TRAKBALL1SUPPORT
- ifnconst TRAKTIME
-   ifnconst TRAKXONLY
-     lda #180 ; minimum for x+y
-   else;  !TRAKXONLY
-     lda #100 ; minimum for just x
-   endif; !TRAKXONLY
- else ; !TRAKTIME
-   lda #TRAKTIME
- endif ; !TRAKTIME
-   jsr SETTIM64T ; INTIM is in Y
-   ldx #0
- ifnconst TRAKXONLY
-   ldy #0
- endif ;  TRAKXONLY
+     ifconst TRAKBALL1SUPPORT
+         ifnconst TRAKTIME
+             ifnconst TRAKXONLY
+                 lda #180 ; minimum for x+y
+             else; !TRAKXONLY
+                 lda #100 ; minimum for just x
+             endif; !TRAKXONLY
+         else ; !TRAKTIME
+             lda #TRAKTIME
+         endif ; !TRAKTIME
+         jsr SETTIM64T ; INTIM is in Y
+         ldx #0
+         ifnconst TRAKXONLY
+             ldy #0
+         endif ; TRAKXONLY
 trakball1updateloop
-   lda SWCHA
-   and #%00000011
-   cmp trakballcodex1
-   sta trakballcodex1
-   beq trakball1movementXdone
-   and #%00000001
-   beq trakball1negativeX
+         lda SWCHA
+         and #%00000011
+         cmp trakballcodex1
+         sta trakballcodex1
+         beq trakball1movementXdone
+         and #%00000001
+         beq trakball1negativeX
 trakball1positiveX
-                              ;(2 from beq)
-   inx                        ; 2
-   jmp trakball1movementXdone ; 3
+         ;(2 from beq)
+         inx ; 2
+         jmp trakball1movementXdone ; 3
 trakball1negativeX
-                              ;(3 from beq)
-   dex                        ; 2
-   nop                        ; 2
+         ;(3 from beq)
+         dex ; 2
+         nop ; 2
 trakball1movementXdone
 
- ifnconst TRAKXONLY
-      lda SWCHA
-      and #%00001100
-      cmp trakballcodey1
-      sta trakballcodey1
-      beq trakball1movementYdone
-      and #%00000100
-      beq trakball1negativeY
+         ifnconst TRAKXONLY
+             lda SWCHA
+             and #%00001100
+             cmp trakballcodey1
+             sta trakballcodey1
+             beq trakball1movementYdone
+             and #%00000100
+             beq trakball1negativeY
 trakball1positiveY
-                                 ;(2 from beq)
-      iny                        ; 2
-      jmp trakball1movementYdone ; 3
+             ;(2 from beq)
+             iny ; 2
+             jmp trakball1movementYdone ; 3
 trakball1negativeY
-                                 ;(3 from beq)
-      dey                        ; 2
-      nop                        ; 2
+             ;(3 from beq)
+             dey ; 2
+             nop ; 2
 trakball1movementYdone
- endif ; !TRAKXONLY
+         endif ; !TRAKXONLY
 
-   lda TIMINT
-   bpl trakball1updateloop
-   lda #0
-   cpx #0
-   beq trakball1skipXadjust
-   clc
+         lda TIMINT
+         bpl trakball1updateloop
+         lda #0
+         cpx #0
+         beq trakball1skipXadjust
+         clc
 trakball1Xloop
-   adc port1resolution
-   dex
-   bne trakball1Xloop
-   clc
-   adc trakballx1
-   sta trakballx1
+         adc port1resolution
+         dex
+         bne trakball1Xloop
+         clc
+         adc trakballx1
+         sta trakballx1
 trakball1skipXadjust
- ifnconst TRAKXONLY
-   lda #0
-   cpy #0
-   beq trakball1skipYadjust
-   clc
+         ifnconst TRAKXONLY
+             lda #0
+             cpy #0
+             beq trakball1skipYadjust
+             clc
 trakball1yloop
-   adc port1resolution
-   dey
-   bne trakball1yloop
-   clc
-   adc trakbally1
-   sta trakbally1
+             adc port1resolution
+             dey
+             bne trakball1yloop
+             clc
+             adc trakbally1
+             sta trakbally1
 trakball1skipYadjust
- endif ; !TRAKXONLY
+         endif ; !TRAKXONLY
 
-  jmp LLRET1
- endif
+         jmp LLRET1
+     endif
 
 
 paddleport0update
- ifconst PADDLE0SUPPORT
-  lda #6
-  sta VBLANK ; start charging the paddle caps
-  lda #0 ; use PADDLE timing
-  jsr SETTIM64T ; INTIM is in Y
+     ifconst PADDLE0SUPPORT
+         lda #6
+         sta VBLANK ; start charging the paddle caps
+         lda #0 ; use PADDLE timing
+         jsr SETTIM64T ; INTIM is in Y
 
 paddleport0updateloop
-  lda INPT0
-  bmi skippaddle0setposition
-  sty paddleposition0
-skippaddle0setposition  
-  ifconst TWOPADDLESUPPORT
-     lda INPT1
-     bmi skippaddle1setposition
-     sty paddleposition1
-skippaddle1setposition  
-  endif
-  ldy INTIM
-  cpy #TIMEOFFSET
-  bcs paddleport0updateloop
+         lda INPT0
+         bmi skippaddle0setposition
+         sty paddleposition0
+skippaddle0setposition         
+         ifconst TWOPADDLESUPPORT
+             lda INPT1
+             bmi skippaddle1setposition
+             sty paddleposition1
+skippaddle1setposition             
+         endif
+         ldy INTIM
+         cpy #TIMEOFFSET
+         bcs paddleport0updateloop
 
-     lda #%10000110
-     sta VBLANK ; dump paddles to ground... this may not be great for genesis controllers
-     sec
-     lda paddleposition0
-     sbc #TIMEOFFSET
- ifconst PADDLESCALEX2
-     asl
- endif
+         lda #%10000110
+         sta VBLANK ; dump paddles to ground... this may not be great for genesis controllers
+         sec
+         lda paddleposition0
+         sbc #TIMEOFFSET
+         ifconst PADDLESCALEX2
+             asl
+         endif
 
- ifnconst PADDLESMOOTHINGOFF
-     clc
-     adc paddleprevious0
-     ror
-     sta paddleprevious0
- endif
+         ifnconst PADDLESMOOTHINGOFF
+             clc
+             adc paddleprevious0
+             ror
+             sta paddleprevious0
+         endif
 
-     sta paddleposition0
+         sta paddleposition0
 
- ifconst TWOPADDLESUPPORT
-     sec
-     lda paddleposition1
-     sbc #TIMEOFFSET
-     ifconst PADDLESCALEX2
-         asl
+         ifconst TWOPADDLESUPPORT
+             sec
+             lda paddleposition1
+             sbc #TIMEOFFSET
+             ifconst PADDLESCALEX2
+                 asl
+             endif
+
+             ifnconst PADDLESMOOTHINGOFF
+                 clc
+                 adc paddleprevious1
+                 ror
+                 sta paddleprevious1
+             endif
+             sta paddleposition1
+         endif ; TWOPADDLESUPPORT
+
+         jmp LLRET0
      endif
-
-     ifnconst PADDLESMOOTHINGOFF
-         clc
-         adc paddleprevious1
-         ror
-         sta paddleprevious1
-     endif
-     sta paddleposition1
- endif ; TWOPADDLESUPPORT
-
-  jmp LLRET0
- endif
 
 paddleport1update
- ifconst PADDLE1SUPPORT
-  lda #6
-  sta VBLANK ; start charging the paddle caps
+     ifconst PADDLE1SUPPORT
+         lda #6
+         sta VBLANK ; start charging the paddle caps
 
-  lda #0 ; use PADDLE timing
-  jsr SETTIM64T ; INTIM is in Y
+         lda #0 ; use PADDLE timing
+         jsr SETTIM64T ; INTIM is in Y
 
 paddleport1updateloop
-  lda INPT2
-  bmi skippaddle2setposition
-  sty paddleposition2
+         lda INPT2
+         bmi skippaddle2setposition
+         sty paddleposition2
 skippaddle2setposition
-  ifconst TWOPADDLESUPPORT
-     lda INPT3
-     bmi skippaddle3setposition
-     sty paddleposition3
+         ifconst TWOPADDLESUPPORT
+             lda INPT3
+             bmi skippaddle3setposition
+             sty paddleposition3
 skippaddle3setposition
-  endif
-  ldy INTIM
-  cpy #TIMEOFFSET
-  bcs paddleport1updateloop
+         endif
+         ldy INTIM
+         cpy #TIMEOFFSET
+         bcs paddleport1updateloop
 
-     lda #%10000110
-     sta VBLANK ; dump paddles to ground... this may not be great for genesis controllers
-     sec
-     lda paddleposition2
-     sbc #TIMEOFFSET
- ifconst PADDLESCALEX2
-     asl
- endif
+         lda #%10000110
+         sta VBLANK ; dump paddles to ground... this may not be great for genesis controllers
+         sec
+         lda paddleposition2
+         sbc #TIMEOFFSET
+         ifconst PADDLESCALEX2
+             asl
+         endif
 
- ifnconst PADDLESMOOTHINGOFF
-     clc
-     adc paddleprevious2
-     ror
-     sta paddleprevious2
- endif
+         ifnconst PADDLESMOOTHINGOFF
+             clc
+             adc paddleprevious2
+             ror
+             sta paddleprevious2
+         endif
 
-     sta paddleposition2
+         sta paddleposition2
 
- ifconst TWOPADDLESUPPORT
-     sec
-     lda paddleposition3
-     sbc #TIMEOFFSET
-     ifconst PADDLESCALEX2
+         ifconst TWOPADDLESUPPORT
+             sec
+             lda paddleposition3
+             sbc #TIMEOFFSET
+             ifconst PADDLESCALEX2
+                 asl
+             endif
+
+             ifnconst PADDLESMOOTHINGOFF
+                 clc
+                 adc paddleprevious3
+                 ror
+                 sta paddleprevious3
+             endif
+             sta paddleposition3
+         endif ; TWOPADDLESUPPORT
+
+         jmp LLRET1
+     endif
+
+
+paddlebuttonhandler     ; outside of conditional, for button-handler LUT
+     ifconst PADDLESUPPORT
+         ; x=0|1 for port, rather than paddle #. 
+         ; Only the first paddle button will integrate into "joy0fire" testing. If the
+         ; game wants to support 2 paddles, up to the game to instead test the 
+         ; joystick right+left directions instead.
+         lda SWCHA ; top of nibble is first paddle button
+         cpx #0 ; port 0?
+         beq skippaddleport2shift
+         asl ; shift second port to upper nibble
          asl
-     endif
-
-     ifnconst PADDLESMOOTHINGOFF
-         clc
-         adc paddleprevious3
-         ror
-         sta paddleprevious3
-     endif
-     sta paddleposition3
- endif ; TWOPADDLESUPPORT
-
-  jmp LLRET1
- endif
-
-
-paddlebuttonhandler ; outside of conditional, for button-handler LUT
- ifconst PADDLESUPPORT
- ; x=0|1 for port, rather than paddle #. 
- ; Only the first paddle button will integrate into "joy0fire" testing. If the
- ; game wants to support 2 paddles, up to the game to instead test the 
- ; joystick right+left directions instead.
-   lda SWCHA ; top of nibble is first paddle button
-   cpx #0 ; port 0?
-   beq skippaddleport2shift
-     asl ; shift second port to upper nibble
-     asl
-     asl
-     asl
+         asl
+         asl
 skippaddleport2shift
-   and #%10000000
-   eor #%10000000 ; invert
-   sta sINPT1,x
-   jmp buttonreadloopreturn
- endif ; PADDLESUPPORT
+         and #%10000000
+         eor #%10000000 ; invert
+         sta sINPT1,x
+         jmp buttonreadloopreturn
+     endif ; PADDLESUPPORT
 
-mousebuttonhandler ; outside of conditional, for button-handler LUT
- ifconst MOUSESUPPORT
-   ; stick the mouse buttons in the correct shadow register...
-   txa
-   asl
-   tay ; y=x*2
-   lda INPT4,x
-   eor #%10000000
-   lsr
-   sta sINPT1,x
+mousebuttonhandler     ; outside of conditional, for button-handler LUT
+     ifconst MOUSESUPPORT
+         ; stick the mouse buttons in the correct shadow register...
+         txa
+         asl
+         tay ; y=x*2
+         lda INPT4,x
+         eor #%10000000
+         lsr
+         sta sINPT1,x
 
-   lda INPT1,y
-   and #%10000000
-   eor #%10000000
-   ora sINPT1,x
-   sta sINPT1,x
-   jmp buttonreadloopreturn
- endif ; MOUSESUPPORT
+         lda INPT1,y
+         and #%10000000
+         eor #%10000000
+         ora sINPT1,x
+         sta sINPT1,x
+         jmp buttonreadloopreturn
+     endif ; MOUSESUPPORT
 
- ifconst KEYPADSUPPORT
-   ; ** select keypad rows 0 to 3 over 4 frames...
+     ifconst KEYPADSUPPORT
+         ; ** select keypad rows 0 to 3 over 4 frames...
 keypadrowselect
-   inc keypadcounter
-   ldy #0
-   lda port0control
-   cmp #7
-   bne skipport0val
-   iny ; y=y+1
+         inc keypadcounter
+         ldy #0
+         lda port0control
+         cmp #7
+         bne skipport0val
+         iny ; y=y+1
 skipport0val
-   lda port1control
-   cmp #7
-   bne skipport1val
-   iny
-   iny ; y=y+2
+         lda port1control
+         cmp #7
+         bne skipport1val
+         iny
+         iny ; y=y+2
 skipport1val
- cpy #0 
- beq exitkeypadrowselect 
-   lda keyrowdirectionmask,y
-   sta CTLSWA
-   tya
-   asl
-   asl
-   sta inttemp1
-   lda keypadcounter
-   and #3
-   ora inttemp1
-   tax
-   lda keyrowselectvalue,x
-   sta SWCHA
+         cpy #0 
+         beq exitkeypadrowselect 
+         lda keyrowdirectionmask,y
+         sta CTLSWA
+         tya
+         asl
+         asl
+         sta inttemp1
+         lda keypadcounter
+         and #3
+         ora inttemp1
+         tax
+         lda keyrowselectvalue,x
+         sta SWCHA
 exitkeypadrowselect
-   rts
+         rts
 
 keyrowdirectionmask
-    .byte #%00000000 ; 0 : port0=input  port1=input
-    .byte #%11110000 ; 1 : port0=output port1=input
-    .byte #%00001111 ; 2 : port0=input  port1=output
-    .byte #%11111111 ; 3 : port0=output port1=output
+         .byte #%00000000 ; 0 : port0=input port1=input
+         .byte #%11110000 ; 1 : port0=output port1=input
+         .byte #%00001111 ; 2 : port0=input port1=output
+         .byte #%11111111 ; 3 : port0=output port1=output
 
 keyrowselectvalue
-        .byte #%00000000, #%00000000, #%00000000, #%00000000 ; no row selected, all pins high, always
-        .byte #%11100000, #%11010000, #%10110000, #%01110000 ; p0 keypad in
-        .byte #%00001110, #%00001101, #%00001011, #%00000111 ; p1 keypad in
-        .byte #%11101110, #%11011101, #%10111011, #%01110111 ; p0+p1 keypads in
- endif;  KEYPADSUPPORT
+         .byte #%00000000, #%00000000, #%00000000, #%00000000 ; no row selected, all pins high, always
+         .byte #%11100000, #%11010000, #%10110000, #%01110000 ; p0 keypad in
+         .byte #%00001110, #%00001101, #%00001011, #%00000111 ; p1 keypad in
+         .byte #%11101110, #%11011101, #%10111011, #%01110111 ; p0+p1 keypads in
+     endif; KEYPADSUPPORT
 
- ifconst KEYPADSUPPORT
-   ; TODO - split into compile-time KEYPAD0SUPPORT and KEYPAD1SUPPORT
+     ifconst KEYPADSUPPORT
+         ; TODO - split into compile-time KEYPAD0SUPPORT and KEYPAD1SUPPORT
 keypadcolumnread
-   lda port0control
-   cmp #7
-   bne skipkeypadcolumnread0
-   lda keypadcounter
-   and #3
-   asl ; x2 because keypad variables are interleaved
-   tax
-   lda #0
-   sta keypadmatrix0a,x
-   lda INPT0
-   cmp #$80
-   rol keypadmatrix0a,x
-   lda INPT1
-   cmp #$80
-   rol keypadmatrix0a,x
-   lda INPT4
-   cmp #$80
-   rol keypadmatrix0a,x
-   lda keypadmatrix0a,x
-   eor #%00000111
-   sta keypadmatrix0a,x
-skipkeypadcolumnread0  
+         lda port0control
+         cmp #7
+         bne skipkeypadcolumnread0
+         lda keypadcounter
+         and #3
+         asl ; x2 because keypad variables are interleaved
+         tax
+         lda #0
+         sta keypadmatrix0a,x
+         lda INPT0
+         cmp #$80
+         rol keypadmatrix0a,x
+         lda INPT1
+         cmp #$80
+         rol keypadmatrix0a,x
+         lda INPT4
+         cmp #$80
+         rol keypadmatrix0a,x
+         lda keypadmatrix0a,x
+         eor #%00000111
+         sta keypadmatrix0a,x
+skipkeypadcolumnread0         
 
-   lda port1control
-   cmp #7
-   bne skipkeypadcolumnread1
-   lda keypadcounter
-   and #3
-   asl ; x2 because keypad variables are interleaved
-   tax
-   lda #0
-   sta keypadmatrix1a,x
-   rol keypadmatrix1a,x
-   lda INPT2
-   cmp #$80
-   rol keypadmatrix1a,x
-   lda INPT3
-   cmp #$80
-   rol keypadmatrix1a,x
-   lda INPT5
-   cmp #$80
-   rol keypadmatrix1a,x
-   lda keypadmatrix1a,x
-   eor #%00000111
-   sta keypadmatrix1a,x
+         lda port1control
+         cmp #7
+         bne skipkeypadcolumnread1
+         lda keypadcounter
+         and #3
+         asl ; x2 because keypad variables are interleaved
+         tax
+         lda #0
+         sta keypadmatrix1a,x
+         rol keypadmatrix1a,x
+         lda INPT2
+         cmp #$80
+         rol keypadmatrix1a,x
+         lda INPT3
+         cmp #$80
+         rol keypadmatrix1a,x
+         lda INPT5
+         cmp #$80
+         rol keypadmatrix1a,x
+         lda keypadmatrix1a,x
+         eor #%00000111
+         sta keypadmatrix1a,x
 skipkeypadcolumnread1
-   rts
- endif ; KEYPADSUPPORT
- 
+         rts
+     endif ; KEYPADSUPPORT
+     
 setportforinput
-   lda CTLSWAs
-   and allpinsinputlut,x
-   sta CTLSWAs
-   sta CTLSWA
-   rts
+     lda CTLSWAs
+     and allpinsinputlut,x
+     sta CTLSWAs
+     sta CTLSWA
+     rts
 
 allpinsinputlut
- .byte $0F, $F0
+     .byte $0F, $F0
 
 setonebuttonmode
-   lda #6 ; in case we're in unlocked-bios mode
-   sta VBLANK ; if we were on paddles, the line is grounded out.
-   lda #$14
-   sta CTLSWB ; set both 2-button disable bits to writable
-   lda CTLSWBs
-   ora thisjoy2buttonbit,x 
-   sta CTLSWBs
-   sta SWCHB ; turn off the 2-button disable bits
-   rts
+     lda #6 ; in case we're in unlocked-bios mode
+     sta VBLANK ; if we were on paddles, the line is grounded out.
+     lda #$14
+     sta CTLSWB ; set both 2-button disable bits to writable
+     lda CTLSWBs
+     ora thisjoy2buttonbit,x 
+     sta CTLSWBs
+     sta SWCHB ; turn off the 2-button disable bits
+     rts
 
 thisjoy2buttonbit
- .byte $04, $10
+     .byte $04, $10
 
 settwobuttonmode
-   lda #6 ; in case we're in unlocked-bios mode
-   sta VBLANK ; if we were on paddles, the line is grounded out.
-   lda #$14
-   sta CTLSWB ; set both 2-button disable bits to writable
-   lda CTLSWBs
-   and thisjoy2buttonmask,x
-   sta CTLSWBs
-   sta SWCHB
-   rts
- 
+     lda #6 ; in case we're in unlocked-bios mode
+     sta VBLANK ; if we were on paddles, the line is grounded out.
+     lda #$14
+     sta CTLSWB ; set both 2-button disable bits to writable
+     lda CTLSWBs
+     and thisjoy2buttonmask,x
+     sta CTLSWBs
+     sta SWCHB
+     rts
+     
 thisjoy2buttonmask
- .byte $fb, $ef
+     .byte $fb, $ef
 

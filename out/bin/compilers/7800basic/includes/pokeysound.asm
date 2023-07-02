@@ -285,6 +285,6 @@ nopokeydetected
 
 pokeysoundmoduleend
 
- echo "  (pokeysound module is using ",[(pokeysoundmoduleend-pokeysoundmodulestart)]d," bytes)"
+ echo "  (pokeysound module is using ",[(pokeysoundmoduleend-pokeysoundmodulestart)]d," bytes of rom)"
 
  endif

@@ -1,4 +1,4 @@
- ; Provided under the CC0 license. See the included LICENSE.txt for details.
+     ; Provided under the CC0 license. See the included LICENSE.txt for details.
 
 START
 start
@@ -8,26 +8,26 @@ start
      sei
      cld
 
-  ifnconst NOTIALOCK
-     lda #$07
-  else
-     lda #$06
-  endif
+     ifnconst NOTIALOCK
+         lda #$07
+     else
+         lda #$06
+     endif
      sta INPTCTRL ;lock 7800 into 7800 mode
      lda #$7F
      sta CTRL ;disable DMA
      lda #$00
      sta OFFSET
-  ifnconst NOTIALOCK
-     sta INPTCTRL
-     sta BACKGRND ; black default, in case a flash cart is using something else
-  endif
+     ifnconst NOTIALOCK
+         sta INPTCTRL
+         sta BACKGRND ; black default, in case a flash cart is using something else
+     endif
      ldx #$FF
      txs
 
      ;************** Clear Memory
 
- ; ** Clear 1800-27FF, pg0+pg1 memory.
+     ; ** Clear 1800-27FF, pg0+pg1 memory.
 ClearMemPages
      lda #0
      tay ; y=0
@@ -54,12 +54,12 @@ pndetectvblankstart
      bpl pndetectvblankstart ; if we're not in VBLANK, wait for it to start 
 pndetectvblankover
      lda MSTAT
-     bmi pndetectvblankover ;  then wait for it to be over
+     bmi pndetectvblankover ; then wait for it to be over
      ldy #$00
      ldx #$00
 pndetectvblankhappening
      lda MSTAT
-     bmi pndetectinvblank   ;  if VBLANK starts, exit our counting loop 
+     bmi pndetectinvblank ; if VBLANK starts, exit our counting loop 
      sta WSYNC
      sta WSYNC
      inx
@@ -93,23 +93,23 @@ pndetecispal
      ;sta CTLSWA
 
      ifconst HSSUPPORT
-       ifconst bankswitchmode
-         ifconst included.hiscore.asm.bank
-           ifconst MCPDEVCART
-             lda #($18 | included.hiscore.asm.bank) 
-             ifconst dumpbankswitch
-                 sta dumpbankswitch
-             endif
-             sta $3000
-           else
-             lda #(included.hiscore.asm.bank)
-             ifconst dumpbankswitch
-                 sta dumpbankswitch
-             endif
-             sta $8000
-           endif
-         endif ; included.hiscore.asm.bank
-       endif ; bankswitchmode
+         ifconst bankswitchmode
+             ifconst included.hiscore.asm.bank
+                 ifconst MCPDEVCART
+                     lda #($18 | included.hiscore.asm.bank) 
+                     ifconst dumpbankswitch
+                         sta dumpbankswitch
+                     endif
+                     sta $3000
+                 else
+                     lda #(included.hiscore.asm.bank)
+                     ifconst dumpbankswitch
+                         sta dumpbankswitch
+                     endif
+                     sta $8000
+                 endif
+             endif ; included.hiscore.asm.bank
+         endif ; bankswitchmode
          ; try to detect HSC
          jsr detecthsc
          and #1
@@ -144,7 +144,7 @@ storeAinhsdevice
                  sta tiavolume
              endif ; TIAVOLUME
          endif ; RMTVOLUME
-     else  ; !RMT
+     else ; !RMT
          ifconst TIAVOLUME
              lda #$F0 ; default to full TIA volume
              sta tiavolume
@@ -195,9 +195,9 @@ storeAinhsdevice
      ldx #0
      jsr settwobuttonmode
 
- ifnconst .altgamestart
-     jmp game
- else
-     jmp .altgamestart
- endif
+     ifnconst .altgamestart
+         jmp game
+     else
+         jmp .altgamestart
+     endif
 

@@ -152,18 +152,18 @@ char *filterterm[] = {
     ""
 };
 
-int main(int argc, char **argv)
+int main (int argc, char **argv)
 {
     char linebuffer[BUFSIZE];
     int t, match;
-    while (fgets(linebuffer, BUFSIZE, stdin) != NULL)
+    while (fgets (linebuffer, BUFSIZE, stdin) != NULL)
     {
 	match = 0;
 	for (t = 0; filterterm[t][0] != '\0'; t++)
 	{
 	    if (filterterm[t][0] == '^')
 	    {
-		if (strncmp(linebuffer, filterterm[t] + 1, strlen(filterterm[t] + 1)) == 0)
+		if (strncmp (linebuffer, filterterm[t] + 1, strlen (filterterm[t] + 1)) == 0)
 		{
 		    match = 1;
 		    break;
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 	    }
 	    else
 	    {
-		if (strstr(linebuffer, filterterm[t]) != NULL)
+		if (strstr (linebuffer, filterterm[t]) != NULL)
 		{
 		    match = 1;
 		    break;
@@ -179,7 +179,7 @@ int main(int argc, char **argv)
 	    }
 	}
 	if (match == 0)
-	    fputs(linebuffer, stdout);
+	    fputs (linebuffer, stdout);
     }
     return (0);
 }

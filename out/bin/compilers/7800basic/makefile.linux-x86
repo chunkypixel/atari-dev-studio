@@ -8,7 +8,7 @@ CFLAGS=-O0 -m32
 LEX=lex
 LEXFLAGS=-t
 
-all:  7800basic.${ARCH} 7800preprocess.${ARCH} 7800postprocess.${ARCH} 7800filter.${ARCH} 7800optimize.${ARCH} 7800header.${ARCH} 7800sign.${ARCH} 7800makecc2.${ARCH} snip.${ARCH} banksetsymbols.${ARCH} 7800rmtfix.${ARCH}
+all:  7800basic.${ARCH} 7800preprocess.${ARCH} 7800postprocess.${ARCH} 7800filter.${ARCH} 7800optimize.${ARCH} 7800header.${ARCH} 7800sign.${ARCH} 7800makecc2.${ARCH} snip.${ARCH} banksetsymbols.${ARCH} 7800rmtfix.${ARCH} 7800rmt2asm.${ARCH}
 
 7800basic.${ARCH}: 7800bas.c statements.c keywords.c statements.h keywords.h atarivox.h 
 	${CC} ${CFLAGS} -o 7800basic.${ARCH} 7800bas.c statements.c keywords.c -L${LDIR}/lib -I${LDIR}/include -lpng -lz -lm
@@ -44,11 +44,14 @@ banksetsymbols.${ARCH}: banksetsymbols.c
 7800rmtfix.${ARCH}: 7800rmtfix.c
 	${CC} ${CFLAGS} -o 7800rmtfix.${ARCH} 7800rmtfix.c
 
+7800rmt2asm.${ARCH}: 7800rmt2asm.c
+	${CC} ${CFLAGS} -o 7800rmt2asm.${ARCH} 7800rmt2asm.c
+
 7800makecc2.${ARCH}: 7800makecc2.c
 	${CC} ${CFLAGS} -o 7800makecc2.${ARCH} 7800makecc2.c
 
 install:   all
 
 clean:
-	rm -f 7800basic.${ARCH} 7800preprocess.${ARCH} 7800postprocess.${ARCH} 7800optimize.${ARCH} 7800header.${ARCH} 7800sign.${ARCH} snip.${ARCH} 7800filter.${ARCH} 7800makecc2.${ARCH} 7800rmtfix.${ARCH} lz4raw.${ARCH}
+	rm -f 7800basic.${ARCH} 7800preprocess.${ARCH} 7800postprocess.${ARCH} 7800optimize.${ARCH} 7800header.${ARCH} 7800sign.${ARCH} snip.${ARCH} 7800filter.${ARCH} 7800makecc2.${ARCH} 7800rmtfix.${ARCH} 7800rmt2asm.${ARCH} lz4raw.${ARCH} banksetsymbols.${ARCH}
 

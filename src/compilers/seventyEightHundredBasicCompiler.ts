@@ -181,7 +181,24 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
 
         // Validate compiler version to determine list of required files
-        if (this.CompilerVersion >= 0.22) {
+        if (this.CompilerVersion >= 0.27) {
+            // version 0.27 and greater added:
+            // - 7800rmt2asm
+            return [command,
+                `7800basic${platform}${extension}`,
+                `7800filter${platform}${extension}`,
+                `7800header${platform}${extension}`,
+                `7800optimize${platform}${extension}`,
+                `7800postprocess${platform}${extension}`,
+                `7800preprocess${platform}${extension}`,
+                `7800sign${platform}${extension}`,
+                `7800makecc2${platform}${extension}`,
+                `7800rmt2asm${platform}${extension}`,
+                `7800rmtfix${platform}${extension}`,
+                `dasm${platform}${extension}`,
+                `banksetsymbols${platform}${extension}`];  
+        }
+        else if (this.CompilerVersion >= 0.22) {
             // version 0.22 and greater added:
             // - 7800rmtfix
             // - banksetsymbols
@@ -197,20 +214,19 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
                 `7800rmtfix${platform}${extension}`,
                 `dasm${platform}${extension}`,
                 `banksetsymbols${platform}${extension}`];  
-        } else {
-           // up to version 0.21 (default)
-           return [command,
-                `7800basic${platform}${extension}`,
-                `7800filter${platform}${extension}`,
-                `7800header${platform}${extension}`,
-                `7800optimize${platform}${extension}`,
-                `7800postprocess${platform}${extension}`,
-                `7800preprocess${platform}${extension}`,
-                `7800sign${platform}${extension}`,
-                `7800makecc2${platform}${extension}`,
-                `dasm${platform}${extension}`];          
         }
-   
+        
+        // up to version 0.21 (default)
+        return [command,
+            `7800basic${platform}${extension}`,
+            `7800filter${platform}${extension}`,
+            `7800header${platform}${extension}`,
+            `7800optimize${platform}${extension}`,
+            `7800postprocess${platform}${extension}`,
+            `7800preprocess${platform}${extension}`,
+            `7800sign${platform}${extension}`,
+            `7800makecc2${platform}${extension}`,
+            `dasm${platform}${extension}`];           
 
     }
 

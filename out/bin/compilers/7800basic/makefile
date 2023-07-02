@@ -10,7 +10,7 @@ CC=cc
 LEX=lex
 LEXFLAGS=-t
 
-all: 7800basic 7800preprocess 7800postprocess 7800filter 7800optimize 7800header 7800sign 7800makecc2 snip banksetsymbols 7800rmtfix
+all: 7800basic 7800preprocess 7800postprocess 7800filter 7800optimize 7800header 7800sign 7800makecc2 snip banksetsymbols 7800rmtfix 7800rmt2asm
 
 7800basic: 7800bas.c statements.c keywords.c statements.h keywords.h atarivox.h
 	${CC} ${CFLAGS} -o $@ 7800bas.c statements.c keywords.c -lz -lpng -lm
@@ -46,6 +46,9 @@ banksetsymbols: banksetsymbols.c
 7800rmtfix: 7800rmtfix.c
 	${CC} ${CFLAGS} -o $@ 7800rmtfix.c
 
+7800rmt2asm: 7800rmt2asm.c
+	${CC} ${CFLAGS} -o $@ 7800rmt2asm.c
+
 7800makecc2: 7800makecc2.c
 	${CC} ${CFLAGS} -o $@ 7800makecc2.c
 
@@ -72,7 +75,7 @@ distclean:
 install: all
 
 clean:
-	${RM} -f 7800basic 7800preprocess 7800postprocess 7800filter 7800optimize 7800header 7800sign snip banksetsymbols 7800makecc2 7800rmtfix lz4raw snip
+	${RM} -f 7800basic 7800preprocess 7800postprocess 7800filter 7800optimize 7800header 7800sign snip banksetsymbols 7800makecc2 7800rmtfix 7800rmt2asm lz4raw snip
 
 love:
 	@echo "not war"

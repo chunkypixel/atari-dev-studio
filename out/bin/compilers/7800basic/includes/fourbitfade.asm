@@ -54,6 +54,6 @@ fourbitfadelut
 
 fourbitfadeend
 
- echo "  (fourbitfade module is using ",[(fourbitfadeend-fourbitfade)]d," bytes)"
+ echo "  (fourbitfade module is using ",[(fourbitfadeend-fourbitfade)]d," bytes of rom)"
 
  endif

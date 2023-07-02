@@ -12,10 +12,19 @@ char stdoutfilename[256];
 FILE *stdoutfilepointer;
 
 extern int currentdmahole;
+extern int numredefvars;
+extern int numconstants;
+extern char incbasepath[500];
+extern char redefined_variables[80000][100];
+extern char bannerfilenames[1000][100];
+extern char palettefilenames[1000][100];
+extern char currentcharset[256];
+extern int graphicsdatawidth[16];
+extern char charactersetchars[257];
 
-#define BASIC_VERSION_INFO "7800basic v0.24"
+#define BASIC_VERSION_INFO "7800basic v0.27"
 
-int main(int argc, char *argv[])
+int main (int argc, char *argv[])
 {
     char **statement;
     char **deallocate_mem;
@@ -39,7 +48,7 @@ int main(int argc, char *argv[])
     int defi = 0;
     path = NULL;
     // get command line arguments
-    while ((i = getopt(argc, argv, "i:r:v")) != -1)
+    while ((i = getopt (argc, argv, "i:r:v")) != -1)
     {
 	switch (i)
 	{
@@ -50,113 +59,70 @@ int main(int argc, char *argv[])
 	    filename = optarg;
 	    break;
 	case 'v':
-	    printf("%s (%s, %s)\n", BASIC_VERSION_INFO, __TIME__, __DATE__);
-	    exit(0);
+	    printf ("%s (%s, %s)\n", BASIC_VERSION_INFO, __TIME__, __DATE__);
+	    exit (0);
 	case '?':
-	    fprintf(stderr, "usage: %s -r <variable redefs file> -i <includes path>\n", argv[0]);
-	    exit(1);
+	    fprintf (stderr, "usage: %s -r <variable redefs file> -i <includes path>\n", argv[0]);
+	    exit (1);
 	}
     }
 
     // global variable init...
-    condpart = 0;
-    ongosub = 0;
-    decimal = 0;
-    romsize = 0;
-    romat4k = 0;
-    bankcount = 0;
-    currentbank = 0;
-    doublebufferused = 0;
-    boxcollisionused = 0;
-    dmaplain = 0;
-    templabel = 0;
-    doublewide = 0;
-    zoneheight = 16;
-    zonelocking = 0;
-    superchip = 0;
-    optimization = 0;
-    smartbranching = 1;
-    collisionwrap = 1;
-    strcpy(redefined_variables[numredefvars++], "collisionwrap = 1");
-    line = 0;
-    numfixpoint44 = 0;
-    numfixpoint88 = 0;
+    strcpy (redefined_variables[numredefvars++], "collisionwrap = 1");
     incbasepath[0] = 0;
-    includesfile_already_done = 0;
-    tallspritemode = 1;
-    multtableindex = 0;
     bannerfilenames[0][0] = 0;
     palettefilenames[0][0] = 0;
     currentcharset[0] = 0;
-    ors = 0;
-    numjsrs = 0;
-    numfors = 0;
-    numthens = 0;
-    numelses = 0;
-    numredefvars = 0;
-    numconstants = 0;
-    branchtargetnumber = 0;
-    doingfunction = 0;
-    sprite_index = 0;
-    multisprite = 0;
-    lifekernel = 0;
-    playfield_number = 0;
-    playfield_index[0] = 0;
-    extra = 0;
-    extralabel = 0;
-    extraactive = 0;
-    macroactive = 0;
 
     for (i = 0; i < 16; i++)
 	graphicsdatawidth[i] = 0;
 
-    strcpy(charactersetchars, " abcdefghijklmnopqrstuvwxyz.!?,\"$():");
+    strcpy (charactersetchars, " abcdefghijklmnopqrstuvwxyz.!?,\"$():");
 
-    fprintf(stderr, "%s %s %s\n", BASIC_VERSION_INFO, __DATE__, __TIME__);
+    fprintf (stderr, "%s %s %s\n", BASIC_VERSION_INFO, __DATE__, __TIME__);
 
     // redirect STDOUT to 7800.asm, overwriting if it exists... 
-    strcpy(stdoutfilename, "7800.asm");
-    if ((stdoutfilepointer = freopen(stdoutfilename, "w", stdout)) == NULL)
+    strcpy (stdoutfilename, "7800.asm");
+    if ((stdoutfilepointer = freopen (stdoutfilename, "w", stdout)) == NULL)
     {
-	prerror("couldn't create the 7800.asm file.");
+	prerror ("couldn't create the 7800.asm file.");
     }
 
-    printf(" ;%s %s %s\n", BASIC_VERSION_INFO, __DATE__, __TIME__);
+    printf (" ;%s %s %s\n", BASIC_VERSION_INFO, __DATE__, __TIME__);
 
-    printf("SPACEOVERFLOW SET 0\n");
+    printf ("SPACEOVERFLOW SET 0\n");
 
     // these asm files are produced dynamically, so as to allow out-of-order
     // assembly with dasm. Their mere presence will affect the compile process
     // so we start off by wiping them, if they exist from a previous compile.
-    remove("7800hole.0.asm");
-    remove("7800hole.1.asm");
-    remove("7800hole.2.asm");
-    remove("banksetrom.asm");
-    remove("banksetstrings.asm");
+    remove ("7800hole.0.asm");
+    remove ("7800hole.1.asm");
+    remove ("7800hole.2.asm");
+    remove ("banksetrom.asm");
+    remove ("banksetstrings.asm");
 
     char removefile[256];
     int t;
-    for(t=0;t<100;t++)
+    for (t = 0; t < 100; t++)
     {
-        sprintf(removefile,"dump_gfx_%02d.bin",t);
-        if(remove(removefile))
-            break;
-        sprintf(removefile,"dump_gfx_%02d.asm",t);
-            remove(removefile);
+	sprintf (removefile, "dump_gfx_%02d.bin", t);
+	if (remove (removefile))
+	    break;
+	sprintf (removefile, "dump_gfx_%02d.asm", t);
+	remove (removefile);
     }
-    
 
-    create_a78info();		//wipe/create a78 parameter file
 
-    printf("game\n");		// label for start of game
-    header_open(header);
-    init_includes(path);
+    create_a78info ();		//wipe/create a78 parameter file
 
-    statement = (char **) malloc(sizeof(char *) * 200);
+    printf ("game\n");		// label for start of game
+    init_includes (path);
+
+    statement = (char **) malloc (sizeof (char *) * 200);
     deallocate_mem = statement;
     for (i = 0; i < 200; ++i)
     {
-	statement[i] = (char *) malloc(sizeof(char) * 200);
+	statement[i] = (char *) malloc (sizeof (char) * 200);
     }
 
     while (1)
@@ -168,12 +134,12 @@ int main(int argc, char *argv[])
 		statement[i][j] = '\0';
 	    }
 	}
-	c = fgets(code, 500, stdin);	// get next line from input
-	incline();
-	strcpy(displaycode, code);
+	c = fgets (code, 500, stdin);	// get next line from input
+	incline ();
+	strcpy (displaycode, code);
 
 	// look for defines and remember them
-	strcpy(mycode, code);
+	strcpy (mycode, code);
 	for (i = 0; i < 495; ++i)
 	    if (code[i] == ' ')
 		break;
@@ -193,8 +159,8 @@ int main(int argc, char *argv[])
 		defr[defi][j++] = code[i];	// get the definition
 	    }
 	    defr[defi][j] = '\0';
-	    removeCR(defr[defi]);
-	    printf(";.%s.%s.\n", def[defi], defr[defi]);
+	    removeCR (defr[defi]);
+	    printf (";.%s.%s.\n", def[defi], defr[defi]);
 	    defi++;
 	}
 	else if (defi)
@@ -208,24 +174,25 @@ int main(int argc, char *argv[])
 		{
 		    if (defcount++ > 250)
 		    {
-			fprintf(stderr, "(%d) Infinitely repeating definition or too many instances of a definition\n",
-				bbgetline());
-			exit(1);
+			fprintf (stderr,
+				 "(%d) Infinitely repeating definition or too many instances of a definition\n",
+				 bbgetline ());
+			exit (1);
 		    }
-		    codeadd = strstr(mycode, def[i]);
+		    codeadd = strstr (mycode, def[i]);
 		    if (codeadd == NULL)
 			break;
 		    for (j = 0; j < 500; ++j)
 			finalcode[j] = '\0';
-		    strncpy(finalcode, mycode, strlen(mycode) - strlen(codeadd));
-		    strcat(finalcode, defr[i]);
-		    strcat(finalcode, codeadd + strlen(def[i]));
-		    strcpy(mycode, finalcode);
+		    strncpy (finalcode, mycode, strlen (mycode) - strlen (codeadd));
+		    strcat (finalcode, defr[i]);
+		    strcat (finalcode, codeadd + strlen (def[i]));
+		    strcpy (mycode, finalcode);
 		}
 	    }
 	}
-	if (strcmp(mycode, code))
-	    strcpy(code, mycode);
+	if (strcmp (mycode, code))
+	    strcpy (code, mycode);
 	if (!c)
 	    break;		//end of file
 
@@ -251,63 +218,63 @@ int main(int argc, char *argv[])
 	    else
 	    {
 		multiplespace = 0;
-		if (k < 199)	//REVENG - avoid overrun when users use REM with long horizontal separators
+		if (k < 199)	// avoid overrun when users use REM with long horizontal separators
 		    statement[j][k++] = single;
 	    }
 
 	}
 	if (j > 150)
 	{
-	    fprintf(stderr, "(%d) Warning: long line\n", bbgetline());
+	    fprintf (stderr, "(%d) Warning: long line\n", bbgetline ());
 	}
 	if (statement[0][0] == '\0')
 	{
-	    sprintf(statement[0], "L0%d", unnamed++);
+	    sprintf (statement[0], "L0%d", unnamed++);
 	}
-	if (strncmp(statement[0], "end\0", 3))
-	    printf(".%s ;; %s\n", statement[0], displaycode);	//    printf(".%s ; %s\n",statement[0],code);
+	if (strncmp (statement[0], "end\0", 3))
+	    printf (".%s ;; %s\n", statement[0], displaycode);	//    printf(".%s ; %s\n",statement[0],code);
 	else
-	    doend();
+	    doend ();
 
-	keywords(statement);
-        if(numconstants==(MAXCONSTANTS-1))
-        {
-            fprintf(stderr, "(%d) Maximum number of constants exceeded.\n", bbgetline());
-            exit(1);
-        }
+	keywords (statement);
+	if (numconstants == (MAXCONSTANTS - 1))
+	{
+	    fprintf (stderr, "(%d) Maximum number of constants exceeded.\n", bbgetline ());
+	    exit (1);
+	}
     }
 
-    printf("DMAHOLEEND%d SET .\n",currentdmahole);
+    printf ("DMAHOLEEND%d SET .\n", currentdmahole);
 
     //if stdout is redirected, change it back to 7800.asm so the gameend label goes in the right spot...
-    if (strcmp(stdoutfilename, "7800.asm") != 0)
+    if (strcmp (stdoutfilename, "7800.asm") != 0)
     {
-	strcpy(stdoutfilename, "7800.asm");
-	if ((stdoutfilepointer = freopen(stdoutfilename, "a", stdout)) == NULL)
+	strcpy (stdoutfilename, "7800.asm");
+	if ((stdoutfilepointer = freopen (stdoutfilename, "a", stdout)) == NULL)
 	{
-	    prerror("couldn't reopen the 7800.asm file.");
+	    prerror ("couldn't reopen the 7800.asm file.");
 	}
     }
 
-    printf("gameend\n");
+    printf ("gameend\n");
 
-    barf_graphic_file();
+    barf_graphic_file ();
 
-    barfmultiplicationtables();
+    barfmultiplicationtables ();
 
-    printf(" if SPACEOVERFLOW > 0\n");
-    printf(" echo \"\"\n");
-    printf(" echo \"######## ERROR: space overflow detected in\",[SPACEOVERFLOW]d,\"areas.\"\n");
-    printf(" echo \"######## look above for areas with negative ROM space left.\"\n");
-    printf(" echo \"######## Aborting assembly.\"\n");
-    printf(" ERR\n");
-    printf(" endif\n");
+    printf (" if SPACEOVERFLOW > 0\n");
+    printf ("  echo \"\"\n");
+    printf ("  echo \"######## ERROR: space overflow detected in\",[SPACEOVERFLOW]d,\"areas.\"\n");
+    printf ("  echo \"######## look above for areas with negative ROM space left.\"\n");
+    printf ("  echo \"######## Aborting assembly.\"\n");
+    printf ("  ERR\n");
+    printf (" endif\n");
 
-    printf(" \n\n");
+    printf (" \n\n");
 
-    header_write(header, filename);
-    create_includes(includes_file);
-    fprintf(stderr, "7800basic compilation complete.\n");
-    freemem(deallocate_mem);
+    header_write (header, filename);
+    create_includes (includes_file);
+    fprintf (stderr, "7800basic compilation complete.\n");
+    freemem (deallocate_mem);
     return 0;
 }

@@ -30,12 +30,14 @@ detecthsc
              ora #%00001100
              sta XCTRL1s
              sta XCTRL1
+
              lda $3900
              eor #$C6
              bne detecthscfail
              lda $3904
              eor #$FE
              bne detecthscfail
+
              ; check if it's initialized...
              ldy #0
              lda #$ff
