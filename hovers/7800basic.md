@@ -311,7 +311,7 @@
 
 
 
-## rmtspeed
+## RMTSPEED
 
     set rmtspeed state
 

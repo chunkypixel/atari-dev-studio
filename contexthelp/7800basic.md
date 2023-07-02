@@ -252,3 +252,8 @@ include|including_external_assembly
 inline|inlining_external_assembly
 ifconst|conditional_compilation
 bankset|bankset_roms
+rmtspeed|set_rmtspeed
+incrmtfile|rmt_incrmtfile
+playrmt|rmt_playrmt
+stoprmt|rmt_stoprmt
+startrmt|rmt_startmt
