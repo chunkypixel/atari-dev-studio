@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.8.8
+
+* Updated 7800basic to v0.27 (Windows, Linux, macOS)
+* Updated 7800basic keyword, hover and context help lists
+
 ## 0.8.7
 
 * Cleanups to sending binary to emulator or cart on launch option (added Windows validation and Language check)

@@ -311,6 +311,16 @@
 
 
 
+## rmtspeed
+
+    set rmtspeed state
+
+    state - ntsc, pal, off
+
+    NOTE: made sure to define variable 'dim RMTRAM = $####' and allocate 173 bytes of RAM for RMT playback (ie. $2200)
+
+
+
 ## SNES0PAUSE
 
     set snes0pause on
@@ -429,6 +439,17 @@
 
 
 
+## INCRMTFILE
+
+    incrmtfile filename.rmt
+
+    filename.rmt - file name of the rmt song file to include
+
+
+    NOTE: made sure to define variable 'dim RMTRAM = $####' and allocate 173 bytes of RAM for RMT playback (ie. $2200)
+
+
+   
 ## INCGRAPHIC
 
     incgraphic filename.png [graphics mode] [color #0] [#1] ... [palette #]
@@ -938,6 +959,28 @@
 
 
 
+## PLAYRMT
+
+    playrmt $#### or incrmtfile 
+
+    $#### - address of tune ie. $6000 or set as incrmtfile
+
+    NOTE: made sure to define variable 'dim RMTRAM = $####' and allocate 173 bytes of RAM for RMT playback (ie. $2200)
+
+
+
+## STARTRMT
+
+    startrmt
+
+
+
+## STOPRMT
+
+    stoprmt
+
+
+
 ## SPEAK
 
     speak speechname
@@ -948,10 +991,14 @@
 
 ## TRACKERSUPPORT
 
-    set trackersupport basic
+    set trackersupport value
+
+    value - basic, rmt
+
+    NOTE: made sure to define variable 'dim RMTRAM = $####' and allocate 173 bytes of RAM for RMT playback (ie. $2200)
 
 
-    
+
 ## INLINE
 
     inline filename.asm
