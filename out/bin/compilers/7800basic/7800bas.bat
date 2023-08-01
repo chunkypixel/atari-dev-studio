@@ -11,11 +11,11 @@ goto nooptimize
 :nooptimize
 
 if not exist banksetrom.asm goto nobankset1
-  dasm "%bas7800dir%"/includes/banksetskeleton.asm  -I"%bas7800dir%"/includes -f3 -l"banksetrom.list.txt" -s"banksetrom.symbol.txt" -o"banksetrom.bin" | 7800filter
+  dasm "%bas7800dir%"/includes/banksetskeleton.asm  -I"%bas7800dir%"/includes -f3 -l"banksetrom.list.txt" -s"banksetrom.symbol.txt" -p20 -o"banksetrom.bin" | 7800filter
   banksetsymbols
 :nobankset1
 
-dasm "%~f1.asm" -I"%bas7800dir%"/includes -f3 -l"%~f1.list.txt" -o"%~f1.bin" | 7800filter
+dasm "%~f1.asm" -I"%bas7800dir%"/includes -f3 -p20 -l"%~f1.list.txt" -o"%~f1.bin" | 7800filter
 7800sign -w "%~f1.bin"
 if not exist banksetrom.asm goto nobankset2
   copy /b "%~f1.bin"+"banksetrom.bin" "%~f1.bin"

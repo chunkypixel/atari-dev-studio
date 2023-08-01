@@ -482,10 +482,10 @@ void setunset (char *command)
     {
 	if ((command[t] == ' ') || (command[t] == '#'))
 	{
-            char *rcommand = malloc(1024);
+            char *rcommand = malloc(1026);
             if(rcommand==NULL)
                 prerror ("Memory allocation error\n");
-            snprintf(rcommand,1024,"%s %s",verb,command+t+1);
+            snprintf(rcommand,1026,"%s %s",verb,command+t+1);
             setunset(rcommand);
             free(rcommand);
 	    noun[s] = 0;

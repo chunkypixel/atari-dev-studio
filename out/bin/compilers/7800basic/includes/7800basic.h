@@ -59,8 +59,9 @@ HSRAMTable     = $2112 ; to $212F (30 bytes) Format: III*5, SSS*5
 HSRAMInitials  = $2112 ; see above
 HSRAMScores    = $2121 ; see above
 
-ssCTRL         = $2131
-ssCHARBASE     = $2132
+sSWCHA          = $2131
+; reserved      = $2132
+
 hsdisplaymode  = $2133
 gamedifficulty = $2134
 hsinitialpos   = $2135
@@ -217,8 +218,8 @@ sfxinstrumenthi = $E1
 sfxpitchoffset = $E2
 sfxnoteindex = $E3
 
-CTLSWAs = $E4
-CTLSWBs = $E5
+; reserved = $E4
+; reserved = $E5
 
 A = $e6
 a = $e6
@@ -471,6 +472,7 @@ trakballx0          =      paddleposition0
 mousex0             =      paddleposition0
 lighttgunx0         =      paddleposition0
 snes2atari0lo       =      paddleposition0
+mega7800data0       =      paddleposition0
 
  ; controller 1 data...
 paddleposition2     DS 1
@@ -480,6 +482,7 @@ trakballx1          =      paddleposition2
 mousex1             =      paddleposition2
 lightgunx1          =      paddleposition2
 snes2atari1lo       =      paddleposition2
+mega7800data1       =      paddleposition2
 
  ; controller 0 altdata...
 paddleposition1     DS 1
@@ -488,6 +491,7 @@ trakbally0          =      paddleposition1
 mousey0             =      paddleposition1
 lightguny0          =      paddleposition1
 snes2atari0hi       =      paddleposition1
+mega7800state0      =      paddleposition1
 
  ; controller 1 altdata...
 paddleposition3     DS 1
@@ -496,6 +500,7 @@ trakbally1          =      paddleposition3
 mousey1             =      paddleposition3
 lightguny1          =      paddleposition3
 snes2atari1hi       =      paddleposition3
+mega7800state1      =      paddleposition3
 
 ; controller state save. for trakball state+dir codes, rotary position codes
 controller0statesave DS 1
@@ -566,10 +571,15 @@ fourbitfadevalueint   DS 1
 
  ifconst SNES2ATARISUPPORT
 snesport           DS 1
- endif
+ endif ; SNES2ATARISUPPORT
 
  ifconst KEYPADSUPPORT
 keypadcounter      DS 1
+ endif
+
+ ifconst MULTIBUTTON
+multibuttoncount0  DS 1
+multibuttoncount1  DS 1
  endif
 
  ; see if we need an interrupthold byte...

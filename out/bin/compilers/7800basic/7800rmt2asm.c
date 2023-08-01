@@ -87,8 +87,8 @@ int main (int argc, char **argv)
 		fprintf(stderr,"ERR: file size of '%s' is %ld bytes.\n",argv[1],size);
 		return(3);
 	}
-	buffer=malloc(size);
-	if(fread(buffer,1,size,in) == 0)
+	buffer=malloc(size+6);
+	if(fread(buffer+6,1,size,in) == 0)
 	{
 		fprintf(stderr,"ERR: couldn't read from '%s'.\n",argv[1]);
 		return(4);

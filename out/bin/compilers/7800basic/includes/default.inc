@@ -34,6 +34,9 @@ zonememory.asm
 ; encryption area guard
 encryptionguard.asm
 
+; check for any missing co-requisites, like rmt+pokey
+firstpasserr.asm
+
 ; the cart end vectors
 7800basicfooter.asm
 

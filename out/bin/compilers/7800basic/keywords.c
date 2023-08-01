@@ -34,16 +34,31 @@ void keywords (char **cstatement)
     char **deallocelstatement;
     int door;
     int foundelse = 0;
+ 
+ //#define DEBUGTRC 1
+ #ifdef DEBUGTRC
+    int debugi; 
+    fprintf (stderr, "DEBUG == %d: ", linenum ());
+    for (debugi=0;debugi<10;debugi++)
+    {
+      if(cstatement[debugi]!=NULL)
+        fprintf (stderr, " %s", cstatement[debugi]);
+    }
+    fprintf (stderr, "\n");
+ #endif
+
     statement = (char **) malloc (sizeof (char *) * 200);
     orstatement = (char **) malloc (sizeof (char *) * 200);
     elstatement = (char **) malloc (sizeof (char *) * 200);
     for (i = 0; i < 200; ++i)
     {
-	orstatement[i] = (char *) malloc (sizeof (char) * 200);
+	orstatement[i] = (char *) malloc (sizeof (char) * 201);
+        memset(orstatement[i],0,201);
     }
     for (i = 0; i < 200; ++i)
     {
-	elstatement[i] = (char *) malloc (sizeof (char) * 200);
+	elstatement[i] = (char *) malloc (sizeof (char) * 201);
+        memset(elstatement[i],0,201);
     }
 
     deallocstatement = statement;	// for deallocation purposes
@@ -77,18 +92,18 @@ void keywords (char **cstatement)
 		&& (!strncmp (cstatement[k + 1], "if\0", 2)) && (swaptest (cstatement[k + 5])))
 	    {
 		// swap operands and switch compare
-		strcpy (cstatement[k + 3], cstatement[k + 2]);	// stick 1st operand here temporarily
-		strcpy (cstatement[k + 2], cstatement[k + 4]);
-		strcpy (cstatement[k + 4], cstatement[k + 3]);	// get it back
+		strncpy (cstatement[k + 3], cstatement[k + 2],200);	// stick 1st operand here temporarily
+		strncpy (cstatement[k + 2], cstatement[k + 4],200);
+		strncpy (cstatement[k + 4], cstatement[k + 3],200);	// get it back
 		strcpy (cstatement[k + 3], "<");	// replace compare
 	    }
 	    else if (!strncmp (cstatement[k + 3], "<=\0", 2)
 		     && (!strncmp (cstatement[k + 1], "if\0", 2)) && (swaptest (cstatement[k + 5])))
 	    {
 		// swap operands and switch compare
-		strcpy (cstatement[k + 3], cstatement[k + 2]);
-		strcpy (cstatement[k + 2], cstatement[k + 4]);
-		strcpy (cstatement[k + 4], cstatement[k + 3]);
+		strncpy (cstatement[k + 3], cstatement[k + 2],200);
+		strncpy (cstatement[k + 2], cstatement[k + 4],200);
+		strncpy (cstatement[k + 4], cstatement[k + 3],200);
 		strcpy (cstatement[k + 3], ">=");
 	    }
 	    if (!strncmp (cstatement[k + 3], "&&\0", 2))
@@ -110,23 +125,23 @@ void keywords (char **cstatement)
 		    && (!strncmp (cstatement[k + 1], "if\0", 2)) && (swaptest (cstatement[k + 7])))
 		{
 		    // swap operands and switch compare
-		    strcpy (cstatement[k + 5], cstatement[k + 4]);	// stick 1st operand here temporarily
-		    strcpy (cstatement[k + 4], cstatement[k + 6]);
-		    strcpy (cstatement[k + 6], cstatement[k + 5]);	// get it back
+		    strncpy (cstatement[k + 5], cstatement[k + 4],200);	// stick 1st operand here temporarily
+		    strncpy (cstatement[k + 4], cstatement[k + 6],200);
+		    strncpy (cstatement[k + 6], cstatement[k + 5],200);	// get it back
 		    strcpy (cstatement[k + 5], "<");	// replace compare
 		}
 		else if (!strncmp (cstatement[k + 5], "<=\0", 2)
 			 && (!strncmp (cstatement[k + 1], "if\0", 2)) && (swaptest (cstatement[k + 7])))
 		{
 		    // swap operands and switch compare
-		    strcpy (cstatement[k + 5], cstatement[k + 4]);
-		    strcpy (cstatement[k + 4], cstatement[k + 6]);
-		    strcpy (cstatement[k + 6], cstatement[k + 5]);
+		    strncpy (cstatement[k + 5], cstatement[k + 4],200);
+		    strncpy (cstatement[k + 4], cstatement[k + 6],200);
+		    strncpy (cstatement[k + 6], cstatement[k + 5],200);
 		    strcpy (cstatement[k + 5], ">=");
 		}
 
 		for (i = 2; i < 198 - k; ++i)
-		    strcpy (orstatement[i], cstatement[k + i + 2]);
+		    strncpy (orstatement[i], cstatement[k + i + 2],200);
 		if (!strncmp (cstatement[k + 5], "then\0", 4))
 		    compressdata (cstatement, k + 3, k + 2);
 		else if (!strncmp (cstatement[k + 7], "then\0", 4))
@@ -144,22 +159,22 @@ void keywords (char **cstatement)
 		    && (!strncmp (cstatement[k + 1], "if\0", 2)) && (swaptest (cstatement[k + 9])))
 		{
 		    // swap operands and switch compare
-		    strcpy (cstatement[k + 7], cstatement[k + 6]);	// stick 1st operand here temporarily
-		    strcpy (cstatement[k + 6], cstatement[k + 8]);
-		    strcpy (cstatement[k + 8], cstatement[k + 7]);	// get it back
+		    strncpy (cstatement[k + 7], cstatement[k + 6],200);	// stick 1st operand here temporarily
+		    strncpy (cstatement[k + 6], cstatement[k + 8],200);
+		    strncpy (cstatement[k + 8], cstatement[k + 7],200);	// get it back
 		    strcpy (cstatement[k + 7], "<");	// replace compare
 		}
 		else if (!strncmp (cstatement[k + 7], "<=\0", 2)
 			 && (!strncmp (cstatement[k + 1], "if\0", 2)) && (swaptest (cstatement[k + 9])))
 		{
 		    // swap operands and switch compare
-		    strcpy (cstatement[k + 7], cstatement[k + 6]);
-		    strcpy (cstatement[k + 6], cstatement[k + 8]);
-		    strcpy (cstatement[k + 8], cstatement[k + 7]);
+		    strncpy (cstatement[k + 7], cstatement[k + 6],200);
+		    strncpy (cstatement[k + 6], cstatement[k + 8],200);
+		    strncpy (cstatement[k + 8], cstatement[k + 7],200);
 		    strcpy (cstatement[k + 7], ">=");
 		}
 		for (i = 2; i < 196 - k; ++i)
-		    strcpy (orstatement[i], cstatement[k + i + 4]);
+		    strncpy (orstatement[i], cstatement[k + i + 4],200);
 		if (!strncmp (cstatement[k + 7], "then\0", 4))
 		    compressdata (cstatement, k + 5, k + 2);
 		else if (!strncmp (cstatement[k + 9], "then\0", 4))
@@ -187,7 +202,7 @@ void keywords (char **cstatement)
 	    }
 
 	for (i = foundelse; i < 200; ++i)
-	    strcpy (elstatement[i - foundelse], pass2elstatement[i]);
+	    strncpy (elstatement[i - foundelse], pass2elstatement[i],200);
 	if (islabelelse (pass2elstatement))
 	{
 	    strcpy (pass2elstatement[foundelse++], ":");
@@ -198,7 +213,7 @@ void keywords (char **cstatement)
 	    pass2elstatement[i][0] = '\0';
 	if (!islabelelse (elstatement))
 	{
-	    strcpy (elstatement[2], elstatement[1]);
+	    strncpy (elstatement[2], elstatement[1],200);
 	    strcpy (elstatement[1], "goto");
 	}
 	if (door)
@@ -275,6 +290,7 @@ void keywords (char **cstatement)
 
     while (1)
     {
+
 	i = 0;
 	removeCR (statement[0]);
 	if (!strncmp (statement[0], "return\0", 7))

@@ -4,5 +4,9 @@
  ; spilled into the encryption area...
  echo "   ",($FF7E-*)d,"bytes left in the 7800basic reserved area."
  if (*>$FF7D)
+        echo
+        echo  "***************************"
+        echo  "*** Abort: ROM Overflow ***"
+        echo  "***************************"
 	ERR  ; abort the assembly
  endif

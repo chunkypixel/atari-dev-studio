@@ -111,7 +111,7 @@
 
     set deprecated value
 
-    value - frameheight, 160bindexes
+    value - frameheight, 160bindexes, boxcollision
 
 
 
@@ -249,7 +249,9 @@
 
 ## DEBUG
 
-    set debug color
+    set debug state
+
+    state - color, frames, interrupt
 
 
 
@@ -654,7 +656,7 @@
     changecontrol port controltype
 
     port - left or right (0-1)
-    controltype - 2buttonjoy (default), 1buttonjoy, snes, lightgun, paddle, trakball, driving, keypad, stmouse, amigamouse, atarivox)
+    controltype - 2buttonjoy (default), 1buttonjoy, snes, mega7800, lightgun, paddle, trakball, driving, keypad, stmouse, amigamouse, atarivox, none)
 
 
 
@@ -718,6 +720,42 @@
 
 
 
+## JOY0FIRE2
+
+    if joy0fire2 then ...
+
+
+
+## JOY0FIRE3
+
+    if joy0fire3 then ...
+
+
+
+## JOY0FIRE4
+
+    if joy0fire4 then ...
+
+
+
+## JOY0FIRE5
+
+    if joy0fire5 then ...
+
+
+
+## JOY0SELECT
+
+    if joy0select then ...
+
+
+
+## JOY0START
+
+    if joy0start then ...
+
+
+
 ## JOY1UP
 
     if joy1up then ...
@@ -765,6 +803,49 @@
     if joy1fire1 then ...
 
 
+
+## JOY1FIRE1
+
+    if joy1fire1 then ...
+
+
+
+## JOY1FIRE2
+
+    if joy1fire2 then ...
+
+
+
+## JOY1FIRE3
+
+    if joy1fire3 then ...
+
+
+
+## JOY1FIRE4
+
+    if joy1fire4 then ...
+
+
+
+## JOY1FIRE5
+
+    if joy1fire5 then ...
+
+
+
+## JOY1SELECT
+
+    if joy0select then ...
+
+
+
+## JOY1START
+
+    if joy0start then ...
+
+
+
 ## SNESDETECT
 
     snesdetect
@@ -788,6 +869,24 @@
     if snes#? then ...
 
     ? - up,down,left,right,A,B,X,Y,lsh,rsh,any
+
+
+
+## SNES0ANY
+
+    if snes0any then ...
+
+
+
+## SNES0ANYMOVE
+
+    if snes0anymove then ...
+
+
+
+## SNES0ANYABXY
+
+    if snes0anyABXY then ...
 
 
 
@@ -851,6 +950,36 @@
 
 
 
+## SNES0SELECT
+
+    if snes0select then ...
+
+
+
+## SNES0START
+
+    if snes0start then ...
+
+
+
+## SNES1ANY
+
+    if snes1any then ...
+
+
+
+## SNES1ANYMOVE
+
+    if snes1anymove then ...
+
+
+
+## SNES1ANYABXY
+
+    if snes1anyABXY then ...
+
+
+
 ## SNES1UP
 
     if snes1up then ...
@@ -908,6 +1037,90 @@
 ## SNES1RSH
 
     if snes1rsh then ...
+
+
+
+## SNES1SELECT
+
+    if snes1select then ...
+
+
+
+## SNES1START
+
+    if snes0start then ...
+
+
+
+## MEGA1ANY
+
+    if mega1any then ...
+
+
+
+## MEGA1UP
+
+    if mega1up then ...
+
+
+
+## MEGA1DOWN
+
+    if mega1down then ...
+
+
+
+## MEGA1LEFT
+
+    if mega1left then ...
+
+
+
+## MEGA1RIGHT
+
+    if mega1right then ...
+
+
+
+## MEGA1A
+
+    if snes0A then ...
+
+
+
+## MEGA1B
+
+    if mega1B then ...
+
+
+
+## MEGA1C
+
+    if mega1C then ...
+
+
+
+## MEGA1X
+
+    if mega1X then ...
+
+
+
+## MEGA1Y
+
+    if mega1Y then ...
+
+
+
+## MEGA1Z
+
+    if mega1Z then ...
+
+
+
+## MEGA1START
+
+    if mega1start then ...
 
 
 
@@ -1053,5 +1266,37 @@
 
     color - value of base color ($00-$ff)
     value (optional) - "black" argument zeroes the hue nibble
+
+
+
+## OPTIMIZATION
+
+   set optimization state
+
+   state - speed, size, noinlinedata, inlinerand, none
+
+
+
+## BREAKPROTECT
+
+   set breakprotect state
+
+   state - on, off
+
+
+
+## CRASHDUMP
+
+   set crashdump state
+
+   state - on, off
+
+
+
+## MULTIBUTTON
+
+   set multibutton state
+
+   state - on, off
 
 

@@ -418,21 +418,6 @@ pauseroutine
          bit SWCHB
          beq pausepressed
 
-         ifnconst SOFTPAUSEOFF
-             ifnconst SOFTRESETASPAUSEOFF
-                 ifnconst MOUSESUPPORT
-                     ifnconst TRAKBALLSUPPORT
-                         lda port0control
-                         cmp #11
-                         bne skipsoftpause
-                         lda SWCHA ; then check the soft "RESET" joysick code...
-                         and #%01110000 ; _LDU
-                         beq pausepressed
-skipsoftpause
-                     endif
-                 endif
-             endif
-         endif
          ifconst SNES0PAUSE
              lda port0control
              cmp #11
@@ -468,6 +453,19 @@ skipsnes1pause
              beq pausepressed
 skipsnesNpause
          endif
+         ifconst MULTIBUTTONPAUSE
+             ldx #1
+multibuttonpauseloop
+             lda port0control,x
+             cmp #11
+             bcc multibuttonpauseloopbottom
+             lda sINPT1,x
+             and #1
+             beq pausepressed
+multibuttonpauseloopbottom
+             dex
+             bpl multibuttonpauseloop
+         endif ; MULTIBUTTONPAUSE
 
          ;pause isn't pressed
          lda #0
@@ -598,6 +596,30 @@ uninterruptableroutines
      ifconst AVOXVOICE
          jsr serviceatarivoxqueue
      endif
+     ifconst MEGA7800SUPPORT
+         ldx #1
+mega7800polling
+         lda port0control,x
+         cmp #12 ; mega7800
+         bne mega7800handlercheck2
+         jsr mega7800handler
+         jmp mega7800handlerdone
+mega7800handlercheck2
+     ifconst MULTIBUTTON
+             cmp #1 ; proline
+             bne mega7800handlerdone
+             lda framecounter
+             eor #7 ; avoid the same frame as the snes2atari probe
+             and #63
+             bne mega7800handlerdone
+             lda #12
+             sta port0control,x
+             jsr mega7800handler
+     endif ; MULTIBUTTON
+mega7800handlerdone
+         dex
+         bpl mega7800polling
+     endif ; MEGA7800SUPPORT
 
      lda #0
      sta palfastframe
@@ -675,12 +697,38 @@ avoxsilentdata
          rts
      endif ; AVOXVOICE
 
+prolinebuttonpadhandler
+     ifconst MULTIBUTTON
+         lda framecounter
+         and #63
+         bne jbhandlercont1
+         jsr setonebuttonmode
+         lda #11
+         sta port0control,x
+         jsr snes2atari_signal_go
+         lda port0control,x
+         cmp #1 ; check if it's still a proline 
+         beq jbhandlercont1
+         jmp buttonreadloopreturn
+jbhandlercont1
+     lda #2
+     sta multibuttoncount0,x
+     endif ; MULTIBUTTON
+joybuttonpadhandler
+     lda sSWCHA             ; clear previous dirs for this pad, from
+     ora SWCHA_DIRMASK,x    ; our sSWCHA nibble.
+     sta sSWCHA
+     lda SWCHA              ; load th actual joystick dirs, ensuring
+     ora SWCHA_DIRMASK+1,x  ; we don't change the other nibble.
+     and sSWCHA
+     sta sSWCHA 
 joybuttonhandler
      txa
      asl
      tay
      lda INPT0,y
      lsr
+     ;ora #%00111111
      sta sINPT1,x
      lda INPT1,y
      and #%10000000
@@ -694,171 +742,21 @@ joybuttonhandler
      sta sINPT1,x
 
      lda joybuttonmode
-     and twobuttonmask,x
+     and thisjoy2buttonbit,x
      beq .skip1bjoyfirecheck
      lda joybuttonmode
-     ora twobuttonmask,x
+     ora thisjoy2buttonbit,x
      sta joybuttonmode
      sta SWCHB
 .skip1bjoyfirecheck
+     lda #%00111111
+     ora sINPT1,x
+     sta sINPT1,x ; ensure multibutton bits are hi
      jmp buttonreadloopreturn
 
-twobuttonmask
-     .byte %00000100,%00010000
-
-     ifconst SNES2ATARISUPPORT
-
-SNES_CLOCK_PORT_BIT
-         .byte $10,$01 
-SNES_CTLSWA_MASK
-         .byte $30,$03
-SNES_CTLSWA_SIGNAL
-         .byte $C0,$0C
 SWCHA_DIRMASK
-         .byte $F0,$0F
-SWCHA_INVDIRMASK
-         .byte $0F,$F0
-
-         ; Probe each port for SNES, and see if autodetection succeeds anywhere.
-SNES_AUTODETECT
-         ifconst HSSUPPORT
-             ; ** an atarivox might be plugged in, so we skip scanning the second
-             ; ** port for a snes if vox was detected...
-             lda hsdevice ; b1 high means atarivox/savekey was detected
-             lsr
-             and #1
-             eor #1
-             tax
-         else
-             ldx #1
-         endif ; HSSUPPORT
-
-SNES_AUTODETECT_LOOP
-         lda #1 ; proline
-         sta port0control,x
-         jsr setportforinput
-         jsr setonebuttonmode
-         jsr SNES_READ
-         lda snesdetected0,x
-         bne SNES_AUTODETECT_FOUND
-         ; detection failed
-         jsr setportforinput
-         jsr settwobuttonmode
-         dex
-         bpl SNES_AUTODETECT_LOOP
-         rts
-SNES_AUTODETECT_FOUND
-         lda #11 ; formally set the snes controller
-         sta port0control,x
-         stx snesport
-         rts
-     endif ; SNES2ATARISUPPORT
-     
-snes2atarihandler
-     ifconst SNES2ATARISUPPORT
-SNES2ATARI
-         jsr SNES_READ 
-         jmp buttonreadloopreturn
-
-SNES_READ
-         ; x=0 for left port, x=1 for right
-
-         ; Start by checking if any port directions are pressed. 
-         ; Abort the autodetect for this port if so, as snes2atari doesn't ground any 
-         ; direction pins. if directions are pressed and the port is changed to output,
-         ; that means the output is direct-shorted, and nobody seems to know if riot's
-         ; output mode has current protection.
-
-         lda SWCHA
-         ora SWCHA_INVDIRMASK,x
-         eor SWCHA_DIRMASK,x
-         bne SNES_READ_cont1
-         jmp SNES_ABORT
-SNES_READ_cont1
-
-         lda port0control,x
-         cmp #11 ; snes
-         bne snes2atari_signal_go ; if this is a first auto-detection read, go ahead and signal
-         lda snesdetected0,x 
-         bne snes2atari_signal_skip ; if snes was available in previous frames, skip signalling
-snes2atari_signal_go
-         jsr SNES2ATARI_SIGNAL
-snes2atari_signal_skip
-
-         ;lda SNES_CTLSWA_MASK,x
-
-         lda CTLSWA
-         and SWCHA_INVDIRMASK,x ; preserve othr nibble
-         ora SNES_CTLSWA_MASK,x
-         sta CTLSWA ; enable pins UP/DOWN to work as outputs
-
-         lda SWCHA
-         and SWCHA_INVDIRMASK,x ; preserve othr nibble
-         ora SNES_CTLSWA_MASK,x
-
-         sta SWCHA ; latch+clock high
-         nop
-         nop
-         nop
-         nop
-         nop
-         nop
-         nop
-         lda SWCHA
-         and SWCHA_INVDIRMASK,x ; preserve othr nibble
-         sta SWCHA ; latch and clock low
-         ldy #16 ; 16 bits 
-SNES2ATARILOOP
-         rol INPT4,x ; sample data into carry
-         lda SWCHA 
-         and SWCHA_INVDIRMASK,x ; preserve othr nibble
-         ora SNES_CLOCK_PORT_BIT,x
-         sta SWCHA ; clock low
-         rol snes2atari0lo,x
-         rol snes2atari0hi,x
-         lda SWCHA
-         and SWCHA_INVDIRMASK,x ; preserve othr nibble
-         sta SWCHA ; latch and clock low
-         dey ; next bit
-         bne SNES2ATARILOOP
-         rol INPT4,x ; 17th bit should be lo if controller is there.
-         rol ; 17th snes bit into A low bit
-         eor snes2atari0lo,x ; 16th bit should be hi if controller is there.
-         and #1
-         sta snesdetected0,x
-         beq SNES_STOP_CLOCK ; if snes isn't detected, leave port in default state
-         stx snesport ; snesport keeps the index of the latest autodetected controller
-         lda SWCHA
-         and SWCHA_INVDIRMASK,x ; preserve othr nibble
-         ora SNES_CLOCK_PORT_BIT,x
-SNES_STOP_CLOCK
-         sta SWCHA ; clock low
-         lda CTLSWA
-         and SWCHA_INVDIRMASK,x ; preserve othr nibble
-         ora SNES_CLOCK_PORT_BIT,x
-         sta CTLSWA ; set port bits to input avoid conflict with other drivers
-         rts
-SNES_ABORT
-         sta snesdetected0,x
-         rts
-SNES2ATARI_SIGNAL
-         ; signal to SNES2ATARI++ that we want SNES mode...
-         lda CTLSWA
-         and SWCHA_INVDIRMASK,x ; preserve othr nibble
-         ora SNES_CTLSWA_SIGNAL,x
-         sta CTLSWA 
-         lda CTLSWA
-         and SWCHA_INVDIRMASK,x ; preserve othr nibble
-         sta SWCHA
-         ldy #0
-SNES_SIGNAL_LOOP
-         dey
-         bne SNES_SIGNAL_LOOP
-         lda SWCHA
-         ora SWCHA_DIRMASK,x
-         sta SWCHA
-         rts
-     endif
+             ;  p0  p1  p0
+         .byte $F0,$0F,$F0
 
 gunbuttonhandler     ; outside of the conditional, so our button handler LUT is valid
      ifconst LIGHTGUNSUPPORT
@@ -896,33 +794,36 @@ controlsusing2buttoncode
      .byte 0 ; 09=amiga mouse
      .byte 1 ; 10=atarivox
      .byte 0 ; 11=snes2atari
+     .byte 0 ; 12=mega7800
 
 buttonhandlerhi
-     .byte 0 ; 00=no controller plugged in
-     .byte >joybuttonhandler ; 01=proline joystick
-     .byte >gunbuttonhandler ; 02=lightgun
-     .byte >paddlebuttonhandler ; 03=paddle
-     .byte >joybuttonhandler ; 04=trakball
-     .byte >joybuttonhandler ; 05=vcs joystick
-     .byte >joybuttonhandler ; 06=driving control
-     .byte 0 ; 07=keypad
-     .byte >mousebuttonhandler ; 08=st mouse
-     .byte >mousebuttonhandler ; 09=amiga mouse
-     .byte >joybuttonhandler ; 10=atarivox
-     .byte >snes2atarihandler ; 11=snes
+     .byte 0                        ; 00=no controller plugged in
+     .byte >prolinebuttonpadhandler ; 01=proline joystick
+     .byte >gunbuttonhandler        ; 02=lightgun
+     .byte >paddlebuttonhandler     ; 03=paddle
+     .byte >joybuttonhandler        ; 04=trakball
+     .byte >joybuttonpadhandler     ; 05=vcs joystick
+     .byte >joybuttonhandler        ; 06=driving control
+     .byte 0                        ; 07=keypad
+     .byte >mousebuttonhandler      ; 08=st mouse
+     .byte >mousebuttonhandler      ; 09=amiga mouse
+     .byte >joybuttonhandler        ; 10=atarivox
+     .byte >snes2atarihandler       ; 11=snes
+     .byte 0                        ; 12=mega7800
 buttonhandlerlo
-     .byte 0 ; 00=no controller plugged in
-     .byte <joybuttonhandler ; 01=proline joystick
-     .byte <gunbuttonhandler ; 02=lightgun 
-     .byte <paddlebuttonhandler ; 03=paddle
-     .byte <joybuttonhandler ; 04=trakball
-     .byte <joybuttonhandler ; 05=vcs joystick
-     .byte <joybuttonhandler ; 06=driving control
-     .byte 0 ; 07=keypad
-     .byte <mousebuttonhandler ; 08=st mouse
-     .byte <mousebuttonhandler ; 09=amiga mouse
-     .byte <joybuttonhandler ; 10=atarivox
-     .byte <snes2atarihandler ; 11=snes
+     .byte 0                        ; 00=no controller plugged in
+     .byte <prolinebuttonpadhandler ; 01=proline joystick
+     .byte <gunbuttonhandler        ; 02=lightgun 
+     .byte <paddlebuttonhandler     ; 03=paddle
+     .byte <joybuttonhandler        ; 04=trakball
+     .byte <joybuttonpadhandler     ; 05=vcs joystick
+     .byte <joybuttonhandler        ; 06=driving control
+     .byte 0                        ; 07=keypad
+     .byte <mousebuttonhandler      ; 08=st mouse
+     .byte <mousebuttonhandler      ; 09=amiga mouse
+     .byte <joybuttonhandler        ; 10=atarivox
+     .byte <snes2atarihandler       ; 11=snes
+     .byte 0                        ; 12=mega7800
 
 drawwait
      bit visibleover ; 255 if screen is being drawn, 0 when not.
@@ -1891,6 +1792,7 @@ noeor
 
      ; *** bcd conversion routine courtesy Omegamatrix
      ; *** http://atariage.com/forums/blog/563/entry-10832-hex-to-bcd-conversion-0-99/
+ ifconst .calledfunction_converttobcd
 converttobcd
      ;value to convert is in the accumulator
      sta temp1
@@ -1910,7 +1812,9 @@ converttobcd
      adc temp2
      adc temp1 
      rts ; return the result in the accumulator
+ endif ; .calledfunction_converttobcd
 
+ ifconst .calledfunction_mul8
      ; Y and A contain multiplicands, result in A
 mul8
      sty temp1
@@ -1928,7 +1832,9 @@ skipmul8
      bne reptmul8
 donemul8
      rts
+ endif ; .calledfunction_mul8
 
+ ifconst .calledfunction_div8
 div8
      ; A=numerator Y=denominator, result in A
      cpy #2
@@ -1943,7 +1849,9 @@ div8end
      tya
      ; result in A
      rts
+ endif ; .calledfunction_div8
 
+ ifconst .calledfunction_mul16
      ; Y and A contain multiplicands, result in temp2,A=low, temp1=high
 mul16
      sty temp1
@@ -1963,7 +1871,9 @@ mul16_2
      bne mul16_1
      sta temp2
      rts
+ endif ; .calledfunction_mul16
 
+ ifconst .calledfunction_div16
      ; div int/int
      ; numerator in A, denom in temp1
      ; returns with quotient in A, remainder in temp1
@@ -1985,6 +1895,7 @@ div16_2
      sta temp1
      lda temp2
      rts
+ endif ; .calledfunction_div16
 
      ifconst bankswitchmode
 BS_jsr
@@ -2022,45 +1933,14 @@ BS_return
      endif
 
 checkselectswitch
-     lda SWCHB ; first check the real select switch...
+     lda SWCHB ; check the real select switch...
      and #%00000010
-     ifnconst SOFTPAUSEOFF
-         ifnconst MOUSESUPPORT
-             ifnconst TRAKBALLSUPPORT
-                 beq checkselectswitchreturn ; switch is pressed
-                 lda port0control
-                 cmp #11
-                 bne checkselectsoftswitch
-                 lda #$ff
-                 rts
-checkselectsoftswitch
-                 lda SWCHA ; then check the soft "select" joysick code...
-                 and #%10110000 ; R_DU
-             endif ; TRAKBALLSUPPORT
-         endif ; MOUSESUPPORT
-     endif ; SOFTPAUSEOFF
 checkselectswitchreturn
      rts
 
 checkresetswitch
-     lda SWCHB ; first check the real reset switch...
+     lda SWCHB ; check the real reset switch...
      and #%00000001
-     ifnconst SOFTPAUSEOFF
-         ifnconst MOUSESUPPORT
-             ifnconst TRAKBALLSUPPORT
-                 beq checkresetswitchreturn ; switch is pressed
-                 lda port0control
-                 cmp #11
-                 bne checkresetsoftswitch
-                 lda #$ff
-                 rts
-checkresetsoftswitch
-                 lda SWCHA ; then check the soft "reset" joysick code...
-                 and #%01110000 ; _LDU
-             endif ; TRAKBALLSUPPORT
-         endif ; MOUSESUPPORT
-     endif ; SOFTPAUSEOFF
-checkresetswitchreturn
      rts
 
      ifconst FINESCROLLENABLED
@@ -3327,40 +3207,32 @@ skipkeypadcolumnread1
      endif ; KEYPADSUPPORT
      
 setportforinput
-     lda CTLSWAs
-     and allpinsinputlut,x
-     sta CTLSWAs
+     lda CTLSWA
+     and SWCHA_DIRMASK,x
      sta CTLSWA
      rts
-
-allpinsinputlut
-     .byte $0F, $F0
 
 setonebuttonmode
      lda #6 ; in case we're in unlocked-bios mode
      sta VBLANK ; if we were on paddles, the line is grounded out.
      lda #$14
-     sta CTLSWB ; set both 2-button disable bits to writable
-     lda CTLSWBs
-     ora thisjoy2buttonbit,x 
-     sta CTLSWBs
-     sta SWCHB ; turn off the 2-button disable bits
+     sta CTLSWB
+     lda SWCHB
+     ora thisjoy2buttonbit,x ; disable: write 1 to the 2-button bit
+     sta SWCHB
      rts
-
-thisjoy2buttonbit
-     .byte $04, $10
 
 settwobuttonmode
      lda #6 ; in case we're in unlocked-bios mode
      sta VBLANK ; if we were on paddles, the line is grounded out.
      lda #$14
-     sta CTLSWB ; set both 2-button disable bits to writable
-     lda CTLSWBs
-     and thisjoy2buttonmask,x
-     sta CTLSWBs
+     sta CTLSWB
+     lda SWCHB
+     and thisjoy2buttonbit+1,x ; enable: write 0 to the 2-button bit
      sta SWCHB
      rts
      
-thisjoy2buttonmask
-     .byte $fb, $ef
+thisjoy2buttonbit
+          ; p0   p1   p0
+     .byte $04, $10, $04
 

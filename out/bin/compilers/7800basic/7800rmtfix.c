@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdarg.h>
 
 long int DESTADDR =  0x4000;
 
@@ -26,10 +27,10 @@ struct rmtheader
     uint16_t vect3;
 
     unsigned char magic[4];	//RMT4 
-    uint8_t track_len;
-    uint8_t song_speed;
-    uint8_t player_freq;
-    uint8_t format_version_number;
+    uint8_t  track_len;
+    uint8_t  song_speed;
+    uint8_t  player_freq;
+    uint8_t  format_version_number;
     uint16_t pointer_to_instrument_pointers;
     uint16_t pointer_to_track_pointers_lo;
     uint16_t pointer_to_track_pointers_hi;
@@ -43,6 +44,7 @@ struct upoint
 
 #pragma pack(pop)
 
+int strippedrmt = 0;
 
 int main (int argc, char **argv)
 {
@@ -58,14 +60,11 @@ int main (int argc, char **argv)
 
     if (argc == 1)
     {
-	fprintf (stderr, "Usage:\n%s [RMT or SAP filename] [0xNNNN]\n", argv[0]);
+	fprintf (stderr, "Usage:\n%s RMT_or_SAP_filename [0xNNNN] [-s]\n", argv[0]);
+	fprintf (stderr, "  [0xNNNN] is the optional relocation address\n");
+	fprintf (stderr, "  [-s] creates a stripped RMT for driver playback\n");
 	return (1);
     }
-    strncpy (outname, argv[1], 1024);
-    int len = strlen (outname);
-    if ((len > 4) && (outname[len - 4] == '.'))
-	outname[len - 4] = 0;
-    strcat (outname, "_rmtfix.rmt");
 
     in = fopen (argv[1], "rb");
     if (in == NULL)
@@ -82,6 +81,7 @@ int main (int argc, char **argv)
 	return (3);
     }
     buffer = malloc (size+6) + 6;
+    memset(buffer,0,6);
     if (fread (buffer, 1, size, in) == 0)
     {
 	fprintf (stderr, "ERR: couldn't read from '%s'.\n", argv[1]);
@@ -89,8 +89,29 @@ int main (int argc, char **argv)
     }
     fclose (in);
 
-    if (argc==3)
-        DESTADDR=strtol(argv[2],NULL,0); 
+
+    int i;
+    for(i=2;i<argc;i++)
+    {
+        if(strcmp(argv[i],"-s")==0)
+            strippedrmt=1;
+        else if ((argv[i][0]=='0')&&(argv[i][1]=='x'))
+            DESTADDR=strtol(argv[i],NULL,0); 
+	else
+        {
+	    fprintf (stderr, "ERR: unknown argument\n");
+	    return (5);
+        }
+    }
+
+    strncpy (outname, argv[1], 1024);
+    int len = strlen (outname);
+    if ((len > 4) && (outname[len - 4] == '.'))
+	outname[len - 4] = 0;
+    if(strippedrmt)
+        strcat (outname, ".rmts");
+    else
+        strcat (outname, "_rmtfix.rmt");
 
     // Search for our RMT4 header...
     for (t = 0; t < size - 10; t++)
@@ -101,7 +122,7 @@ int main (int argc, char **argv)
     if (t == size - 10)
     {
 	fprintf (stderr, "ERR: no RMT4 header was found in '%s'.\n", argv[1]);
-	return (5);
+	return (6);
     }
 
 
@@ -110,7 +131,7 @@ int main (int argc, char **argv)
     if (out == NULL)
     {
 	fprintf (stderr, "ERR: couldn't open '%s' for writing.\n", outname);
-	return (4);
+	return (7);
     }
 
     fprintf (stderr, "locating RMT file to 0x%04lx\n",DESTADDR);
@@ -183,6 +204,6 @@ int main (int argc, char **argv)
     rmthead->vect2_start = DESTADDR;
     rmthead->vect1 = 0xffff;
 
-    fwrite (buffer + rmtstart - 6, 1, size - rmtstart + 6, out);
+    fwrite (buffer + rmtstart - 6 + (strippedrmt*6), 1, size - rmtstart + 6 - (strippedrmt*6), out);
     fclose (out);
 }

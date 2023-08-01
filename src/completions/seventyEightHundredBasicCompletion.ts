@@ -150,6 +150,12 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                         new vscode.CompletionItem('joy0fire', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('joy0fire0', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('joy0fire1', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('joy0fire2', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('joy0fire3', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('joy0fire4', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('joy0fire5', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('joy0select', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('joy0start', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('joy1up', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('joy1down', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('joy1left', vscode.CompletionItemKind.Function),
@@ -158,6 +164,12 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                         new vscode.CompletionItem('joy1fire', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('joy1fire0', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('joy1fire1', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('joy1fire2', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('joy1fire3', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('joy1fire4', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('joy1fire5', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('joy1select', vscode.CompletionItemKind.Function),
+                        new vscode.CompletionItem('joy1start', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('mousex0', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('mousex1', vscode.CompletionItemKind.Function),
                         new vscode.CompletionItem('mousey0', vscode.CompletionItemKind.Function),
@@ -302,6 +314,27 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
             },
             ' ');
 
+        // debug 
+        let debugProvider = vscode.languages.registerCompletionItemProvider(
+            this.Id,
+            {
+                // return list of available language methods
+                provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+                    // get all text until the `position` and check if it reads `return `
+                    let linePrefix = document.lineAt(position).text.substring(0, position.character);
+                    if (!linePrefix.endsWith('debug ')) {
+                        return undefined;
+                    }
+
+                    return [
+                        new vscode.CompletionItem('color', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('frames', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('interrupt', vscode.CompletionItemKind.Value)
+                    ];
+                }
+            },
+            ' ');
+
         // deprecated 
         let deprecatedModeProvider = vscode.languages.registerCompletionItemProvider(
             this.Id,
@@ -316,7 +349,8 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
 
                     return [
                         new vscode.CompletionItem('frameheight', vscode.CompletionItemKind.Value),
-                        new vscode.CompletionItem('160bindexes', vscode.CompletionItemKind.Value)
+                        new vscode.CompletionItem('160bindexes', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('boxcollision', vscode.CompletionItemKind.Value)
                     ];
                 }
             },
@@ -345,7 +379,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
             ' ');
 
         // tallsprite
-        let tallsrpiteModeProvider = vscode.languages.registerCompletionItemProvider(
+        let tallspriteModeProvider = vscode.languages.registerCompletionItemProvider(
             this.Id,
             {
                 // return list of available language methods
@@ -360,6 +394,49 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                         new vscode.CompletionItem('off', vscode.CompletionItemKind.Value),
                         new vscode.CompletionItem('on', vscode.CompletionItemKind.Value),
                         new vscode.CompletionItem('spritesheet', vscode.CompletionItemKind.Value)
+                    ];
+                }
+            },
+            ' ');
+
+        // trackersupport
+        let trackerSupportProvider = vscode.languages.registerCompletionItemProvider(
+            this.Id,
+            {
+                // return list of available language methods
+                provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+                    // get all text until the `position` and check if it reads `return `
+                    let linePrefix = document.lineAt(position).text.substring(0, position.character);
+                    if (!linePrefix.endsWith('trackersupport ')) {
+                        return undefined;
+                    }
+
+                    return [
+                        new vscode.CompletionItem('basic', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('rmt', vscode.CompletionItemKind.Value)
+                    ];
+                }
+            },
+            ' ');
+
+        // optimization
+        let optimizationModeProvider = vscode.languages.registerCompletionItemProvider(
+            this.Id,
+            {
+                // return list of available language methods
+                provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+                    // get all text until the `position` and check if it reads `return `
+                    let linePrefix = document.lineAt(position).text.substring(0, position.character);
+                    if (!linePrefix.endsWith('optimization ')) {
+                        return undefined;
+                    }
+
+                    return [
+                        new vscode.CompletionItem('speed', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('size', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('noinlinedata', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('inlinerand', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('none', vscode.CompletionItemKind.Value)
                     ];
                 }
             },
@@ -380,9 +457,12 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                     return [
                         new vscode.CompletionItem('romsize', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('doublewide', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('debug', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('tallsprite', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('tv', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('xm', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('zoneheight', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('frameskipfix', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('screenheight', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('extradlmemory', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('dlmemory', vscode.CompletionItemKind.Method),
@@ -395,19 +475,29 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                         new vscode.CompletionItem('pauseroutine', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('pokeysound', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('pokeysupport', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('pokeysfxsupport', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('tiasfx', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('trackersupport', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('fourbitfade', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('tiavolume', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('rmtvolume', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('rmtspeed', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('paddlerange', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('paddlepair', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('paddlescalex2', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('drivingboost', vscode.CompletionItemKind.Method),
-                        new vscode.CompletionItem('mousexonly', vscode.CompletionItemKind.Method),          
+                        new vscode.CompletionItem('mousexonly', vscode.CompletionItemKind.Method),  
+                        new vscode.CompletionItem('mousetime', vscode.CompletionItemKind.Method),      
+                        new vscode.CompletionItem('trakxonly', vscode.CompletionItemKind.Method),  
+                        new vscode.CompletionItem('traktime', vscode.CompletionItemKind.Method),    
                         new vscode.CompletionItem('avoxvoice', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('mcpdevcart', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('multibutton', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('canary', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('crashdump', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('breakprotect', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('basepath', vscode.CompletionItemKind.Method),
-                        new vscode.CompletionItem('banksets', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('bankset', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('hssupport', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('hsgamename', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('hsseconds', vscode.CompletionItemKind.Method),
@@ -417,15 +507,21 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                         new vscode.CompletionItem('hsgameranks', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('snes0pause', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('snes1pause', vscode.CompletionItemKind.Method),
-                        new vscode.CompletionItem('snes#pause', vscode.CompletionItemKind.Method)
+                        new vscode.CompletionItem('snes#pause', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('multibuttonpause', vscode.CompletionItemKind.Method),       
+                        new vscode.CompletionItem('softresetpause', vscode.CompletionItemKind.Method),                    
+                        new vscode.CompletionItem('smartbranching', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('optimization', vscode.CompletionItemKind.Method)
                     ];
                 }
             },
             ' ');
 
         // add items           
-        context.subscriptions.push(ifProvider, returnProvider, romsizeProvider, displayModeProvider, shakescreenModeProvider, 
-            deprecatedModeProvider, drawhiscoresProvider, tallsrpiteModeProvider, setProvider);
+        context.subscriptions.push(ifProvider, returnProvider, romsizeProvider, displayModeProvider, shakescreenModeProvider,
+            debugProvider, deprecatedModeProvider, drawhiscoresProvider, 
+            tallspriteModeProvider, trackerSupportProvider,
+            optimizationModeProvider, setProvider);
     }
 
 }

@@ -15,6 +15,8 @@ mutepokeyloop
 	bpl mutepokeyloop
 	rts
 
+ ifconst pokeysfxsupport
+
 checkpokeyplaying
          ldx #6
 checkpokeyplayingloop
@@ -153,6 +155,11 @@ schedulepokeyX
          lda #0
          sta pokey1tick,x
          rts
+ else
+schedulepokeysfx ; just some stubs
+checkpokeyplaying
+         rts
+ endif ; pokeysfxsupport
 
          ; pokey detection routine. we check for pokey in the XBOARD/XM location,
          ; and the standard $4000 location.
@@ -287,4 +294,4 @@ pokeysoundmoduleend
 
  echo "  (pokeysound module is using ",[(pokeysoundmoduleend-pokeysoundmodulestart)]d," bytes of rom)"
 
- endif
+ endif ; pokeysupport

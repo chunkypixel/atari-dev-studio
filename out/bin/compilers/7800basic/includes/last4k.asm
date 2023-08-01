@@ -56,6 +56,12 @@
  ifnconst included.pokeysound.asm
      include pokeysound.asm
  endif
+ ifnconst included.snes2atari.asm
+     include snes2atari.asm
+ endif
+ ifnconst included.mega7800.asm
+     include mega7800.asm
+ endif
  ifnconst included.tracker.asm
      include tracker.asm
  endif

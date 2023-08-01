@@ -68,11 +68,11 @@ if [ "$2" = "-O" ]
 fi
 
 if [ -r banksetrom.asm ] ; then
-    dasm$DASMEXT "$bas7800dir/includes/banksetskeleton.asm" -I"$bas7800dir/includes" -f3 -l"banksetrom.list.txt" -s"banksetrom.symbol.txt" -o"banksetrom.bin" | 7800filter$EXT 
+    dasm$DASMEXT "$bas7800dir/includes/banksetskeleton.asm" -I"$bas7800dir/includes" -f3 -l"banksetrom.list.txt" -p20 -s"banksetrom.symbol.txt" -o"banksetrom.bin" | 7800filter$EXT 
     banksetsymbols$EXT
 fi
 
-dasm$DASMEXT $1.asm -I"$bas7800dir/includes" -f3 -l"$1.list.txt" -s"$1.symbol.txt" -o"$1.bin" | 7800filter$EXT 
+dasm$DASMEXT $1.asm -I"$bas7800dir/includes" -f3 -l"$1.list.txt" -p20 -s"$1.symbol.txt" -o"$1.bin" | 7800filter$EXT 
 
 7800sign$EXT -w "$1.bin"
 
