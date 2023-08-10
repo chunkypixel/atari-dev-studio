@@ -174,7 +174,7 @@ SNES2ATARI_SIGNAL
          and SWCHA_DIRMASK+1,x ; preserve other nibble
          ora SNES_CTLSWA_SIGNAL,x
          sta CTLSWA 
-         lda CTLSWA
+         lda SWCHA
          and SWCHA_DIRMASK+1,x ; preserve other nibble
          sta SWCHA
          ldy #16 

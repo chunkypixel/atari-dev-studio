@@ -139,7 +139,7 @@
 				},
 				{
 					"name": "keyword.other.78b",
-					"match": "\\b(adjustvisible|alphachars|alphadata|avoxvoice|bankset|basepath|breakprotect|boxcollision|characterset|canary|crashdump|clearscreen|collision|collisionwrap|converttobcd|deprecated|dictionary|dmahole|drawscreen|drawwait|drawhiscores|data|debug|displaymode|dlmemory|doublebuffer|doublewide|dumpgraphics|extradlmemory|extrawide|frameskipfix|fourbitfade|getfade|hiscoreload|hiscoreclear|hscolorbase|hsdifficultytext|hsgamename|hsgameranks|hsscoresize|hsseconds|hssupport|incbanner|incbin|incgraphic|incmapfile|incrmtfile|lockzone|loadmemory|loadrambank|loadrombank|mcpdevcart|memcpy|memset|multibutton|mutesfx|newblock|noflow|optimization|pauseroutine|peekchar|pitch|phonetic|playrmt|playsfx|playsong|plotbanner|plotchars|plotmap|plotmapfile|plotsprite|plotvalue|plotvalueonscreen|plotvaluepage|pokechar|pokeybase|pokeydetected|pokeysound|pokeysupport|pokeysfxsupport|psound|raw|reboot|restorescreen|reset|rmtspeed|rmtvolume|romsize|savescreen|savememory|screenheight|setfade|sdata|shakescreen|singlewide|sizeof|smartbranching|songtempo|speak|speechdata|speed|sread|startrmt|stoprmt|stopsong|songdata|tallsprite|tiasfx|tiavolume|trackersupport|tsound|unlockzone|voice|xm|zoneheight|zoneprotection)\\b",
+					"match": "\\b(7800GDmenuoff|7800header|adjustvisible|alphachars|alphadata|avoxvoice|bankset|basepath|breakprotect|boxcollision|characterset|canary|crashdump|clearscreen|collision|collisionwrap|converttobcd|deprecated|dictionary|dmahole|drawscreen|drawwait|drawhiscores|data|debug|displaymode|dlmemory|doublebuffer|doublewide|dumpgraphics|extradlmemory|extrawide|frameskipfix|fourbitfade|getfade|hiscoreload|hiscoreclear|hscolorbase|hsdifficultytext|hsgamename|hsgameranks|hsscoresize|hsseconds|hssupport|incbanner|incbin|incgraphic|incmapfile|incrmtfile|lockzone|loadmemory|loadrambank|loadrombank|mcpdevcart|memcpy|memset|multibutton|mutesfx|newblock|noflow|optimization|pauseroutine|peekchar|pitch|phonetic|playrmt|playsfx|playsong|plotbanner|plotchars|plotmap|plotmapfile|plotsprite|plotvalue|plotvalueonscreen|plotvaluepage|pokechar|pokeybase|pokeydetected|pokeysound|pokeysupport|pokeysfxsupport|psound|raw|reboot|restorescreen|reset|rmtspeed|rmtvolume|romsize|savescreen|savememory|screenheight|setfade|sdata|shakescreen|singlewide|sizeof|smartbranching|songtempo|speak|speechdata|speed|sread|startrmt|stoprmt|stopsong|songdata|tallsprite|tiasfx|tiavolume|trackersupport|tsound|unlockzone|voice|xm|zoneheight|zoneprotection)\\b",
 					"comment": "other keywords"
 				},	
 				{ 
@@ -164,7 +164,7 @@
 				},
 				{
 					"name": "keyword.constant.78b",
-					"match": "\\b(on|off|lo|med|hi|flip|frameheight|160bindexes|tv|spritesheet|ntsc|pal|basic|rmt|repeat|160A|160B|320A|320B|320C|320D|16k|32k|48k|128k|128kRAM|128kBANKRAM|144k|256k|256kRAM|256kBANKRAM|272k|512k|512kRAM|512kBANKRAM|528k|attract|single|player1|player2|player2joy1)\\b",
+					"match": "\\b(on|off|lo|med|hi|flip|frameheight|160bindexes|tv|spritesheet|ntsc|pal|basic|rmt|repeat|160A|160B|320A|320B|320C|320D|16k|32k|48k|128k|128kRAM|128kBANKRAM|144k|256k|256kRAM|256kBANKRAM|272k|512k|512kRAM|512kBANKRAM|528k|attract|single|player1|player2|player2joy1|all)\\b",
 					"comment": "constant keywords"
 				},
 				{

@@ -167,9 +167,9 @@ int main (int argc, char **argv)
     //fix bits that shouldn't be set in the header
     if (!printinfo)
     {
-	if (myheader.controller1 > 11)
+	if (myheader.controller1 > 12)
 	    myheader.controller1 = 1;
-	if (myheader.controller2 > 11)
+	if (myheader.controller2 > 12)
 	    myheader.controller2 = 1;
 	if (myheader.version < 3)
 	    myheader.tvformat &= 1;

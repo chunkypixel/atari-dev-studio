@@ -522,6 +522,8 @@
     singlewide (optional)* - there are special requirements to using this feature. Check the 
                              7800basic Programming forum for details
 
+    NOTE: from v0.29 onwards more than 32 characters can be plotted
+
 
 
 ## PLOTMAP
@@ -1174,7 +1176,7 @@
 
 ## PLAYRMT
 
-    playrmt $#### or incrmtfile 
+    playrmt $#### or incrmtfile
 
     $#### - address of tune ie. $6000 or set as incrmtfile
 
@@ -1298,5 +1300,24 @@
    set multibutton state
 
    state - on, off
+
+
+
+## 7800GDMENUOFF
+
+   set 7800GDmenuoff state
+
+   state - 0 (left controller), 1 (right controller), all (both controllers)
+
+
+
+## 7800HEADER
+
+   set 7800header command
+
+   command - eg. 'name 'name of rom', 'set hsc'
+
+   NOTE: refer to list of header flags for available options
+
 
 

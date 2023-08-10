@@ -509,6 +509,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                         new vscode.CompletionItem('snes1pause', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('snes#pause', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('multibuttonpause', vscode.CompletionItemKind.Method),       
+                        new vscode.CompletionItem('7800GDmenuoff', vscode.CompletionItemKind.Method),   
                         new vscode.CompletionItem('softresetpause', vscode.CompletionItemKind.Method),                    
                         new vscode.CompletionItem('smartbranching', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('optimization', vscode.CompletionItemKind.Method)

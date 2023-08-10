@@ -9,7 +9,7 @@ mega7800handler
      ora SWCHA_DIRMASK,x    ; our sSWCHA nibble.
      sta sSWCHA
      lda SWCHA              ; load the actual joystick dirs, ensuring
-     ora SWCHA_DIRMASK+1,x ; we don't change the other nibble.
+     ora SWCHA_DIRMASK+1,x  ; we don't change the other nibble.
      and sSWCHA
      sta sSWCHA 
 
@@ -70,7 +70,6 @@ m7skipp1shift
      sta CTLSWA ; set this port back to input
 
      ; if mega7800 isn't detected this frame, unpress any buttons...
-     ; to avoid
      lda inttemp5
      and #%00000011
      beq m7skipscuttle
@@ -91,7 +90,6 @@ m7skipscuttle
           tay
           lda megabuttons,y
           sta multibuttoncount0,x
-          ; todo : update multibuttoncount0,x
      endif ; MULTIBUTTON
 
      lda inttemp5

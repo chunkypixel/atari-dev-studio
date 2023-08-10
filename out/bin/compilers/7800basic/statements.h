@@ -3,6 +3,8 @@
 #define _readpaddle 1
 #define _background 64
 #define MAX_EXTRAS 5
+#define SIZEOFSTATEMENT 200
+#define STATEMENTCOUNT  200
 
 #define MODE160A 0
 #define MODE160B 1

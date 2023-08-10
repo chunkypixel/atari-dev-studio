@@ -97,6 +97,7 @@ char *filterterm[] = {
     "^0.calledfunction_mul16",
     "^0.calledfunction_div8",
     "^0.calledfunction_div16",
+    "^0.calledfunction_converttobcd",
     "^interrupthold",
     "_main2 ",
     "_main3 ",

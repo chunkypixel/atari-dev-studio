@@ -61,7 +61,7 @@ int main (int argc, char **argv)
 
     for (t = 0; t < (binsize - 13); t++)
     {
-	if (memcmp ("SNIPStart", binbuffer + t, 10) == 0)
+	if (memcmp ("SNIPStart", (char *)binbuffer + t, 10) == 0)
 	{
 	    t = t + 10;
 	    strncpy (snipfilename, binbuffer + t, 1023);
