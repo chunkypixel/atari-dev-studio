@@ -4528,7 +4528,7 @@ void incgraphic (char *file_name, int offset)
 
 		for (l = 0; l < 7; l = l + 1)
 		{
-		    if ((row[x + l] == row[x + l + 1]))	// not a perfect check, but what a weird scheme. :|
+		    if (row[x + l] == row[x + l + 1])	// not a perfect check, but what a weird scheme. :|
 		    {
 			char sBuffer[400];
 			sprintf (sBuffer,

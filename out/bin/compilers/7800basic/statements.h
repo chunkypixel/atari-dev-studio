@@ -46,7 +46,7 @@ void add_includes (char *);
 void create_includes (char *);
 void incline ();
 void fixfilename (char *);
-void init_includes ();
+void init_includes (char *);
 void invalidate_Areg ();
 void shiftdata (char **, int);
 void compressdata (char **, int, int);
