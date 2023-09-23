@@ -32,6 +32,8 @@ int linenumber=1;
 %x plotmapfile
 %x set
 %x setquotestart
+%x backup
+%x backupquotestart
 %%    
 [ \t]+ putchar(' ');
 [ \t\r]+$
@@ -153,6 +155,15 @@ int linenumber=1;
 <setquotestart>[ \t] putchar('^');
 <setquotestart>['] {printf("%s",yytext);BEGIN(set);}
 <setquotestart>^\n* printf("%s",yytext);
+
+"backup" {printf("%s",yytext);BEGIN(backup);}
+<backup>['] {printf("%s",yytext);BEGIN(backupquotestart);}
+<backup>^\n* printf("%s",yytext);
+<backup>\n {linenumber++;printf("\n");BEGIN(INITIAL);}
+
+<backupquotestart>[ \t] putchar('^');
+<backupquotestart>['] {printf("%s",yytext);BEGIN(set);}
+<backupquotestart>^\n* printf("%s",yytext);
 
 ".asm" printf("%s",yytext);
 "extra"[0-9]+: printf("%s",yytext);

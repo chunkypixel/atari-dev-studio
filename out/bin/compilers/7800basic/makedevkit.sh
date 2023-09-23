@@ -18,10 +18,11 @@ make dist
 
 rm -fr packages
 mkdir packages 2>/dev/null
-cp -R 7800devkit packages/7800AsmDevKit
 
 rm -f samples/*/*.a78 samples/*/*.bin samples/*/*bas.asm samples/*/*.txt samples/*/*.cfg samples/*/*.h samples/*/includes.7800
 rm -fr samples/*/cfg samples/*/nvram
+
+cp -R 7800devkit packages/7800AsmDevKit
 
 #populate architecture neutral stuff into the dist directory
 mkdir packages/7800AsmDevKit/includes 2>/dev/null
@@ -42,17 +43,19 @@ for OSARCH in linux@Linux osx@Darwin win@Windows ; do
 			  rm packages/7800AsmDevKit/7800optimize* 
 			  rm packages/7800AsmDevKit/7800postprocess* 
 			  rm packages/7800AsmDevKit/7800preprocess* 
-			  rm packages/7800AsmDevKit/7800asm* 
+			  rm packages/7800AsmDevKit/7800asm 
 			  rm packages/7800AsmDevKit/7800makecc2* 
 			  rm packages/7800AsmDevKit/7800sign
 			  rm packages/7800AsmDevKit/banksetsymbols*
 			  rm packages/7800AsmDevKit/snip*
 			  rm packages/7800AsmDevKit/lz4raw*
-			  rm packages/7800AsmDevKit/7800rmtfix*
+			  rm packages/7800AsmDevKit/7800rmt*
 			  rm packages/7800AsmDevKit/dasm
 			  rm packages/7800AsmDevKit/7800header
-			  rm packages/7800AsmDevKit/install*
+			  rm packages/7800AsmDevKit/install*sh
                         done
+			cp 7800devkit/install_win.bat packages/7800AsmDevKit/
+			cp 7800devkit/7800asm.bat packages/7800AsmDevKit/
                         (cd packages ; zip -r 7800AsmDevKit-$ERELEASE-$OS-$BITS.zip 7800AsmDevKit)
 			for FILE in *"$ARCH"."$BITS".exe ; do
 			   SHORT=$(echo $FILE | cut -d. -f1)
@@ -62,6 +65,7 @@ for OSARCH in linux@Linux osx@Darwin win@Windows ; do
 			dos2unix packages/7800AsmDevKit/*.txt
 			rm -f packages/7800AsmDevKit/7800asm.bat
 			rm -f packages/7800AsmDevKit/install_win.bat
+                        rm -f packages/7800AsmDevKit/7800rmt2asm
 			cp 7800devkit/install_ux.sh packages/7800AsmDevKit/
 			cp 7800devkit/7800asm packages/7800AsmDevKit/
 			for FILE in *"$ARCH"."$BITS" ; do
@@ -75,16 +79,15 @@ for OSARCH in linux@Linux osx@Darwin win@Windows ; do
 			  rm packages/7800AsmDevKit/7800optimize* 
 			  rm packages/7800AsmDevKit/7800postprocess* 
 			  rm packages/7800AsmDevKit/7800preprocess* 
-			  rm packages/7800AsmDevKit/7800asm* 
+			  rm packages/7800AsmDevKit/7800asm*bat 
 			  rm packages/7800AsmDevKit/7800makecc2* 
 			  rm packages/7800AsmDevKit/7800sign.exe
 			  rm packages/7800AsmDevKit/dasm.exe
 			  rm packages/7800AsmDevKit/7800header.exe
 			  rm packages/7800AsmDevKit/banksetsymbols*
 			  rm packages/7800AsmDevKit/snip*
-			  rm packages/7800AsmDevKit/7800rmtfix*
 			  rm packages/7800AsmDevKit/lz4raw*
-			  rm packages/7800AsmDevKit/install*
+			  rm packages/7800AsmDevKit/7800rmt*
 
                         (cd packages ; tar --numeric-owner -cvzf 7800AsmDevKit-$ERELEASE-$OS-$BITS.tar.gz 7800AsmDevKit)
 			for FILE in *"$ARCH"."$BITS" ; do

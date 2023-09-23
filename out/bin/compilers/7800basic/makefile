@@ -12,8 +12,8 @@ LEXFLAGS=-t
 
 all: 7800basic 7800preprocess 7800postprocess 7800filter 7800optimize 7800header 7800sign 7800makecc2 snip banksetsymbols 7800rmtfix 7800rmt2asm
 
-7800basic: 7800bas.c statements.c keywords.c statements.h keywords.h atarivox.h
-	${CC} ${CFLAGS} -o $@ 7800bas.c statements.c keywords.c -lz -lpng -lm
+7800basic: 7800bas.c statements.c keywords.c statements.h keywords.h atarivox.h minitar.c minitar.h
+	${CC} ${CFLAGS} -o $@ 7800bas.c statements.c keywords.c minitar.c -lz -lpng -lm
 
 7800postprocess: postprocess.c
 	${CC} ${CFLAGS} -o $@ postprocess.c

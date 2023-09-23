@@ -11,6 +11,7 @@
 #include "statements.h"
 #include "keywords.h"
 #include "atarivox.h"
+#include "minitar.h"
 
 #ifndef TRUE
 #define TRUE (1==1)
@@ -21,6 +22,7 @@
 
 extern char stdoutfilename[256];
 extern FILE *stdoutfilepointer;
+extern char backupname[256];
 char redefined_variables[80000][100];
 
 char includespath[500];
@@ -101,6 +103,9 @@ int tallspritecount = 0;
 
 int fourbitfade_alreadyused = 0;
 
+int backupflag = FALSE;
+int backupcount = 0;
+
 #define BANKSETASM "banksetrom.asm"
 #define BANKSETSTRINGSASM "banksetstrings.asm"
 
@@ -113,6 +118,7 @@ int dumpgraphicsaddr = 0;
 
 #define PNG_DEBUG 3
 #include <png.h>
+
 
 void currdir_foundmsg (char *foundfile)
 {
@@ -153,6 +159,38 @@ void checkvalidfilename (char *filename)
 	if ((!isalpha (filename[t])) && (!isdigit (filename[t])) && (filename[t] != '.') && (filename[t] != '_'))
 	    prerror ("'%s' filename must only contain letters and digits", filename);
     }
+}
+
+void backupthisfile(char *filename)
+{
+    if(!backupflag)
+        return;
+    removeCR (filename);
+    if(AddToArchive(filename,TRUE)==FALSE)
+	prerror ("unable to backup '%s'",filename);
+    backupcount++;
+}
+
+
+void backup(char **statement)
+{
+    assertminimumargs (statement, "backup", 1);
+    removeCR (statement[2]);
+    char *backupstr=statement[2];
+    if (*backupstr == '\'')
+        backupstr++;
+    int t;
+    for(t=0;t<SIZEOFSTATEMENT;t++)
+    {
+        if(backupstr[t]==0)
+            break;
+        if(backupstr[t]=='^')
+            backupstr[t]=' ';
+    }
+    if(backupstr[t-1]=='\'')
+        backupstr[t-1]=0;
+
+    backupthisfile(backupstr);
 }
 
 
@@ -1355,7 +1393,7 @@ int gettallspriteindex (char *needle)
 }
 
 
-void plotsprite (char **statement)
+void plotsprite (char **statement, int fourbytesprite)
 {
     //    1          2         3    4 5   6        7
     //plotsprite spritename palette x y [frame] [tallheight]
@@ -1366,7 +1404,15 @@ void plotsprite (char **statement)
     // temp4 = x
     // temp5 = y
 
+    static int firstfourbyte = 1;
+
     assertminimumargs (statement, "plotsprite", 4);
+
+    if(fourbytesprite && firstfourbyte)
+    {
+	strcpy (redefined_variables[numredefvars++], "PLOTSP4 = 1");
+	sprintf (constants[numconstants++], "PLOTSP4");
+    }
 
     int tsi = gettallspriteindex (statement[2]);
 
@@ -1439,10 +1485,14 @@ void plotsprite (char **statement)
     printf ("%s\n", statement[5]);	//Y
     printf ("    sta temp5\n\n");
 
-    printf ("    lda #(%s_mode|%%01000000)\n", statement[2]);
-    printf ("    sta temp6\n\n");
-
-    jsr ("plotsprite");
+    if(!fourbytesprite)
+    {
+        printf ("    lda #(%s_mode|%%01000000)\n", statement[2]);
+        printf ("    sta temp6\n\n");
+        jsr ("plotsprite");
+    }
+    else
+        jsr ("plotsprite4");
 
     if ((statement[6][0] != 0) && (statement[6][0] != ':') && (statement[7][0] != 0) && (statement[7][0] != ':'))
     {
@@ -1459,7 +1509,10 @@ void plotsprite (char **statement)
 	    printf ("    lda temp5\n");
 	    printf ("    adc #WZONEHEIGHT\n");
 	    printf ("    sta temp5\n");
-	    printf ("    jsr plotsprite\n");
+            if(!fourbytesprite)
+	        printf ("    jsr plotsprite\n");
+            else
+	        printf ("    jsr plotsprite4\n");
 	}
     }
     else if ((tsi >= 0) && (tallspritemode != 2))
@@ -1478,8 +1531,32 @@ void plotsprite (char **statement)
 	    printf ("    jsr plotsprite\n");
 	}
     }
-
 }
+
+void PLOTSPRITE (char **statement, int fourbytesprite)
+{
+    //    1          2         3    4 5    6    
+    //plotsprite spritename palette x y [frame]
+
+    //a wrapper to the PLOTSPRITE* family of macros
+    assertminimumargs (statement, "PLOTSPRITE", 4);
+
+    if(fourbytesprite)
+    {
+        if (isimmed (statement[3])) // palette is a constant
+            printf (" PLOTSPRITE4 %s,%s,%s,%s,%s\n",statement[2],statement[3],statement[4],statement[5],statement[6]);
+        else // palette is a variable
+            printf (" PLOTSPRITE4VP %s,%s,%s,%s,%s\n",statement[2],statement[3],statement[4],statement[5],statement[6]);
+    }
+    else //!fourbytesprite
+    {
+        if (isimmed (statement[3])) // palette is a constant
+            printf (" PLOTSPRITE %s,%s,%s,%s,%s\n",statement[2],statement[3],statement[4],statement[5],statement[6]);
+        else // palette is a variable
+            printf (" PLOTSPRITEVP %s,%s,%s,%s,%s\n",statement[2],statement[3],statement[4],statement[5],statement[6]);
+    }
+}
+
 
 void plotbanner (char **statement)
 {
@@ -1816,11 +1893,11 @@ void plotchars (char **statement)
         printf ("    sta temp2\n\n");
 
 	if ((doublewide == 1) && (strncmp (statement[6], "singlewide", 10) != 0))
-            printf ("    lda #%d ; fix X\n",32*4); 
+	    prerror ("plotchars can't plot more than 32 doublewide characters.");
 	else if (strncmp (statement[6], "extrawide", 9) == 0)
-            printf ("    lda #%d ; fix X\n",32*4*2); 
+	    prerror ("plotchars can't plot more than 32 extrawide characters.");
         else
-            printf ("    lda #%d ; fix X\n",32*4*(doublewide+1)); 
+            printf ("    lda #%d ; fix X\n",32*4); 
 
         printf ("    clc\n");
         printf ("    adc temp4\n");
@@ -3358,6 +3435,8 @@ void incmapfile (char **statement)
     for (t = 0; t < 256; t++)
 	sprintf (datavalues[t], " .byte 0\n");
 
+    backupthisfile(statement[2]);
+
     //open file...
     FILE *fp = fopen (statement[2], "rb");
     if (!fp)
@@ -3544,6 +3623,8 @@ void add_graphic (char **statement, int incbanner)
     }
 
     fixfilename (statement[2]);
+
+    backupthisfile(statement[2]);
 
     fileextension = strrchr (statement[2], '.');
     if (fileextension == NULL)
@@ -3769,7 +3850,7 @@ void add_graphic (char **statement, int incbanner)
 
 	height = getgraphicheight (statement[2]);
 	if ((height < zoneheight) || (height > 224))
-	    prerror ("image height out of spec for incbanner");
+	    prerror ("image height %d out of spec for incbanner",height);
 
 
 	//our label is based on the filename...
@@ -4015,6 +4096,7 @@ void incgraphic (char *file_name, int offset)
     //******* read file
 
     unsigned char header[8];	// 8 is the maximum size that can be checked
+
 
     /* open file and test for it being a png */
     FILE *fp = fopen (file_name, "rb");
@@ -4528,7 +4610,7 @@ void incgraphic (char *file_name, int offset)
 
 		for (l = 0; l < 7; l = l + 1)
 		{
-		    if (row[x + l] == row[x + l + 1])	// not a perfect check, but what a weird scheme. :|
+		    if ((row[x + l] == row[x + l + 1]))	// not a perfect check, but what a weird scheme. :|
 		    {
 			char sBuffer[400];
 			sprintf (sBuffer,
@@ -6531,6 +6613,8 @@ void incrmtfile (char **statement)
 
     // we handle rmta different than rmt, so we need to open the file
     // first and see which it is.
+
+    backupthisfile(statement[2]);
 
     char magic[6];
     FILE *fp = fopen (statement[2], "rb");
@@ -11033,6 +11117,35 @@ void set (char **statement)
 	    strcpy (redefined_variables[numredefvars++], "DRIVINGBOOST = 1");
 	}
     }
+    else if (!strncmp (statement[2], "backupstyle", 11))
+    {
+	assertminimumargs (statement, "set backupstyle", 1);
+	if (!strncmp (statement[3], "single", 6))
+            SetBackupStyle(BACKUPSTYLE_SINGLE);
+    }
+    else if (!strncmp (statement[2], "backupfile", 10))
+    {
+	assertminimumargs (statement, "set backupfile", 1);
+        // set backupname to statement[3]
+        removeCR (statement[3]);
+	char *backupstr=statement[3];
+        if (*backupstr == '\'')
+            backupstr++;
+        int t;
+        for(t=0;t<SIZEOFSTATEMENT;t++)
+        {
+            if(backupstr[t]==0)
+                break;
+            if(backupstr[t]=='^')
+                backupstr[t]=' ';
+        }
+        if(backupstr[t-1]=='\'')
+                backupstr[t-1]=0;
+        if(OpenArchive(backupstr)==FALSE)
+	    prerror ("set backupfile failed - couldn't write to '%s'",backupstr);
+        backupflag = TRUE;
+        backupthisfile(backupname);
+    }
     else if (!strncmp (statement[2], "screenheight", 12))
     {
 	assertminimumargs (statement, "set screenheight", 1);
@@ -11505,4 +11618,13 @@ void header_write (FILE * header, char *filename)
     }
     fclose (header);
 
+}
+
+void lastrites()
+{
+    if(backupflag)
+    {
+        CloseArchive();
+        fprintf(stderr,"Backed up %d project files.\n",backupcount);
+    }
 }

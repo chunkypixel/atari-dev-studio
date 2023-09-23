@@ -7,6 +7,14 @@
 #include <unistd.h>
 #include <string.h>
 
+#ifndef TRUE
+#define TRUE (1==1)
+#endif
+#ifndef FALSE
+#define FALSE (1==0)
+#endif
+
+
 int ors = 0;
 int numelses = 0;
 int numthens = 0;
@@ -343,6 +351,8 @@ void keywords (char **cstatement)
 	}
 	else if (!strncmp (statement[1], "goto\0", 5))
 	    dogoto (statement);
+	else if (!strncmp (statement[1], "backup\0", 7))
+	    backup(statement);
 	else if (!strncmp (statement[1], "hiscoreload", 11))
 	    hiscoreload (statement);
 	else if (!strncmp (statement[1], "hiscoreclear", 12))
@@ -531,8 +541,14 @@ void keywords (char **cstatement)
 	    voice (statement);
 	else if (!strncmp (statement[1], "plotbanner\0", 10))
 	    plotbanner (statement);
+	else if (!strncmp (statement[1], "plotsprite4\0", 11))
+	    plotsprite (statement,TRUE);
 	else if (!strncmp (statement[1], "plotsprite\0", 10))
-	    plotsprite (statement);
+	    plotsprite (statement,FALSE);
+	else if (!strncmp (statement[1], "PLOTSPRITE4\0", 11))
+	    PLOTSPRITE (statement,TRUE);
+	else if (!strncmp (statement[1], "PLOTSPRITE\0", 10))
+	    PLOTSPRITE (statement,FALSE);
 	else if (!strncmp (statement[1], "plotchars\0", 9))
 	    plotchars (statement);
 	else if (!strncmp (statement[1], "plotmapfile\0", 11))

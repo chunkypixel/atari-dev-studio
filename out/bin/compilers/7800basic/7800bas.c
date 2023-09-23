@@ -9,6 +9,7 @@
 #include <math.h>
 
 char stdoutfilename[256];
+char backupname[256];
 FILE *stdoutfilepointer;
 
 extern int currentdmahole;
@@ -22,7 +23,7 @@ extern char currentcharset[256];
 extern int graphicsdatawidth[16];
 extern char charactersetchars[257];
 
-#define BASIC_VERSION_INFO "7800basic v0.29"
+#define BASIC_VERSION_INFO "7800basic v0.30"
 
 int main (int argc, char *argv[])
 {
@@ -47,13 +48,17 @@ int main (int argc, char *argv[])
     char mycode[500];
     int defi = 0;
     path = NULL;
+    backupname[0]=0;
     // get command line arguments
-    while ((i = getopt (argc, argv, "i:r:v")) != -1)
+    while ((i = getopt (argc, argv, "i:b:r:v")) != -1)
     {
 	switch (i)
 	{
 	case 'i':
 	    path = optarg;
+	    break;
+	case 'b':
+	    strncpy(backupname,optarg,256);
 	    break;
 	case 'r':
 	    filename = optarg;
@@ -280,9 +285,11 @@ int main (int argc, char *argv[])
 
     printf (" \n\n");
 
+
     header_write (header, filename);
     create_includes (includes_file);
     fprintf (stderr, "7800basic compilation complete.\n");
     freemem (deallocate_mem);
+    lastrites(); 
     return 0;
 }

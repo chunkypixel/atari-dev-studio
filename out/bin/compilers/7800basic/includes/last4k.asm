@@ -71,3 +71,6 @@
  ifnconst included.fourbitfade.asm
      include fourbitfade.asm
  endif
+ ifnconst included.plotsprite4.asm
+     include plotsprite4.asm
+ endif

@@ -34,8 +34,7 @@ VS Code is a cross-platform application which runs on Windows, Linux and macOS. 
 
 > Note: macOS users require a 64-bit operating system to fully utilise all features of Atari Dev Studio and will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
 
-> Note: M1 based Mac users will need to install the INTEL CHIP version of VS Code before installing Atari Dev Studio.  The current dev stack is incompatible with the M1 chip for the time being.  See [here](https://atariage.com/forums/topic/333127-ataribasic-will-it-run-on-the-m1-mac) for further discussion around the potential issues you will encounter.
-
+> Note: M1 based Mac users will need to install the INTEL CHIP version of VS Code before installing Atari Dev Studio.  Also thanks to Scott Lahteine (thinkyhead) the current dev stack should now have compatibility with the M1 chip (ARM64) and includes most of the recent versions of bB, 7800basic, Stella and dasm.  See [here](https://atariage.com/forums/topic/333127-ataribasic-will-it-run-on-the-m1-mac) for further discussion around the potential issues you may encounter.
 
 ### Installing the extension
 Once you have installed VS Code (available [here](https://code.visualstudio.com/Download)), open the VS Code program and complete the following:
@@ -115,12 +114,13 @@ There are currently no known feature issues. If you find a problem please raise 
 ## Acknowlegments
 This extension is only available due to the great people of the AtariAge community who have created these tools to help developers build their vision.  Special thanks to the following for either allowing the inclusion of their tools or for their ongoing help and encouragement:
 * 7800basic - Mike Saarna (RevEng)
-* batari Basic - Fred 'batari' Quimby and Mike Saarna (RevEng)
+* batari Basic - Fred Quimby (batari) and Mike Saarna (RevEng)
 * dasm - the many contibutors
 * Stella emulator - Stephen Anthony (stephena)
 * A7800 emulator - Mike Saarna (RevEng) and Robert Tuccitto (Trebor)
-* The AtariAge community including Albert, CPUWiz, Random Terrain, Trebor, Synthpopalooza, sramirez2008, Defender_2600, Gemintronic, Karl G, ZeroPage Homebrew, Muddyfunster, TwentySixHundred, Lillapojkenpåön, Andrew Davie, splendidnut, andyjp, sexyUnderwriter, MikeBrownEmplas, Generation2Games, cwieland, slacker
+* Scott Lahteine (thinkyhead) for the M1 Mac Compatibility for bB, 7800basic, Stella, dasm (generally or close to the most recent versions)
 * Mats Engstrom (SmallRoomLabs)
+* The AtariAge community including Albert, CPUWiz, Random Terrain, Trebor, Synthpopalooza, sramirez2008, Defender_2600, Gemintronic, Karl G, ZeroPage Homebrew, Muddyfunster, TwentySixHundred, Lillapojkenpåön, Andrew Davie, splendidnut, andyjp, sexyUnderwriter, MikeBrownEmplas, Generation2Games, cwieland, slacker
 
 ## Languages
 Atari Dev Studio includes the following programming languages:
@@ -130,7 +130,7 @@ batari Basic created by Fred 'batari' Quimby is a BASIC-like language used in th
 
 batari Basic is an external project is kindly currently maintained by Mike Saarna (RevEng) and can be downloaded separately [here](https://github.com/batari-Basic/batari-Basic).  Further information is about this release is available here at [AtariAge](https://atariage.com/forums/topic/300856-official-home-for-batari-basic).
 
-### 7800basic (release 0.29 - 20230809)
+### 7800basic (release 0.30 - 20230921)
 7800basic is a BASIC-like language for creating Atari 7800 games.  It is a compiled language that runs on a computer, and it creates a binary file that can be run with an Atari 7800 emulator, or the binary file may be used to make a cartridge that will operate on a real Atari 7800. 7800basic is derived from batari basic, a BASIC-like language for creating Atari 2600 games. Special thanks to the bB creator, Fred Quimby, and all of the the bB contributors!
 
 7800basic is included as part of this extension with many thanks to Mike Saarna (RevEng).  7800basic is an external project and can be downloaded separately [here](https://github.com/7800-devtools/7800basic).  Further information about this release is available here at [AtariAge](http://atariage.com/forums/topic/222638-7800basic-beta-the-release-thread).

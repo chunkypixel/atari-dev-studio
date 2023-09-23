@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.9.2
+
+* Updated 7800basic to v0.30 (Windows, Linux, macOS)
+* Updated 7800basic keyword, hover and context help lists
+* Added M1 Mac Compatibility (arm64) for batariBasic, 7800basic, Stella and dasm (thanks thinkyhead)
+
 ## 0.9.1
 
 * Updated 7800basic to v0.29 (Windows, Linux, macOS)

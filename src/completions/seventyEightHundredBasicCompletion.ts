@@ -512,7 +512,9 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                         new vscode.CompletionItem('7800GDmenuoff', vscode.CompletionItemKind.Method),   
                         new vscode.CompletionItem('softresetpause', vscode.CompletionItemKind.Method),                    
                         new vscode.CompletionItem('smartbranching', vscode.CompletionItemKind.Method),
-                        new vscode.CompletionItem('optimization', vscode.CompletionItemKind.Method)
+                        new vscode.CompletionItem('optimization', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('backupstyle', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('backupfile', vscode.CompletionItemKind.Method)
                     ];
                 }
             },

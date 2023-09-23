@@ -20,9 +20,9 @@ WHAT IT IS?
 -----------
 
 7800basic is a BASIC-like language for creating Atari 7800 games.  It is a 
-compiled language that runs on a computer, and it creates a binary file that 
-can be run with an Atari 7800 emulator, or the binary file may be used to 
-make a cartridge that will operate on a real Atari 7800.
+compiled language that runs on a computer, and it creates a binary files that 
+can be run with Atari 7800 emulators and flash carts, or the binary files
+can be used to create a cartridge that will operate on a real Atari 7800.
 
 If you find any bugs, please report them via github.
 

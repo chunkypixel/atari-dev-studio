@@ -1321,3 +1321,42 @@
 
 
 
+## BACKUPSTYLE
+
+   set backupstyle command
+
+   command - single, running (default)
+
+   NOTE: You need to use “set backupstyle” setting prior to using “set backupfile”, since it affects the file name 
+of the backup file
+
+
+
+## BACKUPFILE
+
+   set backupfile 'directory_path'
+
+   directory_path - location to store your backup
+
+   eg. set backupfile 'E:\backups\spaceman' (Windows) or set backupfile '/Volumes/MyThumbdrive/backups/spaceman'
+
+
+
+## BACKUP
+
+   backup 'directory_path'
+
+   directory_path - relative path to files to be included on backup
+
+
+
+## PLOTSPRITE4
+
+    plotsprite4 sprite_graphic palette_# x y
+    
+    sprite_graphic - name of the included graphic
+    palette_# - index of palette (0-7)
+    x - x screen co-ordinate
+    y - y screen co-ordinate
+
+
