@@ -39,6 +39,10 @@ class SeventyEightHundredGDSerial extends serialBase_1.SerialBase {
             let executeResult = yield execute.Spawn(command, args, null, path.dirname(this.FolderOrPath), (stdout) => {
                 // Prepare
                 let result = true;
+                // Sanitize output
+                // need to remove +\b from mesages (looks a bit nicer)
+                var pattern = /[+][\b]+/gi;
+                stdout = stdout.replace(pattern, "");
                 // Result
                 application.CompilerOutputChannel.append('' + stdout);
                 return result;

@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.9.3
+
+* Updated serial application debug for 7800GD developers (thanks saint)
+
 ## 0.9.2
 
 * Updated 7800basic to v0.30 (Windows, Linux, macOS)

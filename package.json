@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.9.2",
+    "version": "0.9.3",
     "icon": "images/icon.png",
     "preview": false,
     "author": "mksmith",
@@ -462,12 +462,7 @@
         }
     },
     "activationEvents": [
-        "*",
-        "onCommand:extension.openWelcomePage",
-        "onCommand:extension.buildGame",
-        "onCommand:extension.buildGameAndRun",
-        "onCommand:extension.killBuildGame",
-        "onCommand:extension.openSpriteEditor"
+        "onStartupFinished"
     ],
     "main": "./out/extension.js",
     "scripts": {

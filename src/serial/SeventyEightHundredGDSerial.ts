@@ -37,6 +37,11 @@ export class SeventyEightHundredGDSerial extends SerialBase {
                 // Prepare
                 let result = true;
 
+                // Sanitize output
+                // need to remove +\b from mesages (looks a bit nicer)
+                var pattern = /[+][\b]+/gi;
+                stdout = stdout.replace(pattern,"");
+
                 // Result
                 application.CompilerOutputChannel.append('' + stdout);
                 return result;
