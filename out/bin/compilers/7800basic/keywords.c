@@ -535,6 +535,10 @@ void keywords (char **cstatement)
 	    incmapfile (statement);
 	else if (!strncmp (statement[1], "incrmtfile\0", 10))
 	    incrmtfile (statement);
+	else if (!strncmp (statement[1], "decompress\0", 10))
+	    decompress (statement);
+	else if (!strncmp (statement[1], "inccompress\0", 11))
+	    inccompress (statement);
 	else if (!strncmp (statement[1], "newblock\0", 8))
 	    newblock ();
 	else if (!strncmp (statement[1], "voice\0", 5))

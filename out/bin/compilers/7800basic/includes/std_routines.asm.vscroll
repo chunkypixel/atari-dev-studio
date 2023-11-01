@@ -104,10 +104,6 @@ TIMEOFFSET         = 10
          endif
          lda rasterpause
          beq skiprasterupdate
- ifconst PAUSESILENT
-         lda pausestate 
-         bne skiprasterupdate
- endif
          jsr RASTERMUSICTRACKER+3
 skiprasterupdate
 RMT_Iend
@@ -551,22 +547,13 @@ terminatedisplaybuffer
      ;add DL end entry on each DL
      ldx #(WZONECOUNT-1)
 dlendloop
-     ifconst VSCROLL
-         ldy Xx3,x
-         lda DLLMEM+11,y
-     else  ; !VSCROLL
-         lda DLPOINTL,x ;Get pointer to DL that this sprite starts in
-     endif ; !VSCROLL
+     lda DLPOINTL,x
      ifconst DOUBLEBUFFER
          clc
          adc doublebufferdloffset
      endif ; DOUBLEBUFFER
      sta dlpnt
-     ifconst VSCROLL
-         lda DLLMEM+10,y
-     else  ; !VSCROLL
-         lda DLPOINTH,x
-     endif ; !VSCROLL
+     lda DLPOINTH,x
      ifconst DOUBLEBUFFER
          adc #0
      endif ; DOUBLEBUFFER
@@ -663,10 +650,6 @@ servicesongwasnotmissed
      ifconst RMT
          ifnconst RMTPALSPEED
              ifnconst RMTOFFSPEED
- ifconst PAUSESILENT
-         lda pausestate 
-         bne skiprasterupdate2
- endif
                  lda palfastframe
                  beq skiprasterupdate2
                  lda rasterpause
@@ -870,12 +853,6 @@ servicesfxchannelsdone
          jmp checkpokeyplaying
      endif
 servicesfxchannels
- ifconst PAUSESILENT
-     lda pausestate
-     beq servicesfxchannels_1
-     rts
-servicesfxchannels_1
- endif
      ldx #255
 servicesfxchannelsloop
      inx
@@ -1336,15 +1313,6 @@ Xx3
          .byte  0,3,6,9,12,15,18,21,24,27
          .byte 30,33,36,39,42,45,48,51,54,57
          .byte 60,63,66,69,72,75,78,81,84,87
-maskscrollsprite
-         .byte $00,%11000000,($D0+WZONEHEIGHT),0,160  ; 5*2 + 32*3 = 106 cycles
-         .byte $00,1,($D0+WZONEHEIGHT),160            ; 4*2 + 31*3 = 101 cycles 
-         .byte $00,1,($D0+WZONEHEIGHT),160            ; 4*2 + 31*3 = 101 cycles 
-         .byte $00,1,($D0+WZONEHEIGHT),160            ; 4*2 + 31*3 = 101 cycles 
-         .byte $00,%01000000,($D0+WZONEHEIGHT),16,160 ; 5*2 + 16*3 =  58 cycles
-	                                         ; MAX  ============ 467 cycles
-	                                         ; MIN  ============  59 cycles
-maskscrollspriteend
      endif ; VSCROLL
 
 lockzonex
@@ -1491,22 +1459,13 @@ plotcharactersskipentry
 
      tax
      
-    ifconst VSCROLL
-         ldy Xx3,x
-         lda DLLMEM+11,y
-     else  ; !VSCROLL
-         lda DLPOINTL,x ;Get pointer to DL that the characters are in
-     endif ; !VSCROLL
+     lda DLPOINTL,x ;Get pointer to DL that the characters are in
      ifconst DOUBLEBUFFER
          clc
          adc doublebufferdloffset
      endif ; DOUBLEBUFFER
      sta dlpnt
-     ifconst VSCROLL
-         lda DLLMEM+10,y
-     else  ; !VSCROLL
-         lda DLPOINTH,x
-     endif ; !VSCROLL
+     lda DLPOINTH,x
      ifconst DOUBLEBUFFER
          adc #0
      endif ; DOUBLEBUFFER
@@ -1561,23 +1520,13 @@ plotcharacterslive
          lda temp5 ;Y position
 
          tax
-
-         ifconst VSCROLL
-             ldy Xx3,x
-             lda DLLMEM+11,y
-         else  ; !VSCROLL
-             lda DLPOINTL,x ;Get pointer to DL that the characters are in
-         endif ; !VSCROLL
+         lda DLPOINTL,x ;Get pointer to DL that the characters are in
          ifconst DOUBLEBUFFER
              clc
              adc doublebufferdloffset
          endif ; DOUBLEBUFFER
          sta dlpnt
-         ifconst VSCROLL
-             lda DLLMEM+10,y
-         else  ; !VSCROLL
-             lda DLPOINTH,x
-         endif ; !VSCROLL
+         lda DLPOINTH,x
          ifconst DOUBLEBUFFER
              adc #0
          endif ; DOUBLEBUFFER

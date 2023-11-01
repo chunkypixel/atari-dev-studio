@@ -49,7 +49,7 @@ export const IsLinux: boolean = (os.platform() === 'linux');
 export const IsMacOS: boolean = (os.platform() === 'darwin');
 export const Is32Bit: boolean = (os.arch() === 'x32');
 export const Is64Bit: boolean = (os.arch() === 'x64');
-
+export const IsMacOSArm: boolean = (os.platform() === 'darwin' && os.arch() === 'arm64')
 // -------------------------------------------------------------------------------------
 // Extension
 // -------------------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 -bug - banners larger than 128 in 160B don't plot correctly.
 -data with trailing comment and comma's don't get the trailing comma stripped
--fix tallsprite so it's DASM constants holding state, rather than C globals
 -horizontal scrolling
 -vertical scrolling
 

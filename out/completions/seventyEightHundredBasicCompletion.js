@@ -421,6 +421,7 @@ class SeventyEightHundredBasicCompletion extends completionBase_1.CompletionBase
                         new vscode.CompletionItem('plotvaluepage', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('zoneprotection', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('pauseroutine', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('pausesilence', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('pokeysound', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('pokeysupport', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('pokeysfxsupport', vscode.CompletionItemKind.Method),

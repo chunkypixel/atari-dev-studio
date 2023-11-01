@@ -208,6 +208,8 @@ class CompilerBase {
             }
             // Read compiler version (if used)
             yield this.GetCompilerVersionAsync();
+            // Show any specific compiler warnings
+            this.ShowAnyCompilerWarnings();
             // Result
             return true;
         });
@@ -271,6 +273,8 @@ class CompilerBase {
     }
     GetCompilerFileList() {
         return [];
+    }
+    ShowAnyCompilerWarnings() {
     }
     LoadConfigurationAsync() {
         return __awaiter(this, void 0, void 0, function* () {

@@ -171,43 +171,8 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             platform = ".Darwin";
         }
         let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
-        // Validate compiler version to determine list of required files
-        if (this.CompilerVersion >= 0.27) {
-            // version 0.27 and greater added:
-            // - 7800rmt2asm
-            return [command,
-                `7800basic${platform}${extension}`,
-                `7800filter${platform}${extension}`,
-                `7800header${platform}${extension}`,
-                `7800optimize${platform}${extension}`,
-                `7800postprocess${platform}${extension}`,
-                `7800preprocess${platform}${extension}`,
-                `7800sign${platform}${extension}`,
-                `7800makecc2${platform}${extension}`,
-                `7800rmt2asm${platform}${extension}`,
-                `7800rmtfix${platform}${extension}`,
-                `dasm${platform}${extension}`,
-                `banksetsymbols${platform}${extension}`];
-        }
-        else if (this.CompilerVersion >= 0.22) {
-            // version 0.22 and greater added:
-            // - 7800rmtfix
-            // - banksetsymbols
-            return [command,
-                `7800basic${platform}${extension}`,
-                `7800filter${platform}${extension}`,
-                `7800header${platform}${extension}`,
-                `7800optimize${platform}${extension}`,
-                `7800postprocess${platform}${extension}`,
-                `7800preprocess${platform}${extension}`,
-                `7800sign${platform}${extension}`,
-                `7800makecc2${platform}${extension}`,
-                `7800rmtfix${platform}${extension}`,
-                `dasm${platform}${extension}`,
-                `banksetsymbols${platform}${extension}`];
-        }
-        // up to version 0.21 (default)
-        return [command,
+        // Default items
+        let compilerFileList = [command,
             `7800basic${platform}${extension}`,
             `7800filter${platform}${extension}`,
             `7800header${platform}${extension}`,
@@ -216,7 +181,31 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             `7800preprocess${platform}${extension}`,
             `7800sign${platform}${extension}`,
             `7800makecc2${platform}${extension}`,
-            `dasm${platform}${extension}`];
+            `snip${platform}${extension}`];
+        // As of 1/11/23 the existing ARM version does not cater for this file
+        if (!application.IsMacOSArm) {
+            compilerFileList.push(`dasm${platform}${extension}`);
+        }
+        // Append additional items (based on the version)
+        if (this.CompilerVersion >= 0.22) {
+            compilerFileList.push(`7800rmtfix${platform}${extension}`, `banksetsymbols${platform}${extension}`);
+        }
+        if (this.CompilerVersion >= 0.27) {
+            compilerFileList.push(`7800rmt2asm${platform}${extension}`);
+        }
+        // As of 1/11/23 the existing ARM version does not cater for this file
+        if (this.CompilerVersion >= 0.31 && !application.IsMacOSArm) {
+            compilerFileList.push(`lzsa${platform}${extension}`);
+        }
+        // Return
+        return compilerFileList;
+    }
+    ShowAnyCompilerWarnings() {
+        if (application.IsMacOSArm) {
+            let message = `WARNING: The included MacOS ARM version of 7800basic is a number of versions behind the official build (currently v${this.CompilerVersion}) and may not compile correctly due to missing features and functionality.`;
+            application.WriteToCompilerTerminal(message);
+            application.WriteToCompilerTerminal(``);
+        }
     }
 }
 exports.SeventyEightHundredBasicCompiler = SeventyEightHundredBasicCompiler;

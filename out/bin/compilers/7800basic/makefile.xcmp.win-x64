@@ -14,7 +14,7 @@ LDIR=contrib/${ARCH}
 all: 7800basic.Windows.x64.exe 7800preprocess.Windows.x64.exe 7800postprocess.Windows.x64.exe 7800filter.Windows.x64.exe 7800optimize.Windows.x64.exe 7800header.Windows.x64.exe 7800sign.Windows.x64.exe 7800makecc2.Windows.x64.exe snip.Windows.x64.exe banksetsymbols.Windows.x64.exe 7800rmtfix.Windows.x64.exe 7800rmt2asm.Windows.x64.exe
 
 7800basic.Windows.x64.exe: 7800bas.c statements.c keywords.c statements.h keywords.h atarivox.h minitar.c minitar.h 
-	${CC} ${CFLAGS} -o 7800basic.Windows.x64.exe 7800bas.c statements.c keywords.c minitar.c -L${LDIR}/lib -I${LDIR}/include -lpng -lz -lm
+	${CC} ${CFLAGS} -o 7800basic.Windows.x64.exe 7800bas.c statements.c keywords.c minitar.c -L${LDIR}/lib -I${LDIR}/include -lpng -lz -lm -llzsa
 
 7800postprocess.Windows.x64.exe: postprocess.c
 	${CC} ${CFLAGS} -o 7800postprocess.Windows.x64.exe postprocess.c

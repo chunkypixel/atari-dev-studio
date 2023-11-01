@@ -1502,7 +1502,7 @@ ei4
   jmp returnfromInstrumentsEffects
 
 rmtmoduleend
-  echo " (rmtplayer module is using ",[(rmtmoduleend-rmtmodulestart)]d," bytes of rom)"
-  echo " (rmtplayer module is using ",[(MEMLOC-RMTRAM-1)]d," bytes of ram)"
+  echo "  (rmtplayer module is using ",[(rmtmoduleend-rmtmodulestart)]d," bytes of rom)"
+  echo "  (rmtplayer module is using ",[(MEMLOC-RMTRAM-1)]d," bytes of ram)"
 
   endif ; RMT

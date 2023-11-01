@@ -122,8 +122,8 @@ pokey4pointlo  = $61
 pokey4pointhi  = $62
 
 dlpnt      = $63 ; to $64
-dlend      = $65 ; to $81 - for 28 possible visible dll entries
-dlendsave  = $82 ; to $9e - for 28 possible visible dll entries
+dlend      = $65 ; to $81 - for 29 possible visible dll entries
+dlendsave  = $82 ; to $9e - for 29 possible visible dll entries
 
 speech_addr    = $9f
 speech_addr_hi = $a0

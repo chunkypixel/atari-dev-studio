@@ -11,6 +11,7 @@ Legal Stuff
       -Bruce Tomlin (sign7800)
       -the zlib/libpng team
       -the dasm team
+      -Emmanuel Marty (lzsa compression)
 
    See the LICENSE.txt file for details on licensing. 
   

@@ -213,6 +213,15 @@
     state - on, off
 
 
+
+## PAUSESILENCE
+
+    set pausesilence state
+
+    state - on, off
+
+
+
 ## POKEYSOUND
 
     set pokeysound state
@@ -477,6 +486,25 @@
 
     incbin filename.xxx
 
+    filename.xxx - file name of the asset to include
+
+
+
+## DECOMPRESS
+
+    decompress filename $####
+
+    filename.xxx - file name of the asset to decompress
+    $#### - address of dump ie. $4000
+
+
+
+## INCCOMPRESS
+
+    inccompress filename.xxx
+
+    filename.xxx - file name of the asset to compress
+
 
 
 ## NEWBLOCK
@@ -488,6 +516,19 @@
 ## PLOTSPRITE
 
     plotsprite sprite_graphic palette_# x y [frame] [tallheight]
+    
+    sprite_graphic - name of the included graphic
+    palette_# - index of palette (0-7)
+    x - x screen co-ordinate
+    y - y screen co-ordinate
+    frame (optional) - index of the frame to display
+    tallheight (optional) - number of zones each tallsprite occupies
+
+
+
+## PLOTSPRITE4
+
+    plotsprite4 sprite_graphic palette_# x y [frame] [tallheight]
     
     sprite_graphic - name of the included graphic
     palette_# - index of palette (0-7)
@@ -1347,16 +1388,5 @@ of the backup file
    backup 'directory_path'
 
    directory_path - relative path to files to be included on backup
-
-
-
-## PLOTSPRITE4
-
-    plotsprite4 sprite_graphic palette_# x y
-    
-    sprite_graphic - name of the included graphic
-    palette_# - index of palette (0-7)
-    x - x screen co-ordinate
-    y - y screen co-ordinate
 
 

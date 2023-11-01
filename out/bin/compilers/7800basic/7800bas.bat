@@ -1,8 +1,11 @@
 @echo off
 if X"%bas7800dir%" == X goto nobasic
 :tryanyway
-7800preprocess <"%~f1" | 7800basic.exe -i "%bas7800dir%" -b "%1"
+rem 7800preprocess <"%~f1" | 7800basic.exe -i "%bas7800dir%" -b "%1"
+7800preprocess.exe <"%~f1" >"%~f1.pre"
+7800basic.exe -i "%bas7800dir%" -b "%1" -p "%1.pre"
 if errorlevel 1 goto basicerror
+del "%1.pre" 
 if X%2 == X-O goto optimize
 7800postprocess -i "%bas7800dir%" > "%~f1.asm"
 goto nooptimize
@@ -19,6 +22,7 @@ dasm "%~f1.asm" -I"%bas7800dir%"/includes -f3 -p20 -l"%~f1.list.txt" -o"%~f1.bin
 7800sign -w "%~f1.bin"
 if not exist banksetrom.asm goto nobankset2
   copy /b "%~f1.bin"+"banksetrom.bin" "%~f1.bin"
+  del banksetrom.asm banksetrom.bin
 :nobankset2
 7800header -o -f a78info.cfg "%~f1.bin"
 7800makecc2 "%~f1.bin"

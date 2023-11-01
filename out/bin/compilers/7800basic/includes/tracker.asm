@@ -11,6 +11,10 @@ trackerstart
 servicesongover
 	rts
 servicesong
+ ifconst PAUSESILENT
+        lda pausestate
+        bne servicesongover 
+ endif
 	lda songtempo
 	beq servicesongover ; ** if song is off/paused then return
 servicesongcontinue
@@ -70,7 +74,7 @@ processsongdata
         sta songdatalo
         lda songchannel1layer1hi,y
         sta songdatahi
-        ora songdatalo
+        ;ora songdatalo
 	bne channelhasdata
 	    ;channel data is pointing at $0000
 	    lda #$7F
@@ -130,7 +134,7 @@ handlenotedata
 	sta sfxpitchoffset
 
 	jsr schedulesfx
-
+skipnoteschedule
         jmp advancethesongpointer1byte ; advance to the next data byte and exit
 
 handlechannelrest

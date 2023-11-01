@@ -1,3 +1,0 @@
-lz4raw is distributed here under the terms of the GNU GPL v2 License.
-
-Please see the included LICENSE.txt file for the full GPL v2 license text.

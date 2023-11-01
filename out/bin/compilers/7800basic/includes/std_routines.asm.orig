@@ -104,10 +104,6 @@ TIMEOFFSET         = 10
          endif
          lda rasterpause
          beq skiprasterupdate
- ifconst PAUSESILENT
-         lda pausestate 
-         bne skiprasterupdate
- endif
          jsr RASTERMUSICTRACKER+3
 skiprasterupdate
 RMT_Iend
@@ -551,22 +547,13 @@ terminatedisplaybuffer
      ;add DL end entry on each DL
      ldx #(WZONECOUNT-1)
 dlendloop
-     ifconst VSCROLL
-         ldy Xx3,x
-         lda DLLMEM+11,y
-     else  ; !VSCROLL
-         lda DLPOINTL,x ;Get pointer to DL that this sprite starts in
-     endif ; !VSCROLL
+     lda DLPOINTL,x
      ifconst DOUBLEBUFFER
          clc
          adc doublebufferdloffset
      endif ; DOUBLEBUFFER
      sta dlpnt
-     ifconst VSCROLL
-         lda DLLMEM+10,y
-     else  ; !VSCROLL
-         lda DLPOINTH,x
-     endif ; !VSCROLL
+     lda DLPOINTH,x
      ifconst DOUBLEBUFFER
          adc #0
      endif ; DOUBLEBUFFER
@@ -663,10 +650,6 @@ servicesongwasnotmissed
      ifconst RMT
          ifnconst RMTPALSPEED
              ifnconst RMTOFFSPEED
- ifconst PAUSESILENT
-         lda pausestate 
-         bne skiprasterupdate2
- endif
                  lda palfastframe
                  beq skiprasterupdate2
                  lda rasterpause
@@ -870,12 +853,6 @@ servicesfxchannelsdone
          jmp checkpokeyplaying
      endif
 servicesfxchannels
- ifconst PAUSESILENT
-     lda pausestate
-     beq servicesfxchannels_1
-     rts
-servicesfxchannels_1
- endif
      ldx #255
 servicesfxchannelsloop
      inx
@@ -1022,10 +999,8 @@ zerosfx
 schedulesfx
      ; called with sfxinstrumentlo=<data sfxinstrumenthi=>data sfxpitchoffset=pitch-offset sfxnoteindex=note index
      ldy #0
+     lda (sfxinstrumentlo),y
      ifconst pokeysupport
-         lda sfxinstrumenthi
-         beq scheduletiasfx   ; drums have undefined instrument
-         lda (sfxinstrumentlo),y
          cmp #$20 ; POKEY?
          bne scheduletiasfx
          jmp schedulepokeysfx
@@ -1036,17 +1011,16 @@ scheduletiasfx
      ; rts ; unhandled!!! 
 continuescheduletiasfx
      ifnconst TIASFXMONO
-         lda sfx1pointhi
+         lda sfx1pointlo
+         ora sfx1pointhi
          beq schedulesfx1 ;if channel 1 is idle, use it
-         lda sfx2pointhi
+         lda sfx2pointlo
+         ora sfx2pointhi
          beq schedulesfx2 ;if channel 2 is idle, use it
          ; Both channels are scheduled. 
-         lda sfxinstrumenthi
-         beq skipscheduledrums
          ldy #1
          lda (sfxinstrumentlo),y
          bne interruptsfx
-skipscheduledrums
          rts ; the new sound has 0 priority and both channels are busy. Skip playing it.
 interruptsfx
          ;Compare which active sound has a lower priority. We'll interrupt the lower one.
@@ -1163,22 +1137,13 @@ exitplotsprite1
 continueplotsprite1
      endif
 
-     ifconst VSCROLL
-         ldy Xx3,x
-         lda DLLMEM+11,y
-     else  ; !VSCROLL
-         lda DLPOINTL,x ;Get pointer to DL that this sprite starts in
-     endif ; !VSCROLL
+     lda DLPOINTL,x ;Get pointer to DL that this sprite starts in
      ifconst DOUBLEBUFFER
          clc
          adc doublebufferdloffset
      endif ; DOUBLEBUFFER
      sta dlpnt
-     ifconst VSCROLL
-         lda DLLMEM+10,y
-     else  ; !VSCROLL
-         lda DLPOINTH,x
-     endif ; !VSCROLL
+     lda DLPOINTH,x
      ifconst DOUBLEBUFFER
          adc #0
      endif ; DOUBLEBUFFER
@@ -1213,6 +1178,7 @@ continueplotsprite1a
      cmp #1 ; clear carry if our sprite is just in this zone
      ora temp2 ; graphic data, hi byte
      sta (dlpnt),y
+
 
      iny
      lda temp3 ;palette|width
@@ -1253,22 +1219,13 @@ checkcontinueplotsprite2
 continueplotsprite2
      endif
 
-     ifconst VSCROLL
-         ldy Xx3,x
-         lda DLLMEM+11,y
-     else  ; !VSCROLL
-         lda DLPOINTL,x ;Get pointer to next DL
-     endif ; !VSCROLL
+     lda DLPOINTL,x ;Get pointer to next DL
      ifconst DOUBLEBUFFER
          clc
          adc doublebufferdloffset
      endif ; DOUBLEBUFFER
      sta dlpnt
-     ifconst VSCROLL
-         lda DLLMEM+10,y
-     else  ; !VSCROLL
-         lda DLPOINTH,x
-     endif ; !VSCROLL
+     lda DLPOINTH,x
      ifconst DOUBLEBUFFER
          adc #0
      endif ; DOUBLEBUFFER
@@ -1330,22 +1287,6 @@ continueplotsprite2a
 doneSPDL
      rts
 
-     ifconst VSCROLL
-     ; x3 table for fast DLL parsing
-Xx3
-         .byte  0,3,6,9,12,15,18,21,24,27
-         .byte 30,33,36,39,42,45,48,51,54,57
-         .byte 60,63,66,69,72,75,78,81,84,87
-maskscrollsprite
-         .byte $00,%11000000,($D0+WZONEHEIGHT),0,160  ; 5*2 + 32*3 = 106 cycles
-         .byte $00,1,($D0+WZONEHEIGHT),160            ; 4*2 + 31*3 = 101 cycles 
-         .byte $00,1,($D0+WZONEHEIGHT),160            ; 4*2 + 31*3 = 101 cycles 
-         .byte $00,1,($D0+WZONEHEIGHT),160            ; 4*2 + 31*3 = 101 cycles 
-         .byte $00,%01000000,($D0+WZONEHEIGHT),16,160 ; 5*2 + 16*3 =  58 cycles
-	                                         ; MAX  ============ 467 cycles
-	                                         ; MIN  ============  59 cycles
-maskscrollspriteend
-     endif ; VSCROLL
 
 lockzonex
      ifconst ZONELOCKS
@@ -1392,6 +1333,7 @@ unlockzonex
          endif ; DOUBLEBUFFER
          sta dlpnt+1
          dey
+         ;ldy #(DLLASTOBJ-1)
          lda (dlpnt),y
          tay
          sty dlend,x
@@ -1490,23 +1432,13 @@ plotcharactersskipentry
      ;endif
 
      tax
-     
-    ifconst VSCROLL
-         ldy Xx3,x
-         lda DLLMEM+11,y
-     else  ; !VSCROLL
-         lda DLPOINTL,x ;Get pointer to DL that the characters are in
-     endif ; !VSCROLL
+     lda DLPOINTL,x ;Get pointer to DL that the characters are in
      ifconst DOUBLEBUFFER
          clc
          adc doublebufferdloffset
      endif ; DOUBLEBUFFER
      sta dlpnt
-     ifconst VSCROLL
-         lda DLLMEM+10,y
-     else  ; !VSCROLL
-         lda DLPOINTH,x
-     endif ; !VSCROLL
+     lda DLPOINTH,x
      ifconst DOUBLEBUFFER
          adc #0
      endif ; DOUBLEBUFFER
@@ -1561,23 +1493,13 @@ plotcharacterslive
          lda temp5 ;Y position
 
          tax
-
-         ifconst VSCROLL
-             ldy Xx3,x
-             lda DLLMEM+11,y
-         else  ; !VSCROLL
-             lda DLPOINTL,x ;Get pointer to DL that the characters are in
-         endif ; !VSCROLL
+         lda DLPOINTL,x ;Get pointer to DL that the characters are in
          ifconst DOUBLEBUFFER
              clc
              adc doublebufferdloffset
          endif ; DOUBLEBUFFER
          sta dlpnt
-         ifconst VSCROLL
-             lda DLLMEM+10,y
-         else  ; !VSCROLL
-             lda DLPOINTH,x
-         endif ; !VSCROLL
+         lda DLPOINTH,x
          ifconst DOUBLEBUFFER
              adc #0
          endif ; DOUBLEBUFFER
@@ -2104,178 +2026,132 @@ vblankresync
      rts
 
 createallgamedlls
-     ldy #(DLLLUTEND-DLLLUT)
-createallgamedllsloop
-     dey
-     lda DLLLUT,y
-     sta DLLMEM,y
-  ifconst DOUBLEBUFFER
-     sta DLLMEM+DBOFFSET,y
-  endif ; DOUBLEBUFFER
-     cpy #0
-     bne createallgamedllsloop
-
-  ifconst DOUBLEBUFFER
-     ldy #(DLLLUTNONVISSTART-DLLLUTVISSTART)
-fixdoublebuffer
-     dey
-     lda DLLMEM+DBOFFSET+DLLLUTVISSTART-DLLLUT,y
+     ldx #0
+     lda #NVLINES
+     ldy paldetected
+     beq skipcreatePALpadding
      clc
-     adc #DOUBLEBUFFEROFFSET
-     sta DLLMEM+DBOFFSET+DLLLUTVISSTART-DLLLUT,y
-     dey
-     lda DLLMEM+DBOFFSET+DLLLUTVISSTART-DLLLUT,y
-     adc #0
-     sta DLLMEM+DBOFFSET+DLLLUTVISSTART-DLLLUT,y
-     dey
-     bne fixdoublebuffer
- endif
+     adc #21 
+skipcreatePALpadding
+     jsr createnonvisibledlls
+     stx visibleDLLstart
+     jsr createvisiblezones
+     stx overscanDLLstart
+createallgamedllscontinue
+     lda #(NVLINES+55) ; extras for PAL
+     jsr createnonvisibledlls
 
-  ifconst BANKSET_DL_IN_CARTRAM 
-     ; N.B. banksets doesn't in-fact allow DL in cart-ram, so this conditional
-     ; is always skipped. This is here in case some day the limitation is
-     ; worked around, but it's untested. 
+     ldx visibleDLLstart
+     lda DLLMEM,x
+     ora #%10000000 ; NMI 1 - start of visible screen
+     sta DLLMEM,x
+     ifconst DOUBLEBUFFER
+         sta DLLMEM+DBOFFSET,x
+     endif ; DOUBLEBUFFER
 
-     ; With bankset cart ram, we added $8000 to the DL address so plot 
-     ; functions would hit the cart-ram write-address. We need to subtract $80
-     ; so Maria will read from the cart-ram read-address.
-     ldy #(DLLLUTNONVISSTART-DLLLUTVISSTART)
-fixbanksetaddresses
-     dey
-     dey
-     lda DLLMEM+DLLLUTVISSTART-DLLLUT,y
-     and #%01111111
-     sta DLLMEM+DLLLUTVISSTART-DLLLUT,y
-  ifconst DOUBLEBUFFER
-     lda DLLMEM+DBOFFSET+DLLLUTVISSTART-DLLLUT,y
-     and #%01111111
-     sta DLLMEM+DBOFFSET+DLLLUTVISSTART-DLLLUT,y
-  endif ; DOUBLEBUFFER
-     dey
-     bne fixbanksetaddresses
-  endif ; BANKSET_DL_IN_CARTRAM
+     ldx overscanDLLstart
+     lda DLLMEM,x
+     ora #%10000011 ; NMI 2 - end of visible screen
+     and #%11110011 ; change this to a 1-line DLL, so there's time enough for the "deeper overscan" DLL
+     sta DLLMEM,x
+     ifconst DOUBLEBUFFER
+         sta DLLMEM+DBOFFSET,x
+     endif ; DOUBLEBUFFER
 
-     lda paldetected
-     beq skippaladjust
-     lda #($0F|(WZONEHEIGHT*4)) ; +15 lines
-     sta DLLMEM+6
- ifconst DOUBLEBUFFER
-     sta DLLMEM+DBOFFSET+6
- endif
-  if WSCREENHEIGHT = 192
-     lda #($0D|(WZONEHEIGHT*4)) ; +6 lines
-  else
-     lda #($07|(WZONEHEIGHT*4)) ; +6 lines
-  endif ; 
-     sta DLLMEM+3
- ifconst DOUBLEBUFFER
-     sta DLLMEM+DBOFFSET+3
- endif ; DOUBLEBUFFER
+     inx
+     inx
+     inx
 
-skippaladjust
+     lda DLLMEM,x
+     ora #%10000000 ; NMI 3 - deeper overscan
+     sta DLLMEM,x
+     ifconst DOUBLEBUFFER
+         sta DLLMEM+DBOFFSET,x
+     endif ; DOUBLEBUFFER
 
-     ; save the DL markers...
-     lda #(DLLLUTVISSTART-DLLLUT)
-     sta visibleDLLstart
-     lda #(DLLLUTNONVISSTART-DLLLUT)
-     sta overscanDLLstart
      rts
 
-     ; N.B. max DLL length is 112 bytes (for double-buffered)
+createnonvisibledlls
+     sta temp1
+     lsr
+     lsr
+     lsr
+     lsr ; /16
+     beq skipcreatenonvisibledlls1loop
+     tay
+createnonvisibledlls1loop
+     lda #%01001111 ;low nibble=16 lines, high nibble=Holey DMA
+     jsr createblankdllentry
+     dey
+     bne createnonvisibledlls1loop
+skipcreatenonvisibledlls1loop
+     lda temp1
+     and #%00001111
+     beq createnonvisibledllsreturn
+     sec
+     sbc #1
+     ora #%01000000
+     jsr createblankdllentry
+createnonvisibledllsreturn
+     rts
 
-DLLLUT
-  if WSCREENHEIGHT = 192
-     .byte ($0F|(WZONEHEIGHT*4)),$21,$00 ; 16 blank lines
-     .byte ($07|(WZONEHEIGHT*4)),$21,$00 ;  8 blank lines
-     .byte ($00|(WZONEHEIGHT*4)),$21,$00 ;  1 blank lines 
-                                         ;=25 blank lines
-  endif ; WSCREENHEIGHT = 192
-  if WSCREENHEIGHT = 208
-     .byte ($0E|(WZONEHEIGHT*4)),$21,$00 ; 15 blank lines
-     .byte ($00|(WZONEHEIGHT*4)),$21,$00 ;  1 blank lines
-     .byte ($00|(WZONEHEIGHT*4)),$21,$00 ;  1 blank lines 
-                                         ;=17 blank lines
-  endif ; WSCREENHEIGHT = 208
-  if WSCREENHEIGHT = 224
-     .byte ($06|(WZONEHEIGHT*4)),$21,$00 ;  7 blank lines
-     .byte ($00|(WZONEHEIGHT*4)),$21,$00 ;  1 blank lines
-     .byte ($00|(WZONEHEIGHT*4)),$21,$00 ;  1 blank lines 
-                                         ;= 9 blank lines
-  endif ; WSCREENHEIGHT = 224
+createblankdllentry
+     sta DLLMEM,x
+     ifconst DOUBLEBUFFER
+         sta DLLMEM+DBOFFSET,x
+     endif ; DOUBLEBUFFER
+     inx
+     lda #$21 ; blank
+     sta DLLMEM,x
+     ifconst DOUBLEBUFFER
+         sta DLLMEM+DBOFFSET,x
+     endif ; DOUBLEBUFFER
+     inx
+     lda #$00
+     sta DLLMEM,x
+     ifconst DOUBLEBUFFER
+         sta DLLMEM+DBOFFSET,x
+     endif ; DOUBLEBUFFER
+     inx
+     rts 
 
-DLLLUTVISSTART
-     .byte ($80|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE0ADDRESS,<ZONE0ADDRESS
-     ;       ^--NMI 1: start of visible
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE1ADDRESS,<ZONE1ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE2ADDRESS,<ZONE2ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE3ADDRESS,<ZONE3ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE4ADDRESS,<ZONE4ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE5ADDRESS,<ZONE5ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE6ADDRESS,<ZONE6ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE7ADDRESS,<ZONE7ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE8ADDRESS,<ZONE8ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE9ADDRESS,<ZONE9ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE10ADDRESS,<ZONE10ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE11ADDRESS,<ZONE11ADDRESS
-  ifconst ZONE12ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE12ADDRESS,<ZONE12ADDRESS
-  endif
-  ifconst ZONE13ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE13ADDRESS,<ZONE13ADDRESS
-  endif
-  ifconst ZONE14ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE14ADDRESS,<ZONE14ADDRESS
-  endif
-  ifconst ZONE15ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE15ADDRESS,<ZONE15ADDRESS
-  endif
-  ifconst ZONE16ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE16ADDRESS,<ZONE16ADDRESS
-  endif
-  ifconst ZONE17ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE17ADDRESS,<ZONE17ADDRESS
-  endif
-  ifconst ZONE18ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE18ADDRESS,<ZONE18ADDRESS
-  endif
-  ifconst ZONE19ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE19ADDRESS,<ZONE19ADDRESS
-  endif
-  ifconst ZONE20ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE20ADDRESS,<ZONE20ADDRESS
-  endif
-  ifconst ZONE21ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE21ADDRESS,<ZONE21ADDRESS
-  endif
-  ifconst ZONE22ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE22ADDRESS,<ZONE22ADDRESS
-  endif
-  ifconst ZONE23ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE23ADDRESS,<ZONE23ADDRESS
-  endif
-  ifconst ZONE24ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE24ADDRESS,<ZONE24ADDRESS
-  endif
-  ifconst ZONE25ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE25ADDRESS,<ZONE25ADDRESS
-  endif
-  ifconst ZONE26ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE26ADDRESS,<ZONE26ADDRESS
-  endif
-  ifconst ZONE27ADDRESS
-     .byte ($00|(WZONEHEIGHT*4)|(WZONEHEIGHT-1)),>ZONE27ADDRESS,<ZONE27ADDRESS
-  endif
-DLLLUTNONVISSTART
-     .byte ($83|(WZONEHEIGHT*4)),$21,$00 ;  4 blank lines
-     ;       ^--NMI 2: start of non-visible
-     .byte ($8F|(WZONEHEIGHT*4)),$21,$00 ; 16 blank lines
-     ;       ^--NMI 3: start of overscan
-     .byte ($0F|(WZONEHEIGHT*4)),$21,$00 ; 16 blank lines
-     .byte ($0F|(WZONEHEIGHT*4)),$21,$00 ; 16 blank lines
-     .byte ($0F|(WZONEHEIGHT*4)),$21,$00 ; 16 blank lines
-DLLLUTEND
-  ;echo "DLL size: ",[(DLLLUTEND-DLLLUT)]d,"bytes"
-  ;echo "DLL code size: ",[(DLLLUTEND-createallgamedlls)]d,"bytes"
+createvisiblezones
+     ldy #0
+createvisiblezonesloop
+     lda.w DLHEIGHT,y
+     ora #(WZONEHEIGHT * 4) ; set Holey DMA for 8 or 16 tall zones
+     sta DLLMEM,x
+     ifconst DOUBLEBUFFER
+         sta DLLMEM+DBOFFSET,x
+     endif ; DOUBLEBUFFER
+     inx
+     lda DLPOINTH,y
+     ifconst BANKSET_DL_IN_CARTRAM
+         ; with bankset cart ram, we added $8000 to the DL address so plot functions would hit the write-address
+         ; but now we need to subtract that $8000 location to give Maria the normal address
+         sec
+         sbc #$80 
+     endif ; BANKSET_DL_IN_CARTRAM
+     sta DLLMEM,x
+     ifconst DOUBLEBUFFER
+         sta DLLMEM+DBOFFSET,x
+     endif ; DOUBLEBUFFER
+     inx
+     lda DLPOINTL,y
+     sta DLLMEM,x
+     ifconst DOUBLEBUFFER
+         clc
+         adc #DOUBLEBUFFEROFFSET
+         sta DLLMEM+DBOFFSET,x
+         bcc skiphidoublebufferadjust ; dlls are big endian, so we need to fix the hi byte after-the-fact...
+         inc DLLMEM+DBOFFSET-1,x
+skiphidoublebufferadjust
+     endif ; DOUBLEBUFFER
+     inx
+     iny
+     cpy #WZONECOUNT
+     bne createvisiblezonesloop
+     rts
 
 waitforvblankstart
 vblankendwait

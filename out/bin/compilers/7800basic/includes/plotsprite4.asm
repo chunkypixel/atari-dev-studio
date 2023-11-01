@@ -59,17 +59,26 @@ skipplotsprite4wait
          jmp continueplotsprite42
 exitplotsprite41
          rts
-
-continueplotsprite41
      endif
 
-     lda DLPOINTL,x ;Get pointer to DL that this sprite starts in
+continueplotsprite41
+
+     ifconst VSCROLL
+         ldy Xx3,x
+         lda DLLMEM+11,y
+     else  ; !VSCROLL
+         lda DLPOINTL,x ;Get pointer to DL that this sprite starts in
+     endif ; !VSCROLL
      ifconst DOUBLEBUFFER
          clc
          adc doublebufferdloffset
      endif ; DOUBLEBUFFER
      sta dlpnt
-     lda DLPOINTH,x
+     ifconst VSCROLL
+         lda DLLMEM+10,y
+     else  ; !VSCROLL
+         lda DLPOINTH,x
+     endif ; !VSCROLL
      ifconst DOUBLEBUFFER
          adc #0
      endif ; DOUBLEBUFFER
@@ -128,13 +137,22 @@ checkcontinueplotsprite42
 continueplotsprite42
      endif
 
-     lda DLPOINTL,x ;Get pointer to next DL
+     ifconst VSCROLL
+         ldy Xx3,x
+         lda DLLMEM+11,y
+     else  ; !VSCROLL
+         lda DLPOINTL,x ;Get pointer to next DL
+     endif ; !VSCROLL
      ifconst DOUBLEBUFFER
          clc
          adc doublebufferdloffset
      endif ; DOUBLEBUFFER
      sta dlpnt
-     lda DLPOINTH,x
+     ifconst VSCROLL
+         lda DLLMEM+10,y
+     else  ; !VSCROLL
+         lda DLPOINTH,x
+     endif ; !VSCROLL
      ifconst DOUBLEBUFFER
          adc #0
      endif ; DOUBLEBUFFER

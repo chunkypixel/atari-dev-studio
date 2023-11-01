@@ -177,7 +177,10 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Read compiler version (if used)
         await this.GetCompilerVersionAsync();
 
-         // Result
+        // Show any specific compiler warnings
+        this.ShowAnyCompilerWarnings();
+
+        // Result
         return true;
     }
 
@@ -246,7 +249,10 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected GetCompilerFileList(): string[] {
         return [];
     } 
-    
+
+    protected ShowAnyCompilerWarnings(): void {
+    }
+
     protected async LoadConfigurationAsync(): Promise<boolean> {
         console.log('debugger:CompilerBase.LoadConfigurationAsync');  
 

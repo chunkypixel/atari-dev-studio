@@ -74,3 +74,6 @@
  ifnconst included.plotsprite4.asm
      include plotsprite4.asm
  endif
+ ifnconst included.lzsa1compression.asm
+     include lzsa1compression.asm
+ endif
