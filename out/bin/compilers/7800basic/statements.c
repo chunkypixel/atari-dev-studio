@@ -11308,26 +11308,29 @@ void set (char **statement)
     }
     else if (!strncmp (statement[2], "backupfile", 10))
     {
-	assertminimumargs (statement, "set backupfile", 1);
-        // set backupname to statement[3]
-        removeCR (statement[3]);
-	char *backupstr=statement[3];
-        if (*backupstr == '\'')
-            backupstr++;
-        int t;
-        for(t=0;t<SIZEOFSTATEMENT;t++)
+        if (!backupflag)
         {
-            if(backupstr[t]==0)
-                break;
-            if(backupstr[t]=='^')
-                backupstr[t]=' ';
-        }
-        if(backupstr[t-1]=='\'')
+	    assertminimumargs (statement, "set backupfile", 1);
+            // set backupname to statement[3]
+            removeCR (statement[3]);
+	    char *backupstr=statement[3];
+            if (*backupstr == '\'')
+                backupstr++;
+            int t;
+            for(t=0;t<SIZEOFSTATEMENT;t++)
+            {
+                if(backupstr[t]==0)
+                    break;
+                if(backupstr[t]=='^')
+                    backupstr[t]=' ';
+            }
+            if(backupstr[t-1]=='\'')
                 backupstr[t-1]=0;
-        if(OpenArchive(backupstr)==FALSE)
-	    prerror ("set backupfile failed - couldn't write to '%s'",backupstr);
-        backupflag = TRUE;
-        backupthisfile(backupname);
+            if(OpenArchive(backupstr)==FALSE)
+	        prerror ("set backupfile failed - couldn't write to '%s'",backupstr);
+            backupflag = TRUE;
+            backupthisfile(backupname);
+        }
     }
     else if (!strncmp (statement[2], "screenheight", 12))
     {

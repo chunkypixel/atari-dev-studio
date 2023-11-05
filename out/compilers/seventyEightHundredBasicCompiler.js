@@ -201,6 +201,7 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
         return compilerFileList;
     }
     ShowAnyCompilerWarnings() {
+        console.log('debugger:SeventyEightHundredBasicCompiler.ShowAnyCompilerWarnings');
         if (application.IsMacOSArm) {
             let message = `WARNING: The included MacOS ARM version of 7800basic is a number of versions behind the official build (currently v${this.CompilerVersion}) and may not compile correctly due to missing features and functionality.`;
             application.WriteToCompilerTerminal(message);

@@ -59,7 +59,7 @@ extern int firstcompress;
 extern int dumpgraphics_index;
 int maxpasses = 2;
 
-#define BASIC_VERSION_INFO "7800basic v0.31"
+#define BASIC_VERSION_INFO "7800basic v0.32"
 
 int main (int argc, char *argv[])
 {

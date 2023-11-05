@@ -27,7 +27,8 @@
 ; Changes intruduced by Mike Saarna, 2023:
 ;    -converted to DASM format.
 ;    -generalised memory locations, for easier incorporation into 7800basic
-;    -removed self-modifying code, for use on rom-based platforms.
+;    -removed self-modifying code, for execution from rom.
+;    -added LZSAFASTCOPYBYTE optimisation ; +24 bytes rom, ~10% quicker
 ;
 ; get the original unmodified code from: 
 ; https://raw.githubusercontent.com/emmanuel-marty/lzsa
@@ -52,22 +53,22 @@
 ;
 
 LZSA_SMALL_SIZE  = 0
-LZSAFASTCOPYBYTE = 1 ; +11 bytes rom
+LZSAFASTCOPYBYTE = 1 ; +24 bytes rom, ~10% quicker
 
 ; ***************************************************************************
 ; ***************************************************************************
 ;
 ; ZP memory allocations... (temp1-temp9 are 7800basic ZP locations)
-LSZA1ZPRAM     = temp1 
-lzsa_winptr = LSZA1ZPRAM ; 1 word.
-lzsa_srcptr = LSZA1ZPRAM + 2 ; 1 word.
-lzsa_dstptr = LSZA1ZPRAM + 4 ; 1 word.
+LSZA1ZPRAM  = temp1 
+lzsa_winptr = LSZA1ZPRAM     ; 1 word (temp1+temp2)
+lzsa_srcptr = LSZA1ZPRAM + 2 ; 1 word (temp3+temp4)
+lzsa_dstptr = LSZA1ZPRAM + 4 ; 1 word (temp5+temp6)
 
 ; Doesn't need to be ZP allocations...
 LSZA1TEMPRAM     = temp7
-lzsa_cmdbuf = LSZA1TEMPRAM ; 1 byte.
-lzsa_cp_npages = LSZA1TEMPRAM + 1
-lzsa_lz_npages = LSZA1TEMPRAM + 2
+lzsa_cmdbuf      = LSZA1TEMPRAM      ; 1 byte (temp7)
+lzsa_cp_npages   = LSZA1TEMPRAM + 1  ; 1 byte (temp8)
+lzsa_lz_npages   = LSZA1TEMPRAM + 2  ; 1 byte (temp9)
 
 ; Alternate names for previous allocations...
 lzsa_offset = lzsa_winptr
@@ -80,6 +81,25 @@ LZSA_DST_HI = lzsa_dstptr+1
 
 lzsa1modulestart
 
+ if LZSAFASTCOPYBYTE = 1
+.cp_fixpointer
+ ; the optimised pointer adjustment fails if .cp_byte copied a whole page.
+ ; so we deal with it as a special case here, out of the regular .cp_byte flow.
+ ; this seems to happen so rarely that I have as of yet to see it with real data.
+     inc lzsa_srcptr+1   ; CC
+     inc lzsa_dstptr+1
+     bcc .cp_skip3       ; always taken
+ ; each of these happen infrequently (~1 in 256 byte copies) 
+.cp_fixsrc1
+     inc lzsa_srcptr+1
+     clc
+     bcc .cp_skip1
+.cp_fixsrc2
+     inc lzsa_dstptr+1
+     clc
+     bcc .cp_skip2
+ endif
+
 ; ***************************************************************************
 ; ***************************************************************************
 ;
@@ -88,6 +108,7 @@ lzsa1modulestart
 ; Args: lzsa_srcptr = ptr to compessed data
 ; Args: lzsa_dstptr = ptr to output buffer
 ;
+
 
 DECOMPRESS_LZSA1_FAST
 lzsa1_unpack
@@ -134,7 +155,7 @@ lzsa1_unpack
 .cp_got_len
      tax ; Lo-byte of length.
 
- ifnconst LZSAFASTCOPYBYTE
+ if LZSAFASTCOPYBYTE = 0
 
 .cp_byte ; CC throughout the execution of this .cp_page loop.
      lda (lzsa_srcptr),y ; 5
@@ -149,41 +170,44 @@ lzsa1_unpack
 .cp_skip2
      dex                 ; 2
      bne .cp_byte        ; 3  
-                         ; ~29 cycles for X=1
-                         ; ~58 cycles for X=2
-                         ; ~87 cycles for X=3
+                         ;  ~29 cycles overall for X=1
+                         ;  ~58 cycles overall for X=2
+                         ;  ~87 cycles overall for X=3
+                         ; ...
+                         ; ~174 cycles overall for X=6
 
- else ; LZSAFASTCOPYBYTE
+ else ; LZSAFASTCOPYBYTE != 0 
 
  ; according to 7800heat, this loop is hot. It runs on average ~6x. 
-.cp_byte ; CC throughout the execution of this .cp_page loop.
-     lda (lzsa_srcptr),y ; 5
-     sta (lzsa_dstptr),y ; 5
+
+.cp_byte      ; CC throughout the execution of this .cp_page loop.
+     lda (lzsa_srcptr),y ; 5+
+     sta (lzsa_dstptr),y ; 5+
      iny                 ; 2
      dex                 ; 2
-     bne .cp_byte        ; 3
-                         ; ~17 cycles per iteration
+     bne .cp_byte        ; 3/2
+                         ; ~17 cycles each iteration
      tya                 ; 2
+     beq .cp_fixpointer  ; 2 unlikely branch - only if we just copied a full page
      adc lzsa_srcptr+0   ; 3
      sta lzsa_srcptr+0   ; 3
-     bcc .cp_skip1       ; 3
-     inc lzsa_srcptr+1
-     clc
+     bcs .cp_fixsrc1     ; 2 (typical)
 .cp_skip1
      tya                 ; 2
      adc lzsa_dstptr+0   ; 3
      sta lzsa_dstptr+0   ; 3
-     bcc .cp_skip2       ; 3
-     inc lzsa_dstptr+1
-     clc
+     bcs .cp_fixsrc2     ; 2 (typical)
 .cp_skip2
      ldy #0              ; 2
-                         ; ~22 cycles overhead
+.cp_skip3
+                         ; ~24 cycles overhead, typical
 
-                         ; ~39 cycles for X=1
-                         ; ~56 cycles for X=2 (break-even)
-                         ; ~73 cycles for X=3
- endif ; LZSAFASTCOPYBYTE
+                         ; ~41  cycles for X=1 (+12  cycles vs non-optimized)
+                         ; ~58  cycles for X=2 (  0  cycles vs non-optimized)
+                         ; ~75  cycles for X=3 (-12  cycles vs non-optimized)
+                         ; ... 
+                         ; ~126 cycles for X=6 (-48  cycles vs non-optimized)
+ endif ; ! LZSAFASTCOPYBYTE = 0
 
 .cp_npages
      lda lzsa_cp_npages ; Any full pages left to copy?

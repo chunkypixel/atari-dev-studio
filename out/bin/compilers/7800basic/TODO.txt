@@ -1,14 +1,22 @@
 -bug - banners larger than 128 in 160B don't plot correctly.
--data with trailing comment and comma's don't get the trailing comma stripped
+-bug - can't stick compression files into a directory.
+-data with trailing comment and commas don't get the trailing comma stripped
 -horizontal scrolling
 -vertical scrolling
+-resizezone
+-incspritemapfile
+	-can create table of tile indexes (how?)
+	-can create a table of sprite hi-addresses
+	-can create a table of sprite lo-addresses
+-animatesprites
+	Run through a specified number of lines of sprites each frame, and 
+	animate. Sprites using palettes 0 and 4 are animated.
+-callback: drawline
 
 ======================================================================
 
  Horizontal Scrolling Notes
 
  - uses sprites-as-tiles design
- - sprite tiles are always 16 pixels wide
- - 11 sprites cover the screen and the one edge.
  - if the tiles aren't aligned at 16 pixel boundaries, just do the fine scroll.
  - if the tiles are aligned at 16 pixel boundaries, setup the tile greater than 159 at the correct X, depending on scroll direction, with new graphics scroll, then do the fine scroll.
