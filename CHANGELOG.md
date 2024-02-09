@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.9.6
+
+* Updated 7800basic to v0.33 (Windows, Linux, macOS) NOTE: arm64 compatibility build remains at v0.29
+* Updated 7800basic keyword, hover and context help lists
+* Updated Stella to v6.7.1 (Windows, Linux [Deb], macOS). Note: Linux 32-bit is currently v6.2
+
 ## 0.9.5
 
 * Updated 7800basic to v0.32 (Windows, Linux, macOS)

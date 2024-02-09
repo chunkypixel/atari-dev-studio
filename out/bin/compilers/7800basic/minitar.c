@@ -6,11 +6,11 @@
 // account. There are hardcoded limiations, which shouldn't be an issue for
 // it's intended purpose:
 //
-//   * The only supported filetypes are files and directories.
-//   * The archived user and group ownershp is alwasy "7800bas:7800bas"
-//   * The archived permissions are alwasy directories=755 and files=644.
-//   * The archived timestamp is the time of tar file creation, not the file's
-//     actual creation date.
+//   * The only supported file types are files and directories.
+//   * The archived user and group ownershp is always "7800bas:7800bas"
+//   * The archived permissions are always directories=755 and files=644.
+//   * The archived timestamp on each file is the time of tar creation,
+//     not each file's actual creation date.
 //   * Only relative paths are supported. If an absolute path is submitted,
 //     the leading / will be removed.
 

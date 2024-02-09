@@ -4,67 +4,97 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>Resources/CMake/sdl2-config-version.cmake</key>
+		<data>
+		GOmfPsl6+zUzjRroR1OeRUu1Do0=
+		</data>
+		<key>Resources/CMake/sdl2-config.cmake</key>
+		<data>
+		s2hXhDxzy/ilC+gLamGy/Kq13jo=
+		</data>
 		<key>Resources/Info.plist</key>
 		<data>
-		OxWHBbdJFecUEehMjei2Rc0U5Fs=
+		E/exzjLmO25/xe18BS765cbGzWY=
 		</data>
 		<key>Resources/License.txt</key>
 		<data>
-		VoVWJNSXNFkj10nxdQKhgCnXJjE=
+		fCUUBjJ4JuUAC8MRSCszNcY21v8=
 		</data>
 		<key>Resources/ReadMe.txt</key>
 		<data>
-		JbxWZUxpvG/D7Yb/DvLh6Aunla0=
+		04Gl3MPa3Etx4qtkaftLHaPqBVU=
 		</data>
 		<key>Resources/default.metallib</key>
 		<data>
-		50m0avYLiIBc6a4gWqXN3tnFlpU=
+		07w7GQmm31+NEK8ne4mSo7m70Do=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>Resources/CMake/sdl2-config-version.cmake</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			GOmfPsl6+zUzjRroR1OeRUu1Do0=
+			</data>
+			<key>hash2</key>
+			<data>
+			YeQ8SoXGqMam3mk/39htvQ5fF5Twd16X5JPfl7/hSuk=
+			</data>
+		</dict>
+		<key>Resources/CMake/sdl2-config.cmake</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			s2hXhDxzy/ilC+gLamGy/Kq13jo=
+			</data>
+			<key>hash2</key>
+			<data>
+			DuTUW8idzRp7WT1FT5x/m1C1SbVH0FKvKRKOgVlRVhU=
+			</data>
+		</dict>
 		<key>Resources/Info.plist</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			OxWHBbdJFecUEehMjei2Rc0U5Fs=
+			E/exzjLmO25/xe18BS765cbGzWY=
 			</data>
 			<key>hash2</key>
 			<data>
-			ScLuGB7K21JNtYbbGu7tXZiTvB3bCi8bFdDLJGAMcOs=
+			lMA4Mg67jCQrkxVHL0vBdN74dU3iomW7AggH3QYKJ44=
 			</data>
 		</dict>
 		<key>Resources/License.txt</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			VoVWJNSXNFkj10nxdQKhgCnXJjE=
+			fCUUBjJ4JuUAC8MRSCszNcY21v8=
 			</data>
 			<key>hash2</key>
 			<data>
-			IY4SCBLx/QICUzUIfTw/MBGoah4TzstyMeoTfwWSuDM=
+			d+3CuMuNTuvjYs+HODz44b3nsOHwwJqlcyQOq7qhAPc=
 			</data>
 		</dict>
 		<key>Resources/ReadMe.txt</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			JbxWZUxpvG/D7Yb/DvLh6Aunla0=
+			04Gl3MPa3Etx4qtkaftLHaPqBVU=
 			</data>
 			<key>hash2</key>
 			<data>
-			pOpMHiFjj3pIWQqZ5KDvYNyp0twU7vCZmLwAQJLVkT4=
+			OjTqSEaeNJpJyrrZIzKimvTn011CW6ucNulPPxUwgL0=
 			</data>
 		</dict>
 		<key>Resources/default.metallib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			50m0avYLiIBc6a4gWqXN3tnFlpU=
+			07w7GQmm31+NEK8ne4mSo7m70Do=
 			</data>
 			<key>hash2</key>
 			<data>
-			w8jS3DIw3CKDRfJsmiA4MWFVPhdpi2zi+WEO1Zfw8+8=
+			vmrmeHQ4l7Q4flA5dILQw27M4T0Sc70MQIfP+lFY/do=
 			</data>
 		</dict>
 	</dict>

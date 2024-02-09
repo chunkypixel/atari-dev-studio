@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>BuildMachineOSBuild</key>
-	<string>21F79</string>
+	<string>23C71</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleDisplayName</key>
@@ -47,7 +47,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>Stella-emu</string>
 	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.7</string>
+	<string>6.7.1</string>
 	<key>CFBundleName</key>
 	<string>Stella</string>
 	<key>CFBundlePackageType</key>
@@ -59,27 +59,27 @@
 		<string>MacOSX</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>6.7</string>
+	<string>6.7.1</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
-	<string>13F100</string>
+	<string></string>
 	<key>DTPlatformName</key>
 	<string>macosx</string>
 	<key>DTPlatformVersion</key>
-	<string>12.3</string>
+	<string>14.2</string>
 	<key>DTSDKBuild</key>
-	<string>21E226</string>
+	<string>23C53</string>
 	<key>DTSDKName</key>
-	<string>macosx12.3</string>
+	<string>macosx14.2</string>
 	<key>DTXcode</key>
-	<string>1341</string>
+	<string>1520</string>
 	<key>DTXcodeBuild</key>
-	<string>13F100</string>
+	<string>15C500b</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.games</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>10.9</string>
+	<string>10.13</string>
 	<key>LSMinimumSystemVersionByArchitecture</key>
 	<dict>
 		<key>x86_64</key>

@@ -1456,9 +1456,9 @@ void plotsprite (char **statement, int fourbytesprite)
 	}
 	else
 	    printf ("    ldy #%s_width\n", statement[2]);
-	printf ("    clc\n");
 	printf ("    beq plotspritewidthskip%d\n", templabel);
 	printf ("plotspritewidthloop%d\n", templabel);
+	printf ("      clc\n");
 	printf ("      adc ");
 	printimmed (statement[6]);
 	printf ("%s\n", statement[6]);
@@ -1571,19 +1571,53 @@ void PLOTSPRITE (char **statement, int fourbytesprite)
     if(fourbytesprite)
     {
         if (isimmed (statement[3])) // palette is a constant
-            printf (" PLOTSPRITE4 %s,%s,%s,%s,%s\n",statement[2],statement[3],statement[4],statement[5],statement[6]);
+            printf ("MACARG2CONST SET 1\n");
         else // palette is a variable
-            printf (" PLOTSPRITE4VP %s,%s,%s,%s,%s\n",statement[2],statement[3],statement[4],statement[5],statement[6]);
+            printf ("MACARG2CONST SET 0\n");
+        if (isimmed (statement[4])) // x is a constant
+            printf ("MACARG3CONST SET 1\n");
+        else // x is a variable
+            printf ("MACARG3CONST SET 0\n");
+        if (isimmed (statement[5])) // y is a constant
+            printf ("MACARG4CONST SET 1\n");
+        else // y is a variable
+            printf ("MACARG4CONST SET 0\n");
+	if (optionalargused(statement[6]) && !isimmed (statement[6])) // const
+            printf ("MACARG5CONST SET 0\n");
+        else // frame is a variable
+            printf ("MACARG5CONST SET 1\n");
+
+        printf (" PLOTSPRITE4 %s,%s,%s,%s,%s\n",statement[2],statement[3],statement[4],statement[5],statement[6]);
+
     }
     else //!fourbytesprite
     {
         if (isimmed (statement[3])) // palette is a constant
-            printf (" PLOTSPRITE %s,%s,%s,%s,%s\n",statement[2],statement[3],statement[4],statement[5],statement[6]);
+            printf ("MACARG2CONST SET 1\n");
         else // palette is a variable
-            printf (" PLOTSPRITEVP %s,%s,%s,%s,%s\n",statement[2],statement[3],statement[4],statement[5],statement[6]);
+            printf ("MACARG2CONST SET 0\n");
+        if (isimmed (statement[4])) // x is a constant
+            printf ("MACARG3CONST SET 1\n");
+        else // x is a variable
+            printf ("MACARG3CONST SET 0\n");
+        if (isimmed (statement[5])) // y is a constant
+            printf ("MACARG4CONST SET 1\n");
+        else // y is a variable
+            printf ("MACARG4CONST SET 0\n");
+	if (optionalargused(statement[6]) && !isimmed (statement[6])) // const
+            printf ("MACARG5CONST SET 0\n");
+        else // frame is a variable
+            printf ("MACARG5CONST SET 1\n");
+
+        printf (" PLOTSPRITE %s,%s,%s,%s,%s\n",statement[2],statement[3],statement[4],statement[5],statement[6]);
     }
 }
 
+int optionalargused(char *statement)
+{
+    removeCR (statement);
+    return ((statement[0] != 0) && (statement[0] != ':'));
+}
 
 void plotbanner (char **statement)
 {
@@ -1766,7 +1800,7 @@ int inlinealphadata (char **statement)
     int quotelen = 0;
 
     if (currentcharset[0] == '\0')
-	prerror ("the characterset statement needs to precede plotchars with an inline string");
+	prerror ("the characterset statement needs to precede a command with an inline string");
 
 
     for (t = 0; statement[2][t] != '\0'; t++)
@@ -1808,6 +1842,30 @@ int inlinealphadata (char **statement)
     templabel++;
     return (quotelen);
 }
+
+void dostrcpy(char **statement)
+{
+    //           1        2             3
+    //        strcpy   destination 'string literal'
+
+
+    int autotextwidth = 0;
+
+    assertminimumargs (statement, "strcpy", 2);
+
+    if (statement[3][0] == '\'')
+	autotextwidth = inlinealphadata (statement+1);
+    else
+	prerror ("strcpy requires a string literal");
+
+    printf(" ldy #%d\n",autotextwidth);
+    printf ("copystr%d\n", templabel);
+    printf(" lda [%s-1],y\n",statement[3]);
+    printf(" sta [%s-1],y\n",statement[2]);
+    printf(" dey\n");
+    printf (" bne copystr%d\n", templabel++);
+}
+
 
 void plotchars (char **statement)
 {
@@ -2106,7 +2164,7 @@ void plotmapfile (char **statement)
     //our default data label...
     for (t = 0; t < 256; t++)
 	sprintf (datavalues[t], "palette0");
-
+//datavalues
     for (;;)
     {
 	char line[1024];
@@ -2168,6 +2226,7 @@ void plotmapfile (char **statement)
                     else
 		        prerror ("plotmapfile didn't find a palette for %s", datavalues[gid]);
 		}
+
 		if (strcmp (palettefilenames[q], datavalues[gid]) == 0)
 		    break;
 	    }
@@ -3852,7 +3911,6 @@ void add_graphic (char **statement, int incbanner)
 		    prerror ("ran out of default graphic palette entries");
 		strcpy (palettefilenames[s], graphicslabels[dmaplain][graphicsdatawidth[dmaplain]]);
 		graphicfilepalettes[s] = strictatoi (statement[palettestatement]);
-		palettefilenames[s + 1][0] = 0;
 		graphicfilemodes[s] = graphiccolormode;
 	    }
 	}
@@ -5916,6 +5974,12 @@ void data (char **statement)
 	    exit (1);
 	}
 	line++;
+	data[SIZEOFSTATEMENT-1]=0;
+	if (strlen(data)==(SIZEOFSTATEMENT-1))
+	{
+	    prerror ("line length exceeded in data statelement.");
+	    exit (1);
+	}
 	if (!strncmp (data, "end\0", 3))
 	    break;
 	remove_trailing_commas (data);
@@ -7609,8 +7673,28 @@ void alphadata (char **statement)
 	alphaend = strrchr (data, '\'');
 	if ((alphaend == NULL) || (alphachr == alphaend) || (alphachr == (alphaend - 1)))
 	{
-	    prerror ("malformed alphadata line");
-	    exit (1);
+	    int t, hasnum;
+	    hasnum=0;
+	    for(t=0;((t<SIZEOFSTATEMENT)&&(data[t]!=0));t++)
+	    {
+	        if ((data[t]>='0')&&(data[t]<='9'))
+		{
+	            hasnum=1; 
+	            break;
+		}
+	    }
+	    if (!hasnum)
+            {
+	        prerror ("malformed alphadata line");
+	        exit (1);
+            }
+	    // We see a digit in there. We'll take it on faith that there's
+	    // valid data listed. Validity checking here could be better.
+	    if (!thisdatabankset)
+		printf ("  .byte %s\n", data);
+            else
+		gfxprintf ("  .byte %s\n", data);
+	    continue;
 	}
 	alphachr = alphachr + 1;
 	*alphaend = '\0';
@@ -7892,6 +7976,110 @@ void next (char **statement)
     }
     if (failsafe)
 	printf (".%s\n", failsafelabel);
+}
+
+void autodim (char **statement)
+{
+    #define AD_BYTE 0
+    #define AD_44  1
+    #define AD_88  2
+
+    static int inititialized = 0;
+    static char start_addr[80];
+    static char end_addr[80];
+    static int current_index;
+
+    int variable_type;
+    int memsize,t;
+    int objsize, objcount;
+
+    // when arg2=init...
+    //         1           2         3         4
+    //     autodim       init   start addr  end addr
+
+    // when arg2=byte, 8.8, or 4.4...
+    //         1           2         3         4
+    //     autodim       type      name      count
+
+    assertminimumargs (statement, "autodim", 2);
+    removeCR (statement[3]);
+    removeCR (statement[4]);
+
+    if (strncmp(statement[2],"init",5)==0)
+    {
+        assertminimumargs (statement, "autodim (init)", 3);
+        inititialized = 1;
+        current_index=0;
+	strncpy(start_addr,statement[3],79);
+	strncpy(end_addr,statement[4],79);
+        return;
+    }
+
+    if(!inititialized)
+        prerror ("autodim used without initializing.");
+
+    variable_type = -1;
+    if (strncmp(statement[2],"byte",5)==0)
+    {
+        variable_type = AD_BYTE;
+        objsize = 1;
+    }
+    else if (strncmp(statement[2],"4.4",5)==0)
+    {
+        variable_type = AD_44;
+        objsize = 1;
+    }
+    else if (strncmp(statement[2],"8.8",5)==0)
+    {
+        variable_type = AD_88;
+        objsize = 2;
+    }
+
+    if(variable_type == -1)
+        prerror ("autodim type not recognized.");
+
+    if ((statement[4][0] == 0) || (statement[4][0] == ':'))
+        objcount=1;
+    else
+    {
+        // retrieve and validate how many bytes/objects are needed
+        objcount = strictatoi (statement[4]);
+        if (objcount<1)
+            prerror ("autodim invalid object count used.");
+    }
+
+    // register the base variable name
+    snprintf (redefined_variables[numredefvars], 100, "%s = (%s + %d)",statement[3],start_addr,current_index);
+    numredefvars++;
+
+    if ( variable_type == AD_44 )
+    {
+        snprintf (redefined_variables[numredefvars], 100, "%sb44 = (%s + %d)",statement[3],start_addr,current_index);
+        numredefvars++;
+        snprintf (fixpoint44[0][numfixpoint44], 46, "%s",statement[3]);
+        snprintf (fixpoint44[1][numfixpoint44], 46, "%sb44",statement[3]);
+        numfixpoint44++;
+    }
+
+    if ( variable_type == AD_88 )
+    {
+        snprintf (redefined_variables[numredefvars], 100, "%s_hi = (%s + %d)",statement[3],start_addr,current_index);
+        numredefvars++;
+        snprintf (redefined_variables[numredefvars], 100, "%s_lo = (%s + %d)",statement[3],start_addr,current_index+objcount);
+        numredefvars++;
+        snprintf (fixpoint88[0][numfixpoint88], 46, "%s",statement[3]);
+        snprintf (fixpoint88[1][numfixpoint88], 46, "%s_lo",statement[3]);
+        numfixpoint88++;
+
+    }
+
+    // advance the autodim index past this recent allocation...
+    current_index = current_index + (objcount * objsize);
+
+    // Add an assembly check that the allocation didn't go past the end value
+    // This needs to be at the asm level, because we allow the program to 
+    // use symbols for the start and end address.
+    printf(" if ((%s + %d) > %s)\n echo \"\"\n echo \"######## ERROR: autodim of variable '%s' exceeded range end. (%s)\"\n  ERR\n endif\n",start_addr,current_index-1, end_addr, statement[3],end_addr);
 }
 
 void dim (char **statement)

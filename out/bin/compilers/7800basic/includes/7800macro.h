@@ -159,13 +159,18 @@ MedianOrderLUTend
 	; It also doesn't check if the visible screen is displayed or not.
 	; It has no training wheels. It is all rusty sharp edges.
 
-.GFXLabel   SET {1}
-.Palette    SET {2} ; constant
-.SpriteX    SET {3} ; variable
-.SpriteY    SET {4} ; variable
-.ByteOffset SET {5} ; variable 
+.GFXLabel   SET {1} ; constant
+.Palette    SET {2} ; constant/variable MACARG2CONST
+.SpriteX    SET {3} ; constant/variable MACARG3CONST
+.SpriteY    SET {4} ; constant/variable MACARG4CONST
+.ByteOffset SET {5} ; constant/variable MACARG5CONST
 
+ if MACARG4CONST = 0
 	lda .SpriteY
+ else
+	lda #.SpriteY
+ endif
+
         lsr
         lsr
         asr #%11111110 ; ensure carry is clear
@@ -203,20 +208,26 @@ MedianOrderLUTend
 
  ifconst .ByteOffset
 
+ if MACARG5CONST = 1
+	lda #.ByteOffset 
+ else
 	lda .ByteOffset 
-
+ endif
 	ifconst DOUBLEBUFFER
  	if {1}_width = 1
         	clc
  	endif
  	endif
-
  if {1}_width = 2
         asl
  endif
  if {1}_width = 3
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 4
         asl
@@ -225,18 +236,34 @@ MedianOrderLUTend
  if {1}_width = 5
         asl
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 6
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
  endif
  if {1}_width = 7
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 8
         asl
@@ -247,394 +274,97 @@ MedianOrderLUTend
         asl
         asl
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 10
         asl
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
  endif
  if {1}_width = 11
         asl
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 12
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
         asl
  endif
  if {1}_width = 13
         asl
-        adc .ByteOffset
-        asl
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 14
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 15
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 16
-        asl
-        asl
-        asl
-        asl
- endif
-
-	adc #<.GFXLabel ; carry is clear via previous asl or asr
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
  else
-	lda #<.GFXLabel ; carry is clear via previous asl or asr
- endif ; .ByteOffset
-        sta (dlpnt),y ; #1 - low byte object address
-
-	iny
-
-	lda #({1}_mode | %01000000)
-	sta (dlpnt),y ; #2 - graphics mode , indirect
-
-	iny
-
-	lda .SpriteY
-	and #(WZONEHEIGHT - 1)
-	cmp #1 ; clear carry if our sprite is just in this zone
-	ora #>.GFXLabel
-	sta (dlpnt),y ; #3 - hi byte object address
-
-	iny
-
-	lda #({1}_width_twoscompliment | (.Palette * 32))
-	sta (dlpnt),y ; #4 - palette|width
-
-	iny
-
-	lda .SpriteX
-	sta (dlpnt),y ; #5 - x object position
-
-        iny
-        sty dlend,x
-
-    ifconst ALWAYSTERMINATE
-         iny
-         lda #0
-         sta (dlpnt),y
-     endif
-
-	bcc .PLOTSPRITEend
-
-.PLOTSPRITEnext
-	inx ; next zone
-
-        cpx #WZONECOUNT
-	bcs .PLOTSPRITEend 
-	; carry is clear
-
-	ifconst VSCROLL
-		ldy Xx3,x
-		lda DLLMEM+11,y
-	else  ; !VSCROLL
-		lda DLPOINTL,x ;Get pointer to DL that this sprite starts in
-	endif ; !VSCROLL
-	ifconst DOUBLEBUFFER
-		adc doublebufferdloffset
-	endif ; DOUBLEBUFFER
-	sta dlpnt
-	ifconst VSCROLL
-		lda DLLMEM+10,y
-	else  ; !VSCROLL
-		lda DLPOINTH,x
-	endif ; !VSCROLL
-	ifconst DOUBLEBUFFER
-		adc #0
-	endif ; DOUBLEBUFFER
-	sta dlpnt+1
-	
- 	ldy dlend,x ; find the next new object position in this zone
-
- ifconst .ByteOffset
-
-	lda .ByteOffset
- if {1}_width = 1
-        clc
+	adc .ByteOffset 
  endif
- if {1}_width = 2
-        asl ; carry clear
- endif
- if {1}_width = 3
-        asl ; carry clear
-        adc .ByteOffset
- endif
- if {1}_width = 4
-        asl ; carry clear
-        asl
- endif
- if {1}_width = 5
-        asl ; carry clear
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 6
-        asl ; carry clear
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 7
-        asl ; carry clear
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 8
-        asl ; carry clear
         asl
         asl
- endif
- if {1}_width = 9
-        asl ; carry clear
-        asl
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 10
-        asl ; carry clear
-        asl
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 11
-        asl ; carry clear
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 12
-        asl ; carry clear
-        adc .ByteOffset
-        asl
-        asl
- endif
- if {1}_width = 13
-        asl ; carry clear
-        adc .ByteOffset
-        asl
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 14
-        asl ; carry clear
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 15
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 16
-        asl
-        asl
-        asl
-        asl
- endif
-
-	adc #<.GFXLabel
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
  else
-	lda #<.GFXLabel
- endif ; .ByteOffset
-
-        sta (dlpnt),y ; #1 - low byte object address
-
-	iny
-
-	lda #({1}_mode | %01000000)
-	sta (dlpnt),y ; #2 - graphics mode , indirect
-
-	iny
-
-	lda .SpriteY
-	and #(WZONEHEIGHT - 1)
-	ora #>(.GFXLabel - (WZONEHEIGHT * 256)) ; start in the dma hole
-	sta (dlpnt),y ; #3 - hi byte object address
-
-	iny
-
-	lda #({1}_width_twoscompliment | (.Palette * 32))
-	sta (dlpnt),y ; #4 - palette|width
-
-	iny
-
-	lda .SpriteX
-	sta (dlpnt),y ; #5 - x object position
-
-	iny
-	sty dlend,x
-
-    ifconst ALWAYSTERMINATE
-         iny
-         lda #0
-         sta (dlpnt),y
-     endif
-
-.PLOTSPRITEend
- ENDM
-
- MAC PLOTSPRITEVP
-
-	; A macro version of the plotsprite command. (with Variable palette)
-	; This trades off rom space for speed.
-	; It also doesn't check if the visible screen is displayed or not.
-	; It has no training wheels. It is all rusty sharp edges.
-
-.GFXLabel   SET {1}
-.Palette    SET {2} ; variable (palette desired *32)
-.SpriteX    SET {3} ; variable
-.SpriteY    SET {4} ; variable
-.ByteOffset SET {5} ; variable 
-
-	lda .SpriteY
-        lsr
-        lsr
-        asr #%11111110 ; ensure carry is clear
-   if WZONEHEIGHT = 16
-        asr #%11111110 ; ensure carry is clear
-   endif
+	adc .ByteOffset 
+ endif
  
-	tax
-
-        cpx #WZONECOUNT
-	bcs .PLOTSPRITEnext
-	; carry is clear
-	
-	ifconst VSCROLL
-		ldy Xx3,x
-		lda DLLMEM+11,y
-	else  ; !VSCROLL
-		lda DLPOINTL,x ;Get pointer to DL that this sprite starts in
-	endif ; !VSCROLL
-	ifconst DOUBLEBUFFER
-		adc doublebufferdloffset
-	endif ; DOUBLEBUFFER
-	sta dlpnt
-	ifconst VSCROLL
-		lda DLLMEM+10,y
-	else  ; !VSCROLL
-		lda DLPOINTH,x
-	endif ; !VSCROLL
-	ifconst DOUBLEBUFFER
-		adc #0
-	endif ; DOUBLEBUFFER
-	sta dlpnt+1
-	
- 	ldy dlend,x ; find the next new object position in this zone
-
- ifconst .ByteOffset
-
-	lda .ByteOffset 
-
-	ifconst DOUBLEBUFFER
- 	if {1}_width = 1
-        	clc
- 	endif
- 	endif
-
- if {1}_width = 2
-        asl
- endif
- if {1}_width = 3
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 4
-        asl
-        asl
- endif
- if {1}_width = 5
-        asl
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 6
-        asl
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 7
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 8
-        asl
-        asl
-        asl
- endif
- if {1}_width = 9
-        asl
-        asl
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 10
-        asl
-        asl
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 11
-        asl
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 12
-        asl
-        adc .ByteOffset
-        asl
-        asl
- endif
- if {1}_width = 13
-        asl
-        adc .ByteOffset
-        asl
-        asl
-        adc .ByteOffset
  endif
  if {1}_width = 14
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
  endif
  if {1}_width = 15
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 16
         asl
@@ -642,7 +372,6 @@ MedianOrderLUTend
         asl
         asl
  endif
-
 	adc #<.GFXLabel ; carry is clear via previous asl or asr
  else
 	lda #<.GFXLabel ; carry is clear via previous asl or asr
@@ -656,7 +385,11 @@ MedianOrderLUTend
 
 	iny
 
+ if MACARG4CONST = 0
 	lda .SpriteY
+ else
+	lda #.SpriteY
+ endif
 	and #(WZONEHEIGHT - 1)
 	cmp #1 ; clear carry if our sprite is just in this zone
 	ora #>.GFXLabel
@@ -664,13 +397,21 @@ MedianOrderLUTend
 
 	iny
 
+ if MACARG2CONST = 1
+	lda #({1}_width_twoscompliment | (.Palette * 32))
+ else
 	lda #({1}_width_twoscompliment)
-        ora .Palette
+	ora .Palette
+ endif
 	sta (dlpnt),y ; #4 - palette|width
 
 	iny
 
+ if MACARG3CONST = 1
+	lda #.SpriteX
+ else
 	lda .SpriteX
+ endif
 	sta (dlpnt),y ; #5 - x object position
 
         iny
@@ -715,7 +456,11 @@ MedianOrderLUTend
 
  ifconst .ByteOffset
 
-	lda .ByteOffset
+ if MACARG5CONST = 1
+	lda #.ByteOffset 
+ else
+	lda .ByteOffset 
+ endif
  if {1}_width = 1
         clc
  endif
@@ -724,7 +469,11 @@ MedianOrderLUTend
  endif
  if {1}_width = 3
         asl ; carry clear
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 4
         asl ; carry clear
@@ -733,16 +482,28 @@ MedianOrderLUTend
  if {1}_width = 5
         asl ; carry clear
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 6
         asl ; carry clear
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
  endif
  if {1}_width = 7
         asl ; carry clear
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
  endif
  if {1}_width = 8
@@ -754,48 +515,96 @@ MedianOrderLUTend
         asl ; carry clear
         asl
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 10
         asl ; carry clear
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
  endif
  if {1}_width = 11
         asl ; carry clear
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 12
         asl ; carry clear
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
         asl
  endif
  if {1}_width = 13
         asl ; carry clear
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 14
         asl ; carry clear
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
  endif
  if {1}_width = 15
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 16
         asl
@@ -803,8 +612,6 @@ MedianOrderLUTend
         asl
         asl
  endif
-
-
 	adc #<.GFXLabel
  else
 	lda #<.GFXLabel
@@ -819,20 +626,32 @@ MedianOrderLUTend
 
 	iny
 
+ if MACARG4CONST = 0
 	lda .SpriteY
+ else
+	lda #.SpriteY
+ endif
 	and #(WZONEHEIGHT - 1)
 	ora #>(.GFXLabel - (WZONEHEIGHT * 256)) ; start in the dma hole
 	sta (dlpnt),y ; #3 - hi byte object address
 
 	iny
 
+ if MACARG2CONST = 1
+	lda #({1}_width_twoscompliment | (.Palette * 32))
+ else
 	lda #({1}_width_twoscompliment)
-        ora .Palette
+	ora .Palette
+ endif
 	sta (dlpnt),y ; #4 - palette|width
 
 	iny
 
+ if MACARG3CONST = 1
+	lda #.SpriteX
+ else
 	lda .SpriteX
+ endif
 	sta (dlpnt),y ; #5 - x object position
 
 	iny
@@ -860,7 +679,11 @@ MedianOrderLUTend
 .SpriteY    SET {4} ; variable
 .ByteOffset SET {5} ; variable 
 
+ if MACARG4CONST = 0
 	lda .SpriteY
+ else
+	lda #.SpriteY
+ endif
         lsr
         lsr
         asr #%11111110 ; ensure carry is clear
@@ -897,20 +720,26 @@ MedianOrderLUTend
 
  ifconst .ByteOffset
 
+ if MACARG5CONST = 1
+	lda #.ByteOffset 
+ else
 	lda .ByteOffset 
-
+ endif
 	ifconst DOUBLEBUFFER
  	if {1}_width = 1
        		clc
  	endif
  	endif
-
  if {1}_width = 2
         asl
  endif
  if {1}_width = 3
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 4
         asl
@@ -919,18 +748,35 @@ MedianOrderLUTend
  if {1}_width = 5
         asl
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 6
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+
         asl
  endif
  if {1}_width = 7
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 8
         asl
@@ -941,48 +787,96 @@ MedianOrderLUTend
         asl
         asl
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 10
         asl
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
  endif
  if {1}_width = 11
         asl
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 12
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
         asl
  endif
  if {1}_width = 13
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 14
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
  endif
  if {1}_width = 15
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
         asl
-        adc .ByteOffset
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
  endif
  if {1}_width = 16
         asl
@@ -990,8 +884,6 @@ MedianOrderLUTend
         asl
         asl
  endif
-
-
 	adc #<.GFXLabel ; carry is clear via previous asl or asr
  else
 	lda #<.GFXLabel ; carry is clear via previous asl or asr
@@ -999,498 +891,264 @@ MedianOrderLUTend
         sta (dlpnt),y ; #1 - low byte object address
 
 	iny
+
+ if MACARG2CONST = 1
 	lda #({1}_width_twoscompliment | (.Palette * 32))
-	sta (dlpnt),y ; #2 - palette|width
-
-	iny
-	lda .SpriteY
-	and #(WZONEHEIGHT - 1)
-	cmp #1 ; clear carry if our sprite is just in this zone
-	ora #>.GFXLabel
-	sta (dlpnt),y ; #3 - hi byte object address
-
-	iny
-	lda .SpriteX
-	sta (dlpnt),y ; #4 - x object position
-
-        iny
-        sty dlend,x
-
-    ifconst ALWAYSTERMINATE
-         iny
-         lda #0
-         sta (dlpnt),y
-     endif
-
-	bcc .PLOTSPRITEend
-
-.PLOTSPRITEnext
-	inx ; next zone
-
-        cpx #WZONECOUNT
-	bcs .PLOTSPRITEend 
-	; carry is clear
-	ifconst VSCROLL
-		ldy Xx3,x
-		lda DLLMEM+11,y
-	else  ; !VSCROLL
-		lda DLPOINTL,x ;Get pointer to DL that this sprite starts in
-	endif ; !VSCROLL
-	ifconst DOUBLEBUFFER
-		adc doublebufferdloffset
-	endif ; DOUBLEBUFFER
-	sta dlpnt
-	ifconst VSCROLL
-		lda DLLMEM+10,y
-	else  ; !VSCROLL
-		lda DLPOINTH,x
-	endif ; !VSCROLL
-	ifconst DOUBLEBUFFER
-		adc #0
-	endif ; DOUBLEBUFFER
-	sta dlpnt+1
-	
- 	ldy dlend,x ; find the next new object position in this zone
-
- ifconst .ByteOffset
-
-	lda .ByteOffset
- if {1}_width = 1
-        clc
- endif
- if {1}_width = 2
-        asl ; carry clear
- endif
- if {1}_width = 3
-        asl ; carry clear
-        adc .ByteOffset
- endif
- if {1}_width = 4
-        asl ; carry clear
-        asl
- endif
- if {1}_width = 5
-        asl ; carry clear
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 6
-        asl ; carry clear
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 7
-        asl ; carry clear
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 8
-        asl ; carry clear
-        asl
-        asl
- endif
- if {1}_width = 9
-        asl ; carry clear
-        asl
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 10
-        asl ; carry clear
-        asl
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 11
-        asl ; carry clear
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 12
-        asl ; carry clear
-        adc .ByteOffset
-        asl
-        asl
- endif
- if {1}_width = 13
-        asl ; carry clear
-        adc .ByteOffset
-        asl
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 14
-        asl ; carry clear
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 15
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 16
-        asl
-        asl
-        asl
-        asl
- endif
-
-
-	adc #<.GFXLabel
  else
-	lda #<.GFXLabel
- endif ; .ByteOffset
-        sta (dlpnt),y ; #1 - low byte object address
-
-	iny
-	lda #({1}_width_twoscompliment | (.Palette * 32))
-	sta (dlpnt),y ; #2 - palette|width
-
-	iny
-	lda .SpriteY
-	and #(WZONEHEIGHT - 1)
-	ora #>(.GFXLabel - (WZONEHEIGHT * 256)) ; start in the dma hole
-	sta (dlpnt),y ; #3 - hi byte object address
-
-	iny
-	lda .SpriteX
-	sta (dlpnt),y ; #4 - x object position
-
-	iny
-	sty dlend,x
-
-    ifconst ALWAYSTERMINATE
-         iny
-         lda #0
-         sta (dlpnt),y
-     endif
-
-.PLOTSPRITEend
- ENDM
-
- MAC PLOTSPRITE4VP
-        ; 
-	; A macro version of plotsprite. (with 4 byte objects+variable palette)
-	; This trades off rom space for speed.
-	; It also doesn't check if the visible screen is displayed or not.
-	; It has no training wheels. It is all rusty sharp edges.
-
-.GFXLabel   SET {1}
-.Palette    SET {2} ; variable (palette desired *32)
-.SpriteX    SET {3} ; variable
-.SpriteY    SET {4} ; variable
-.ByteOffset SET {5} ; variable 
-
-	lda .SpriteY
-        lsr
-        lsr
-        asr #%11111110 ; ensure carry is clear
-   if WZONEHEIGHT = 16
-        asr #%11111110 ; ensure carry is clear
-   endif
- 
-	tax
-
-        cpx #WZONECOUNT
-	bcs .PLOTSPRITEnext
-	; carry is clear
-	ifconst VSCROLL
-		ldy Xx3,x
-		lda DLLMEM+11,y
-	else  ; !VSCROLL
-		lda DLPOINTL,x ;Get pointer to DL that this sprite starts in
-	endif ; !VSCROLL
-	ifconst DOUBLEBUFFER
-		adc doublebufferdloffset
-	endif ; DOUBLEBUFFER
-	sta dlpnt
-	ifconst VSCROLL
-		lda DLLMEM+10,y
-	else  ; !VSCROLL
-		lda DLPOINTH,x
-	endif ; !VSCROLL
-	ifconst DOUBLEBUFFER
-		adc #0
-	endif ; DOUBLEBUFFER
-	sta dlpnt+1
-	
- 	ldy dlend,x ; find the next new object position in this zone
-
- ifconst .ByteOffset
-	lda .ByteOffset 
-
-	ifconst DOUBLEBUFFER
- 	if {1}_width = 1
-       		clc
- 	endif
- 	endif
-
- if {1}_width = 2
-        asl
- endif
- if {1}_width = 3
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 4
-        asl
-        asl
- endif
- if {1}_width = 5
-        asl
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 6
-        asl
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 7
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 8
-        asl
-        asl
-        asl
- endif
- if {1}_width = 9
-        asl
-        asl
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 10
-        asl
-        asl
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 11
-        asl
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 12
-        asl
-        adc .ByteOffset
-        asl
-        asl
- endif
- if {1}_width = 13
-        asl
-        adc .ByteOffset
-        asl
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 14
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 15
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 16
-        asl
-        asl
-        asl
-        asl
- endif
-
-	adc #<.GFXLabel ; carry is clear via previous asl or asr
- else
-	lda #<.GFXLabel ; carry is clear via previous asl or asr
- endif ; .ByteOffset
-        sta (dlpnt),y ; #1 - low byte object address
-
-	iny
-	lda #({1}_width_twoscompliment)
-        ora .Palette
-	sta (dlpnt),y ; #2 - palette|width
-
-	iny
-	lda .SpriteY
-	and #(WZONEHEIGHT - 1)
-	cmp #1 ; clear carry if our sprite is just in this zone
-	ora #>.GFXLabel
-	sta (dlpnt),y ; #3 - hi byte object address
-
-	iny
-	lda .SpriteX
-	sta (dlpnt),y ; #4 - x object position
-
-        iny
-        sty dlend,x
-
-    ifconst ALWAYSTERMINATE
-         iny
-         lda #0
-         sta (dlpnt),y
-     endif
-
-	bcc .PLOTSPRITEend
-
-.PLOTSPRITEnext
-	inx ; next zone
-
-        cpx #WZONECOUNT
-	bcs .PLOTSPRITEend 
-	; carry is clear
-	ifconst VSCROLL
-		ldy Xx3,x
-		lda DLLMEM+11,y
-	else  ; !VSCROLL
-		lda DLPOINTL,x ;Get pointer to DL that this sprite starts in
-	endif ; !VSCROLL
-	ifconst DOUBLEBUFFER
-		adc doublebufferdloffset
-	endif ; DOUBLEBUFFER
-	sta dlpnt
-	ifconst VSCROLL
-		lda DLLMEM+10,y
-	else  ; !VSCROLL
-		lda DLPOINTH,x
-	endif ; !VSCROLL
-	ifconst DOUBLEBUFFER
-		adc #0
-	endif ; DOUBLEBUFFER
-	sta dlpnt+1
-	
- 	ldy dlend,x ; find the next new object position in this zone
-
- ifconst .ByteOffset
-
-	lda .ByteOffset
- if {1}_width = 1
-        clc
- endif
- if {1}_width = 2
-        asl ; carry clear
- endif
- if {1}_width = 3
-        asl ; carry clear
-        adc .ByteOffset
- endif
- if {1}_width = 4
-        asl ; carry clear
-        asl
- endif
- if {1}_width = 5
-        asl ; carry clear
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 6
-        asl ; carry clear
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 7
-        asl ; carry clear
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 8
-        asl ; carry clear
-        asl
-        asl
- endif
- if {1}_width = 9
-        asl ; carry clear
-        asl
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 10
-        asl ; carry clear
-        asl
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 11
-        asl ; carry clear
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 12
-        asl ; carry clear
-        adc .ByteOffset
-        asl
-        asl
- endif
- if {1}_width = 13
-        asl ; carry clear
-        adc .ByteOffset
-        asl
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 14
-        asl ; carry clear
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
-        asl
- endif
- if {1}_width = 15
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
-        asl
-        adc .ByteOffset
- endif
- if {1}_width = 16
-        asl
-        asl
-        asl
-        asl
- endif
-
-
-	adc #<.GFXLabel
- else
-	lda #<.GFXLabel
- endif ; .ByteOffset
-        sta (dlpnt),y ; #1 - low byte object address
-
-	iny
 	lda #({1}_width_twoscompliment)
 	ora .Palette
+ endif
 	sta (dlpnt),y ; #2 - palette|width
 
 	iny
+ if MACARG4CONST = 0
 	lda .SpriteY
+ else
+	lda #.SpriteY
+ endif
+	and #(WZONEHEIGHT - 1)
+	cmp #1 ; clear carry if our sprite is just in this zone
+	ora #>.GFXLabel
+	sta (dlpnt),y ; #3 - hi byte object address
+
+	iny
+ if MACARG3CONST = 1
+	lda #.SpriteX
+ else
+	lda .SpriteX
+ endif
+	sta (dlpnt),y ; #4 - x object position
+
+        iny
+        sty dlend,x
+
+    ifconst ALWAYSTERMINATE
+         iny
+         lda #0
+         sta (dlpnt),y
+     endif
+
+	bcc .PLOTSPRITEend
+
+.PLOTSPRITEnext
+	inx ; next zone
+
+        cpx #WZONECOUNT
+	bcs .PLOTSPRITEend 
+	; carry is clear
+	ifconst VSCROLL
+		ldy Xx3,x
+		lda DLLMEM+11,y
+	else  ; !VSCROLL
+		lda DLPOINTL,x ;Get pointer to DL that this sprite starts in
+	endif ; !VSCROLL
+	ifconst DOUBLEBUFFER
+		adc doublebufferdloffset
+	endif ; DOUBLEBUFFER
+	sta dlpnt
+	ifconst VSCROLL
+		lda DLLMEM+10,y
+	else  ; !VSCROLL
+		lda DLPOINTH,x
+	endif ; !VSCROLL
+	ifconst DOUBLEBUFFER
+		adc #0
+	endif ; DOUBLEBUFFER
+	sta dlpnt+1
+	
+ 	ldy dlend,x ; find the next new object position in this zone
+
+ ifconst .ByteOffset
+
+ if MACARG5CONST = 1
+	lda #.ByteOffset 
+ else
+	lda .ByteOffset 
+ endif
+ if {1}_width = 1
+        clc
+ endif
+ if {1}_width = 2
+        asl ; carry clear
+ endif
+ if {1}_width = 3
+        asl ; carry clear
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+ endif
+ if {1}_width = 4
+        asl ; carry clear
+        asl
+ endif
+ if {1}_width = 5
+        asl ; carry clear
+        asl
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+ endif
+ if {1}_width = 6
+        asl ; carry clear
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+ 
+        asl
+ endif
+ if {1}_width = 7
+        asl ; carry clear
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+        asl
+ endif
+ if {1}_width = 8
+        asl ; carry clear
+        asl
+        asl
+ endif
+ if {1}_width = 9
+        asl ; carry clear
+        asl
+        asl
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+ endif
+ if {1}_width = 10
+        asl ; carry clear
+        asl
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+        asl
+ endif
+ if {1}_width = 11
+        asl ; carry clear
+        asl
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+        asl
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+ endif
+ if {1}_width = 12
+        asl ; carry clear
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+        asl
+        asl
+ endif
+ if {1}_width = 13
+        asl ; carry clear
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+        asl
+        asl
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+ endif
+ if {1}_width = 14
+        asl ; carry clear
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+        asl
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+        asl
+ endif
+ if {1}_width = 15
+        asl
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+        asl
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+        asl
+ if MACARG5CONST = 1
+	adc #.ByteOffset 
+ else
+	adc .ByteOffset 
+ endif
+ endif
+ if {1}_width = 16
+        asl
+        asl
+        asl
+        asl
+ endif
+	adc #<.GFXLabel
+ else
+	lda #<.GFXLabel
+ endif ; .ByteOffset
+        sta (dlpnt),y ; #1 - low byte object address
+
+	iny
+ if MACARG2CONST = 1
+	lda #({1}_width_twoscompliment | (.Palette * 32))
+ else
+	lda #({1}_width_twoscompliment)
+	ora .Palette
+ endif
+
+	sta (dlpnt),y ; #2 - palette|width
+
+	iny
+ if MACARG4CONST = 0
+	lda .SpriteY
+ else
+	lda #.SpriteY
+ endif
 	and #(WZONEHEIGHT - 1)
 	ora #>(.GFXLabel - (WZONEHEIGHT * 256)) ; start in the dma hole
 	sta (dlpnt),y ; #3 - hi byte object address
 
 	iny
+ if MACARG3CONST = 1
+	lda #.SpriteX
+ else
 	lda .SpriteX
+ endif
 	sta (dlpnt),y ; #4 - x object position
 
 	iny

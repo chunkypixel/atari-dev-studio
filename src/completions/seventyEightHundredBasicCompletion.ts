@@ -442,6 +442,28 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
             },
             ' ');
 
+        // autodim
+        let autodimModeProvider = vscode.languages.registerCompletionItemProvider(
+            this.Id,
+            {
+                // return list of available language methods
+                provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+                    // get all text until the `position` and check if it reads `return `
+                    let linePrefix = document.lineAt(position).text.substring(0, position.character);
+                    if (!linePrefix.endsWith('autodim ')) {
+                        return undefined;
+                    }
+
+                    return [
+                        new vscode.CompletionItem('init', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('byte', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('8.8', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('4.4', vscode.CompletionItemKind.Value)
+                    ];
+                }
+            },
+            ' ');   
+
         // set
         let setProvider = vscode.languages.registerCompletionItemProvider(
             this.Id,
@@ -523,9 +545,8 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
 
         // add items           
         context.subscriptions.push(ifProvider, returnProvider, romsizeProvider, displayModeProvider, shakescreenModeProvider,
-            debugProvider, deprecatedModeProvider, drawhiscoresProvider, 
-            tallspriteModeProvider, trackerSupportProvider,
-            optimizationModeProvider, setProvider);
+            debugProvider, deprecatedModeProvider, drawhiscoresProvider, tallspriteModeProvider, 
+            trackerSupportProvider, optimizationModeProvider, autodimModeProvider, setProvider);
     }
 
 }

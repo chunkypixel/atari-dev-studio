@@ -144,9 +144,9 @@ snesjoypadloop
              ; snes2atari0hi = B  Y  Se St *  *  *  *
              ; snes2atari0lo = A  X  Ls Rs 
              ; sINPT1        = B  A  Y  X  Ls Rs Se St
-             lda snes2atari0lo 
+             lda snes2atari0lo,x 
              sta inttemp5
-             lda snes2atari0hi 
+             lda snes2atari0hi,x
              sta inttemp6
              asl inttemp5 ; A
              rol 

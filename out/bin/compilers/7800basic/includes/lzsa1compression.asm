@@ -85,7 +85,7 @@ lzsa1modulestart
 .cp_fixpointer
  ; the optimised pointer adjustment fails if .cp_byte copied a whole page.
  ; so we deal with it as a special case here, out of the regular .cp_byte flow.
- ; this seems to happen so rarely that I have as of yet to see it with real data.
+ ; this only happens rarely.
      inc lzsa_srcptr+1   ; CC
      inc lzsa_dstptr+1
      bcc .cp_skip3       ; always taken
@@ -188,7 +188,7 @@ lzsa1_unpack
      bne .cp_byte        ; 3/2
                          ; ~17 cycles each iteration
      tya                 ; 2
-     beq .cp_fixpointer  ; 2 unlikely branch - only if we just copied a full page
+     beq .cp_fixpointer  ; 2 unlikely branch - only if we copied a full page
      adc lzsa_srcptr+0   ; 3
      sta lzsa_srcptr+0   ; 3
      bcs .cp_fixsrc1     ; 2 (typical)

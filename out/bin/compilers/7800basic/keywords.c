@@ -21,7 +21,7 @@ int numthens = 0;
 
 int swaptest (char *value)	// check for then, && or ||
 {
-    if (!strncmp (value, "then\0", 4) || !strncmp (value, "&&\0", 2) || !strncmp (value, "||\0", 2))
+    if (!strncmp (value, "then", 4) || !strncmp (value, "&&", 2) || !strncmp (value, "||", 2))
 	return 1;
     return 0;
 }
@@ -83,21 +83,21 @@ void keywords (char **cstatement)
     door = 0;
     for (k = 0; k <= 190; ++k)	// reversed loop since last build, need to check for rems first!
     {
-	if (!strncmp (cstatement[k + 1], "rem\0", 3))
+	if (!strncmp (cstatement[k + 1], "rem", 3))
 	    break;		// if statement has a rem, do not process it
-	if (!strncmp (cstatement[k + 1], "echo\0", 4))
+	if (!strncmp (cstatement[k + 1], "echo", 4))
 	    break;		// if statement has an echo, do not process it
-	if (!strncmp (cstatement[k + 1], "if\0", 2))
+	if (!strncmp (cstatement[k + 1], "if", 2))
 	{
 	    for (i = k + 2; i < 200; ++i)
 	    {
-		if (!strncmp (cstatement[i], "if\0", 2))
+		if (!strncmp (cstatement[i], "if", 2))
 		    break;
-		if (!strncmp (cstatement[i], "else\0", 4))
+		if (!strncmp (cstatement[i], "else", 4))
 		    foundelse = i;
 	    }
-	    if (!strncmp (cstatement[k + 3], ">\0", 2)
-		&& (!strncmp (cstatement[k + 1], "if\0", 2)) && (swaptest (cstatement[k + 5])))
+	    if (!strncmp (cstatement[k + 3], ">", 2)
+		&& (!strncmp (cstatement[k + 1], "if", 2)) && (swaptest (cstatement[k + 5])))
 	    {
 		// swap operands and switch compare
 		strncpy (cstatement[k + 3], cstatement[k + 2],200);	// stick 1st operand here temporarily
@@ -105,8 +105,8 @@ void keywords (char **cstatement)
 		strncpy (cstatement[k + 4], cstatement[k + 3],200);	// get it back
 		strcpy (cstatement[k + 3], "<");	// replace compare
 	    }
-	    else if (!strncmp (cstatement[k + 3], "<=\0", 2)
-		     && (!strncmp (cstatement[k + 1], "if\0", 2)) && (swaptest (cstatement[k + 5])))
+	    else if (!strncmp (cstatement[k + 3], "<=", 2)
+		     && (!strncmp (cstatement[k + 1], "if", 2)) && (swaptest (cstatement[k + 5])))
 	    {
 		// swap operands and switch compare
 		strncpy (cstatement[k + 3], cstatement[k + 2],200);
@@ -114,23 +114,23 @@ void keywords (char **cstatement)
 		strncpy (cstatement[k + 4], cstatement[k + 3],200);
 		strcpy (cstatement[k + 3], ">=");
 	    }
-	    if (!strncmp (cstatement[k + 3], "&&\0", 2))
+	    if (!strncmp (cstatement[k + 3], "&&", 2))
 	    {
 		shiftdata (cstatement, k + 3);
 		sprintf (cstatement[k + 3], "then%d", ors++);
 		strcpy (cstatement[k + 4], "if");
 	    }
-	    else if (!strncmp (cstatement[k + 5], "&&\0", 2))
+	    else if (!strncmp (cstatement[k + 5], "&&", 2))
 	    {
 
 		shiftdata (cstatement, k + 5);
 		sprintf (cstatement[k + 5], "then%d", ors++);
 		strcpy (cstatement[k + 6], "if");
 	    }
-	    else if (!strncmp (cstatement[k + 3], "||\0", 2))
+	    else if (!strncmp (cstatement[k + 3], "||", 2))
 	    {
-		if (!strncmp (cstatement[k + 5], ">\0", 2)
-		    && (!strncmp (cstatement[k + 1], "if\0", 2)) && (swaptest (cstatement[k + 7])))
+		if (!strncmp (cstatement[k + 5], ">", 2)
+		    && (!strncmp (cstatement[k + 1], "if", 2)) && (swaptest (cstatement[k + 7])))
 		{
 		    // swap operands and switch compare
 		    strncpy (cstatement[k + 5], cstatement[k + 4],200);	// stick 1st operand here temporarily
@@ -138,8 +138,8 @@ void keywords (char **cstatement)
 		    strncpy (cstatement[k + 6], cstatement[k + 5],200);	// get it back
 		    strcpy (cstatement[k + 5], "<");	// replace compare
 		}
-		else if (!strncmp (cstatement[k + 5], "<=\0", 2)
-			 && (!strncmp (cstatement[k + 1], "if\0", 2)) && (swaptest (cstatement[k + 7])))
+		else if (!strncmp (cstatement[k + 5], "<=", 2)
+			 && (!strncmp (cstatement[k + 1], "if", 2)) && (swaptest (cstatement[k + 7])))
 		{
 		    // swap operands and switch compare
 		    strncpy (cstatement[k + 5], cstatement[k + 4],200);
@@ -150,9 +150,9 @@ void keywords (char **cstatement)
 
 		for (i = 2; i < 198 - k; ++i)
 		    strncpy (orstatement[i], cstatement[k + i + 2],200);
-		if (!strncmp (cstatement[k + 5], "then\0", 4))
+		if (!strncmp (cstatement[k + 5], "then", 4))
 		    compressdata (cstatement, k + 3, k + 2);
-		else if (!strncmp (cstatement[k + 7], "then\0", 4))
+		else if (!strncmp (cstatement[k + 7], "then", 4))
 		    compressdata (cstatement, k + 3, k + 4);
 		strcpy (cstatement[k + 3], "then");
 		sprintf (orstatement[0], "%dOR", ors++);
@@ -161,10 +161,10 @@ void keywords (char **cstatement)
 		// todo: need to skip over the next statement!
 
 	    }
-	    else if (!strncmp (cstatement[k + 5], "||\0", 2))
+	    else if (!strncmp (cstatement[k + 5], "||", 2))
 	    {
-		if (!strncmp (cstatement[k + 7], ">\0", 2)
-		    && (!strncmp (cstatement[k + 1], "if\0", 2)) && (swaptest (cstatement[k + 9])))
+		if (!strncmp (cstatement[k + 7], ">", 2)
+		    && (!strncmp (cstatement[k + 1], "if", 2)) && (swaptest (cstatement[k + 9])))
 		{
 		    // swap operands and switch compare
 		    strncpy (cstatement[k + 7], cstatement[k + 6],200);	// stick 1st operand here temporarily
@@ -172,8 +172,8 @@ void keywords (char **cstatement)
 		    strncpy (cstatement[k + 8], cstatement[k + 7],200);	// get it back
 		    strcpy (cstatement[k + 7], "<");	// replace compare
 		}
-		else if (!strncmp (cstatement[k + 7], "<=\0", 2)
-			 && (!strncmp (cstatement[k + 1], "if\0", 2)) && (swaptest (cstatement[k + 9])))
+		else if (!strncmp (cstatement[k + 7], "<=", 2)
+			 && (!strncmp (cstatement[k + 1], "if", 2)) && (swaptest (cstatement[k + 9])))
 		{
 		    // swap operands and switch compare
 		    strncpy (cstatement[k + 7], cstatement[k + 6],200);
@@ -183,9 +183,9 @@ void keywords (char **cstatement)
 		}
 		for (i = 2; i < 196 - k; ++i)
 		    strncpy (orstatement[i], cstatement[k + i + 4],200);
-		if (!strncmp (cstatement[k + 7], "then\0", 4))
+		if (!strncmp (cstatement[k + 7], "then", 4))
 		    compressdata (cstatement, k + 5, k + 2);
-		else if (!strncmp (cstatement[k + 9], "then\0", 4))
+		else if (!strncmp (cstatement[k + 9], "then", 4))
 		    compressdata (cstatement, k + 5, k + 4);
 		strcpy (cstatement[k + 5], "then");
 		sprintf (orstatement[0], "%dOR", ors++);
@@ -203,7 +203,7 @@ void keywords (char **cstatement)
 	else
 	    pass2elstatement = cstatement;
 	for (i = 1; i < 200; ++i)
-	    if (!strncmp (pass2elstatement[i], "else\0", 4))
+	    if (!strncmp (pass2elstatement[i], "else", 4))
 	    {
 		foundelse = i;
 		break;
@@ -227,7 +227,7 @@ void keywords (char **cstatement)
 	if (door)
 	{
 	    for (i = 1; i < 200; ++i)
-		if (!strncmp (cstatement[i], "else\0", 4))
+		if (!strncmp (cstatement[i], "else", 4))
 		    break;
 	    for (k = i; k < 200; ++k)
 		cstatement[k][0] = '\0';
@@ -253,7 +253,7 @@ void keywords (char **cstatement)
 
 	    // find end of statement
 	    i = 3;
-	    while (strncmp (orstatement[i++], "then\0", 4))
+	    while (strncmp (orstatement[i++], "then", 4))
 	    {
 	    }			// not sure if this will work...
 	    // add goto to it
@@ -290,7 +290,7 @@ void keywords (char **cstatement)
     }
 
 
-    if (!strncmp (statement[0], "then\0", 4))
+    if (!strncmp (statement[0], "then", 4))
 	sprintf (statement[0], "%dthen", numthens++);
 
 
@@ -301,7 +301,7 @@ void keywords (char **cstatement)
 
 	i = 0;
 	removeCR (statement[0]);
-	if (!strncmp (statement[0], "return\0", 7))
+	if (!strncmp (statement[0], "return", 7))
 	    prerror ("return used as label");
 	else if (statement[1][0] == '\0')
 	{
@@ -317,41 +317,41 @@ void keywords (char **cstatement)
 	    freemem (deallocelstatement);
 	    return;
 	}
-	else if (!strncmp (statement[1], "def\0", 4))
+	else if (!strncmp (statement[1], "def", 4))
 	{
 	    free (deallocstatement);
 	    freemem (deallocorstatement);
 	    freemem (deallocelstatement);
 	    return;
 	}
-	else if (!strncmp (statement[0], "end\0", 4))
+	else if (!strncmp (statement[0], "end", 4))
 	    endfunction ();
-	else if (!strncmp (statement[1], "#ifconst\0", 8))
+	else if (!strncmp (statement[1], "#ifconst", 8))
 	    ifconst (statement);
-	else if (!strncmp (statement[1], "#else\0", 5))
+	else if (!strncmp (statement[1], "#else", 5))
 	    doelse ();
-	else if (!strncmp (statement[1], "#endif\0", 6))
+	else if (!strncmp (statement[1], "#endif", 6))
 	    endif ();
-	else if (!strncmp (statement[1], "incbin\0", 6))
+	else if (!strncmp (statement[1], "incbin", 6))
 	    incbin (statement);
-	else if (!strncmp (statement[1], "sizeof\0", 6))
+	else if (!strncmp (statement[1], "sizeof", 6))
 	    dosizeof (statement);
-	else if (!strncmp (statement[1], "includesfile\0", 13))
+	else if (!strncmp (statement[1], "includesfile", 13))
 	    create_includes (statement[2]);
-	else if (!strncmp (statement[1], "include\0", 7))
+	else if (!strncmp (statement[1], "include", 7))
 	    add_includes (statement[2]);
-	else if (!strncmp (statement[1], "inline\0", 7))
+	else if (!strncmp (statement[1], "inline", 7))
 	    add_inline (statement[2]);
-	else if (!strncmp (statement[1], "function\0", 9))
+	else if (!strncmp (statement[1], "function", 9))
 	    function (statement);
-	else if (!strncmp (statement[1], "if\0", 3))
+	else if (!strncmp (statement[1], "if", 3))
 	{
 	    doif (statement);
 	    break;
 	}
-	else if (!strncmp (statement[1], "goto\0", 5))
+	else if (!strncmp (statement[1], "goto", 5))
 	    dogoto (statement);
-	else if (!strncmp (statement[1], "backup\0", 7))
+	else if (!strncmp (statement[1], "backup", 7))
 	    backup(statement);
 	else if (!strncmp (statement[1], "hiscoreload", 11))
 	    hiscoreload (statement);
@@ -359,97 +359,101 @@ void keywords (char **cstatement)
 	    hiscoreclear (statement);
 	else if (!strncmp (statement[1], "drawhiscores", 11))
 	    drawhiscores (statement);
-	else if (!strncmp (statement[1], "loadmemory\0", 11))
+	else if (!strncmp (statement[1], "loadmemory", 11))
 	    loadmemory (statement);
-	else if (!strncmp (statement[1], "savememory\0", 11))
+	else if (!strncmp (statement[1], "savememory", 11))
 	    savememory (statement);
-	else if (!strncmp (statement[1], "loadrombank\0", 11))
+	else if (!strncmp (statement[1], "loadrombank", 11))
 	    loadrombank (statement);
-	else if (!strncmp (statement[1], "loadrambank\0", 11))
+	else if (!strncmp (statement[1], "loadrambank", 11))
 	    loadrambank (statement);
-	else if (!strncmp (statement[1], "sdata\0", 6))
+	else if (!strncmp (statement[1], "sdata", 6))
 	    sdata (statement);
-	else if (!strncmp (statement[1], "speechdata\0", 11))
+	else if (!strncmp (statement[1], "speechdata", 11))
 	    speechdata (statement);
-	else if (!strncmp (statement[1], "songdata\0", 9))
+	else if (!strncmp (statement[1], "songdata", 9))
 	    songdata (statement);
-	else if (!strncmp (statement[1], "stopsong\0", 8))
+	else if (!strncmp (statement[1], "stopsong", 8))
 	    stopsong ();
-	else if (!strncmp (statement[1], "playsong\0", 9))
+	else if (!strncmp (statement[1], "playsong", 9))
 	    playsong (statement);
-	else if (!strncmp (statement[1], "playrmt\0", 8))
+	else if (!strncmp (statement[1], "playrmt", 8))
 	    playrmt (statement);
-	else if (!strncmp (statement[1], "stoprmt\0", 7))
+	else if (!strncmp (statement[1], "stoprmt", 7))
 	    stoprmt ();
-	else if (!strncmp (statement[1], "startrmt\0", 8))
+	else if (!strncmp (statement[1], "startrmt", 8))
 	    startrmt ();
-	else if (!strncmp (statement[1], "speak\0", 6))
+	else if (!strncmp (statement[1], "speak", 6))
 	    speak (statement);
-	else if (!strncmp (statement[1], "data\0", 5))
+	else if (!strncmp (statement[1], "data", 5))
 	    data (statement);
-	else if (!strncmp (statement[1], "alphachars\0", 10))
+	else if (!strncmp (statement[1], "alphachars", 10))
 	    alphachars (statement);
-	else if (!strncmp (statement[1], "alphadata\0", 9))
+	else if (!strncmp (statement[1], "alphadata", 9))
 	    alphadata (statement);
-	else if (!strncmp (statement[1], "sinedata\0", 8))
+	else if (!strncmp (statement[1], "sinedata", 8))
 	    sinedata (statement);
-	else if (!strncmp (statement[1], "pokechar\0", 8))
+	else if (!strncmp (statement[1], "pokechar", 8))
 	    pokechar (statement);
-	else if (!strncmp (statement[1], "setfade\0", 7))
+	else if (!strncmp (statement[1], "setfade", 7))
 	    setfade (statement);
-	else if ((!strncmp (statement[1], "on\0", 3)) && (!strncmp (statement[3], "go\0", 2)))
+	else if ((!strncmp (statement[1], "on", 3)) && (!strncmp (statement[3], "go", 2)))
 	    ongoto (statement);	// on ... goto or on ... gosub
-	else if (!strncmp (statement[1], "const\0", 6))
+	else if (!strncmp (statement[1], "const", 6))
 	    doconst (statement);
-	else if (!strncmp (statement[1], "dim\0", 4))
+	else if (!strncmp (statement[1], "dim", 4))
 	    dim (statement);
-	else if (!strncmp (statement[1], "for\0", 4))
+	else if (!strncmp (statement[1], "autodim", 8))
+	    autodim (statement);
+	else if (!strncmp (statement[1], "for", 4))
 	    dofor (statement);
-	else if (!strncmp (statement[1], "next\0", 5))
+	else if (!strncmp (statement[1], "next", 5))
 	    next (statement);
 	else if (!strncmp (statement[1], "next\n", 5))
 	    next (statement);
 	else if (!strncmp (statement[1], "next\r", 5))
 	    next (statement);
-	else if (!strncmp (statement[1], "adjustvisible\0", 14))
+	else if (!strncmp (statement[1], "adjustvisible", 14))
 	    adjustvisible (statement);
-	else if (!strncmp (statement[1], "lockzone\0", 9))
+	else if (!strncmp (statement[1], "lockzone", 9))
 	    lockzone (statement);
-	else if (!strncmp (statement[1], "unlockzone\0", 11))
+	else if (!strncmp (statement[1], "unlockzone", 11))
 	    unlockzone (statement);
-	else if (!strncmp (statement[1], "shakescreen\0", 12))
+	else if (!strncmp (statement[1], "shakescreen", 12))
 	    shakescreen (statement);
-	else if (!strncmp (statement[1], "gosub\0", 6))
+	else if (!strncmp (statement[1], "gosub", 6))
 	    gosub (statement);
-	else if (!strncmp (statement[1], "drawscreen\0", 10))
+	else if (!strncmp (statement[1], "drawscreen", 10))
 	    drawscreen ();
-	else if (!strncmp (statement[1], "drawwait\0", 8))
+	else if (!strncmp (statement[1], "drawwait", 8))
 	    drawwait ();
-	else if (!strncmp (statement[1], "doublebuffer\0", 11))
+	else if (!strncmp (statement[1], "doublebuffer", 11))
 	    doublebuffer (statement);
-	else if (!strncmp (statement[1], "savescreen\0", 10))
+	else if (!strncmp (statement[1], "savescreen", 10))
 	    savescreen ();
-	else if (!strncmp (statement[1], "restorescreen\0", 10))
+	else if (!strncmp (statement[1], "restorescreen", 10))
 	    restorescreen ();
-	else if (!strncmp (statement[1], "clearscreen\0", 11))
+	else if (!strncmp (statement[1], "clearscreen", 11))
 	    clearscreen ();
-	else if (!strncmp (statement[1], "tsound\0", 6))
+	else if (!strncmp (statement[1], "tsound", 6))
 	    tsound (statement);
-	else if (!strncmp (statement[1], "psound\0", 6))
+	else if (!strncmp (statement[1], "psound", 6))
 	    psound (statement);
-	else if (!strncmp (statement[1], "playsfx\0", 8))
+	else if (!strncmp (statement[1], "playsfx", 8))
 	    playsfx (statement);
-	else if (!strncmp (statement[1], "mutesfx\0", 8))
+	else if (!strncmp (statement[1], "mutesfx", 8))
 	    mutesfx (statement);
-	else if (!strncmp (statement[1], "memcpy\0", 6))
+	else if (!strncmp (statement[1], "strcpy", 6))
+	    dostrcpy (statement);
+	else if (!strncmp (statement[1], "memcpy", 6))
 	    domemcpy (statement);
-	else if (!strncmp (statement[1], "memset\0", 6))
+	else if (!strncmp (statement[1], "memset", 6))
 	    domemset (statement);
-	else if (!strncmp (statement[1], "asm\0", 4))
+	else if (!strncmp (statement[1], "asm", 4))
 	    doasm ();
-	else if (!strncmp (statement[1], "pop\0", 4))
+	else if (!strncmp (statement[1], "pop", 4))
 	    dopop ();
-	else if (!strncmp (statement[1], "rem\0", 4))
+	else if (!strncmp (statement[1], "rem", 4))
 	{
 	    rem (statement);
 	    free (deallocstatement);
@@ -481,7 +485,7 @@ void keywords (char **cstatement)
 	    freemem (deallocelstatement);
 	    return;
 	}
-	else if (!strncmp (statement[1], "echo\0", 5))
+	else if (!strncmp (statement[1], "echo", 5))
 	{
 	    echo (statement);
 	    free (deallocstatement);
@@ -505,11 +509,11 @@ void keywords (char **cstatement)
 	    freemem (deallocelstatement);
 	    return;
 	}
-	else if (!strncmp (statement[1], "set\0", 4))
+	else if (!strncmp (statement[1], "set", 4))
 	    set (statement);
-	else if (!strncmp (statement[1], "return\0", 7))
+	else if (!strncmp (statement[1], "return", 7))
 	    doreturn (statement);
-	else if (!strncmp (statement[1], "reboot\0", 7))
+	else if (!strncmp (statement[1], "reboot", 7))
 	    doreboot ();
 	else if (!strncmp (statement[1], "return\n", 7))
 	    doreturn (statement);
@@ -519,63 +523,63 @@ void keywords (char **cstatement)
 	    doreturn (statement);
 	else if (!strncmp (statement[1], "reboot\r", 7))
 	    doreboot ();
-	else if (!strncmp (statement[1], "changecontrol\0", 14))
+	else if (!strncmp (statement[1], "changecontrol", 14))
 	    changecontrol (statement);
-	else if (!strncmp (statement[1], "snesdetect\0", 10))
+	else if (!strncmp (statement[1], "snesdetect", 10))
 	    snesdetect ();
-	else if (!strncmp (statement[1], "plotvalue\0", 9))
+	else if (!strncmp (statement[1], "plotvalue", 9))
 	    plotvalue (statement);
-	else if (!strncmp (statement[1], "displaymode\0", 11))
+	else if (!strncmp (statement[1], "displaymode", 11))
 	    displaymode (statement);
-	else if (!strncmp (statement[1], "incgraphic\0", 10))
+	else if (!strncmp (statement[1], "incgraphic", 10))
 	    add_graphic (statement, 0);
-	else if (!strncmp (statement[1], "incbanner\0", 9))
+	else if (!strncmp (statement[1], "incbanner", 9))
 	    add_graphic (statement, 1);
-	else if (!strncmp (statement[1], "incmapfile\0", 10))
+	else if (!strncmp (statement[1], "incmapfile", 10))
 	    incmapfile (statement);
-	else if (!strncmp (statement[1], "incrmtfile\0", 10))
+	else if (!strncmp (statement[1], "incrmtfile", 10))
 	    incrmtfile (statement);
-	else if (!strncmp (statement[1], "decompress\0", 10))
+	else if (!strncmp (statement[1], "decompress", 10))
 	    decompress (statement);
-	else if (!strncmp (statement[1], "inccompress\0", 11))
+	else if (!strncmp (statement[1], "inccompress", 11))
 	    inccompress (statement);
-	else if (!strncmp (statement[1], "newblock\0", 8))
+	else if (!strncmp (statement[1], "newblock", 8))
 	    newblock ();
-	else if (!strncmp (statement[1], "voice\0", 5))
+	else if (!strncmp (statement[1], "voice", 5))
 	    voice (statement);
-	else if (!strncmp (statement[1], "plotbanner\0", 10))
+	else if (!strncmp (statement[1], "plotbanner", 10))
 	    plotbanner (statement);
-	else if (!strncmp (statement[1], "plotsprite4\0", 11))
+	else if (!strncmp (statement[1], "plotsprite4", 11))
 	    plotsprite (statement,TRUE);
-	else if (!strncmp (statement[1], "plotsprite\0", 10))
+	else if (!strncmp (statement[1], "plotsprite", 10))
 	    plotsprite (statement,FALSE);
-	else if (!strncmp (statement[1], "PLOTSPRITE4\0", 11))
+	else if (!strncmp (statement[1], "PLOTSPRITE4", 11))
 	    PLOTSPRITE (statement,TRUE);
-	else if (!strncmp (statement[1], "PLOTSPRITE\0", 10))
+	else if (!strncmp (statement[1], "PLOTSPRITE", 10))
 	    PLOTSPRITE (statement,FALSE);
-	else if (!strncmp (statement[1], "plotchars\0", 9))
+	else if (!strncmp (statement[1], "plotchars", 9))
 	    plotchars (statement);
-	else if (!strncmp (statement[1], "plotmapfile\0", 11))
+	else if (!strncmp (statement[1], "plotmapfile", 11))
 	    plotmapfile (statement);
-	else if (!strncmp (statement[1], "plotmap\0", 7))
+	else if (!strncmp (statement[1], "plotmap", 7))
 	    plotmap (statement);
-	else if (!strncmp (statement[1], "characterset\0", 12))
+	else if (!strncmp (statement[1], "characterset", 12))
 	    characterset (statement);
-	else if (!strncmp (statement[2], "=\0", 1))
+	else if (!strncmp (statement[2], "=", 1))
 	    let (statement);
-	else if (!strncmp (statement[1], "let\0", 4))
+	else if (!strncmp (statement[1], "let", 4))
 	    let (statement);
-	else if (!strncmp (statement[1], "dec\0", 4))
+	else if (!strncmp (statement[1], "dec", 4))
 	    dec (statement);
-	else if (!strncmp (statement[1], "macro\0", 6))
+	else if (!strncmp (statement[1], "macro", 6))
 	    domacro (statement);
-	else if (!strncmp (statement[1], "callmacro\0", 10))
+	else if (!strncmp (statement[1], "callmacro", 10))
 	    callmacro (statement);
-	else if (!strncmp (statement[1], "bank\0", 5))
+	else if (!strncmp (statement[1], "bank", 5))
 	    bank (statement);
-	else if (!strncmp (statement[1], "dmahole\0", 8))
+	else if (!strncmp (statement[1], "dmahole", 8))
 	    dmahole (statement);
-	else if (!strncmp (statement[1], "extra\0", 5))
+	else if (!strncmp (statement[1], "extra", 5))
 	    doextra (statement[1]);
 	else
 	{

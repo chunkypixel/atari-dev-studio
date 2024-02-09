@@ -130,7 +130,7 @@ batari Basic created by Fred 'batari' Quimby is a BASIC-like language used in th
 
 batari Basic is an external project is kindly currently maintained by Mike Saarna (RevEng) and can be downloaded separately [here](https://github.com/batari-Basic/batari-Basic).  Further information is about this release is available here at [AtariAge](https://atariage.com/forums/topic/300856-official-home-for-batari-basic).
 
-### 7800basic (release 0.32 - 20231105)
+### 7800basic (release 0.33 - 20240208)
 7800basic is a BASIC-like language for creating Atari 7800 games.  It is a compiled language that runs on a computer, and it creates a binary file that can be run with an Atari 7800 emulator, or the binary file may be used to make a cartridge that will operate on a real Atari 7800. 7800basic is derived from batari basic, a BASIC-like language for creating Atari 2600 games. Special thanks to the bB creator, Fred Quimby, and all of the the bB contributors!
 
 7800basic is included as part of this extension with many thanks to Mike Saarna (RevEng).  7800basic is an external project and can be downloaded separately [here](https://github.com/7800-devtools/7800basic).  Further information about this release is available here at [AtariAge](http://atariage.com/forums/topic/222638-7800basic-beta-the-release-thread).
@@ -143,7 +143,7 @@ dasm is an external project and can be downloaded separately [here](https://dasm
 ## Emulation
 Atari Dev Studio includes the following emulators for testing purposes:
 
-### Stella (release 6.7.0 - 20220613)
+### Stella (release 6.7.1 - 20240116)
 Stella is a multi-platform Atari 2600 VCS emulator released under the GNU General Public License (GPL). Stella was originally developed for Linux by Bradford W. Mott, and is currently maintained by Stephen Anthony. Since its original release several people have joined the development team to port Stella to other operating systems such as AcornOS, AmigaOS, DOS, FreeBSD, IRIX, Linux, OS/2, MacOS, Unix, and Windows. The development team is working hard to perfect the emulator and we hope you enjoy our effort.
 
 Stella is included as part of this extension with many thanks to Stephen Anthony. Stella is an external project and can be downloaded separately [here](https://stella-emu.github.io). If you enjoy using Stella place consider [donating](https://stella-emu.github.io/donations.html) to ensure it's continued development.

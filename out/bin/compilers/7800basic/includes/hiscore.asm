@@ -47,6 +47,12 @@ checkhscinit
              bpl checkhscinit
              cmp #$ff
              bne hscisalreadyinit
+checkhscinit2
+             ora $1000,y
+             dey
+             bpl checkhscinit2
+             cmp #0
+             bne hscisalreadyinit
              ; if we're here, we need to do a minimal HSC init...
              ldy #$28
 hscinitloop1
@@ -100,17 +106,18 @@ SCORESIZE                     = 6
 
                  ;save shadow registers for later return...
                  lda sCTRL
-                 ;sta ssCTRL
                  pha
                  lda sCHARBASE
-                 ;sta ssCHARBASE
                  pha
+
+                 jsr blacken320colors
+                 jsr drawoverwait
+                 jsr drawwait
+                 jsr hiscorecleardlmem
+                 jsr clearscreen
 
                  lda #$60
                  sta charactermode
-                 jsr drawwait
-                 jsr blacken320colors
-                 jsr clearscreen
 
                  ;set the character base to the HSC font
                  lda #>hiscorefont
@@ -126,17 +133,17 @@ SCORESIZE                     = 6
                  lda #0
                  sta hscursorx
                  sta framecounter
+
                  ifnconst HSCOLORCHASESTART
                      lda #$8D ; default is blue. why not?
                  else
                      lda #HSCOLORCHASESTART
                  endif
                  sta hscolorchaseindex
-
                  lda #$0F
                  sta P0C2 ; base text is white
-
                  jsr hschasecolors
+
                  ; ** plot all of the initials
                  lda #<HSRAMInitials
                  sta temp1 ; charmaplo
@@ -1038,6 +1045,16 @@ loaddifficultytableScores
              iny
              cpx #15
              bne loaddifficultytableScores
+             ldx #14
+             lda #$ff
+validatescoresloop
+             and HSRAMScores,x
+             dex
+             bpl validatescoresloop
+             cmp #$ff
+             bne exitloaddifficultytableScores
+             jmp cleardifficultytablemem
+exitloaddifficultytableScores
              rts
 
 decodeHSCInitials
@@ -1225,6 +1242,23 @@ cleardifficultytablememloop
              bpl cleardifficultytablememloop
              rts
 hiscoremoduleend
+
+hiscorecleardlmem
+ ldx #(WZONECOUNT-1)
+hiscorecleardlmemloop1
+ lda DLPOINTL,x
+ sta dlpnt
+ lda DLPOINTH,x
+ sta dlpnt+1
+ lda #0
+ ldy #17
+hiscorecleardlmemloop2
+ sta (dlpnt),y
+ dey
+ bpl hiscorecleardlmemloop2
+ dex
+ bpl hiscorecleardlmemloop1
+ rts 
 
              ifconst DOUBLEWIDE
 plotvaluedw

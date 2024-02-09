@@ -4,14 +4,24 @@
 -horizontal scrolling
 -vertical scrolling
 -resizezone
--incspritemapfile
-	-can create table of tile indexes (how?)
-	-can create a table of sprite hi-addresses
-	-can create a table of sprite lo-addresses
+
+-notes on compressed graphics
+	-incgraphicbin name $address name.png ... 
+
+-notes on sprite-tiles...
+	-tiles are tallsprite based
+	-inctilemapfile imports files referencing named ###_spritename.png
+		-creates a RLE table of palettes
+		-creates a RLE table of sprite hi-addresses
+		-creates a table of sprite lo-addresses
+
+-peektilemap
+	-given a tilemap, provides the sprite lo+hi values.
+-scrollfillh callback. Called with a particular world row index and tile row index. You need to call updatetile on each tile in the row.
+
 -animatesprites
 	Run through a specified number of lines of sprites each frame, and 
 	animate. Sprites using palettes 0 and 4 are animated.
--callback: drawline
 
 ======================================================================
 

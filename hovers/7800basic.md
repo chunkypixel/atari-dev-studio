@@ -669,6 +669,15 @@
 
 
 
+## STRCPY
+
+   strcpy destination 'string'
+
+   destination - RAM location to copy data into  
+   string - literal string
+
+
+
 ## MEMSET
 
     memset destination value bytes
@@ -694,12 +703,255 @@
 
 
 
+## TSOUND
+
+    tsound channel,[frequency],[waveform],[volume]
+
+    channel - channel to play TIA audio (0-1)
+    frequency (optional) - 0-31
+    waveform (optional) - 0-15
+    volume (otional) - 0-15
+
+
+
+## PSOUND
+
+    psound channel,[frequency],[waveform,volume]
+
+    channel - channel to play POKEY audio (0-3)
+    frequency (optional) - 0-255
+    waveform (optional) - 0-15
+    volume (otional) - 0-15   
+
+
+
+## PLAYSFX
+
+    playsfx sounddata [offset]
+
+    sounddata - RAM or ROM location of the data to get
+    offset (optional) - raise or lower pitch of the played sound
+
+
+
+## PLAYSONG
+
+    playsound songname tempo [repeat|number]
+
+    songname - reference to the data to play
+    tempo - initial tempo of song to play
+    repeat (optional) - repeat indefinately the song to play
+    number (optional) - number of times to repeat the song to play
+
+
+
+## STOPSONG
+
+    stopsong
+
+
+
+## PLAYRMT
+
+    playrmt $#### or incrmtfile
+
+    $#### - address of tune ie. $6000 or set as incrmtfile
+
+    NOTE: made sure to define variable 'dim RMTRAM = $####' and allocate 173 bytes of RAM for RMT playback (ie. $2200)
+
+
+
+## STARTRMT
+
+    startrmt
+
+
+
+## STOPRMT
+
+    stoprmt
+
+
+
+## SPEAK
+
+    speak speechname
+
+    speechname - reference to the data to speak
+
+
+
+## TRACKERSUPPORT
+
+    set trackersupport value
+
+    value - basic, rmt
+
+    NOTE: made sure to define variable 'dim RMTRAM = $####' and allocate 173 bytes of RAM for RMT playback (ie. $2200)
+
+
+
+## INLINE
+
+    inline filename.asm
+
+    filename.asm - name of assembly file to inline
+
+
+
+## INCLUDE
+
+    include filename.asm
+
+    filename.asm - name of assembly file to include
+
+
+
+## SAVEMEMORY
+
+    savememory [variable_#] ...
+
+    variable_# - variable to save to detected high score device (maximum of 25 variables)
+
+
+
+## LOADMEMORY
+
+    loadmemory [variable_#] ...
+
+    variable_# - variable to load from detected high score device (maximum of 25 variables)
+
+
+
+## SIZEOF
+
+   sizeof label
+
+   label - returns the size of a 7800basic routine or data structure at compile time
+
+
+   
+## SETFADE
+
+    setfade value
+
+    value - variable containing fade value (0-255)
+
+
+
+## GETFADE
+
+    PXCX = getfade(color[,black])
+
+    color - value of base color ($00-$ff)
+    value (optional) - "black" argument zeroes the hue nibble
+
+
+
+## OPTIMIZATION
+
+   set optimization state
+
+   state - speed, size, noinlinedata, inlinerand, none
+
+
+
+## BREAKPROTECT
+
+   set breakprotect state
+
+   state - on, off
+
+
+
+## CRASHDUMP
+
+   set crashdump state
+
+   state - on, off
+
+
+
+## MULTIBUTTON
+
+   set multibutton state
+
+   state - on, off
+
+
+
+## 7800GDMENUOFF
+
+   set 7800GDmenuoff state
+
+   state - 0 (left controller), 1 (right controller), all (both controllers)
+
+
+
+## 7800HEADER
+
+   set 7800header command
+
+   command - eg. 'name 'name of rom', 'set hsc'
+
+   NOTE: refer to list of header flags for available options
+
+
+
+## BACKUPSTYLE
+
+   set backupstyle command
+
+   command - single, running (default)
+
+   NOTE: You need to use “set backupstyle” setting prior to using “set backupfile”, since it affects the file name 
+of the backup file
+
+
+
+## BACKUPFILE
+
+   set backupfile 'directory_path'
+
+   directory_path - location to store your backup
+
+   eg. set backupfile 'E:\backups\spaceman' (Windows) or set backupfile '/Volumes/MyThumbdrive/backups/spaceman'
+
+
+
+## BACKUP
+
+   backup 'directory_path'
+
+   directory_path - relative path to files to be included on backup
+
+
+
 ## CHANGECONTROL
 
     changecontrol port controltype
 
     port - left or right (0-1)
-    controltype - 2buttonjoy (default), 1buttonjoy, snes, mega7800, lightgun, paddle, trakball, driving, keypad, stmouse, amigamouse, atarivox, none)
+    controltype - 2buttonjoy (default), 1buttonjoy, snes, mega7800, lightgun, paddle, trakball, driving, keypad, stmouse, amigamouse, atarivox, none
+
+
+
+## AUTODIM
+
+   autodim type variable/rangestart length/rangeend
+   
+   type - init, byte, 8.8, 4.4
+   variable - name of variable eg. shipspeed
+   length - total number of variables to initialise
+   rangestart - start of variable range to initialise eg. $2600 or var0
+   rangeend - end of variable range to initialise eg. $26ff or var99
+
+   autodim init var0 var99
+   autodim init $2600 $26ff
+   autodim byte shipspeed
+   autodim byte enemyhealth 8
+   autodim 8.8 tempxposition
+   autodim 8.8 enemyxposition 4
 
 
 
@@ -1164,229 +1416,4 @@
 ## MEGA1START
 
     if mega1start then ...
-
-
-
-## TSOUND
-
-    tsound channel,[frequency],[waveform],[volume]
-
-    channel - channel to play TIA audio (0-1)
-    frequency (optional) - 0-31
-    waveform (optional) - 0-15
-    volume (otional) - 0-15
-
-
-
-## PSOUND
-
-    psound channel,[frequency],[waveform,volume]
-
-    channel - channel to play POKEY audio (0-3)
-    frequency (optional) - 0-255
-    waveform (optional) - 0-15
-    volume (otional) - 0-15   
-
-
-
-## PLAYSFX
-
-    playsfx sounddata [offset]
-
-    sounddata - RAM or ROM location of the data to get
-    offset (optional) - raise or lower pitch of the played sound
-
-
-
-## PLAYSONG
-
-    playsound songname tempo [repeat|number]
-
-    songname - reference to the data to play
-    tempo - initial tempo of song to play
-    repeat (optional) - repeat indefinately the song to play
-    number (optional) - number of times to repeat the song to play
-
-
-
-## STOPSONG
-
-    stopsong
-
-
-
-## PLAYRMT
-
-    playrmt $#### or incrmtfile
-
-    $#### - address of tune ie. $6000 or set as incrmtfile
-
-    NOTE: made sure to define variable 'dim RMTRAM = $####' and allocate 173 bytes of RAM for RMT playback (ie. $2200)
-
-
-
-## STARTRMT
-
-    startrmt
-
-
-
-## STOPRMT
-
-    stoprmt
-
-
-
-## SPEAK
-
-    speak speechname
-
-    speechname - reference to the data to speak
-
-
-
-## TRACKERSUPPORT
-
-    set trackersupport value
-
-    value - basic, rmt
-
-    NOTE: made sure to define variable 'dim RMTRAM = $####' and allocate 173 bytes of RAM for RMT playback (ie. $2200)
-
-
-
-## INLINE
-
-    inline filename.asm
-
-    filename.asm - name of assembly file to inline
-
-
-
-## INCLUDE
-
-    include filename.asm
-
-    filename.asm - name of assembly file to include
-
-
-
-## SAVEMEMORY
-
-    savememory [variable_#] ...
-
-    variable_# - variable to save to detected high score device (maximum of 25 variables)
-
-
-
-## LOADMEMORY
-
-    loadmemory [variable_#] ...
-
-    variable_# - variable to load from detected high score device (maximum of 25 variables)
-
-
-
-## SIZEOF
-
-   sizeof label
-
-   label - returns the size of a 7800basic routine or data structure at compile time
-
-
-   
-## SETFADE
-
-    setfade value
-
-    value - variable containing fade value (0-255)
-
-
-
-## GETFADE
-
-    PXCX = getfade(color[,black])
-
-    color - value of base color ($00-$ff)
-    value (optional) - "black" argument zeroes the hue nibble
-
-
-
-## OPTIMIZATION
-
-   set optimization state
-
-   state - speed, size, noinlinedata, inlinerand, none
-
-
-
-## BREAKPROTECT
-
-   set breakprotect state
-
-   state - on, off
-
-
-
-## CRASHDUMP
-
-   set crashdump state
-
-   state - on, off
-
-
-
-## MULTIBUTTON
-
-   set multibutton state
-
-   state - on, off
-
-
-
-## 7800GDMENUOFF
-
-   set 7800GDmenuoff state
-
-   state - 0 (left controller), 1 (right controller), all (both controllers)
-
-
-
-## 7800HEADER
-
-   set 7800header command
-
-   command - eg. 'name 'name of rom', 'set hsc'
-
-   NOTE: refer to list of header flags for available options
-
-
-
-## BACKUPSTYLE
-
-   set backupstyle command
-
-   command - single, running (default)
-
-   NOTE: You need to use “set backupstyle” setting prior to using “set backupfile”, since it affects the file name 
-of the backup file
-
-
-
-## BACKUPFILE
-
-   set backupfile 'directory_path'
-
-   directory_path - location to store your backup
-
-   eg. set backupfile 'E:\backups\spaceman' (Windows) or set backupfile '/Volumes/MyThumbdrive/backups/spaceman'
-
-
-
-## BACKUP
-
-   backup 'directory_path'
-
-   directory_path - relative path to files to be included on backup
-
 

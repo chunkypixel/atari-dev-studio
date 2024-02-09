@@ -19,6 +19,7 @@ int linenumber=1;
 %x speechquotestart
 %x songdata
 %x songquotestart
+%x strcpy 
 %x plotchars
 %x plotquotestart
 %x player
@@ -29,6 +30,7 @@ int linenumber=1;
 %x incgraphic
 %x incbanner
 %x incmapfile
+%x inccompress
 %x plotmapfile
 %x set
 %x setquotestart
@@ -125,6 +127,12 @@ int linenumber=1;
 <plotquotestart>['] {printf("%s",yytext);BEGIN(INITIAL);}
 <plotquotestart>^\n* printf("%s",yytext);
 
+"strcpy" {printf("%s",yytext);BEGIN(strcpy);}
+<strcpy>['] {printf("%s",yytext);BEGIN(plotquotestart);}
+<strcpy>[ \t]+ putchar(' ');
+<strcpy>[ \t\r]+$
+<strcpy>\n {linenumber++;printf("\n");BEGIN(INITIAL);}
+
 "_include"            printf("%s", yytext);  
 "include" {printf("%s",yytext);BEGIN(includes);}
 <includes>^\n* printf("%s",yytext);
@@ -141,6 +149,11 @@ int linenumber=1;
 "incmapfile" {printf("%s",yytext);BEGIN(incmapfile);}
 <incmapfile>^\n* printf("%s",yytext);
 <incmapfile>\n {linenumber++;printf("\n");BEGIN(INITIAL);}
+
+"inccompress" {printf("%s",yytext);BEGIN(inccompress);}
+<inccompress>^\n* printf("%s",yytext);
+<inccompress>\n {linenumber++;printf("\n");BEGIN(INITIAL);}
+
 
 "plotmapfile" {printf("%s",yytext);BEGIN(plotmapfile);}
 <plotmapfile>^\n* printf("%s",yytext);
