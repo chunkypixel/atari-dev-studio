@@ -57,7 +57,7 @@ export function IsRunFromExplorer(fileUri: vscode.Uri): boolean {
 }
 
 export function FileExistsAsync(path: string): Promise<boolean> {
-    console.log('debugger:filesystem.FileExistsAsync');
+    console.log('debugger:filesystem.FileExistsAsync PATH:' + path);
 
     return new Promise((resolve, reject) => {
         fs.access(path, fs.constants.F_OK, err => {
@@ -98,7 +98,7 @@ export function RemoveFileAsync(path: string): Promise<boolean> {
 }
 
 export function FolderExistsAsync(folder: string): Promise<boolean> {
-    console.log('debugger:filesystem.FolderExistsAsync');
+    console.log('debugger:filesystem.FolderExistsAsync FOLDER:' + folder);
 
     return new Promise((resolve, reject) => {
         fs.access(folder, fs.constants.F_OK, err => {
@@ -108,7 +108,7 @@ export function FolderExistsAsync(folder: string): Promise<boolean> {
 }
 
 export function MkDirAsync(folder: string): Promise<boolean> {
-    console.log('debugger:filesystem.MkDirAsync');
+    console.log('debugger:filesystem.MkDirAsync FOLDER:' + folder);
     
     return new Promise((resolve, reject) => {
         fs.mkdir(folder, err => {

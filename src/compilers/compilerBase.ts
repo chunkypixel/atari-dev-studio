@@ -158,16 +158,32 @@ export abstract class CompilerBase implements vscode.Disposable {
         }
 
         // Save files?
-        if (this.Configuration.get<boolean>(`editor.saveAllFilesBeforeRun`))  {
-            result = await vscode.workspace.saveAll();
-
-        } else if (this.Configuration.get<boolean>(`editor.saveFileBeforeRun`)) {
-            if (this.Document) { 
-                result = await this.Document.save(); 
+        // There appears to be an issue using SaveAll in VSCODE in certain situations
+        // I often see it when editing the Compare View and it been happening for a long time
+        // Bloody annoying as you need to restart the compile process due to me checking the result
+        // NOTE: if this doesn't fix it long term I'm going to remove the result validation
+        let repeatCounter = 0;
+        do {
+            if (this.Configuration.get<boolean>(`editor.saveAllFilesBeforeRun`))  {
+                result = await vscode.workspace.saveAll();
+    
+            } else if (this.Configuration.get<boolean>(`editor.saveFileBeforeRun`)) {
+                if (this.Document) { 
+                    result = await this.Document.save(); 
+                }
             }
-        }
-        // Failed?
-        if (!result) { return false; }
+            if (!result) { 
+                // repeat up to 5 times
+                repeatCounter = repeatCounter+1
+                console.log('debugger:CompilerBase.InitialiseAsync.SaveAllFiles.RepeatCounter='+repeatCounter);
+                if (repeatCounter > 4) {
+                    console.log('debugger:CompilerBase.InitialiseAsync.SaveAllFiles something did not save as expected');
+                    return false;             
+                } 
+            } 
+            // put a little delay to allow the system to contine to work in the background
+            await application.Delay(500);
+        } while (!result)
 
         // Remove old debugger files before build
         if (!this.UsingMakeFileCompiler && !this.UsingBatchCompiler && !this.UsingShellScriptCompiler) { 

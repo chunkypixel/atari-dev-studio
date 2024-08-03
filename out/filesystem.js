@@ -72,7 +72,7 @@ function IsRunFromExplorer(fileUri) {
 }
 exports.IsRunFromExplorer = IsRunFromExplorer;
 function FileExistsAsync(path) {
-    console.log('debugger:filesystem.FileExistsAsync');
+    console.log('debugger:filesystem.FileExistsAsync PATH:' + path);
     return new Promise((resolve, reject) => {
         fs.access(path, fs.constants.F_OK, err => {
             resolve(!err);
@@ -111,7 +111,7 @@ function RemoveFileAsync(path) {
 }
 exports.RemoveFileAsync = RemoveFileAsync;
 function FolderExistsAsync(folder) {
-    console.log('debugger:filesystem.FolderExistsAsync');
+    console.log('debugger:filesystem.FolderExistsAsync FOLDER:' + folder);
     return new Promise((resolve, reject) => {
         fs.access(folder, fs.constants.F_OK, err => {
             resolve(!err);
@@ -120,7 +120,7 @@ function FolderExistsAsync(folder) {
 }
 exports.FolderExistsAsync = FolderExistsAsync;
 function MkDirAsync(folder) {
-    console.log('debugger:filesystem.MkDirAsync');
+    console.log('debugger:filesystem.MkDirAsync FOLDER:' + folder);
     return new Promise((resolve, reject) => {
         fs.mkdir(folder, err => {
             if (err && err.code === 'EEXIST') {

@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.9.7 (TO RELEASED)
+
+ * Attempted fix to work around the 'vscode.workspace.saveAll()' issue where the validation check fails due to some sort of internal VSCode problem.
+
 ## 0.9.6
 
 * Updated 7800basic to v0.33 (Windows, Linux, macOS). NOTE: arm64 compatibility build remains at v0.29
