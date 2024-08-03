@@ -214,7 +214,7 @@ class CompilerBase {
                     }
                 }
                 // put a little delay to allow the system to contine to work in the background
-                yield application.Delay(500);
+                yield application.Delay(200);
             } while (!result);
             // Remove old debugger files before build
             if (!this.UsingMakeFileCompiler && !this.UsingBatchCompiler && !this.UsingShellScriptCompiler) {
