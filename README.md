@@ -108,8 +108,8 @@ There are a number of compiler, emulator and editor configuration options availa
 ### Recommended Setting changes
 It is recommended to change these VSCode settings to the following as they appear to sometimes affect the ability of the internal save functions to automatically save your open documents before continuing with the compilation:
 
-Files: Auto Save - set to Off (default is autoDelay)
-Files: Auto Save Delay - set to 0 (default is 1000)
+* Files: Auto Save - set to Off (default is autoDelay)
+* Files: Auto Save Delay - set to 0 (default is 1000)
 
 NOTE: from version 0.97 onwards I have attempted to rectify this issue with an auto-retry function (will retry 5 times).
 
