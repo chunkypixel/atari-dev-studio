@@ -43,12 +43,8 @@ export class ShellScriptCompiler extends CompilerBase {
 
         // Clear output content? (not available for terminals)
 
-        // Save files?
-        if (this.Configuration.get<boolean>(`editor.saveAllFilesBeforeRun`))  {
-            result = await vscode.workspace.saveAll();
-        } else if (this.Configuration.get<boolean>(`editor.saveFileBeforeRun`)) {
-            if (this.Document) { result = await this.Document.save(); }
-        }
+        // Save files (based on user configuration)
+        result = await this.SaveAllFilesBeforeRun()
         if (!result) { return false; }
 
          // Result

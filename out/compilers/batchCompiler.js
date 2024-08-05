@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BatchCompiler = void 0;
-const vscode = require("vscode");
 const path = require("path");
 const application = require("../application");
 const compilerBase_1 = require("./compilerBase");
@@ -41,15 +40,8 @@ class BatchCompiler extends compilerBase_1.CompilerBase {
                 (_a = application.AdsTerminal) === null || _a === void 0 ? void 0 : _a.show();
             }
             // Clear output content? (not available for terminals)
-            // Save files?
-            if (this.Configuration.get(`editor.saveAllFilesBeforeRun`)) {
-                result = yield vscode.workspace.saveAll();
-            }
-            else if (this.Configuration.get(`editor.saveFileBeforeRun`)) {
-                if (this.Document) {
-                    result = yield this.Document.save();
-                }
-            }
+            // Save files (based on user configuration)
+            result = yield this.SaveAllFilesBeforeRun();
             if (!result) {
                 return false;
             }

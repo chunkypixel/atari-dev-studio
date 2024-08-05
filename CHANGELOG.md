@@ -2,9 +2,9 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
-## 0.9.7 (TO RELEASED)
+## 0.9.7
 
- * Attempted fix to work around the 'vscode.workspace.saveAll()' issue where the validation check fails due to some sort of internal VSCode problem.
+ * Updated the internal Save on Compile routine to auto retry (a maximum of 5 times) before failing the save and exiting the compiler with a warning.
 
 ## 0.9.6
 

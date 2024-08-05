@@ -105,6 +105,14 @@ The Sprite Editor is based on [Spritemate](http://spritemate.com) by Ingo Hinter
 ### Settings
 There are a number of compiler, emulator and editor configuration options available in Atari Dev Studio which can be changed via the **Settings** (Preferences -> Settings -> Extensions -> Atari Dev Studio).
 
+### Recommended Setting changes
+It is recommended to change these VSCode settings to the following as they appear to sometimes affect the ability of the internal save functions to automatically save your open documents before continuing with the compilation:
+
+Files: Auto Save - set to Off (default is autoDelay)
+Files: Auto Save Delay - set to 0 (default is 1000)
+
+NOTE: from version 0.97 onwards I have attempted to rectify this issue with an auto-retry function (will retry 5 times).
+
 ### Debugging the extension
 During the development phase of the extension I've added some developer output to assist with any issues that may appear.  To view this output, open the VS Code **Developer Tools** by selecting **Help -> Toggle Developer Tools** from the menu, and in the debugger window ensure the **Console** tab is activated.  This information may help identify the area where the extension is failing to process as expected.
 
