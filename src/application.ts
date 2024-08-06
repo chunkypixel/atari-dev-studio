@@ -1,7 +1,7 @@
 "use strict";
 import * as vscode from 'vscode';
 import * as filesystem from './filesystem';
-const opn = require('opn');
+const open = require('open');
 const os = require("os");
 import { CompilerBase } from './compilers/compilerBase';
 import { BatariBasicCompiler } from './compilers/batariBasicCompiler';
@@ -277,13 +277,6 @@ export function KillBuildGame(): void {
 	}		
 }
 
-export function OpenBrowserWindow(path: string, browser: ''): void {
-	opn(path, { app: browser })
-    .catch((_: any) => {
-      vscode.window.showErrorMessage(`Open browser failed!! Please check if you have installed the browser ${browser} correctly!`);
-    });
-}
-
 export async function OpenContextHelp(): Promise<void> {
 	// Get active editor
 	var activeEditor = vscode.window.activeTextEditor;
@@ -387,4 +380,11 @@ export function Delay(ms: number) {
 
 export function IsNumber(numStr: string) {
 	return !isNaN(parseFloat(numStr)) && !isNaN(+numStr)
+}
+
+export async function OpenBrowserWindow(path: string, browser:string = ''): Promise<void> {
+	await open(path, { app: browser })
+    .catch((_: any) => {
+      vscode.window.showErrorMessage(`Open browser failed!! Please check if you have installed the browser ${browser} correctly!`);
+    });
 }

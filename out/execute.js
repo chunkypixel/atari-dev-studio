@@ -9,7 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Spawn = exports.KillSpawnProcess = exports.KillProcessById = exports.KillProcessByNameAsync = void 0;
+exports.KillProcessByNameAsync = KillProcessByNameAsync;
+exports.KillProcessById = KillProcessById;
+exports.KillSpawnProcess = KillSpawnProcess;
+exports.Spawn = Spawn;
 const application = require("./application");
 const cp = require("child_process");
 const find = require("find-process");
@@ -31,7 +34,6 @@ function KillProcessByNameAsync(name) {
         });
     });
 }
-exports.KillProcessByNameAsync = KillProcessByNameAsync;
 function KillProcessById(pid) {
     // Validate
     if (pid === undefined) {
@@ -47,13 +49,11 @@ function KillProcessById(pid) {
         console.log(`Failed to kill process ${pid}`);
     }
 }
-exports.KillProcessById = KillProcessById;
 function KillSpawnProcess() {
     var _a;
     // Process
     KillProcessById((_a = cp === null || cp === void 0 ? void 0 : cp._process) === null || _a === void 0 ? void 0 : _a.id);
 }
-exports.KillSpawnProcess = KillSpawnProcess;
 function Spawn(command, args, env, cwd, stdout, stderr) {
     console.log('debugger:execute.ExecuteCommand');
     // Process
@@ -112,5 +112,4 @@ function Spawn(command, args, env, cwd, stdout, stderr) {
         });
     });
 }
-exports.Spawn = Spawn;
 //# sourceMappingURL=execute.js.map

@@ -9,10 +9,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IsNumber = exports.Delay = exports.ShowStartupMessagesAsync = exports.GetConfiguration = exports.ShowErrorPopup = exports.ShowInformationPopup = exports.ShowWarningPopup = exports.WriteToCompilerTerminal = exports.OpenContextHelp = exports.OpenBrowserWindow = exports.KillBuildGame = exports.BuildGameAndRunAsync = exports.BuildGameAsync = exports.RegisterContextHelpsAsync = exports.ContextHelps = exports.RegisterReferenceProvidersAsync = exports.ReferenceProviders = exports.RegisterDefinitionProvidersAsync = exports.DefinitionProviders = exports.RegisterDocumentSymbolProvidersAsync = exports.DocumentSymbolProviders = exports.RegisterFoldingProvidersAsync = exports.Foldings = exports.RegisterCompletionProvidersAsync = exports.Completions = exports.RegisterHoverProvidersAsync = exports.Hovers = exports.Serials = exports.Emulators = exports.Compilers = exports.InitialiseAdsTerminalAsync = exports.AdsTerminal = exports.CompilerOutputChannel = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.IsMacOSArm = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSArch = exports.OSPlatform = void 0;
+exports.ContextHelps = exports.ReferenceProviders = exports.DefinitionProviders = exports.DocumentSymbolProviders = exports.Foldings = exports.Completions = exports.Hovers = exports.Serials = exports.Emulators = exports.Compilers = exports.AdsTerminal = exports.CompilerOutputChannel = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.IsMacOSArm = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSArch = exports.OSPlatform = void 0;
+exports.InitialiseAdsTerminalAsync = InitialiseAdsTerminalAsync;
+exports.RegisterHoverProvidersAsync = RegisterHoverProvidersAsync;
+exports.RegisterCompletionProvidersAsync = RegisterCompletionProvidersAsync;
+exports.RegisterFoldingProvidersAsync = RegisterFoldingProvidersAsync;
+exports.RegisterDocumentSymbolProvidersAsync = RegisterDocumentSymbolProvidersAsync;
+exports.RegisterDefinitionProvidersAsync = RegisterDefinitionProvidersAsync;
+exports.RegisterReferenceProvidersAsync = RegisterReferenceProvidersAsync;
+exports.RegisterContextHelpsAsync = RegisterContextHelpsAsync;
+exports.BuildGameAsync = BuildGameAsync;
+exports.BuildGameAndRunAsync = BuildGameAndRunAsync;
+exports.KillBuildGame = KillBuildGame;
+exports.OpenContextHelp = OpenContextHelp;
+exports.WriteToCompilerTerminal = WriteToCompilerTerminal;
+exports.ShowWarningPopup = ShowWarningPopup;
+exports.ShowInformationPopup = ShowInformationPopup;
+exports.ShowErrorPopup = ShowErrorPopup;
+exports.GetConfiguration = GetConfiguration;
+exports.ShowStartupMessagesAsync = ShowStartupMessagesAsync;
+exports.Delay = Delay;
+exports.IsNumber = IsNumber;
+exports.OpenBrowserWindow = OpenBrowserWindow;
 const vscode = require("vscode");
 const filesystem = require("./filesystem");
-const opn = require('opn');
+const open = require('open');
 const os = require("os");
 const batariBasicCompiler_1 = require("./compilers/batariBasicCompiler");
 const seventyEightHundredBasicCompiler_1 = require("./compilers/seventyEightHundredBasicCompiler");
@@ -84,7 +105,6 @@ function InitialiseAdsTerminalAsync() {
         });
     });
 }
-exports.InitialiseAdsTerminalAsync = InitialiseAdsTerminalAsync;
 // -------------------------------------------------------------------------------------
 // Compilers
 // Register compilers here and in order of preference
@@ -128,7 +148,6 @@ function RegisterHoverProvidersAsync(context) {
         }
     });
 }
-exports.RegisterHoverProvidersAsync = RegisterHoverProvidersAsync;
 // -------------------------------------------------------------------------------------
 // Completion
 // Language intellisense
@@ -143,7 +162,6 @@ function RegisterCompletionProvidersAsync(context) {
         }
     });
 }
-exports.RegisterCompletionProvidersAsync = RegisterCompletionProvidersAsync;
 // -------------------------------------------------------------------------------------
 // Region Folding
 // Language intellisense
@@ -159,7 +177,6 @@ function RegisterFoldingProvidersAsync(context) {
         }
     });
 }
-exports.RegisterFoldingProvidersAsync = RegisterFoldingProvidersAsync;
 // -------------------------------------------------------------------------------------
 // DocumentSymbolProviders
 // Language intellisense
@@ -176,7 +193,6 @@ function RegisterDocumentSymbolProvidersAsync(context) {
         }
     });
 }
-exports.RegisterDocumentSymbolProvidersAsync = RegisterDocumentSymbolProvidersAsync;
 // -------------------------------------------------------------------------------------
 // DefinitionProviders
 // Language intellisense
@@ -193,7 +209,6 @@ function RegisterDefinitionProvidersAsync(context) {
         }
     });
 }
-exports.RegisterDefinitionProvidersAsync = RegisterDefinitionProvidersAsync;
 // -------------------------------------------------------------------------------------
 // ReferenceProviders
 // Language intellisense
@@ -210,7 +225,6 @@ function RegisterReferenceProvidersAsync(context) {
         }
     });
 }
-exports.RegisterReferenceProvidersAsync = RegisterReferenceProvidersAsync;
 // -------------------------------------------------------------------------------------
 // ContextHelp
 // Language intellisense
@@ -226,7 +240,6 @@ function RegisterContextHelpsAsync(context) {
         }
     });
 }
-exports.RegisterContextHelpsAsync = RegisterContextHelpsAsync;
 // -------------------------------------------------------------------------------------
 // Functions
 // -------------------------------------------------------------------------------------
@@ -246,7 +259,6 @@ function BuildGameAsync(fileUri) {
         return false;
     });
 }
-exports.BuildGameAsync = BuildGameAsync;
 function BuildGameAndRunAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
         // Get document
@@ -263,7 +275,6 @@ function BuildGameAndRunAsync(fileUri) {
         return false;
     });
 }
-exports.BuildGameAndRunAsync = BuildGameAndRunAsync;
 function KillBuildGame() {
     // Process all compilers
     for (let compiler of exports.Compilers) {
@@ -272,14 +283,6 @@ function KillBuildGame() {
         }
     }
 }
-exports.KillBuildGame = KillBuildGame;
-function OpenBrowserWindow(path, browser) {
-    opn(path, { app: browser })
-        .catch((_) => {
-        vscode.window.showErrorMessage(`Open browser failed!! Please check if you have installed the browser ${browser} correctly!`);
-    });
-}
-exports.OpenBrowserWindow = OpenBrowserWindow;
 function OpenContextHelp() {
     return __awaiter(this, void 0, void 0, function* () {
         // Get active editor
@@ -297,30 +300,24 @@ function OpenContextHelp() {
         }
     });
 }
-exports.OpenContextHelp = OpenContextHelp;
 function WriteToCompilerTerminal(message, writeToLog = false) {
     exports.CompilerOutputChannel.appendLine(message);
     if (writeToLog) {
         console.log(`debugger:${message}`);
     }
 }
-exports.WriteToCompilerTerminal = WriteToCompilerTerminal;
 function ShowWarningPopup(message) {
     vscode.window.showWarningMessage(message);
 }
-exports.ShowWarningPopup = ShowWarningPopup;
 function ShowInformationPopup(message) {
     vscode.window.showInformationMessage(message);
 }
-exports.ShowInformationPopup = ShowInformationPopup;
 function ShowErrorPopup(message) {
     vscode.window.showErrorMessage(message);
 }
-exports.ShowErrorPopup = ShowErrorPopup;
 function GetConfiguration() {
     return vscode.workspace.getConfiguration(exports.Name, null);
 }
-exports.GetConfiguration = GetConfiguration;
 function getChosenCompiler(document) {
     // Prepare
     let configuration = GetConfiguration();
@@ -374,13 +371,18 @@ function ShowStartupMessagesAsync() {
         });
     });
 }
-exports.ShowStartupMessagesAsync = ShowStartupMessagesAsync;
 function Delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-exports.Delay = Delay;
 function IsNumber(numStr) {
     return !isNaN(parseFloat(numStr)) && !isNaN(+numStr);
 }
-exports.IsNumber = IsNumber;
+function OpenBrowserWindow(path_1) {
+    return __awaiter(this, arguments, void 0, function* (path, browser = '') {
+        yield open(path, { app: browser })
+            .catch((_) => {
+            vscode.window.showErrorMessage(`Open browser failed!! Please check if you have installed the browser ${browser} correctly!`);
+        });
+    });
+}
 //# sourceMappingURL=application.js.map

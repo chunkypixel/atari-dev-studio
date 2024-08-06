@@ -23,8 +23,8 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
         this.Verboseness = "";
     }
     ExecuteCompilerAsync() {
-        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a, _b;
             console.log('debugger:DasmCompiler.ExecuteCompilerAsync');
             // Make compile?
             if (this.UsingMakeFileCompiler) {

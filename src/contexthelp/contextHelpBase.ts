@@ -1,6 +1,7 @@
 "use strict";
 import * as vscode from 'vscode';
 import * as path from 'path';
+import * as application from "../application";
 import * as filesystem from '../filesystem';
 import open = require('open');
 
@@ -46,7 +47,7 @@ export abstract class ContextHelpBase {
         if (content) {
             // Yes got one
             var url = this.Url + '#' +content;
-            await open(url);
+            await application.OpenBrowserWindow(url);
         }
     }
 

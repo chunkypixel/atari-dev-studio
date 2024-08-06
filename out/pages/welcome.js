@@ -14,7 +14,6 @@ const vscode = require("vscode");
 const path = require("path");
 const filesystem = require("../filesystem");
 const application = require("../application");
-const opn = require("open");
 class WelcomePage {
     constructor() {
         this.currentPanel = undefined;
@@ -129,39 +128,30 @@ class WelcomePage {
     }
     openBatariBasicForum() {
         console.log('debugger:WelcomePage.openBatariBasicForum');
-        this.openUrl("http://atariage.com/forums/forum/65-batari-basic/");
+        application.OpenBrowserWindow("http://atariage.com/forums/forum/65-batari-basic/");
     }
     open7800ProgrammingForum() {
         console.log('debugger:WelcomePage.open7800ProgrammingForum');
-        this.openUrl("http://atariage.com/forums/forum/52-atari-7800-programming/");
+        application.OpenBrowserWindow("http://atariage.com/forums/forum/52-atari-7800-programming/");
     }
     openBatariGuidePage() {
         console.log('debugger:WelcomePage.openBatariGuidePage');
-        this.openUrl("http://www.randomterrain.com/atari-2600-memories-batari-basic-commands.html");
+        application.OpenBrowserWindow("http://www.randomterrain.com/atari-2600-memories-batari-basic-commands.html");
     }
     open7800basicGuidePage() {
         console.log('debugger:WelcomePage.open7800basicGuidePage');
-        this.openUrl("http://www.randomterrain.com/7800basic.html");
+        application.OpenBrowserWindow("http://www.randomterrain.com/7800basic.html");
     }
     openDiscussionPage() {
         console.log('debugger:WelcomePage.openDiscussionPage');
-        this.openUrl("http://atariage.com/forums/topic/290365-atari-dev-studio-for-homebrew-development-release/");
+        application.OpenBrowserWindow("http://atariage.com/forums/topic/290365-atari-dev-studio-for-homebrew-development-release/");
     }
     openGitHubIssue() {
         console.log('debugger:WelcomePage.openGitHubIssue');
-        this.openUrl("https://github.com/chunkypixel/atari-dev-studio/issues");
+        application.OpenBrowserWindow("https://github.com/chunkypixel/atari-dev-studio/issues");
     }
     openSpriteEditor() {
         vscode.commands.executeCommand('extension.openSpriteEditorPage');
-    }
-    openUrl(uri) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                //let options:
-                opn(uri);
-            }
-            catch (_a) { }
-        });
     }
 }
 exports.WelcomePage = WelcomePage;

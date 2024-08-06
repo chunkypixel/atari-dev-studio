@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContextHelpBase = void 0;
 const vscode = require("vscode");
 const path = require("path");
+const application = require("../application");
 const filesystem = require("../filesystem");
-const open = require("open");
 class ContextHelpBase {
     constructor(id, url) {
         this.links = {};
@@ -52,7 +52,7 @@ class ContextHelpBase {
             if (content) {
                 // Yes got one
                 var url = this.Url + '#' + content;
-                yield open(url);
+                yield application.OpenBrowserWindow(url);
             }
         });
     }

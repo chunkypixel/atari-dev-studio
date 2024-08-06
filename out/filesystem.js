@@ -9,7 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WorkspaceFolder = exports.WriteFileAsync = exports.ReadFileAsync = exports.ChModAsync = exports.MkDirAsync = exports.FolderExistsAsync = exports.RemoveFileAsync = exports.GetFileStatsAsync = exports.RenameFileAsync = exports.FileExistsAsync = exports.IsRunFromExplorer = exports.GetDocumentAsync = exports.GetFileUriAsync = void 0;
+exports.GetFileUriAsync = GetFileUriAsync;
+exports.GetDocumentAsync = GetDocumentAsync;
+exports.IsRunFromExplorer = IsRunFromExplorer;
+exports.FileExistsAsync = FileExistsAsync;
+exports.RenameFileAsync = RenameFileAsync;
+exports.GetFileStatsAsync = GetFileStatsAsync;
+exports.RemoveFileAsync = RemoveFileAsync;
+exports.FolderExistsAsync = FolderExistsAsync;
+exports.MkDirAsync = MkDirAsync;
+exports.ChModAsync = ChModAsync;
+exports.ReadFileAsync = ReadFileAsync;
+exports.WriteFileAsync = WriteFileAsync;
+exports.WorkspaceFolder = WorkspaceFolder;
 const vscode = require("vscode");
 const application = require("./application");
 const fs = require("fs");
@@ -35,7 +47,6 @@ function GetFileUriAsync(fileUri) {
         return document.uri;
     });
 }
-exports.GetFileUriAsync = GetFileUriAsync;
 function GetDocumentAsync(fileUri) {
     return __awaiter(this, void 0, void 0, function* () {
         // Validate
@@ -56,7 +67,6 @@ function GetDocumentAsync(fileUri) {
         return null;
     });
 }
-exports.GetDocumentAsync = GetDocumentAsync;
 function IsRunFromExplorer(fileUri) {
     let editor = vscode.window.activeTextEditor;
     if (!fileUri || !fileUri.fsPath) {
@@ -70,7 +80,6 @@ function IsRunFromExplorer(fileUri) {
     }
     return true;
 }
-exports.IsRunFromExplorer = IsRunFromExplorer;
 function FileExistsAsync(path) {
     console.log('debugger:filesystem.FileExistsAsync PATH:' + path);
     return new Promise((resolve, reject) => {
@@ -79,7 +88,6 @@ function FileExistsAsync(path) {
         });
     });
 }
-exports.FileExistsAsync = FileExistsAsync;
 function RenameFileAsync(oldName, newName) {
     console.log('debugger:filesystem.RenameFileAsync');
     return new Promise((resolve, reject) => {
@@ -88,7 +96,6 @@ function RenameFileAsync(oldName, newName) {
         });
     });
 }
-exports.RenameFileAsync = RenameFileAsync;
 function GetFileStatsAsync(path) {
     console.log('debugger:filesystem.GetFileStatsAsync');
     return new Promise((resolve, reject) => {
@@ -100,7 +107,6 @@ function GetFileStatsAsync(path) {
         });
     });
 }
-exports.GetFileStatsAsync = GetFileStatsAsync;
 function RemoveFileAsync(path) {
     console.log('debugger:filesystem.RemoveFileAsync');
     return new Promise((resolve, reject) => {
@@ -109,7 +115,6 @@ function RemoveFileAsync(path) {
         });
     });
 }
-exports.RemoveFileAsync = RemoveFileAsync;
 function FolderExistsAsync(folder) {
     console.log('debugger:filesystem.FolderExistsAsync FOLDER:' + folder);
     return new Promise((resolve, reject) => {
@@ -118,7 +123,6 @@ function FolderExistsAsync(folder) {
         });
     });
 }
-exports.FolderExistsAsync = FolderExistsAsync;
 function MkDirAsync(folder) {
     console.log('debugger:filesystem.MkDirAsync FOLDER:' + folder);
     return new Promise((resolve, reject) => {
@@ -130,7 +134,6 @@ function MkDirAsync(folder) {
         });
     });
 }
-exports.MkDirAsync = MkDirAsync;
 function ChModAsync(path, mode = '777') {
     console.log('debugger:filesystem.ChModAsync');
     return new Promise((resolve, reject) => {
@@ -142,7 +145,6 @@ function ChModAsync(path, mode = '777') {
         });
     });
 }
-exports.ChModAsync = ChModAsync;
 function ReadFileAsync(path) {
     console.log('debugger:filesystem.ReadFileAsync');
     return new Promise((resolve, reject) => {
@@ -154,7 +156,6 @@ function ReadFileAsync(path) {
         });
     });
 }
-exports.ReadFileAsync = ReadFileAsync;
 function WriteFileAsync(path, data) {
     console.log('debugger:filesystem.WriteFileAsync');
     return new Promise((resolve, reject) => {
@@ -163,7 +164,6 @@ function WriteFileAsync(path, data) {
         });
     });
 }
-exports.WriteFileAsync = WriteFileAsync;
 function WorkspaceFolder() {
     // Workspace 
     if (vscode.workspace.workspaceFolders) {
@@ -171,5 +171,4 @@ function WorkspaceFolder() {
     }
     return "";
 }
-exports.WorkspaceFolder = WorkspaceFolder;
 //# sourceMappingURL=filesystem.js.map

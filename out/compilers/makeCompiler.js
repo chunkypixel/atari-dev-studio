@@ -19,8 +19,8 @@ class MakeCompiler extends compilerBase_1.CompilerBase {
         super("makefile", "makefile", ["makefile"], [""], [""], "", "");
     }
     InitialiseAsync() {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             console.log('debugger:MakeCompiler.InitialiseAsync');
             // Prepare
             let result = true;
@@ -50,8 +50,8 @@ class MakeCompiler extends compilerBase_1.CompilerBase {
         });
     }
     ExecuteCompilerAsync() {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             console.log('debugger:MakeCompiler.ExecuteCompilerAsync');
             // Launch and exit
             // note: we cannot wait for a result
