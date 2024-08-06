@@ -15,7 +15,6 @@ exports.deactivate = exports.activate = void 0;
 const vscode = require("vscode");
 const application = require("./application");
 const welcome_1 = require("./pages/welcome");
-const spriteeditor_1 = require("./pages/spriteeditor");
 require("./statusbar");
 // Activation Events
 // https://code.visualstudio.com/api/references/activation-events
@@ -28,7 +27,6 @@ function activate(context) {
     return __awaiter(this, void 0, void 0, function* () {
         // Pages
         let welcomePage = new welcome_1.WelcomePage();
-        let spriteEditorPage = new spriteeditor_1.SpriteEditorPage();
         // Use the console to output diagnostic information (console.log) and errors (console.error)
         // This line of code will only be executed once when your extension is activated
         console.log(`Extension ${application.DisplayName} (${application.Version}) is now active!`);
@@ -41,10 +39,14 @@ function activate(context) {
             console.log('User activated command "extension.openWelcomePage"');
             welcomePage.openPage(context);
         });
-        // SpriteEditor
-        const openSpriteEditorPage = vscode.commands.registerCommand('extension.openSpriteEditorPage', () => {
-            console.log('User activated command "extension.openSpriteEditorPage"');
-            spriteEditorPage.openPage(context);
+        // 2600 editors
+        const openPlayerPalPage = vscode.commands.registerCommand('extension.openPlayerPalPage', () => {
+            console.log('User activated command "extension.openPlayerPalPage"');
+            application.OpenBrowserWindow('https://alienbill.com/2600/playerpalnext.html', '');
+        });
+        const openAtariBackgroundBuilderPage = vscode.commands.registerCommand('extension.openAtariBackgroundBuilderPage', () => {
+            console.log('User activated command "extension.openAtariBackgroundBuilderPage"');
+            application.OpenBrowserWindow('https://alienbill.com/2600/atari-background-builder', '');
         });
         // Build
         // Note: apparently the fileUri can be supplied via the command line but we are not going to use it
@@ -60,11 +62,6 @@ function activate(context) {
             console.log('User activated command "extension.killBuildGame"');
             application.KillBuildGame();
         });
-        // SpriteEditor
-        const openSpriteEditor = vscode.commands.registerCommand('extension.openSpriteEditorFile', (fileUri) => __awaiter(this, void 0, void 0, function* () {
-            console.log('User activated command "extension.openSpriteEditorFile"');
-            spriteEditorPage.openPage(context, fileUri);
-        }));
         // Build (touchbar)
         // Note: apparently the fileUri can be supplied via the command line but we are not going to use it
         const touchbarBuildGame = vscode.commands.registerCommand('extension.touchbar.buildGame', (fileUri) => __awaiter(this, void 0, void 0, function* () {
@@ -82,11 +79,9 @@ function activate(context) {
         });
         // Subscriptions (register)
         context.subscriptions.push(openWelcomePage);
-        context.subscriptions.push(openSpriteEditorPage);
         context.subscriptions.push(buildGame);
         context.subscriptions.push(buildGameAndRun);
         context.subscriptions.push(killBuildGame);
-        context.subscriptions.push(openSpriteEditor);
         // Subscriptions (touchbar)
         context.subscriptions.push(touchbarBuildGame);
         context.subscriptions.push(touchbarBuildGameAndRun);

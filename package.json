@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.9.9",
+    "version": "0.10.0",
     "icon": "images/icon.png",
     "preview": false,
     "author": "mksmith",
@@ -13,7 +13,7 @@
         "url": "https://github.com/chunkypixel/atari-dev-studio.git"
     },
     "engines": {
-        "vscode": "^1.74.0"
+        "vscode": "^1.91.2"
     },
     "categories": [
         "Programming Languages",
@@ -72,15 +72,6 @@
                     ".h"
                 ],
                 "configuration": "./languages/dasm.language-configuration.json"
-            },
-            {
-                "id": "spe",
-                "aliases": [
-                    "Sprite Editor Project"
-                ],
-                "extensions": [
-                    ".spe"
-                ]
             }
         ],
         "grammars": [
@@ -130,6 +121,18 @@
                 "category": "ads"
             },
             {
+                "command": "extension.openPlayerPalPage",
+                "title": "Open PlayerPal 2600 Editor",
+                "icon": "$(tools)",
+                "category": "ads"
+            },
+            {
+                "command": "extension.openAtariBackgroundBuilderPage",
+                "title": "Open Atari Background Builder 2600 Editor",
+                "icon": "$(tools)",
+                "category": "ads"
+            },
+            {
                 "command": "extension.buildGameAndRun",
                 "title": "Compile source code and launch [via emulator or cart]",
                 "icon": "$(rocket)",
@@ -138,12 +141,6 @@
             {
                 "command": "extension.killBuildGame",
                 "title": "Kill build process",
-                "category": "ads"
-            },
-            {
-                "command": "extension.openSpriteEditorFile",
-                "title": "Open the Sprite Editor",
-                "icon": "$(tools)",
                 "category": "ads"
             },
             {
@@ -184,13 +181,6 @@
                     "command": "extension.buildGameAndRun",
                     "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript",
                     "group": "1_run@20"
-                }
-            ],
-            "explorer/context": [
-                {
-                    "when": "resourceLangId == spe",
-                    "command": "extension.openSpriteEditorFile",
-                    "group": "navigation"
                 }
             ]
         },
@@ -475,13 +465,14 @@
         "find-process": "^1.4.7",
         "minimist": "^1.2.7",
         "open": "^8.4.0",
-        "tree-kill": "^1.2.2"
+        "tree-kill": "^1.2.2",
+        "opn": "^5.3.0"
     },
     "devDependencies": {
         "@types/mocha": "^10.0.1",
         "@types/node": "^18.11.11",
         "@types/open": "^6.2.1",
-        "@types/vscode": "^1.73.1",
+        "@types/vscode": "^1.91.2",
         "diff": "^5.1.0",
         "typescript": "^4.9.4",
         "vscode-test": "^1.6.1"
