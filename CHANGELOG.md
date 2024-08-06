@@ -2,7 +2,7 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
-## 0.9.7
+## 0.9.7/0.9.8/0.9.9
 
 * Updated the internal Save on Compile routine to auto retry (a maximum of 5 times) before failing the save and exiting the compiler with a warning.
 

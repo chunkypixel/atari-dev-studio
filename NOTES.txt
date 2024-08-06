@@ -2,6 +2,8 @@ Creating a VSIX package
 -----------------------
 Install the vsce extension
 npm install -g vsce
+Install the tsc extension
+npm install -g typescript
 
 Creating a packgage
 vsce package 
