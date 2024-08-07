@@ -42,8 +42,16 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
                 else if (application.IsMacOS) {
                     emulatorName = "Stella.app";
                 }
-                // Append path (based on architecture and emulator name)
-                this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, application.OSArch, emulatorName);
+                emulatorName = "Stella.app";
+                this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, emulatorName);
+                // Append path (based on architecture and emulator name etc)
+                if (application.IsMacOS) {
+                    // for macOS exclude architecture
+                    this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, emulatorName);
+                }
+                else {
+                    this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, application.OSArch, emulatorName);
+                }
             }
             // Other
             this.AutoCloseExistingInstances = this.Configuration.get(`emulator.${this.Id.toLowerCase()}.autoCloseExistingInstances`, true);
