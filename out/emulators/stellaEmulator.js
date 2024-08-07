@@ -63,10 +63,10 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
             // Prepare
             application.WriteToCompilerTerminal('');
             // Validate for 32-bit on macOS
-            if (!this.CustomFolderOrPath && (application.IsMacOS && application.Is32Bit)) {
-                application.WriteToCompilerTerminal(`ERROR: Unable to launch the Stella emulator as there is no 32-bit version available for macOS.`);
-                return false;
-            }
+            //if (!this.CustomFolderOrPath && (application.IsMacOS && application.Is32Bit)) {
+            //    application.WriteToCompilerTerminal(`ERROR: Unable to launch the Stella emulator as there is no 32-bit version available for macOS.`); 
+            //    return false;  
+            //}
             // Premissions
             yield this.RepairFilePermissionsAsync();
             // Command

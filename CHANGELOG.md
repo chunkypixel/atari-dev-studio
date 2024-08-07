@@ -6,7 +6,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 * Added status bar and command palette links to PlayerPal 2600 and Atari Background Builder (thanks kisrael) websites (opens in the system default browser currently)
 * Removed existing Sprite Editor due to lack for proper features to edit 2600 objects as well as other missing functionality.  Also the code libraries are dangerously out of date according to Github and not updatable in some cases without serious effort.  Recommend using Paint.Net (Windows) or Gimp for now - any other suggestions welcome.
-* Updated Stella for macOS to exclude architecture referencing [x64/arm64] and use the same build (thanks Mats)
+* Updated Stella for macOS to exclude architecture referencing [x64/arm64] and use the same universal build
 * Updated internal packages to latest 
 * Updated minimum VSCode version to 1.90.2
 
