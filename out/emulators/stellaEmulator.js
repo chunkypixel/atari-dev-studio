@@ -42,8 +42,6 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
                 else if (application.IsMacOS) {
                     emulatorName = "Stella.app";
                 }
-                emulatorName = "Stella.app";
-                this.FolderOrPath = path.join(this.FolderOrPath, application.OSPlatform, emulatorName);
                 // Append path (based on architecture and emulator name etc)
                 if (application.IsMacOS) {
                     // for macOS exclude architecture
