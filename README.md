@@ -90,6 +90,9 @@ Apart from using the **Command Palette** to select compilation, there are a numb
 
 > Note: the short-cut buttons on the **Status Bar** can be minimised or turned off via the **Settings**.
 
+### Sprite Editor
+The Sprite Editor has been removed as of v0.10.0 - this is due to various reasons such as lack for proper features to edit 2600 objects as well as other missing functionality. Also the code libraries are dangerously out of date according to Github and not updatable in some cases without serious effort. Recommend using Paint.Net (Windows) or Gimp for now - any other suggestions welcome.
+
 ### Settings
 There are a number of compiler, emulator and editor configuration options available in Atari Dev Studio which can be changed via the **Settings** (Preferences -> Settings -> Extensions -> Atari Dev Studio).
 
