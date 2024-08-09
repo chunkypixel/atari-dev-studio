@@ -1,17 +1,5 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetFileUriAsync = GetFileUriAsync;
-exports.GetDocumentAsync = GetDocumentAsync;
-exports.IsRunFromExplorer = IsRunFromExplorer;
 exports.FileExistsAsync = FileExistsAsync;
 exports.RenameFileAsync = RenameFileAsync;
 exports.GetFileStatsAsync = GetFileStatsAsync;
@@ -25,61 +13,6 @@ exports.WorkspaceFolder = WorkspaceFolder;
 const vscode = require("vscode");
 const application = require("./application");
 const fs = require("fs");
-//export let error: NodeJS.ErrnoException = null;
-function GetFileUriAsync(fileUri) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Validate
-        if (fileUri) {
-            return fileUri;
-        }
-        // Prepare
-        let document;
-        // Document not open?
-        // Note: this really shouldn't happen
-        let editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            document = yield vscode.workspace.openTextDocument(fileUri);
-        }
-        else {
-            document = editor.document;
-        }
-        // Result
-        return document.uri;
-    });
-}
-function GetDocumentAsync(fileUri) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Validate
-        if (IsRunFromExplorer(fileUri)) {
-            // Make sure document exists
-            let result = yield FileExistsAsync(fileUri.fsPath);
-            if (result) {
-                return yield vscode.workspace.openTextDocument(fileUri);
-            }
-            // Not found
-            vscode.window.showInformationMessage("Error: File cannot be found");
-        }
-        // Try current document
-        let editor = vscode.window.activeTextEditor;
-        if (editor) {
-            return editor.document;
-        }
-        return null;
-    });
-}
-function IsRunFromExplorer(fileUri) {
-    let editor = vscode.window.activeTextEditor;
-    if (!fileUri || !fileUri.fsPath) {
-        return false;
-    }
-    if (!editor) {
-        return true;
-    }
-    if (fileUri.fsPath === editor.document.uri.fsPath) {
-        return false;
-    }
-    return true;
-}
 function FileExistsAsync(path) {
     console.log('debugger:filesystem.FileExistsAsync PATH:' + path);
     return new Promise((resolve, reject) => {

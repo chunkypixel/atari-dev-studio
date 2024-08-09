@@ -28,11 +28,11 @@ exports.ShowInformationPopup = ShowInformationPopup;
 exports.ShowErrorPopup = ShowErrorPopup;
 exports.GetConfiguration = GetConfiguration;
 exports.ShowStartupMessagesAsync = ShowStartupMessagesAsync;
+exports.GetActiveTextEditorDocumentAsync = GetActiveTextEditorDocumentAsync;
 exports.Delay = Delay;
 exports.IsNumber = IsNumber;
 exports.OpenBrowserWindow = OpenBrowserWindow;
 const vscode = require("vscode");
-const filesystem = require("./filesystem");
 const open = require('open');
 const os = require("os");
 const batariBasicCompiler_1 = require("./compilers/batariBasicCompiler");
@@ -243,10 +243,10 @@ function RegisterContextHelpsAsync(context) {
 // -------------------------------------------------------------------------------------
 // Functions
 // -------------------------------------------------------------------------------------
-function BuildGameAsync(fileUri) {
+function BuildGameAsync() {
     return __awaiter(this, void 0, void 0, function* () {
         // Get document
-        let document = yield filesystem.GetDocumentAsync(fileUri);
+        let document = yield GetActiveTextEditorDocumentAsync();
         if (!document || document.uri.scheme !== "file") {
             return false;
         }
@@ -259,10 +259,10 @@ function BuildGameAsync(fileUri) {
         return false;
     });
 }
-function BuildGameAndRunAsync(fileUri) {
+function BuildGameAndRunAsync() {
     return __awaiter(this, void 0, void 0, function* () {
         // Get document
-        let document = yield filesystem.GetDocumentAsync(fileUri);
+        let document = yield GetActiveTextEditorDocumentAsync();
         if (!document || document.uri.scheme !== "file") {
             return false;
         }
@@ -369,6 +369,18 @@ function ShowStartupMessagesAsync() {
                 configuration.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
             }
         });
+    });
+}
+function GetActiveTextEditorDocumentAsync() {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Ensure coding area active before reading current document
+        yield vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup');
+        // Try current document
+        let editor = vscode.window.activeTextEditor;
+        if (editor) {
+            return editor.document;
+        }
+        return null;
     });
 }
 function Delay(ms) {

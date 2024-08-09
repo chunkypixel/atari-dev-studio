@@ -39,6 +39,7 @@ import { SeventyEightHundredBasicContextHelp } from "./contexthelp/seventyEightH
 import { BatariBasicContextHelp } from "./contexthelp/batariBasicContextHelp";
 import { SeventyEightHundredGDSerial } from './serial/SeventyEightHundredGDSerial';
 import { SerialBase } from './serial/serialBase';
+import internal = require('stream');
 
 // -------------------------------------------------------------------------------------
 // Operating System
@@ -242,9 +243,9 @@ export async function RegisterContextHelpsAsync(context: vscode.ExtensionContext
 // -------------------------------------------------------------------------------------
 // Functions
 // -------------------------------------------------------------------------------------
-export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
+export async function BuildGameAsync(): Promise<boolean> {
 	// Get document
-	let document = await filesystem.GetDocumentAsync(fileUri);
+	let document = await GetActiveTextEditorDocumentAsync();
 	if (!document || document!.uri.scheme !== "file") { return false; }
 
 	// Find compiler
@@ -255,9 +256,9 @@ export async function BuildGameAsync(fileUri: vscode.Uri): Promise<boolean> {
 	return false;
 }
 
-export async function BuildGameAndRunAsync(fileUri: vscode.Uri): Promise<boolean> {
+export async function BuildGameAndRunAsync(): Promise<boolean> {
 	// Get document
-	let document = await filesystem.GetDocumentAsync(fileUri);
+	let document = await GetActiveTextEditorDocumentAsync();
 	if (!document || document!.uri.scheme !== "file") { return false; }
 
 	// Find compiler
@@ -372,6 +373,16 @@ export async function ShowStartupMessagesAsync(): Promise<void> {
 					configuration.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
 				}
 			});
+}
+
+export async function GetActiveTextEditorDocumentAsync(): Promise<vscode.TextDocument | null> {
+    // Ensure coding area active before reading current document
+    await vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup');
+
+	// Try current document
+    let editor = vscode.window.activeTextEditor;
+    if (editor) { return editor.document; }
+    return null;
 }
 
 export function Delay(ms: number) {

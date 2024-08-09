@@ -53,11 +53,11 @@ function activate(context) {
         // Note: apparently the fileUri can be supplied via the command line but we are not going to use it
         const buildGame = vscode.commands.registerCommand('extension.buildGame', (fileUri) => __awaiter(this, void 0, void 0, function* () {
             console.log('User activated command "extension.buildGame"');
-            yield application.BuildGameAsync(fileUri);
+            yield application.BuildGameAsync();
         }));
         const buildGameAndRun = vscode.commands.registerCommand('extension.buildGameAndRun', (fileUri) => __awaiter(this, void 0, void 0, function* () {
             console.log('User activated command "extension.buildGameAndRun"');
-            yield application.BuildGameAndRunAsync(fileUri);
+            yield application.BuildGameAndRunAsync();
         }));
         const killBuildGame = vscode.commands.registerCommand('extension.killBuildGame', () => {
             console.log('User activated command "extension.killBuildGame"');
@@ -67,11 +67,11 @@ function activate(context) {
         // Note: apparently the fileUri can be supplied via the command line but we are not going to use it
         const touchbarBuildGame = vscode.commands.registerCommand('extension.touchbar.buildGame', (fileUri) => __awaiter(this, void 0, void 0, function* () {
             console.log('User activated command "extension.touchbar.buildGame"');
-            yield application.BuildGameAsync(fileUri);
+            yield application.BuildGameAsync();
         }));
         const touchbarBuildGameAndRun = vscode.commands.registerCommand('extension.touchbar.buildGameAndRun', (fileUri) => __awaiter(this, void 0, void 0, function* () {
             console.log('User activated command "extension.touchbar.buildGameAndRun"');
-            yield application.BuildGameAndRunAsync(fileUri);
+            yield application.BuildGameAndRunAsync();
         }));
         // ContextHelp
         const openContextHelp = vscode.commands.registerCommand('extension.openContextHelp', () => {

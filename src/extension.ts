@@ -46,11 +46,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Note: apparently the fileUri can be supplied via the command line but we are not going to use it
 	const buildGame = vscode.commands.registerCommand('extension.buildGame', async (fileUri: vscode.Uri) => {
 		console.log('User activated command "extension.buildGame"');
-		await application.BuildGameAsync(fileUri);
+		await application.BuildGameAsync();
 	});
 	const buildGameAndRun = vscode.commands.registerCommand('extension.buildGameAndRun', async (fileUri: vscode.Uri) => {
 		console.log('User activated command "extension.buildGameAndRun"');
-		await application.BuildGameAndRunAsync(fileUri);
+		await application.BuildGameAndRunAsync();
 	});
 	const killBuildGame = vscode.commands.registerCommand('extension.killBuildGame', () => {
 		console.log('User activated command "extension.killBuildGame"');
@@ -61,11 +61,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Note: apparently the fileUri can be supplied via the command line but we are not going to use it
 	const touchbarBuildGame = vscode.commands.registerCommand('extension.touchbar.buildGame', async (fileUri: vscode.Uri) => {
 		console.log('User activated command "extension.touchbar.buildGame"');
-		await application.BuildGameAsync(fileUri);
+		await application.BuildGameAsync();
 	});
 	const touchbarBuildGameAndRun = vscode.commands.registerCommand('extension.touchbar.buildGameAndRun', async (fileUri: vscode.Uri) => {
 		console.log('User activated command "extension.touchbar.buildGameAndRun"');
-		await application.BuildGameAndRunAsync(fileUri);
+		await application.BuildGameAndRunAsync();
 	});
 
 	// ContextHelp
