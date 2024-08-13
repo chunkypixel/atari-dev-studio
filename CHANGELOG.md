@@ -5,6 +5,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 ## 0.10.1
 
 * Updated compile routine to ensure the 'code' document area is selected before determining the required document to compile (fix for when the console area active and not the code document area and not compiling)
+* Fixed an issue with the 7800basic.sh (and updated 2600basic.sh also) containing a CRLF ending causing the compiler to not process (thanks Mats).
 
 ## 0.10.0
 
