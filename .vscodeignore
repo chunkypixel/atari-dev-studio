@@ -3,7 +3,6 @@
 .gitignore
 vsc-extension-quickstart.md
 src/
-node_modules/
 NOTES.txt
 OPENVSXRegistry.md
 tsconfig.json
