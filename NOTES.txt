@@ -1,5 +1,12 @@
-Setup Node.Js, NVM, NPM
+Setup Node.Js, NVM, NPM (LINUX)
+-----------------------
 https://nodejs.org/en/download/package-manager
+
+
+Setup git (LINUX)
+-----------------
+sudo apt-get install git
+
 
 Creating a VSIX package
 -----------------------
@@ -20,7 +27,7 @@ vsce package
 
 
 // VS Code Extension Guides
-https://code.visualstudio.com/api/ext-----------------ension-guides/overview
+https://code.visualstudio.com/api/extension-guides/overview
 
 
 Installing a VSIX package 
@@ -42,7 +49,7 @@ tsc
 
 
 Testing webpackage
-------------------
+------------------# apt-get install git
 npm start
 
 
