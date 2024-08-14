@@ -1,28 +1,40 @@
+Setup Node.Js, NVM, NPM
+https://nodejs.org/en/download/package-manager
+
 Creating a VSIX package
 -----------------------
 Install the vsce extension
-npm install -g vsce
+npm install -g @vscode/vsce
 Install the tsc extension
 npm install -g typescript
 
+
+7800basic and 2600basic compilers
+---------------------------------
+make sure 7800basic.sh and 2600basic.sh use the LF end-of-line sequence NOT CRLF
+
+
 Creating a packgage
+-------------------
 vsce package 
 
+
 // VS Code Extension Guides
-https://code.visualstudio.com/api/extension-guides/overview
+https://code.visualstudio.com/api/ext-----------------ension-guides/overview
 
 
 Installing a VSIX package 
 -------------------------
 * Open the Extensions features from the Activity Bar (left side).
 * In the Extensions panel, click the Hamburger (...) menu and select the 'Install from VSIX...' option
-* From the browser, navigate to the required file select it and click the Install button. 
+* From the browser, navigate to the r-----------------equired file select it and click the Install button. 
 
 
 Adding/Updating node packages
------------------------------------
+-----------------------------
 npm install
 npm update
+
 
 Compiling extension source manually
 -----------------------------------
@@ -30,8 +42,9 @@ tsc
 
 
 Testing webpackage
------------------------------------
+------------------
 npm start
+
 
 Compiling webpackage source manually
 -----------------------------------
