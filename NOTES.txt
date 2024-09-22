@@ -61,3 +61,9 @@ npm run build
 A7800 4.0 Blurry Fix
 --------------------
 https://atariage.com/forums/topic/307889-a7800-40-release/?do=findComment&comment=4561680
+
+
+Package.json functionality
+--------------------------
+Hide items from command palette
+https://stackoverflow.com/questions/55270915/vs-code-extension-hide-commands-from-command-palette

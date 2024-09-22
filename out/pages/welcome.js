@@ -150,9 +150,6 @@ class WelcomePage {
         console.log('debugger:WelcomePage.openGitHubIssue');
         application.OpenBrowserWindow("https://github.com/chunkypixel/atari-dev-studio/issues");
     }
-    openSpriteEditor() {
-        vscode.commands.executeCommand('extension.openSpriteEditorPage');
-    }
 }
 exports.WelcomePage = WelcomePage;
 //# sourceMappingURL=welcome.js.map

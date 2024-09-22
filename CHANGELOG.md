@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.10.2
+
+* Restored the existing Sprite Editor (many requests)
+
 ## 0.10.1
 
 * Updated compile routine to ensure the 'code' document area is selected before determining the required document to compile (fix for when the console area active and not the code document area and not compiling)

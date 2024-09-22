@@ -184,8 +184,4 @@ export class WelcomePage implements vscode.Disposable {
         application.OpenBrowserWindow("https://github.com/chunkypixel/atari-dev-studio/issues");
     }
 
-    private openSpriteEditor() {
-        vscode.commands.executeCommand('extension.openSpriteEditorPage');
-    }
-
 }

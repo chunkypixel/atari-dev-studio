@@ -55,6 +55,7 @@ To display the available extension features press **CTRL+SHIFT+P** to display th
 * ads: Compile source code (Shift+F5)
 * ads: Compile source code and run in emulator (F5)
 * ads: Kill build process
+* ads: Open the Sprite Editor
 * ads: Open PlayerPal 2600 Editor
 * ads: Open Atari Background Builder 2600 Editor
 
@@ -81,6 +82,7 @@ Prefer using scripts to build your dasm games? If you have chosen to override th
 Apart from using the **Command Palette** to select compilation, there are a number of short-cut buttons on the **Status Bar** allowing you to:
 * Display the extension version (might be useful at times)
 * Open Welcome page
+* Open Sprite Editor
 * Open PlayerPal 2600 Editor
 * Open Atari Background Builder 2600 Editor
 * Compile source code (Shift+F5)
@@ -90,8 +92,17 @@ Apart from using the **Command Palette** to select compilation, there are a numb
 
 > Note: the short-cut buttons on the **Status Bar** can be minimised or turned off via the **Settings**.
 
-### Sprite Editor
-The Sprite Editor has been removed as of v0.10.0 - this is due to various reasons such as lack for proper features to edit 2600 objects as well as other missing functionality. Also the code libraries are dangerously out of date according to Github and not updatable in some cases without serious effort. Recommend using Paint.Net (Windows) or Gimp for now - any other suggestions welcome.
+### Sprite Editor [preview]
+Atari Dev Studio includes a simple and easy to use Sprite Editor allowing you to create sprites, tiles and other objects for use in your projects.  It has the following features:
+* New Project wizard allowing you to select the console (2600 or 7800), size, region (NTSC or PAL palettes) and total colors of your sprites
+* Load and Save projects allowing you to save and come back to on-going work
+* Editing features such and palette selector, zoom, pen, eraser, fill and move modes
+* Ability to manage your sprites in a sortable list with options to copy, paste, duplicate, resize and delete
+* Export sprites to batari Basic or assembly source code (2600)
+* Export sprites to .png files (7800) - either selected or all (compatible with 7800basic 3+1 and 12+1 image requirements)
+* Load and save palettes
+![Sprite Editor](images/ataridevstudio-spriteeditor.png)
+The Sprite Editor is based on [Spritemate](http://spritemate.com) by Ingo Hinterding ([GitHub](https://github.com/Esshahn/spritemate)) and was suggested by RandomTerrain for inclusion in Atari Dev Studio. I have customised the source to provide the required features necessary for editing sprites, tiles and objects for the Atari platforms.  This work is currently in preview and will be on-going until all required features have been added.
 
 ### Settings
 There are a number of compiler, emulator and editor configuration options available in Atari Dev Studio which can be changed via the **Settings** (Preferences -> Settings -> Extensions -> Atari Dev Studio).

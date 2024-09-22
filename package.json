@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.10.1",
+    "version": "0.10.2",
     "icon": "images/icon.png",
     "preview": false,
     "author": "mksmith",
@@ -72,6 +72,15 @@
                     ".h"
                 ],
                 "configuration": "./languages/dasm.language-configuration.json"
+            },
+            {
+                "id": "spe",
+                "aliases": [
+                    "Sprite Editor Project"
+                ],
+                "extensions": [
+                    ".spe"
+                ]
             }
         ],
         "grammars": [
@@ -121,15 +130,27 @@
                 "category": "ads"
             },
             {
+                "command": "extension.openSpriteEditorPage",
+                "title": "Open Sprite Editor",
+                "icon": "$(tools)",
+                "category": "ads"
+            },
+            {
+                "command": "extension.openSpriteEditorFile",
+                "title": "Open file in Sprite Editor",
+                "icon": "$(tools)",
+                "category": "hidden"
+            },
+            {
                 "command": "extension.openPlayerPalPage",
                 "title": "Open PlayerPal 2600 Editor",
-                "icon": "$(tools)",
+                "icon": "$(globe)",
                 "category": "ads"
             },
             {
                 "command": "extension.openAtariBackgroundBuilderPage",
                 "title": "Open Atari Background Builder 2600 Editor",
-                "icon": "$(tools)",
+                "icon": "$(globe)",
                 "category": "ads"
             },
             {
@@ -181,6 +202,19 @@
                     "command": "extension.buildGameAndRun",
                     "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript",
                     "group": "1_run@20"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "when": "resourceLangId == spe",
+                    "command": "extension.openSpriteEditorFile",
+                    "group": "navigation"
+                }
+            ],
+            "commandPalette": [
+                {
+                    "command": "extension.openSpriteEditorFile",
+                    "when": "false"
                 }
             ]
         },

@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import * as application from './application';
 import { WelcomePage } from './pages/welcome';
+import { SpriteEditorPage } from './pages/spriteeditor';
 import './statusbar';
 
 // Activation Events
@@ -16,6 +17,7 @@ import './statusbar';
 export async function activate(context: vscode.ExtensionContext) {
 	// Pages
 	let welcomePage = new WelcomePage();
+	let spriteEditorPage = new SpriteEditorPage();
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
@@ -31,7 +33,11 @@ export async function activate(context: vscode.ExtensionContext) {
 		console.log('User activated command "extension.openWelcomePage"');
 		welcomePage.openPage(context);
 	});
-
+	// SpriteEditor
+	const openSpriteEditorPage = vscode.commands.registerCommand('extension.openSpriteEditorPage', () => {
+		console.log('User activated command "extension.openSpriteEditorPage"');
+		spriteEditorPage.openPage(context);
+	});
 	// 2600 editors
 	const openPlayerPalPage = vscode.commands.registerCommand('extension.openPlayerPalPage', () => {
 		console.log('User activated command "extension.openPlayerPalPage"');
@@ -57,6 +63,12 @@ export async function activate(context: vscode.ExtensionContext) {
 		application.KillBuildGame();		
 	});
 
+	// SpriteEditor
+	const openSpriteEditorFile = vscode.commands.registerCommand('extension.openSpriteEditorFile', async (fileUri: vscode.Uri) => {
+		console.log('User activated command "extension.openSpriteEditorFile"');		
+		spriteEditorPage.openPage(context, fileUri);
+	});
+
 	// Build (touchbar)
 	// Note: apparently the fileUri can be supplied via the command line but we are not going to use it
 	const touchbarBuildGame = vscode.commands.registerCommand('extension.touchbar.buildGame', async (fileUri: vscode.Uri) => {
@@ -76,9 +88,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Subscriptions (register)
 	context.subscriptions.push(openWelcomePage);
+	context.subscriptions.push(openSpriteEditorPage);
 	context.subscriptions.push(buildGame);
 	context.subscriptions.push(buildGameAndRun);
 	context.subscriptions.push(killBuildGame);
+	context.subscriptions.push(openSpriteEditorFile);
 	// Subscriptions (touchbar)
 	context.subscriptions.push(touchbarBuildGame);
 	context.subscriptions.push(touchbarBuildGameAndRun);	
