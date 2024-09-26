@@ -2511,14 +2511,7 @@ Spritemate stylesheet
    float: right;
    width: 200px;
  }
- 
- 
- .ui-widget-content a
- {
-   color: var(--blue);
- }
- 
- 
+  
  canvas
  {
    margin: 0px;
@@ -2586,6 +2579,11 @@ Spritemate stylesheet
    background-color: transparent;
  }
  
+ .ui-widget-content a
+ {
+   color: var(--blue);
+ }
+ 
  .ui-widget input.settings_colorvalue
  {
    border: 0px solid var(--blue);
@@ -2612,16 +2610,15 @@ Spritemate stylesheet
  }
 
  .ui-widget.ui-spinner {
-  max-width: 100px;
   background: white;
  }
 
  .ui-spinner-input {
   background: white;
   color: #333333;
-  padding: .3em 0;
-  margin-left: 1em;
-}
+  width: 69px;
+  margin-left: 14px;
+ }
  
  .ui-widget button.center
  {
@@ -3065,6 +3062,7 @@ Spritemate stylesheet
  .ui-dialog .ui-dialog-title
  {
    width: 100%;
+   font-weight: 600;
  }
  
  .ui-widget-overlay 

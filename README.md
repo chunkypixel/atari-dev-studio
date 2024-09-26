@@ -96,7 +96,7 @@ Apart from using the **Command Palette** to select compilation, there are a numb
 Atari Dev Studio includes a simple and easy to use Sprite Editor allowing you to create sprites, tiles and other objects for use in your projects.  It has the following features:
 * New Project wizard allowing you to select the console (2600 or 7800), size, region (NTSC or PAL palettes) and total colors of your sprites
 * Load and Save projects allowing you to save and come back to on-going work
-* Editing features such and palette selector, zoom, pen, eraser, fill and move modes
+* Editing features such as a pen, eraser, fill, line, rectangle and cirle as well as zoom, move and palette selection
 * Ability to manage your sprites in a sortable list with options to copy, paste, duplicate, resize and delete
 * Export sprites to batari Basic or assembly source code (2600)
 * Export sprites to .png files (7800) - either selected or all (compatible with 7800basic 3+1 and 12+1 image requirements)

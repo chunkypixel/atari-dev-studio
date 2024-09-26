@@ -5,6 +5,12 @@ The following enhancements and changes have been made to Atari Dev Studio:
 ## 0.10.2
 
 * Restored the existing Sprite Editor (many requests)
+* Updated the Sprite Editor with the following changes:
+  - Added line, rectangle, ellipse, color picker tools
+  - Updated the undo/redo storage to better handle various tool usage - some tools either didn't work as expected or over saved changes
+  - Fixed the formatting of the spinner controls
+  - Updated all the toolbar icons
+  - Various enhancements internally
 
 ## 0.10.1
 
