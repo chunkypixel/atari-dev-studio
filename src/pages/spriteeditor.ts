@@ -41,7 +41,7 @@ export class SpriteEditorPage implements vscode.Disposable {
                 {
                     enableScripts: true,
                     retainContextWhenHidden: true,
-                    localResourceRoots: [contentUri]
+                    localResourceRoots: [contentUri], 
                 }
             );
 

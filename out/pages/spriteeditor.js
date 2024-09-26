@@ -44,7 +44,7 @@ class SpriteEditorPage {
                 this.currentPanel = vscode.window.createWebviewPanel('webpage', 'Sprite Editor', columnToShowIn || vscode.ViewColumn.One, {
                     enableScripts: true,
                     retainContextWhenHidden: true,
-                    localResourceRoots: [contentUri]
+                    localResourceRoots: [contentUri],
                 });
                 // Content
                 let startPagePath = vscode.Uri.joinPath(contentUri, 'index.html');

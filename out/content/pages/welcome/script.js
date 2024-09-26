@@ -8,6 +8,10 @@
         e.addEventListener('click', _postCommand);
     });
 
+    // Disable popup menu
+    // NOTE: Doesn't work
+    //window.addEventListener("contextmenu", e => e.preventDefault());
+
     // Post back to vscode
     function _postCommand() {
         var command = this.dataset.command;

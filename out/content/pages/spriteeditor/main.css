@@ -2793,8 +2793,8 @@ Spritemate stylesheet
  
  .icon
  {
-   width: 50px;
-   height: 50px;
+   width: 40px;
+   height: 40px;
    display: block;
    margin: 0 auto;
  
@@ -2958,47 +2958,7 @@ Spritemate stylesheet
  .sprite_layer_selected
  {
    border: 1px dotted var(--blue);
- }
- 
- 
- 
- .icon-preview-x2
- {
-   background-image: url(img/icon-preview-x2.png);
-   height: 25px;
-   width: 25px;
-   display: inline-block;
-   margin-left: auto;
-   margin-right: auto;
- }
- 
- .icon-preview-x2-hi
- {
-   background-image: url(img/icon-preview-x2-hi.png);
- }
- 
- .icon-preview-y2
- {
-   background-image: url(img/icon-preview-y2.png);
-   height: 25px;
-   width: 25px;
-   display: inline-block;
-   margin-left: auto;
-   margin-right: auto;
- }
- 
- .icon-preview-y2-hi
- {
-   background-image: url(img/icon-preview-y2-hi.png);
- }
- 
- .icon-preview-highlight
- {
-   border: 2px solid var(--red);
-   opacity: 1.0;
- }
- 
- 
+ } 
  
  #info fieldset
  {
@@ -3034,7 +2994,7 @@ Spritemate stylesheet
    margin: 4px;
    margin-top: 20px;
  }
- 
+
  
  .ui-dialog-titlebar
  {
@@ -3046,12 +3006,6 @@ Spritemate stylesheet
    border-bottom-left-radius: 0px;
    border-bottom-right-radius: 0px;
    color: #aaaaaa;
- }
- 
- 
- .no-close .ui-dialog-titlebar-close 
- {
-   display: none;
  }
  
  .ui-widget.ui-widget-content
@@ -3071,6 +3025,9 @@ Spritemate stylesheet
    padding: 0px;
  }
  
+ .ui-tooltip {
+	max-width: fit-content;
+ }
  
  .ui-dialog .ui-dialog-titlebar 
  {
@@ -3233,3 +3190,8 @@ Spritemate stylesheet
    font-size: 100%;
    margin: 4px;
  }
+
+ .ui-widget-content {
+   background: #121212;
+ }
+
