@@ -2,6 +2,18 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.10.3
+
+* Updated the Sprite Editor with the following changes:
+  - Changed the export of png images to work specifically with the requirements of 7800basic
+  - On the Editor window added an output of the color indexes for 7800basic (click to copy to the clipboard)
+  - On the Editor window added an output of the grid co-ordinates.
+  - Fixed the formatting/sizing of the Editor and List windows when resizing them
+  - Further updates to the undo/redo identification
+  - Various other changes and enhancments
+  - Updated the UPNG library to make the required changes
+  - Note: images are now exported without transparency and that color will output as the chosen Background color.
+
 ## 0.10.2
 
 * Restored the existing Sprite Editor (many requests)
