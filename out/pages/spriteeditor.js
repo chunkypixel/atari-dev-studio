@@ -60,7 +60,7 @@ class SpriteEditorPage {
                 //let basePath = vscode.Uri.file(this.contentPath);
                 //let basePathUri = basePath.with({ scheme: 'vscode-resource' }).toString() + '/';
                 // Configuration
-                let configuration = yield this.loadConfiguration(startPagePath);
+                let configuration = yield this.loadConfiguration(contentUri);
                 // Update tags in content
                 content = this.replaceContentTag(content, "APPNAME", "Sprite Editor");
                 content = this.replaceContentTag(content, "NONCE", nonce);
@@ -120,6 +120,10 @@ class SpriteEditorPage {
                 let delay = (!isOpen ? 750 : 5);
                 // Process
                 yield application.Delay(delay).then(_ => this.loadFileContent("loadProject", loadProjectUri));
+            }
+            else {
+                // normal opening - show project if chosen by user
+                this.attemptToOpenProjectWindowOnStartup();
             }
         });
     }
@@ -554,6 +558,12 @@ class SpriteEditorPage {
                 status: 'error',
                 errorMessage: `Failed to load file '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
             });
+        });
+    }
+    attemptToOpenProjectWindowOnStartup() {
+        this.currentPanel.webview.postMessage({
+            command: "attemptToOpenProjectWindowOnStartup",
+            status: 'ok'
         });
     }
 }

@@ -2424,16 +2424,16 @@ Spritemate stylesheet
  {
    font-size: 160%;
    color: var(--blue);
-   text-align:center;
-   margin-bottom: 0px;
+   text-align:left;
+   margin: 0px 0px 0px 8px; 
  }
  
  h2
  {
    font-size: 110%;
    color: var(--blue);
-   text-align: center;
-   margin: 0px 0px 12px 0px; 
+   text-align: left;
+   margin: 0px 0px 12px 8px; 
  }
  
  ol 
@@ -2481,6 +2481,7 @@ Spritemate stylesheet
  table
  {
    width: 100%;
+   padding-bottom: 16px;
  }
  
  td,th
@@ -2659,7 +2660,8 @@ Spritemate stylesheet
  }
 
  .ui-checkboxradio {
-  margin-right: 8px;
+   margin-left: 0px;
+   margin-right: 8px;
 }
  
  #info

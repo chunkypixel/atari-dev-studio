@@ -63,7 +63,7 @@ export class SpriteEditorPage implements vscode.Disposable {
             //let basePathUri = basePath.with({ scheme: 'vscode-resource' }).toString() + '/';
 
             // Configuration
-            let configuration = await this.loadConfiguration(startPagePath);
+            let configuration = await this.loadConfiguration(contentUri);
 
             // Update tags in content
             content = this.replaceContentTag(content, "APPNAME", "Sprite Editor");
@@ -146,7 +146,11 @@ export class SpriteEditorPage implements vscode.Disposable {
             await application.Delay(delay).then(_ =>
                  this.loadFileContent("loadProject", loadProjectUri)
             )
+        } else {
+            // normal opening - show project if chosen by user
+            this.attemptToOpenProjectWindowOnStartup(); 
         }
+
     }
 
     private getNonce() {
@@ -628,5 +632,12 @@ export class SpriteEditorPage implements vscode.Disposable {
                     errorMessage: `Failed to load file '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
                 }); 
             });
+    }
+
+    private attemptToOpenProjectWindowOnStartup() {
+        this.currentPanel!.webview.postMessage({
+            command: "attemptToOpenProjectWindowOnStartup",
+            status: 'ok'
+        }); 
     }
 }
