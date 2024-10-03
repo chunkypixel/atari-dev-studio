@@ -96,11 +96,13 @@ Apart from using the **Command Palette** to select compilation, there are a numb
 Atari Dev Studio includes a simple and easy to use Sprite Editor allowing you to create sprites, tiles and other objects for use in your projects.  It has the following features:
 * New Project wizard allowing you to select the console (2600 or 7800), size, region (NTSC or PAL palettes) and total colors of your sprites
 * Load and Save projects allowing you to save and come back to on-going work
-* Editing features such as a pen, eraser, fill, line, rectangle and circle as well as zoom, move and palette selection
+* Editing features such as a pen, eraser, fill, line, rectangle and ellipse as well as zoom, move and palette selection
 * Ability to manage your sprites in a sortable list with options to copy, paste, duplicate, resize and delete
+* Display a copyable list of color indexes for the selected sprite which can be used with your **incgraphics** references (7800)
 * Export sprites to batari Basic or assembly source code (2600)
-* Export sprites to .png files (7800) - either selected or all (compatible with 7800basic 3+1 and 12+1 image requirements)
+* Export sprites to .png files (7800)
 * Load and save palettes
+
 ![Sprite Editor](images/ataridevstudio-spriteeditor.png)
 The Sprite Editor is based on [Spritemate](http://spritemate.com) by Ingo Hinterding ([GitHub](https://github.com/Esshahn/spritemate)) and was suggested by RandomTerrain for inclusion in Atari Dev Studio. I have customised the source to provide the required features necessary for editing sprites, tiles and objects for the Atari platforms.  This work is currently in preview and will be on-going until all required features have been added.
 
@@ -113,7 +115,7 @@ It is recommended to change these VSCode settings to the following as they appea
 * Files: Auto Save - set to autoDelay (default is off)
 * Files: Auto Save Delay - set to 0 (default is 1000)
 
-NOTE: from version 0.97 onwards I have attempted to rectify this issue with an auto-retry function (will retry 5 times).
+NOTE: from version 0.97 onwards I have attempted to rectify this issue with an internal auto-retry function (will retry up to 5 times) when kicking off a compile.
 
 ### Debugging the extension
 During the development phase of the extension I've added some developer output to assist with any issues that may appear.  To view this output, open the VS Code **Developer Tools** by selecting **Help -> Toggle Developer Tools** from the menu, and in the debugger window ensure the **Console** tab is activated.  This information may help identify the area where the extension is failing to process as expected.
@@ -181,7 +183,6 @@ MAME compatibility and syntax has been maintained, to allow for the reuse of MAM
 A7800 is included as part of this extension with many thanks to Mike Saarna (RevEng). A7800 is an external project and can be downloaded separately [here](http://7800.8bitdev.org/index.php/A7800_Emulator). Further information about this release is available here at [AtariAge](https://atariage.com/forums/topic/268458-a7800-the-atari-7800-emulator).
 
 #### A7800 Linux
-
 The following libraries may be required for Linux users:
 
 TESTED ON UBUNTU 22.04 LTS (12/07/2022)
