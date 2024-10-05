@@ -2,6 +2,14 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.10.4
+
+* Updated the Sprite Editor with the following changes:
+  - Rebuilt the 2600 and 7800 Export window and process to offer a more streamlined and feature rich process
+  - Updated the Editor and Palette features to work with multi-color 2600 sprites
+  - Added an output content (showing the generated source) and copy/paste feature to the 2600 Export window
+  - Added color information to the 2600 export content
+
 ## 0.10.3
 
 * Updated the Sprite Editor with the following changes:

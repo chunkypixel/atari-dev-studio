@@ -4,7 +4,6 @@ import * as path from 'path';
 import * as filesystem from '../filesystem';
 import * as application from '../application';
 import opn = require('open');
-import { stringify } from 'querystring';
 
 export class SpriteEditorPage implements vscode.Disposable {
 
@@ -330,7 +329,7 @@ export class SpriteEditorPage implements vscode.Disposable {
                                 this.currentPanel!.webview.postMessage({
                                     command: command,
                                     status: 'error',
-                                    errorMessage: `Failed to export image '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
+                                    errorMessage: `Failed to export sprite to file '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
                                 });  
                             }); 
                         })
@@ -396,7 +395,7 @@ export class SpriteEditorPage implements vscode.Disposable {
                                     this.currentPanel!.webview.postMessage({
                                         command: command,
                                         status: 'error',
-                                        errorMessage: `Failed to export image '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
+                                        errorMessage: `Failed to export sprite to file '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
                                     });  
                                 }); 
                         }

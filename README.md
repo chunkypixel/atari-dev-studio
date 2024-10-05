@@ -98,10 +98,11 @@ Atari Dev Studio includes a simple and easy to use Sprite Editor allowing you to
 * Load and Save projects allowing you to save and come back to on-going work
 * Editing features such as a pen, eraser, fill, line, rectangle and ellipse as well as zoom, move and palette selection
 * Ability to manage your sprites in a sortable list with options to copy, paste, duplicate, resize and delete
-* Display a copyable list of color indexes for the selected sprite which can be used with your **incgraphics** references (7800)
-* Export sprites to batari Basic or assembly source code (2600)
-* Export sprites to .png files (7800)
 * Load and save palettes
+* Display a copyable list of color indexes for the selected sprite which can be used with your **incgraphics** references (7800)
+* Export sprites to .png image files (7800)
+* Create single or multi-color sprites (2600)
+* Export sprites to batari Basic or assembly source code (2600)
 
 ![Sprite Editor](images/ataridevstudio-spriteeditor.png)
 The Sprite Editor is based on [Spritemate](http://spritemate.com) by Ingo Hinterding ([GitHub](https://github.com/Esshahn/spritemate)) and was suggested by RandomTerrain for inclusion in Atari Dev Studio. I have customised the source to provide the required features necessary for editing sprites, tiles and objects for the Atari platforms.  This work is currently in preview and will be on-going until all required features have been added.

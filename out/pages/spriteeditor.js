@@ -285,7 +285,7 @@ class SpriteEditorPage {
                         this.currentPanel.webview.postMessage({
                             command: command,
                             status: 'error',
-                            errorMessage: `Failed to export image '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
+                            errorMessage: `Failed to export sprite to file '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
                         });
                     });
                 })
@@ -346,7 +346,7 @@ class SpriteEditorPage {
                             this.currentPanel.webview.postMessage({
                                 command: command,
                                 status: 'error',
-                                errorMessage: `Failed to export image '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
+                                errorMessage: `Failed to export sprite to file '${path.basename(fileUri.fsPath)}' (Error: ${e.message})`
                             });
                         });
                     }

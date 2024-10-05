@@ -2474,7 +2474,7 @@ Spritemate stylesheet
    background-color: rgba(0,0,0,0.5);
  }
  
- #window-export input#filename {
+ #window-export input#export7800Filename {
   width: 98%;
  }
 
@@ -2755,13 +2755,30 @@ Spritemate stylesheet
   margin: 0px 0px 4px 2px;
  }
  
- div#region-section #palette-dropdown-region-button {
-   width: 232px;
+ #palette-dropdown-region-button {
+   width: 227px;
    margin-bottom: 10px;
  }
 
- div#region-section .ui-selectmenu-text {
-  font-size: 1.3em;
+ #export-output {
+  width: 100%;
+  height: 300px;
+  font-family: 'courier';
+  background: black;
+  color: white;
+  resize: none;
+ }
+
+ .palette-section-header {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 70%;
+  text-align: center;
+  padding: 4px 0px 4px 0px
+ }
+
+ #button-export2600-copy {
+  margin: 0px;
  }
 
  .palette_color_item_sprite_colors
