@@ -9,7 +9,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
   - Updated the Editor and Palette features to work with multi-color 2600 sprites
   - Added an output content (showing the generated source) and copy/paste feature to the 2600 Export window
   - Added color information to the 2600 export content
-  - (Re)added a Show on Startup option for displaying the Project window when you open the Sprite Editor
+  - (Re)added a **Show on startup** option for displaying the Project window when you open the Sprite Editor
 
 ## 0.10.3
 
