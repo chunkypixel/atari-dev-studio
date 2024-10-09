@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.10.5
+
+* Update Stella to the latest version (v7.0).  
+
+Note: Stella emulation in Atari Dev Studio is now fully 64-bit only.  If you wish to use an older 32-bit version, configure a custom path in the Settings instead (Emulator › Stella: Path).
+
 ## 0.10.4
 
 * Updated the Sprite Editor with the following changes:

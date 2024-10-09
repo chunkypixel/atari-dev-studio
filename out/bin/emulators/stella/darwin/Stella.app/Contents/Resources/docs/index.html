@@ -21,7 +21,7 @@
     <img src="graphics/stella_icon.png">
     <h2><b>A multi-platform Atari 2600 VCS emulator</b></h2>
 
-    <h4><b>Release 6.7.1</b></h4>
+    <h4><b>Release 7.0</b></h4>
     <br>
 
     <h2><b>User's Guide</b></h2>
@@ -75,7 +75,7 @@
 
   <br><br><br>
 
-  <center><b>February 1999 - June 2022</b></center>
+  <center><b>February 1999 - September 2024</b></center>
     <center><b>The Stella Team</b></center>
   <center><b><a href="https://stella-emu.github.io">Stella Homepage</a></b></center>
 
@@ -255,7 +255,7 @@
   your favorite 2600 games once again by emulating the 2600's hardware with
   software. Stella is written in C++, which allows it to be ported to other
   operating systems and architectures. Since its original release Stella has
-  been ported to AcornOS, AmigaOS, DOS, FreeBSD, Linux, MacOS, OpenStep, OS/2,
+  been ported to AcornOS, AmigaOS, DOS, FreeBSD, Linux, macOS, OpenStep, OS/2,
     Unix, and Windows, as well as consoles such as Sega Dreamcast, GP2X, Nintendo
   DS and Playstation Portable (among others).
   </p>
@@ -265,7 +265,7 @@
   <h2><b><a name="Features">Features</a></b></h2>
 
   <ul>
-    <li>High speed emulation using optimized C++17 code</li>
+    <li>High speed emulation using optimized C++20 code</li>
     <li>Supports high quality TIA emulation using the cycle-exact TIA core from
       <a href="https://github.com/6502ts/6502.ts">6502.ts</a> by
       Christian Speckner</li>
@@ -273,14 +273,16 @@
       Atari 2600 FPGA project, including cycle-exact audio, analog interference
       from mixing of audio channels, as well as stereo sound support; dynamic
       sound resampling is also included</li>
-    <li>Emulates the Atari 2600 Joystick, Paddle, Driving, CBS Booster Grip, Sega Genesis, QuadTari controllers using your computer's keyboard,
-      joysticks or mouse</li>
-    <li>Emulates CX22/CX80 style Trak-Balls, Amiga/Atari mouse, MindLink controller and the Light Gun using your
-      computer's mouse</li>
+    <li>Emulates the Atari 2600 Joystick, Paddle, Driving, CBS Booster Grip,
+      Sega Genesis, <a href="https://github.com/ascrnet/Joy2Bplus">Joy 2B+</a>,
+      QuadTari controllers using your computer's keyboard, joysticks or mouse</li>
+    <li>Emulates CX22/CX80 style Trak-Balls, Amiga/Atari mouse, MindLink controller
+      and the Light Gun using your computer's mouse</li>
     <li>Emulates the Atari 2600 Keyboard controllers using your computer's keyboard</li>
     <li>Emulates <a href="https://en.wikipedia.org/wiki/CompuMate">Spectravideo CompuMate</a> system using your computer's keyboard,
       including mapping of CompuMate 'Backspace', 'Space' and 'Enter' functionality to
       to the actual keys on your keyboard</li>
+    <li>Emulates the Kid Vid Voice Module</li>
     <li>Supports autodetection for most common controller types</li>
     <li>Support for real Atari 2600 controllers using the
       <a href="http://www.grandideastudio.com/stelladaptor-2600">Stelladaptor</a> and
@@ -318,6 +320,7 @@
       Blargg filtering</a>, including presets for several common TV outputs
       (Composite, S-Video, RGB, etc.), and ability to fully customize
       many attributes (contrast, brightness, saturation, gamma, etc.).</li>
+	<li>Bezel support</li>
     <li>Built-in ROM database with information partially compiled by
       <a href="http://www.atarimania.com/rom_collection_archive_atari_2600_roms.html">
       RomHunter</a></li>
@@ -339,8 +342,8 @@
   <p>
   <h3><b><u>General</u> (required for all versions of Stella)</b></h3>
   <ul>
-    <li>SDL version 2.0.5 or greater, latest version highly recommended</li>
-    <li>15/16 bit color minimum; 24/32 bit color graphics card highly recommended</li>
+    <li>SDL version 2.0.14 or greater, latest version highly recommended</li>
+    <li>32 bit color graphics card</li>
     <li>Enough RAM for the OS + 256MB RAM for the emulation; 512MB+ highly recommended</li>
     <li>Joysticks or gamepads are highly recommended</li>
     <li>Mouse or <a href="http://www.grandideastudio.com/stelladaptor-2600">Stelladaptor</a>/<a href="http://2600-daptor.com">2600-daptor</a>
@@ -353,10 +356,10 @@
   <p>The Linux version of Stella is designed to work on a Linux Workstation with
   the following:</p>
   <ul>
-    <li>i386 or x86_64 class machine, with 32 or 64-bit distribution</li>
+    <li>x86_64 class machine (32-bit not actively tested, but probably works fine)</li>
     <li>Other architectures (MIPS, PPC, PPC64, etc.) have been confirmed to work,
-      but aren't as well tested as i386/x86_64</li>
-    <li>GNU g++ v/7 or Clang v/5 (with C++17 support) and the make utility are required for compiling the Stella source code</li>
+      but aren't as well tested as x86_64</li>
+    <li>GNU g++ v/11 or Clang v/10 (with C++20 support) and the make utility are required for compiling the Stella source code</li>
   </ul>
 
   <p>
@@ -365,9 +368,9 @@
   <p>The Mac version of Stella is designed to work on an Apple Macintosh with
   the following:</p>
   <ul>
-    <li>macOS 10.7 or above</li>
-    <li>64-bit Intel processor</li>
-    <li>Xcode 8.0 is required to compile the Stella source code</li>
+    <li>macOS 10.11 or above</li>
+    <li>64-bit ARM or Intel processor</li>
+    <li>Xcode 13.0 is required to compile the Stella source code</li>
   </ul>
 
   <p>
@@ -377,7 +380,7 @@
   with the following:</p>
 
   <ul>
-    <li>Visual C++ 2019 Community is required to compile the Stella source code</li>
+    <li>Visual C++ 2022 Community is required to compile the Stella source code</li>
   </ul>
 
   <p>
@@ -462,6 +465,7 @@
     </ul>
     </li>
   </ul>
+  Note: Stella does <b>not</b> support paths and names with special chars (e.g. &#233;, &#339;, &#353;, ...) for Windows.
   </blockquote></br>
 
   <h2><b><a name="Games">Locating Game Images (aka ROMs)</a></b></h2>
@@ -601,7 +605,7 @@
   <h3><a name ="CommandMenu"><b><u>Command Menu</u></b></a></h3>
 
   <p>While playing a game, normally one would use the keyboard shortcuts for controlling the
-  'virtual' switches in Stella (ie, the commands associated with the
+  'virtual' switches in Stella (e.g. the commands associated with the
   function keys as described in
   <b>Playing a Game - <a href="#Hotkeys">Hotkeys</a></b>).
   However, another alternative is available. Pressing the '\' key (default) toggles
@@ -611,7 +615,7 @@
   <p>This dialog contains a set of buttons that represent the same functionality
   as the function keys and display the current state. You may find this useful if
   you cannot remember all the function key events, or you wish to use Stella
-  without a keyboard (ie, in a standalone gaming system).</p>
+  without a keyboard (e.g. in a standalone gaming system).</p>
 
   <p>Note: Clicking the `?` at the top right opens this document at the related
   paragraph. This works for almost all dialogs. There is also a hotkey defined
@@ -700,6 +704,18 @@
     </tr>
 
     <tr>
+      <td>Toggle Black/White TV</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+
+    <tr>
+      <td>Toggle 7800 pause &#185;</td>
+      <td>Alt + F3</td>
+      <td>Cmd + F3</td>
+    </tr>
+
+    <tr>
       <td>Left Player Difficulty A</td>
       <td>F5</td>
       <td>F5</td>
@@ -729,7 +745,7 @@
       <td>F9</td>
     </tr>
 
-  <tr>
+    <tr>
       <td>Save all Time Machine states</td>
       <td>Alt + F9</td>
       <td>Cmd + F9</td>
@@ -777,104 +793,65 @@
       <td>Shift-Cmd + P</td>
     </tr>
 
+    <tr>
+      <td colspan="3"><center><font size="-1">
+      &#185; only if "Console" is set to "Atari 7800" in <b><a href="#Debugger">Developer Settings</a></b>.
+      </td>
+    </tr>
   </table>
 
   </br>
-  <p><b>Joystick/Booster Grip Controller (can be remapped)</b></p>
+  <p><b>Joystick, Booster Grip (&#185;), Sega Genesis (&#178;) & Joy 2B+ (&#179;) Controller (can be remapped)</b></p>
 
   <table style="border: hidden">
     <tr>
       <td style="padding: 0px">
         <table>
           <tr>
-            <th colspan=2>Left Joystick</th>
-          </tr>
-
-          <tr>
             <th>Function</th>
-            <th>Key</th>
+            <th>Left Controller Key</th>
+            <th>Right Controller Key</th>
           </tr>
 
           <tr>
-            <td>Joystick Up</td>
+            <td>Up</td>
             <td>Up arrow, Keypad 8</td>
-          </tr>
-
-          <tr>
-            <td>Joystick Down</td>
-            <td>Down arrow, Keypad 2</td>
-          </tr>
-
-          <tr>
-            <td>Joystick Left</td>
-            <td>Left arrow, Keypad 4</td>
-          </tr>
-
-          <tr>
-            <td>Joystick Right</td>
-            <td>Right arrow, Keypad 6</td>
-          </tr>
-
-          <tr>
-            <td>Fire Button</td>
-            <td>Left Control, Space, Keypad 5</td>
-          </tr>
-
-          <tr>
-            <td>Top Booster Button</td>
-            <td>Right Shift, 4, Keypad 9</td>
-          </tr>
-
-          <tr>
-            <td>Handle Grip Trigger</td>
-            <td>Right Control, 5, Keypad 3</td>
-          </tr>
-        </table>
-      </td>
-      <td style="border: hidden"></td>
-      <td style="padding: 0px">
-        <table>
-          <tr>
-            <th colspan=2>Right Joystick</th>
-          </tr>
-
-          <tr>
-            <th>Function</th>
-            <th>Key</th>
-          </tr>
-
-          <tr>
-            <td>Joystick Up</td>
             <td>Y</td>
           </tr>
 
           <tr>
-            <td>Joystick Down</td>
+            <td>Down</td>
+            <td>Down arrow, Keypad 2</td>
             <td>H</td>
           </tr>
 
           <tr>
-            <td>Joystick Left</td>
+            <td>Left</td>
+            <td>Left arrow, Keypad 4</td>
             <td>G</td>
           </tr>
 
           <tr>
-            <td>Joystick Right</td>
+            <td>Right</td>
+            <td>Right arrow, Keypad 6</td>
             <td>J</td>
           </tr>
 
           <tr>
-            <td>Fire Button</td>
+            <td>Fire, Button 'B'</td>
+            <td>Left Control, Space, Keypad 5</td>
             <td>F</td>
           </tr>
 
           <tr>
-            <td>Top Booster Button</td>
+            <td>Top Booster Button &#185;, Button 'C' &#178; &#179;</td>
+            <td>Right Shift, 4, Keypad 9</td>
             <td>6</td>
           </tr>
 
           <tr>
-            <td>Handle Grip Trigger</td>
+            <td>Handle Grip Trigger &#185;, Button '3' &#179;</td>
+            <td>Right Control, 5, Keypad 3</td>
             <td>7</td>
           </tr>
         </table>
@@ -883,92 +860,52 @@
   </table>
 
   </br>
-  <p><b>Sega Genesis Controller (cannot be remapped, always associated with joystick and Booster Grip controllers)</b></p>
+  <p><b>Paddle Controller (digital emulation) (can be remapped)</b></p>
 
   <table style="border: hidden">
     <tr>
       <td style="padding: 0px">
         <table>
           <tr>
-            <th colspan=2>Left Pad</th>
-          </tr>
-
-          <tr>
             <th>Function</th>
-            <th>Key</th>
+            <th>Left Paddles Key</th>
+            <th>Right Paddles Key</th>
           </tr>
 
           <tr>
-            <td>Pad Up</td>
-            <td>Same as Left Joystick 'Up'</td>
+            <td>Paddle A Turn Left</td>
+            <td>Left arrow</td>
+            <td>G</td>
           </tr>
 
           <tr>
-            <td>Pad Down</td>
-            <td>Same as Left Joystick 'Down'</td>
+            <td>Paddle A Turn Right</td>
+            <td>Right arrow</td>
+            <td>J</td>
           </tr>
 
           <tr>
-            <td>Pad Left</td>
-            <td>Same as Left Joystick 'Left'</td>
+            <td>Paddle A Fire</td>
+            <td>Left Control, Space, Keypad 5</td>
+            <td>F</td>
           </tr>
 
           <tr>
-            <td>Pad Right</td>
-            <td>Same as Left Joystick 'Right'</td>
+            <td>Paddle B Turn Left</td>
+            <td>Up arrow</td>
+            <td>Y</td>
           </tr>
 
           <tr>
-            <td>Button 'B'</td>
-            <td>Same as Left Joystick 'Fire'</td>
+            <td>Paddle B Turn Right</td>
+            <td>Down arrow</td>
+            <td>H</td>
           </tr>
 
           <tr>
-            <td>Button 'C'</td>
-            <td>Same as Left Joystick 'Top Booster Button'</td>
-          </tr>
-        </table>
-      </td>
-      <td style="border: hidden"></td>
-      <td style="padding: 0px">
-        <table>
-          <tr>
-            <th colspan=2>Right Pad</th>
-          </tr>
-
-          <tr>
-            <th>Function</th>
-            <th>Key</th>
-          </tr>
-
-          <tr>
-            <td>Pad Up</td>
-            <td>Same as Right Joystick 'Up'</td>
-          </tr>
-
-          <tr>
-            <td>Pad Down</td>
-            <td>Same as Right Joystick 'Down'</td>
-          </tr>
-
-          <tr>
-            <td>Pad Left</td>
-            <td>Same as Right Joystick 'Left'</td>
-          </tr>
-
-          <tr>
-            <td>Pad Right</td>
-            <td>Same as Right Joystick 'Right'</td>
-          </tr>
-
-          <tr>
-            <td>Button 'B'</td>
-            <td>Same as Right Joystick 'Fire'</td>
-          </tr>
-
-          <tr>
-            <td>Button 'C'</td>
-            <td>Same as Right Joystick 'Top Booster Button'</td>
+            <td>Paddle B Fire</td>
+            <td>Right Control, 4</td>
+            <td>6</td>
           </tr>
         </table>
       </td>
@@ -983,53 +920,26 @@
       <td style="padding: 0px">
         <table>
           <tr>
-            <th colspan=2>Left Driving</th>
-          </tr>
-
-          <tr>
             <th>Function</th>
-            <th>Key</th>
+            <th>Left Driving Key</th>
+            <th>Right Driving Key</th>
           </tr>
 
           <tr>
-            <td>Counter Clockwise</td>
+            <td>Turn Left</td>
             <td>Left arrow, Keypad 4</td>
+            <td>G</td>
           </tr>
 
           <tr>
-            <td>Clockwise</td>
+            <td>Turn Right</td>
             <td>Right arrow, Keypad 6</td>
-          </tr>
-
-          <tr>
-            <td>Fire Button</td>
-            <td>Left Control, Space, Keypad 5</td>
-          </tr>
-        </table>
-      </td>
-      <td style="border: hidden"></td>
-      <td style="padding: 0px">
-        <table>
-          <tr>
-            <th colspan=2>Right Driving</th>
-          </tr>
-          <tr>
-            <th>Function</th>
-            <th>Key</th>
-          </tr>
-
-          <tr>
-            <td>Counter Clockwise</td>
-            <td>G</td>
-          </tr>
-
-          <tr>
-            <td>Clockwise</td>
             <td>J</td>
           </tr>
 
           <tr>
             <td>Fire Button</td>
+            <td>Left Control, Space, Keypad 5</td>
             <td>F</td>
           </tr>
         </table>
@@ -1038,129 +948,16 @@
   </table>
 
   </br>
-  <p><b>Trackball Controller (uses mouse, left port only)</b></p>
+  <p><b>Trackball & Light Gun Controller (uses mouse, left port only)</b></p>
 
   <table>
     <tr>
-      <th colspan=2>Left Trackball</th>
-    </tr>
-    <tr>
       <th>Function</th>
-      <th>Key</th>
+      <th>Left Trackball Key</th>
     </tr>
     <tr>
-      <td>Fire Button</td>
+      <td>Fire</td>
       <td>Same as Left Joystick 'Fire'</td>
-    </tr>
-  </table>
-
-  </br>
-  <p><b>Light Gun Controller (uses mouse, left port only)</b></p>
-
-  <table>
-    <tr>
-      <th colspan=2>Left Light Gun</th>
-    </tr>
-    <tr>
-      <th>Function</th>
-      <th>Key</th>
-    </tr>
-    <tr>
-      <td>Fire Button</td>
-      <td>Same as Left Joystick 'Fire'</td>
-    </tr>
-  </table>
-
-  </br>
-  <p><b>Paddle Controller digital emulation (can be remapped)</b></p>
-
-  <table style="border: hidden">
-    <tr>
-      <td style="padding: 0px">
-        <table>
-          <tr>
-            <th colspan=2>Left Paddles</th>
-          </tr>
-
-          <tr>
-            <th>Function</th>
-            <th>Key</th>
-          </tr>
-
-          <tr>
-            <td>Paddle A Turn Left</td>
-            <td>Left arrow</td>
-          </tr>
-
-          <tr>
-            <td>Paddle A Turn Right</td>
-            <td>Right arrow</td>
-          </tr>
-
-          <tr>
-            <td>Paddle A Fire</td>
-            <td>Left Control, Space, Keypad 5</td>
-          </tr>
-
-          <tr>
-            <td>Paddle B Turn Left</td>
-            <td>Up arrow</td>
-          </tr>
-
-          <tr>
-            <td>Paddle B Turn Right</td>
-            <td>Down arrow</td>
-          </tr>
-
-          <tr>
-            <td>Paddle B Fire</td>
-            <td>Right Control, 4</td>
-          </tr>
-        </table>
-      </td>
-      <td style="border: hidden"></td>
-      <td style="padding: 0px">
-        <table>
-          <tr>
-            <th colspan=2>Right Paddles</th>
-          </tr>
-
-          <tr>
-            <th>Function</th>
-            <th>Key</th>
-          </tr>
-
-          <tr>
-            <td>Paddle A Turn Left</td>
-            <td>G</td>
-          </tr>
-
-          <tr>
-            <td>Paddle A Turn Right</td>
-            <td>J</td>
-          </tr>
-
-          <tr>
-            <td>Paddle A Fire</td>
-            <td>F</td>
-          </tr>
-
-          <tr>
-            <td>Paddle B Turn Left</td>
-            <td>Y</td>
-          </tr>
-
-          <tr>
-            <td>Paddle B Turn Right</td>
-            <td>H</td>
-          </tr>
-
-          <tr>
-            <td>Paddle B Fire</td>
-            <td>6</td>
-          </tr>
-        </table>
-      </td>
     </tr>
   </table>
 
@@ -1172,148 +969,117 @@
       <td style="padding: 0px">
         <table>
           <tr>
-            <th colspan=2>Left Keyboard</th>
-          </tr>
-
-          <tr>
             <th>Pad Button</th>
-            <th>Key</th>
+            <th>Left Keyboard Key</th>
+            <th>Right Keyboard Key</th>
           </tr>
 
           <tr>
             <td>1</td>
             <td>1</td>
+            <td>8</td>
           </tr>
 
           <tr>
             <td>2</td>
             <td>2</td>
+            <td>9</td>
           </tr>
 
           <tr>
             <td>3</td>
             <td>3</td>
+            <td>0</td>
           </tr>
 
           <tr>
             <td>4</td>
             <td>Q</td>
-          </tr>
-
-          <tr>
-            <td>5</td>
-            <td>W</td>
-          </tr>
-
-          <tr>
-            <td>6</td>
-            <td>E</td>
-          </tr>
-
-          <tr>
-            <td>7</td>
-            <td>A</td>
-          </tr>
-
-          <tr>
-            <td>8</td>
-            <td>S</td>
-          </tr>
-
-          <tr>
-            <td>9</td>
-            <td>D</td>
-          </tr>
-
-          <tr>
-            <td>.</td>
-            <td>Z</td>
-          </tr>
-
-          <tr>
-            <td>0</td>
-            <td>X</td>
-          </tr>
-
-          <tr>
-            <td>#</td>
-            <td>C</td>
-          </tr>
-        </table>
-      </td>
-      <td style="border: hidden"></td>
-      <td style="padding: 0px">
-        <table>
-          <tr>
-            <th colspan=2>Right Keyboard</th>
-          </tr>
-
-          <tr>
-            <th>Pad Button</th>
-            <th>Key</th>
-          </tr>
-
-          <tr>
-            <td>1</td>
-            <td>8</td>
-          </tr>
-
-          <tr>
-            <td>2</td>
-            <td>9</td>
-          </tr>
-
-          <tr>
-            <td>3</td>
-            <td>0</td>
-          </tr>
-
-          <tr>
-            <td>4</td>
             <td>I</td>
           </tr>
 
           <tr>
             <td>5</td>
+            <td>W</td>
             <td>O</td>
           </tr>
 
           <tr>
             <td>6</td>
+            <td>E</td>
             <td>P</td>
           </tr>
 
           <tr>
             <td>7</td>
+            <td>A</td>
             <td>K</td>
           </tr>
 
           <tr>
             <td>8</td>
+            <td>S</td>
             <td>L</td>
           </tr>
 
           <tr>
             <td>9</td>
+            <td>D</td>
             <td>;</td>
           </tr>
 
           <tr>
             <td>.</td>
+            <td>Z</td>
             <td>,</td>
           </tr>
 
           <tr>
             <td>0</td>
+            <td>X</td>
             <td>.</td>
           </tr>
 
           <tr>
             <td>#</td>
+            <td>C</td>
             <td>/</td>
           </tr>
         </table>
       </td>
+    </tr>
+  </table>
+
+  </br>
+  <p><b>Kid Vid Voice Module (can be remapped via Keyboard Controller and Console Controls)</b></p>
+
+  <table BORDER=2>
+    <tr><th>Function</th> <th>Key</th> <th>Difficulty Switches &#185;</th></tr>
+    <tr>
+      <td>Start game #1</td>
+      <td>8 (Right Pad Button '1')</td>
+      <td>F6 (Left = A), F8 (Right = B)</td>
+    </tr>
+    <tr>
+      <td>Start game #2</td>
+      <td>9 (Right Pad Button '2')</td>
+      <td>F5 (Left = B), F8 (Right = A)</td>
+    </tr>
+    <tr>
+      <td>Start game #3</td>
+      <td>0 (Right Pad Button '3')</td>
+      <td>F6 (Left = B), F7 (Right = B)</td>
+    </tr>
+    <tr>
+      <td>Skip current song (except initial songs of</br>
+        Berenstain Bears and Harmony Smurf) &#178;</td>
+      <td>P (Right Pad Button '6'),</br>
+        F1 ('Select Game')</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td colspan="3">&#185; Press F1 ('Select Game') to start the selected game.
+      &#178; F4 ('Black/White TV') skip to all allowed songs.</td>
     </tr>
   </table>
 
@@ -1341,7 +1107,6 @@
     <tr><td>[ </td><td>[ or Shift + 8 </td></tr>
     <tr><td>] </td><td>] or Shift + 9 </td></tr>
     <tr><td>&quot; </td><td>" (Shift + ') or Shift + 0 </td></tr>
-
   </table>
 
   </br>
@@ -1388,7 +1153,7 @@
     </tr>
     <tr>
       <td>Toggle adapting display refresh rate to game frame rate
-      </br>Note: Not available for macOS</td>
+      </br>Note: Not available for macOS, also some renderers may not support this</td>
       <td>Alt + R</td>
       <td>-</td>
     </tr>
@@ -1414,8 +1179,8 @@
     </tr>
     <tr>
       <td>Toggle aspect ratio correct scaling</td>
-      <td>Control + C</td>
-      <td>Control + C</td>
+      <td>Shift-Control + C</td>
+      <td>Shift-Control + C</td>
     </tr>
     <tr>
       <td><i>Decrease</i> vertical display size</td>
@@ -1441,6 +1206,11 @@
       <td>Toggle display interpolation (not available for Software renderer)</td>
       <td>Control + I</td>
       <td>Control + I</td>
+    </tr>
+    <tr>
+      <td>Toggle bezel display</td>
+      <td>Control + B</td>
+      <td>Control + B</td>
     </tr>
     <tr>
       <td colspan="3"><center><font size="-1">
@@ -1501,7 +1271,7 @@
   </table>
 
   </br>
-  <p><b>TV effects Keys (can be remapped)</b></p>
+  <p><b>TV Effects Keys (can be remapped)</b></p>
 
   <table BORDER=2 cellpadding=4>
     <tr>
@@ -1538,6 +1308,16 @@
       <td><i>Increase</i> 'Custom' selected attribute value (*)</td>
       <td>Alt + 3</td>
       <td>Cmd + 3</td>
+    </tr>
+    <tr>
+      <td>Select <i>previous</i> 'phosphor' enabling mode</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>Select <i>next</i> 'phosphor' enabling mode</td>
+      <td>Ctrl-Alt + P</td>
+      <td>Ctrl-Cmd + P</td>
     </tr>
     <tr>
       <td>Toggle 'phosphor' mode</td>
@@ -1581,7 +1361,7 @@
     </tr>
     <tr>
       <td colspan="3"><center><font size="-1">
-      Items marked as (*) will also switch to 'Custom' mode</font></center></td>
+      Items marked as (*) will also switch to 'Custom' TV effects mode</font></center></td>
     </tr>
   </table>
 
@@ -2175,7 +1955,6 @@
       <td>Shift-Control-Alt + P to enter, Shift-Control-Alt + P/Escape to exit and continue with emulation</td>
       <td>Shift-Control-Cmd + P to enter, Shift-Control-Cmd + P/Escape to exit and continue with emulation</td>
     </tr>
-
   </table>
 
   </br>
@@ -2186,96 +1965,121 @@
       <th>Function</th>
       <th>Key (Standard)</th>
       <th>Key (macOS)</th>
+	  <th>Controller</th>
     </tr>
     <tr>
       <td>Open context-sensitive help</td>
       <td>F1</td>
       <td>Shift-Cmd + ?</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Move Up</td>
       <td>Up arrow</td>
       <td>Up arrow</td>
+	  <td>Up</td>
     </tr>
     <tr>
       <td>Move Down</td>
       <td>Down arrow</td>
       <td>Down arrow</td>
+	  <td>Down</td>
     </tr>
     <tr>
       <td>Move Left</td>
       <td>Left arrow</td>
       <td>Left arrow</td>
+	  <td>Down</td>
     </tr>
     <tr>
       <td>Move Right</td>
       <td>Right arrow</td>
       <td>Right arrow</td>
+	  <td>Up</td>
     </tr>
     <tr>
       <td>Move Home</td>
       <td>Home</td>
       <td>Home</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Move End</td>
       <td>End</td>
       <td>End</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Move Page Up</td>
       <td>Page Up</td>
       <td>Page Up</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Move Page Down</td>
       <td>Page Down</td>
       <td>Page Down</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>OK</td>
       <td>-</td>
       <td>-</td>
+	  <td>Button 1/X + Up, Button 2/A</td>
     </tr>
     <tr>
       <td>Cancel</td>
       <td>Escape</td>
       <td>Escape</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Select item</td>
       <td>Return/Enter/Space</td>
       <td>Return/Enter/Space</td>
+	  <td>Button 1/X</td>
     </tr>
     <tr>
       <td>Move to previous object</td>
       <td>Shift + Tab</td>
       <td>Shift + Tab</td>
+	  <td>Left</td>
     </tr>
     <tr>
       <td>Move to next object</td>
       <td>Tab</td>
       <td>Tab</td>
+	  <td>Right</td>
     </tr>
     <tr>
       <td>Move to previous tab</td>
       <td>Shift-Control + Tab</td>
       <td>Shift-Control + Tab</td>
+	  <td>Button 1/X + Left, Button 4/Y</td>
     </tr>
     <tr>
       <td>Move to next tab</td>
       <td>Control + Tab</td>
       <td>Control + Tab</td>
+	  <td>Button 1/X + Right, Button 3/B</td>
     </tr>
     <tr>
       <td>Toggle windowed/fullscreen mode</td>
       <td>Alt + Return</td>
       <td>Cmd + Return</td>
+	  <td>-</td>
+    </tr>
+    <tr>
+      <td>Toggle UI theme</td>
+      <td>Alt + T</td>
+      <td>Cmd + T</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Exit Stella</td>
       <td>Control + Q</td>
       <td>Cmd + Q</td>
+	  <td>-</td>
     </tr>
   </table>
 
@@ -2286,81 +2090,115 @@
       <th>Function</th>
       <th>Key (Standard)</th>
       <th>Key (macOS)</th>
+	  <th>Controller</th>
     </tr>
     <tr>
       <td>Go to initial directory (also in other file dialogs)</td>
       <td>Alt + Home</td>
-      <td>Alt + Home</td>
+      <td>Cmd + Home</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Go to previous directory in history (also in other file dialogs)</td>
       <td>Alt + Left arrow</td>
-      <td>Alt + Left arrow</td>
+      <td>Cmd + Left arrow</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Go to next directory in history (also in other file dialogs)</td>
       <td>Alt + Right arrow</td>
-      <td>Alt + Right arrow</td>
+      <td>Cmd + Right arrow</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Go to parent directory (also in other file dialogs)</td>
       <td>Backspace, Alt + Up arrow</td>
-      <td>Backspace, Alt + Up arrow</td>
+      <td>Backspace, Cmd + Up arrow</td>
+	  <td>-</td>
+    </tr>
+    <tr>
+      <td>Move Page Up</td>
+      <td>Page Up</td>
+      <td>Page Up</td>
+	  <td>Button 1/X + Left</td>
+    </tr>
+    <tr>
+      <td>Move Page Down</td>
+      <td>Page Down</td>
+      <td>Page Down</td>
+	  <td>Button 1/X + Right</td>
     </tr>
     <tr>
       <td>Remove from 'Recently Played' or 'Most Popular' folder</td>
       <td>Control + X</td>
       <td>Control + X</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Toggle favorite</td>
       <td>Control + F</td>
       <td>Control + F</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Open Game properties dialog</td>
       <td>Control + G</td>
       <td>Control + G</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Open Power-On options dialog</td>
       <td>Control + P</td>
       <td>Control + P</td>
+	  <td>Button 2/A</td>
     </tr>
     <tr>
       <td>Open High Scores dialog (if available for selected ROM)</td>
       <td>Control + H</td>
       <td>Control + H</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Toggle file extensions display</td>
       <td>Control + E</td>
       <td>Control + E</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Toggle search ROMs in subdirectories too</td>
       <td>Control + D</td>
       <td>Control + D</td>
-    </tr>
-    <tr>
-      <td>Toggle show all files</td>
-      <td>Control + A</td>
-      <td>Control + A</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Toggle favorites sorting (normal or alternative)</td>
       <td>Control + S</td>
       <td>Control + S</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Reload ROM listing</td>
       <td>Control + R</td>
       <td>Control + R</td>
+	  <td>-</td>
+    </tr>
+    <tr>
+      <td>Load random ROM</td>
+      <td>Alt + R</td>
+      <td>Cmd + R</td>
+	  <td>-</td>
     </tr>
     <tr>
       <td>Open Options dialog</td>
       <td>Control + O</td>
       <td>Control + O</td>
+	  <td>Button 4/Y</td>
+    </tr>
+    <tr>
+      <td>Open context menu</td>
+      <td>-</td>
+      <td>-</td>
+	  <td>Hold any Button</td>
     </tr>
   </table>
 
@@ -2539,7 +2377,7 @@
     <tr>
       <th> Booster Grip</th>
       <td> &#x2713;</td>
-      <td> &#x2713;</td>
+      <td> &#x2713; (+ extra)</td>
       <td> &#x2713; (+ extra)</td>
       <td> &#x2715;</td>
       <td> &#x2713; (+ extra)</td>
@@ -2551,6 +2389,14 @@
       <td> &#x2713;</td>
       <td> &#x2715;</td>
       <td> &#x2715;</td>
+    </tr>
+    <tr>
+      <th> Joy 2B+</th>
+      <td> &#x2713;</td>
+      <td> &#x2713; (+ extra)</td>
+      <td> &#x2713; (+ extra)</td>
+      <td> &#x2715;</td>
+      <td> &#x2715; (+ extra)</td>
     </tr>
     <tr>
       <th> Keyboard</th>
@@ -2872,6 +2718,16 @@
     </tr>
 
     <tr>
+      <td><pre>-detectpal60 &lt;1|0&gt;</pre></td>
+      <td>Enable autodetection of PAL-60 based on colors used..</td>
+    </tr>
+
+    <tr>
+      <td><pre>-detectntsc50 &lt;1|0&gt;</pre></td>
+      <td>Enable autodetection of NTSC-50 based on colors used..</td>
+    </tr>
+
+    <tr>
       <td><pre>-speed &lt;number&gt;</pre></td>
       <td>Control the emulation speed (as a percentage, 10 - 1000).</td>
     </tr>
@@ -2895,6 +2751,39 @@
     <tr>
       <td><pre>-pausedim &lt;1|0&gt;</pre></td>
       <td>Enable or disable emulation dimming in pause mode.</td>
+    </tr>
+
+    <tr>
+      <td><pre>-bezel.show &lt;1|0&gt;</pre></td>
+      <td>Enable or disable bezel display.</td>
+    </tr>
+    <tr>
+      <td><pre>-bezel.dir &lt;path&gt;</pre></td>
+      <td>Specifies from where bezel images are loaded.</td>
+    </tr>
+    <tr>
+      <td><pre>-bezel.windowed &lt;1|0&gt;</pre></td>
+      <td>Enable bezels in windowed modes as well.</td>
+    </tr>
+    <tr>
+      <td><pre>-bezel.win.auto&lt;1|0&gt;</pre></td>
+      <td>Enable manually set bezel's emulation window position.</td>
+    </tr>
+    <tr>
+      <td><pre>-bezel.win.left&lt;1|0&gt;</pre></td>
+      <td>Set left position of bezel's emulation window.</td>
+    </tr>
+    <tr>
+      <td><pre>-bezel.win.right&lt;1|0&gt;</pre></td>
+      <td>Set right position of bezel's emulation window.</td>
+    </tr>
+    <tr>
+      <td><pre>-bezel.win.top&lt;1|0&gt;</pre></td>
+      <td>Set top position of bezel's emulation window.</td>
+    </tr>
+    <tr>
+      <td><pre>-bezel.win.bottom&lt;1|0&gt;</pre></td>
+      <td>Set bottom position of bezel's emulation window.</td>
     </tr>
 
     <tr>
@@ -2982,7 +2871,7 @@
       <td><pre>-tia.fs_refresh &lt;1|0&gt;</pre></td>
       <td>While in fullscreen mode, adapt the display's refresh rate to the game's frame rate
         to minimize judder.
-        </br>Note: Not available for macOS</td>
+        </br>Note: Not available for macOS, also some renderers may not support this</br></td>
     </tr>
 
     <tr>
@@ -3042,11 +2931,13 @@
     </tr>
 
     <tr>
-      <td><pre>-tv.phosphor &lt;always|byrom&gt;</pre></td>
-      <td>Determine how phosphor mode is enabled. If 'always', then the
-        ROM properties entry is ignored, and phosphor mode is always turned
-        on. Otherwise, the ROM properties determine whether phosphor mode
-        is used for each ROM.
+      <td><pre>-tv.phosphor &lt;byrom|always|autoon|auto&gt;</pre></td>
+      <td>Determine how phosphor mode is enabled. If 'byrom', then the ROM
+        properties determine whether phosphor mode is used for each ROM.
+      	Else the ROM properties entry is ignored. If 'always', then the
+      	phosphor mode is always enabled. If 'autoon', then the phosphor
+        mode is enabled automatically. If 'auto', then the phosphor mode
+        is enabled/disabled on automatically.
       </td>
     </tr>
 
@@ -3319,12 +3210,6 @@
     </tr>
 
     <tr>
-      <td><pre>-launcherroms &lt;1|0&gt;</pre></td>
-      <td>Specifies whether to show ROMs only (the default) or all
-        files in the ROM launcher.</td>
-    </tr>
-
-    <tr>
       <td><pre>-launcherextensions &lt;1|0&gt;</pre></td>
       <td>Display file extensions in the ROM launcher.</td>
     </tr>
@@ -3359,7 +3244,17 @@
 
     <tr>
       <td><pre>-uipalette &lt;standard|classic|light|dark&gt;</pre></td>
-      <td>Use the specified palette for UI elements.</td>
+      <td>Define default palette/theme for UI elements.</td>
+    </tr>
+
+    <tr>
+      <td><pre>-uipalette2 &lt;standard|classic|light|dark&gt;</pre></td>
+      <td>Define alternative palette/theme for UI elements.</td>
+    </tr>
+
+    <tr>
+      <td><pre>-altpalette &lt;1|0&gt;</pre></td>
+      <td>Use alternative palette/theme for UI elements.</td>
     </tr>
 
     <tr>
@@ -3459,6 +3354,11 @@
     </tr>
 
     <tr>
+      <td><pre>-filterbstypes &lt;1|0&gt;</pre></td>
+      <td>Enable filtering of bankswitch type list in <a href="#EmulationProps"><b>Emulation Properties</b></a> by ROM size.</td>
+    </tr>
+
+    <tr>
       <td><pre>-help</pre></td>
       <td>Print a help message describing these options, and then
         exit Stella.</td>
@@ -3544,6 +3444,13 @@
     <tr>
       <td><pre>-debug</pre></td>
       <td>Immediately jump to debugger mode when starting Stella.</td>
+    </tr>
+
+    <tr>
+      <td><pre>-elf.dump</pre></td>
+      <td>Display extensive linkage information when loading ELF ROMs and dump
+        the low 4.5MB of ARM memory (to which all sections are relocated) to
+        'elf_executable_image.bin' in the current working directory.</td>
     </tr>
 
     <tr>
@@ -3741,6 +3648,9 @@
       <td><pre>-&lt;plr.|dev.&gt;cpurandom &lt;S,A,X,Y,P&gt;</pre></td>
       <td>On reset, randomize the content of the specified CPU registers.</td>
     </tr><tr>
+      <td><pre>-dev.hsrandom &lt;1|0&gt;</pre></td>
+      <td>When this option is enabled, peeks to hotspots return semi-random values.</td>
+    </tr><tr>
       <td><pre>-dev.tiadriven &lt;1|0&gt;</pre></td>
       <td>Set unused TIA pins to be randomly driven high or low on a read/peek.
           If disabled, use the last databus value for those pins instead.</td>
@@ -3766,7 +3676,15 @@
         throw an exception and enter the debugger on fatal errors. When disabled, such
         fatal errors are simply logged, and emulation continues. Do not use this
         unless you know exactly what you're doing, as it changes the behaviour as
-        compared to real hardware.</td>
+        compared to real hardware.
+        For ELF ROMs, this option additionally checks for write accesses to
+        those parts of memory that should be read only and validates that all
+        relevant symbols in the ELF file can be relocated. Errors during relocation
+        will cause Stella to return to the debugger.
+      </td>
+    </tr><tr>
+      <td><pre>-dev.arm.mips &lt;50-300&gt;</pre></td>
+      <td>Limit the number of ARM instructions executed per 6507 instruction for ELF ROMs.</td>
     </tr><tr>
       <td><pre>-dev.thumb.incycles &lt;1|0&gt;</pre></td>
       <td>When enabled, ARM emulation cycles are added to 6507 system cycles. This
@@ -3791,7 +3709,7 @@
       <td>When enabled, each external access (AtariVox/SaveKey EEPROM, PlusROM, Supercharger...)
         is signalled by a message.</td>
     </tr><tr>
-      <td><pre>-dev.tia.type &lt;standard|koolaidman|</br>  cosmicark|pesco|quickstep|matchie|</br>  indy500|heman|custom&gt;</pre></td>
+      <td><pre>-dev.tia.type &lt;standard|koolaidman|</br>  cosmicark|pesco|quickstep|matchie|</br>  indy500|heman|flashmenu|custom&gt;</pre></td>
       <td>Set emulated TIA type. Only with 'custom' the following TIA options become relevant.</td>
     </tr><tr>
       <td><pre>-dev.tia.plinvphase &lt;1|0&gt;</pre></td>
@@ -3802,6 +3720,15 @@
     </tr><tr>
       <td><pre>-dev.tia.blinvphase &lt;1|0&gt;</pre></td>
       <td>Enable/disable inverted HMOVE clock phase for ball.</td>
+    </tr><tr>
+      <td><pre>-dev.tia.pllatehmove &lt;1|0&gt;</pre></td>
+      <td>Enable/disable short late HMOVE for players (Flashcart menu shifted right).</td>
+    </tr><tr>
+      <td><pre>-dev.tia.mslatehmove &lt;1|0&gt;</pre></td>
+      <td>Enable/disable short late HMOVE for missiles.</td>
+    </tr><tr>
+      <td><pre>-dev.tia.bllatehmove &lt;1|0&gt;</pre></td>
+      <td>Enable/disable short late HMOVE for ball.</td>
     </tr><tr>
       <td><pre>-dev.tia.delaypfbits &lt;1|0&gt;</pre></td>
       <td>Enable/disable playfield bits delayed by one color clock (stray playfield pixels in Pesco).</td>
@@ -3856,6 +3783,8 @@
       <td><pre>-&lt;plr.|dev.&gt;tm.horizon &lt;3s|10s|30s|1m|3m|</br>  10m|30m|60m&gt;</pre></td>
       <td>Define the horizon of the Time Machine.</td>
     </tr>
+    </td>
+  </tr>
   </table>
   </blockquote></br>
 
@@ -3885,7 +3814,7 @@
                   This depends on the OS and renderer used.</td><td>-fullscreen</td></tr>
           <tr><td>Stretch</td><td>In fullscreen mode, completely fill screen with the TIA image.</td><td>-tia.fs_stretch</td></tr>
           <tr><td>Adapt display...</td><td>In fullscreen mode, adapt the display's refresh rate to the game's frame rate to minimize judder.
-                  </br>Note: Not available for macOS</td><td>-tia.fs_refresh</td></tr>
+                  </br>Note: Not available for macOS, also some renderers may not support this</td><td>-tia.fs_refresh</td></tr>
           <tr><td>Overscan</td><td>In fullscreen mode, add overscan to the TIA image.</td><td>-tia.fs_overscan</td></tr>
           <tr><td>Correct aspect ratio</td><td>Enable aspect ratio correct scaling.
                   </br>Note: Creates a cleaner looking TIA image when disabled (like z26 and old versions of Stella) vs. a correctly emulated aspect ratio when enabled.</td><td>-tia.correct_aspect</td></tr>
@@ -3905,15 +3834,17 @@
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
           <tr><td>Palette</td><td>Palette used for emulation mode</td><td>-palette</td></tr>
-          <tr><td>NTSC/PAL phase</td><td>Adjust phase shift of 'Custom' NTSC or PAL (depends on game) palette.  </td><td>-pal.phase_ntsc, -pal.phase_pal</td></tr>
-          <tr><td>R</td><td>Adjust red scale and shift of 'Custom' palette</td><td>-pal.red_scale, -pal.red_shift</td></tr>
-          <tr><td>G</td><td>Adjust green scale and shift of 'Custom' palette</td><td>-pal.green_scale, -pal.green_shift</td></tr>
-          <tr><td>B</td><td>Adjust blue scale and shift of 'Custom' palette</td><td>-pal.blue_scale, -pal.blue_shift</td></tr>
+          <tr><td>NTSC/PAL phase</td><td>Adjust phase shift of 'Custom' NTSC or PAL (depends on game) palette.</td><td>-pal.phase_ntsc<br/>-pal.phase_pal</td></tr>
+          <tr><td>R</td><td>Adjust red scale and shift of 'Custom' palette</td><td>-pal.red_scale<br/>-pal.red_shift</td></tr>
+          <tr><td>G</td><td>Adjust green scale and shift of 'Custom' palette</td><td>-pal.green_scale<br/>-pal.green_shift</td></tr>
+          <tr><td>B</td><td>Adjust blue scale and shift of 'Custom' palette</td><td>-pal.blue_scale<br/>-pal.blue_shift</td></tr>
           <tr><td>Hue</td><td>Adjust hue of currently selected palette</td><td>-pal.hue</td></tr>
           <tr><td>Saturation</td><td>Adjust saturation of currently selected palette</td><td>-pal.saturation</td></tr>
           <tr><td>Contrast</td><td>Adjust contrast of currently selected palette</td><td>-pal.contrast</td></tr>
           <tr><td>Brightness</td><td>Adjust brightness of currently selected palette</td><td>-pal.brightness</td></tr>
           <tr><td>Gamma</td><td>Adjust gamma of currently selected palette</td><td>-pal.gamma</td></tr>
+          <tr><td>Autodetection</td><td>Enable autodetection of PAL-60/NTSC-50 based on colors used.</br>
+          Note: The detection is not very reliable and therefore uses very conservative parameters to avoid false positives.</td><td>-detectpal60<br/>-detectntsc50</td></tr>
         </table>
       </td>
     </tr>
@@ -3929,10 +3860,10 @@
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
           <tr><td>TV mode</td><td>Disable TV effects, or select TV preset</td><td>-tv.filter</td></tr>
-          <tr><td>Adjustable sliders</td><td>Set specific attribute in 'Custom' TV mode</td><td>-tv.sharpness, -tv.resolution, etc.</td></tr>
-          <tr><td>Phosphor for all ROMs</td><td>Enable phosphor mode for all ROMs</td><td>-tv.phosphor</td></tr>
-          <tr><td>Blend (phosphor)</td><td>Blend level to use in phosphor mode for all ROMs
-                (needs to be manually adjusted for your particular hardware)</td><td>-tv.phosblend</td></tr>
+          <tr><td>Adjustable sliders</td><td>Set specific attribute in 'Custom' TV mode</td><td>-tv.sharpness<br/>-tv.resolution, etc.</td></tr>
+          <tr><td>Phosphor</td><td>Select mode for enabling phosphor</td><td>-tv.phosphor</td></tr>
+          <tr><td>Blend (phosphor)</td><td>Blend level to use in phosphor modes for all ROMs and automatic ones
+                (level needs to be manually adjusted for your particular hardware)</td><td>-tv.phosblend</td></tr>
           <tr><td>(Scanlines) Intensity</td><td>Sets scanlines black-level intensity.</br>
                   Note: No scanlines in 1x mode snapshots</td><td>-tv.scanlines</td></tr>
           <tr><td>(Scanlines) Mask</td><td>Sets the scanlines mask.</br>
@@ -3942,6 +3873,29 @@
           <tr><td>Clone Composite</td><td>Copy 'Composite' attributes to 'Custom' TV mode sliders</td><td>&nbsp;</td></tr>
           <tr><td>Clone Bad adjust</td><td>Copy 'Bad Adjust' attributes to 'Custom' TV mode sliders</td><td>&nbsp;</td></tr>
           <tr><td>Revert</td><td>Revert attribute sliders to previously saved 'Custom' TV mode settings</td><td>&nbsp;</td></tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <p><b>Video & Audio Settings</b> dialog <a name="VideoAudioBezels">(Bezels)</a>:</p>
+  <table style="border:hidden">
+    <tr>
+	  <td valign="top"><img src="graphics/options_bezels.png"></td>
+      <td style="border:hidden">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td valign="top">
+        <table border="1" cellpadding="4">
+	  	  <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
+          <tr><td>Enable bezels</td><td>Enables the bezel display, if a matching bezel image or a
+          	default image (named 'default.png') can be found in the bezel path.</td><td>-bezel.show</td></tr>
+          <tr><td>Bezel path</td><td>Specifies the path from where bezel images are loaded.</td><td>-bezel.dir</td></tr>
+		  <tr><td>Windowed modes</td><td>Enable bezels in windowed modes as well.</td><td>-bezel.windowed</td></tr>
+		  <tr><td>Manual emulation window</td><td>Enable manually set bezel's emulation window position.</td><td>-bezel.win.auto</td></tr>
+		  <tr><td>Left</td><td>Set left position of bezel's emulation window.</td><td>-bezel.win.left</td></tr>
+		  <tr><td>Right</td><td>Set right position of bezel's emulation window.</td><td>-bezel.win.right</td></tr>
+		  <tr><td>Top</td><td>Set top position of bezel's emulation window.</td><td>-bezel.win.top</td></tr>
+		  <tr><td>Bottom</td><td>Set bottom position of bezel's emulation window.</td><td>-bezel.win.bottom</td></tr>
         </table>
       </td>
     </tr>
@@ -4053,7 +4007,8 @@
       <td valign="top">
         <table border="1" cellpadding="4">
           <tr><th>Item</th><th>Brief description</th><th>For more information,<br>see <a href="#CommandLine">Command Line</a></th></tr>
-          <tr><td>Theme</td><td>Theme to use for UI elements (see examples)</td><td>-uipalette</td></tr>
+          <tr><td>Theme #1</td><td>Default theme to use for UI elements (see examples)</td><td>-uipalette</td></tr>
+          <tr><td>Theme #2</td><td>Alternative theme to use for UI elements (see examples)</td><td>-uipalette2</td></tr>
           <tr><td>Dialogs font</td><td>The font used in the dialogs</td><td>-dialogfont</td></tr>
           <tr><td>HiDPI mode</td><td>Scale the UI by a factor of two when enabled</td><td>-hidpi</td></tr>
           <tr><td>Dialogs position</td><td>Position of dialogs with Stella window</td><td>-dialogpos</td></tr>
@@ -4179,10 +4134,14 @@
   </ol>
   You can also:
   <ul>
-    <li>Cancel a remap in progress by clicking 'Cancel'. <br/>Note: Pressing 'ESC' will map that key, <b>not</b> abort the mapping.</li>
+    <li>Cancel a remap in progress by clicking 'Cancel'. <br/>Note: Pressing 'ESC' will map that key,
+        <b>not</b> abort the mapping.</li>
     <li>Erase all event's mappings by clicking 'Erase'.</li>
     <li>Reset the event to its default mapping by clicking 'Reset'.</li>
-    <li>Reset <b>all</b> emulation or UI event mappings to default by clicking 'Defaults'.</li>
+    <li>Reset <b>all</b> emulation or UI event mappings to default by clicking 'Defaults'.
+    	<br/>Note: Controllers are by default automatically mapped to left or right controller
+    	port events, depending on their ID (even/odd). But you can assign each controller to a
+        fixed port in the 'Controller Database' dialog in the 'Devices & Ports' tab. </li>
   </ul>
 
   <p>The following screenshots illustrate the event remapping process:<br><br>
@@ -4227,7 +4186,7 @@
           <tr><td>Allow all 4 directions ...</td><td>Allow all 4 joystick directions to be pressed simultaneously</td><td>-joyallow4</td></tr>
           <tr><td>Use modifier key combos</td><td>Enable using modifier keys in keyboard actions</td><td>-modcombo</td></tr>
           <tr><td>Swap Stelladaptor ports</td><td>Swap the order of the detected Stelladaptors/2600-daptors (see <b>Advanced Configuration - <a href="#Adaptor">Stelladaptor/2600-daptor Support</a></b>)</td><td>-saport</td></tr>
-          <tr><td>Controller Database</td><td>Show all controllers that Stella knows about, with the option to remove them</td><td>&nbsp;</td></tr>
+          <tr><td>Controller Database</td><td>Show all controllers that Stella knows about and allow assigning them to a default mapping port and removing them</td><td>&nbsp;</td></tr>
           <tr><td>Erase EEPROM</td><td>Erase the whole AtariVox/SaveKey flash memory</td><td>&nbsp;</td></tr>
           <tr><td>AtariVox serial port</td><td>Described in further detail in <b>Advanced Configuration - <a href="#AtariVox">AtariVox/SaveKey Support</a></b> </td><td>-avoxport</td></tr>
         </table>
@@ -4269,13 +4228,29 @@
 
   <h3><b><a name="ROMInfoViewer">ROM Info Viewer</a></b></h3>
 
-  <p>Stella supports viewing snapshots and ROM properties of the currently
-  selected ROM in the ROM launcher. Support is automatic, as long as your
-  image directory contains snapshots in the appropriate format. An
-  <a href="https://stella-emu.github.io/stella-snapshots.zip">archive</a> of updated snapshots is available on the Stella webpage.
+  <p>Stella supports viewing images and ROM properties of the currently
+  selected ROM in the ROM launcher. Image support is automatic, as long as your
+  image directory contains any images in the appropriate format. The label (if
+  existing) and the number of matching images are displayed under the
+  current image. The mouse, the ROM Launcher hotkeys or the controller can be
+  used to browse multiple images of a ROM.</p>
+
+  Notes:
+  <li>The images can have PNG or JPG format.</li>
+  <li>The image names must be identical to either Stella's ROM properties cart
+  name or the ROM's filename.</li>
+  <li>For displaying additional images per ROM, the image names must be
+  extended with '_#', where '#' is a number.</li>
+  <li>The image label is read from the image's metadata. For PNGs, the 'iTxt'
+  chunk, keyword 'Title', for JPGs, the EXIF field 'ImageDescription' is used.
+  </li>
+
+  <p>An <a href="https://stella-emu.github.io/stella-snapshots.zip">archive</a> of
+  updated snapshots is available on the Stella webpage.	For links to even more
+  launcher images and bezels, look <a href="https://stella-emu.github.io/downloads.html">here</a>.
   This archive may be updated periodically as new ROMs are found, and also
   for each new release of Stella. In case no snapshot is found, you can
-  provide a default image named 'default_snapshot.png'.
+  provide a default image named 'default_snapshot.png' or 'default_snapshot.jpg'.
   Note that the snapshots can be any size (e.g. generated by Stella); they
   will be resized accordingly.</p>
 
@@ -4290,16 +4265,25 @@
   <p>ROM Info Viewer width at 40%, UI sized 800x480, small launcher font, bottom buttons enabled:</p>
   <img src="graphics/rominfo_1x_small.png">
 
-  <p>ROM Info Viewer width at 32%, UI sized 900x720, medium launcher font, bottom buttons disabled::</p>
+  <p>ROM Info Viewer width at 32%, UI sized 900x720, medium launcher font, bottom buttons disabled:</p>
   <img src="graphics/rominfo_1x_large.png">
 
-  <p>ROM Info Viewer width at 50% , UI sized 1280x900, large launcher font, bottom buttons disabled::</p>
+  <p>ROM Info Viewer width at 50% , UI sized 1280x900, large launcher font, bottom buttons disabled:</p>
   <img src="graphics/rominfo_2x_small.png">
 
-  <p>The dialog items at the top can be used to define the listed files and to navigate your folders:</p>
+  <p>The dialog items at the top can be used to navigate your folders and to define the listed files:</p>
 
   <ul>
     <li>
+    <img src="graphics/navigation_buttons.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px; margin-right: 4px">
+      Quick folder navigation buttons; the path display allows direct navigation by clicking an element.
+    </li><li>
+    <img src="graphics/open_help.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px; margin-right: 4px">
+      Open this help for the launcher.
+	</li><li>
+	<img src="graphics/reload_list.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px; margin-right: 4px">
+	  Reload the file list.
+    </li><li>
       The 'Filter' text box can be used to narrow down the results in the
       ROM listing. When this box is empty, all files are shown. Typing
       characters here will show only those files that match that
@@ -4310,24 +4294,13 @@
       about capital or lower-case letters. You also can use '*' and '?' as
       wildcards. E.g. for '(198?)*atari' only ROMs from the 1980s made by
       Atari will be listed.
-    </li>
-    <li>
-    <img src="graphics/show_roms.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px">
-    <img src="graphics/show_all.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px; margin-right: 4px">
-      Display either files which do have a valid ROM extension or all files.
     </li><li>
     <img src="graphics/show_current_dir.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px">
     <img src="graphics/show_sub_dirs.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px; margin-right: 4px">
-      Display either files from current directory only or all subdirectories too.
+      Display either files from current directory only, or all subdirectories too.
     </li><li>
-    <img src="graphics/open_help.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px; margin-right: 4px">
-      Open this help for the launcher.
-    </li><li>
-    <img src="graphics/navigation_buttons.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px; margin-right: 4px">
-      Quick folder navigation buttons; the path display allows direct navigation by clicking an element.
-    </li><li>
-    <img src="graphics/reload_list.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px; margin-right: 4px">
-      Reload the list.
+    <img src="graphics/select_random_rom.png" style="vertical-align: middle; margin-top: 4px; margin-bottom: 4px; margin-right: 4px">
+      Load a random ROM from the current file list.
     </li>
   </ul>
   </br>
@@ -4396,11 +4369,11 @@
               <tr><td>TV type</td><td>-tv</td></tr>
               <tr><td>Left difficulty</td><td>-ld</td></tr>
               <tr><td>Right difficulty</td><td>-rd</td></tr>
-              <tr><td>Startup mode</td><td>-debug</td></tr>
               <tr><td>Left joy items</td><td>-holdjoy0</td></tr>
               <tr><td>Right joy items</td><td>-holdjoy1</td></tr>
               <tr><td>Console: Select</td><td>-holdselect</td></tr>
               <tr><td>Console: Reset</td><td>-holdreset</td></tr>
+              <tr><td>Start in Debugger mode</td><td>-debug</td></tr>
             </table>
             <p></p>
           </td>
@@ -4419,10 +4392,6 @@
     <li>
       <p><b>Toggle alternative sorting</b> (or 'Control + S'): Toggles
       alternative sorting in the virtual directories.</p>
-    </li>
-    <li>
-      <p><b>Show all files/only ROMs</b> (or 'Control + A'): Toggles display of
-      non-ROM files.</p>
     </li>
     <li>
       <p><b>Include/exclude subdirectories</b> (or 'Control + D'): Toggles searching
@@ -4629,6 +4598,11 @@
             <td>-plr.cpurandom<br/>-dev.cpurandom</td>
           </tr>
           <tr>
+            <td>Random hotspot peek values</td>
+            <td>Peeks to hotspots return semi-random values</td>
+            <td>-dev.hsrandom</td>
+          </tr>
+          <tr>
             <td>Drive unused TIA pins ...</td>
             <td>Unused TIA pins are read random instead of the last databus values</td>
             <td>-dev.tiadriven</td>
@@ -4644,10 +4618,14 @@
             <td><span style="white-space:nowrap">-dev.wrportbreak</span></td>
           </tr>
           <tr>
-            <td>Fatal ARM emulation ...</td>
-            <td>Thumb ARM emulation throws an exception and enters the debugger on fatal errors</td>
+            <td>Strict ARM emulation ...</td>
+            <td>Thumb ARM emulation throws an exception and enters the debugger on fatal errors.</br>
+              For ELF ROMs, this option additionally checks for valid write accesses.</td>
             <td><span style="white-space:nowrap">-dev.thumb.trapfatal</span></td>
           </tr>
+            <tr><td>Limit ARM speed...</td>
+            <td>Limit the number of ARM instructions executed per 6507 instruction for ELF ROMs.</td>
+            <td>-dev.arm.mips</td></tr>
         </table>
       </td>
     </tr>
@@ -4667,6 +4645,9 @@
     <tr><td>Inverted HMOVE clock...</td><td>Emulates the Kool-Aid Man
       collision and Cosmic Ark stars glitches for the given objects.</td>
       <td>-dev.tia.plinvphase</br>-dev.tia.msinvphase</br>-dev.tia.blinvphase</td></tr>
+    <tr><td>Short late HMOVE</td><td>Emulates one pixel too short late HMOVEs for the given objects.
+            This causes e.g. shifted flashcart menues.</td>
+      <td>-dev.tia.pllatehmove</br>-dev.tia.mslatehmove</br>-dev.tia.bllatehmove</td></tr>
     <tr><td>Delayed Playfield</td><td>Emulates playfield changes moved
       by one color clock. This e.g. causes glitches in Pesco (stray playfield
       pixel), Quick Step! (colored step borders) and Matchie (vertical line at pixel 79).</td>
@@ -5069,14 +5050,16 @@ Ms Pac-Man (Stella extended codes):
 
   <tr>
     <td VALIGN="TOP"><a name="PropertiesCartType"><i>Cart.Type</i></a></td>
-    <td>Indicates the bank-switching type for the game.
+    <td>Indicates the bankswitching type for the game.
       The value of this property must be either <b>Auto</b> or one of the following
-      (for more information about bank-switching see Kevin Horton's <a href="http://kevtris.org/files/sizes.txt">2600 bankswitching
+      (for more information about bankswitching see Kevin Horton's <a href="http://kevtris.org/files/sizes.txt">2600 bankswitching
       document</a> or the documentation in each cartridge's source code file) types. Types marked
       as (&#185;) do currently have no reliable auto-detection, those marked as (&#178;)
-      are not fully supported in the debugger.
+      are not fully supported in the debugger.<br/>
+      Note: If 'Filter' is checked, only the bankswitching types matching the ROM size are listed.
       <table cellpadding="2" border="1">
         <tr><th>&nbsp;Type&nbsp;</th><th>Description</th><th>File Extension<br>(to force type)</th></tr>
+		<tr><td>03e0 </td><td>8K Brazilian Parker Bros</td><td>.03e, .03e0</td></tr>
         <tr><td>0840 </td><td>8K EconoBanking</td><td>.084, .0840</td></tr>
         <tr><td>0FA0 </td><td>8K Fotomania</td><td>.0FA, .0FA0</td></tr>
         <tr><td>2IN1 &#185;</td><td>4-64K Multicart (2 games)</td><td>.2N1 </td></tr>
@@ -5110,6 +5093,7 @@ Ms Pac-Man (Stella extended codes):
         <tr><td>E7 </td><td>8-16K M Network </td><td>.E7 .E78, .E78K</td></tr>
         <tr><td>EF </td><td>64K Homestar Runner </td><td>.EF </td></tr>
         <tr><td>EFSC </td><td>64K Homestar Runner + RAM</td><td>.EFS, .EFSC </td></tr>
+		<tr><td>ELF </td><td>Mattress Monkeys, ARM based</td><td>.ELF </td></tr>
         <tr><td>F0 </td><td>Dynacom Megaboy </td><td>.F0 </td></tr>
         <tr><td>F4 </td><td>32K Atari </td><td>.F4 </td></tr>
         <tr><td>F4SC </td><td>32K Atari + RAM </td><td>.F4S, .F4SC </td></tr>
@@ -5121,6 +5105,8 @@ Ms Pac-Man (Stella extended codes):
         <tr><td>FA2 </td><td>CBS RAM Plus 24/28K </td><td>.FA2 </td></tr>
         <tr><td>FC </td><td>Amiga Power Play Aracde 16/32K </td><td>.FC </td></tr>
         <tr><td>FE </td><td>8K Activision (aka SCABS)</td><td>.FE </td></tr>
+		<tr><td>GL &#178;</td><td>4 or 6K GameLine Master Module</td><td>.GL </td></tr>
+		<tr><td>JANE </td><td>16K Coleco (Tarzan) </td><td>.JAN, .JANE </td></tr>
         <tr><td>MDM </td><td>Menu Driven Megacart </td><td>.MDM </td></tr>
         <tr><td>MVC </td><td>Movie Cart</td><td>.MVC </td></tr>
         <tr><td>SB </td><td>128-256K SUPERbanking </td><td>.SB </td></tr>
@@ -5129,7 +5115,8 @@ Ms Pac-Man (Stella extended codes):
         <tr><td>UASW </td><td>8K UA Ltd. (swapped banks)</td><td>.UASW </td></tr>
         <tr><td>WD </td><td>Wickstead Design (Pink Panther) </td><td>.WD </td></tr>
         <tr><td>WDSW </td><td>Wickstead Design (Pink Panther) (bad)</td><td>.WDSW </td></tr>
-        <tr><td>X07 &#185;</td><td>64K AtariAge </td><td>.X07 </td></tr>
+		<tr><td>WF8 &#185</td><td>Coleco (some white carts)</td><td>.WF8 </td></tr>
+        <tr><td>X07</td><td>64K AtariAge </td><td>.X07 </td></tr>
       </table></td>
     </tr>
 
@@ -5143,7 +5130,9 @@ Ms Pac-Man (Stella extended codes):
       <td>Indicates the television format the game was designed for. The value
       must be <b>Auto</b> or one of the following. Types marked as (&#185;)
       do currently have no reliable auto-detection. A format can be enforced
-      by using one of the following pattern in the filename.
+      by using one of the following pattern in the filename.</br>
+      For ELF ROMs, this also controls the mode Stella configures the
+      cartridge to run in.
       <table cellpadding="2" border="1">
         <tr><th>&nbsp;Format&nbsp;</th><th>Filename Pattern (to force format)</th></tr>
         <tr><td>NTSC</td><td>NTSC, NTSC60, NTSC 60, NTSC-60, PAL-M</td></tr>
@@ -5235,7 +5224,7 @@ Ms Pac-Man (Stella extended codes):
         <tr><td>Paddles </td><td>Standard paddle controllers for use with games such as Breakout and Warlords. One pair of controller per connector (allows for 4-player Warlords).</td></tr>
         <tr><td>Paddles_IAxis &#185</td><td>Same as Paddles, except the axes are inverted.</td></tr>
         <tr><td>Paddles_IAxDr &#185</td><td>Same as Paddles, except both the axes and direction of movement are inverted.</td></tr>
-        <tr><td>Driving &#185 </td><td>Looks like a paddle, but allows 360° movement. Only one unit per connector, unlike paddles which were sold in pairs.</td></tr>
+        <tr><td>Driving &#185 </td><td>Looks like a paddle, but allows 360&#176; movement. Only one unit per connector, unlike paddles which were sold in pairs.</td></tr>
         <tr><td>Keyboard</td><td>Also known as the Star Raiders controller, functionally identical to the Kid's Controller and Keyboard Controller. Game included an overlay with commands, for use with Star Raiders.</td></tr>
         <tr><td>AmigaMouse</td><td>Commodore Amiga computer mouse.</td></tr>
         <tr><td>AtariMouse</td><td>Atari ST computer mouse.</td></tr>
@@ -5243,10 +5232,16 @@ Ms Pac-Man (Stella extended codes):
         <tr><td><a href="https://atariage.com/store/index.php?l=product_detail&p=1045">AtariVox &#185</a></td><td>A SpeakJet based unlimited-vocabulary speech/sound synthesizer with 32K EEPROM.</td></tr>
         <tr><td>SaveKey</td><td>A 32K EEPROM for saving high scores, etc. (the EEPROM portion of an AtariVox).</td></tr>
         <tr><td>Genesis </td><td>Sega Genesis controller, which can be used similar to a Booster Grip, giving an extra button.</td></tr>
+        <tr><td>Joy2B+ </td><td><a href="https://github.com/ascrnet/Joy2Bplus">Joy 2B+</a> controller, which can be used similar to a Booster Grip, giving two extra buttons.</td></tr>
         <tr><td>CompuMate &#185</td><td>Spectravideo CompuMate (if either left or right is set, CompuMate is used for both).</td></tr>
         <tr><td>Lightgun</td><td>Atari XG-1 compatible Light Gun.</td></tr>
         <tr><td>MindLink &#185</td><td>MindLink controller.</td></tr>
-        <tr><td>KidVid</td><td>Kid Vid Voice Module, limited support (Right Keyboard controller buttons 1, 2 and 3 start the games, default mapping is 8, 9 and 0).</td></tr>
+        <tr><td>KidVid</td><td>Kid Vid Voice Module.</br>
+          Audio files can be downloaded e.g. from <a href="https://www.atariage.com/2600/archives/KidVidAudio/">AtariAge</a>.
+          Put unzipped .WAV files into Stella's base directory (see properties
+          or palette files below for details).</br>
+          Note: Stella supports playing the games without audio files too.
+        </td></tr>
         <tr><td>QuadTari</td><td><a href="#Quadtari">QuadTari</a> controller, limited support (see below).</td></tr>
       </table></td>
     </tr>
@@ -5378,6 +5373,20 @@ Ms Pac-Man (Stella extended codes):
       <td>Contains any special notes about playing the game.</td>
     </tr>
 
+    <tr>
+      <td VALIGN="TOP"><i>Cart.Url</i></td>
+      <td>Defines a website link, e.g. for additional information or to the AtariAge store.
+        Click the ">>" button to open the website.</td>
+    </tr>
+
+    <tr>
+      <td VALIGN="TOP"><i>Bezel.Name</i></td>
+      <td>Defines the file name (without suffix) used for loading the bezel
+        image. If the name fails or is not defined, the cart name is used. If
+        that fails too, 'default.png' is tried. If no image can be found, no
+        bezel is displayed.
+        </br>Note: The bezel images should reside in their own directory, separate from the launcher images. </td>
+    </tr>
   </table>
 
   <h3><a name="HighScoreProps"><b>High Scores Properties</b></h3></a>
@@ -5539,12 +5548,16 @@ Ms Pac-Man (Stella extended codes):
     <li>Dig Dug (Atari)</li>
     <li>Donkey Kong (Coleco)</li>
     <li>Dragster (Activision)</li>
+    <li>Elk Attack (Atari)</li>
     <li>Enduro (Activision)</li>
     <li>Frogger (Parker Bros)</li>
     <li>Frostbite (Activision)</li>
     <li>Galaxian (Atari)</li>
+    <li>Gigolo/Cathouse Blues (Mystique)</li>
     <li>Grand Prix (Activision)</li>
+    <li>Gremlins (Atari)</li>
     <li>H.E.R.O. (Activision)</li>
+    <li>Halloween (Wizard Video Games)</li>
     <li>Jr. Pac-Man (Atari)</li>
     <li>Jungle Hunt (Atari)</li>
     <li>Kaboom! (Activision)</li>
@@ -5563,9 +5576,13 @@ Ms Pac-Man (Stella extended codes):
     <li>Sky Jinks (Activision)</li>
     <li>Solaris (Atari)</li>
     <li>Space Invaders (Atari)</li>
+    <li>Spider-Man (Parker Bros)</li>
+    <li>Stampede (Activision)</li>
+    <li>Star Wars - The Arcade Game (Parker Bros)</li>
     <li>Star Wars - The Empire Strikes Back (Parker Bros)</li>
     <li>StarMaster (Activision)</li>
     <li>Super Breakout (Atari)</li>
+    <li>Superman (Atari)</li>
     <li>Vanguard (Atari)</li>
     <li>Yars' Revenge (Atari)</li>
   </ul>

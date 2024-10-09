@@ -32,15 +32,8 @@ export class StellaEmulator extends EmulatorBase {
                 emulatorName = "Stella.app";                      
             }
 
-            // Append path (based on architecture and emulator name etc)
-            if (application.IsMacOS) {
-                // for macOS exclude architecture
-                this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,emulatorName);
-            }
-            else
-            {
-                this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,application.OSArch,emulatorName);                  
-            }                      
+            // from v7 we now exclude architecture at all platforms ar x64
+            this.FolderOrPath = path.join(this.FolderOrPath,application.OSPlatform,emulatorName);         
         }
 
         // Other
@@ -56,11 +49,11 @@ export class StellaEmulator extends EmulatorBase {
         // Prepare
         application.WriteToCompilerTerminal(''); 
 
-        // Validate for 32-bit on macOS
-        //if (!this.CustomFolderOrPath && (application.IsMacOS && application.Is32Bit)) {
-        //    application.WriteToCompilerTerminal(`ERROR: Unable to launch the Stella emulator as there is no 32-bit version available for macOS.`); 
-        //    return false;  
-        //}
+        // Validate for 32-bit
+        if (!this.CustomFolderOrPath && application.Is32Bit) {
+            application.WriteToCompilerTerminal(`ERROR: ${application.DisplayName} now only includes 64-bit (Windows, Debian Linux) or ARM M1 and 64-bit Intel (MacOS) versions of Stella (v7 onwards). If you wish to use an older 32-bit version, configure a custom path in the Settings instead (Emulator › Stella: Path).`); 
+            return false;  
+        }
 
         // Premissions
         await this.RepairFilePermissionsAsync();

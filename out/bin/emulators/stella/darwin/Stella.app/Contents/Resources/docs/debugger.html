@@ -15,7 +15,7 @@
 <body>
 
   <center><b><font size="7">Stella</font></b></center>
-  <center><h4><b>Release 6.7.1</b></h4></center>
+  <center><h4><b>Release 7.0</b></h4></center>
   <center><h1><b>Integrated Debugger</b></h1></center>
   <center><h4><b>(a work in progress)</b></h4></center>
   <br>
@@ -45,6 +45,7 @@
                 <li><a href="#PseudoRegisters">Pseudo-Registers</a></li>
                 <li><a href="#Watches">Watches</a></li>
                 <li><a href="#Traps">Traps</a></li>
+                <li><a href="#Timers">Timers</a></li>
               </ul>
             </li>
             <li><a href="#SaveWork">Save your work!</a></li>
@@ -310,7 +311,7 @@ more convenient.
   </li>
   <li>
     "&lt;rom_filename&gt;.sym" (located in the same directory as the ROM)</br>
-    If you provied the -l and -s parameters DASM will create these two files during
+    If you provide the -l and -s parameters DASM will create these two files during
     assembly. Stella uses the file content to display the correct labels.
   </li>
 </ul>
@@ -858,6 +859,22 @@ can remove a trap with "delTrap number", where the number comes from
 "listTraps" or by entering the identical trap again. You can get rid of
 all traps at once with the "clearTraps" command.</p></p>
 
+<h4><a name="Timers">Timers</a></h4>
+
+<p>Timers are used to measure cycles used between two timer points. They
+measure the minimum, maximum and average cycles executed between their two
+timer points. Start and end points can be set via prompt command or ROM
+Disassembly settings dialog.</p>
+
+<p>If the timer point is defined without an address or bank, the current PC
+address or bank are used. If a '+' is added, both timer points use address
+mirrors too, a '*' triggers both timer points in any bank.</p>
+
+<p>All timers can be shown in detail with "listTimers", a single timer
+with "printTimer number". "resetTimers" allows resetting all timer statistics,
+"delTimer number" removes a single timer. All timers can be deleted with the
+"clearTimers" command.</p>
+
 </br>
 <h3><a name="SaveWork">Save your work!</a></h3>
 <p>Stella offers several commands to save your work inside the debugger for
@@ -945,6 +962,7 @@ Type "help 'cmd'" to see extended information about the given command.</p>
       clearConfig - Clear DiStella config directives [bank xx]
      clearHistory - Clear the prompt history
 clearSaveStateIfs - Clear all saveState points
+      clearTimers - Clear all timers
        clearTraps - Clear all traps
      clearWatches - Clear all watches
               cls - Clear prompt area of text
@@ -959,6 +977,7 @@ clearSaveStateIfs - Clear all saveState points
       delFunction - Delete function with label xx
    delSaveStateIf - Delete conditional saveState point &lt;xx&gt;
           delTrap - Delete trap &lt;xx&gt;
+         delTimer - Delete timer &lt;xx&gt;
          delWatch - Delete watch &lt;xx&gt;
            disAsm - Disassemble address xx [yy lines] (default=PC)
              dump - Dump data at address &lt;xx&gt; [to yy] [1: memory; 2: CPU state; 4: input regs] [?]
@@ -988,14 +1007,17 @@ clearSaveStateIfs - Clear all saveState points
     loadAllStates - Load all emulator states
         loadState - Load emulator state xx (0-9)
         logBreaks - Logs breaks and traps and continues emulation
+         logTrace - Logs emulation (note: emulation may slow down and the log becomes huge soon)
                 n - Negative Flag: set (0 or 1), or toggle (no arg)
           palette - Show current TIA palette
                pc - Set Program Counter to address xx
              pCol - Mark 'PCOL' range in disassembly
              pGfx - Mark 'PGFX' range in disassembly
             print - Evaluate/print expression xx in hex/dec/binary
+       printTimer - Print details of timer xx
               ram - Show ZP RAM, or set address xx to yy1 [yy2 ...]
             reset - Reset system to power-on state
+      resetTimers - Reset all timers' statistics
            rewind - Rewind state by one or [xx] steps/traces/scanlines/frames...
              riot - Show RIOT timer/input status
               rom - Set ROM address xx to yy1 [yy2 ...]
@@ -1017,7 +1039,9 @@ clearSaveStateIfs - Clear all saveState points
          scanLine - Advance emulation by &lt;xx&gt; scanlines (default=1)
              step - Single step CPU [with count xx]
         stepWhile - Single step CPU while &lt;condition&gt; is true
+            swchb - Set SWCHB to value xx
               tia - Show TIA state
+            timer - Set a timer point
             trace - Single step CPU over subroutines [with count xx]
              trap - Trap read/write access to address(es) xx [yy]
            trapIf - On &lt;condition&gt; trap R/W access to address(es) xx [yy]
@@ -1084,7 +1108,7 @@ VDELBL selects the register that is used to control the ball. This is
 visualized in the debugger in the same way as the two copies of GRP0 and
 GRP1</p>
 
-<p>For many registers, writes don't take effect immediatelly as the
+<p>For many registers, writes don't take effect immediately as the
 TIA takes some color clocks to change state. In Stella's TIA core, this
 is implemented by queueing the writes, and the contents of this queue
 are visualized in the debugger in the "Queued Writes" area of the TIA tab.</p>
@@ -1562,13 +1586,16 @@ matches the address of the disassembly line where the mouse was clicked.</li>
 <li><b>Disassemble @ current line</b>: Disassemble from the disassembly line where the mouse was clicked.
 This allows to fill gaps in the disassembly and is most useful for bankswitched ROMs.</li>
 
+<li><b>Set timer @ current line</b>: Set a timer point using the current
+disassembly line's address and bank</li>
+
 <li><b>Show tentative code</b>: Allow DiStella to do a static analysis/disassembly.</li>
 
 <li><b>Show PC addresses</b>: Show Program Counter addresses as labels (where there
 isn't already a defined label).</li>
 
 <li><b>Show GFX as binary</b>: Switch between displaying/editing GFX and PGFX sections
-in either binary or hexidecimal.</li>
+in either binary or hexadecimal.</li>
 
 <li><b>Use address relocation</b>: Corresponds to the DiStella '-r' option
 (Relocate calls out of address range).</br>

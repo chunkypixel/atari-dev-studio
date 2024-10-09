@@ -10,15 +10,15 @@
 		</data>
 		<key>Resources/CMake/sdl2-config.cmake</key>
 		<data>
-		s2hXhDxzy/ilC+gLamGy/Kq13jo=
+		HFjU0snuPDDpVpeJJsOGAfWEqrU=
 		</data>
 		<key>Resources/Info.plist</key>
 		<data>
-		E/exzjLmO25/xe18BS765cbGzWY=
+		jYns7qqDeiejPA1Wp8eZns+OF6o=
 		</data>
 		<key>Resources/License.txt</key>
 		<data>
-		fCUUBjJ4JuUAC8MRSCszNcY21v8=
+		A8VTYHTg+gsOssUp337xdGbdHW0=
 		</data>
 		<key>Resources/ReadMe.txt</key>
 		<data>
@@ -26,7 +26,7 @@
 		</data>
 		<key>Resources/default.metallib</key>
 		<data>
-		07w7GQmm31+NEK8ne4mSo7m70Do=
+		BO5njZwigEYbd1h6TX/xkchzM2o=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -46,33 +46,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			s2hXhDxzy/ilC+gLamGy/Kq13jo=
+			HFjU0snuPDDpVpeJJsOGAfWEqrU=
 			</data>
 			<key>hash2</key>
 			<data>
-			DuTUW8idzRp7WT1FT5x/m1C1SbVH0FKvKRKOgVlRVhU=
+			3CcBgLSrIjtN3CnKminQz7NzcDt2kcMM2AW/PSX3/0Q=
 			</data>
 		</dict>
 		<key>Resources/Info.plist</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			E/exzjLmO25/xe18BS765cbGzWY=
+			jYns7qqDeiejPA1Wp8eZns+OF6o=
 			</data>
 			<key>hash2</key>
 			<data>
-			lMA4Mg67jCQrkxVHL0vBdN74dU3iomW7AggH3QYKJ44=
+			irUNdiI+O4xLR2lB2V3gBYSAJNcoj0wlZ9OEuB7S+JM=
 			</data>
 		</dict>
 		<key>Resources/License.txt</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			fCUUBjJ4JuUAC8MRSCszNcY21v8=
+			A8VTYHTg+gsOssUp337xdGbdHW0=
 			</data>
 			<key>hash2</key>
 			<data>
-			d+3CuMuNTuvjYs+HODz44b3nsOHwwJqlcyQOq7qhAPc=
+			UN4cvaEc5FbrLcR2jBIsS5miYCucbhF1iAKC2EMtJhM=
 			</data>
 		</dict>
 		<key>Resources/ReadMe.txt</key>
@@ -90,11 +90,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			07w7GQmm31+NEK8ne4mSo7m70Do=
+			BO5njZwigEYbd1h6TX/xkchzM2o=
 			</data>
 			<key>hash2</key>
 			<data>
-			vmrmeHQ4l7Q4flA5dILQw27M4T0Sc70MQIfP+lFY/do=
+			Fe5XhVrmpOq2Hqk5Jy7Yhqd+IXcB/PDUI58bHeKR4Cg=
 			</data>
 		</dict>
 	</dict>

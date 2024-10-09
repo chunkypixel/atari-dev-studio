@@ -157,10 +157,12 @@ dasm is an external project and can be downloaded separately [here](https://dasm
 ## Emulation
 Atari Dev Studio includes the following emulators for testing purposes:
 
-### Stella (release 6.7.1 - 20240116)
+### Stella (release 7.0 - 20241006)
 Stella is a multi-platform Atari 2600 VCS emulator released under the GNU General Public License (GPL). Stella was originally developed for Linux by Bradford W. Mott, and is currently maintained by Stephen Anthony. Since its original release several people have joined the development team to port Stella to other operating systems such as AcornOS, AmigaOS, DOS, FreeBSD, IRIX, Linux, OS/2, MacOS, Unix, and Windows. The development team is working hard to perfect the emulator and we hope you enjoy our effort.
 
 Stella is included as part of this extension with many thanks to Stephen Anthony. Stella is an external project and can be downloaded separately [here](https://stella-emu.github.io). If you enjoy using Stella place consider [donating](https://stella-emu.github.io/donations.html) to ensure it's continued development.
+
+> Note: Stella emulation in Atari Dev Studio is now fully 64-bit only.  If you wish to use an older 32-bit version, configure a custom path in the Settings instead (Emulator › Stella: Path).
 
 ### A7800 (release 5.2 - 20220626)
 A7800 is a fork of the MAME Atari 7800 driver, with several enhancements added:
