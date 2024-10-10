@@ -37,7 +37,7 @@ class SpriteEditorPage {
                 isOpen = true;
                 // loading project file?
                 if (loadProjectUri)
-                    this.loadFileContent("loadProject", loadProjectUri);
+                    this.loadFileContent("loadProject", loadProjectUri, 'utf-8');
             }
             else {
                 // Create
@@ -48,7 +48,7 @@ class SpriteEditorPage {
                 });
                 // Content
                 let startPagePath = vscode.Uri.joinPath(contentUri, 'index.html');
-                let content = yield filesystem.ReadFileAsync(startPagePath.fsPath);
+                let content = yield filesystem.ReadFileAsync(startPagePath.fsPath, 'utf-8');
                 let nonce = this.getNonce();
                 // Script
                 let scriptJsPath = vscode.Uri.joinPath(contentUri, 'main.js');
@@ -81,6 +81,9 @@ class SpriteEditorPage {
                             break;
                         case 'saveProject':
                             this.saveProject(message);
+                            break;
+                        case 'importAsPngFile':
+                            this.importAsPngFile(message);
                             break;
                         case 'exportAsPngFile':
                             this.exportAsPngFile(message);
@@ -119,7 +122,7 @@ class SpriteEditorPage {
                 // Put in a delay to ensure editor is fully loaded before importing project
                 let delay = (!isOpen ? 750 : 5);
                 // Process
-                yield application.Delay(delay).then(_ => this.loadFileContent("loadProject", loadProjectUri));
+                yield application.Delay(delay).then(_ => this.loadFileContent("loadProject", loadProjectUri, 'utf-8'));
             }
             else {
                 // normal opening - show project if chosen by user
@@ -152,7 +155,7 @@ class SpriteEditorPage {
         return __awaiter(this, void 0, void 0, function* () {
             // Process
             let configurationFileUri = vscode.Uri.joinPath(contentUri, 'spriteeditor.config');
-            let data = yield filesystem.ReadFileAsync(configurationFileUri.fsPath);
+            let data = yield filesystem.ReadFileAsync(configurationFileUri.fsPath, 'utf-8');
             // Return BASE64
             if (data) {
                 return Buffer.from(data).toString("base64");
@@ -187,7 +190,7 @@ class SpriteEditorPage {
         // Process
         vscode.window.showOpenDialog(options).then(fileUri => {
             if (fileUri && fileUri[0]) {
-                this.loadFileContent(command, fileUri[0]);
+                this.loadFileContent(command, fileUri[0], 'utf-8');
             }
         });
         // Result
@@ -245,6 +248,31 @@ class SpriteEditorPage {
                 });
             }
         });
+    }
+    importAsPngFile(message) {
+        // Prompt user here, get selected file content
+        // and send response back to webview
+        // Prepare
+        let command = message.command;
+        // Get current workspace
+        let defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
+        // Options
+        let options = {
+            canSelectMany: false,
+            openLabel: "Import",
+            defaultUri: defaultUri,
+            filters: {
+                'Png Files': ['png']
+            }
+        };
+        // Process
+        vscode.window.showOpenDialog(options).then(fileUri => {
+            if (fileUri && fileUri[0]) {
+                this.loadFileContent(command, fileUri[0], 'base64');
+            }
+        });
+        // Result
+        return true;
     }
     exportAsPngFile(message) {
         // Prepare
@@ -484,7 +512,7 @@ class SpriteEditorPage {
         vscode.window.showOpenDialog(options)
             .then(fileUri => {
             if (fileUri && fileUri[0]) {
-                this.loadFileContent(command, fileUri[0]);
+                this.loadFileContent(command, fileUri[0], 'utf-8');
             }
         });
     }
@@ -541,8 +569,8 @@ class SpriteEditorPage {
             }
         });
     }
-    loadFileContent(command, fileUri) {
-        filesystem.ReadFileAsync(fileUri.fsPath)
+    loadFileContent(command, fileUri, encoding) {
+        filesystem.ReadFileAsync(fileUri.fsPath, encoding)
             .then(data => {
             // Result
             this.currentPanel.webview.postMessage({

@@ -41,7 +41,7 @@ class WelcomePage {
                 });
                 // Content
                 let startPagePath = vscode.Uri.joinPath(contentUri, 'index.html');
-                let content = yield filesystem.ReadFileAsync(startPagePath.fsPath);
+                let content = yield filesystem.ReadFileAsync(startPagePath.fsPath, 'utf-8');
                 let nonce = this.getNonce();
                 // Script
                 let scriptJsPath = vscode.Uri.joinPath(contentUri, 'script.js');

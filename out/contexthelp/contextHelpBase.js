@@ -23,7 +23,7 @@ class ContextHelpBase {
     LoadContextHelpFileAsync(context, filename) {
         return __awaiter(this, void 0, void 0, function* () {
             const filePath = vscode.Uri.file(path.join(context.extensionPath, 'contexthelp', filename));
-            const fileArrary = (yield filesystem.ReadFileAsync(filePath.fsPath)).toString().split(/\r?\n/);
+            const fileArrary = (yield filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/);
             // Process
             for (const line of fileArrary) {
                 // split (into 2) and validate length

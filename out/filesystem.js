@@ -78,10 +78,10 @@ function ChModAsync(path, mode = '777') {
         });
     });
 }
-function ReadFileAsync(path) {
+function ReadFileAsync(path, encoding) {
     console.log('debugger:filesystem.ReadFileAsync');
     return new Promise((resolve, reject) => {
-        fs.readFile(path, 'utf8', (err, data) => {
+        fs.readFile(path, encoding, (err, data) => {
             if (!err) {
                 return resolve(data);
             }

@@ -21,7 +21,7 @@ export abstract class CompletionBase {
 	protected async LoadCompletionFileAsync(context: vscode.ExtensionContext, filename: string): Promise<vscode.CompletionItem[]> {
         // prepare
         const filePath: vscode.Uri = vscode.Uri.file(path.join(context.extensionPath, 'completions', filename));
-        const fileArrary = (await filesystem.ReadFileAsync(filePath.fsPath)).toString().split(/\r?\n/);
+        const fileArrary = (await filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/);
         let autoCompletes: vscode.CompletionItem[] = [];
 
         // process

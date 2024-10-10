@@ -39,7 +39,7 @@ export class WelcomePage implements vscode.Disposable {
 
             // Content
             let startPagePath = vscode.Uri.joinPath(contentUri, 'index.html');
-            let content = await filesystem.ReadFileAsync(startPagePath.fsPath);
+            let content = await filesystem.ReadFileAsync(startPagePath.fsPath, 'utf-8');
             let nonce = this.getNonce();
             
             // Script

@@ -31,7 +31,7 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             this.CompilerVersion = 0.21;
             // attempt to read contents
             if (yield (filesystem.FileExistsAsync(filePath.fsPath))) {
-                let fileContent = (yield filesystem.ReadFileAsync(filePath.fsPath)).toString().split(/\r?\n/);
+                let fileContent = (yield filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/);
                 if (!fileContent.any && application.IsNumber(fileContent[0])) {
                     this.CompilerVersion = parseFloat(fileContent[0]);
                 }

@@ -76,11 +76,11 @@ export function ChModAsync(path: string, mode: string = '777'): Promise<boolean>
     }); 
 }
 
-export function ReadFileAsync(path: string): Promise<any> {
+export function ReadFileAsync(path: string, encoding:BufferEncoding | null): Promise<any> {
     console.log('debugger:filesystem.ReadFileAsync');
 
     return new Promise((resolve, reject) => {
-        fs.readFile(path, 'utf8', (err, data) => {
+        fs.readFile(path, encoding, (err, data) => {
             if (!err) { return resolve(data); }
             resolve(undefined);
         });

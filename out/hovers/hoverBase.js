@@ -37,7 +37,7 @@ class HoverBase {
     LoadHoverFileAsync(context, filename) {
         return __awaiter(this, void 0, void 0, function* () {
             const filePath = vscode.Uri.file(path.join(context.extensionPath, 'hovers', filename));
-            const fileArrary = (yield filesystem.ReadFileAsync(filePath.fsPath)).toString().split(/\r?\n/);
+            const fileArrary = (yield filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/);
             const keypattern = /^([^A-Za-z0-9_]*)([A-Za-z0-9_]+)/; // Pattern for matching the 'key'
             const delimCnt = 2; // How many contiguous blank lines that must be found betwen keys
             let blanks = 0; // How many more contigous blank lines until the next key

@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as filesystem from '../filesystem';
 import * as application from '../application';
 import opn = require('open');
+import fs = require('fs');
 
 export class SpriteEditorPage implements vscode.Disposable {
 
@@ -29,7 +30,7 @@ export class SpriteEditorPage implements vscode.Disposable {
             isOpen = true;
 
             // loading project file?
-            if (loadProjectUri) this.loadFileContent("loadProject", loadProjectUri)
+            if (loadProjectUri) this.loadFileContent("loadProject", loadProjectUri, 'utf-8')
 
         } else {
             // Create
@@ -46,7 +47,7 @@ export class SpriteEditorPage implements vscode.Disposable {
 
             // Content
             let startPagePath = vscode.Uri.joinPath(contentUri,'index.html');
-            let content = await filesystem.ReadFileAsync(startPagePath.fsPath);
+            let content = await filesystem.ReadFileAsync(startPagePath.fsPath,'utf-8');
             let nonce = this.getNonce();
             
             // Script
@@ -89,6 +90,10 @@ export class SpriteEditorPage implements vscode.Disposable {
 
                         case 'saveProject':
                             this.saveProject(message);
+                            break;
+
+                        case 'importAsPngFile':
+                            this.importAsPngFile(message);
                             break;
 
                         case 'exportAsPngFile':
@@ -143,7 +148,7 @@ export class SpriteEditorPage implements vscode.Disposable {
 
              // Process
             await application.Delay(delay).then(_ =>
-                 this.loadFileContent("loadProject", loadProjectUri)
+                 this.loadFileContent("loadProject", loadProjectUri, 'utf-8')
             )
         } else {
             // normal opening - show project if chosen by user
@@ -178,7 +183,7 @@ export class SpriteEditorPage implements vscode.Disposable {
     private async loadConfiguration(contentUri : vscode.Uri): Promise<string> {
         // Process
         let configurationFileUri = vscode.Uri.joinPath(contentUri, 'spriteeditor.config');
-        let data = await filesystem.ReadFileAsync(configurationFileUri.fsPath);
+        let data = await filesystem.ReadFileAsync(configurationFileUri.fsPath,'utf-8');
 
         // Return BASE64
         if (data) { return Buffer.from(data).toString("base64"); }
@@ -218,7 +223,7 @@ export class SpriteEditorPage implements vscode.Disposable {
         // Process
         vscode.window.showOpenDialog(options).then(fileUri => {
             if (fileUri && fileUri[0]) { 
-                this.loadFileContent(command, fileUri[0]); 
+                this.loadFileContent(command, fileUri[0], 'utf-8'); 
             }
         });
 
@@ -284,6 +289,37 @@ export class SpriteEditorPage implements vscode.Disposable {
  
             }          
         });
+    }
+
+    private importAsPngFile(message: any) {
+        // Prompt user here, get selected file content
+        // and send response back to webview
+
+        // Prepare
+        let command = message!.command;
+
+        // Get current workspace
+        let defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
+
+        // Options
+        let options: vscode.OpenDialogOptions = {
+            canSelectMany: false,
+            openLabel: "Import",
+            defaultUri: defaultUri,
+            filters: {
+                'Png Files': ['png']
+            }
+        };
+
+        // Process
+        vscode.window.showOpenDialog(options).then(fileUri => {
+            if (fileUri && fileUri[0]) { 
+                this.loadFileContent(command, fileUri[0], 'base64'); 
+            }
+        });
+
+        // Result
+        return true;
     }
 
     private exportAsPngFile(message: any) {
@@ -549,7 +585,7 @@ export class SpriteEditorPage implements vscode.Disposable {
         vscode.window.showOpenDialog(options)
             .then(fileUri => {
                 if (fileUri && fileUri[0]) { 
-                    this.loadFileContent(command, fileUri[0]); 
+                    this.loadFileContent(command, fileUri[0], 'utf-8'); 
                 }
         });
     }
@@ -613,10 +649,10 @@ export class SpriteEditorPage implements vscode.Disposable {
         });
     }
 
-    private loadFileContent(command: string, fileUri: vscode.Uri) {
-        filesystem.ReadFileAsync(fileUri.fsPath)
+    private loadFileContent(command: string, fileUri: vscode.Uri, encoding:BufferEncoding | null) {
+        filesystem.ReadFileAsync(fileUri.fsPath, encoding)
             .then(data => {
-                  // Result
+                   // Result
                   this.currentPanel!.webview.postMessage({
                     command: command,
                     status: 'ok',

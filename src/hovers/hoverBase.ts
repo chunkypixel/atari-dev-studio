@@ -30,7 +30,7 @@ export abstract class HoverBase implements vscode.HoverProvider {
 	//
 	protected async LoadHoverFileAsync(context: vscode.ExtensionContext, filename: string): Promise<void> {
 		const filePath: vscode.Uri = vscode.Uri.file(path.join(context.extensionPath, 'hovers', filename));
-		const fileArrary = (await filesystem.ReadFileAsync(filePath.fsPath)).toString().split(/\r?\n/);
+		const fileArrary = (await filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/);
 
 		const keypattern = /^([^A-Za-z0-9_]*)([A-Za-z0-9_]+)/; // Pattern for matching the 'key'
 		const delimCnt = 2; // How many contiguous blank lines that must be found betwen keys
