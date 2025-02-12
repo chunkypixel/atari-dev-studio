@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.10.6
+
+* Updated the Sprite Editor with the following changes:
+  - fixed issue using scroll wheel to zoom on the Sprite List window
+  
 ## 0.10.5
 
 * Update Stella to the latest version (v7.0).  
