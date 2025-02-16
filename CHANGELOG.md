@@ -6,7 +6,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 * Updated the Sprite Editor with the following changes:
   - fixed issue using scroll wheel to zoom on the Sprite List window
-  - Added shift key functionality (erase/background color) when using line, rectange and ellipse tools
+  - Added shift key functionality (use background color/erase) when using line, rectange, ellipse and flood fill tools
 
 ## 0.10.5
 
