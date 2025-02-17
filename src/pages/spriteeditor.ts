@@ -412,10 +412,22 @@ export class SpriteEditorPage implements vscode.Disposable {
                 // Save
                 filesystem.MkDirAsync(folder)
                     .then(() => {
+                        // Prepare
+                        // NOTE: determine how many trailing zeros so we can build up a index replacement the size
+                        //       requested by the user
+                        let templateFileName = data.fileName;
+                        let totalZerosLength = application.CountTrailingZeros(templateFileName);
+                        let indexTemplate = '0'.repeat(totalZerosLength);
+                        // if we have trailing zeros strip them from the template name
+                        if (totalZerosLength > 0) templateFileName = application.TrimLeft(templateFileName,templateFileName.length-totalZerosLength);
+
                         // Process each image
                         for (let i = 0; i < data.count; i++) {
-                            // Loop through each file
-                            let fileName = data.fileName + i + ".png";
+                            // loop through each file
+
+                            // build filename
+                            let fileName = templateFileName + application.ReplaceZerosTemplate(indexTemplate,i) + ".png";  
+                            // create file
                             let fileUri = vscode.Uri.file(path.join(folder,fileName));
                             // We now send through in base64 to avoid Buffer.from() conversion errors
                             let convertToBuffer = Buffer.from(data.sprites[i],"base64");

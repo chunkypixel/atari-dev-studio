@@ -399,3 +399,27 @@ export async function OpenBrowserWindow(path: string, browser:string = ''): Prom
       vscode.window.showErrorMessage(`Open browser failed!! Please check if you have installed the browser ${browser} correctly!`);
     });
 }
+
+export function CountTrailingZeros(str: string): number {
+	if (!str) return 0; // Handle empty string
+	const match = str.match(/0+$/);
+	return match ? match[0].length : 0;
+}
+
+export function TrimRight(str: string, length: number): string {
+    if (length <= 0) return ''; // Handle invalid length
+    return str.slice(-length); // Extract from end using negative index
+}
+
+export function TrimLeft(str: string, length: number): string {
+    if (length <= 0) return ''; // Handle invalid length
+    return str.slice(0, length); // Extract from start to length
+}
+
+export function ReplaceZerosTemplate(template: string, num: number): string {
+    const numStr = num.toString();
+    if (numStr.length > template.length) {
+        return numStr; // If number is longer than template, return number as is
+    }
+    return template.slice(0, template.length - numStr.length) + numStr;
+}

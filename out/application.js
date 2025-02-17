@@ -32,6 +32,10 @@ exports.GetActiveTextEditorDocumentAsync = GetActiveTextEditorDocumentAsync;
 exports.Delay = Delay;
 exports.IsNumber = IsNumber;
 exports.OpenBrowserWindow = OpenBrowserWindow;
+exports.CountTrailingZeros = CountTrailingZeros;
+exports.TrimRight = TrimRight;
+exports.TrimLeft = TrimLeft;
+exports.ReplaceZerosTemplate = ReplaceZerosTemplate;
 const vscode = require("vscode");
 const open = require('open');
 const os = require("os");
@@ -396,5 +400,28 @@ function OpenBrowserWindow(path_1) {
             vscode.window.showErrorMessage(`Open browser failed!! Please check if you have installed the browser ${browser} correctly!`);
         });
     });
+}
+function CountTrailingZeros(str) {
+    if (!str)
+        return 0; // Handle empty string
+    const match = str.match(/0+$/);
+    return match ? match[0].length : 0;
+}
+function TrimRight(str, length) {
+    if (length <= 0)
+        return ''; // Handle invalid length
+    return str.slice(-length); // Extract from end using negative index
+}
+function TrimLeft(str, length) {
+    if (length <= 0)
+        return ''; // Handle invalid length
+    return str.slice(0, length); // Extract from start to length
+}
+function ReplaceZerosTemplate(template, num) {
+    const numStr = num.toString();
+    if (numStr.length > template.length) {
+        return numStr; // If number is longer than template, return number as is
+    }
+    return template.slice(0, template.length - numStr.length) + numStr;
 }
 //# sourceMappingURL=application.js.map
