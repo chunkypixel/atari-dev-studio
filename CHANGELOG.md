@@ -7,8 +7,8 @@ The following enhancements and changes have been made to Atari Dev Studio:
 * Updated 7800basic to v0.34 (Windows, Linux, macOS). NOTE: arm64 compatibility build remains at v0.29
 * Updated the Sprite Editor with the following changes:
   - fixed issue using scroll wheel to zoom on the Sprite List window
-  - Added shift key functionality (use background color/erase) when using line, rectange, ellipse and flood fill tools
-  - When exporting using the 'All sprites (seperate files)' export function (7800 mode), you can now append the required number of zeros to the end of a filename to output with a consistent filename indexing length ie. filename000 will output as filename000.png, filename001.png, filename010.png, filename100.png etc
+  - Added shift key functionality (use background color/erase) when using line, rectangle, ellipse and flood fill tools
+  - When exporting using the 'All sprites (separate files)' export function (7800 mode), you can now append the required number of zeros to the end of a filename to output with a consistent filename indexing length ie. filename000 will output as filename000.png, filename001.png, filename010.png, filename100.png etc
 
 ## 0.10.5
 
