@@ -399,6 +399,26 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
             },
             ' ');
 
+        // changedmaholes
+        let changeDmaHolesProvider = vscode.languages.registerCompletionItemProvider(
+            this.Id,
+            {
+                // return list of available language methods
+                provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+                    // get all text until the `position` and check if it reads `return `
+                    let linePrefix = document.lineAt(position).text.substring(0, position.character);
+                    if (!linePrefix.endsWith('changedmaholes ')) {
+                        return undefined;
+                    }
+
+                    return [
+                        new vscode.CompletionItem('disable', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('enable', vscode.CompletionItemKind.Value)
+                    ];
+                }
+            },
+            ' ');
+
         // trackersupport
         let trackerSupportProvider = vscode.languages.registerCompletionItemProvider(
             this.Id,
@@ -510,7 +530,8 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
                         new vscode.CompletionItem('paddlescalex2', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('drivingboost', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('mousexonly', vscode.CompletionItemKind.Method),  
-                        new vscode.CompletionItem('mousetime', vscode.CompletionItemKind.Method),      
+                        new vscode.CompletionItem('mousetime', vscode.CompletionItemKind.Method),  
+                        new vscode.CompletionItem('tightpackborder', vscode.CompletionItemKind.Method),      
                         new vscode.CompletionItem('trakxonly', vscode.CompletionItemKind.Method),  
                         new vscode.CompletionItem('traktime', vscode.CompletionItemKind.Method),    
                         new vscode.CompletionItem('avoxvoice', vscode.CompletionItemKind.Method),
@@ -545,7 +566,7 @@ export class SeventyEightHundredBasicCompletion extends CompletionBase {
 
         // add items           
         context.subscriptions.push(ifProvider, returnProvider, romsizeProvider, displayModeProvider, shakescreenModeProvider,
-            debugProvider, deprecatedModeProvider, drawhiscoresProvider, tallspriteModeProvider, 
+            debugProvider, deprecatedModeProvider, drawhiscoresProvider, tallspriteModeProvider, changeDmaHolesProvider,
             trackerSupportProvider, optimizationModeProvider, autodimModeProvider, setProvider);
     }
 

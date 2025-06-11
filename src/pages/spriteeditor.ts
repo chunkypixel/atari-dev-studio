@@ -3,7 +3,6 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as filesystem from '../filesystem';
 import * as application from '../application';
-import opn = require('open');
 import fs = require('fs');
 
 export class SpriteEditorPage implements vscode.Disposable {
@@ -170,14 +169,6 @@ export class SpriteEditorPage implements vscode.Disposable {
     {
         tag = `%${tag}%`;
         return content.replace(new RegExp(tag, 'g'), tagContent);
-    }
-
-    private async openUrl(uri: string) {
-        try {
-            //let options:
-            opn(uri); 
-        }
-        catch {}
     }
 
     private async loadConfiguration(contentUri : vscode.Uri): Promise<string> {

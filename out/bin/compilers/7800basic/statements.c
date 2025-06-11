@@ -24,6 +24,11 @@
 #define FALSE (1==0)
 #endif
 
+#define MAXINCBASIC 50
+#define MAXINCBASICSTR 100
+int savelines[MAXINCBASIC];
+char savelinesname[MAXINCBASIC][MAXINCBASIC];
+
 extern char stdoutfilename[256];
 extern FILE *stdoutfilepointer;
 extern FILE *preprocessedfd;
@@ -64,12 +69,18 @@ int bannerheights[1000];
 int bannerwidths[1000];
 int bannerpixelwidth[1000];
 char palettefilenames[1000][100];
+char Areg[SIZEOFSTATEMENT];
 int graphicfilepalettes[1000];
 int graphicfilemodes[1000];
-char Areg[SIZEOFSTATEMENT];
 
+unsigned char graphiccolorindex[16];
+unsigned char graphic7800colors[16];
+unsigned char graphiccolormode;
+
+int savelevel = 0;
 int dmaplain = 0;
 int templabel = 0;
+int plotlabel = 0;
 int doublewide = 0;
 int zoneheight = 16;
 int zonelocking = 0;
@@ -112,8 +123,11 @@ int dumpgraphics_index = 0;
 int firstfourbyte = 1;
 int firstcompress = 1;
 
+int changedmaholescalled = 0;
+
 int romsize_already_set = 0;
 
+int TIGHTPACKBORDER = 0;
 
 #define TALLSPRITEMAX 2048
 char tallspritelabel[TALLSPRITEMAX][1024];
@@ -1427,6 +1441,24 @@ void plotsprite (char **statement, int fourbytesprite)
 
     assertminimumargs (statement, "plotsprite", 4);
 
+    int len = strlen(statement[2]);
+    char *pagedelim = strchr(statement[2],'@');
+    int rampage = 0;
+
+    if (pagedelim != NULL)
+    {
+        pagedelim[0]=0; // split the pre-delimiter and post-delimiter into 2 strings
+
+        if (pagedelim[1]==0)
+            rampage = 0x40;
+        else
+            rampage = strictatoi (pagedelim+1);
+        if (rampage > 255)
+            prerror ("plotsprite graphic redirection '%s' is >255 (%s)", statement[2],pagedelim+1);
+
+        // note: if rampage<0 then the user is using a variable for the ram page
+    }
+
     if(fourbytesprite && firstfourbyte)
     {
 	strcpy (redefined_variables[numredefvars++], "PLOTSP4 = 1");
@@ -1476,7 +1508,16 @@ void plotsprite (char **statement, int fourbytesprite)
 	printf ("    sta temp1\n\n");
     }
 
-    printf ("    lda #>%s\n", statement[2]);
+    if (pagedelim != NULL)
+    {
+        if (rampage < 0)
+            printf ("    lda %s\n", pagedelim+1);
+        else
+            printf ("    lda #%d\n", rampage);
+    }
+    else
+        printf ("    lda #>%s\n", statement[2]);
+
     printf ("    sta temp2\n\n");
 
     if ((statement[3][0] >= '0') && (statement[3][0] <= '9'))
@@ -1543,6 +1584,15 @@ void plotsprite (char **statement, int fourbytesprite)
     else if ((tsi >= 0) && (tallspritemode != 2))
     {
 	int t;
+
+	printf ("  ifconst TALLCLIP\n");
+	printf ("      lda #0\n");
+	printf ("      ldy temp5\n");
+	printf ("      cpy #(WSCREENHEIGHT)\n");
+	printf ("      adc #$FF\n");
+	printf ("      sta temp7 ; on-screen: temp7=0, off-screen: temp7=$ff\n");
+	printf ("  endif ; TALLCLIP\n");
+
 	for (t = 1; t < tallspriteheight[tsi]; t++)
 	{
 	    printf ("    ; +tall sprite replot\n");
@@ -1553,8 +1603,18 @@ void plotsprite (char **statement, int fourbytesprite)
 	    printf ("    lda temp5\n");
 	    printf ("    adc #WZONEHEIGHT\n");
 	    printf ("    sta temp5\n");
-	    printf ("    jsr plotsprite\n");
+	    printf ("  ifconst TALLCLIP\n");
+	    printf ("      ora temp7\n");
+	    printf ("      cmp #(WSCREENHEIGHT)\n");
+	    printf ("      bcs .plotexit_%d\n",plotlabel);
+	    printf ("  endif ; TALLCLIP\n");
+            if(!fourbytesprite)
+	        printf ("    jsr plotsprite\n");
+            else
+	        printf ("    jsr plotsprite4\n");
 	}
+	    printf (".plotexit_%d\n",plotlabel);
+            plotlabel++;
     }
 }
 
@@ -3395,6 +3455,29 @@ void playsfx (char **statement)
     printf (" endif ; NOTIALOCKMUTE\n");
 }
 
+void incbasic (char **statement)
+{
+    // the inclusion is handled by the preprocessor, but we need to
+    // fix the line number and record the name of the file we're working
+    // with to have helpful error messages.
+    removeCR(statement[2]);
+    savelevel++;
+    if (savelevel > MAXINCBASIC)
+        prerror ("Too many nested incbas files!");
+    savelines[savelevel] = line;
+    strncpy(savelinesname[savelevel],statement[2],MAXINCBASICSTR);
+    line = 1;
+}
+
+void incbasicend ()
+{
+    // the included file ended. go back a level.
+    line = savelines[savelevel];
+    savelevel--;
+    if (savelevel < 0)
+        prerror ("We somehow reached the end of more incbas files than used!");
+}
+
 void mutesfx (char **statement)
 {
     //   1         2
@@ -3467,7 +3550,6 @@ void fixfilename (char *filename)
 #endif
 
 }
-
 
 char *ourbasename (char *fullpath)
 {
@@ -3671,9 +3753,6 @@ void convertbmp2png (char *bmpname)
 
 }
 
-unsigned char graphiccolorindex[16];
-unsigned char graphic7800colors[16];
-unsigned char graphiccolormode;
 void add_graphic (char **statement, int incbanner)
 {
     int s, t, width, height;
@@ -4032,6 +4111,63 @@ void add_graphic (char **statement, int incbanner)
 	    sprintf (constants[numconstants++], "%s_color%d", generalname, t);	// record to queue
 	}
     }
+}
+
+void filetolabel(char *target, char *source)
+{
+	int t;
+
+	//our label is based on the filename...
+	snprintf (target, 80, "%s", ourbasename (source));
+
+	checkvalidfilename (target);
+
+	//but remove the extension...
+	for (t = (strlen (target) - 3); t > 0; t--)
+	    if (strcasecmp (target + t, ".png") == 0)
+		target[t] = 0;
+}
+
+void defaultpalette (char **statement)
+{
+    //defaultpalette filename  mode   palette
+    //    1             2        3      4
+
+    int s;
+    unsigned char ourmode;
+
+    assertminimumargs (statement, "defaultpalette", 3);
+    removeCR (statement[4]);
+
+    char imagename[256];
+    filetolabel(imagename,statement[2]);
+
+    if (strcasecmp (statement[3], "160A") == 0)
+	    ourmode = MODE160A;
+    else if (strcasecmp (statement[3], "160B") == 0)
+	    ourmode = MODE160B;
+    else if (strcasecmp (statement[3], "320A") == 0)
+	    ourmode = MODE320A;
+    else if (strcasecmp (statement[3], "320B") == 0)
+	    ourmode = MODE320B;
+    else if (strcasecmp (statement[3], "320C") == 0)
+	    ourmode = MODE320C;
+    else if (strcasecmp (statement[3], "320D") == 0)
+	    ourmode = MODE320D;
+
+    // scan for the palette entry, or make a new one...
+    for (s = 0; s < 1000; s++)
+    {
+        if (palettefilenames[s][0] == 0)
+             break;
+	if (strcmp (palettefilenames[s], imagename) == 0)
+	     break;
+    }
+    if (s > 998)
+        prerror ("ran out of default graphic palette entries");
+    strcpy (palettefilenames[s], imagename);
+    graphicfilepalettes[s] = strictatoi (statement[4]);
+    graphicfilemodes[s] = ourmode;
 }
 
 int getgraphicwidth (char *file_name)
@@ -4938,8 +5074,8 @@ void barf_graphic_file (void)
 
     if ((graphicsdatawidth[dmaplain] > 0) || (dmaplain > 0))	//only process if the incgraphic command was encountered.
     {
-	if (((bankcount > 0) && (zoneheight == 16) && (dmaplain > 1)) ||
-	    ((bankcount > 0) && (zoneheight == 8) && (dmaplain > 3)))
+	if (((bankcount > 0) && (zoneheight == 16) && (dmaplain > 1) && (!TIGHTPACKBORDER)) ||
+	    ((bankcount > 0) && (zoneheight == 8) && (dmaplain > 3) && (!TIGHTPACKBORDER)))
 	{
 	    prerror ("graphics overrun in bank %d", currentbank);
 	}
@@ -4947,20 +5083,70 @@ void barf_graphic_file (void)
 	orgprintf ("     .byte 0\n");
 	orgprintf (" endif\n");
 	orgprintf ("START_OF_ROM SET 0 ; scuttle so we always fail subsequent banks\n");
+
+
+	int graphics_addr[256];
+	int graphics_addr_absolute[256];
+	int tightpacked[256];
+	int dmaholeindex = 0;
+
+	// In 7800basic, the graphics blocks are used up from back to front of the rom/bank.
+	// 
+	// We need to allow tight packing of graphics (no dma holes) below some game-selected
+	// threshold address.
+	// 
+	// Dasm requires that rom data gets laid out front to back.
+	// 
+	// To adhere to all of these requirements, we need to:
+
+	// 1. Setup the initial addresses for the back-to-front loop.
+	ADDRBASE = BANKSTART;
+	if (bankcount == 0)
+	{
+	    ABADDRBASE = ADDRBASE;
+	}
+	else
+	{
+	    if (romat4k == 1)
+	        ABADDRBASE = REALSTART + ((currentbank - 1) * 0x4000) + 0x2000;
+	    else
+	        ABADDRBASE = REALSTART + (currentbank * 0x4000) + 0x2000;
+	}
+
+	// 1a. adjust if we can start in what would normally be a dma hole...
+	if (ADDRBASE + (DMASIZE/2) <= TIGHTPACKBORDER)
+	{
+	    ADDRBASE = ADDRBASE + (DMASIZE/2);
+	    ABADDRBASE = ABADDRBASE + (DMASIZE/2);
+	}
+
+	// 2. Loop back-to-front, updating and storing the graphics addresses for later.
+	for (currentplain = dmaplain ; currentplain >= 0; currentplain--)
+	{
+	    graphics_addr[currentplain] = ADDRBASE;
+	    graphics_addr_absolute[currentplain] = ABADDRBASE;
+	    if (ADDRBASE > TIGHTPACKBORDER)
+	    {
+	        ADDRBASE = ADDRBASE - DMASIZE;
+	        ABADDRBASE = ABADDRBASE - DMASIZE;
+	        if (currentplain>0)
+	            tightpacked[currentplain-1]=0;
+	    }
+	    else // (ADDRBASE <= TIGHTPACKBORDER)
+	    {
+	        ADDRBASE = ADDRBASE - (DMASIZE/2);
+	        ABADDRBASE = ABADDRBASE - (DMASIZE/2);
+	        if (currentplain>0)
+	            tightpacked[currentplain-1]=1;
+	    }
+	}
+
+	// 3. Loop front to back, to store the actual graphics data in the rom/bank.
 	for (currentplain = 0; currentplain <= dmaplain; currentplain++)
 	{
-	    if (bankcount == 0)
-		ADDRBASE = BANKSTART - ((dmaplain - currentplain) * DMASIZE);
-	    else
-	    {
-		ADDRBASE = BANKSTART - ((dmaplain - currentplain) * DMASIZE);
-		if (romat4k == 1)
-		    ABADDRBASE =
-			REALSTART + ((currentbank - 1) * 0x4000) + 0x2000 - ((dmaplain - currentplain) * DMASIZE);
-		else
-		    ABADDRBASE = REALSTART + (currentbank * 0x4000) + 0x2000 - ((dmaplain - currentplain) * DMASIZE);
+	    ADDRBASE = graphics_addr[currentplain];
+	    ABADDRBASE = graphics_addr_absolute[currentplain];
 
-	    }
 	    prout ("\n");
 	    if (bankcount == 0)
 	    {
@@ -5047,29 +5233,17 @@ void barf_graphic_file (void)
 		fclose (dumpgraphics_fileout);
 
 	    // if we're in a DMA hole, report on it and barf any code that was saved for it...
-	    if ((currentplain < dmaplain)
-		|| ((currentplain == dmaplain) && (bankcount > 0) && (currentbank + 1 < bankcount)))
+	    if ((tightpacked[currentplain])&&(currentplain < dmaplain))
+	        prinfo ("No DMA hole here, due to tight packing");
+	    else if ( (ADDRBASE != TIGHTPACKBORDER) && ( (currentplain < dmaplain) 
+	    //else if ( ( (currentplain < dmaplain) 
+		|| ((currentplain == dmaplain) && (bankcount > 0) && (currentbank + 1 < bankcount))) )
 	    {
-		if (bankcount == 0)
-		    ADDRBASE = BANKSTART - ((dmaplain - currentplain) * DMASIZE) + (DMASIZE / 2);
-		else
-		{
-		    ADDRBASE = BANKSTART - ((dmaplain - currentplain) * DMASIZE) + (DMASIZE / 2);
-		    if (romat4k == 1)
-			ABADDRBASE =
-			    REALSTART + ((currentbank - 1) * 0x4000) +
-			    0x2000 - ((dmaplain - currentplain) * DMASIZE) + (DMASIZE / 2);
-		    else
-			ABADDRBASE =
-			    REALSTART + (currentbank * 0x4000) + 0x2000 -
-			    ((dmaplain - currentplain) * DMASIZE) + (DMASIZE / 2);
-
-		}
 		prout ("\n");
 		if (bankcount == 0)
-		    prinfo ("DMA hole #%d starts @ $%04X", currentplain, ADDRBASE);
+		    prinfo ("DMA hole #%d starts @ $%04X", dmaholeindex, ADDRBASE);
 		else
-		    prinfo ("bank #%d, DMA hole #%d starts @ $%04X", currentbank + 1, currentplain, ADDRBASE);
+		    prinfo ("bank #%d, DMA hole #%d starts @ $%04X", currentbank + 1, dmaholeindex, ADDRBASE);
 
 		if (bankcount == 0)
 		    gfxprintf ("\n ORG $%04X,0  ; *************\n", ADDRBASE);
@@ -5082,7 +5256,7 @@ void barf_graphic_file (void)
 		FILE *holefilepointer;
 		char holefilename[256];
 		fflush (stdout);
-		sprintf (holefilename, "7800hole.%d.asm", currentplain);
+		sprintf (holefilename, "7800hole.%d.asm", dmaholeindex);
 		holefilepointer = fopen (holefilename, "r");
 		if (holefilepointer != NULL)
 		{
@@ -5098,32 +5272,17 @@ void barf_graphic_file (void)
 		    prout ("        no code defined for DMA hole\n");
 		}
 
-		if (bankcount == 0)
-		    ADDRBASE = BANKSTART - ((dmaplain - currentplain) * DMASIZE) + DMASIZE;
-		else
-		{
-		    ADDRBASE = BANKSTART - ((dmaplain - currentplain) * DMASIZE) + DMASIZE;
-		    if (romat4k == 1)
-			ABADDRBASE =
-			    REALSTART + ((currentbank - 1) * 0x4000) +
-			    0x2000 - ((dmaplain - currentplain) * DMASIZE) + (DMASIZE / 2);
-		    else
-			ABADDRBASE =
-			    REALSTART + (currentbank * 0x4000) + 0x2000 -
-			    ((dmaplain - currentplain) * DMASIZE) + (DMASIZE / 2);
-
-		}
-
 		if (holefilepointer != NULL)
 		{
 		    printf
 			(" echo \"  \",\"  \",\"  \",\"  \",[(256*WZONEHEIGHT)-(DMAHOLEEND%d - DMAHOLESTART%d)]d , \"bytes of ROM space left in DMA hole %d.\"\n",
-			 currentplain, currentplain, currentplain);
+			 dmaholeindex, dmaholeindex, dmaholeindex);
 		    printf
-			(" if ((256*WZONEHEIGHT)-(DMAHOLEEND%d - DMAHOLESTART%d)) < 0\n", currentplain, currentplain);
+			(" if ((256*WZONEHEIGHT)-(DMAHOLEEND%d - DMAHOLESTART%d)) < 0\n", dmaholeindex, dmaholeindex);
 		    printf ("SPACEOVERFLOW SET (SPACEOVERFLOW+1)\n");
 		    printf (" endif\n");
 		}
+	        dmaholeindex++;
 	    }
 
 	    if (dumpgraphics)
@@ -5270,7 +5429,7 @@ void create_includes (char *includesfile)
 	}
 	if (writeline)
 	{
-	    if (!strncasecmp (dline, "7800.asm\0", 6))
+	    if (!strncasecmp (dline, "7800.asm", 8))
 		if (user_includes[0] != '\0')
 		    fprintf (includeswrite, "%s", user_includes);
 	    fprintf (includeswrite, "%s", dline);
@@ -10863,6 +11022,15 @@ void set (char **statement)
 	    printf ("DLMEMEND   = %s\n", statement[4]);
 	}
     }
+    else if (!strncmp (statement[2], "tightpackborder", 15))
+    {
+	assertminimumargs (statement + 1, "set tightpackborder", 1);
+	removeCR (statement[3]);	//remove CR if present
+	if (!strncmp (statement[3], "top", 3))
+            TIGHTPACKBORDER = 0xEFFF;
+	else
+            TIGHTPACKBORDER = strictatoi (statement[3]);
+    }
     else if (!strncmp (statement[2], "hssupport\0", 10))
     {
 	assertminimumargs (statement, "set hssupport", 1);
@@ -11813,6 +11981,30 @@ void savescreen (void)
     jsr ("savescreen");
 }
 
+void changedmaholes (char **statement)
+{
+
+    //   1              2
+    // changedmaholes value
+    // accepted values are "enable" and "disable"
+
+    assertminimumargs (statement, "changedmaholes", 1);
+
+    if (!changedmaholescalled)
+    {
+	changedmaholescalled = 1;
+	strcpy (redefined_variables[numredefvars++], "CHANGEDMAHOLES = 1");
+    }
+
+    if (!strncmp(statement[2], "disable",7))
+        printf ("    jsr removedmaholes\n");
+    else if (!strncmp(statement[2], "enable",6))
+        printf ("    jsr createdmaholes\n");
+    else
+	prerror ("Unrecognized argument '%s' was provided to changedmaholes.\n", statement[2]);
+}
+
+
 void restorescreen (void)
 {
     invalidate_Areg ();
@@ -11908,7 +12100,10 @@ void prwarn (char *format, ...)
     va_list args;
     va_start (args, format);
     vsnprintf (buffer, 1023, format, args);
-    fprintf (stderrfilepointer, "*** (%d): WARNING, %s\n", line, buffer);
+    if (savelevel)
+        fprintf (stderrfilepointer, "*** (%s:%d): WARNING, %s\n", savelinesname[savelevel], line, buffer);
+    else
+        fprintf (stderrfilepointer, "*** (%d): WARNING, %s\n", line, buffer);
     va_end (args);
 }
 
@@ -11919,7 +12114,10 @@ void prerror (char *format, ...)
     va_list args;
     va_start (args, format);
     vsnprintf (buffer, 1023, format, args);
-    fprintf (stderrfilepointer, "*** (%d): ERROR, %s\n", line, buffer);
+    if (savelevel)
+        fprintf (stderrfilepointer, "*** (%s:%d): ERROR, %s\n", savelinesname[savelevel], line, buffer);
+    else
+        fprintf (stderrfilepointer, "*** (%d): ERROR, %s\n", line, buffer);
     va_end (args);
     lastrites();
     exit (1);

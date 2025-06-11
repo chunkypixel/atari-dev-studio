@@ -1,5 +1,11 @@
 // Provided under the GPL v2 license. See the included LICENSE.txt for details.
 
+#ifndef STATEMENTS_H_CONSTANTS_DEFINED
+#define STATEMENTS_H_CONSTANTS_DEFINED
+
+#define MAXCONSTANTS 80000
+#define CONSTANTLEN    100
+
 #define _readpaddle 1
 #define _background 64
 #define MAX_EXTRAS 5
@@ -12,6 +18,8 @@
 #define MODE320B 4
 #define MODE320C 8
 #define MODE320D 16
+
+#endif // !STATEMENTS_H_CONSTANTS_DEFINED
 
 #include <stdio.h>
 
@@ -47,9 +55,10 @@ int islabelelse (char **);
 int findlabel (char **, int i);
 void add_includes (char *);
 void create_includes (char *);
+void filetolabel(char *target, char *source);
 void incline ();
 void fixfilename (char *);
-void init_includes ();
+void init_includes (char *path);
 void invalidate_Areg ();
 void shiftdata (char **, int);
 void compressdata (char **, int, int);
@@ -129,12 +138,16 @@ void unlockzone (char **statement);
 void shakescreen (char **statement);
 void changecontrol (char **statement);
 void snesdetect ();
+void defaultpalette (char **statement);
 int inlinealphadata (char **statement);
+void incbasic (char **statement);
+void incbasicend ();
 void incgraphic (char *file_name, int offset);
 void newblock ();
 void voice (char **statement);
 int getgraphicwidth (char *file_name);
 void characterset (char **statement);
+void changedmaholes (char **statement);
 void savescreen (void);
 void restorescreen (void);
 void barf_graphic_file (void);

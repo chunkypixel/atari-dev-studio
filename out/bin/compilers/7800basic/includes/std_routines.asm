@@ -637,12 +637,18 @@ mega7800handlerdone
      lda #0
      sta palfastframe
      sta ntscslowframe
-     ldx paldetected ; 0=ntsc 1=pal
      ldy palframes
      iny
-     cpy #5
+     ldx paldetected ; 0=ntsc 1=pal
+     beq ntsc2palskipcheck
+pal2ntscskipcheck
+     cpy #5 ; every 5th frame, add a frame
      bne palframeskipdone
-     lda paldetected
+     beq frameskipdo
+ntsc2palskipcheck
+     cpy #6 ; every 6th frame, drop a frame
+     bne palframeskipdone
+frameskipdo
      inc ntscslowframe,x
      ldy #0
 palframeskipdone
@@ -1762,6 +1768,7 @@ pvnibble2charextra
          adc #1
          sta VALBUFFER,x
          inx
+         dec plotdigitcount
 
 pvnibble2char_skipnibbleextra
          ; low nibble...
@@ -3207,8 +3214,8 @@ paddlebuttonhandler     ; outside of conditional, for button-handler LUT
          asl
          asl
 skippaddleport2shift
-         and #%10000000
-         eor #%10000000 ; invert
+         and #%11000000
+         eor #%11000000 ; invert
          sta sINPT1,x
          jmp buttonreadloopreturn
      endif ; PADDLESUPPORT
@@ -3359,4 +3366,46 @@ settwobuttonmode
 thisjoy2buttonbit
           ; p0   p1   p0
      .byte $04, $10, $04
+
+     ifconst CHANGEDMAHOLES
+removedmaholes
+     ldx #0
+removedllholesloop
+     lda DLLMEM,x
+     and #%10001111
+     sta DLLMEM,x
+   ifconst DOUBLEBUFFER
+     sta DLLMEM+DBOFFSET,x
+   endif
+     inx
+     inx
+     inx
+   ifconst DOUBLEBUFFER
+     cpx #DBOFFSET
+     bcc removedllholesloop
+   else
+     bpl removedllholesloop
+   endif
+     rts
+
+createdmaholes
+     ldx #0
+createdllholesloop
+     lda DLLMEM,x
+     ora #(WZONEHEIGHT*4)
+     sta DLLMEM,x
+   ifconst DOUBLEBUFFER
+     sta DLLMEM+DBOFFSET,x
+   endif
+     inx
+     inx
+     inx
+   ifconst DOUBLEBUFFER
+     cpx #DBOFFSET
+     bcc createdllholesloop
+   else
+     bpl createdllholesloop
+   endif
+     rts
+ endif
 

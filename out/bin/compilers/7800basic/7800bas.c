@@ -17,7 +17,7 @@ extern int currentbank;
 extern int currentdmahole;
 extern int numredefvars;
 extern int numconstants;
-extern char constants[MAXCONSTANTS][100];
+extern char constants[MAXCONSTANTS][CONSTANTLEN];
 extern char incbasepath[500];
 extern char redefined_variables[80000][100];
 extern char bannerfilenames[1000][100];
@@ -27,8 +27,10 @@ extern int graphicsdatawidth[16];
 extern char charactersetchars[257];
 extern int passes;
 extern int line;
+extern int savelevel;
 extern int dmaplain;
 extern int templabel;
+extern int plotlabel;
 extern int tallspritecount;
 extern int fourbitfade_alreadyused;
 extern int zonelocking;
@@ -57,15 +59,18 @@ extern int romsize_already_set;
 extern int firstfourbyte;
 extern int firstcompress;
 extern int dumpgraphics_index;
+extern int TIGHTPACKBORDER;
+extern int changedmaholescalled;
 int maxpasses = 2;
 
-#define BASIC_VERSION_INFO "7800basic v0.33"
+#define BASIC_VERSION_INFO "7800basic v0.34"
 
 int main (int argc, char *argv[])
 {
     char **statement;
     char **deallocate_mem;
     int i, j, k;
+    int def_idx;
     int unnamed, defcount, defi;
     char *c;
     char single;
@@ -77,8 +82,8 @@ int main (int argc, char *argv[])
     char *filename = "7800basic_variable_redefs.h";
     char *prefilename = NULL;
     char *path = 0;
-    char def[250][100];
-    char defr[250][100];
+    char def[500][100];
+    char defr[500][100];
     char finalcode[500];
     char *codeadd;
     char mycode[500];
@@ -117,6 +122,7 @@ int main (int argc, char *argv[])
         // we were called without the "-p" switch, so revert to the historic
         // single-pass behavior, since the basic source is coming from stdin,
         // and we can't rewind stdin.
+	prwarn ("7800basic was launched without -p. Using single-pass only.");
 	maxpasses=1;
         preprocessedfd = stdin;
     }
@@ -161,17 +167,20 @@ int main (int argc, char *argv[])
         prout ("%s %s %s\n", BASIC_VERSION_INFO, __DATE__, __TIME__);
 
         // a bunch of vars that should be reset each pass.
+        changedmaholescalled = 0;
         numredefvars = 0;
         numconstants = 0;
 	incbasepath[0] = 0;
 	currentcharset[0] = 0;
 	line = 0;
+	savelevel = 0;
 	unnamed = 0;
 	defcount = 0;
 	multiplespace = 0;
 	defi = 0;
 	dmaplain = 0;
 	templabel = 0;
+	plotlabel = 0;
 	currentbank = 0;
 	branchtargetnumber = 0;
 	doingfunction = 0;
@@ -200,6 +209,7 @@ int main (int argc, char *argv[])
 	numthens = 0;
 	firstfourbyte = 1;
 	firstcompress = 1;
+	TIGHTPACKBORDER = 0;
 
         // global variable init...
         strcpy (redefined_variables[numredefvars++], "collisionwrap = 1");
@@ -262,32 +272,59 @@ int main (int argc, char *argv[])
 
 	    // look for defines and remember them
 	    strcpy (mycode, code);
-	    for (i = 0; i < 495; ++i)
-		if (code[i] == ' ')
+	    int k_def_search;
+            for (k_def_search = 0; k_def_search < 495; ++k_def_search)
+	        if (code[k_def_search] == ' ')
 		    break;
-	    if (code[i + 1] == 'd' && code[i + 2] == 'e' && code[i + 3] == 'f' && code[i + 4] == ' ')
+	    if (k_def_search < 495 && code[k_def_search] == ' ' && 
+	    (k_def_search + 4 < 499) && code[k_def_search + 1] == 'd' && 
+	    code[k_def_search + 2] == 'e' && code[k_def_search + 3] == 'f' &&
+	    code[k_def_search + 4] == ' ')
 	    {			// found a define
-		i += 5;
-		for (j = 0; code[i] != ' '; i++)
+	        int current_pos = k_def_search + 5; // current_pos now points to start of define name.
+	        if (defi >= 499) { // Max 500 defines
+		    fprintf(stderr, "(%d) ERROR: Maximum number of defines (500) reached.\n", bbgetline());
+		    exit(1);
+		}
+	        for (j = 0; current_pos < 499 && code[current_pos] != ' ' && code[current_pos] != '\0' && code[current_pos] != '\n' && code[current_pos] != '\r'; current_pos++)
 		{
-		    def[defi][j++] = code[i];	// get the define
+		    if (j >= 99) {
+		        fprintf(stderr, "(%d) ERROR: Define name too long (max 99 chars).\n", bbgetline());
+		        exit(1);
+		    }
+		    def[defi][j++] = code[current_pos];
 		}
 		def[defi][j] = '\0';
 
-		i += 3;
+		if (j == 0) { // Empty define name
+		     fprintf(stderr, "(%d) ERROR: Malformed define statement. Empty define name.\n", bbgetline());
+		     exit(1);
+		}
 
-		for (j = 0; code[i] != '\0'; i++)
+		// Expect " = " sequence after define name
+		if (!(current_pos < 497 && code[current_pos] == ' ' && code[current_pos+1] == '=' && code[current_pos+2] == ' ')) {
+		    fprintf(stderr, "(%d) ERROR: Malformed define statement. Expected \" = \" after define name '%s'.\n",
+		            bbgetline(), def[defi]);
+		    exit(1);
+		}
+		current_pos += 3; // Skip " = "
+
+		for (j = 0; current_pos < 499 && code[current_pos] != '\0' && code[current_pos] != '\n' && code[current_pos] != '\r'; current_pos++)
 		{
-		    defr[defi][j++] = code[i];	// get the definition
+		    if (j >= 99) {
+		        fprintf(stderr, "(%d) ERROR: Define replacement string too long (max 99 chars) for define '%s'.\n", bbgetline(), def[defi]);
+		        exit(1);
+		    }
+		    defr[defi][j++] = code[current_pos];
 		}
 		defr[defi][j] = '\0';
 		removeCR (defr[defi]);
-		printf (";.%s.%s.\n", def[defi], defr[defi]);
+	        printf (";PARSED_DEFINE: .%s. = .%s.\n", def[defi], defr[defi]);
 		defi++;
 	    }
-	    else if (defi)
+	    else if (defi) // This 'i' refers to the outer loop variable for iterating through existing defines
 	    {
-		for (i = 0; i < defi; ++i)
+		for (def_idx = 0; def_idx < defi; ++def_idx)
 		{
 		    codeadd = NULL;
 		    finalcode[0] = '\0';
@@ -301,15 +338,15 @@ int main (int argc, char *argv[])
 				     bbgetline ());
 			    exit (1);
 			}
-			codeadd = strstr (mycode, def[i]);
+	                codeadd = strstr (mycode, def[def_idx]);
 			if (codeadd == NULL)
 			    break;
 			for (j = 0; j < 500; ++j)
 			    finalcode[j] = '\0';
 			strncpy (finalcode, mycode, 500);
 			finalcode[(strlen (mycode) - strlen (codeadd))] = 0;
-			strcat (finalcode, defr[i]);
-			strcat (finalcode, codeadd + strlen (def[i]));
+	                strcat (finalcode, defr[def_idx]);
+	                strcat (finalcode, codeadd + strlen (def[def_idx]));
 			strcpy (mycode, finalcode);
 		    }
 		}
@@ -390,7 +427,7 @@ int main (int argc, char *argv[])
 	printf ("  echo \"######## ERROR: space overflow detected in\",[SPACEOVERFLOW]d,\"areas.\"\n");
 	printf ("  echo \"######## look above for areas with negative ROM space left.\"\n");
 	printf ("  echo \"######## Aborting assembly.\"\n");
-	printf ("SET SPACEOVERFLOWPASS = (SPACEOVERFLOWPASS + 1)\n");
+	printf ("SPACEOVERFLOWPASS SET (SPACEOVERFLOWPASS + 1)\n");
 	printf (" if SPACEOVERFLOWPASS > 0\n");
 	printf ("  ERR\n");
 	printf (" endif\n");

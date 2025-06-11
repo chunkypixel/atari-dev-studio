@@ -7,6 +7,35 @@
 
 
 
+## CHANGEDMAHOLES
+
+    changedmaholes mode
+
+    mode - disable, enable
+
+
+
+## TIGHTPACKBORDER
+
+    set tightpackborder option
+
+    option - $#### or top
+
+    $#### - address of gfx data ie. $8000
+    top - If you wish to tightly pack all graphics ie. the graphics are always aligned with zones perfectly—you can use 'top' as the address location with tightpackborder.
+
+
+
+## DEFAULTPALETTE
+
+    defaultpalette sprite_graphic mode palette_#
+
+    sprite_graphic - name of the included graphic
+    mode - 160A, 160B, 320A, 320B, 320C, 320D
+    palette_# - index of palette (0-7)
+
+
+
 ## LOADROMBANK
 
     loadrombank bank
@@ -487,6 +516,14 @@
     incbin filename.xxx
 
     filename.xxx - file name of the asset to include
+
+
+
+## INCBASIC
+
+    incbasic filename.xxx
+
+    filename.xxx - file name of the source code to include
 
 
 

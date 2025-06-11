@@ -28,6 +28,7 @@ if|conditional_logic
 then|conditional_logic
 bank|bank
 dmahole|dmahole
+changedmaholes|changedmaholes
 noflow|dmahole
 goto|goto
 gosub|gosub_and_return
@@ -48,6 +49,7 @@ speechdata|speechdata
 romsize|set_romsize
 doublewide|set_doublewide_on
 zoneheight|set_zoneheight
+defaultpalette|defaultpalette
 P0C1|setting_palettes
 P0C2|setting_palettes
 P0C3|setting_palettes
@@ -120,6 +122,7 @@ userinterrupt|topscreenroutine_subroutine
 adjustvisible|adjustvisible
 incgraphic|incgraphic
 incbanner|incbanner
+incbasic|including_basic_code_from_other_files
 newblock|newblock
 plotsprite|plotsprite
 plotbanner|plotbanner

@@ -44,15 +44,18 @@ detecthsc
 checkhscinit
              and $1000,y
              dey
-             bpl checkhscinit
+             bne checkhscinit
              cmp #$ff
-             bne hscisalreadyinit
+             beq dominimalhscinit
+             ; Y is 0
+             lda #0
 checkhscinit2
              ora $1000,y
              dey
-             bpl checkhscinit2
+             bne checkhscinit2
              cmp #0
              bne hscisalreadyinit
+dominimalhscinit
              ; if we're here, we need to do a minimal HSC init...
              ldy #$28
 hscinitloop1
@@ -103,6 +106,11 @@ SCORESIZE                     = HSSCORESIZE
                  else
 SCORESIZE                     = 6
                  endif
+
+                 jsr mutetia
+                 ifconst pokeysupport
+                     jsr mutepokey
+                 endif ; pokeysupport
 
                  ;save shadow registers for later return...
                  lda sCTRL

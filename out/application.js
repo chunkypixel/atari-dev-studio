@@ -37,8 +37,7 @@ exports.TrimRight = TrimRight;
 exports.TrimLeft = TrimLeft;
 exports.ReplaceZerosTemplate = ReplaceZerosTemplate;
 const vscode = require("vscode");
-const open = require('open');
-const os = require("os");
+const open_1 = require("open");
 const batariBasicCompiler_1 = require("./compilers/batariBasicCompiler");
 const seventyEightHundredBasicCompiler_1 = require("./compilers/seventyEightHundredBasicCompiler");
 const dasmCompiler_1 = require("./compilers/dasmCompiler");
@@ -65,6 +64,7 @@ const dasmReferenceProvider_1 = require("./referenceProvider/dasmReferenceProvid
 const seventyEightHundredBasicContextHelp_1 = require("./contexthelp/seventyEightHundredBasicContextHelp");
 const batariBasicContextHelp_1 = require("./contexthelp/batariBasicContextHelp");
 const SeventyEightHundredGDSerial_1 = require("./serial/SeventyEightHundredGDSerial");
+const os = require("os");
 // -------------------------------------------------------------------------------------
 // Operating System
 // -------------------------------------------------------------------------------------
@@ -393,11 +393,12 @@ function Delay(ms) {
 function IsNumber(numStr) {
     return !isNaN(parseFloat(numStr)) && !isNaN(+numStr);
 }
-function OpenBrowserWindow(path_1) {
-    return __awaiter(this, arguments, void 0, function* (path, browser = '') {
-        yield open(path, { app: browser })
+function OpenBrowserWindow(path) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield (0, open_1.default)(path, { app: { name: open_1.apps.browser }
+        })
             .catch((_) => {
-            vscode.window.showErrorMessage(`Open browser failed!! Please check if you have installed the browser ${browser} correctly!`);
+            vscode.window.showErrorMessage(`Open web browser failed!! Please check if you have Chrome, Firefox or Edge correctly installed!`);
         });
     });
 }

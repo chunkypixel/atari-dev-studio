@@ -242,7 +242,7 @@ int main (int argc, char **argv)
 			fprintf(out,"\n");
 			fprintf(out,"   .word $%02XFE,(.RMTSTART+$%04x) ; GOTO",buffer[t+1],val);
 			t=t+3;
-			i==16;
+			i=16;
 			continue;
 		}
 		if((i==16)&&((t+1)<endrange))

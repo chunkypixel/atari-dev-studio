@@ -13,7 +13,7 @@
         "url": "https://github.com/chunkypixel/atari-dev-studio.git"
     },
     "engines": {
-        "vscode": "^1.90.2"
+        "vscode": "^1.97.2"
     },
     "categories": [
         "Programming Languages",
@@ -495,17 +495,17 @@
         "watch": "tsc -watch -p ./"
     },
     "dependencies": {
-        "eslint": "^9.8.0",
-        "find-process": "^1.4.7",
+        "eslint": "^9.28.0",
+        "find-process": "^1.4.10",
         "minimist": "^1.2.8",
-        "open": "^8.4.0",
+        "open": "^10.1.2",
         "tree-kill": "^1.2.2"
     },
     "devDependencies": {
-        "@types/mocha": "^10.0.7",
-        "@types/node": "^22.1.0",
-        "@types/vscode": "^1.90.2",
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^22.15.31",
+        "@types/vscode": "^1.97.2",
         "diff": "^5.2.0",
-        "typescript": "^5.5.4"
+        "typescript": "^5.8.3"
     }
 }

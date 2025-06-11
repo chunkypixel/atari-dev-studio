@@ -3,9 +3,6 @@
 #ifndef KEYWORDS_H
 #define KEYWORDS_H
 
-#define MAXCONSTANTS 80000
-#define CONSTANTLEN    100
-
 void keywords (char **);
 
 #endif

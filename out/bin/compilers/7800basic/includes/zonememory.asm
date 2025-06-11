@@ -1,5 +1,8 @@
  ; Provided under the CC0 license. See the included LICENSE.txt for details.
 
+ ; A tunable parameter, to claim some memory back from DL usage
+MEMSKIP = $00
+
      ;************** Setup DLL entries
 
      ; setup some working definitions, to avoid ifnconst mess elsewhere...
@@ -36,13 +39,18 @@ NVLINES         = ((243-WSCREENHEIGHT)/2)
 
     ifnconst DLMEMSTART
       ifnconst DOUBLEBUFFER
-WDLMEMSTART = $1880
+WDLMEMSTART SET $1880
       else
-WDLMEMSTART = $18E0
+WDLMEMSTART SET $18E0
       endif ; DOUBLEBUFFER
     else
-WDLMEMSTART = DLMEMSTART
+WDLMEMSTART SET DLMEMSTART
     endif
+
+ if MEMSKIP > 0 
+     echo "   ",[WDLMEMSTART],"to",[WDLMEMSTART+MEMSKIP-1],"was freed for game usage with MEMSKIP."
+WDLMEMSTART SET (WDLMEMSTART + MEMSKIP)
+ endif ; MEMSKIP > 0
 
     ifnconst DLMEMEND
        ifconst EXTRADLMEMORY

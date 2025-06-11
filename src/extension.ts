@@ -41,11 +41,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	// 2600 editors
 	const openPlayerPalPage = vscode.commands.registerCommand('extension.openPlayerPalPage', () => {
 		console.log('User activated command "extension.openPlayerPalPage"');
-	    application.OpenBrowserWindow('https://alienbill.com/2600/playerpalnext.html','');
+	    application.OpenBrowserWindow('https://alienbill.com/2600/playerpalnext.html');
 	});
 	const openAtariBackgroundBuilderPage = vscode.commands.registerCommand('extension.openAtariBackgroundBuilderPage', () => {
 		console.log('User activated command "extension.openAtariBackgroundBuilderPage"');
-		application.OpenBrowserWindow('https://alienbill.com/2600/atari-background-builder','');
+		application.OpenBrowserWindow('https://alienbill.com/2600/atari-background-builder');
 	});
 
 	// Build

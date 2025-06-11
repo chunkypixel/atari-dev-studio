@@ -1,8 +1,6 @@
 "use strict";
 import * as vscode from 'vscode';
-import * as filesystem from './filesystem';
-const open = require('open');
-const os = require("os");
+import open, {openApp, apps} from 'open';
 import { CompilerBase } from './compilers/compilerBase';
 import { BatariBasicCompiler } from './compilers/batariBasicCompiler';
 import { SeventyEightHundredBasicCompiler } from './compilers/seventyEightHundredBasicCompiler';
@@ -40,6 +38,7 @@ import { BatariBasicContextHelp } from "./contexthelp/batariBasicContextHelp";
 import { SeventyEightHundredGDSerial } from './serial/SeventyEightHundredGDSerial';
 import { SerialBase } from './serial/serialBase';
 import internal = require('stream');
+const os = require("os");
 
 // -------------------------------------------------------------------------------------
 // Operating System
@@ -393,10 +392,12 @@ export function IsNumber(numStr: string) {
 	return !isNaN(parseFloat(numStr)) && !isNaN(+numStr)
 }
 
-export async function OpenBrowserWindow(path: string, browser:string = ''): Promise<void> {
-	await open(path, { app: browser })
+export async function OpenBrowserWindow(path: string): Promise<void> {
+	await open(path, { app: 
+		{name: apps.browser} 
+	})
     .catch((_: any) => {
-      vscode.window.showErrorMessage(`Open browser failed!! Please check if you have installed the browser ${browser} correctly!`);
+      vscode.window.showErrorMessage(`Open web browser failed!! Please check if you have Chrome, Firefox or Edge correctly installed!`);
     });
 }
 

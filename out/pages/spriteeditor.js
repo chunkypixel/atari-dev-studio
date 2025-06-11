@@ -14,7 +14,6 @@ const vscode = require("vscode");
 const path = require("path");
 const filesystem = require("../filesystem");
 const application = require("../application");
-const opn = require("open");
 class SpriteEditorPage {
     constructor() {
         this.currentPanel = undefined;
@@ -141,15 +140,6 @@ class SpriteEditorPage {
     replaceContentTag(content, tag, tagContent) {
         tag = `%${tag}%`;
         return content.replace(new RegExp(tag, 'g'), tagContent);
-    }
-    openUrl(uri) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                //let options:
-                opn(uri);
-            }
-            catch (_a) { }
-        });
     }
     loadConfiguration(contentUri) {
         return __awaiter(this, void 0, void 0, function* () {
