@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.10.8
+
+* Added moving the generated *.ace file to the output bin folder during the batari Basic compile process 
+
 ## 0.10.7
 
 * Updated 7800basic to v0.36 (Windows, Linux, macOS). NOTE: arm64 compatibility build remains at v0.29

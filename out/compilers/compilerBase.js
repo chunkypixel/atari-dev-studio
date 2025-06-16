@@ -474,10 +474,17 @@ class CompilerBase {
                     let extension = _c;
                     // Prepare
                     let compiledFileName = `${this.FileName}${extension}`;
+                    // leading minus (-)? if so strip any existing extensions from filename before adding
+                    if (extension.startsWith("-")) {
+                        // remove minus (-)
+                        extension = extension.slice(1);
+                        compiledFileName = `${path.parse(this.FileName).name}${extension}`;
+                    }
+                    // set path
                     let oldPath = path.join(this.WorkspaceFolder, compiledFileName);
                     let newPath = path.join(this.CompiledSubFolder, compiledFileName);
                     // Move compiled file
-                    // Updated to check as we may now have optional files (7800basic - .CC2)
+                    // Updated to check as we may now have optional files (7800basic - .CC2, bB - .ace)
                     if (yield filesystem.FileExistsAsync(oldPath)) {
                         // Process
                         result = yield filesystem.RenameFileAsync(oldPath, newPath);

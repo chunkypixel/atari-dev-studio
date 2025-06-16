@@ -9,10 +9,11 @@ import { CompilerBase } from "./compilerBase";
 export class BatariBasicCompiler extends CompilerBase {
     
     constructor() {
+        // NOTE: '.ace' CompiledExtension requires all existing extensions to be stripped (-)
         super("batariBasic",
                 "batari Basic",
                 [".bas",".bb"],
-                [".bin"],[".bin"],
+                [".bin","-.ace"],[".bin"],
                 path.join(application.Path,"out","bin","compilers","bB"),
                 "Stella");
     }
@@ -159,7 +160,6 @@ export class BatariBasicCompiler extends CompilerBase {
             // Process
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`${this.FileName}.asm`));
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`bB.asm`));
-            await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`default.ace`));
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`includes.bB`));
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`2600basic_variable_redefs.h`));
         }

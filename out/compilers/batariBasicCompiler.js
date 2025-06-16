@@ -18,7 +18,8 @@ const execute = require("../execute");
 const compilerBase_1 = require("./compilerBase");
 class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     constructor() {
-        super("batariBasic", "batari Basic", [".bas", ".bb"], [".bin"], [".bin"], path.join(application.Path, "out", "bin", "compilers", "bB"), "Stella");
+        // NOTE: '.ace' CompiledExtension requires all existing extensions to be stripped (-)
+        super("batariBasic", "batari Basic", [".bas", ".bb"], [".bin", "-.ace"], [".bin"], path.join(application.Path, "out", "bin", "compilers", "bB"), "Stella");
     }
     GetCompilerVersionAsync() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -149,7 +150,6 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                 // Process
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `${this.FileName}.asm`));
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `bB.asm`));
-                yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `default.ace`));
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `includes.bB`));
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `2600basic_variable_redefs.h`));
             }
