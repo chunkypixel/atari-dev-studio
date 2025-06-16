@@ -1,4 +1,5 @@
 "use strict";
+import * as vscode from 'vscode';
 import * as path from 'path';
 import * as application from '../application';
 import * as filesystem from '../filesystem';
@@ -14,6 +15,20 @@ export class BatariBasicCompiler extends CompilerBase {
                 [".bin"],[".bin"],
                 path.join(application.Path,"out","bin","compilers","bB"),
                 "Stella");
+    }
+
+    protected async GetCompilerVersionAsync(): Promise<void> {
+        // Prepare
+        const filePath: vscode.Uri = vscode.Uri.file(path.join(this.FolderOrPath, 'release.dat'));
+        this.CompilerVersion = 0.17;
+
+        // attempt to read contents
+        if (await (filesystem.FileExistsAsync(filePath.fsPath))) {
+            let fileContent = (await filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/); 
+            if (!fileContent.any && application.IsNumber(fileContent[0])) { 
+                this.CompilerVersion = parseFloat(fileContent[0]); 
+            }
+        }
     }
 
     protected async ExecuteCompilerAsync(): Promise<boolean> {
@@ -144,6 +159,7 @@ export class BatariBasicCompiler extends CompilerBase {
             // Process
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`${this.FileName}.asm`));
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`bB.asm`));
+            await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`default.ace`));
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`includes.bB`));
             await filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder,`2600basic_variable_redefs.h`));
         }
@@ -167,13 +183,20 @@ export class BatariBasicCompiler extends CompilerBase {
         let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
 
         // Result
-        return [command,
+        let compilerFileList = [command,
             `2600basic${platform}${extension}`,
             `bbfilter${platform}${extension}`,
             `optimize${platform}${extension}`,
             `postprocess${platform}${extension}`,
             `preprocess${platform}${extension}`,
-            `dasm${platform}${extension}`];     
-
+            `dasm${platform}${extension}`]; 
+            
+        // As of 15/06/25 (v0.18) the existing ARM version does not cater for this file
+        if (this.CompilerVersion >= 0.18 && !application.IsMacOSArm) {
+            compilerFileList.push(
+                `relocateBB${platform}${extension}`);
+        }
+        // Return
+        return compilerFileList;        
     }
 }

@@ -7,9 +7,14 @@
 #include "statements.h"
 #include "keywords.h"
 #include <math.h>
-#define BB_VERSION_INFO "batari Basic v1.7 (c)2022\n"
+#define BB_VERSION_INFO "batari Basic v1.8 (c)2025\n"
 
-int bank = 1;
+extern int bank;
+
+extern int bs;
+extern int numconstants;
+extern int playfield_index[];
+extern int line;
 
 int main(int argc, char *argv[])
 {
@@ -54,42 +59,14 @@ int main(int argc, char *argv[])
 	    exit(1);
 	}
     }
-    condpart = 0;
-    last_bank = 0;		// last bank when bs is enabled (0 for 2k/4k)
-    bank = 1;			// current bank: 1 or 2 for 8k
-    bs = 0;			// bankswtiching type; 0=none
-    ongosub = 0;
-    superchip = 0;
-    optimization = 0;
-    smartbranching = 0;
-    line = 0;
-    numfixpoint44 = 0;
-    numfixpoint88 = 0;
-    ROMpf = 0;
-    ors = 0;
-    numjsrs = 0;
-    numfors = 0;
-    numthens = 0;
-    numelses = 0;
-    numredefvars = 0;
-    numconstants = 0;
-    branchtargetnumber = 0;
-    doingfunction = 0;
-    sprite_index = 0;
-    multisprite = 0;
-    lifekernel = 0;
-    playfield_number = 0;
-    playfield_index[0] = 0;
-    extra = 0;
-    extralabel = 0;
-    extraactive = 0;
-    macroactive = 0;
 
     fprintf(stderr, BB_VERSION_INFO);
 
     printf("game\n");		// label for start of game
     header_open(header);
     init_includes(path);
+
+    playfield_index[0]=0;
 
     statement = (char **) malloc(sizeof(char *) * 200);
     for (i = 0; i < 200; ++i)
@@ -112,32 +89,61 @@ int main(int argc, char *argv[])
 
 	// look for defines and remember them
 	strcpy(mycode, code);
-	for (i = 0; i < 500; ++i)
-	    if (code[i] == ' ')
+        int k_def_search; // Use a different loop variable to avoid conflict with outer 'i'
+        for (k_def_search = 0; k_def_search < 495; ++k_def_search)
+	    if (code[k_def_search] == ' ')
 		break;
-	if (code[i + 1] == 'd' && code[i + 2] == 'e' && code[i + 3] == 'f' && code[i + 4] == ' ')
+        if (k_def_search < 495 && code[k_def_search] == ' ' && /* Ensure space was found */
+            (k_def_search + 4 < 499) && /* Bounds check for code access */
+        code[k_def_search + 1] == 'd' && code[k_def_search + 2] == 'e' && 
+        code[k_def_search + 3] == 'f' && code[k_def_search + 4] == ' ')
 	{			// found a define
-	    i += 5;
-	    for (j = 0; code[i] != ' '; i++)
+	    int current_pos = k_def_search + 5; // current_pos now points to start of define name.
+
+	    if (defi >= 499) { // Max 500 defines (0-499)
+	        fprintf(stderr, "(%d) ERROR: Maximum number of defines (500) reached.\n", bbgetline());
+	        exit(1);
+	    }
+
+	    for (j = 0; current_pos < 499 && code[current_pos] != ' ' && code[current_pos] != '\0' && code[current_pos] != '\n' && code[current_pos] != '\r'; current_pos++)
 	    {
-		def[defi][j++] = code[i];	// get the define
+	        if (j >= 99) {
+	            fprintf(stderr, "(%d) ERROR: Define name too long (max 99 chars).\n", bbgetline());
+		    exit(1);
+		}
+		def[defi][j++] = code[current_pos];
 	    }
 	    def[defi][j] = '\0';
 
-	    i += 3;
+	    if (j == 0) { // Empty define name
+	        fprintf(stderr, "(%d) ERROR: Malformed define statement. Empty define name.\n", bbgetline());
+	         exit(1);
+	    }
 
-	    for (j = 0; code[i] != '\0'; i++)
+	    // Expect " = " sequence after define name
+	    if (!(current_pos < 497 && code[current_pos] == ' ' && code[current_pos+1] == '=' && code[current_pos+2] == ' ')) {
+	        fprintf(stderr, "(%d) ERROR: Malformed define statement. Expected \" = \" after define name '%s'.\n", bbgetline(), def[defi]);
+		exit(1);
+	    }
+	    current_pos += 3; // Skip " = "
+
+	    for (j = 0; current_pos < 499 && code[current_pos] != '\0' && code[current_pos] != '\n' && code[current_pos] != '\r'; current_pos++)
 	    {
-		defr[defi][j++] = code[i];	// get the definition
+	        if (j >= 99) {
+	            fprintf(stderr, "(%d) ERROR: Define replacement string too long (max 99 chars) for define '%s'.\n", bbgetline(), def[defi]);
+	            exit(1);
+	        }
+	        defr[defi][j++] = code[current_pos];
 	    }
 	    defr[defi][j] = '\0';
 	    removeCR(defr[defi]);
-	    printf(";.%s.%s.\n", def[defi], defr[defi]);
+	    printf (";PARSED_DEFINE: .%s. = .%s.\n", def[defi], defr[defi]); // Clarified debug print
 	    defi++;
 	}
-	else if (defi)
+	else if (defi) // This 'i' refers to the outer loop variable for iterating through existing defines
 	{
-	    for (i = 0; i < defi; ++i)
+            int def_idx;
+	    for (def_idx = 0; def_idx < defi; ++def_idx) // Use new loop var def_idx
 	    {
 		codeadd = NULL;
 		finalcode[0] = '\0';
@@ -150,14 +156,14 @@ int main(int argc, char *argv[])
 				bbgetline());
 			exit(1);
 		    }
-		    codeadd = strstr(mycode, def[i]);
+		    codeadd = strstr (mycode, def[def_idx]);
 		    if (codeadd == NULL)
 			break;
 		    for (j = 0; j < 500; ++j)
 			finalcode[j] = '\0';
 		    strncpy(finalcode, mycode, strlen(mycode) - strlen(codeadd));
-		    strcat(finalcode, defr[i]);
-		    strcat(finalcode, codeadd + strlen(def[i]));
+		    strcat (finalcode, defr[def_idx]);
+		    strcat (finalcode, codeadd + strlen (def[def_idx]));
 		    strcpy(mycode, finalcode);
 		}
 	    }
@@ -212,7 +218,7 @@ int main(int argc, char *argv[])
 
 	}
 	if (strncmp(statement[0], "end\0", 3))
-	    printf(".%s ; %s\n", statement[0], displaycode);	//    printf(".%s ; %s\n",statement[0],code);
+            printf (".%s ;;line %d;; %s\n", statement[0], line, displaycode);
 	else
 	    doend();
 

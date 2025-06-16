@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.10.7
+
+* Updated 7800basic to v0.36 (Windows, Linux, macOS). NOTE: arm64 compatibility build remains at v0.29
+* Updated batari Basic to v1.8 (Windows, Linux, macOS). NOTE: arm64 compatibility build remains at v1.6
+
 ## 0.10.6
 
 * Updated 7800basic to v0.34 (Windows, Linux, macOS). NOTE: arm64 compatibility build remains at v0.29

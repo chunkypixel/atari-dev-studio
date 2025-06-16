@@ -43,6 +43,9 @@ void keywords (char **cstatement)
     char **deallocelstatement;
     int door;
     int foundelse = 0;
+
+    if ((cstatement[0]!=NULL)&&(cstatement[0][0] == ';'))
+        return;
  
  //#define DEBUGTRC 1
  #ifdef DEBUGTRC
@@ -604,6 +607,8 @@ void keywords (char **cstatement)
 		return;
 
 	    removeCR (statement[1]);
+            if (statement[1][0]==0)
+		return;
 	    sprintf (errorcode, "unknown keyword '%s'.", statement[1]);
 	    prerror (&errorcode[0]);
 	    exit (1);

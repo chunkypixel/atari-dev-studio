@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BatariBasicCompiler = void 0;
+const vscode = require("vscode");
 const path = require("path");
 const application = require("../application");
 const filesystem = require("../filesystem");
@@ -18,6 +19,20 @@ const compilerBase_1 = require("./compilerBase");
 class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     constructor() {
         super("batariBasic", "batari Basic", [".bas", ".bb"], [".bin"], [".bin"], path.join(application.Path, "out", "bin", "compilers", "bB"), "Stella");
+    }
+    GetCompilerVersionAsync() {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Prepare
+            const filePath = vscode.Uri.file(path.join(this.FolderOrPath, 'release.dat'));
+            this.CompilerVersion = 0.17;
+            // attempt to read contents
+            if (yield (filesystem.FileExistsAsync(filePath.fsPath))) {
+                let fileContent = (yield filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/);
+                if (!fileContent.any && application.IsNumber(fileContent[0])) {
+                    this.CompilerVersion = parseFloat(fileContent[0]);
+                }
+            }
+        });
     }
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -134,6 +149,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                 // Process
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `${this.FileName}.asm`));
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `bB.asm`));
+                yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `default.ace`));
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `includes.bB`));
                 yield filesystem.RemoveFileAsync(path.join(this.WorkspaceFolder, `2600basic_variable_redefs.h`));
             }
@@ -158,13 +174,19 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
         }
         let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
         // Result
-        return [command,
+        let compilerFileList = [command,
             `2600basic${platform}${extension}`,
             `bbfilter${platform}${extension}`,
             `optimize${platform}${extension}`,
             `postprocess${platform}${extension}`,
             `preprocess${platform}${extension}`,
             `dasm${platform}${extension}`];
+        // As of 15/06/25 (v0.18) the existing ARM version does not cater for this file
+        if (this.CompilerVersion >= 0.18 && !application.IsMacOSArm) {
+            compilerFileList.push(`relocateBB${platform}${extension}`);
+        }
+        // Return
+        return compilerFileList;
     }
 }
 exports.BatariBasicCompiler = BatariBasicCompiler;

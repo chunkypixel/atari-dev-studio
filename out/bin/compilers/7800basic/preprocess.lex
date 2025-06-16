@@ -39,6 +39,14 @@ void handle_include_file(const char* filename_yytext, int filename_len) {
         actual_filename[len_to_copy] = '\0';
     }
 
+    char *CR;
+    CR = strrchr (actual_filename, (unsigned char) 0x0A);
+    if (CR != NULL)
+        *CR = 0;
+    CR = strrchr (actual_filename, (unsigned char) 0x0D);
+    if (CR != NULL)
+        *CR = 0;
+
     if (actual_filename[0] == '\0') {
         fprintf(stderr, "(%d) Error: Empty filename provided for 'incbasic'.\n", linenumber);
         return;
@@ -66,9 +74,6 @@ void handle_include_file(const char* filename_yytext, int filename_len) {
     // Create a new buffer for the new file and switch to it
     yy_switch_to_buffer(yy_create_buffer(yyin, YY_BUF_SIZE)); 
     
-    // Optional: Reset linenumber for the new file. 
-    // If you want per-file line numbers, you'd save/restore 'linenumber' too.
-    // linenumber = 1; // Example: reset for each new file
 }
 
 %}    
@@ -147,10 +152,6 @@ void handle_include_file(const char* filename_yytext, int filename_len) {
     BEGIN(incbasic_fname_parsed); // Or BEGIN(INITIAL); and re-evaluate the character
 }
 
-<incbasic_fname_parsed>[ \t]+ { 
-    printf("%s", yytext); 
-}
-
 <incbasic_fname_parsed>\n {
     linenumber++;
     printf("\n"); 
@@ -158,8 +159,8 @@ void handle_include_file(const char* filename_yytext, int filename_len) {
 }
 
 <incbasic_fname_parsed>. { 
-    fprintf(stderr, "(%d) Warning: Unexpected characters '%s' after filename on 'incbasic' line.\n", linenumber, yytext);
-    printf("%s", yytext); 
+    printf("\n%s", yytext); 
+    BEGIN(INITIAL); 
 }
 
 [ \t\r]+";" {BEGIN(scomment);}
@@ -235,14 +236,14 @@ void handle_include_file(const char* filename_yytext, int filename_len) {
 <speechquotestart>\n {fprintf(stderr, "(%d) Warning: Unterminated speech quote.\n", linenumber); linenumber++; printf("\n"); BEGIN(speechdata);} 
 
 
-"_songdata"            printf("%s", yytext);  
+"_songdata"            printf("%s", yytext);
 "songdata" {printf("%s",yytext);BEGIN(songdata);}
 <songdata>['] {printf("%s",yytext);BEGIN(songquotestart);}
-<songdata>"\n"[ \t]*"end" {linenumber++;printf("\nend");BEGIN(INITIAL);}
+<songdata>^"\nend" printf("%s",yytext);
+<songdata>"\nend" {linenumber++;printf("\nend");BEGIN(INITIAL);}
 <songdata>[ \t]+ putchar(' ');
 <songdata>[ \t\r]+$
 <songdata>"\n" {linenumber++;printf("\n");}
-<songdata>[^'\n]+ {printf("%s", yytext);}
 
 
 <songquotestart>[ \t] putchar('^');
@@ -393,7 +394,7 @@ int yywrap(void) {
             fclose(finished_file);
         }
 
-	printf(" incbasicend\n");
+	printf("\n incbasicend\n");
         
         return 0; // Signal to Flex: "more input is available from the new (old) buffer"
     }

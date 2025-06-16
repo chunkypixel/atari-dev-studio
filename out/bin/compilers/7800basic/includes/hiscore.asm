@@ -600,7 +600,7 @@ hsskipadjustjoystick1
                      asl 
                      eor #$FF 
                      sta hsswcha
-                 endif
+                 endif ; .HSup
                  lda SWCHB
                  and #%00000010
                  bne hsskipselectswitch
@@ -753,7 +753,7 @@ skipdebounceadjust
                  sta hsinpt1
                  rts
 hscheckresetover
-                 ifnconst .HSup
+                 ifnconst .HSselect
                      ldx hsdisplaymode
                      cpx #3
                      bne hsskipadjustjoyfire1
@@ -769,7 +769,7 @@ hsskipadjustjoyfire1done
                      ror ; carry
                      ror ; b7
                      sta hsinpt1
-                 endif .HSup
+                 endif ; .HSselect
 skipstorefirebuttonstatus
                  rts
 

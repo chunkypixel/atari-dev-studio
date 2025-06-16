@@ -63,7 +63,7 @@ extern int TIGHTPACKBORDER;
 extern int changedmaholescalled;
 int maxpasses = 2;
 
-#define BASIC_VERSION_INFO "7800basic v0.34"
+#define BASIC_VERSION_INFO "7800basic v0.36"
 
 int main (int argc, char *argv[])
 {
@@ -358,6 +358,8 @@ int main (int argc, char *argv[])
 
 	    // preprocessing removed in favor of a simplistic lex-based preprocessor
 
+            // fprintf(stderr,"%s",code); // DEBUG
+
 	    i = 0;
 	    j = 0;
 	    k = 0;
@@ -392,7 +394,7 @@ int main (int argc, char *argv[])
 		sprintf (statement[0], "L0%d", unnamed++);
 	    }
 	    if (strncmp (statement[0], "end\0", 3))
-		printf (".%s ;; %s\n", statement[0], displaycode);	//    printf(".%s ; %s\n",statement[0],code);
+		printf (".%s ;;line %d;; %s\n", statement[0], line, displaycode);
 	    else
 		doend ();
 
@@ -426,11 +428,6 @@ int main (int argc, char *argv[])
 	printf ("  echo \"\"\n");
 	printf ("  echo \"######## ERROR: space overflow detected in\",[SPACEOVERFLOW]d,\"areas.\"\n");
 	printf ("  echo \"######## look above for areas with negative ROM space left.\"\n");
-	printf ("  echo \"######## Aborting assembly.\"\n");
-	printf ("SPACEOVERFLOWPASS SET (SPACEOVERFLOWPASS + 1)\n");
-	printf (" if SPACEOVERFLOWPASS > 0\n");
-	printf ("  ERR\n");
-	printf (" endif\n");
 	printf (" endif\n");
 
 	printf (" \n\n");

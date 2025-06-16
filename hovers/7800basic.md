@@ -112,7 +112,7 @@
     
     doublebuffer state [framerate]
 
-    state - on, off, flip
+    state - on, off, flip, quickflip
     framerate (optional)
 
 

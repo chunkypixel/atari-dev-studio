@@ -10686,8 +10686,8 @@ void adjustvisible (char **statement)
 
 void doublebuffer (char **statement)
 {
-    //  1              2            3
-    // doublebuffer [on/off/flip] [minimumframe]
+    //  1              2                         3
+    // doublebuffer [on/off/flip/quickflip] [minimumframe]
     assertminimumargs (statement, "adjustvisible", 1);
 
     // enable the compile-time optional code
@@ -10713,6 +10713,10 @@ void doublebuffer (char **statement)
     else if (strcmp (statement[2], "flip") == 0)
     {
 	printf ("  jsr flipdisplaybuffer\n");
+    }
+    else if (strcmp (statement[2], "quickflip") == 0)
+    {
+	printf ("  jsr quickbufferflip\n");
     }
     else
     {

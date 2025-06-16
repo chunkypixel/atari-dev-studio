@@ -193,12 +193,12 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
         if (this.CompilerVersion >= 0.27) {
             compilerFileList.push(`7800rmt2asm${platform}${extension}`);
         }
-        // As of 8/06/25 the LZSA file is no longer used
-        // // As of 1/11/23 the existing ARM version does not cater for this file
-        // if (this.CompilerVersion >= 0.31 && !application.IsMacOSArm) {
-        //     compilerFileList.push(
-        //         `lzsa${platform}${extension}`);     
-        // }
+        // As of 8/06/25 (v0.34) the LZSA file is no longer used
+        // As of 1/11/23 (v0.31) the existing ARM version does not cater for this file
+        if (this.CompilerVersion >= 0.31 && this.CompilerVersion <= 0.33 &&
+            !application.IsMacOSArm) {
+            compilerFileList.push(`lzsa${platform}${extension}`);
+        }
         // Return
         return compilerFileList;
     }

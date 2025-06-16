@@ -2306,10 +2306,6 @@ flipdisplaybuffer
 
          jsr terminatedisplaybuffer ; terminate the working buffer before we flip
 
-         lda doublebufferstate
-         lsr ; /2, so we'll see 0 or 1, rather than 1 or 3
-         tax
-
          ; ensure we don't flip mid-display. otherwise the displayed DL will be the one the game is working on.
 
 flipdisplaybufferwait1
@@ -2319,6 +2315,11 @@ flipdisplaybufferwait1
 flipdisplaybufferwait
          lda visibleover
          bne flipdisplaybufferwait
+
+quickbufferflip
+         lda doublebufferstate
+         lsr ; /2, so we'll see 0 or 1, rather than 1 or 3
+         tax
 
          lda doublebufferminimumframetarget
          beq skipminimumframecode
