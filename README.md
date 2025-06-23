@@ -4,7 +4,7 @@ Welcome to Atari Dev Studio for designing homebrew games for the Atari 8-bit sys
 ![Atari Dev Studio](images/ataridevstudio-emulator.png)
 
 ## Requirements
-Atari Dev Studio is an extension for Microsoft's cross-platform IDE Visual Studio Code and will run on the Windows, Linux and macOS platforms. The latest releases of batari Basic, 7800basic, dasm, Stella and A7800 are included so you can begin coding straight after installing the extension.
+Atari Dev Studio is an extension for Microsoft's cross-platform IDE Visual Studio Code and will run on the Windows, Linux and macOS platforms. The latest releases of batari Basic, 7800basic, dasm, Stella and A7800 are included so you can begin coding straight after installing the extension. Though, please take a moment to check the OS-specific notes below for potential caveats.
 
 ## Features
 Atari Dev Studio includes the following features:
@@ -52,7 +52,7 @@ Older Mac computers with Intel chips should be able to use Atari Dev Studio as i
 ### Installing the extension
 Once you have installed VS Code (available [here](https://code.visualstudio.com/Download)), open the VS Code program and complete the following:
 1. From the **Activity Bar**, click the **Extensions** button to display the **Extensions** window.
-2. From the **Extensions** window, type **Atari** into the **Search** box and press **Enter** to display the list of available extensions. 
+2. From the **Extensions** window, type **Atari** into the **Search** box and press **Enter** to display the list of available extensions.
 3. From the list of available extensions, locate **Atari Dev Studio** and click the green **Install** button.
 
 ![Install the extension](images/ataridevstudio-installation.png)
@@ -85,7 +85,7 @@ To change a language you can click on the Status Bar **Language selector** and a
 ![Language Selector](images/ataridevstudio-languageselector.png)
 
 ### Build scripts [preview]
-Prefer using scripts to build your dasm games? If you have chosen to override the dasm compiler (select Make via the **Settings**) , Atari Dev Studio will scan and detect for makefile, batch (makefile.bat) or shell scripts (makefile.sh) files which are located in your root workspace folder to build your game. 
+Prefer using scripts to build your dasm games? If you have chosen to override the dasm compiler (select Make via the **Settings**) , Atari Dev Studio will scan and detect for makefile, batch (makefile.bat) or shell scripts (makefile.sh) files which are located in your root workspace folder to build your game.
 
 ![dasm Compiler](images/ataridevstudio-dasmcompiler.png)
 
