@@ -4,7 +4,7 @@ Welcome to Atari Dev Studio for designing homebrew games for the Atari 8-bit sys
 ![Atari Dev Studio](images/ataridevstudio-emulator.png)
 
 ## Requirements
-Atari Dev Studio is an extension for Microsoft's cross-platform IDE Visual Studio Code and will run on the Windows, Linux and macOS platforms. The latest releases of batari Basic, 7800basic, dasm, Stella and A7800 are included so you can begin coding straight after installing the extension.
+Atari Dev Studio is an extension for Microsoft's cross-platform IDE Visual Studio Code and will run on the Windows, Linux and macOS platforms. The latest releases of batari Basic, 7800basic, dasm, Stella and A7800 are included so you can begin coding straight after installing the extension. Though, please take a moment to check the OS-specific notes below for potential caveats.
 
 ## Features
 Atari Dev Studio includes the following features:
@@ -30,16 +30,29 @@ Visual Studio Code (VS Code) is a streamlined code editor with support for devel
 ### Which OSs are supported?
 VS Code is a cross-platform application which runs on Windows, Linux and macOS. See [requirements](https://code.visualstudio.com/docs/supporting/requirements) for the supported versions.
 
-> Note: Linux users on 64-bit systems will be required to install the 32-bit compatibility libraries on your system to ensure everything will run as expected. 
+#### Windows
+No special considerations. Windows users should be able to use Atari Dev Studio as is.
 
-> Note: macOS users require a 64-bit operating system to fully utilise all features of Atari Dev Studio and will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
+#### Linux
+Linux users on 64-bit systems will be required to install the 32-bit compatibility libraries on your system to ensure everything will run as expected.
 
-> Note: M1 based Mac users will need to install the INTEL CHIP version of VS Code before installing Atari Dev Studio.  Also thanks to Scott Lahteine (thinkyhead) the current dev stack should now have compatibility with the M1 chip (ARM64) and includes most of the recent versions of bB, 7800basic, Stella and dasm.  See [here](https://atariage.com/forums/topic/333127-ataribasic-will-it-run-on-the-m1-mac) for further discussion around the potential issues you may encounter.
+#### macOS
+macOS users require a 64-bit operating system to fully utilise all features of Atari Dev Studio and will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
+
+Mac computers with [Apple silicon](https://support.apple.com/116943) currently have a few options:
+
+1.  Thanks to Scott Lahteine (thinkyhead), Atari Dev Studio now includes `*.Darwin.arm64` (Apple silicon) binaries of relatively recent versions of bB, 7800basic, Stella and dasm.
+    Note, these the are *not* the latest versions of these tools. See the atariage [discussion](https://atariage.com/forums/topic/333127-ataribasic-will-it-run-on-the-m1-mac)
+    around additional issues you might encounter.
+2.  Manually build `*.Darwin.arm64` (Apple silicon) binaries from source and configure Atari Dev Studio to use use your locally built binaries. See `README-macos.md` for instructions.
+3.  Install and run the INTEL CHIP version of VS Code instead of the Apple Silicon version. This will cause Atari Dev Studio to use the Intel binaries, `*.Darwin.x86` / `*.Darwin.x64`.
+
+Older Mac computers with Intel chips should be able to use Atari Dev Studio as is.
 
 ### Installing the extension
 Once you have installed VS Code (available [here](https://code.visualstudio.com/Download)), open the VS Code program and complete the following:
 1. From the **Activity Bar**, click the **Extensions** button to display the **Extensions** window.
-2. From the **Extensions** window, type **Atari** into the **Search** box and press **Enter** to display the list of available extensions. 
+2. From the **Extensions** window, type **Atari** into the **Search** box and press **Enter** to display the list of available extensions.
 3. From the list of available extensions, locate **Atari Dev Studio** and click the green **Install** button.
 
 ![Install the extension](images/ataridevstudio-installation.png)
@@ -72,7 +85,7 @@ To change a language you can click on the Status Bar **Language selector** and a
 ![Language Selector](images/ataridevstudio-languageselector.png)
 
 ### Build scripts [preview]
-Prefer using scripts to build your dasm games? If you have chosen to override the dasm compiler (select Make via the **Settings**) , Atari Dev Studio will scan and detect for makefile, batch (makefile.bat) or shell scripts (makefile.sh) files which are located in your root workspace folder to build your game. 
+Prefer using scripts to build your dasm games? If you have chosen to override the dasm compiler (select Make via the **Settings**) , Atari Dev Studio will scan and detect for makefile, batch (makefile.bat) or shell scripts (makefile.sh) files which are located in your root workspace folder to build your game.
 
 ![dasm Compiler](images/ataridevstudio-dasmcompiler.png)
 
