@@ -30,11 +30,24 @@ Visual Studio Code (VS Code) is a streamlined code editor with support for devel
 ### Which OSs are supported?
 VS Code is a cross-platform application which runs on Windows, Linux and macOS. See [requirements](https://code.visualstudio.com/docs/supporting/requirements) for the supported versions.
 
-> Note: Linux users on 64-bit systems will be required to install the 32-bit compatibility libraries on your system to ensure everything will run as expected. 
+#### Windows
+No special considerations. Windows users should be able to use Atari Dev Studio as is.
 
-> Note: macOS users require a 64-bit operating system to fully utilise all features of Atari Dev Studio and will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
+#### Linux
+Linux users on 64-bit systems will be required to install the 32-bit compatibility libraries on your system to ensure everything will run as expected.
 
-> Note: M1 based Mac users will need to install the INTEL CHIP version of VS Code before installing Atari Dev Studio.  Also thanks to Scott Lahteine (thinkyhead) the current dev stack should now have compatibility with the M1 chip (ARM64) and includes most of the recent versions of bB, 7800basic, Stella and dasm.  See [here](https://atariage.com/forums/topic/333127-ataribasic-will-it-run-on-the-m1-mac) for further discussion around the potential issues you may encounter.
+#### macOS
+macOS users require a 64-bit operating system to fully utilise all features of Atari Dev Studio and will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
+
+Mac computers with Apple silicon currently have a few options:
+
+1.  Thanks to Scott Lahteine (thinkyhead), Atari Dev Studio now includes `*.Darwin.arm64` (Apple silicon) binaries of relatively recent versions of bB, 7800basic, Stella and dasm.
+    Note, these the are *not* the latest versions of these tools. See the atariage [discussion](https://atariage.com/forums/topic/333127-ataribasic-will-it-run-on-the-m1-mac)
+    around additional issues you might encounter.
+2.  Manually build `*.Darwin.arm64` (Apple silicon) binaries from source and configure Atari Dev Studio to use use your locally built binaries. See `README-macos.md` for instructions.
+3.  Install and run the INTEL CHIP version of VS Code instead of the Apple Silicon version. This will cause Atari Dev Studio to use the Intel binaries, `*.Darwin.x86` / `*.Darwin.x64`.
+
+Older Mac computers with Intel chips should be able to use Atari Dev Studio as is.
 
 ### Installing the extension
 Once you have installed VS Code (available [here](https://code.visualstudio.com/Download)), open the VS Code program and complete the following:
