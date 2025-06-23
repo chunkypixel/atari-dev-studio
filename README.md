@@ -39,7 +39,7 @@ Linux users on 64-bit systems will be required to install the 32-bit compatibili
 #### macOS
 macOS users require a 64-bit operating system to fully utilise all features of Atari Dev Studio and will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
 
-Mac computers with Apple silicon currently have a few options:
+Mac computers with [Apple silicon](https://support.apple.com/116943) currently have a few options:
 
 1.  Thanks to Scott Lahteine (thinkyhead), Atari Dev Studio now includes `*.Darwin.arm64` (Apple silicon) binaries of relatively recent versions of bB, 7800basic, Stella and dasm.
     Note, these the are *not* the latest versions of these tools. See the atariage [discussion](https://atariage.com/forums/topic/333127-ataribasic-will-it-run-on-the-m1-mac)
