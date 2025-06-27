@@ -25,6 +25,37 @@ class HoverBase {
             vscode.languages.registerHoverProvider(this.Id, this);
         });
     }
+    provideHover(document, position) {
+        // Prepare
+        const validchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
+        let word = '';
+        let p = position.character;
+        const line = String(document.lineAt(position.line).text);
+        // Find beginning of the hower-word
+        while (p > 0 && validchars.indexOf(line[p]) !== -1) {
+            p--;
+        }
+        // Skip leading invalid character
+        if (validchars.indexOf(line[p]) === -1) {
+            p++;
+        }
+        // Collect string until an invalid character is encountered
+        while (p < line.length && validchars.indexOf(line[p]) !== -1) {
+            word += line[p++];
+        }
+        // Found something to check for?
+        if (word) {
+            // Search and validate
+            let content = this.hoverText[word.toUpperCase()];
+            if (content) {
+                return new vscode.Hover(content);
+                // 	const markdown = new vscode.MarkdownString(content);
+                // 	return new vscode.Hover(markdown);
+            }
+        }
+        // Return
+        return new vscode.Hover(`No documentation found for **${word}**.`);
+    }
     //
     // Load and parse a file located in .../hovers 
     //
@@ -36,8 +67,8 @@ class HoverBase {
     //
     LoadHoverFileAsync(context, filename) {
         return __awaiter(this, void 0, void 0, function* () {
+            // prepare
             const filePath = vscode.Uri.file(path.join(context.extensionPath, 'hovers', filename));
-            const fileArrary = (yield filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/);
             const keypattern = /^([^A-Za-z0-9_]*)([A-Za-z0-9_]+)/; // Pattern for matching the 'key'
             const delimCnt = 2; // How many contiguous blank lines that must be found betwen keys
             let blanks = 0; // How many more contigous blank lines until the next key
@@ -46,7 +77,8 @@ class HoverBase {
             // Interate thru the file and pick out the keywords by keeping track of
             // how many contigous blank lines that have passed by.  Since the keyword can be
             // prefixed by markdown data we need to use a regex to just get the key.
-            for (const line of fileArrary) {
+            const lines = (yield filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/);
+            for (const line of lines) {
                 let match = line.match(keypattern);
                 // Do we something that looks like a key and also enough blanks passed by?
                 if (match && match[2] && blanks <= 0) {
@@ -74,35 +106,6 @@ class HoverBase {
                 this.hoverText[key] = info;
             }
         });
-    }
-    provideHover(document, position) {
-        // Prepare
-        const validchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
-        let word = '';
-        let p = position.character;
-        const line = String(document.lineAt(position.line).text);
-        // Find beginning of the hower-word
-        while (p > 0 && validchars.indexOf(line[p]) !== -1) {
-            p--;
-        }
-        // Skip leading invalid character
-        if (validchars.indexOf(line[p]) === -1) {
-            p++;
-        }
-        // Collect string until an invalid character is encountered
-        while (p < line.length && validchars.indexOf(line[p]) !== -1) {
-            word += line[p++];
-        }
-        // Found something to check for?
-        if (word) {
-            // Search and validate
-            let content = this.hoverText[word.toUpperCase()];
-            if (content) {
-                return new vscode.Hover(content);
-            }
-        }
-        // Return
-        return;
     }
 }
 exports.HoverBase = HoverBase;

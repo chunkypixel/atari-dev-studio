@@ -1,196 +1,339 @@
-## DMAHOLE
+### DMAHOLE
 
-    dmahole hole [noflow]
+The 7800 requires it's graphics to be padded with zeroes. To avoid wasting ROM space with zeroes, 7800basic uses a 7800 feature called holey DMA. This 
+allows you to stick program code in these areas between the graphics blocks that would otherwise be wasted with zeroes.
 
-    hole
-    noflow (optional)
+```7800basic
+dmahole hole [noflow]
+```
+- `hole` - number of hole (0-3)
+- `noflow` (optional)
 
+[Learn more...](https://www.randomterrain.com/7800basic.html#dmahole)
 
 
-## CHANGEDMAHOLES
 
-    changedmaholes mode
+### CHANGEDMAHOLES
 
-    mode - disable, enable
+If you've used the `set tightpackborder` command to import graphics into areas that would normally be reserved for dmaholes, you can disable dmaholes
+entirely by using this command with the **disable** argument. If you later wish to change back to the normal dma hole behaviour again, you can use the
+**enable** argument.
 
+```7800basic
+changedmaholes mode
+```
+- `mode` - disable, enable
 
+[Learn more...](https://www.randomterrain.com/7800basic.html#changedmaholes)
 
-## TIGHTPACKBORDER
 
-    set tightpackborder option
 
-    option - $#### or top
+### TIGHTPACKBORDER
 
-    $#### - address of gfx data ie. $8000
-    top - If you wish to tightly pack all graphics ie. the graphics are always aligned with zones perfectly—you can use 'top' as the address location with tightpackborder.
+Normally 7800basic places your graphics data between DMA holes, so that Maria is able to position your graphics anywhere on the screen. Without DMA holes,
+the graphics would glitch when placed at a Y coordinate that doesn't line up with a zone.
 
+```7800basic
+set tightpackborder address
+```
+- `address` - address of gfx data eg. $8000, top
 
+**Note:** If you wish to tightly pack all graphics - say if your game doesn’t need arbitrary Y placement of graphics, but rather, the graphics are always aligned with zones perfectly - you can use **top** as the address location with `tightpackborder`.
 
-## DEFAULTPALETTE
+[Learn more...](https://www.randomterrain.com/7800basic.html#set_tightpackborder)
 
-    defaultpalette sprite_graphic mode palette_#
 
-    sprite_graphic - name of the included graphic
-    mode - 160A, 160B, 320A, 320B, 320C, 320D
-    palette_# - index of palette (0-7)
 
+### DEFAULTPALETTE
 
+Define or redefine the palette that `plotmapfile` will use with your image. You can use this to re-color certain tiles for certain levels.
 
-## LOADROMBANK
+```7800basic
+defaultpalette imagename graphicsmode palette#
+```
+- `imagename` - name of the included graphic
+- `graphicsmode` - 160A, 160B, 320A, 320B, 320C, 320D
+- `palette#` - index of palette (0-7)
 
-    loadrombank bank
+**Note:** When the `plotmapfile` command is encountered, it will embed the palette numbers you've specified into the charactermap data. As a result, you can't
+use multiple defaultpalette changes with the same `plotmapfile` command.
 
-    bank
+[Learn more...](https://www.randomterrain.com/7800basic.html#defaultpalette)
 
 
 
-## LOADRAMBANK
+### LOADROMBANK
 
-    loadrambank bank
+When using bankswitching, there may be times you wish to switch the active bank for using its data without actually calling goto or gosub. You may do
+this from the last always-present bank.
 
-    bank
+```7800basic
+loadrombank bank
+```
+- `bank` - bank to switch to ie. bank1, bank2, bank3
 
+[Learn more...](https://www.randomterrain.com/7800basic.html#loadrombank)
 
 
-## REBOOT
 
-    reboot
+### LOADRAMBANK
 
+When using bankswitching with the **BANKRAM** formats, you can switch the active RAM bank with the `loadrambank` command.
 
+```7800basic
+loadrambank bank
+```
+- `bank` - bank to switch to ie. bank1, bank2, bank3
 
-## RAND
+[Learn more...](https://www.randomterrain.com/7800basic.html#loadrambank)
 
-    rand
 
 
+### REBOOT
 
-## DISPLAYMODE
+Restart your game as if the console had just been turned on.
 
-    displaymode mode
+```7800basic
+reboot
+```
 
-    mode - 160A, 160B, 320A, 320B, 320C, 320D
+[Learn more...](https://www.randomterrain.com/7800basic.html#reboot)
 
 
 
-## CLEARSCREEN
+### RAND
 
-    clearscreen
+`rand` is a special variable that will implicitly call a random number generator when used and returns a pseudo-random number between `1` and `255` every
+time it is called.
 
+```7800basic
+rand
+```
 
+**Note:** You can also set the `rand` variable to a specific value, at least until it is accessed again. The only reason you would ever want to do this
+is to seed the randomizer. If you do this, pay careful attention to the value you store there, since storing a zero in rand will **break** the randomizer,
+and all subsequent reads will also be zero!
 
-## SAVESCREEN
+[Learn more...](https://www.randomterrain.com/7800basic.html#random_numbers)
 
-    savescreen
 
 
+### DISPLAYMODE
 
-## RESTORESCREEN
+Sets the current graphics display mode.
 
-    restorescreen
+```7800basic
+displaymode mode
+```
+- `mode` - 160A (default), 160B, 320A, 320B, 320C, 320D
 
+[Learn more...](https://www.randomterrain.com/7800basic.html#displaymode)
 
 
-## DRAWSCREEN
 
-    drawscreen
+### CLEARSCREEN
 
+Erases all sprites and characters that you've previously drawn on the screen, so you can draw the next screen.
 
+```7800basic
+clearscreen
+```
 
-## DRAWWAIT
+[Learn more...](https://www.randomterrain.com/7800basic.html#working_with_the_screen_commands)
 
-    drawwait
 
 
+### SAVESCREEN
 
-## DRAWHIGHSCORE
+Saves any sprites and characters that you've drawn on the screen since the last `clearscreen` call.
 
-    drawhighscore [attract|single|player1|player2]
+```7800basic
+savescreen
+```
 
+**Note:** `savescreen` and `restorescreen` are meant to reduce the CPU requirements of your game, by avoiding re-plotting background elements 
+that don't change from frame to frame. 
 
+[Learn more...](https://www.randomterrain.com/7800basic.html#working_with_the_screen_commands)
 
-## DOUBLEBUFFER
-    
-    doublebuffer state [framerate]
 
-    state - on, off, flip, quickflip
-    framerate (optional)
 
+### RESTORESCREEN
 
+Erases any sprites and characters that you've drawn on the screen since the last `savescreen` call.
 
-## ROMSIZE
+```7800basic
+restorescreen
+```
 
-    set romsize size
+**Note:** `savescreen` and `restorescreen` are meant to reduce the CPU requirements of your game, by avoiding re-plotting background elements 
+that don't change from frame to frame. 
 
-    size - 16k, 32k, 48k, 128k, 128kRAM, 128kBANKRAM, 144k, 256k, 256kRAM, 256kBANKRAM, 272k, 512k, 512kRAM, 512kBANKRAM, 528k
+[Learn more...](https://www.randomterrain.com/7800basic.html#working_with_the_screen_commands)
 
-    NOTE: it is recommended 'set bankset on' is located at the top of your set list (or at least before any use of both 'set romsize' and 'set extradlmemory').  
 
 
+### DRAWSCREEN
 
+Ensures that all plotted graphics are ready to display, and waits for MARIA to start the display. Including `drawscreen` in any 
+display loop ensures that the loop will run every **1/60th** of a second for **NTSC** consoles, or **1/50th** of a second for **PAL** consoles.
 
-## DOUBLEWIDE
+```7800basic
+drawscreen
+```
 
-    set doublewide state
+[Learn more...](https://www.randomterrain.com/7800basic.html#working_with_the_screen_commands)
 
-    state - on, off
 
 
+### DRAWWAIT
 
-## DEPRECATED
+The `drawscreen` command completes near the beginning of the visible display. This is done intentionally, to allow your program to have the maximum 
+amount of CPU time possible. You may occasionally have code that you don't want to execute during the visible screen. For these occasions you can call the `drawwait` command. This command will only return after the visible screen has been completely displayed.
 
-    set deprecated value
+```7800basic
+drawwait
+```
 
-    value - frameheight, 160bindexes, boxcollision
+[Learn more...](https://www.randomterrain.com/7800basic.html#drawwait)
 
 
 
-## SHAKESCREEN
+### DOUBLEBUFFER
 
-    shakescreen state
+If your game takes a very long time to build the display, you may wish to use the double buffering system in 7800basic, which frees you from the requirement
+of completing a display within a single frame. The double buffering system is controlled through the `doublebuffer` command.
 
-    state - lo, med, hi, off
+```7800basic
+doublebuffer state [framerate]
+```
+- `state` - on, off, flip, quickflip
+- `framerate` (optional) - ie. 2 or greater
 
+**Note:** You can optionally set a minimum framerate with the `doublebuffer` command, to ensure there's a uniform framerate when your game logic and 
+object count differs.
 
+[Learn more...](https://www.randomterrain.com/7800basic.html#doublebuffer)
 
-## TALLSPRITE
 
-    set tallsprite state
+### ROMSIZE
 
-    state - on, off, spritesheet
+This sets the ROM size and format of your game.
 
+```7800basic
+set romsize value
+```
+- `value` - 16k, 32k (default), 48k, 128k, 128kRAM, 128kBANKRAM, 144k, 256k, 256kRAM, 256kBANKRAM, 272k, 512k, 512kRAM, 512kBANKRAM, 528k
 
+**Note:** It is recommended `set bankset on` is located at the top of your set list (or at least before any use of both `set romsize` and `set extradlmemory`).  
 
-## TV
+[Learn more...](https://www.randomterrain.com/7800basic.html#set_romsize)
 
-    set tv region
 
-    region - ntsc (default), pal
 
+### DOUBLEWIDE
 
+Tells MARIA to fetch 2 bytes of character data for each character you plot, effectively making the characters twice as wide.
 
-## ZONEHEIGHT
+```7800basic
+set doublewide on
+```
 
-    set zoneheight height
+[Learn more...](https://www.randomterrain.com/7800basic.html#set_doublewide_on)
 
-    height - 8 (default), 16
+
+### DEPRECATED
+
+Enable legacy behavior in some 7800basic routines. You should only use **set deprecated** for old code that you don't wish to update.
+
+```7800basic
+set deprecated state
+```
+- `state` - frameheight, 160bindexes, boxcollision, onepass
+
+[Learn more...](https://www.randomterrain.com/7800basic.html#set_deprecated)
+
+
+
+### SHAKESCREEN
+
+Tells 7800basic to move the screen randomly, for visual effect.
+
+```7800basic
+shakescreen state
+```
+- `state` - lo, med, hi, off
+
+The `shakescreen` command needs to be called once per frame, to continuously move the screen. When you’re done with the shaking effect, you should call
+**shakescreen off** to restore the correct screen position.
+
+[Learn more...](https://www.randomterrain.com/7800basic.html#shakescreen)
+
+
+
+### TALLSPRITE
+
+If the tallsprite is set to **on** (the default) then when the `incgraphic` command sees a graphic that is 2 zone-heights or more, it will import all of the graphics and link them together as a **tallsprite**. If you use the `plotsprite` command on a tallsprite graphic, the `plotsprite` command will loop to ensure all parts will be drawn.
+
+```7800basic
+set tallsprite state
+```
+- `state` - on, off, spritesheet
+
+[Learn more...](https://www.randomterrain.com/7800basic.html#set_tallsprite_on_off)
+
+
+
+### TV
+
+Set the default television region for the finalised ROM.
+
+```7800basic
+set tv region
+```
+- `region` - ntsc (default), pal
+
+
+
+### ZONEHEIGHT
+
+Graphics in 7800basic are limited to either 8 or 16 pixels tall. This is a result of MARIA's zone based architecture.
+
+```7800basic
+set zoneheight height
+```
+- `height` - 8, 16 (default)
+
+**Note:** Using a zone height of `8` means that 7800basic needs to present more memory to MARIA for screen building. 
+
+[Learn more...](https://www.randomterrain.com/7800basic.html#zoneheight)
 
 
 
 ## SCREENHEIGHT
 
-    set screenheight height
+Set the vertical resolution of your screen in pixels.
 
-    height - 192 (default), 208, 224
+```7800basic
+set screenheight height
+```
+- `height` - 192 (default), 208, 224
+
+[Learn more...](https://www.randomterrain.com/7800basic.html#screenheight)
 
 
 
-## EXTRADLMEMORY
+### EXTRADLMEMORY
 
-    set extradlmemory state
+Tells 7800basic that you want to use the memory at `$2200` for the purpose of expanding your display list, to allow more objects. When you compile your
+program with this option, the compile output will advise what memory range it used. [Learn more...](https://www.randomterrain.com/7800basic.html#set_extradlmemory_on)
 
-    state - on, off
+```7800basic
+set extradlmemory on
+```
 
-    NOTE: it is recommended 'set bankset on' is located at the top of your set list (or at least before any use of both 'set romsize' and 'set extradlmemory').  The use of 'set dlmemory' is incompatible with bankset roms and is not available when turned on.   
+**Note:** It is recommended `set bankset on` is located at the top of your set list (or at least before any use of both `set romsize` and `set extradlmemory`).
+Also the use of `set dlmemory` is incompatible with bankset roms and is not available when enabled.  
 
 
 
@@ -382,6 +525,12 @@
 ## POKEYDETECTED
 
     if pokeydetected then ...
+
+
+
+## DRAWHIGHSCORE
+
+    drawhighscore [attract|single|player1|player2]
 
 
 
@@ -647,28 +796,37 @@
 
 
 
-## PEEKCHAR
+### PEEKCHAR
+The `peekchar` command is used to read a value from the provided mapdata (or memory location) in ROM or RAM.
+ [Learn more...](https://www.randomterrain.com/7800basic.html#peekchar)
 
-    value = peekchar(mapdata, x, y, width, height)
+```7800basic
+value = peekchar(mapdata, x, y, width, height)
+```
+- `mapdata` - RAM or ROM location of the data to read
+- `x` - x screen column or offset co-ordinate
+- `y` - y screen row or offset co-ordinate
+- `width` - total width of the mapdata (or memory) area
+- `height` - total height of the mapdata (or memory) area
 
-    mapdata - RAM or ROM location of the data to get
-    x - x screen column co-ordinate
-    y - y screen row co-ordinate
-    width - total width of the map
-    height - total height of the map
+**Returns**
+byte
 
 
 
-## POKECHAR
+### POKECHAR
+The `pokechar` command is used to write a value to the provided mapdata (or memory location) in RAM.
+ [Learn more...](https://www.randomterrain.com/7800basic.html#pokechar)
 
-    pokechar mapdata x y width height value
-
-    mapdata - RAM or ROM location of the data to set
-    x - x screen column co-ordinate
-    y - y screen row co-ordinate
-    width - total width of the map
-    height - total height of the map
-    value - value to be stored
+```7800basic
+pokechar mapdata x y width height value
+```
+- `mapdata` - RAM location of the data to write
+- `x` - x screen column or offset co-ordinate
+- `y` - y screen row or offset co-ordinate
+- `width` - total width of the mapdata (or memory) area
+- `height` - total height of the mapdata (or memory) area
+- `value` - value (byte) to be stored
 
     
 

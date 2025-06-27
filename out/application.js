@@ -91,7 +91,7 @@ exports.ChangeLogUri = vscode.Uri.parse(`https://marketplace.visualstudio.com/it
 // -------------------------------------------------------------------------------------
 // Channels
 // -------------------------------------------------------------------------------------
-exports.CompilerOutputChannel = vscode.window.createOutputChannel("Compiler");
+exports.CompilerOutputChannel = vscode.window.createOutputChannel("Atari Compiler");
 function InitialiseAdsTerminalAsync() {
     return __awaiter(this, void 0, void 0, function* () {
         // Already have a terminal?
