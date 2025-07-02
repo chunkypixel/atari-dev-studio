@@ -31,8 +31,9 @@ export abstract class CompilerBase implements vscode.Disposable {
     public CompiledSubFolder: string = "";
     readonly CompiledSubFolderName: string = "bin";
     
-    protected GenerateDebuggerFiles: boolean = false;
-    protected CleanUpCompilationFiles: boolean = false;
+    protected GenerateDebuggerFiles: boolean = true;
+    protected CleanUpCompilationFiles: boolean = true;
+    protected StripSourceFileExtensions: boolean = true;
     protected WorkspaceFolder: string = "";
 
     protected UsingMakeFileCompiler: boolean = false;
@@ -325,6 +326,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Compilation
         this.GenerateDebuggerFiles = this.Configuration!.get<boolean>(`compiler.options.generateDebuggerFiles`, true);
         this.CleanUpCompilationFiles = this.Configuration!.get<boolean>(`compiler.options.cleanupCompilationFiles`, true);
+        this.StripSourceFileExtensions = this.Configuration!.get<boolean>(`compiler.options.stripSourceFileExtensions`, true);
 
         // System
         this.CompiledSubFolder = path.join(this.WorkspaceFolder, this.CompiledSubFolderName);
@@ -444,14 +446,21 @@ export abstract class CompilerBase implements vscode.Disposable {
             let compiledFileName = `${this.FileName}${extension}`;
 
             // leading minus (-)? if so strip any existing extensions from filename before adding
+            // There is a sepcific requirement for the 7800basic compiler
             if (extension.startsWith("-")) {
                 // remove minus (-)
                 extension = extension.slice(1);
                 compiledFileName = `${path.parse(this.FileName).name}${extension}`;
             }
 
-            // set path
+            // set old path
             let oldPath = path.join(this.WorkspaceFolder, compiledFileName);
+
+            // set new path
+            if (this.StripSourceFileExtensions) {
+                // remove source file extensions for new path filename
+                compiledFileName = `${path.parse(this.FileName).name}${extension}`;
+            }
             let newPath = path.join(this.CompiledSubFolder, compiledFileName);
 
             // Move compiled file
@@ -473,16 +482,24 @@ export abstract class CompilerBase implements vscode.Disposable {
             application.WriteToCompilerTerminal(`Moving debugger file(s) to '${this.CompiledSubFolderName}' folder...`);
             for await (let [arg, extension] of this.DebuggerExtensions) {
                 // Prepare
-                let debuggerFile: string = `${this.FileName}${extension}`;
-                let oldPath = path.join(this.WorkspaceFolder, debuggerFile);
-                let newPath = path.join(this.CompiledSubFolder, debuggerFile);
+                let debuggerFileName: string = `${this.FileName}${extension}`;
+
+                // Set old path
+                let oldPath = path.join(this.WorkspaceFolder, debuggerFileName);
+
+                // Set new path
+                if (this.StripSourceFileExtensions) {
+                    // remove source file extensions for new path filename
+                    debuggerFileName = `${path.parse(this.FileName).name}${extension}`;
+                }
+                let newPath = path.join(this.CompiledSubFolder, debuggerFileName);
 
                 // Move compiled file?
                 if (await filesystem.FileExistsAsync(oldPath)) {
                     result = await filesystem.RenameFileAsync(oldPath, newPath);
                     if (!result) {
                         // Notify            
-                        application.WriteToCompilerTerminal(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);          
+                        application.WriteToCompilerTerminal(`ERROR: Failed to move file '${debuggerFileName}' to '${this.CompiledSubFolderName}' folder`);          
                     }
                 }
             }

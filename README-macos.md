@@ -4,6 +4,8 @@ Atari Dev Studio does not currently include the latest `*.Darwin.arm64` (Apple s
 
 Use these instructions to manually build the latest binaries from source and configure Atari Dev Studio to use your locally built binaries.
 
+>Thank you to Fred Sauer for providing the following information.  If you are a MacOS arm64 user who can compile and keep the following compiler libraries up to date please contact **@mksmith** on the AtariAge forum.
+
 
 # Install Atari Dev Studio
 
@@ -61,6 +63,9 @@ cp preprocess ~/mybatariBasic/preprocess.$OSTYPE.$ARCH
 cd ..
 rm -rf batari-Basic
 ```
+# 7800basic build and copy
+
+**TBC**
 
 # dasm build and copy
 

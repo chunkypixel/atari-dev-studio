@@ -147,8 +147,8 @@ This extension is only available due to the great people of the AtariAge communi
 * PlayerPal 2600 and Atari Background Builder (kisrael)
 * Mats Engstrom (SmallRoomLabs)
 * Scott Lahteine (thinkyhead) for the MacOS ARM Compatibility for bB, 7800basic, Stella, dasm
-* Fred Sauer (fredsa) for additional information relating to the MacOS ARM releases and self compilation. Learn more [here](README-macos.md).
-* The AtariAge community including Albert, CPUWiz, Random Terrain, Trebor, Synthpopalooza, sramirez2008, Defender_2600, Gemintronic, Karl G, ZeroPage Homebrew, Muddyfunster, TwentySixHundred, Lillapojkenpåön, Andrew Davie, splendidnut, andyjp, sexyUnderwriter, MikeBrownEmplas, Generation2Games, cwieland, slacker
+* Fred Sauer (fredsa) for product suggestions and additional information relating to the MacOS ARM releases and self compilation of the language compilers. Learn more [here](README-macos.md).
+* The AtariAge community including Albert, CPUWiz, Random Terrain, Trebor, Synthpopalooza, sramirez2008, Defender_2600, Gemintronic, Karl G, ZeroPage Homebrew, Muddyfunster, TwentySixHundred, Lillapojkenpåön, Andrew Davie, splendidnut, andyjp, sexyUnderwriter, MikeBrownEmplas, Generation2Games, cwieland, slacker, milnak
 
 ## Languages
 Atari Dev Studio includes the following programming languages:
