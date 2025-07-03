@@ -38,7 +38,7 @@ class CompilerBase {
         this.CompiledSubFolderName = "bin";
         this.GenerateDebuggerFiles = true;
         this.CleanUpCompilationFiles = true;
-        this.StripSourceFileExtensions = false;
+        this.StripSourceFileExtensions = true;
         this.WorkspaceFolder = "";
         this.UsingMakeFileCompiler = false;
         this.UsingBatchCompiler = false;
@@ -334,7 +334,7 @@ class CompilerBase {
             // Compilation
             this.GenerateDebuggerFiles = this.Configuration.get(`compiler.options.generateDebuggerFiles`, true);
             this.CleanUpCompilationFiles = this.Configuration.get(`compiler.options.cleanupCompilationFiles`, true);
-            this.StripSourceFileExtensions = this.Configuration.get(`compiler.options.stripSourceFileExtensions`, false);
+            this.StripSourceFileExtensions = this.Configuration.get(`compiler.options.stripSourceFileExtensions`, true);
             // System
             this.CompiledSubFolder = path.join(this.WorkspaceFolder, this.CompiledSubFolderName);
             // Result
