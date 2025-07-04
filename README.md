@@ -135,7 +135,20 @@ NOTE: from version 0.97 onwards I have attempted to rectify this issue with an i
 During the development phase of the extension I've added some developer output to assist with any issues that may appear.  To view this output, open the VS Code **Developer Tools** by selecting **Help -> Toggle Developer Tools** from the menu, and in the debugger window ensure the **Console** tab is activated.  This information may help identify the area where the extension is failing to process as expected.
 
 ## Known Issues
-There are currently no known feature issues. If you find a problem please raise an issue on [GitHub](https://github.com/chunkypixel/atari-dev-studio/issues) or contact [mksmith](http://atariage.com/forums/user/66583-mksmith/) at the AtariAge community.
+There are currently no known feature issues but if you find a problem please raise an issue on [GitHub](https://github.com/chunkypixel/atari-dev-studio/issues) or contact [mksmith](http://atariage.com/forums/user/66583-mksmith/) at the AtariAge community.
+
+### Virus capture
+On Windows when using the 7800basic or batari Basic compilers, occasionally some of the compile chain files are captured by virus protection software (eg. Windows Security) and quarantined. This is a false/positive case but you will need to release/restore these file(s) when required to allow the compilation to succeed. You should find a file verification error in the compile log identifying this potential capture:
+
+![Error](images/ataridevstudio-verfiyingcompilerfileexists.png)
+
+If you have specific installed virus software consult your manual to release/restore the file(s).  Alternatively `Windows Security` will have captured the file(s).  Complete the following as required:
+
+* **Windows 10** - Open `Settings`, select `Update & Security` then `Windows Security` from the sidebar.
+* **Windows 11** - Open `Settings`, select `Privacy & Security` from the sidebar, then `Windows Security` from the list.
+
+Locate the `Virus & threat protection` item and follow the prompts to release/restore the required file(s).
+
 
 ## Acknowlegments
 This extension is only available due to the great people of the AtariAge community who have created these tools to help developers build their vision.  Special thanks to the following for either allowing the inclusion of their tools or for their ongoing help and encouragement:
