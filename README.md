@@ -94,12 +94,12 @@ Prefer using scripts to build your dasm games? If you have chosen to override th
 ### Status Bar
 Apart from using the **Command Palette** to select compilation, there are a number of short-cut buttons on the **Status Bar** allowing you to:
 * Display the extension version (might be useful at times)
-* Open Welcome page
-* Open Sprite Editor
-* Open PlayerPal 2600 Editor
-* Open Atari Background Builder 2600 Editor
-* Compile source code (Shift+F5)
+* Open Welcome page* Compile source code (Shift+F5)
 * Compile source code and launch [via emulator or cart] (F5)
+* Open Sprite Editor
+* Open PlayerPal Editor (2600)
+* Open Atari Background Builder Editor (2600)
+* Open RT bB Sprite Editor (2600)
 
 ![Status Bar](images/ataridevstudio-statusbar.png)
 

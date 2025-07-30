@@ -56,6 +56,10 @@ function activate(context) {
             console.log('User activated command "extension.openAtariBackgroundBuilderPage"');
             application.OpenBrowserWindow('https://alienbill.com/2600/atari-background-builder');
         });
+        const openRTbBSpriteEditorPage = vscode.commands.registerCommand('extension.openRTbBSpriteEditorPage', () => {
+            console.log('User activated command "extension.openRTbBSpriteEditorPage"');
+            application.OpenBrowserWindow('https://www.randomterrain.com/2600bbsprite.html');
+        });
         // Build
         // Note: apparently the fileUri can be supplied via the command line but we are not going to use it
         const buildGame = vscode.commands.registerCommand('extension.buildGame', (fileUri) => __awaiter(this, void 0, void 0, function* () {

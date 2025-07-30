@@ -130,6 +130,17 @@
                 "category": "ads"
             },
             {
+                "command": "extension.buildGameAndRun",
+                "title": "Compile source code and launch [via emulator or cart]",
+                "icon": "$(rocket)",
+                "category": "ads"
+            },
+            {
+                "command": "extension.killBuildGame",
+                "title": "Kill build process",
+                "category": "ads"
+            },
+            {
                 "command": "extension.openSpriteEditorPage",
                 "title": "Open Sprite Editor",
                 "icon": "$(tools)",
@@ -143,25 +154,20 @@
             },
             {
                 "command": "extension.openPlayerPalPage",
-                "title": "Open PlayerPal 2600 Editor",
+                "title": "Open PlayerPal Editor (2600)",
                 "icon": "$(globe)",
                 "category": "ads"
             },
             {
                 "command": "extension.openAtariBackgroundBuilderPage",
-                "title": "Open Atari Background Builder 2600 Editor",
+                "title": "Open Atari Background Builder Editor (2600)",
                 "icon": "$(globe)",
                 "category": "ads"
             },
             {
-                "command": "extension.buildGameAndRun",
-                "title": "Compile source code and launch [via emulator or cart]",
-                "icon": "$(rocket)",
-                "category": "ads"
-            },
-            {
-                "command": "extension.killBuildGame",
-                "title": "Kill build process",
+                "command": "extension.openRTbBSpriteEditorPage",
+                "title": "Open RT bB Sprite Editor (2600)",
+                "icon": "$(globe)",
                 "category": "ads"
             },
             {

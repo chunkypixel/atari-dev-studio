@@ -32,11 +32,12 @@ class StatusBar {
         if (command === "Full" || command === "Minimum") {
             let itemOptions = [
                 { tooltip: 'Welcome', text: '$(home)', command: 'extension.openWelcomePage' },
-                { tooltip: 'Sprite Editor', text: '$(tools)', command: 'extension.openSpriteEditorPage' },
-                { tooltip: 'PlayerPal 2600 Editor', text: '$(globe)', command: 'extension.openPlayerPalPage' },
-                { tooltip: 'Atari Background Builder 2600 Editor', text: '$(globe)', command: 'extension.openAtariBackgroundBuilderPage' },
                 { tooltip: 'Compile source code (Shift+F5)', text: '$(play)', command: 'extension.buildGame' },
-                { tooltip: 'Compile source code and launch [via emulator or cart] (F5)', text: '$(rocket)', command: 'extension.buildGameAndRun' }
+                { tooltip: 'Compile source code and launch [via emulator or cart] (F5)', text: '$(rocket)', command: 'extension.buildGameAndRun' },
+                { tooltip: 'Sprite Editor', text: '$(tools)', command: 'extension.openSpriteEditorPage' },
+                { tooltip: 'PlayerPal Editor (2600)', text: '$(globe)', command: 'extension.openPlayerPalPage' },
+                { tooltip: 'Atari Background Builder Editor (2600)', text: '$(globe)', command: 'extension.openAtariBackgroundBuilderPage' },
+                { tooltip: 'RT bB Sprite Editor (2600)', text: '$(globe)', command: 'extension.openRTbBSpriteEditorPage' }
             ];
             itemOptions.forEach(option => this.createItem(option));
         }
