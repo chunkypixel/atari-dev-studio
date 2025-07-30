@@ -63,13 +63,12 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         ];
 
         // Environment
-        let env : { [key: string]: string | null } = {};
-        env["PATH"] = this.FolderOrPath;
-        if (application.IsLinux || application.IsMacOS) {
-            // Additional for Linux or MacOS
-            env["PATH"] = ":/bin:/usr/bin:" + env["PATH"];
-        }
-        env["bas7800dir"] = this.FolderOrPath;
+        let env: Record<string, string> = {
+            PATH: `${this.FolderOrPath}${path.delimiter}${process.env.PATH}`,
+            bas7800dir: this.FolderOrPath
+        };
+        // Additional for Linux or MacOS?
+        if (application.IsLinux || application.IsMacOS) env["PATH"] += `${path.delimiter}/bin`;
 
         // Notify
         // Linux and macOS script has this message already

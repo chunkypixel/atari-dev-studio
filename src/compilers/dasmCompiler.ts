@@ -58,7 +58,8 @@ export class DasmCompiler extends CompilerBase {
         if (this.Args) { args.push(`${this.Args}`); }
 
         // Environment
-        let env : { [key: string]: string | null } = {};
+        let env: Record<string, string> = {
+        };
 
         // Notify
         application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`); 
