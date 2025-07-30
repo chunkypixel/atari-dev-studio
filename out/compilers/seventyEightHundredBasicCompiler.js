@@ -63,12 +63,12 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             ];
             // Environment
             let env = {
-                PATH: `${this.FolderOrPath}${path.delimiter}${process.env.PATH}`,
+                PATH: this.FolderOrPath,
                 bas7800dir: this.FolderOrPath
             };
             // Additional for Linux or MacOS?
             if (application.IsLinux || application.IsMacOS)
-                env["PATH"] += `${path.delimiter}/bin`;
+                env["PATH"] += `${path.delimiter}/bin${path.delimiter}/usr/bin`;
             // Notify
             // Linux and macOS script has this message already
             if (application.IsWindows) {

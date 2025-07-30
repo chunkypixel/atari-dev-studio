@@ -27,7 +27,7 @@ BV=$(7800basic$EXT -v 2>/dev/null)
 echo "  Version: $BV" 
 
 #do dasm separately, because it's distributed separately
-for DASMEXT in "" .$OSTYPE.x64 .$OSTYPE.x86 .$OSTYPE.$ARCH .$OSTYPE ; do
+for DASMEXT in .$OSTYPE.x64 .$OSTYPE.x86 .$OSTYPE.$ARCH .$OSTYPE "" ; do
   dasm$DASMEXT 2>/dev/null >&2 
   [ $? = 1 ] && break
 done

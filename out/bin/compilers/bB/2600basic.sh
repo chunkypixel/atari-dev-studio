@@ -19,7 +19,7 @@ if [ ! $? = 0 ] ; then
 fi
 
 #do dasm separately, because it's distributed separately
-for DASMEXT in "" .$OSTYPE.x86 .$OSTYPE.x64 .$OSTYPE.$ARCH .$OSTYPE ; do
+for DASMEXT in .$OSTYPE.x86 .$OSTYPE.x64 .$OSTYPE.$ARCH .$OSTYPE "" ; do
   dasm$DASMEXT 2>/dev/null >&2 
   [ $? = 1 ] && break
 done
@@ -44,7 +44,7 @@ if [ "$1" = "-v" ] ; then
   2600basic$EXT -v
   exit
 fi
-  
+
 DV=$(dasm$DASMEXT 2>/dev/null | grep ^DASM | head -n1)
 echo "Found dasm version: $DV"
 
