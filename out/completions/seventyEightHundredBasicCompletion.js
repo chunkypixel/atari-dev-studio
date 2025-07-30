@@ -323,7 +323,8 @@ class SeventyEightHundredBasicCompletion extends completionBase_1.CompletionBase
                     return [
                         new vscode.CompletionItem('frameheight', vscode.CompletionItemKind.Value),
                         new vscode.CompletionItem('160bindexes', vscode.CompletionItemKind.Value),
-                        new vscode.CompletionItem('boxcollision', vscode.CompletionItemKind.Value)
+                        new vscode.CompletionItem('boxcollision', vscode.CompletionItemKind.Value),
+                        new vscode.CompletionItem('onepass', vscode.CompletionItemKind.Value)
                     ];
                 }
             }, ' ');
@@ -481,6 +482,7 @@ class SeventyEightHundredBasicCompletion extends completionBase_1.CompletionBase
                         new vscode.CompletionItem('basepath', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('bankset', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('hssupport', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('hscsupport', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('hsgamename', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('hsseconds', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('hsscoresize', vscode.CompletionItemKind.Method),
@@ -494,6 +496,7 @@ class SeventyEightHundredBasicCompletion extends completionBase_1.CompletionBase
                         new vscode.CompletionItem('7800GDmenuoff', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('softresetpause', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('smartbranching', vscode.CompletionItemKind.Method),
+                        new vscode.CompletionItem('7800header', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('optimization', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('backupstyle', vscode.CompletionItemKind.Method),
                         new vscode.CompletionItem('backupfile', vscode.CompletionItemKind.Method)

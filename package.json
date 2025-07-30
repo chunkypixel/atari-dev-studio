@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.10.8",
+    "version": "0.10.9",
     "icon": "images/icon.png",
     "preview": false,
     "author": "mksmith",
@@ -294,6 +294,12 @@
                     ],
                     "default": "Automatic (based on the active language)",
                     "description": "Specify the default compiler used to compile your source code:",
+                    "scope": "resource"
+                },
+                "atari-dev-studio.compiler.options.stripSourceFileExtensions": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether to strip all source file extensions from the built output on compilation.",
                     "scope": "resource"
                 },
                 "atari-dev-studio.compiler.options.cleanupCompilationFiles": {

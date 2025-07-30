@@ -36,8 +36,9 @@ class CompilerBase {
         this.FileName = "";
         this.CompiledSubFolder = "";
         this.CompiledSubFolderName = "bin";
-        this.GenerateDebuggerFiles = false;
-        this.CleanUpCompilationFiles = false;
+        this.GenerateDebuggerFiles = true;
+        this.CleanUpCompilationFiles = true;
+        this.StripSourceFileExtensions = true;
         this.WorkspaceFolder = "";
         this.UsingMakeFileCompiler = false;
         this.UsingBatchCompiler = false;
@@ -333,6 +334,7 @@ class CompilerBase {
             // Compilation
             this.GenerateDebuggerFiles = this.Configuration.get(`compiler.options.generateDebuggerFiles`, true);
             this.CleanUpCompilationFiles = this.Configuration.get(`compiler.options.cleanupCompilationFiles`, true);
+            this.StripSourceFileExtensions = this.Configuration.get(`compiler.options.stripSourceFileExtensions`, true);
             // System
             this.CompiledSubFolder = path.join(this.WorkspaceFolder, this.CompiledSubFolderName);
             // Result
@@ -475,13 +477,19 @@ class CompilerBase {
                     // Prepare
                     let compiledFileName = `${this.FileName}${extension}`;
                     // leading minus (-)? if so strip any existing extensions from filename before adding
+                    // There is a sepcific requirement for the 7800basic compiler
                     if (extension.startsWith("-")) {
                         // remove minus (-)
                         extension = extension.slice(1);
                         compiledFileName = `${path.parse(this.FileName).name}${extension}`;
                     }
-                    // set path
+                    // set old path
                     let oldPath = path.join(this.WorkspaceFolder, compiledFileName);
+                    // set new path
+                    if (this.StripSourceFileExtensions) {
+                        // remove source file extensions for new path filename
+                        compiledFileName = `${path.parse(this.FileName).name}${extension}`;
+                    }
                     let newPath = path.join(this.CompiledSubFolder, compiledFileName);
                     // Move compiled file
                     // Updated to check as we may now have optional files (7800basic - .CC2, bB - .ace)
@@ -513,15 +521,21 @@ class CompilerBase {
                         _k = false;
                         let [arg, extension] = _f;
                         // Prepare
-                        let debuggerFile = `${this.FileName}${extension}`;
-                        let oldPath = path.join(this.WorkspaceFolder, debuggerFile);
-                        let newPath = path.join(this.CompiledSubFolder, debuggerFile);
+                        let debuggerFileName = `${this.FileName}${extension}`;
+                        // Set old path
+                        let oldPath = path.join(this.WorkspaceFolder, debuggerFileName);
+                        // Set new path
+                        if (this.StripSourceFileExtensions) {
+                            // remove source file extensions for new path filename
+                            debuggerFileName = `${path.parse(this.FileName).name}${extension}`;
+                        }
+                        let newPath = path.join(this.CompiledSubFolder, debuggerFileName);
                         // Move compiled file?
                         if (yield filesystem.FileExistsAsync(oldPath)) {
                             result = yield filesystem.RenameFileAsync(oldPath, newPath);
                             if (!result) {
                                 // Notify            
-                                application.WriteToCompilerTerminal(`ERROR: Failed to move file '${debuggerFile}' to '${this.CompiledSubFolderName}' folder`);
+                                application.WriteToCompilerTerminal(`ERROR: Failed to move file '${debuggerFileName}' to '${this.CompiledSubFolderName}' folder`);
                             }
                         }
                     }

@@ -67,7 +67,7 @@ export const ChangeLogUri: vscode.Uri = vscode.Uri.parse(`https://marketplace.vi
 // -------------------------------------------------------------------------------------
 // Channels
 // -------------------------------------------------------------------------------------
-export const CompilerOutputChannel: vscode.OutputChannel = vscode.window.createOutputChannel("Compiler"); 
+export const CompilerOutputChannel: vscode.OutputChannel = vscode.window.createOutputChannel("Atari Compiler"); 
 
 // -------------------------------------------------------------------------------------
 // Terminal

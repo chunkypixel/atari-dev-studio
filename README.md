@@ -4,7 +4,7 @@ Welcome to Atari Dev Studio for designing homebrew games for the Atari 8-bit sys
 ![Atari Dev Studio](images/ataridevstudio-emulator.png)
 
 ## Requirements
-Atari Dev Studio is an extension for Microsoft's cross-platform IDE Visual Studio Code and will run on the Windows, Linux and macOS platforms. The latest releases of batari Basic, 7800basic, dasm, Stella and A7800 are included so you can begin coding straight after installing the extension.
+Atari Dev Studio is an extension for Microsoft's cross-platform IDE Visual Studio Code and will run on the Windows, Linux and macOS platforms. The latest releases of batari Basic, 7800basic, dasm, Stella and A7800 are included so you can begin coding straight after installing the extension. Though, please take a moment to check the OS-specific notes below for potential caveats.
 
 ## Features
 Atari Dev Studio includes the following features:
@@ -30,16 +30,29 @@ Visual Studio Code (VS Code) is a streamlined code editor with support for devel
 ### Which OSs are supported?
 VS Code is a cross-platform application which runs on Windows, Linux and macOS. See [requirements](https://code.visualstudio.com/docs/supporting/requirements) for the supported versions.
 
-> Note: Linux users on 64-bit systems will be required to install the 32-bit compatibility libraries on your system to ensure everything will run as expected. 
+#### Windows
+No special considerations. Windows users should be able to use Atari Dev Studio as is.
 
-> Note: macOS users require a 64-bit operating system to fully utilise all features of Atari Dev Studio and will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
+#### Linux
+Linux users on 64-bit systems will be required to install the 32-bit compatibility libraries on your system to ensure everything will run as expected.
 
-> Note: M1 based Mac users will need to install the INTEL CHIP version of VS Code before installing Atari Dev Studio.  Also thanks to Scott Lahteine (thinkyhead) the current dev stack should now have compatibility with the M1 chip (ARM64) and includes most of the recent versions of bB, 7800basic, Stella and dasm.  See [here](https://atariage.com/forums/topic/333127-ataribasic-will-it-run-on-the-m1-mac) for further discussion around the potential issues you may encounter.
+#### macOS
+macOS users require a 64-bit operating system to fully utilise all features of Atari Dev Studio and will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
+
+Mac computers with [Apple silicon](https://support.apple.com/116943) currently have a few options:
+
+1.  Thanks to Scott Lahteine (thinkyhead), Atari Dev Studio now includes `*.Darwin.arm64` (Apple silicon) binaries of relatively recent versions of bB, 7800basic, Stella and dasm.
+    Note, these the are *not* the latest versions of these tools. See the atariage [discussion](https://atariage.com/forums/topic/333127-ataribasic-will-it-run-on-the-m1-mac)
+    around additional issues you might encounter.
+2.  Manually build `*.Darwin.arm64` (Apple silicon) binaries from source and configure Atari Dev Studio to use use your locally built binaries. See `README-macos.md` for instructions.
+3.  Install and run the INTEL CHIP version of VS Code instead of the Apple Silicon version. This will cause Atari Dev Studio to use the Intel binaries, `*.Darwin.x86` / `*.Darwin.x64`.
+
+Older Mac computers with Intel chips should be able to use Atari Dev Studio as is.
 
 ### Installing the extension
 Once you have installed VS Code (available [here](https://code.visualstudio.com/Download)), open the VS Code program and complete the following:
 1. From the **Activity Bar**, click the **Extensions** button to display the **Extensions** window.
-2. From the **Extensions** window, type **Atari** into the **Search** box and press **Enter** to display the list of available extensions. 
+2. From the **Extensions** window, type **Atari** into the **Search** box and press **Enter** to display the list of available extensions.
 3. From the list of available extensions, locate **Atari Dev Studio** and click the green **Install** button.
 
 ![Install the extension](images/ataridevstudio-installation.png)
@@ -72,7 +85,7 @@ To change a language you can click on the Status Bar **Language selector** and a
 ![Language Selector](images/ataridevstudio-languageselector.png)
 
 ### Build scripts [preview]
-Prefer using scripts to build your dasm games? If you have chosen to override the dasm compiler (select Make via the **Settings**) , Atari Dev Studio will scan and detect for makefile, batch (makefile.bat) or shell scripts (makefile.sh) files which are located in your root workspace folder to build your game. 
+Prefer using scripts to build your dasm games? If you have chosen to override the dasm compiler (select Make via the **Settings**) , Atari Dev Studio will scan and detect for makefile, batch (makefile.bat) or shell scripts (makefile.sh) files which are located in your root workspace folder to build your game.
 
 ![dasm Compiler](images/ataridevstudio-dasmcompiler.png)
 
@@ -122,7 +135,20 @@ NOTE: from version 0.97 onwards I have attempted to rectify this issue with an i
 During the development phase of the extension I've added some developer output to assist with any issues that may appear.  To view this output, open the VS Code **Developer Tools** by selecting **Help -> Toggle Developer Tools** from the menu, and in the debugger window ensure the **Console** tab is activated.  This information may help identify the area where the extension is failing to process as expected.
 
 ## Known Issues
-There are currently no known feature issues. If you find a problem please raise an issue on [GitHub](https://github.com/chunkypixel/atari-dev-studio/issues) or contact [mksmith](http://atariage.com/forums/user/66583-mksmith/) at the AtariAge community.
+There are currently no known feature issues but if you find a problem please raise an issue on [GitHub](https://github.com/chunkypixel/atari-dev-studio/issues) or contact [mksmith](http://atariage.com/forums/user/66583-mksmith/) at the AtariAge community.
+
+### Virus capture
+On Windows when using the 7800basic or batari Basic compilers, occasionally some of the compile chain files are captured by virus protection software (eg. Windows Security) and quarantined. This is a false/positive case but you will need to release/restore these file(s) when required to allow the compilation to succeed. You should find a file verification error in the compile log identifying this potential capture:
+
+![Error](images/ataridevstudio-verfiyingcompilerfileexists.png)
+
+If you have specific installed virus software consult your manual to release/restore the file(s).  Alternatively `Windows Security` will have captured the file(s).  Complete the following as required:
+
+* **Windows 10** - Open `Settings`, select `Update & Security` then `Windows Security` from the sidebar.
+* **Windows 11** - Open `Settings`, select `Privacy & Security` from the sidebar, then `Windows Security` from the list.
+
+Locate the `Virus & threat protection` item and follow the prompts to release/restore the required file(s).
+
 
 ## Acknowlegments
 This extension is only available due to the great people of the AtariAge community who have created these tools to help developers build their vision.  Special thanks to the following for either allowing the inclusion of their tools or for their ongoing help and encouragement:
@@ -132,19 +158,20 @@ This extension is only available due to the great people of the AtariAge communi
 * Stella emulator - Stephen Anthony (stephena)
 * A7800 emulator - Mike Saarna (RevEng) and Robert Tuccitto (Trebor)
 * PlayerPal 2600 and Atari Background Builder (kisrael)
-* Scott Lahteine (thinkyhead) for the M1 Mac Compatibility for bB, 7800basic, Stella, dasm (generally or close to the most recent versions)
 * Mats Engstrom (SmallRoomLabs)
-* The AtariAge community including Albert, CPUWiz, Random Terrain, Trebor, Synthpopalooza, sramirez2008, Defender_2600, Gemintronic, Karl G, ZeroPage Homebrew, Muddyfunster, TwentySixHundred, Lillapojkenpåön, Andrew Davie, splendidnut, andyjp, sexyUnderwriter, MikeBrownEmplas, Generation2Games, cwieland, slacker
+* Scott Lahteine (thinkyhead) for the MacOS ARM Compatibility for bB, 7800basic, Stella, dasm
+* Fred Sauer (fredsa) for product suggestions and additional information relating to the MacOS ARM releases and self compilation of the language compilers. Learn more [here](README-macos.md).
+* The AtariAge community including Albert, CPUWiz, Random Terrain, Trebor, Synthpopalooza, sramirez2008, Defender_2600, Gemintronic, Karl G, ZeroPage Homebrew, Muddyfunster, TwentySixHundred, Lillapojkenpåön, Andrew Davie, splendidnut, andyjp, sexyUnderwriter, MikeBrownEmplas, Generation2Games, cwieland, slacker, milnak
 
 ## Languages
 Atari Dev Studio includes the following programming languages:
 
-### batari Basic (release 1.8 - 20250615)
+### batari Basic (release 1.8 - 20250615, macOS ARM64 release 1.6)
 batari Basic created by Fred 'batari' Quimby is a BASIC-like language used in the creation of Atari 2600 games. batari Basic is compiled to generate a binary file that can by used on actual Atari 2600 VCS hardware via cartridge (such as a Harmony or UNO cart) or by using an Atari 2600 VCS emulator such as Stella.
 
 batari Basic is an external project is kindly currently maintained by Mike Saarna (RevEng) and can be downloaded separately [here](https://github.com/batari-Basic/batari-Basic).  Further information is about this release is available here at [AtariAge](https://atariage.com/forums/topic/300856-official-home-for-batari-basic).
 
-### 7800basic (release 0.36 - 20250615)
+### 7800basic (release 0.36 - 20250615, macOS ARM64 release 0.29)
 7800basic is a BASIC-like language for creating Atari 7800 games.  It is a compiled language that runs on a computer, and it creates a binary file that can be run with an Atari 7800 emulator, or the binary file may be used to make a cartridge that will operate on a real Atari 7800. 7800basic is derived from batari basic, a BASIC-like language for creating Atari 2600 games. Special thanks to the bB creator, Fred Quimby, and all of the the bB contributors!
 
 7800basic is included as part of this extension with many thanks to Mike Saarna (RevEng).  7800basic is an external project and can be downloaded separately [here](https://github.com/7800-devtools/7800basic).  Further information about this release is available here at [AtariAge](http://atariage.com/forums/topic/222638-7800basic-beta-the-release-thread).
