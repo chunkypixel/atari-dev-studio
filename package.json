@@ -302,12 +302,6 @@
                     "description": "Specify the default compiler used to compile your source code:",
                     "scope": "resource"
                 },
-                "atari-dev-studio.compiler.options.stripSourceFileExtensions": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Whether to strip all source file extensions from the built output on compilation.",
-                    "scope": "resource"
-                },
                 "atari-dev-studio.compiler.options.cleanupCompilationFiles": {
                     "type": "boolean",
                     "default": true,

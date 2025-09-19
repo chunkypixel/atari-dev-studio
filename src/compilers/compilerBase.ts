@@ -33,7 +33,6 @@ export abstract class CompilerBase implements vscode.Disposable {
     
     protected GenerateDebuggerFiles: boolean = true;
     protected CleanUpCompilationFiles: boolean = true;
-    protected StripSourceFileExtensions: boolean = true;
     protected WorkspaceFolder: string = "";
 
     protected UsingMakeFileCompiler: boolean = false;
@@ -326,7 +325,6 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Compilation
         this.GenerateDebuggerFiles = this.Configuration!.get<boolean>(`compiler.options.generateDebuggerFiles`, true);
         this.CleanUpCompilationFiles = this.Configuration!.get<boolean>(`compiler.options.cleanupCompilationFiles`, true);
-        this.StripSourceFileExtensions = this.Configuration!.get<boolean>(`compiler.options.stripSourceFileExtensions`, true);
 
         // System
         this.CompiledSubFolder = path.join(this.WorkspaceFolder, this.CompiledSubFolderName);
@@ -453,14 +451,8 @@ export abstract class CompilerBase implements vscode.Disposable {
                 compiledFileName = `${path.parse(this.FileName).name}${extension}`;
             }
 
-            // set old path
+            // set path
             let oldPath = path.join(this.WorkspaceFolder, compiledFileName);
-
-            // set new path
-            if (this.StripSourceFileExtensions) {
-                // remove source file extensions for new path filename
-                compiledFileName = `${path.parse(this.FileName).name}${extension}`;
-            }
             let newPath = path.join(this.CompiledSubFolder, compiledFileName);
 
             // Move compiled file
@@ -484,14 +476,8 @@ export abstract class CompilerBase implements vscode.Disposable {
                 // Prepare
                 let debuggerFileName: string = `${this.FileName}${extension}`;
 
-                // Set old path
+                // Set path
                 let oldPath = path.join(this.WorkspaceFolder, debuggerFileName);
-
-                // Set new path
-                if (this.StripSourceFileExtensions) {
-                    // remove source file extensions for new path filename
-                    debuggerFileName = `${path.parse(this.FileName).name}${extension}`;
-                }
                 let newPath = path.join(this.CompiledSubFolder, debuggerFileName);
 
                 // Move compiled file?

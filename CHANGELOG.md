@@ -7,7 +7,6 @@ The following enhancements and changes have been made to Atari Dev Studio:
 * Started updating the 7800basic hover tooltips to new format with included links to on-line help (TBC)
 * Added information outlining the usage and potential compilation of out of date compilers used of Atari Dev Studio for MacOS arm64 machines (fredsa)
 * Updated the Output compiler window title to `Atari Compiler` for better identification (fredsa)
-* Added new option `compiler.options.stripSourceFileExtensions` to the settings to strip all source file extensions from the built output on compilation [enabled by default] (milnak)
 * Added status bar and command palette links to RT bB Sprite Editor website (opens in the system default browser currently). ALso re-ordered the icons moving the compiler options to the left.
 
 ## 0.10.8

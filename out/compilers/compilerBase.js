@@ -38,7 +38,6 @@ class CompilerBase {
         this.CompiledSubFolderName = "bin";
         this.GenerateDebuggerFiles = true;
         this.CleanUpCompilationFiles = true;
-        this.StripSourceFileExtensions = true;
         this.WorkspaceFolder = "";
         this.UsingMakeFileCompiler = false;
         this.UsingBatchCompiler = false;
@@ -334,7 +333,6 @@ class CompilerBase {
             // Compilation
             this.GenerateDebuggerFiles = this.Configuration.get(`compiler.options.generateDebuggerFiles`, true);
             this.CleanUpCompilationFiles = this.Configuration.get(`compiler.options.cleanupCompilationFiles`, true);
-            this.StripSourceFileExtensions = this.Configuration.get(`compiler.options.stripSourceFileExtensions`, true);
             // System
             this.CompiledSubFolder = path.join(this.WorkspaceFolder, this.CompiledSubFolderName);
             // Result
@@ -483,13 +481,8 @@ class CompilerBase {
                         extension = extension.slice(1);
                         compiledFileName = `${path.parse(this.FileName).name}${extension}`;
                     }
-                    // set old path
+                    // set path
                     let oldPath = path.join(this.WorkspaceFolder, compiledFileName);
-                    // set new path
-                    if (this.StripSourceFileExtensions) {
-                        // remove source file extensions for new path filename
-                        compiledFileName = `${path.parse(this.FileName).name}${extension}`;
-                    }
                     let newPath = path.join(this.CompiledSubFolder, compiledFileName);
                     // Move compiled file
                     // Updated to check as we may now have optional files (7800basic - .CC2, bB - .ace)
@@ -522,13 +515,8 @@ class CompilerBase {
                         let [arg, extension] = _f;
                         // Prepare
                         let debuggerFileName = `${this.FileName}${extension}`;
-                        // Set old path
+                        // Set path
                         let oldPath = path.join(this.WorkspaceFolder, debuggerFileName);
-                        // Set new path
-                        if (this.StripSourceFileExtensions) {
-                            // remove source file extensions for new path filename
-                            debuggerFileName = `${path.parse(this.FileName).name}${extension}`;
-                        }
                         let newPath = path.join(this.CompiledSubFolder, debuggerFileName);
                         // Move compiled file?
                         if (yield filesystem.FileExistsAsync(oldPath)) {

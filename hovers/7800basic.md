@@ -4,12 +4,12 @@ The 7800 requires it's graphics to be padded with zeroes. To avoid wasting ROM s
 allows you to stick program code in these areas between the graphics blocks that would otherwise be wasted with zeroes.
 
 ```7800basic
-dmahole hole [noflow]
+dmahole [hole] [noflow]
 ```
 - `hole` - number of hole (0-3)
 - `noflow` (optional)
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#dmahole)
+[Online](https://www.randomterrain.com/7800basic.html#dmahole)
 
 
 
@@ -20,11 +20,11 @@ entirely by using this command with the **disable** argument. If you later wish 
 **enable** argument.
 
 ```7800basic
-changedmaholes mode
+changedmaholes [mode]
 ```
 - `mode` - disable, enable
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#changedmaholes)
+[Online](https://www.randomterrain.com/7800basic.html#changedmaholes)
 
 
 
@@ -34,13 +34,13 @@ Normally 7800basic places your graphics data between DMA holes, so that Maria is
 the graphics would glitch when placed at a Y coordinate that doesn't line up with a zone.
 
 ```7800basic
-set tightpackborder address
+set tightpackborder [address]
 ```
 - `address` - address of gfx data eg. $8000, top
 
 **Note:** If you wish to tightly pack all graphics - say if your game doesn’t need arbitrary Y placement of graphics, but rather, the graphics are always aligned with zones perfectly - you can use **top** as the address location with `tightpackborder`.
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#set_tightpackborder)
+[Online](https://www.randomterrain.com/7800basic.html#set_tightpackborder)
 
 
 
@@ -49,7 +49,7 @@ set tightpackborder address
 Define or redefine the palette that `plotmapfile` will use with your image. You can use this to re-color certain tiles for certain levels.
 
 ```7800basic
-defaultpalette imagename graphicsmode palette#
+defaultpalette [imagename] [graphicsmode] [palette#]
 ```
 - `imagename` - name of the included graphic
 - `graphicsmode` - 160A, 160B, 320A, 320B, 320C, 320D
@@ -58,7 +58,7 @@ defaultpalette imagename graphicsmode palette#
 **Note:** When the `plotmapfile` command is encountered, it will embed the palette numbers you've specified into the charactermap data. As a result, you can't
 use multiple defaultpalette changes with the same `plotmapfile` command.
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#defaultpalette)
+[Online](https://www.randomterrain.com/7800basic.html#defaultpalette)
 
 
 
@@ -68,11 +68,11 @@ When using bankswitching, there may be times you wish to switch the active bank 
 this from the last always-present bank.
 
 ```7800basic
-loadrombank bank
+loadrombank [bank]
 ```
 - `bank` - bank to switch to ie. bank1, bank2, bank3
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#loadrombank)
+[Online](https://www.randomterrain.com/7800basic.html#loadrombank)
 
 
 
@@ -81,11 +81,11 @@ loadrombank bank
 When using bankswitching with the **BANKRAM** formats, you can switch the active RAM bank with the `loadrambank` command.
 
 ```7800basic
-loadrambank bank
+loadrambank [bank]
 ```
 - `bank` - bank to switch to ie. bank1, bank2, bank3
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#loadrambank)
+[Online](https://www.randomterrain.com/7800basic.html#loadrambank)
 
 
 
@@ -97,7 +97,7 @@ Restart your game as if the console had just been turned on.
 reboot
 ```
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#reboot)
+[Online](https://www.randomterrain.com/7800basic.html#reboot)
 
 
 
@@ -114,7 +114,7 @@ rand
 is to seed the randomizer. If you do this, pay careful attention to the value you store there, since storing a zero in rand will **break** the randomizer,
 and all subsequent reads will also be zero!
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#random_numbers)
+[Online](https://www.randomterrain.com/7800basic.html#random_numbers)
 
 
 
@@ -123,11 +123,11 @@ and all subsequent reads will also be zero!
 Sets the current graphics display mode.
 
 ```7800basic
-displaymode mode
+displaymode [mode]
 ```
 - `mode` - 160A (default), 160B, 320A, 320B, 320C, 320D
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#displaymode)
+[Online](https://www.randomterrain.com/7800basic.html#displaymode)
 
 
 
@@ -139,7 +139,7 @@ Erases all sprites and characters that you've previously drawn on the screen, so
 clearscreen
 ```
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#working_with_the_screen_commands)
+[Online](https://www.randomterrain.com/7800basic.html#working_with_the_screen_commands)
 
 
 
@@ -154,7 +154,7 @@ savescreen
 **Note:** `savescreen` and `restorescreen` are meant to reduce the CPU requirements of your game, by avoiding re-plotting background elements 
 that don't change from frame to frame. 
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#working_with_the_screen_commands)
+[Online](https://www.randomterrain.com/7800basic.html#working_with_the_screen_commands)
 
 
 
@@ -169,7 +169,7 @@ restorescreen
 **Note:** `savescreen` and `restorescreen` are meant to reduce the CPU requirements of your game, by avoiding re-plotting background elements 
 that don't change from frame to frame. 
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#working_with_the_screen_commands)
+[Online](https://www.randomterrain.com/7800basic.html#working_with_the_screen_commands)
 
 
 
@@ -182,7 +182,7 @@ display loop ensures that the loop will run every **1/60th** of a second for **N
 drawscreen
 ```
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#working_with_the_screen_commands)
+[Online](https://www.randomterrain.com/7800basic.html#working_with_the_screen_commands)
 
 
 
@@ -195,7 +195,7 @@ amount of CPU time possible. You may occasionally have code that you don't want 
 drawwait
 ```
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#drawwait)
+[Online](https://www.randomterrain.com/7800basic.html#drawwait)
 
 
 
@@ -213,7 +213,7 @@ doublebuffer state [framerate]
 **Note:** You can optionally set a minimum framerate with the `doublebuffer` command, to ensure there's a uniform framerate when your game logic and 
 object count differs.
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#doublebuffer)
+[Online](https://www.randomterrain.com/7800basic.html#doublebuffer)
 
 
 ### ROMSIZE
@@ -221,13 +221,13 @@ object count differs.
 This sets the ROM size and format of your game.
 
 ```7800basic
-set romsize value
+set romsize [value]
 ```
 - `value` - 16k, 32k (default), 48k, 128k, 128kRAM, 128kBANKRAM, 144k, 256k, 256kRAM, 256kBANKRAM, 272k, 512k, 512kRAM, 512kBANKRAM, 528k
 
 **Note:** It is recommended `set bankset on` is located at the top of your set list (or at least before any use of both `set romsize` and `set extradlmemory`).  
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#set_romsize)
+[Online](https://www.randomterrain.com/7800basic.html#set_romsize)
 
 
 
@@ -236,10 +236,11 @@ set romsize value
 Tells MARIA to fetch 2 bytes of character data for each character you plot, effectively making the characters twice as wide.
 
 ```7800basic
-set doublewide on
+set doublewide [state]
 ```
+- `state` - on, off
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#set_doublewide_on)
+[Online](https://www.randomterrain.com/7800basic.html#set_doublewide_on)
 
 
 ### DEPRECATED
@@ -247,11 +248,11 @@ set doublewide on
 Enable legacy behavior in some 7800basic routines. You should only use **set deprecated** for old code that you don't wish to update.
 
 ```7800basic
-set deprecated state
+set deprecated [state]
 ```
 - `state` - frameheight, 160bindexes, boxcollision, onepass
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#set_deprecated)
+[Online](https://www.randomterrain.com/7800basic.html#set_deprecated)
 
 
 
@@ -260,27 +261,29 @@ set deprecated state
 Tells 7800basic to move the screen randomly, for visual effect.
 
 ```7800basic
-shakescreen state
+shakescreen [state]
 ```
 - `state` - lo, med, hi, off
 
 The `shakescreen` command needs to be called once per frame, to continuously move the screen. When you’re done with the shaking effect, you should call
 **shakescreen off** to restore the correct screen position.
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#shakescreen)
+[Online](https://www.randomterrain.com/7800basic.html#shakescreen)
 
 
 
 ### TALLSPRITE
 
-If the tallsprite is set to **on** (the default) then when the `incgraphic` command sees a graphic that is 2 zone-heights or more, it will import all of the graphics and link them together as a **tallsprite**. If you use the `plotsprite` command on a tallsprite graphic, the `plotsprite` command will loop to ensure all parts will be drawn.
+If the tallsprite is set to **on** (the default) then when the `incgraphic` command sees a graphic that is 2 zone-heights or more, it will import all 
+of the graphics and link them together as a **tallsprite**. If you use the `plotsprite` command on a tallsprite graphic, the `plotsprite` command will 
+loop to ensure all parts will be drawn.
 
 ```7800basic
-set tallsprite state
+set tallsprite [state]
 ```
 - `state` - on, off, spritesheet
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#set_tallsprite_on_off)
+[Online](https://www.randomterrain.com/7800basic.html#set_tallsprite_on_off)
 
 
 
@@ -289,7 +292,7 @@ set tallsprite state
 Set the default television region for the finalised ROM.
 
 ```7800basic
-set tv region
+set tv [region]
 ```
 - `region` - ntsc (default), pal
 
@@ -300,13 +303,13 @@ set tv region
 Graphics in 7800basic are limited to either 8 or 16 pixels tall. This is a result of MARIA's zone based architecture.
 
 ```7800basic
-set zoneheight height
+set zoneheight [height]
 ```
 - `height` - 8, 16 (default)
 
 **Note:** Using a zone height of `8` means that 7800basic needs to present more memory to MARIA for screen building. 
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#zoneheight)
+[Online](https://www.randomterrain.com/7800basic.html#zoneheight)
 
 
 
@@ -315,192 +318,334 @@ set zoneheight height
 Set the vertical resolution of your screen in pixels.
 
 ```7800basic
-set screenheight height
+set screenheight [height]
 ```
 - `height` - 192 (default), 208, 224
 
-[Learn more...](https://www.randomterrain.com/7800basic.html#screenheight)
+[Online](https://www.randomterrain.com/7800basic.html#screenheight)
 
 
 
 ### EXTRADLMEMORY
 
-Tells 7800basic that you want to use the memory at `$2200` for the purpose of expanding your display list, to allow more objects. When you compile your
-program with this option, the compile output will advise what memory range it used. [Learn more...](https://www.randomterrain.com/7800basic.html#set_extradlmemory_on)
+Tells 7800basic that you want to use the memory at `$2200-$27ff` for the purpose of expanding your display list, to allow more objects. When you compile 
+your program with this option, the compile output will advise what memory range it used.
 
 ```7800basic
-set extradlmemory on
+set extradlmemory [state]
 ```
+- `state` - on, off
 
-**Note:** It is recommended `set bankset on` is located at the top of your set list (or at least before any use of both `set romsize` and `set extradlmemory`).
+**Note:** It is recommended `set bankset on` is located at the top of your set list (or at least before any use of both `set romsize` and `set extradlmemory`). 
 Also the use of `set dlmemory` is incompatible with bankset roms and is not available when enabled.  
+
+[Online](https://www.randomterrain.com/7800basic.html#set_extradlmemory_on)
 
 
 
 ## CANARY
 
-    set canary state
+If 7800basic detects the 6502 break opcode has been encountered, it will turn the screen yellow and stop the game. This is meant to highlight that data 
+has been executed, instead of code, since the break opcode isn't normally part of your 7800basic game code. By default this break protection is on, but 
+you can use this statement to disable the protection.
 
-    state - on, off
+```7800basic
+set canary [state]
+```
+- `state` - on, off
 
-
-
-## DLMEMORY
-
-    set dlmemory start_byte_location end_byte_location 
-
-    start_byte_location
-    end_byte_location
-
-    NOTE: it is recommended 'set bankset on' is located at the top of your set list (or at least before any use of both 'set romsize' and 'set extradlmemory').  The use of 'set dlmemory' is incompatible with bankset roms and is not available when turned on.  
+[Online](https://www.randomterrain.com/7800basic.html#set_canary)
 
 
 
-## COLLISIONWRAP
+## CRASHDUMP
 
-    set collisionwrap on
+If your game has the hiscorefont imported and you use `set crashdump on`, then any canary crash (red screen of death) or break protect crash (yellow 
+screen of death) crash will dump the top of the stack contents to the screen. This may help someone with strong assembly skills track down which game 
+routine led to the crash.
 
+```7800basic
+set crashdump [state]
+```
+- `state` - on, off
 
-    
-## PLOTVALUEONSCREEN
-
-    set plotvalueonscreen state
-
-    state - on, off
-
-
-
-## ZONEPROTECTION
-
-    set zoneprotection state
-
-    state - on, off
-
-
-
-## PAUSEROUTINE
-
-    set pauseroutine state
-
-    state - on, off
-
-
-
-## PAUSESILENCE
-
-    set pausesilence state
-
-    state - on, off
-
-
-
-## POKEYSOUND
-
-    set pokeysound state
-
-    state - on, off
-
-
-
-## POKEYSUPPORT
-
-    set pokeysupport state
-
-    state - on, off, $450, $800, $4000
-
-
-
-## TIAVOLUME
-
-    set tiavolume on
-
-
-
-## TIASFX
-
-    set tiasfx mono
-
-
-
-## AVOXVOICE
-
-    set avoxvoice on
-
-
-
-## DEBUG
-
-    set debug state
-
-    state - color, frames, interrupt
+[Online](https://www.randomterrain.com/7800basic.html#set_crashdump)
 
 
 
 ## MCPDEVCART
 
-    set mcpdevcart state
+This tells 7800basic to use hotspots compatible with the 7800 MCP DevCart. This only needs to be used when working with bankswitched formats.
 
-    state - on, off
+```7800basic
+set mcpdevcart state
+```
+- `state` - on, off
 
-
-
-## PADDLERANGE
-
-   set paddlerange range
-
-   range - 1 to 240
+[Online](https://www.randomterrain.com/7800basic.html#set_mcpdevcart)
 
 
 
-## PADDLEPAIR
+## DLMEMORY
 
-   set paddlepair state
+By default, 7800basic allocates its object display list from `$1880` to `$1fff`. If you have another source of available memory (like on-cart memory) 
+and you need to increase the number of objects that the display can hold, you may wish to relocate the display list.
 
-   state - on, off
+```7800basic
+set dlmemory [start_byte_location] [end_byte_location] 
+```
+- `start_byte_location` - starting location of custom dl memory eg. $4000
+- `end_byte_location` - starting location of custom dl memory eg. $4fff
+
+**Note:** It is recommended `set bankset on` is located at the top of your set list (or at least before any use of both `set romsize` and `set extradlmemory`). 
+Also the use of `set dlmemory` is incompatible with bankset roms and is not available when enabled.  
+
+[Online](https://www.randomterrain.com/7800basic.html#set_dlmemory)
 
 
 
-## PADDLESCALEX2
+## COLLISIONWRAP
 
-   set paddlescalex2 state
+Normally 7800basic adds a bit of extra code to collision checking that allows it to check for sprites that are partially off screen. If you need a performance 
+boost, you can turn collision wrapping off.
 
-   state - on, off
+```7800basic
+set collisionwrap [state]
+```
+- `state` - on, off
+
+[Online](https://www.randomterrain.com/7800basic.html#boxcollision)
+
+
+ 
+## PLOTVALUEONSCREEN
+
+This tells 7800basic that when the plotvalue command is used, it should update the screen immediately, instead of waiting for the screen to complete 
+drawing. This will save precious off-screen cycles for plotting other objects, like sprites.
+
+```7800basic
+set plotvalueonscreen [state]
+```
+- `state` - on, off
+
+[Online](https://www.randomterrain.com/7800basic.html#set_plotvalueonscreen)
+
+
+
+## ZONEPROTECTION
+
+If too many objects are plotted to the same horizontal zone, there's a chance objects will overflow the storage for that zone, and corrupt display of 
+the next zone. Using this command will prevent that from happening, at the expense of available CPU time.
+
+```7800basic
+set zoneprotection [state]
+```
+- `state` - on, off
+
+[Online](https://www.randomterrain.com/7800basic.html#set_plotvalueonscreen)
+
+
+
+## PAUSEROUTINE
+
+Turning `pauseroutine` off tells 7800basic to not use its built-in pause routine in the game.
+
+```7800basic
+set pauseroutine [state]
+```
+- `state` - on, off
+
+[Online](https://www.randomterrain.com/7800basic.html#set_pauseroutine)
+
+
+
+## PAUSESILENCE
+
+Turning `pausesilence` on tells 7800basic to not play sfx or tracker music when the game is paused.
+
+```7800basic
+set pausesilence [state]
+```
+- `state` - on, off
+
+[Online](https://www.randomterrain.com/7800basic.html#set_pausesilence)
+
+
+
+## POKEYSUPPORT
+
+This tells 7800basic to enable or disable pokey soundchip support. If `on` is selected, the pokey location will be probed by 7800basic. If you instead 
+specify one of the supported pokey addresses, no autoprobe will be done, and the pokey will be assumed to be present—this is the recommended method 
+of pokey support.
+
+```7800basic
+set pokeysupport [state]
+```
+- `state` - on, off, $450, $800, $4000
+
+[Online](https://www.randomterrain.com/7800basic.html#set_pokeysupport)
+
+
+
+## TIAVOLUME
+
+This tells 7800basic to scale any TIA sounds by the variable `tiavolume`. The tiavolume value can range from 0 (silent) to 15 (full scale). This only 
+applies to the 7800basic `playsfx` command and tia music tracker—if you set tia registers directly in your program, they'll be unaffected by tiavolume.
+
+```7800basic
+set tiavolume on
+```
+
+[Online](https://www.randomterrain.com/7800basic.html#set_tiavolume_on)
+
+
+
+## TIASFX
+
+This tells 7800basic to only use one channel for TIA sound effects. 
+
+```7800basic
+set tiasfx mono
+```
+
+[Online](https://www.randomterrain.com/7800basic.html#set_tiasfx_mono)
+
+
+
+## AVOXVOICE
+
+This tells 7800basic to turn on AtariVox voice support.
+
+```7800basic
+set avoxvoice on
+```
+
+[Online](https://www.randomterrain.com/7800basic.html#set_avoxvoice_on)
+
+
+
+## DEBUG
+
+This tells 7800basic to change the color of the screen to red, until all of the screen plotting functions are called. This allows you to judge how much 
+of the program calculations are happening during the visible screen, and allows you to see the relative efficiency of your program.
+
+```7800basic
+set debug [state]
+```
+- `state` - color, frames, interrupt
+
+[Online](https://www.randomterrain.com/7800basic.html#set_debug_color)
+
+
+
+## BREAKPROTECT
+
+If 7800basic detects the 6502 break opcode has been encountered, it will turn the screen yellow and stop the game. This is meant to highlight that data 
+has been executed, instead of code, since the break opcode isn't normally part of your 7800basic game code.
+
+```7800basic
+set breakprotect [state]
+```
+- `state` - on (default), off
+
+[Online](https://www.randomterrain.com/7800basic.html#set_breakprotect)
 
 
 
 ## BASEPATH
 
-    set basepath directory_path
+```7800basic
+set basepath [directory_path]
+```
+- `directory_path` - relative path to files to be included on compilation
 
-    directory_path - relative path to files to be included on compilation
+[Online](https://www.randomterrain.com/7800basic.html#set_basepath)
 
 
 
 ## BANKSET
 
-    set bankset state
+This instructs 7800basic to create a bankset format rom. Banksets doubles the amount of ROM your game can access. 
 
-    state - on, off
+```7800basic
+set bankset [state]
+```
+- `state` - on, off
 
-    NOTE: it is recommended 'set bankset on' is located at the top of your set list (or at least before any use of both 'set romsize' and 'set extradlmemory').  The use of 'set dlmemory' is incompatible with bankset roms and is not available when turned on.
+**Note:** It is recommended `set bankset on` is located at the top of your set list (or at least before any use of both `set romsize` and `set extradlmemory`). 
+Also the use of `set dlmemory` is incompatible with bankset roms and is not available when enabled.  
+
+[Online](https://www.randomterrain.com/7800basic.html#set_bankset_on)
+
+
+
+## PADDLERANGE
+
+This sets the value range the paddle controllers will return. Larger ranges use more CPU time.
+
+```7800basic
+set paddlerange [range]
+```
+- `range` - 1 to 240
+
+[Online](https://www.randomterrain.com/7800basic.html#set_paddlerange)
+[Paddle Controls](https://www.randomterrain.com/7800basic.html#paddle_controls)
+
+
+## PADDLEPAIR
+
+Tells 7800basic to read both paddles in a set of 2.
+
+```7800basic
+set paddlepair [state]
+```
+- `state` - on, off
+
+[Online](https://www.randomterrain.com/7800basic.html#set_paddlepair)
+[Paddle Controls](https://www.randomterrain.com/7800basic.html#paddle_controls)
+
+
+
+## PADDLESCALEX2
+
+Doubles the values returned by the paddles, increasing the range without additional CPU time.
+
+```7800basic
+set paddlescalex2 [state]
+```
+- `state` - on, off
+
+[Online](https://www.randomterrain.com/7800basic.html#set_paddlescalex2)
+[Paddle Controls](https://www.randomterrain.com/7800basic.html#paddle_controls)
 
 
 
 ## DUMPGRAPHICS
 
-    set dumpgraphics $####
+This instructs 7800basic to dump all graphics blocks and any needed assembly code to access those graphics within 7800basic to file.
 
-    $#### - address of dump ie. $6000
+```7800basic
+set dumpgraphics [address]
+```
+- `address` - location of dump ie. $6000 (used for the assembly code address reference)
+
+[Online](https://www.randomterrain.com/7800basic.html#set_dumpgraphics)
 
 
 
 ## RMTSPEED
 
-    set rmtspeed state
+This tells 7800basic what speed your rmt music was composed for. If you use this command, 7800basic will adjust the music speed so the music plays as 
+composed, on both ntsc and pal consoles.
 
-    state - ntsc, pal, off
+```7800basic
+set rmtspeed state
+```
+- `state` - ntsc, pal, off
 
-    NOTE: made sure to define variable 'dim RMTRAM = $####' and allocate 173 bytes of RAM for RMT playback (ie. $2200)
+**Note:** You must also define variable `dim RMTRAM = $####` (ie. $2200) and allocate 173 bytes of RAM for RMT playback 
+
+[Online](https://www.randomterrain.com/7800basic.html#set_rmtspeed)
 
 
 
@@ -524,7 +669,12 @@ Also the use of `set dlmemory` is incompatible with bankset roms and is not avai
 
 ## POKEYDETECTED
 
-    if pokeydetected then ...
+When your program has POKEY support enabled with `set pokeysupport`, you can check to see if 7800basic detected a POKEY chip through the pokeydetected variable.
+
+```7800basic
+if pokeydetected then ...
+```
+[Online](https://www.randomterrain.com/7800basic.html#pokeydetected_variable)
 
 
 
@@ -536,9 +686,9 @@ Also the use of `set dlmemory` is incompatible with bankset roms and is not avai
 
 ## HSSUPPORT
 
-    set hssupport $####
+    set hssupport [address]
 
-    $#### - Atari High Score Cart, AtariVox, or Savekey Identifier
+    adress - Atari High Score Cart, AtariVox, or Savekey Identifier
 
 
 
@@ -635,7 +785,7 @@ Also the use of `set dlmemory` is incompatible with bankset roms and is not avai
     filename.rmt - file name of the rmt song file to include
 
 
-    NOTE: made sure to define variable 'dim RMTRAM = $####' and allocate 173 bytes of RAM for RMT playback (ie. $2200)
+**Note:** You must also define variable `dim RMTRAM = $####` (ie. $2200) and allocate 173 bytes of RAM for RMT playback 
 
 
    
@@ -678,10 +828,10 @@ Also the use of `set dlmemory` is incompatible with bankset roms and is not avai
 
 ## DECOMPRESS
 
-    decompress filename $####
+    decompress filename [address]
 
     filename.xxx - file name of the asset to decompress
-    $#### - address of dump ie. $4000
+    address - address of dump ie. $4000
 
 
 
@@ -798,7 +948,7 @@ Also the use of `set dlmemory` is incompatible with bankset roms and is not avai
 
 ### PEEKCHAR
 The `peekchar` command is used to read a value from the provided mapdata (or memory location) in ROM or RAM.
- [Learn more...](https://www.randomterrain.com/7800basic.html#peekchar)
+ [Online](https://www.randomterrain.com/7800basic.html#peekchar)
 
 ```7800basic
 value = peekchar(mapdata, x, y, width, height)
@@ -816,7 +966,7 @@ byte
 
 ### POKECHAR
 The `pokechar` command is used to write a value to the provided mapdata (or memory location) in RAM.
- [Learn more...](https://www.randomterrain.com/7800basic.html#pokechar)
+ [Online](https://www.randomterrain.com/7800basic.html#pokechar)
 
 ```7800basic
 pokechar mapdata x y width height value
@@ -948,11 +1098,11 @@ pokechar mapdata x y width height value
 
 ## PLAYRMT
 
-    playrmt $#### or incrmtfile
+    playrmt [address] or incrmtfile
 
-    $#### - address of tune ie. $6000 or set as incrmtfile
+    address - address of tune ie. $6000 or set as incrmtfile
 
-    NOTE: made sure to define variable 'dim RMTRAM = $####' and allocate 173 bytes of RAM for RMT playback (ie. $2200)
+**Note:** You must also define variable `dim RMTRAM = $####` (ie. $2200) and allocate 173 bytes of RAM for RMT playback 
 
 
 
@@ -982,7 +1132,7 @@ pokechar mapdata x y width height value
 
     value - basic, rmt
 
-    NOTE: made sure to define variable 'dim RMTRAM = $####' and allocate 173 bytes of RAM for RMT playback (ie. $2200)
+**Note:** You must also define variable `dim RMTRAM = $####` (ie. $2200) and allocate 173 bytes of RAM for RMT playback 
 
 
 
@@ -1048,22 +1198,6 @@ pokechar mapdata x y width height value
    set optimization state
 
    state - speed, size, noinlinedata, inlinerand, none
-
-
-
-## BREAKPROTECT
-
-   set breakprotect state
-
-   state - on, off
-
-
-
-## CRASHDUMP
-
-   set crashdump state
-
-   state - on, off
 
 
 
