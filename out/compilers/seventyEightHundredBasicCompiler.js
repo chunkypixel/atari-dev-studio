@@ -18,7 +18,7 @@ const execute = require("../execute");
 const compilerBase_1 = require("./compilerBase");
 class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
     constructor() {
-        super("7800basic", "7800basic", [".bas", ".78b"], [".a78", ".bin", ".bin.CC2", ".bin.versa"], [".a78", ".bin"], path.join(application.Path, "out", "bin", "compilers", "7800basic"), "A7800");
+        super("7800basic", "7800basic", [".bas", ".78b"], [".a78", ".bin", ".bin.CC2", ".bin.versa"], [".a78", ".bin"], path.join(application.Path, "out", "bin", "compilers", "7800basicwasm"), "A7800");
         // Debugger extensions
         this.DebuggerExtensions = new Map([["-s", ".symbol.txt"], ["-l", ".list.txt"]]);
         // Launch options
@@ -43,11 +43,9 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             console.log('debugger:SeventyEightHundredBasicCompiler.ExecuteCompilerAsync');
             // Validate compiler files
             // Note: for anti-virus quarantining
-            if (!(yield this.VerifyCompilerFilesExistsAsync())) {
-                return false;
-            }
+            //if (!await this.VerifyCompilerFilesExistsAsync()) { return false; }
             // Premissions
-            yield this.RepairFilePermissionsAsync();
+            //await this.RepairFilePermissionsAsync();
             // Compiler options
             let commandName = "7800bas.bat";
             if (application.IsLinux || application.IsMacOS) {

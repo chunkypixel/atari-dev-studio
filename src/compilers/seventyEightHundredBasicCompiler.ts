@@ -13,7 +13,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
                 "7800basic",
                 [".bas",".78b"],
                 [".a78",".bin",".bin.CC2",".bin.versa"],[".a78",".bin"],
-                path.join(application.Path,"out","bin","compilers","7800basic"),
+                path.join(application.Path,"out","bin","compilers","7800basicwasm"),
                 "A7800");
         
         // Debugger extensions
@@ -41,10 +41,10 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
 
         // Validate compiler files
         // Note: for anti-virus quarantining
-        if (!await this.VerifyCompilerFilesExistsAsync()) { return false; }
+        //if (!await this.VerifyCompilerFilesExistsAsync()) { return false; }
 
         // Premissions
-        await this.RepairFilePermissionsAsync();
+        //await this.RepairFilePermissionsAsync();
 
         // Compiler options
         let commandName = "7800bas.bat";
