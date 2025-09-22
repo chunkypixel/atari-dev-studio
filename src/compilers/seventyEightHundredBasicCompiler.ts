@@ -41,10 +41,10 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
 
         // Validate compiler files
         // Note: for anti-virus quarantining
-        //if (!await this.VerifyCompilerFilesExistsAsync()) { return false; }
+        if (!await this.VerifyCompilerFilesExistsAsync()) { return false; }
 
         // Premissions
-        //await this.RepairFilePermissionsAsync();
+        await this.RepairFilePermissionsAsync();
 
         // Compiler options
         let commandName = "7800bas.bat";
@@ -64,15 +64,14 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
 
         // Environment
         let env: Record<string, string> = {
-            PATH: this.FolderOrPath,
+            PATH: (process.env.PATH + ";" || '') + this.FolderOrPath,
             bas7800dir: this.FolderOrPath
         };
         // Additional for Linux or MacOS?
         if (application.IsLinux || application.IsMacOS) env["PATH"] += `${path.delimiter}/bin${path.delimiter}/usr/bin`;
 
-        // Notify
-        // Linux and macOS script has this message already
-        if (application.IsWindows) { application.WriteToCompilerTerminal(`Starting build of ${this.FileName}...`); } 
+        // Spacer
+        application.WriteToCompilerTerminal();
 
         // Compile
         this.IsRunning = true;
@@ -98,7 +97,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
                 }
 
                 // Result
-                application.WriteToCompilerTerminal('' + stdout, false);
+                application.WriteToCompilerTerminal(stdout, false);
                 return result;
             },
             (stderr: string) => {
@@ -118,13 +117,13 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
                 }
 
                 // Result
-                application.WriteToCompilerTerminal('' + stderr, false);
+                application.WriteToCompilerTerminal(stderr, false);
                 return result;
             });
         this.IsRunning = false;
 
-        // Cleanup (regardless of state if chosen)
-        application.WriteToCompilerTerminal(``, false); 
+        // Spacer
+        application.WriteToCompilerTerminal(); 
 
         // Finalise
         if (executeResult) { executeResult = await this.VerifyCompiledFileSizeAsync(); }
@@ -178,6 +177,10 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         if (application.IsLinux) { platform = ".Linux"; }
         if (application.IsMacOS) { platform = ".Darwin"; }
         let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
+        
+        // testing
+        // for wasmtime it looks like we only need to worry about the shell/batch but I still might fix this...
+        return [command];
 
         // Default items
         let compilerFileList = [command,

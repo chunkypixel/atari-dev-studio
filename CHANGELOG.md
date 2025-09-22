@@ -4,7 +4,9 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.10.9
 
+* Updated 7800basic to v0.37 (wasm).  NOTE: this is now a cross-platform release that requires the wasmtime runtime to be installed on your computer.
 * Started updating the 7800basic hover tooltips to new format with included links to on-line help (TBC)
+* Updated the compiler output to be properly formatted across multiple batches (it would include line feeds when not required)
 * Added information outlining the usage and potential compilation of out of date compilers used of Atari Dev Studio for MacOS arm64 machines (fredsa)
 * Updated the Output compiler window title to `Atari Compiler` for better identification (fredsa)
 * Added status bar and command palette links to RT bB Sprite Editor website (opens in the system default browser currently). ALso re-ordered the icons moving the compiler options to the left.

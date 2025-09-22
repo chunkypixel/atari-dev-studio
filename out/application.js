@@ -304,8 +304,15 @@ function OpenContextHelp() {
         }
     });
 }
-function WriteToCompilerTerminal(message, writeToLog = false) {
-    exports.CompilerOutputChannel.appendLine(message);
+function WriteToCompilerTerminal(message = '', lineFeed = true, writeToLog = false) {
+    // Output
+    if (lineFeed) {
+        exports.CompilerOutputChannel.appendLine(message);
+    }
+    else {
+        exports.CompilerOutputChannel.append(message);
+    }
+    // Write to log?
     if (writeToLog) {
         console.log(`debugger:${message}`);
     }

@@ -89,7 +89,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                     result = false;
                 }
                 // Result
-                application.WriteToCompilerTerminal('' + stdout, false);
+                application.WriteToCompilerTerminal(stdout, false, false);
                 return result;
             }, (stderr) => {
                 // Prepare
@@ -112,15 +112,18 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                 else if (stderr.includes("Cannot open includes.bB for reading")) {
                     // Special - seen this when the source is not processed correctly so we'll advise
                     // obviously doesn't get to the point of copying over this file
-                    application.WriteToCompilerTerminal("WARNING: An unknown issue has occurred during compilation that may have affected your build....", false);
+                    application.WriteToCompilerTerminal();
+                    application.WriteToCompilerTerminal("WARNING: An unknown issue has occurred during compilation that may have affected your build....");
                     // Failed
                     result = false;
                 }
-                // Result
-                application.CompilerOutputChannel.append('' + stderr);
+                // Result                
+                application.WriteToCompilerTerminal(stderr, false);
                 return result;
             });
             this.IsRunning = false;
+            // Spacer
+            application.WriteToCompilerTerminal();
             // Finalise
             if (executeResult) {
                 executeResult = yield this.VerifyCompiledFileSizeAsync();

@@ -11,7 +11,7 @@ if %ERRORLEVEL% NEQ 0 (
   echo ERROR: wasmtime is not installed or not in PATH.
   echo.
   echo You can install it using:
-  echo   - Windows winget:   winget install wasmtime
+  echo   - Windows winget: winget install BytecodeAlliance.Wasmtime.Portable
   echo   - Or download from: https://wasmtime.dev/
   echo.
   echo Installation cannot continue without wasmtime.

@@ -65,7 +65,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
             // Environment
             let env = {};
             // Notify
-            application.CompilerOutputChannel.appendLine(`Starting build of ${this.FileName}...`);
+            application.WriteToCompilerTerminal(`Starting build of ${this.FileName}...`);
             // Process
             this.IsRunning = true;
             let executeResult = yield execute.Spawn(command, args, env, this.WorkspaceFolder, (stdout) => {
@@ -80,7 +80,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
                     result = false;
                 }
                 // Result
-                application.CompilerOutputChannel.append('' + stdout);
+                application.WriteToCompilerTerminal(stdout, false);
                 return result;
             }, (stderr) => {
                 // Prepare
@@ -93,7 +93,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
                     result = false;
                 }
                 // Result
-                application.CompilerOutputChannel.append('' + stderr);
+                application.WriteToCompilerTerminal(stderr, false);
                 return result;
             });
             this.IsRunning = false;

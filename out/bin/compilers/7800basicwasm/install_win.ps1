@@ -1,7 +1,7 @@
 # 7800basic Windows Installer (PowerShell)
 Write-Host ""
 Write-Host "The 7800basic Windows Installer v2 (WASM edition)" -ForegroundColor Cyan
-Write-Host "------------------------------------------------" -ForegroundColor Cyan
+Write-Host "-------------------------------------------------" -ForegroundColor Cyan
 Write-Host ""
 
 # --- Check for wasmtime ---

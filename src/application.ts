@@ -292,8 +292,14 @@ export async function OpenContextHelp(): Promise<void> {
 	}
 }
 
-export function WriteToCompilerTerminal(message: string, writeToLog: boolean = false): void {
-	CompilerOutputChannel.appendLine(message);
+export function WriteToCompilerTerminal(message: string = '', lineFeed: boolean = true, writeToLog: boolean = false): void {
+	// Output
+	if (lineFeed) {
+		CompilerOutputChannel.appendLine(message)
+	} else {
+		CompilerOutputChannel.append(message);
+	}
+	// Write to log?
 	if (writeToLog) { console.log(`debugger:${message}`); }        
 }
 
