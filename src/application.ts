@@ -45,12 +45,14 @@ const os = require("os");
 // -------------------------------------------------------------------------------------
 export const OSPlatform: any = os.platform();
 export const OSArch: any = os.arch();
+export const OSRelease: any = os.release();
 export const IsWindows: boolean = (os.platform() === 'win32');
 export const IsLinux: boolean = (os.platform() === 'linux');
 export const IsMacOS: boolean = (os.platform() === 'darwin');
 export const Is32Bit: boolean = (os.arch() === 'x32');
 export const Is64Bit: boolean = (os.arch() === 'x64');
 export const IsMacOSArm: boolean = (os.platform() === 'darwin' && os.arch() === 'arm64')
+
 // -------------------------------------------------------------------------------------
 // Extension
 // -------------------------------------------------------------------------------------
@@ -63,7 +65,7 @@ export const DisplayName: string = vscode.extensions.getExtension(Id)!.packageJS
 export const Description: string = vscode.extensions.getExtension(Id)!.packageJSON.description;
 export const PreferencesSettingsExtensionPath: string = `${(IsMacOS ? "Code" : "File")} -> Preferences -> Settings -> Extensions -> ${DisplayName}`;
 export const ChangeLogUri: vscode.Uri = vscode.Uri.parse(`https://marketplace.visualstudio.com/items/${Id}/changelog`);
-
+export const WASMTIME_RELEASE = 0.37;
 // -------------------------------------------------------------------------------------
 // Channels
 // -------------------------------------------------------------------------------------

@@ -25,7 +25,8 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
     protected async GetCompilerVersionAsync(): Promise<void> {
 		// Prepare
         const filePath: vscode.Uri = vscode.Uri.file(path.join(this.FolderOrPath, 'release.dat'));
-        this.CompilerVersion = 0.21;
+        // min version of wasmtime releases of 7800basic/batariBasic
+        this.CompilerVersion = application.WASMTIME_RELEASE;
 
         // attempt to read contents
         if (await (filesystem.FileExistsAsync(filePath.fsPath))) {
@@ -173,53 +174,54 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
     protected GetCompilerFileList(): string[] {
         // Prepare
         let command = (application.IsWindows ? "7800bas.bat" : "7800basic.sh");
-        let platform = "";
-        if (application.IsLinux) { platform = ".Linux"; }
-        if (application.IsMacOS) { platform = ".Darwin"; }
-        let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
         
-        // testing
-        // for wasmtime it looks like we only need to worry about the shell/batch but I still might fix this...
-        return [command];
+        // for Wasmtime we only need to validate the script file by the looks from my testing...
+        let compilerFileList = [command];
 
-        // Default items
-        let compilerFileList = [command,
-            `7800basic${platform}${extension}`,
-            `7800filter${platform}${extension}`,
-            `7800header${platform}${extension}`,
-            `7800optimize${platform}${extension}`,
-            `7800postprocess${platform}${extension}`,
-            `7800preprocess${platform}${extension}`,
-            `7800sign${platform}${extension}`,
-            `7800makecc2${platform}${extension}`,
-            `snip${platform}${extension}`];
+        // Validate if we are using an older version of 7800basic
+        if (this.CompilerVersion < application.WASMTIME_RELEASE) {
+            let platform = "";
+            if (application.IsLinux) { platform = ".Linux"; }
+            if (application.IsMacOS) { platform = ".Darwin"; }
+            let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
 
-        // As of 1/11/23 the existing ARM version does not cater for this file
-        if (!application.IsMacOSArm) {
-            compilerFileList.push(
-                `dasm${platform}${extension}`);     
+            // Yes! can only be version 0.22-0.36 as versions before will NOT include the release.dat file
+            // Default items
+            compilerFileList.push(`7800basic${platform}${extension}`,
+                `7800filter${platform}${extension}`,
+                `7800header${platform}${extension}`,
+                `7800optimize${platform}${extension}`,
+                `7800postprocess${platform}${extension}`,
+                `7800preprocess${platform}${extension}`,
+                `7800sign${platform}${extension}`,
+                `7800makecc2${platform}${extension}`,
+                `snip${platform}${extension}`);
+
+            // As of 1/11/23 the existing ARM version does not cater for this file
+            if (!application.IsMacOSArm) {
+                compilerFileList.push(
+                    `dasm${platform}${extension}`);     
+            }
+
+            // Append additional items (based on the version)
+            if (this.CompilerVersion >= 0.22) {
+                compilerFileList.push(
+                    `7800rmtfix${platform}${extension}`,
+                    `banksetsymbols${platform}${extension}`);
+            }
+            if (this.CompilerVersion >= 0.27) {
+                compilerFileList.push(
+                    `7800rmt2asm${platform}${extension}`);
+            }
+
+            // As of 8/06/25 (v0.34) the LZSA file is no longer used
+            // As of 1/11/23 (v0.31) the existing ARM version does not cater for this file
+            if (this.CompilerVersion >= 0.31 && this.CompilerVersion <= 0.33 && 
+                !application.IsMacOSArm) {
+                compilerFileList.push(
+                    `lzsa${platform}${extension}`);     
+            }
         }
-
-        // Append additional items (based on the version)
-        if (this.CompilerVersion >= 0.22) {
-            compilerFileList.push(
-                `7800rmtfix${platform}${extension}`,
-                `banksetsymbols${platform}${extension}`);
-
-        }
-        if (this.CompilerVersion >= 0.27) {
-            compilerFileList.push(
-                `7800rmt2asm${platform}${extension}`);
-        }
-
-        // As of 8/06/25 (v0.34) the LZSA file is no longer used
-        // As of 1/11/23 (v0.31) the existing ARM version does not cater for this file
-        if (this.CompilerVersion >= 0.31 && this.CompilerVersion <= 0.33 && 
-            !application.IsMacOSArm) {
-             compilerFileList.push(
-                 `lzsa${platform}${extension}`);     
-        }
-
         // Return
         return compilerFileList;
     }
@@ -227,7 +229,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
     protected ShowAnyCompilerWarnings(): void {
         console.log('debugger:SeventyEightHundredBasicCompiler.ShowAnyCompilerWarnings');
 
-        if (application.IsMacOSArm) {
+        if (application.IsMacOSArm && this.CompilerVersion < application.WASMTIME_RELEASE) {
             let message = `WARNING: The included MacOS ARM version of 7800basic is a number of versions behind the official build (currently v${this.CompilerVersion}) and may not compile correctly due to missing features and functionality.`;
             application.WriteToCompilerTerminal(message);
             application.WriteToCompilerTerminal(``);

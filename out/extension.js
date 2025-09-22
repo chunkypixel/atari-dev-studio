@@ -15,6 +15,7 @@ exports.deactivate = deactivate;
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require("vscode");
 const application = require("./application");
+const wasmtime = require("./wasmtime");
 const welcome_1 = require("./pages/welcome");
 const spriteeditor_1 = require("./pages/spriteeditor");
 require("./statusbar");
@@ -34,6 +35,8 @@ function activate(context) {
         // This line of code will only be executed once when your extension is activated
         console.log(`Extension ${application.DisplayName} (${application.Version}) is now active!`);
         console.log(`- Installation path: '${application.Path}'`);
+        // install on startup (as required)
+        wasmtime.install();
         // The command has been defined in the package.json file
         // Now provide the implementation of the command with registerCommand
         // The commandId parameter must match the command field in package.json

@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as application from './application';
+import * as wasmtime from './wasmtime';
 import { WelcomePage } from './pages/welcome';
 import { SpriteEditorPage } from './pages/spriteeditor';
 import './statusbar';
@@ -24,6 +25,9 @@ export async function activate(context: vscode.ExtensionContext) {
 	console.log(`Extension ${application.DisplayName} (${application.Version}) is now active!`);
     console.log(`- Installation path: '${application.Path}'`);
 	
+	// install on startup (as required)
+	wasmtime.install();
+
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
