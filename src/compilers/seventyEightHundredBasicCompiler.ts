@@ -13,7 +13,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
                 "7800basic",
                 [".bas",".78b"],
                 [".a78",".bin",".bin.CC2",".bin.versa"],[".a78",".bin"],
-                path.join(application.Path,"out","bin","compilers","7800basicwasm"),
+                path.join(application.Path,"out","bin","compilers","7800basic"),
                 "A7800");
         
         // Debugger extensions
