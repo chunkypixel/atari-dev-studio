@@ -8,7 +8,7 @@ export function install() {
     cp.exec('wasmtime --version', { shell: true }, (error: Error | null, stdout: string, stderr: string) => {
         // Is it?
         if (!error && stdout.includes('wasmtime')) {
-            console.log(`Wasmtime already installed: ${stdout.trim()}`);
+            application.WriteToCompilerTerminal(`- Wasmtime installed (${stdout.trim()})`);
             //vscode.window.showInformationMessage(`Wasmtime is already installed (${stdout.trim()}). No action needed.`);
             return;
         }
@@ -31,39 +31,40 @@ export function install() {
             // Windows 7 (6.1), Windows 10 (10.0, build < 22000), Windows 11 (10.0, build >= 22000)
             if (majorVersion === 6 && application.OSRelease.startsWith('6.1')) {
                 // Windows 7: winget not supported
-                vscode.window.showErrorMessage('Wasmtime installation via winget is not supported on Windows 7. Please download and install manually from https://wasmtime.dev/.');
+                application.WriteToCompilerTerminal('Wasmtime automated installation (via winget) is not supported on Windows 7. Download and install manually from https://wasmtime.dev/.');
                 return;
-            } else if (majorVersion === 10) {
+            } else if (majorVersion >= 10) {
                 // Windows 10 or 11: use winget
                 command = 'winget install --id=BytecodeAlliance.Wasmtime --silent --accept-package-agreements --accept-source-agreements';
             } else {
                 // Unknown/unsupported Windows version
-                vscode.window.showErrorMessage('Wasmtime installation not supported on this Windows version. Please install manually from https://wasmtime.dev/.');
+                application.WriteToCompilerTerminal('Wasmtime installation may not supported on this Windows version. Download and install manually from https://wasmtime.dev/.');
                 return;
             }
         } else {
-            vscode.window.showErrorMessage('Wasmtime installation not supported on this platform.');
+            application.WriteToCompilerTerminal('Wasmtime installation may not be supported on this platform. Download and install manually from https://wasmtime.dev/');
             return;
         }
 
         // Execute the installation
-        console.log(`Attempting to install Wasmtime...`);
+        application.WriteToCompilerTerminal();
+        application.WriteToCompilerTerminal(`Attempting to install Wasmtime.  This may take a few minutes...`);
         const execOptions = { cwd: undefined, shell: true };
         cp.exec(command, execOptions, (error: Error | null, stdout: string, stderr: string) => {
             if (error) {
-                console.error(`Wasmtime installation failed: ${error.message}`);
                 if (application.IsMacOS) {
-                    vscode.window.showErrorMessage(`Failed to install Wasmtime: ${error.message}. Ensure Homebrew is installed (https://brew.sh/) or that the curl install script completed successfully. Alternatively, install manually from https://wasmtime.dev/.`);
+                    application.WriteToCompilerTerminal(`Failed to install Wasmtime: ${error.message}. Ensure Homebrew is installed (https://brew.sh/) or that the curl install script completed successfully. Alternatively, download and install manually from from https://wasmtime.dev/.`);
                 } else {
-                    vscode.window.showErrorMessage(`Failed to install Wasmtime: ${error.message}. Please install manually from https://wasmtime.dev/.`);
+                    application.WriteToCompilerTerminal(`Failed to install Wasmtime: ${error.message}. Download and install manually from https://wasmtime.dev/.`);
                 }
                 return;
             }
             if (stderr) {
-                console.warn(`Wasmtime installation warnings: ${stderr}`);
+                application.WriteToCompilerTerminal(`Wasmtime installation warnings: ${stderr}`);
             }
-            console.log(`Wasmtime installed successfully: ${stdout}`);
-            vscode.window.showInformationMessage('Wasmtime installed! You may need to restart VS Code for changes to take effect.');
+            // NOTE: the stdout is very comprehensive and really doesn't need displaying ie. cmd progress bars etc
+            //application.WriteToCompilerTerminal(`Wasmtime installed successfully: ${stdout}`);
+            application.WriteToCompilerTerminal('Wasmtime installion complete! Depending on your operating system you may need to restart VS Code or your machine for changes to take effect.');
         });
     });
 }

@@ -22,12 +22,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
-	console.log(`Extension ${application.DisplayName} (${application.Version}) is now active!`);
-    console.log(`- Installation path: '${application.Path}'`);
 	
-	// install on startup (as required)
-	wasmtime.install();
-
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
@@ -117,6 +112,14 @@ export async function activate(context: vscode.ExtensionContext) {
 	await application.RegisterReferenceProvidersAsync(context);
 	await application.RegisterCompletionProvidersAsync(context);
 	
+	// Advise in compiler window we have started
+	application.CompilerOutputChannel.show();
+	application.WriteToCompilerTerminal(`Extension ${application.DisplayName} (${application.Version}) is now active!`);
+    application.WriteToCompilerTerminal(`- Installation path: '${application.Path}'`);
+
+	// install on startup (as required)
+	wasmtime.install();
+
 	// Show welcome messages
 	await application.ShowStartupMessagesAsync();
 }
