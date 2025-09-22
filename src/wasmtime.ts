@@ -4,6 +4,13 @@ import * as application from './application';
 const cp = require("child_process");
 
 export function install() {
+    // Process?
+    var configuration = application.GetConfiguration();
+    if (!configuration.get<boolean>(`application.configuration.doWasmtimeCheck`))  {
+        application.WriteToCompilerTerminal(`- Wasmtime validation has been turned off in the Settings.`);
+        return;
+    }
+
     // First, check if Wasmtime is already installed
     cp.exec('wasmtime --version', { shell: true }, (error: Error | null, stdout: string, stderr: string) => {
         // Is it?
