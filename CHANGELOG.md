@@ -4,9 +4,9 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.10.9
 
-* Updated 7800basic to v0.37 (wasm).  NOTE: this is now a cross-platform release that requires the wasmtime runtime to be installed on your computer.
+* Updated 7800basic to v0.37 (wasm).  NOTE: this is now a cross-platform release that requires the **wasmtime** runtime to be installed on your computer.
 * Updated the Output compiler window title to `Atari Compiler` for better identification (fredsa)
-* Updated the Atart Dev Studio startup process with the following chages: 
+* Updated the Atari Dev Studio startup process with the following chages: 
  - output to the `Atari Compiler` log and advise the status of the extension (version, location, wasmtime)
  - validate and install (as required) the **wasmtime** runtime automatically.
 * Updated the compiler output to be properly formatted across multiple batches (it previously included line feeds when not required)

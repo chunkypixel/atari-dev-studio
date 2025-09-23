@@ -39,7 +39,7 @@ Linux users on 64-bit systems will be required to install the 32-bit compatibili
 #### macOS
 macOS users require a 64-bit operating system to fully utilise all features of Atari Dev Studio and will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
 
-> Note: 7800basic v0.37 now uses WASM for mutli-platform compatibility therefore this information currently relates to batari Basic or older releases of 7800basic only and will be removed once bB is converted.
+> Note: 7800basic v0.37 now uses WASM for cross-platform compatibility therefore this information currently relates to batari Basic or older releases of 7800basic only and will be removed once bB is converted.
 
 Mac computers with [Apple silicon](https://support.apple.com/116943) currently have a few options:
 
