@@ -1,32 +1,44 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.install = install;
+exports.installAsync = installAsync;
+const util_1 = require("util");
 const application = require("./application");
 const cp = require("child_process");
-function install() {
-    // Process?
-    var configuration = application.GetConfiguration();
-    if (!configuration.get(`application.configuration.doWasmtimeCheck`)) {
-        application.WriteToCompilerTerminal(`- Wasmtime validation has been turned off in the Settings.`);
-        return;
-    }
-    // First, check if Wasmtime is already installed
-    cp.exec('wasmtime --version', { shell: true }, (error, stdout, stderr) => {
-        // Is it?
-        if (!error && stdout.includes('wasmtime')) {
-            application.WriteToCompilerTerminal(`- Wasmtime installed (${stdout.trim()})`);
-            //vscode.window.showInformationMessage(`Wasmtime is already installed (${stdout.trim()}). No action needed.`);
+// Promisify exec for async/await usage
+const execPromise = (0, util_1.promisify)(cp.exec);
+function installAsync() {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Process?
+        var configuration = application.GetConfiguration();
+        if (!configuration.get(`application.configuration.doWasmtimeCheck`)) {
+            application.WriteToCompilerTerminal(`- Wasmtime validation has been turned off in the Settings.`);
             return;
         }
-        // No! so lets prepare to install it
-        let command;
-        if (application.IsLinux) {
-            // Official install script for Linux
-            command = 'curl https://wasmtime.dev/install.sh -sSf | bash';
+        // First, check if Wasmtime is already installed
+        try {
+            const { stdout } = yield execPromise('wasmtime --version', { shell: true });
+            if (stdout.includes('wasmtime')) {
+                application.WriteToCompilerTerminal(`- ${stdout.trim()} installed`);
+                return;
+            }
         }
-        else if (application.IsMacOS) {
-            // Check if Homebrew is installed; if not, fall back to curl script
-            command = 'command -v brew >/dev/null 2>&1 && brew install wasmtime || curl https://wasmtime.dev/install.sh -sSf | bash';
+        catch (error) {
+            // Error means Wasmtime is likely not installed, proceed to installation
+        }
+        // No! prepare to install it
+        let command;
+        if (application.IsLinux || application.IsMacOS) {
+            // Install script using curl
+            command = 'curl https://wasmtime.dev/install.sh -sSf | bash';
         }
         else if (application.IsWindows) {
             // Get Windows version
@@ -54,25 +66,23 @@ function install() {
         }
         // Execute the installation
         application.WriteToCompilerTerminal();
-        application.WriteToCompilerTerminal(`Attempting to install Wasmtime.  This may take a few minutes...`);
-        const execOptions = { cwd: undefined, shell: true };
-        cp.exec(command, execOptions, (error, stdout, stderr) => {
-            if (error) {
-                if (application.IsMacOS) {
-                    application.WriteToCompilerTerminal(`Failed to install Wasmtime: ${error.message}. Ensure Homebrew is installed (https://brew.sh/) or that the curl install script completed successfully. Alternatively, download and install manually from from https://wasmtime.dev/.`);
-                }
-                else {
-                    application.WriteToCompilerTerminal(`Failed to install Wasmtime: ${error.message}. Download and install manually from https://wasmtime.dev/.`);
-                }
-                return;
-            }
+        application.WriteToCompilerTerminal('Attempting to install Wasmtime. This may take a few minutes...');
+        try {
+            const { stdout, stderr } = yield execPromise(command, { cwd: undefined, shell: true });
             if (stderr) {
                 application.WriteToCompilerTerminal(`Wasmtime installation warnings: ${stderr}`);
             }
-            // NOTE: the stdout is very comprehensive and really doesn't need displaying ie. cmd progress bars etc
-            //application.WriteToCompilerTerminal(`Wasmtime installed successfully: ${stdout}`);
-            application.WriteToCompilerTerminal('Wasmtime installion complete! Depending on your operating system you may need to restart VS Code or your machine for changes to take effect.');
-        });
+            // NOTE: stdout is verbose and often unnecessary (e.g., cmd progress bars)
+            application.WriteToCompilerTerminal('Wasmtime installation complete! Depending on your operating system you may need to restart VS Code or your machine for changes to take effect.');
+        }
+        catch (error) {
+            if (application.IsMacOS) {
+                application.WriteToCompilerTerminal(`Failed to install Wasmtime: ${error.message}. Ensure Homebrew is installed[](https://brew.sh/) or that the curl install script completed successfully. Alternatively, download and install manually from https://wasmtime.dev/.`);
+            }
+            else {
+                application.WriteToCompilerTerminal(`Failed to install Wasmtime: ${error.message}. Download and install manually from https://wasmtime.dev/.`);
+            }
+        }
     });
 }
 //# sourceMappingURL=wasmtime.js.map

@@ -25,7 +25,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
     protected async GetCompilerVersionAsync(): Promise<void> {
 		// Prepare
         const filePath: vscode.Uri = vscode.Uri.file(path.join(this.FolderOrPath, 'release.dat'));
-        // min version of wasmtime releases of 7800basic/batariBasic
+        // Note: v0.21 and earlier didn't include the 'release.dat' file so we cannot support them properly unless file is manually added
         this.CompilerVersion = application.WASMTIME_RELEASE;
 
         // attempt to read contents
@@ -179,13 +179,14 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         let compilerFileList = [command];
 
         // Validate if we are using an older version of 7800basic
+        // support 0.22-0.36 
+        // Note: v0.21 and earlier didn't include the 'release.dat' file so we cannot support them properly unless file is manually added
         if (this.CompilerVersion < application.WASMTIME_RELEASE) {
             let platform = "";
             if (application.IsLinux) { platform = ".Linux"; }
             if (application.IsMacOS) { platform = ".Darwin"; }
             let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
 
-            // Yes! can only be version 0.22-0.36 as versions before will NOT include the release.dat file
             // Default items
             compilerFileList.push(`7800basic${platform}${extension}`,
                 `7800filter${platform}${extension}`,
@@ -230,7 +231,7 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         console.log('debugger:SeventyEightHundredBasicCompiler.ShowAnyCompilerWarnings');
 
         if (application.IsMacOSArm && this.CompilerVersion < application.WASMTIME_RELEASE) {
-            let message = `WARNING: The included MacOS ARM version of 7800basic is a number of versions behind the official build (currently v${this.CompilerVersion}) and may not compile correctly due to missing features and functionality.`;
+            let message = `WARNING: The latest known MacOS ARM version of 7800basic is a number of versions behind the official build (currently v${this.CompilerVersion}) and may not compile correctly due to missing features and functionality. Note: The officially included version built using WASM should support all Apple silicon where the wasmtime runtime is available.`;
             application.WriteToCompilerTerminal(message);
             application.WriteToCompilerTerminal(``);
         }

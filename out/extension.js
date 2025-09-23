@@ -33,6 +33,10 @@ function activate(context) {
         let spriteEditorPage = new spriteeditor_1.SpriteEditorPage();
         // Use the console to output diagnostic information (console.log) and errors (console.error)
         // This line of code will only be executed once when your extension is activated
+        // Advise in compiler window we have started
+        application.CompilerOutputChannel.show();
+        application.WriteToCompilerTerminal(`Extension ${application.DisplayName} (${application.Version}) is now active!`);
+        application.WriteToCompilerTerminal(`- Location: '${application.Path}'`);
         // The command has been defined in the package.json file
         // Now provide the implementation of the command with registerCommand
         // The commandId parameter must match the command field in package.json
@@ -113,12 +117,8 @@ function activate(context) {
         yield application.RegisterDefinitionProvidersAsync(context);
         yield application.RegisterReferenceProvidersAsync(context);
         yield application.RegisterCompletionProvidersAsync(context);
-        // Advise in compiler window we have started
-        application.CompilerOutputChannel.show();
-        application.WriteToCompilerTerminal(`Extension ${application.DisplayName} (${application.Version}) is now active!`);
-        application.WriteToCompilerTerminal(`- Installation path: '${application.Path}'`);
         // install on startup (as required)
-        wasmtime.install();
+        yield wasmtime.installAsync();
         // Show welcome messages
         yield application.ShowStartupMessagesAsync();
     });

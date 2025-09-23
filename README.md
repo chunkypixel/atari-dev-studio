@@ -39,6 +39,8 @@ Linux users on 64-bit systems will be required to install the 32-bit compatibili
 #### macOS
 macOS users require a 64-bit operating system to fully utilise all features of Atari Dev Studio and will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
 
+> Note: 7800basic v0.37 now uses WASM for mutli-platform compatibility therefore this information currently relates to batari Basic or older releases of 7800basic only and will be removed once bB is converted.
+
 Mac computers with [Apple silicon](https://support.apple.com/116943) currently have a few options:
 
 1.  Thanks to Scott Lahteine (thinkyhead), Atari Dev Studio now includes `*.Darwin.arm64` (Apple silicon) binaries of relatively recent versions of bB, 7800basic, Stella and dasm.
@@ -59,6 +61,10 @@ Once you have installed VS Code (available [here](https://code.visualstudio.com/
 
 ### Updating the extension
 Updates are regularly provided and you will be notified via VS Code when one has been made available. Once an update has been installed you will generally be prompted to restart VS Code.
+
+### Starting the extension
+7800basic (0.37 onwards) requires the installation of the [wasmtime](https://wasmtime.dev/) runtime on all platforms. During startup of the Atari Dev Studio extension this will be validated and automatically installed as required.
+
 
 ## Using Atari Dev Studio
 
@@ -171,7 +177,7 @@ batari Basic created by Fred 'batari' Quimby is a BASIC-like language used in th
 
 batari Basic is an external project is kindly currently maintained by Mike Saarna (RevEng) and can be downloaded separately [here](https://github.com/batari-Basic/batari-Basic).  Further information is about this release is available here at [AtariAge](https://atariage.com/forums/topic/300856-official-home-for-batari-basic).
 
-### 7800basic (release 0.36 - 20250615, macOS ARM64 release 0.29)
+### 7800basic (release 0.37 - 20250922 [WASM])
 7800basic is a BASIC-like language for creating Atari 7800 games.  It is a compiled language that runs on a computer, and it creates a binary file that can be run with an Atari 7800 emulator, or the binary file may be used to make a cartridge that will operate on a real Atari 7800. 7800basic is derived from batari basic, a BASIC-like language for creating Atari 2600 games. Special thanks to the bB creator, Fred Quimby, and all of the the bB contributors!
 
 7800basic is included as part of this extension with many thanks to Mike Saarna (RevEng).  7800basic is an external project and can be downloaded separately [here](https://github.com/7800-devtools/7800basic).  Further information about this release is available here at [AtariAge](http://atariage.com/forums/topic/222638-7800basic-beta-the-release-thread).
@@ -212,7 +218,7 @@ MAME compatibility and syntax has been maintained, to allow for the reuse of MAM
 
 A7800 is included as part of this extension with many thanks to Mike Saarna (RevEng). A7800 is an external project and can be downloaded separately [here](http://7800.8bitdev.org/index.php/A7800_Emulator). Further information about this release is available here at [AtariAge](https://atariage.com/forums/topic/268458-a7800-the-atari-7800-emulator).
 
-#### A7800 Linux
+#### Linux
 The following libraries may be required for Linux users:
 
 TESTED ON UBUNTU 22.04 LTS (12/07/2022)
@@ -221,3 +227,6 @@ TESTED ON UBUNTU 22.04 LTS (12/07/2022)
 > sudo apt-get install -y libqt5widgets5
 
 > sudo apt-get install -y libsdl2-ttf-2.0-0
+
+#### MacOS
+The SDL library will be required to be installed.
