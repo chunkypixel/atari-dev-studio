@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.11.0
+
+* Updated 7800basic to v0.38 (wasm).
+
 ## 0.10.9
 
 * Updated 7800basic to v0.37 (wasm).  NOTE: this is now a cross-platform release that requires the **wasmtime** runtime to be installed on your computer.

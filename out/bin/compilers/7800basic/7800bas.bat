@@ -24,12 +24,12 @@ echo   dasm version: %DASMVER%
 
 
 REM --- Source file check ---
-if X%1==X (
+if "%~1"=="" (
     echo ### ERROR: No source file specified.
     exit /b 1
 )
 
-if "%1"=="-v" (
+if /i "%~1"=="-v" (
     REM Just version check
     exit /b 0
 )
@@ -102,4 +102,5 @@ exit /b 1
 :end
 endlocal
 exit /b 0
+
 
