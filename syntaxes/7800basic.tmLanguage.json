@@ -134,7 +134,7 @@
 			"patterns": [
 				{
 					"name": "keyword.control.78b",
-					"match": "\\b(asm|autodim|CARRY|ASCII|callmacro|const|color|dec|def|dim|else|end|function|frames|if|include|includesfile|inline|interrupt|for|gosub|goto|let|macro|next|on|off|pop|rand|return|set|step|then|to)\\b",
+					"match": "\\b(asm|autodim|CARRY|ASCII|callmacro|const|color|dec|def|dim|else|end|function|frames|if|include|includesfile|inline|interrupt|for|gosub|goto|let|macro|next|on|off|pop|rand|rerand|return|set|step|then|to)\\b",
 					"comment": "control keywords"
 				},
 				{
