@@ -491,8 +491,8 @@
                "atari-dev-studio.application.configuration.doWasmtimeCheck": {
                     "type": "boolean",
                     "default": true,
-                    "description": "7800basic and batariBasic require the installation of Wasmtime. On startup of Atari Dev Studio validate the runtime is available and install (as required).",
-                    "scope": "resource"
+                    "description": "7800basic requires the installation of Wasmtime. On startup of Atari Dev Studio validate the runtime is available and install (as required).",
+                    "scope": "application"
                 }
             }
         }
