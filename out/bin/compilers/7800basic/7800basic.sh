@@ -10,9 +10,10 @@ wasmtime --version 2>&1 > /dev/null
 if [ ! $? = 0 ] ; then
     echo "### WARNING: wasmtime isn't in your PATH."
     echo "    You can install it as follows:"
-    echo "      Linux (Debian/Ubuntu): curl https://wasmtime.dev/install.sh -sSf | bash"
+    echo "      macOS/Linux: curl https://wasmtime.dev/install.sh -sSf | bash"
     echo "      macOS (Homebrew): brew install wasmtime"
-    echo "      Windows (Scoop/Chocolatey): scoop install wasmtime  OR  choco install wasmtime"
+    echo "      Linux (Debian/Ubuntu): sudo apt install wasmtime"
+    echo "      Linux (Fedora/RHEL):  sudo dnf install wasmtime"
     echo "    See https://wasmtime.dev for other installation options."
     exit 1
 fi

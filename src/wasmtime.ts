@@ -60,9 +60,13 @@ export async function installAsync() {
     try {
         const { stdout, stderr } = await execPromise(command, { cwd: undefined, shell: true });
         if (stderr) {
-            application.WriteToCompilerTerminal(`Wasmtime installation warnings: ${stderr}`);
+            // NOTE: stderr is verbose and really unnecessary for our use (e.g., cmd progress bars)
+            //application.WriteToCompilerTerminal(stderr);
         }
-        // NOTE: stdout is verbose and often unnecessary (e.g., cmd progress bars)
+        if (stdout) {
+            // NOTE: includes a list of files unpacked (linux) so will leave for now
+            application.WriteToCompilerTerminal(stdout);
+        }
         application.WriteToCompilerTerminal('Wasmtime installation complete! Depending on your operating system you may need to restart VS Code or your machine for changes to take effect.');
     } catch (error) {
         if (application.IsMacOS) {

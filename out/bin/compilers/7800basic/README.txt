@@ -34,6 +34,21 @@ Extract the contents of the zip file to a new directory.  The name of the
 directory doesn't matter. The examples in this guide assume "c:\7800basic"
 for Windows, and $HOME/7800basic for Unix.
 
+PREREQUISITES  
+-------------
+7800basic is distributed as Web Assembly binaries - these are universal 
+programs that via the "wasmtime" runtime. This allows 7800basic to run
+on any one of the many platforms that wasmtime supports.
+
+To install wasmtime, use one of the following methods:
+  - Windows: winget install BytecodeAlliance.Wasmtime.Portable
+  - macOS/Linux: curl https://wasmtime.dev/install.sh -sSf | bash
+  - macOS (Homebrew):   brew install wasmtime
+  - Linux (Debian/Ubuntu): sudo apt install wasmtime
+  - Linux (Fedora/RHEL):  sudo dnf install wasmtime
+  - *: download from: https://wasmtime.dev/
+
+
 Windows:
 --------
 7800basic is distributed as a single zip file. Download the latest zip 

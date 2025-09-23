@@ -27,6 +27,7 @@ if ! command -v wasmtime >/dev/null 2>&1; then
 ### ERROR: wasmtime is not installed or not in PATH.
 
 You can install it using:
+  - macOS/Linux: curl https://wasmtime.dev/install.sh -sSf | bash
   - macOS (Homebrew):   brew install wasmtime
   - Linux (Debian/Ubuntu): sudo apt install wasmtime
   - Linux (Fedora/RHEL):  sudo dnf install wasmtime
