@@ -118,7 +118,7 @@ export class A7800Emulator extends EmulatorBase {
         await execute.KillProcessByNameAsync(this.Name);
 
         // Process
-        application.CompilerOutputChannel.appendLine(`Launching ${this.Name} emulator...`);         
+        application.WriteToCompilerTerminal(`Launching ${this.Name} emulator...`);         
         
         // Launch
         let executeResult = await execute.Spawn(command, args, null, path.dirname(this.FolderOrPath),
@@ -127,7 +127,7 @@ export class A7800Emulator extends EmulatorBase {
                 let result = true;
 
                 // Result
-                application.CompilerOutputChannel.append('' + stdout);
+                application.WriteToCompilerTerminal(stdout, false);
                 return result;
             },
             (stderr: string) => {
@@ -135,7 +135,7 @@ export class A7800Emulator extends EmulatorBase {
                 let result = true;
 
                 // Result
-                application.CompilerOutputChannel.append('' + stderr);
+                application.WriteToCompilerTerminal(stderr, false);
                 return result;
             });
 

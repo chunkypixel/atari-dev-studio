@@ -25,7 +25,7 @@ class SeventyEightHundredGDSerial extends serialBase_1.SerialBase {
             var configuration = application.GetConfiguration();
             var comPort = configuration.get(`launch.emulatorOrCartComPort`, "Emulator").toLowerCase();
             // Prepare
-            application.CompilerOutputChannel.appendLine('');
+            application.WriteToCompilerTerminal('');
             // Command
             let command = `"${this.FolderOrPath}"`;
             // Args
@@ -34,23 +34,25 @@ class SeventyEightHundredGDSerial extends serialBase_1.SerialBase {
                 `-run "${this.FileName}"`
             ];
             // Process
-            application.CompilerOutputChannel.appendLine(`Launching ${this.Name} serial process...`);
+            application.WriteToCompilerTerminal(`Launching ${this.Name} serial process...`);
             // Launch
             let executeResult = yield execute.Spawn(command, args, null, path.dirname(this.FolderOrPath), (stdout) => {
                 // Prepare
                 let result = true;
                 // Sanitize output
-                // need to remove +\b from mesages (looks a bit nicer)
+                // need to remove +\b from messages (looks a bit nicer)
                 var pattern = /[+][\b]+/gi;
                 stdout = stdout.replace(pattern, "");
                 // Result
-                application.CompilerOutputChannel.append('' + stdout);
+                //application.CompilerOutputChannel.append('' + stdout);
+                application.WriteToCompilerTerminal(stdout, false);
                 return result;
             }, (stderr) => {
                 // Prepare
                 let result = true;
                 // Result
-                application.CompilerOutputChannel.append('' + stderr);
+                //application.CompilerOutputChannel.append('' + stderr);
+                application.WriteToCompilerTerminal(stderr, false);
                 return result;
             });
             // Result
