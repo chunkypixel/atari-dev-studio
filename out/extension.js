@@ -16,6 +16,7 @@ exports.deactivate = deactivate;
 const vscode = require("vscode");
 const application = require("./application");
 const wasmtime = require("./wasmtime");
+const tags = require("./tags");
 const welcome_1 = require("./pages/welcome");
 const spriteeditor_1 = require("./pages/spriteeditor");
 require("./statusbar");
@@ -107,6 +108,17 @@ function activate(context) {
         // Subscriptions (touchbar)
         context.subscriptions.push(touchbarBuildGame);
         context.subscriptions.push(touchbarBuildGameAndRun);
+        // Subscriptions (document)
+        context.subscriptions.push(
+        // scan for ADS definitions
+        vscode.workspace.onDidOpenTextDocument((document) => {
+            tags.ScanDocumentForADSLanguageTag(document);
+        }));
+        context.subscriptions.push(
+        // check if user has changed language
+        vscode.workspace.onDidSaveTextDocument((document) => {
+            tags.ScanDocumentForADSLanguageTag(document);
+        }));
         // Register the mouse-over hover providers
         yield application.RegisterHoverProvidersAsync(context);
         yield application.RegisterContextHelpsAsync(context);

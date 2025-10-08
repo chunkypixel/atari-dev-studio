@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.11.1
+
+* Added ADS document tags: ;#ADSLanguage:**language** and ;#ADSCompiler:**compiler**.  These will configure your default document language and compiler and should be located at the top of your document for quick access.
+  - **language**: 7800basic, batariBasic
+  - **compiler**: Default, Custom
+
 ## 0.11.0
 
 * Updated 7800basic to v0.38 (wasm).
@@ -11,11 +17,11 @@ The following enhancements and changes have been made to Atari Dev Studio:
 * Updated 7800basic to v0.37 (wasm).  NOTE: this is now a cross-platform release that requires the **wasmtime** runtime to be installed on your computer.
 * Updated the Output compiler window title to `Atari Compiler` for better identification (fredsa)
 * Updated the Atari Dev Studio startup process with the following chages: 
- - output to the `Atari Compiler` log and advise the status of the extension (version, location, wasmtime)
- - validate and install (as required) the **wasmtime** runtime automatically.
+  - output to the `Atari Compiler` log and advise the status of the extension (version, location, wasmtime)
+  - validate and install (as required) the **wasmtime** runtime automatically.
 * Updated the compiler output to be properly formatted across multiple batches (it previously included line feeds when not required)
 * Updated the Sprite Editor with the following changes:
- - Fixed an issue when editing 2600 sprites holding the shift key would clear the entire row not just the chosen cell (cheesywhiz)
+  - Fixed an issue when editing 2600 sprites holding the shift key would clear the entire row not just the chosen cell (cheesywhiz)
 * Updated 7800basic keyword lists
 * Started updating the 7800basic hover tooltips to new format with included links to on-line help (TBC)
 * Added information outlining the usage and potential compilation of out of date compilers used of Atari Dev Studio for MacOS arm64 machines (fredsa)

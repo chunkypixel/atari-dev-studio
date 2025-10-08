@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as application from '../application';
 import * as filesystem from '../filesystem';
 import * as execute from '../execute';
+import * as tags from '../tags';
 
 export abstract class CompilerBase implements vscode.Disposable {
 
@@ -299,11 +300,20 @@ export abstract class CompilerBase implements vscode.Disposable {
         // System
         this.WorkspaceFolder = this.GetWorkspaceFolder();
         this.FileName = path.basename(this.Document!.fileName);
+        // Check document for compiler tag: currently Default,Custom,Make
+        let adsCompilerTag = tags.ScanDocumentForADSCompilerTag(this.Document!);
 
-        // Validate compilers
+        // Get default chosen compiler
         console.log('debugger:CompilerBase.LoadConfigurationAsync.ValidateCompiler');  
-        let defaultCompiler = this.Configuration!.get<string>(`compiler.${this.Id}.defaultCompiler`);
-        if (defaultCompiler === "Make") {
+        let defaultCompiler = this.Configuration!.get<string>(`compiler.${this.Id}.defaultCompiler`)?.toLowerCase();
+
+        // Override with document tag?
+        if (adsCompilerTag) {
+            defaultCompiler = adsCompilerTag;
+        }
+
+        // Validate
+        if (defaultCompiler === "make") {
             // Only working in dasm currently
 
             // validate for one of the script files
@@ -313,7 +323,7 @@ export abstract class CompilerBase implements vscode.Disposable {
             await application.InitialiseAdsTerminalAsync();
             return true;
         }
-        if (defaultCompiler === "Custom") {
+        if (defaultCompiler === "custom") {
             // Validate
             // bB and 7800basic check for a folder, dasm checks for a path
             await this.ValidateCustomCompilerLocationAsync();

@@ -22,6 +22,7 @@ const path = require("path");
 const application = require("../application");
 const filesystem = require("../filesystem");
 const execute = require("../execute");
+const tags = require("../tags");
 class CompilerBase {
     constructor(id, name, extensions, compiledExtensions, verifyCompiledExtensions, folderOrPath, emulator) {
         // Features
@@ -298,6 +299,7 @@ class CompilerBase {
     }
     LoadConfigurationAsync() {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             console.log('debugger:CompilerBase.LoadConfigurationAsync');
             // Reset
             this.CustomFolderOrPath = false;
@@ -310,10 +312,17 @@ class CompilerBase {
             // System
             this.WorkspaceFolder = this.GetWorkspaceFolder();
             this.FileName = path.basename(this.Document.fileName);
-            // Validate compilers
+            // Check document for compiler tag: currently Default,Custom,Make
+            let adsCompilerTag = tags.ScanDocumentForADSCompilerTag(this.Document);
+            // Get default chosen compiler
             console.log('debugger:CompilerBase.LoadConfigurationAsync.ValidateCompiler');
-            let defaultCompiler = this.Configuration.get(`compiler.${this.Id}.defaultCompiler`);
-            if (defaultCompiler === "Make") {
+            let defaultCompiler = (_a = this.Configuration.get(`compiler.${this.Id}.defaultCompiler`)) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+            // Override with document tag?
+            if (adsCompilerTag) {
+                defaultCompiler = adsCompilerTag;
+            }
+            // Validate
+            if (defaultCompiler === "make") {
                 // Only working in dasm currently
                 // validate for one of the script files
                 if (!(yield this.ValidateTerminalMakeFileAvailableAysnc())) {
@@ -323,7 +332,7 @@ class CompilerBase {
                 yield application.InitialiseAdsTerminalAsync();
                 return true;
             }
-            if (defaultCompiler === "Custom") {
+            if (defaultCompiler === "custom") {
                 // Validate
                 // bB and 7800basic check for a folder, dasm checks for a path
                 yield this.ValidateCustomCompilerLocationAsync();

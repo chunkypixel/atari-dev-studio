@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import * as application from './application';
 import * as wasmtime from './wasmtime';
+import * as tags from "./tags";
 import { WelcomePage } from './pages/welcome';
 import { SpriteEditorPage } from './pages/spriteeditor';
 import './statusbar';
@@ -103,6 +104,19 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Subscriptions (touchbar)
 	context.subscriptions.push(touchbarBuildGame);
 	context.subscriptions.push(touchbarBuildGameAndRun);	
+	// Subscriptions (document)
+	context.subscriptions.push(
+		// scan for ADS definitions
+		vscode.workspace.onDidOpenTextDocument((document) => {
+			tags.ScanDocumentForADSLanguageTag(document);
+		})
+	);
+	context.subscriptions.push(
+		// check if user has changed language
+		vscode.workspace.onDidSaveTextDocument((document) => {
+			tags.ScanDocumentForADSLanguageTag(document);
+		})
+	);
 
 	// Register the mouse-over hover providers
 	await application.RegisterHoverProvidersAsync(context);
