@@ -45,7 +45,8 @@ export abstract class HoverBase implements vscode.HoverProvider {
 		}
 
 		// Return
-    	return new vscode.Hover(`No documentation found for **${word}**.`);
+    	return undefined;
+		//return new vscode.Hover(`No documentation found for **${word}**.`);
 	}
 
 	//

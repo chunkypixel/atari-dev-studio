@@ -54,7 +54,8 @@ class HoverBase {
             }
         }
         // Return
-        return new vscode.Hover(`No documentation found for **${word}**.`);
+        return undefined;
+        //return new vscode.Hover(`No documentation found for **${word}**.`);
     }
     //
     // Load and parse a file located in .../hovers 
