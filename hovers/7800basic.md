@@ -38,7 +38,8 @@ set tightpackborder [address]
 ```
 - `address` - address of gfx data eg. $8000, top
 
-**Note:** If you wish to tightly pack all graphics - say if your game doesn’t need arbitrary Y placement of graphics, but rather, the graphics are always aligned with zones perfectly - you can use **top** as the address location with `tightpackborder`.
+**Note:** If you wish to tightly pack all graphics - say if your game doesn’t need arbitrary Y placement of graphics, but rather, the graphics are always 
+aligned with zones perfectly - you can use **top** as the address location with `tightpackborder`.
 
 [Online](https://www.randomterrain.com/7800basic.html#set_tightpackborder)
 
@@ -189,7 +190,8 @@ drawscreen
 ### DRAWWAIT
 
 The `drawscreen` command completes near the beginning of the visible display. This is done intentionally, to allow your program to have the maximum 
-amount of CPU time possible. You may occasionally have code that you don't want to execute during the visible screen. For these occasions you can call the `drawwait` command. This command will only return after the visible screen has been completely displayed.
+amount of CPU time possible. You may occasionally have code that you don't want to execute during the visible screen. For these occasions you can call 
+the `drawwait` command. This command will only return after the visible screen has been completely displayed.
 
 ```7800basic
 drawwait
@@ -205,7 +207,7 @@ If your game takes a very long time to build the display, you may wish to use th
 of completing a display within a single frame. The double buffering system is controlled through the `doublebuffer` command.
 
 ```7800basic
-doublebuffer state [framerate]
+doublebuffer [state] [framerate]
 ```
 - `state` - on, off, flip, quickflip
 - `framerate` (optional) - ie. 2 or greater
@@ -223,9 +225,10 @@ This sets the ROM size and format of your game.
 ```7800basic
 set romsize [value]
 ```
-- `value` - 16k, 32k (default), 48k, 128k, 128kRAM, 128kBANKRAM, 144k, 256k, 256kRAM, 256kBANKRAM, 272k, 512k, 512kRAM, 512kBANKRAM, 528k
+- `value` - 16k, 32k (default), 32kRAM, 48k, 128k, 128kRAM, 128kBANKRAM, 144k, 256k, 256kRAM, 256kBANKRAM, 272k, 512k, 512kRAM, 512kBANKRAM, 528k
 
 **Note:** It is recommended `set bankset on` is located at the top of your set list (or at least before any use of both `set romsize` and `set extradlmemory`).  
+**Note:** 32kRAM option does not currently operate in the A7800 emulator.  Try JS7800, Test7800 or BupSystem for testing purposes.
 
 [Online](https://www.randomterrain.com/7800basic.html#set_romsize)
 
@@ -378,7 +381,7 @@ set crashdump [state]
 This tells 7800basic to use hotspots compatible with the 7800 MCP DevCart. This only needs to be used when working with bankswitched formats.
 
 ```7800basic
-set mcpdevcart state
+set mcpdevcart [state]
 ```
 - `state` - on, off
 
@@ -392,10 +395,10 @@ By default, 7800basic allocates its object display list from `$1880` to `$1fff`.
 and you need to increase the number of objects that the display can hold, you may wish to relocate the display list.
 
 ```7800basic
-set dlmemory [start_byte_location] [end_byte_location] 
+set dlmemory [start_address] [end_address] 
 ```
-- `start_byte_location` - starting location of custom dl memory eg. $4000
-- `end_byte_location` - starting location of custom dl memory eg. $4fff
+- `start_address` - starting location of custom dl memory eg. $4000
+- `end_address` - starting location of custom dl memory eg. $4fff
 
 **Note:** It is recommended `set bankset on` is located at the top of your set list (or at least before any use of both `set romsize` and `set extradlmemory`). 
 Also the use of `set dlmemory` is incompatible with bankset roms and is not available when enabled.  
@@ -639,7 +642,7 @@ This tells 7800basic what speed your rmt music was composed for. If you use this
 composed, on both ntsc and pal consoles.
 
 ```7800basic
-set rmtspeed state
+set rmtspeed [state]
 ```
 - `state` - ntsc, pal, off
 
@@ -688,7 +691,7 @@ if pokeydetected then ...
 
     set hssupport [address]
 
-    adress - Atari High Score Cart, AtariVox, or Savekey Identifier
+    address - Atari High Score Cart, AtariVox, or Savekey Identifier
 
 
 
@@ -755,7 +758,7 @@ if pokeydetected then ...
 
 ## DRAWHISCORES
 
-    drawhiscores state
+    drawhiscores [state]
 
     state - attract, single, player1, player2, player2joy1
     
@@ -966,7 +969,6 @@ byte
 
 ### POKECHAR
 The `pokechar` command is used to write a value to the provided mapdata (or memory location) in RAM.
- [Online](https://www.randomterrain.com/7800basic.html#pokechar)
 
 ```7800basic
 pokechar mapdata x y width height value
@@ -978,7 +980,9 @@ pokechar mapdata x y width height value
 - `height` - total height of the mapdata (or memory) area
 - `value` - value (byte) to be stored
 
-    
+ [Online](https://www.randomterrain.com/7800basic.html#pokechar)
+
+
 
 ## CHARACTERSET
 
@@ -1128,7 +1132,7 @@ pokechar mapdata x y width height value
 
 ## TRACKERSUPPORT
 
-    set trackersupport value
+    set trackersupport [value]
 
     value - basic, rmt
 
