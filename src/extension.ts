@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import * as application from './application';
 import * as wasmtime from './wasmtime';
 import * as tags from "./tags";
+import * as configuration from "./configuration";
 import { WelcomePage } from './pages/welcome';
 import { SpriteEditorPage } from './pages/spriteeditor';
 import './statusbar';
@@ -117,6 +118,9 @@ export async function activate(context: vscode.ExtensionContext) {
 			tags.ScanDocumentForADSLanguageTag(document);
 		})
 	);
+
+	// Transfer old settings
+	await configuration.TransferFolderToCustomFolders(context);
 
 	// Register the mouse-over hover providers
 	await application.RegisterHoverProvidersAsync(context);

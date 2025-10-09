@@ -38,6 +38,7 @@ import { BatariBasicContextHelp } from "./contexthelp/batariBasicContextHelp";
 import { SeventyEightHundredGDSerial } from './serial/SeventyEightHundredGDSerial';
 import { SerialBase } from './serial/serialBase';
 import internal = require('stream');
+import { BatariBasicCompletion } from './completions/batariBasicCompletion';
 const os = require("os");
 
 // -------------------------------------------------------------------------------------
@@ -66,6 +67,11 @@ export const Description: string = vscode.extensions.getExtension(Id)!.packageJS
 export const PreferencesSettingsExtensionPath: string = `${(IsMacOS ? "Code" : "File")} -> Preferences -> Settings -> Extensions -> ${DisplayName}`;
 export const ChangeLogUri: vscode.Uri = vscode.Uri.parse(`https://marketplace.visualstudio.com/items/${Id}/changelog`);
 export const WASMTIME_RELEASE = 0.37;
+// -------------------------------------------------------------------------------------
+// Languages
+// -------------------------------------------------------------------------------------
+export const SeventyEightHundredBasicLanguageId = "7800basic";
+export const BatariBasicLangaugeId = "batariBasic";
 // -------------------------------------------------------------------------------------
 // Channels
 // -------------------------------------------------------------------------------------
@@ -154,7 +160,8 @@ export async function RegisterHoverProvidersAsync(context: vscode.ExtensionConte
 // Language intellisense
 // -------------------------------------------------------------------------------------
 export const Completions:CompletionBase[] = [
-	new SeventyEightHundredBasicCompletion()
+	new SeventyEightHundredBasicCompletion(),
+	new BatariBasicCompletion()
 ];
 
 export async function RegisterCompletionProvidersAsync(context: vscode.ExtensionContext): Promise<void> {

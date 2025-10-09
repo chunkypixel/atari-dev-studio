@@ -17,6 +17,7 @@ const vscode = require("vscode");
 const application = require("./application");
 const wasmtime = require("./wasmtime");
 const tags = require("./tags");
+const configuration = require("./configuration");
 const welcome_1 = require("./pages/welcome");
 const spriteeditor_1 = require("./pages/spriteeditor");
 require("./statusbar");
@@ -119,6 +120,8 @@ function activate(context) {
         vscode.workspace.onDidSaveTextDocument((document) => {
             tags.ScanDocumentForADSLanguageTag(document);
         }));
+        // Transfer old settings
+        yield configuration.TransferFolderToCustomFolders(context);
         // Register the mouse-over hover providers
         yield application.RegisterHoverProvidersAsync(context);
         yield application.RegisterContextHelpsAsync(context);

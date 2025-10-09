@@ -5,6 +5,7 @@ import * as application from '../application';
 import * as filesystem from '../filesystem';
 import * as execute from '../execute';
 import * as tags from '../tags';
+import * as configuration from '../configuration';
 
 export abstract class CompilerBase implements vscode.Disposable {
 
@@ -291,7 +292,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Reset
         this.CustomFolderOrPath = false;
         this.FolderOrPath = this.DefaultFolderOrPath;
-        this.Args = "";
+        this.Args = '';
         this.Emulator = this.DefaultEmulator;
         this.UsingMakeFileCompiler = false;
         this.UsingBatchCompiler = false;
@@ -300,20 +301,20 @@ export abstract class CompilerBase implements vscode.Disposable {
         // System
         this.WorkspaceFolder = this.GetWorkspaceFolder();
         this.FileName = path.basename(this.Document!.fileName);
-        // Check document for compiler tag: currently Default,Custom,Make
-        let adsCompilerTag = tags.ScanDocumentForADSCompilerTag(this.Document!);
+        // Check document for compiler tag: currently Default,Make,Custom,Other
+        const adsCompilerTag = tags.ScanDocumentForADSCompilerTag(this.Id, this.Document!);
 
         // Get default chosen compiler
         console.log('debugger:CompilerBase.LoadConfigurationAsync.ValidateCompiler');  
-        let defaultCompiler = this.Configuration!.get<string>(`compiler.${this.Id}.defaultCompiler`)?.toLowerCase();
+        let chosenCompiler = this.Configuration!.get<string>(`compiler.${this.Id}.defaultCompiler`,'');
 
         // Override with document tag?
         if (adsCompilerTag) {
-            defaultCompiler = adsCompilerTag;
+            chosenCompiler = adsCompilerTag;
         }
 
-        // Validate
-        if (defaultCompiler === "make") {
+        // Make?
+        if (chosenCompiler === "Make") {
             // Only working in dasm currently
 
             // validate for one of the script files
@@ -323,11 +324,19 @@ export abstract class CompilerBase implements vscode.Disposable {
             await application.InitialiseAdsTerminalAsync();
             return true;
         }
-        if (defaultCompiler === "custom") {
-            // Validate
-            // bB and 7800basic check for a folder, dasm checks for a path
-            await this.ValidateCustomCompilerLocationAsync();
-        } 
+
+        // Default/Custom/Other
+        switch (chosenCompiler)
+        {
+            case "Default":
+                // do nothing
+                break;
+
+            default:
+                // custom or everything else
+                // bB and 7800basic check for a folder, dasm checks for a path
+                await this.ValidateCustomCompilerLocationAsync(chosenCompiler);                   
+        }
 
         // Compiler (other)
         this.Args = this.Configuration!.get<string>(`compiler.${this.Id}.args`,"");
@@ -371,16 +380,16 @@ export abstract class CompilerBase implements vscode.Disposable {
         return false;
     }
 
-    protected async ValidateCustomCompilerLocationAsync() : Promise<void> {
+    protected async ValidateCustomCompilerLocationAsync(customCompilerId: string) : Promise<void> {
         console.log('debugger:CompilerBase.ValidateCustomCompilerLocationAsync');  
 
         // Validate for a folder
-        let customCompilerFolder = this.Configuration!.get<string>(`compiler.${this.Id}.folder`);
+        let customCompilerFolder = configuration.GetCustomCompilerPath(this.Id, customCompilerId);
         if (!customCompilerFolder) {
             // No custom compiler provided, revert
-            let message = `WARNING: You have chosen to use a custom ${this.Name} compiler but have not provided the location.\nReverting to the default compiler...`;
+            let message = `WARNING: You have chosen to use a custom ${this.Name} compiler (${customCompilerId}) but it is either not listed or you have not provided the location.\nReverting to the default compiler...`;
             application.WriteToCompilerTerminal(message);
-            application.ShowWarningPopup(message);
+            //application.ShowWarningPopup(message);
 
         } else {
             // Validate custom compiler path exists
@@ -389,11 +398,11 @@ export abstract class CompilerBase implements vscode.Disposable {
                 // Failed, revert
                 let message = `WARNING: Your custom ${this.Name} compiler location '${customCompilerFolder}' cannot be found.\nReverting to the default compiler...`;
                 application.WriteToCompilerTerminal(message);
-                application.ShowWarningPopup(message);
+                //application.ShowWarningPopup(message);
 
             } else {
                 // Ok
-                application.WriteToCompilerTerminal(`Building using your custom ${this.Name} compiler.`);               
+                application.WriteToCompilerTerminal(`Building using your custom ${this.Name} compiler (${customCompilerId}).`);               
                 application.WriteToCompilerTerminal(`Location: ${customCompilerFolder}`);  
 
                 // Set

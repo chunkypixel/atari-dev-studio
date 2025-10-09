@@ -23,6 +23,7 @@ const application = require("../application");
 const filesystem = require("../filesystem");
 const execute = require("../execute");
 const tags = require("../tags");
+const configuration = require("../configuration");
 class CompilerBase {
     constructor(id, name, extensions, compiledExtensions, verifyCompiledExtensions, folderOrPath, emulator) {
         // Features
@@ -299,12 +300,11 @@ class CompilerBase {
     }
     LoadConfigurationAsync() {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             console.log('debugger:CompilerBase.LoadConfigurationAsync');
             // Reset
             this.CustomFolderOrPath = false;
             this.FolderOrPath = this.DefaultFolderOrPath;
-            this.Args = "";
+            this.Args = '';
             this.Emulator = this.DefaultEmulator;
             this.UsingMakeFileCompiler = false;
             this.UsingBatchCompiler = false;
@@ -312,17 +312,17 @@ class CompilerBase {
             // System
             this.WorkspaceFolder = this.GetWorkspaceFolder();
             this.FileName = path.basename(this.Document.fileName);
-            // Check document for compiler tag: currently Default,Custom,Make
-            let adsCompilerTag = tags.ScanDocumentForADSCompilerTag(this.Document);
+            // Check document for compiler tag: currently Default,Make,Custom,Other
+            const adsCompilerTag = tags.ScanDocumentForADSCompilerTag(this.Id, this.Document);
             // Get default chosen compiler
             console.log('debugger:CompilerBase.LoadConfigurationAsync.ValidateCompiler');
-            let defaultCompiler = (_a = this.Configuration.get(`compiler.${this.Id}.defaultCompiler`)) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+            let chosenCompiler = this.Configuration.get(`compiler.${this.Id}.defaultCompiler`, '');
             // Override with document tag?
             if (adsCompilerTag) {
-                defaultCompiler = adsCompilerTag;
+                chosenCompiler = adsCompilerTag;
             }
-            // Validate
-            if (defaultCompiler === "make") {
+            // Make?
+            if (chosenCompiler === "Make") {
                 // Only working in dasm currently
                 // validate for one of the script files
                 if (!(yield this.ValidateTerminalMakeFileAvailableAysnc())) {
@@ -332,10 +332,15 @@ class CompilerBase {
                 yield application.InitialiseAdsTerminalAsync();
                 return true;
             }
-            if (defaultCompiler === "custom") {
-                // Validate
-                // bB and 7800basic check for a folder, dasm checks for a path
-                yield this.ValidateCustomCompilerLocationAsync();
+            // Default/Custom/Other
+            switch (chosenCompiler) {
+                case "Default":
+                    // do nothing
+                    break;
+                default:
+                    // custom or everything else
+                    // bB and 7800basic check for a folder, dasm checks for a path
+                    yield this.ValidateCustomCompilerLocationAsync(chosenCompiler);
             }
             // Compiler (other)
             this.Args = this.Configuration.get(`compiler.${this.Id}.args`, "");
@@ -386,16 +391,16 @@ class CompilerBase {
             return false;
         });
     }
-    ValidateCustomCompilerLocationAsync() {
+    ValidateCustomCompilerLocationAsync(customCompilerId) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.ValidateCustomCompilerLocationAsync');
             // Validate for a folder
-            let customCompilerFolder = this.Configuration.get(`compiler.${this.Id}.folder`);
+            let customCompilerFolder = configuration.GetCustomCompilerPath(this.Id, customCompilerId);
             if (!customCompilerFolder) {
                 // No custom compiler provided, revert
-                let message = `WARNING: You have chosen to use a custom ${this.Name} compiler but have not provided the location.\nReverting to the default compiler...`;
+                let message = `WARNING: You have chosen to use a custom ${this.Name} compiler (${customCompilerId}) but it is either not listed or you have not provided the location.\nReverting to the default compiler...`;
                 application.WriteToCompilerTerminal(message);
-                application.ShowWarningPopup(message);
+                //application.ShowWarningPopup(message);
             }
             else {
                 // Validate custom compiler path exists
@@ -404,11 +409,11 @@ class CompilerBase {
                     // Failed, revert
                     let message = `WARNING: Your custom ${this.Name} compiler location '${customCompilerFolder}' cannot be found.\nReverting to the default compiler...`;
                     application.WriteToCompilerTerminal(message);
-                    application.ShowWarningPopup(message);
+                    //application.ShowWarningPopup(message);
                 }
                 else {
                     // Ok
-                    application.WriteToCompilerTerminal(`Building using your custom ${this.Name} compiler.`);
+                    application.WriteToCompilerTerminal(`Building using your custom ${this.Name} compiler (${customCompilerId}).`);
                     application.WriteToCompilerTerminal(`Location: ${customCompilerFolder}`);
                     // Set
                     this.FolderOrPath = customCompilerFolder;

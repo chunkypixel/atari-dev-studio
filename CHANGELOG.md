@@ -4,9 +4,10 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.11.1
 
-* Added ADS document tags: ;#ADSLanguage:**language** and ;#ADSCompiler:**compiler**.  These will configure your default document language and compiler and should be located at the top of your document for quick access.
-  - **language**: 7800basic, batariBasic
-  - **compiler**: Default, Custom
+* Added ADS document tags: ;#ADSLanguage=**language** and ;#ADSCompiler=**compiler**.  These will configure your default document language and compiler settings otherwise the system will revert to use the existing Default Compiler option. As you type the system will offer the available language and compiler options.
+* Added transfer of old batariBasic & 7800basic custom folder settings into new Custom layout for each language (if any exist)
+* Started adding batariBasic code completion options (TBC)
+* Fixed #ifconst, #else, #endif compiler directives in 7800basic
 
 ## 0.11.0
 

@@ -330,12 +330,16 @@
                     "description": "Specify (optional) command line arguments, ie. -O (Optimizer):",
                     "scope": "resource"
                 },
-                "atari-dev-studio.compiler.batariBasic.folder": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Don't wish to use the included version of the batari Basic compiler? Specify the folder location of your custom compiler:",
+                "atari-dev-studio.compiler.batariBasic.customFolders": {
+                    "type": "object",
+                    "default": {},
+                    "additionalProperties": {
+                        "type": "string",
+                        "description": "Enter an Id and Folder location of the compiler."
+                    },
+                    "description": "Don't wish to use the included version of the batari Basic compiler? Specify multiple folder locations for your custom compilers:",
                     "scope": "resource"
-                },
+                }, 
                 "atari-dev-studio.compiler.7800basic.defaultCompiler": {
                     "type": "string",
                     "enum": [
@@ -352,12 +356,16 @@
                     "description": "Specify (optional) command line arguments:",
                     "scope": "resource"
                 },
-                "atari-dev-studio.compiler.7800basic.folder": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Don't wish to use the included version of the 7800basic compiler? Specify the folder location of your custom compiler:",
+                "atari-dev-studio.compiler.7800basic.customFolders": {
+                    "type": "object",
+                    "default": {},
+                    "additionalProperties": {
+                        "type": "string",
+                        "description": "Enter an Id and Folder location of the compiler."
+                    },
+                    "description": "Don't wish to use the included version of the 7800basic compiler? Specify multiple folder locations for your custom compilers:",
                     "scope": "resource"
-                },
+                },           
                 "atari-dev-studio.compiler.dasm.defaultCompiler": {
                     "type": "string",
                     "enum": [

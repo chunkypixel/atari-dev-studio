@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContextHelps = exports.ReferenceProviders = exports.DefinitionProviders = exports.DocumentSymbolProviders = exports.Foldings = exports.Completions = exports.Hovers = exports.Serials = exports.Emulators = exports.Compilers = exports.AdsTerminal = exports.CompilerOutputChannel = exports.WASMTIME_RELEASE = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.IsMacOSArm = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSRelease = exports.OSArch = exports.OSPlatform = void 0;
+exports.ContextHelps = exports.ReferenceProviders = exports.DefinitionProviders = exports.DocumentSymbolProviders = exports.Foldings = exports.Completions = exports.Hovers = exports.Serials = exports.Emulators = exports.Compilers = exports.AdsTerminal = exports.CompilerOutputChannel = exports.BatariBasicLangaugeId = exports.SeventyEightHundredBasicLanguageId = exports.WASMTIME_RELEASE = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.IsMacOSArm = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSRelease = exports.OSArch = exports.OSPlatform = void 0;
 exports.InitialiseAdsTerminalAsync = InitialiseAdsTerminalAsync;
 exports.RegisterHoverProvidersAsync = RegisterHoverProvidersAsync;
 exports.RegisterCompletionProvidersAsync = RegisterCompletionProvidersAsync;
@@ -64,6 +64,7 @@ const dasmReferenceProvider_1 = require("./referenceProvider/dasmReferenceProvid
 const seventyEightHundredBasicContextHelp_1 = require("./contexthelp/seventyEightHundredBasicContextHelp");
 const batariBasicContextHelp_1 = require("./contexthelp/batariBasicContextHelp");
 const SeventyEightHundredGDSerial_1 = require("./serial/SeventyEightHundredGDSerial");
+const batariBasicCompletion_1 = require("./completions/batariBasicCompletion");
 const os = require("os");
 // -------------------------------------------------------------------------------------
 // Operating System
@@ -90,6 +91,11 @@ exports.Description = vscode.extensions.getExtension(exports.Id).packageJSON.des
 exports.PreferencesSettingsExtensionPath = `${(exports.IsMacOS ? "Code" : "File")} -> Preferences -> Settings -> Extensions -> ${exports.DisplayName}`;
 exports.ChangeLogUri = vscode.Uri.parse(`https://marketplace.visualstudio.com/items/${exports.Id}/changelog`);
 exports.WASMTIME_RELEASE = 0.37;
+// -------------------------------------------------------------------------------------
+// Languages
+// -------------------------------------------------------------------------------------
+exports.SeventyEightHundredBasicLanguageId = "7800basic";
+exports.BatariBasicLangaugeId = "batariBasic";
 // -------------------------------------------------------------------------------------
 // Channels
 // -------------------------------------------------------------------------------------
@@ -159,7 +165,8 @@ function RegisterHoverProvidersAsync(context) {
 // Language intellisense
 // -------------------------------------------------------------------------------------
 exports.Completions = [
-    new seventyEightHundredBasicCompletion_1.SeventyEightHundredBasicCompletion()
+    new seventyEightHundredBasicCompletion_1.SeventyEightHundredBasicCompletion(),
+    new batariBasicCompletion_1.BatariBasicCompletion()
 ];
 function RegisterCompletionProvidersAsync(context) {
     return __awaiter(this, void 0, void 0, function* () {

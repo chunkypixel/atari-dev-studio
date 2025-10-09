@@ -128,6 +128,11 @@
 				"name": "keyword.numeric.binary.78b",
 				"match": "\\%[0-1]+\\b",
 				"comment": "binary number"	
+			},
+			{
+				"name": "keyword.directive.78b",
+				"match": "\\#(ifconst|else|endif)\\b",
+				"comment": "compiler directive"
 			}]
 		},
 		{
@@ -139,7 +144,7 @@
 				},
 				{
 					"name": "keyword.other.78b",
-					"match": "\\b(7800GDmenuoff|7800header|adjustvisible|alphachars|alphadata|avoxvoice|backup|backupfile|backupstyle|bankset|basepath|breakprotect|boxcollision|changedmaholes|characterset|canary|crashdump|clearscreen|collision|collisionwrap|converttobcd|decompress|defaultpalette|deprecated|dictionary|dmahole|drawscreen|drawwait|drawhiscores|data|debug|displaymode|dlmemory|doublebuffer|doublewide|dumpgraphics|extradlmemory|extrawide|extra|frameskipfix|fourbitfade|getfade|hiscoreload|hiscoreclear|hscolorbase|hsdifficultytext|hsgamename|hsgameranks|hsscoresize|hsseconds|hssupport|incbanner|incbasic|incbin|inccompress|incgraphic|incmapfile|incrmtfile|init|byte|8.8|4.4|lockzone|loadmemory|loadrambank|loadrombank|mcpdevcart|memcpy|memset|multibutton|mutesfx|newblock|noflow|optimization|pauseroutine|pausesilence|peekchar|pitch|phonetic|playrmt|playsfx|playsong|plotbanner|plotchars|plotmap|plotmapfile|plotsprite|PLOTSPRITE|plotsprite4|PLOTSPRITE4|plotvalue|plotvalueonscreen|plotvaluepage|pokechar|pokeybase|pokeydetected|pokeysound|pokeysupport|pokeysfxsupport|psound|raw|reboot|restorescreen|reset|rmtspeed|rmtvolume|romsize|savescreen|savememory|screenheight|setfade|sdata|shakescreen|singlewide|sizeof|smartbranching|strcpy|songtempo|speak|speechdata|speed|sread|startrmt|stoprmt|stopsong|songdata|tallsprite|tiasfx|tiavolume|tightpackborder|trackersupport|tsound|unlockzone|voice|xm|zoneheight|zoneprotection)\\b",
+					"match": "\\b(7800GDmenuoff|7800header|adjustvisible|alphachars|alphadata|avoxvoice|backup|backupfile|backupstyle|bankset|basepath|breakprotect|boxcollision|changedmaholes|characterset|canary|crashdump|clearscreen|collision|collisionwrap|converttobcd|decompress|defaultpalette|deprecated|dictionary|dmahole|drawscreen|drawwait|drawhiscores|data|debug|displaymode|dlmemory|doublebuffer|doublewide|dumpgraphics|extradlmemory|echo|extrawide|extra|frameskipfix|fourbitfade|getfade|hiscoreload|hiscoreclear|hscolorbase|hsdifficultytext|hsgamename|hsgameranks|hsscoresize|hsseconds|hssupport|incbanner|incbasic|incbin|inccompress|incgraphic|incmapfile|incrmtfile|init|byte|8.8|4.4|lockzone|loadmemory|loadrambank|loadrombank|mcpdevcart|memcpy|memset|multibutton|mutesfx|newblock|noflow|optimization|pauseroutine|pausesilence|peekchar|pitch|phonetic|playrmt|playsfx|playsong|plotbanner|plotchars|plotmap|plotmapfile|plotsprite|PLOTSPRITE|plotsprite4|PLOTSPRITE4|plotvalue|plotvalueonscreen|plotvaluepage|pokechar|pokeybase|pokeydetected|pokeysound|pokeysupport|pokeysfxsupport|psound|raw|reboot|restorescreen|reset|rmtspeed|rmtvolume|romsize|savescreen|savememory|screenheight|setfade|sdata|shakescreen|singlewide|sizeof|smartbranching|strcpy|songtempo|speak|speechdata|speed|sread|startrmt|stoprmt|stopsong|songdata|tallsprite|tiasfx|tiavolume|tightpackborder|trackersupport|tsound|unlockzone|voice|xm|zoneheight|zoneprotection)\\b",
 					"comment": "other keywords"
 				},	
 				{ 
@@ -176,11 +181,6 @@
 					"name": "keyword.audio.78b",
 					"match": "\\b(AUDC0|AUDC1|AUDF0|AUDF1|AUDV0|AUDV1|PAUDF0)\\b",
 					"comment": "audio keywords"
-				},
-				{
-					"name": "keyword.directive.78b",
-					"match": "\\b(#ifconst|#elseif|#endif)\\b",
-					"comment": "directive keywords"
 				}]
 		},
 		{
