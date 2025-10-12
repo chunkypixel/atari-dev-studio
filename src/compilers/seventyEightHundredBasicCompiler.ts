@@ -74,20 +74,23 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         // Spacer
         application.WriteToCompilerTerminal();
 
+        // TODO: These might need checking for the new WASMTIME build??
+
         // Compile
         this.IsRunning = true;
         let executeResult = await execute.Spawn(command, args, env, this.WorkspaceFolder,
             (stdout: string) => {
                 // Prepare
                 let result = true;
-                const outMesasage = stdout.toLowerCase();
+                const outMessage = stdout.toLowerCase();
 
                 // Validate
-                if (outMesasage.includes("fatal assembly error") || outMesasage.includes("compilation failed.") || 
-                        outMesasage.includes("unrecoverable error(s) in pass, aborting assembly!") || 
-                        outMesasage.includes("error:") ||
-                        outMesasage.includes("segment:")) {
-                    // Potential messages received (so far):
+                if (outMessage.includes("compilation failed") ||
+                    outMessage.includes("error:") ||
+                    outMessage.includes("fatal assembly error") || 
+                    outMessage.includes("unrecoverable error(s) in pass, aborting assembly!") || 
+                    outMessage.includes("segment:")) {
+                    // Messages received (so far):
                     // Fatal assembly error: Source is not resolvable.
                     // Compilation failed.
                     // Unrecoverable error(s) in pass, aborting assembly!
@@ -109,8 +112,8 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
 
                 // Validate
                 if (errMessage.includes("permission denied") ||
-                        errMessage.includes("*** warning: the file size of")) {
-                    // Potential messages received (so far):
+                    errMessage.includes("*** warning: the file size of")) {
+                    // Messages received (so far):
                     // Permission denied
                     // *** WARNING: The file size of <file> isn't correct.
                     // *** ERROR, incmapfile couldn't open map file 'maps\level1.tmx' for reading

@@ -66,15 +66,17 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             // Additional for Linux or MacOS?
             if (application.IsLinux || application.IsMacOS)
                 env["PATH"] += `${path.delimiter}/bin${path.delimiter}/usr/bin`;
+            // TODO: These might need checking for the new WASMTIME build??
             // Compile
             this.IsRunning = true;
             let executeResult = yield execute.Spawn(command, args, env, this.WorkspaceFolder, (stdout) => {
                 // Prepare
                 let result = true;
-                const outMesasage = stdout.toLowerCase();
+                const outMessage = stdout.toLowerCase();
                 // Validate (batari Basic)
-                if (outMesasage.includes("compilation failed") || stdout.includes("error:")) {
-                    // bB messages received (so far):
+                if (outMessage.includes("compilation failed") ||
+                    outMessage.includes("error:")) {
+                    // Messages received (so far):
                     // Compilation failed
                     // error: Origin Reverse-indexed
                     // Fatal assembly error: Source is not resolvable.
@@ -91,14 +93,10 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                 let result = true;
                 const errMessage = stderr.toLowerCase();
                 // Validate
-                if (errMessage.includes("2600 basic compilation complete.")) {
-                    // Ok - bB throws out standard message here that it shouldn't so we need to verify everything arrr...
-                }
-                else if (errMessage.includes("user-defined score_graphics.asm found in current directory")) {
-                    // Ok - bB throws out standard message here that it shouldn't so we need to verify everything arrr...
-                }
-                else if (errMessage.includes("parse error") || stderr.includes("error:") || stderr.includes("permission denied")) {
-                    // bB messages received (so far):
+                if (errMessage.includes("parse error") ||
+                    errMessage.includes("error:") ||
+                    errMessage.includes("permission denied")) {
+                    // Messages received (so far):
                     // Parse error
                     // Error: 
                     // Permission denied
