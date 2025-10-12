@@ -25,7 +25,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             // Prepare
             const filePath = vscode.Uri.file(path.join(this.FolderOrPath, 'release.dat'));
-            this.CompilerVersion = 0.17;
+            this.CompilerVersion = application.BATARIBASIC_WASMTIME_RELEASE;
             // attempt to read contents
             if (yield (filesystem.FileExistsAsync(filePath.fsPath))) {
                 let fileContent = (yield filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/);
@@ -60,25 +60,20 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             ];
             // Environment
             let env = {
-                PATH: this.FolderOrPath,
+                PATH: (process.env.PATH + ";" || '') + this.FolderOrPath,
                 bB: this.FolderOrPath
             };
             // Additional for Linux or MacOS?
             if (application.IsLinux || application.IsMacOS)
                 env["PATH"] += `${path.delimiter}/bin${path.delimiter}/usr/bin`;
-            // Notify
-            // Linux and macOS script has this message already
-            if (application.IsWindows) {
-                application.WriteToCompilerTerminal(``);
-                application.WriteToCompilerTerminal(`Starting build of ${this.FileName}...`, false);
-            }
             // Compile
             this.IsRunning = true;
             let executeResult = yield execute.Spawn(command, args, env, this.WorkspaceFolder, (stdout) => {
                 // Prepare
                 let result = true;
+                const outMesasage = stdout.toLowerCase();
                 // Validate (batari Basic)
-                if (stdout.includes("Compilation failed") || stdout.includes("error:")) {
+                if (outMesasage.includes("compilation failed") || stdout.includes("error:")) {
                     // bB messages received (so far):
                     // Compilation failed
                     // error: Origin Reverse-indexed
@@ -94,14 +89,15 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             }, (stderr) => {
                 // Prepare
                 let result = true;
+                const errMessage = stderr.toLowerCase();
                 // Validate
-                if (stderr.includes("2600 Basic compilation complete.")) {
+                if (errMessage.includes("2600 basic compilation complete.")) {
                     // Ok - bB throws out standard message here that it shouldn't so we need to verify everything arrr...
                 }
-                else if (stderr.includes("User-defined score_graphics.asm found in current directory")) {
+                else if (errMessage.includes("user-defined score_graphics.asm found in current directory")) {
                     // Ok - bB throws out standard message here that it shouldn't so we need to verify everything arrr...
                 }
-                else if (stderr.includes("Parse error") || stderr.includes("error:") || stderr.includes("Permission denied")) {
+                else if (errMessage.includes("parse error") || stderr.includes("error:") || stderr.includes("permission denied")) {
                     // bB messages received (so far):
                     // Parse error
                     // Error: 
@@ -109,7 +105,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                     // Failed
                     result = false;
                 }
-                else if (stderr.includes("Cannot open includes.bB for reading")) {
+                else if (errMessage.includes("cannot open includes.bb for reading")) {
                     // Special - seen this when the source is not processed correctly so we'll advise
                     // obviously doesn't get to the point of copying over this file
                     application.WriteToCompilerTerminal();
@@ -136,13 +132,6 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             return executeResult;
         });
     }
-    // protected LoadConfiguration(): boolean {
-    //     console.log('debugger:BatariBasicCompiler.LoadConfiguration');  
-    //     // Base
-    //     if (!super.LoadConfiguration()) return false;
-    //     // Result
-    //     return true;
-    // }
     RemoveCompilationFilesAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:BatariBasicCompiler.RemoveCompilationFilesAsync');
@@ -168,25 +157,32 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     GetCompilerFileList() {
         // Prepare
         let command = (application.IsWindows ? "2600bas.bat" : "2600basic.sh");
-        let platform = "";
-        if (application.IsLinux) {
-            platform = ".Linux";
-        }
-        if (application.IsMacOS) {
-            platform = ".Darwin";
-        }
-        let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
-        // Result
-        let compilerFileList = [command,
-            `2600basic${platform}${extension}`,
-            `bbfilter${platform}${extension}`,
-            `optimize${platform}${extension}`,
-            `postprocess${platform}${extension}`,
-            `preprocess${platform}${extension}`,
-            `dasm${platform}${extension}`];
-        // As of 15/06/25 (v0.18) the existing ARM version does not cater for this file
-        if (this.CompilerVersion >= 0.18 && !application.IsMacOSArm) {
-            compilerFileList.push(`relocateBB${platform}${extension}`);
+        // for Wasmtime we only need to validate the script file by the looks from my testing...
+        let compilerFileList = [command];
+        // Validate if we are using an older version of bB
+        // support 0.12-0.18
+        if (this.CompilerVersion < application.BATARIBASIC_WASMTIME_RELEASE) {
+            // Prepare
+            let platform = "";
+            if (application.IsLinux) {
+                platform = ".Linux";
+            }
+            if (application.IsMacOS) {
+                platform = ".Darwin";
+            }
+            let extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
+            // Default items
+            compilerFileList = [command,
+                `2600basic${platform}${extension}`,
+                `bbfilter${platform}${extension}`,
+                `optimize${platform}${extension}`,
+                `postprocess${platform}${extension}`,
+                `preprocess${platform}${extension}`,
+                `dasm${platform}${extension}`];
+            // As of 15/06/25 (v0.18) the existing ARM version does not cater for this file
+            if (this.CompilerVersion == 0.18 && !application.IsMacOSArm) {
+                compilerFileList.push(`relocateBB${platform}${extension}`);
+            }
         }
         // Return
         return compilerFileList;

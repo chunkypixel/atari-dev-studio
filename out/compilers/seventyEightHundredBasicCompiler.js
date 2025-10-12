@@ -29,7 +29,7 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             // Prepare
             const filePath = vscode.Uri.file(path.join(this.FolderOrPath, 'release.dat'));
             // Note: v0.21 and earlier didn't include the 'release.dat' file so we cannot support them properly unless file is manually added
-            this.CompilerVersion = application.WASMTIME_RELEASE;
+            this.CompilerVersion = application.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE;
             // attempt to read contents
             if (yield (filesystem.FileExistsAsync(filePath.fsPath))) {
                 let fileContent = (yield filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/);
@@ -77,11 +77,12 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             let executeResult = yield execute.Spawn(command, args, env, this.WorkspaceFolder, (stdout) => {
                 // Prepare
                 let result = true;
+                const outMesasage = stdout.toLowerCase();
                 // Validate
-                if (stdout.includes("Fatal assembly error") || stdout.includes("Compilation failed.") ||
-                    stdout.includes("Unrecoverable error(s) in pass, aborting assembly!") ||
-                    stdout.includes("error:") ||
-                    stdout.includes("segment:")) {
+                if (outMesasage.includes("fatal assembly error") || outMesasage.includes("compilation failed.") ||
+                    outMesasage.includes("unrecoverable error(s) in pass, aborting assembly!") ||
+                    outMesasage.includes("error:") ||
+                    outMesasage.includes("segment:")) {
                     // Potential messages received (so far):
                     // Fatal assembly error: Source is not resolvable.
                     // Compilation failed.
@@ -97,9 +98,10 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
             }, (stderr) => {
                 // Prepare
                 let result = true;
+                const errMessage = stderr.toLowerCase();
                 // Validate
-                if (stderr.includes("Permission denied") ||
-                    stderr.includes("*** WARNING: the file size of")) {
+                if (errMessage.includes("permission denied") ||
+                    errMessage.includes("*** warning: the file size of")) {
                     // Potential messages received (so far):
                     // Permission denied
                     // *** WARNING: The file size of <file> isn't correct.
@@ -166,7 +168,8 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
         // Validate if we are using an older version of 7800basic
         // support 0.22-0.36 
         // Note: v0.21 and earlier didn't include the 'release.dat' file so we cannot support them properly unless file is manually added
-        if (this.CompilerVersion < application.WASMTIME_RELEASE) {
+        if (this.CompilerVersion < application.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE) {
+            // Prepare
             let platform = "";
             if (application.IsLinux) {
                 platform = ".Linux";
@@ -200,7 +203,7 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
     }
     ShowAnyCompilerWarnings() {
         console.log('debugger:SeventyEightHundredBasicCompiler.ShowAnyCompilerWarnings');
-        if (application.IsMacOSArm && this.CompilerVersion < application.WASMTIME_RELEASE) {
+        if (application.IsMacOSArm && this.CompilerVersion < application.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE) {
             let message = `WARNING: The latest known MacOS ARM version of 7800basic is a number of versions behind the official build (currently v${this.CompilerVersion}) and may not compile correctly due to missing features and functionality. Note: The officially included version built using WASM should support all Apple silicon where the wasmtime runtime is available.`;
             application.WriteToCompilerTerminal(message);
             application.WriteToCompilerTerminal(``);

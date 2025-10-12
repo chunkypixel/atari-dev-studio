@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContextHelps = exports.ReferenceProviders = exports.DefinitionProviders = exports.DocumentSymbolProviders = exports.Foldings = exports.Completions = exports.Hovers = exports.Serials = exports.Emulators = exports.Compilers = exports.AdsTerminal = exports.CompilerOutputChannel = exports.BatariBasicLangaugeId = exports.SeventyEightHundredBasicLanguageId = exports.WASMTIME_RELEASE = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.IsMacOSArm = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSRelease = exports.OSArch = exports.OSPlatform = void 0;
+exports.ContextHelps = exports.ReferenceProviders = exports.DefinitionProviders = exports.DocumentSymbolProviders = exports.Foldings = exports.Completions = exports.Hovers = exports.Serials = exports.Emulators = exports.Compilers = exports.AdsTerminal = exports.CompilerOutputChannel = exports.BatariBasicLangaugeId = exports.SeventyEightHundredBasicLanguageId = exports.BATARIBASIC_WASMTIME_RELEASE = exports.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.IsMacOSArm = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSRelease = exports.OSArch = exports.OSPlatform = void 0;
 exports.InitialiseAdsTerminalAsync = InitialiseAdsTerminalAsync;
 exports.RegisterHoverProvidersAsync = RegisterHoverProvidersAsync;
 exports.RegisterCompletionProvidersAsync = RegisterCompletionProvidersAsync;
@@ -90,7 +90,8 @@ exports.DisplayName = vscode.extensions.getExtension(exports.Id).packageJSON.dis
 exports.Description = vscode.extensions.getExtension(exports.Id).packageJSON.description;
 exports.PreferencesSettingsExtensionPath = `${(exports.IsMacOS ? "Code" : "File")} -> Preferences -> Settings -> Extensions -> ${exports.DisplayName}`;
 exports.ChangeLogUri = vscode.Uri.parse(`https://marketplace.visualstudio.com/items/${exports.Id}/changelog`);
-exports.WASMTIME_RELEASE = 0.37;
+exports.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE = 0.37;
+exports.BATARIBASIC_WASMTIME_RELEASE = 0.18;
 // -------------------------------------------------------------------------------------
 // Languages
 // -------------------------------------------------------------------------------------
