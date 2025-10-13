@@ -4,11 +4,11 @@ Welcome to Atari Dev Studio for designing homebrew games for the Atari 8-bit sys
 ![Atari Dev Studio](images/ataridevstudio-emulator.png)
 
 ## Requirements
-Atari Dev Studio is an extension for Microsoft's cross-platform IDE Visual Studio Code and will run on the Windows, Linux and macOS platforms. The latest releases of batari Basic, 7800basic, dasm, Stella and A7800 are included so you can begin coding straight after installing the extension. Though, please take a moment to check the OS-specific notes below for potential caveats.
+Atari Dev Studio is an extension for Microsoft's cross-platform IDE Visual Studio Code and will run on the Windows, Linux and MacOS platforms. The latest releases of batari Basic, 7800basic, dasm, Stella and A7800 are included so you can begin coding straight after installing the extension. Though, please take a moment to check the OS-specific notes below for potential caveats.
 
 ## Features
 Atari Dev Studio includes the following features:
-* Develop your game on Windows, Linux or macOS
+* Develop your game on Windows, Linux or MacOS
 * Compile source code for your Atari 2600 or 7800 using batari Basic, 7800basic or dasm
 * Use scripting (makefile, batch or shell script files) to build your dasm projects [preview]
 * Optionally launch and test your game using the Stella (2600) or A7800 (7800) emulators
@@ -28,7 +28,7 @@ Additional features are planned for the future. At this time the focus is on the
 Visual Studio Code (VS Code) is a streamlined code editor with support for development operations like debugging, task running, and version control. It aims to provide just the tools a developer needs for a quick code-build-debug cycle and leaves more complex workflows to fuller featured IDEs, such as Visual Studio.
 
 ### Which OSs are supported?
-VS Code is a cross-platform application which runs on Windows, Linux and macOS. See [requirements](https://code.visualstudio.com/docs/supporting/requirements) for the supported versions.
+VS Code is a cross-platform application which runs on Windows, Linux and MacOS. See [requirements](https://code.visualstudio.com/docs/supporting/requirements) for the supported versions.
 
 #### Microsoft Windows
 No special considerations. Windows users should be able to use Atari Dev Studio as is.
@@ -36,8 +36,8 @@ No special considerations. Windows users should be able to use Atari Dev Studio 
 #### Linux
 Linux users on 64-bit systems will be required to install the 32-bit compatibility libraries on your system to ensure everything will run as expected.
 
-#### Apple macOS
-macOS users require a 64-bit operating system to fully utilise all features of Atari Dev Studio and will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
+#### Apple MacOS
+MacOS users require a 64-bit operating system to fully utilise all features of Atari Dev Studio and will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
 
 
 ### WASM
@@ -172,7 +172,7 @@ This extension is only available due to the great people of the AtariAge communi
 * A7800 emulator - Mike Saarna (RevEng) and Robert Tuccitto (Trebor)
 * PlayerPal 2600 and Atari Background Builder (kisrael)
 * Mats Engstrom (SmallRoomLabs)
-* Scott Lahteine (thinkyhead) for the MacOS ARM Compatibility for bB, 7800basic, Stella, dasm
+* Scott Lahteine (thinkyhead) for the current Stella & dasm builds and the previous MacOS ARM Compatibility for bB, 7800basic.
 * Fred Sauer (fredsa) for product suggestions and additional information relating to the previous MacOS ARM releases and self compilation of the language compilers.
 * The AtariAge community including Albert, CPUWiz, Random Terrain, Trebor, Synthpopalooza, sramirez2008, Defender_2600, Gemintronic, Karl G, ZeroPage Homebrew, Muddyfunster, TwentySixHundred, Lillapojkenpåön, Andrew Davie, splendidnut, andyjp, sexyUnderwriter, MikeBrownEmplas, Generation2Games, cwieland, slacker, milnak
 
