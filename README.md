@@ -30,26 +30,21 @@ Visual Studio Code (VS Code) is a streamlined code editor with support for devel
 ### Which OSs are supported?
 VS Code is a cross-platform application which runs on Windows, Linux and macOS. See [requirements](https://code.visualstudio.com/docs/supporting/requirements) for the supported versions.
 
-#### Windows
+#### Microsoft Windows
 No special considerations. Windows users should be able to use Atari Dev Studio as is.
 
 #### Linux
 Linux users on 64-bit systems will be required to install the 32-bit compatibility libraries on your system to ensure everything will run as expected.
 
-#### macOS
+#### Apple macOS
 macOS users require a 64-bit operating system to fully utilise all features of Atari Dev Studio and will be required to install the SDL libraries on your system to ensure the A7800 emulator will run as expected.
 
-> Note: 7800basic v0.37 now uses WASM for cross-platform compatibility therefore this information currently relates to batari Basic or older releases of 7800basic only and will be removed once bB is converted.
 
-Mac computers with [Apple silicon](https://support.apple.com/116943) currently have a few options:
+### WASM
+With the introduction of batari Basic 1.9 and 7800basic v0.37, the language compilers now utilise WASM for cross-platform compatibility with the **wasmtime** runtime required to be installed for the compilation of your games.  For ease of use, during startup of the Atari Dev Studio extension this will be validated and automatically installed as required.
 
-1.  Thanks to Scott Lahteine (thinkyhead), Atari Dev Studio now includes `*.Darwin.arm64` (Apple silicon) binaries of relatively recent versions of bB, 7800basic, Stella and dasm.
-    Note, these the are *not* the latest versions of these tools. See the atariage [discussion](https://atariage.com/forums/topic/333127-ataribasic-will-it-run-on-the-m1-mac)
-    around additional issues you might encounter.
-2.  Manually build `*.Darwin.arm64` (Apple silicon) binaries from source and configure Atari Dev Studio to use use your locally built binaries. See `README-macos.md` for instructions.
-3.  Install and run the INTEL CHIP version of VS Code instead of the Apple Silicon version. This will cause Atari Dev Studio to use the Intel binaries, `*.Darwin.x86` / `*.Darwin.x64`.
+> NOTE: the option to validate the availability of the **wasmtime** runtime can be turned off in the **Settings**.
 
-Older Mac computers with Intel chips should be able to use Atari Dev Studio as is.
 
 ### Installing the extension
 Once you have installed VS Code (available [here](https://code.visualstudio.com/Download)), open the VS Code program and complete the following:
@@ -61,9 +56,6 @@ Once you have installed VS Code (available [here](https://code.visualstudio.com/
 
 ### Updating the extension
 Updates are regularly provided and you will be notified via VS Code when one has been made available. Once an update has been installed you will generally be prompted to restart VS Code.
-
-### Starting the extension
-7800basic (0.37 onwards) requires the installation of the [wasmtime](https://wasmtime.dev/) runtime on all platforms. During startup of the Atari Dev Studio extension this will be validated and automatically installed as required.
 
 
 ## Using Atari Dev Studio
@@ -80,7 +72,7 @@ To display the available extension features press **CTRL+SHIFT+P** to display th
 
 ![Command Palette](images/ataridevstudio-commandpalette.png)
 
-### Language Selection
+## Language Selection
 When you load a file the initial language will be chosen based on the file extension.  For example:
 * batari Basic (.bas, .bb) [Default for .bas files]
 * 7800basic (.bas, .78b)
@@ -89,6 +81,27 @@ When you load a file the initial language will be chosen based on the file exten
 To change a language you can click on the Status Bar **Language selector** and a list will be shown allowing you to choose another language. Optionally in the **Settings** you will be able to either let the extension choose based on the active language or set a specific language to always compile against.
 
 ![Language Selector](images/ataridevstudio-languageselector.png)
+
+### Language Definition Tags (Available from v0.11.1)
+
+Starting with **v0.11.1**, you can define the default language and compiler for your source files using **definition tags** directly in your code. This allows you to override the default behavior of relying on file extensions and other options.
+
+![Language Definition Tags](images/ataridevstudio-languagedefinitiontags.png)
+
+#### `;#ADSLanguage=`
+
+Use this tag to specify the **default language** for the document.
+
+- 7800basic
+- batariBasic
+- Make *(see below - recommended only for advanced users)*
+
+#### `;#ADSCompiler=`
+
+Use this tag to specify the **default compiler** for the document. To add additional compilers, you can create a **custom compiler list** for each language in the **Settings**.  
+
+> **Tip:** Definition tags are **IntelliSense-aware**, so you'll receive auto-completion and suggestions as you type.
+
 
 ### Build scripts [preview]
 Prefer using scripts to build your dasm games? If you have chosen to override the dasm compiler (select Make via the **Settings**) , Atari Dev Studio will scan and detect for makefile, batch (makefile.bat) or shell scripts (makefile.sh) files which are located in your root workspace folder to build your game.
@@ -100,7 +113,8 @@ Prefer using scripts to build your dasm games? If you have chosen to override th
 ### Status Bar
 Apart from using the **Command Palette** to select compilation, there are a number of short-cut buttons on the **Status Bar** allowing you to:
 * Display the extension version (might be useful at times)
-* Open Welcome page* Compile source code (Shift+F5)
+* Open Welcome page
+* Compile source code (Shift+F5)
 * Compile source code and launch [via emulator or cart] (F5)
 * Open Sprite Editor
 * Open PlayerPal Editor (2600)
@@ -109,7 +123,7 @@ Apart from using the **Command Palette** to select compilation, there are a numb
 
 ![Status Bar](images/ataridevstudio-statusbar.png)
 
-> Note: the short-cut buttons on the **Status Bar** can be minimised or turned off via the **Settings**.
+> Note: the short-cut buttons on the **Status Bar** can be minimised or turned off in the **Settings**.
 
 ### Sprite Editor [preview]
 Atari Dev Studio includes a simple and easy to use Sprite Editor allowing you to create sprites, tiles and other objects for use in your projects.  It has the following features:
@@ -143,17 +157,10 @@ During the development phase of the extension I've added some developer output t
 ## Known Issues
 There are currently no known feature issues but if you find a problem please raise an issue on [GitHub](https://github.com/chunkypixel/atari-dev-studio/issues) or contact [mksmith](http://atariage.com/forums/user/66583-mksmith/) at the AtariAge community.
 
-### Virus capture
-On Windows when using the 7800basic or batari Basic compilers, occasionally some of the compile chain files are captured by virus protection software (eg. Windows Security) and quarantined. This is a false/positive case but you will need to release/restore these file(s) when required to allow the compilation to succeed. You should find a file verification error in the compile log identifying this potential capture:
+### Virus capture of compiler files
+With the introduction of the WASM releases of batari Basic and 7800basic you should no longer encounter issues with the language compiler files being captured by your virus software due to false/positives.  Be aware that if you revert to using prior releases built specifically for Microsoft Windows this may still continue.  
 
-![Error](images/ataridevstudio-verfiyingcompilerfileexists.png)
-
-If you have specific installed virus software consult your manual to release/restore the file(s).  Alternatively `Windows Security` will have captured the file(s).  Complete the following as required:
-
-* **Windows 10** - Open `Settings`, select `Update & Security` then `Windows Security` from the sidebar.
-* **Windows 11** - Open `Settings`, select `Privacy & Security` from the sidebar, then `Windows Security` from the list.
-
-Locate the `Virus & threat protection` item and follow the prompts to release/restore the required file(s).
+Consult your manual on how to release/restore the required file(s) where this happens.
 
 
 ## Acknowlegments
@@ -166,13 +173,13 @@ This extension is only available due to the great people of the AtariAge communi
 * PlayerPal 2600 and Atari Background Builder (kisrael)
 * Mats Engstrom (SmallRoomLabs)
 * Scott Lahteine (thinkyhead) for the MacOS ARM Compatibility for bB, 7800basic, Stella, dasm
-* Fred Sauer (fredsa) for product suggestions and additional information relating to the MacOS ARM releases and self compilation of the language compilers. Learn more [here](README-macos.md).
+* Fred Sauer (fredsa) for product suggestions and additional information relating to the previous MacOS ARM releases and self compilation of the language compilers.
 * The AtariAge community including Albert, CPUWiz, Random Terrain, Trebor, Synthpopalooza, sramirez2008, Defender_2600, Gemintronic, Karl G, ZeroPage Homebrew, Muddyfunster, TwentySixHundred, Lillapojkenpåön, Andrew Davie, splendidnut, andyjp, sexyUnderwriter, MikeBrownEmplas, Generation2Games, cwieland, slacker, milnak
 
 ## Languages
 Atari Dev Studio includes the following programming languages:
 
-### batari Basic (release 1.8 - 20250615, macOS ARM64 release 1.6)
+### batari Basic (release 1.9 - 20251013 [WASM])
 batari Basic created by Fred 'batari' Quimby is a BASIC-like language used in the creation of Atari 2600 games. batari Basic is compiled to generate a binary file that can by used on actual Atari 2600 VCS hardware via cartridge (such as a Harmony or UNO cart) or by using an Atari 2600 VCS emulator such as Stella.
 
 batari Basic is an external project is kindly currently maintained by Mike Saarna (RevEng) and can be downloaded separately [here](https://github.com/batari-Basic/batari-Basic).  Further information is about this release is available here at [AtariAge](https://atariage.com/forums/topic/300856-official-home-for-batari-basic).
