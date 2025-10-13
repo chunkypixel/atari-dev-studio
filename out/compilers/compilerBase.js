@@ -254,11 +254,6 @@ class CompilerBase {
                     result = false;
                 }
             }
-            // Failed?, 
-            if (!result) {
-                let message = "NOTE: your anti-virus software may have quarantined one or more files related to the compiler due to a false/positive test and where this is the case please ensure you whitelist to allow these files to used.  Alternatively try re-installing the extension.";
-                application.WriteToCompilerTerminal(message);
-            }
             // Result
             return result;
         });
@@ -395,10 +390,10 @@ class CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.ValidateCustomCompilerLocationAsync');
             // Validate for a folder
-            let customCompilerFolder = configuration.GetCustomCompilerPath(this.Id, customCompilerId);
+            let customCompilerFolder = configuration.GetCustomCompilerFolder(this.Id, customCompilerId);
             if (!customCompilerFolder) {
                 // No custom compiler provided, revert
-                let message = `WARNING: You have chosen to use a custom ${this.Name} compiler (${customCompilerId}) but it is either not listed or you have not provided the location.\nReverting to the default compiler...`;
+                let message = `WARNING: You have chosen to use a custom ${this.Name} compiler (${customCompilerId}) but you have not provided the location.\nReverting to the default compiler...`;
                 application.WriteToCompilerTerminal(message);
                 //application.ShowWarningPopup(message);
             }

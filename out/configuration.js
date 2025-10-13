@@ -11,7 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransferFolderToCustomFolders = TransferFolderToCustomFolders;
 exports.GetCustomCompilerIdList = GetCustomCompilerIdList;
-exports.GetCustomCompilerPath = GetCustomCompilerPath;
+exports.CustomFolderIdExists = CustomFolderIdExists;
+exports.GetCustomCompilerFolder = GetCustomCompilerFolder;
 exports.ValidateCustomFoldersConfigurationEntry = ValidateCustomFoldersConfigurationEntry;
 const vscode = require("vscode");
 const application = require("./application");
@@ -53,20 +54,35 @@ function GetCustomCompilerIdList(languageId) {
     // Return
     return compilerIdList;
 }
-function GetCustomCompilerPath(languageId, compilerId) {
+function CustomFolderIdExists(languageId, id) {
     // Prepare
     const config = vscode.workspace.getConfiguration(application.Name);
     const customFolders = config.get(`compiler.${languageId}.customFolders`, {});
-    let path = '';
+    let result = false;
     // Scan
     for (const [key, value] of Object.entries(customFolders)) {
-        if (key.toLowerCase() === compilerId.toLowerCase()) {
-            path = value;
+        if (key.toLowerCase() === id.toLowerCase()) {
+            result = true;
             break;
         }
     }
     // Return result
-    return path;
+    return result;
+}
+function GetCustomCompilerFolder(languageId, id) {
+    // Prepare
+    const config = vscode.workspace.getConfiguration(application.Name);
+    const customFolders = config.get(`compiler.${languageId}.customFolders`, {});
+    let folder = '';
+    // Scan
+    for (const [key, value] of Object.entries(customFolders)) {
+        if (key.toLowerCase() === id.toLowerCase()) {
+            folder = value;
+            break;
+        }
+    }
+    // Return result
+    return folder;
 }
 function ValidateCustomFoldersConfigurationEntry(event) {
     return __awaiter(this, void 0, void 0, function* () {

@@ -2,13 +2,17 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.11.2
+
+ * Added Operating System and VSCode version information to output log
+ * Cleanup areas of the compilation process including message wording and version validations
+ * Updated minimum VSCode requirements to v1.103.2 or better
+
 ## 0.11.1
 
 * Updated batari Basic to v0.19 (wasm).  NOTE: this is now a cross-platform release that requires the **wasmtime** runtime to be installed on your computer.
 * Added the following ADS definition tags:
-
    - ;#ADSLanguage=**language** and ;#ADSCompiler=**compiler**
-
    These will define the default language and compiler for your source files directly in your code. Definition tags are **IntelliSense-aware**, so you will receive auto-completion and suggestions as you type.
 * Added new **Custom Folders** lists to allow users to define multiple compilers for each language.
 * Added transfer of old batari Basic & 7800basic **Custom Folder** settings into the new **Custom Folders** list for each language (if any exist)

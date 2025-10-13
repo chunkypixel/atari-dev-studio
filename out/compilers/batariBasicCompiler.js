@@ -38,8 +38,9 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:BatariBasicCompiler.ExecuteCompilerAsync');
+            // Write system and VSCode version to log
+            application.WriteEnvironmentSummaryToCompilerTerminal();
             // Validate compiler files
-            // Note: for anti-virus quarantining
             if (!(yield this.VerifyCompilerFilesExistsAsync())) {
                 return false;
             }
@@ -66,6 +67,8 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             // Additional for Linux or MacOS?
             if (application.IsLinux || application.IsMacOS)
                 env["PATH"] += `${path.delimiter}/bin${path.delimiter}/usr/bin`;
+            // Spacer
+            application.WriteToCompilerTerminal();
             // TODO: These might need checking for the new WASMTIME build??
             // Compile
             this.IsRunning = true;
@@ -184,6 +187,22 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
         }
         // Return
         return compilerFileList;
+    }
+    VerifyCompilerFilesExistsAsync() {
+        const _super = Object.create(null, {
+            VerifyCompilerFilesExistsAsync: { get: () => super.VerifyCompilerFilesExistsAsync }
+        });
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('debugger:SeventyEightHundredBasicCompiler.VerifyCompilerFilesExistsAsync');
+            // Verfiy
+            let result = _super.VerifyCompilerFilesExistsAsync.call(this);
+            if (!result && this.CompilerVersion < application.BATARIBASIC_WASMTIME_RELEASE) {
+                let message = "NOTE: your anti-virus software may have quarantined one or more files related to the compiler due to a false/positive test and where this is the case please ensure you whitelist to allow these files to used.  Alternatively try re-installing the extension.";
+                application.WriteToCompilerTerminal(message);
+            }
+            // Result
+            return result;
+        });
     }
 }
 exports.BatariBasicCompiler = BatariBasicCompiler;

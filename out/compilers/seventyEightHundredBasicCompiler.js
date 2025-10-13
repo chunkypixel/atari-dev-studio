@@ -42,8 +42,9 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SeventyEightHundredBasicCompiler.ExecuteCompilerAsync');
+            // Write system and VSCode version to log
+            application.WriteEnvironmentSummaryToCompilerTerminal();
             // Validate compiler files
-            // Note: for anti-virus quarantining
             if (!(yield this.VerifyCompilerFilesExistsAsync())) {
                 return false;
             }
@@ -203,10 +204,26 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
         // Return
         return compilerFileList;
     }
+    VerifyCompilerFilesExistsAsync() {
+        const _super = Object.create(null, {
+            VerifyCompilerFilesExistsAsync: { get: () => super.VerifyCompilerFilesExistsAsync }
+        });
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('debugger:SeventyEightHundredBasicCompiler.VerifyCompilerFilesExistsAsync');
+            // Verfiy
+            let result = _super.VerifyCompilerFilesExistsAsync.call(this);
+            if (!result && this.CompilerVersion < application.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE) {
+                let message = "NOTE: your anti-virus software may have quarantined one or more files related to the compiler due to a false/positive test and where this is the case please ensure you whitelist to allow these files to used.  Alternatively try re-installing the extension.";
+                application.WriteToCompilerTerminal(message);
+            }
+            // Result
+            return result;
+        });
+    }
     ShowAnyCompilerWarnings() {
         console.log('debugger:SeventyEightHundredBasicCompiler.ShowAnyCompilerWarnings');
         if (application.IsMacOSArm && this.CompilerVersion < application.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE) {
-            let message = `WARNING: The latest known MacOS ARM version of 7800basic is a number of versions behind the official build (currently v${this.CompilerVersion}) and may not compile correctly due to missing features and functionality. Note: The officially included version built using WASM should support all Apple silicon where the wasmtime runtime is available.`;
+            let message = `WARNING: The latest working MacOS ARM version of 7800basic is a number of versions behind the official build (currently v${this.CompilerVersion}) and may not compile correctly due to missing features and functionality. Note: The officially included version built using WASM should support all Apple silicon where the wasmtime runtime is available.`;
             application.WriteToCompilerTerminal(message);
             application.WriteToCompilerTerminal(``);
         }

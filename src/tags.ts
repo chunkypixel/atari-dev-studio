@@ -25,7 +25,7 @@ export function ScanDocumentForADSLanguageTag(document: vscode.TextDocument) {
         });
     };
 
-    // if tag or language not found let the sysytem choose
+    // if tag or language not found let the system choose
 }
 
 export function ScanDocumentForADSCompilerTag(languageId: string, document: vscode.TextDocument): string {

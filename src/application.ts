@@ -53,7 +53,7 @@ export const IsMacOS: boolean = (os.platform() === 'darwin');
 export const Is32Bit: boolean = (os.arch() === 'x32');
 export const Is64Bit: boolean = (os.arch() === 'x64');
 export const IsMacOSArm: boolean = (os.platform() === 'darwin' && os.arch() === 'arm64')
-
+export const EnvironmentSummary: string = `Operating System: ${(IsWindows ? "Windows" : IsLinux ? "Linux" : IsMacOS ? "MacOS" : "Unknown")} (${OSArch}), VSCode Version: ${vscode.version}`;
 // -------------------------------------------------------------------------------------
 // Extension
 // -------------------------------------------------------------------------------------
@@ -311,6 +311,12 @@ export function WriteToCompilerTerminal(message: string = '', lineFeed: boolean 
 	}
 	// Write to log?
 	if (writeToLog) { console.log(`debugger:${message}`); }        
+}
+
+export function WriteEnvironmentSummaryToCompilerTerminal(): void {
+	// Write
+	WriteToCompilerTerminal(EnvironmentSummary);
+	WriteToCompilerTerminal();
 }
 
 export function ShowWarningPopup(message: string): void {

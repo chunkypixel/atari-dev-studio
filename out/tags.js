@@ -24,7 +24,7 @@ function ScanDocumentForADSLanguageTag(document) {
         });
     }
     ;
-    // if tag or language not found let the sysytem choose
+    // if tag or language not found let the system choose
 }
 function ScanDocumentForADSCompilerTag(languageId, document) {
     var _a;

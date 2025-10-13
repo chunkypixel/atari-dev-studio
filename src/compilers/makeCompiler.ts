@@ -54,6 +54,9 @@ export class MakeCompiler extends CompilerBase {
     protected async ExecuteCompilerAsync(): Promise<boolean> {
         console.log('debugger:MakeCompiler.ExecuteCompilerAsync');
 
+        // Write system and VSCode version to log
+        application.WriteEnvironmentSummaryToCompilerTerminal();
+
         // Launch and exit
         // note: we cannot wait for a result
         application.AdsTerminal?.sendText(`make -f ${this.FileName}`);

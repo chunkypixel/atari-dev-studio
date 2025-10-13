@@ -35,8 +35,10 @@ export class BatariBasicCompiler extends CompilerBase {
     protected async ExecuteCompilerAsync(): Promise<boolean> {
         console.log('debugger:BatariBasicCompiler.ExecuteCompilerAsync');
 
+        // Write system and VSCode version to log
+        application.WriteEnvironmentSummaryToCompilerTerminal();
+
         // Validate compiler files
-        // Note: for anti-virus quarantining
         if (!await this.VerifyCompilerFilesExistsAsync()) { return false; }
 
         // Premissions
@@ -65,6 +67,9 @@ export class BatariBasicCompiler extends CompilerBase {
         };
         // Additional for Linux or MacOS?
         if (application.IsLinux || application.IsMacOS) env["PATH"] += `${path.delimiter}/bin${path.delimiter}/usr/bin`;
+
+        // Spacer
+        application.WriteToCompilerTerminal();
 
         // TODO: These might need checking for the new WASMTIME build??
 
@@ -197,5 +202,19 @@ export class BatariBasicCompiler extends CompilerBase {
         }
         // Return
         return compilerFileList;        
+    }
+
+    protected async VerifyCompilerFilesExistsAsync(): Promise<boolean> {
+        console.log('debugger:SeventyEightHundredBasicCompiler.VerifyCompilerFilesExistsAsync');
+
+        // Verfiy
+        let result = super.VerifyCompilerFilesExistsAsync(); 
+        if (!result && this.CompilerVersion < application.BATARIBASIC_WASMTIME_RELEASE) {
+            let message = "NOTE: your anti-virus software may have quarantined one or more files related to the compiler due to a false/positive test and where this is the case please ensure you whitelist to allow these files to used.  Alternatively try re-installing the extension.";
+            application.WriteToCompilerTerminal(message);  
+        }
+
+        // Result
+        return result;
     }
 }

@@ -45,22 +45,40 @@ export function GetCustomCompilerIdList(languageId: string): string[] {
     return compilerIdList;
 }
 
-export function GetCustomCompilerPath(languageId: string, compilerId: string): string {
+export function CustomFolderIdExists(languageId: string, id: string): boolean {
     // Prepare
     const config = vscode.workspace.getConfiguration(application.Name);
     const customFolders = config.get<Record<string, string>>(`compiler.${languageId}.customFolders`,{});
-    let path = '';
+    let result = false;
 
     // Scan
     for (const [key, value] of Object.entries(customFolders)) {
-        if (key.toLowerCase() === compilerId.toLowerCase()) {
-            path = value;
+        if (key.toLowerCase() === id.toLowerCase()) {
+            result = true;
             break;
         }
     }
 
     // Return result
-    return path;
+    return result;
+}
+
+export function GetCustomCompilerFolder(languageId: string, id: string): string {
+    // Prepare
+    const config = vscode.workspace.getConfiguration(application.Name);
+    const customFolders = config.get<Record<string, string>>(`compiler.${languageId}.customFolders`,{});
+    let folder = '';
+
+    // Scan
+    for (const [key, value] of Object.entries(customFolders)) {
+        if (key.toLowerCase() === id.toLowerCase()) {
+            folder = value;
+            break;
+        }
+    }
+
+    // Return result
+    return folder;
 }
 
 export async function ValidateCustomFoldersConfigurationEntry(event: vscode.ConfigurationChangeEvent): Promise<void> {
