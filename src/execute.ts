@@ -1,9 +1,8 @@
 "use strict";
-import * as vscode from 'vscode';
 import * as application from './application';
-import { kill } from "process";
+import find = require("find-process");
 const cp = require("child_process");
-const find = require("find-process");
+
 
 export async function KillProcessByNameAsync(name:string): Promise<void> {
     // Need to lowercase name
@@ -27,11 +26,14 @@ export function KillProcessById(pid:any): void {
 
     // Process
     try {
-        // Try and kill any child process
-        let kill = require('tree-kill');
-        kill(pid);       
-    } catch (error) {  
-        console.log(`Failed to kill process ${pid}`); 
+        process.kill(pid,"SIGKILL"); // force
+        console.log(`Process ${pid} terminated.`);  
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.log(`Failed to kill process ${pid}`); 
+        } else {
+            console.log(`Unknow error occurred while killing process ${pid}`);            
+        } 
     }
 }
 

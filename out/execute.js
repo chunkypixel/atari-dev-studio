@@ -14,8 +14,8 @@ exports.KillProcessById = KillProcessById;
 exports.KillSpawnProcess = KillSpawnProcess;
 exports.Spawn = Spawn;
 const application = require("./application");
-const cp = require("child_process");
 const find = require("find-process");
+const cp = require("child_process");
 function KillProcessByNameAsync(name) {
     return __awaiter(this, void 0, void 0, function* () {
         // Need to lowercase name
@@ -41,12 +41,16 @@ function KillProcessById(pid) {
     }
     // Process
     try {
-        // Try and kill any child process
-        let kill = require('tree-kill');
-        kill(pid);
+        process.kill(pid, "SIGKILL"); // force
+        console.log(`Process ${pid} terminated.`);
     }
     catch (error) {
-        console.log(`Failed to kill process ${pid}`);
+        if (error instanceof Error) {
+            console.log(`Failed to kill process ${pid}`);
+        }
+        else {
+            console.log(`Unknow error occurred while killing process ${pid}`);
+        }
     }
 }
 function KillSpawnProcess() {

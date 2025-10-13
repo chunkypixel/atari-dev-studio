@@ -515,17 +515,16 @@
         "watch": "tsc -watch -p ./"
     },
     "dependencies": {
-        "eslint": "^9.237.0",
+        "eslint": "^9.37.0",
         "find-process": "^1.4.10",
         "minimist": "^1.2.8",
-        "open": "^10.2.0",
-        "tree-kill": "^1.2.2"
+        "open": "^10.2.0"
     },
     "devDependencies": {
         "@types/mocha": "^10.0.10",
         "@types/node": "^24.7.2",
         "@types/vscode": "^1.103.2",
-        "diff": "^5.2.0",
+        "diff": "^8.0.2",
         "typescript": "^5.9.3"
     }
 }
