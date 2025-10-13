@@ -158,7 +158,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
         // for Wasmtime we only need to validate the script file by the looks from my testing...
         let compilerFileList = [command];
         // Validate if we are using an older version of bB
-        // support 0.12-0.18
+        // support 1.2-1.8
         if (this.CompilerVersion < application.BATARIBASIC_WASMTIME_RELEASE) {
             // Prepare
             let platform = "";
@@ -177,8 +177,8 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                 `postprocess${platform}${extension}`,
                 `preprocess${platform}${extension}`,
                 `dasm${platform}${extension}`];
-            // As of 15/06/25 (v0.18) the existing ARM version does not cater for this file
-            if (this.CompilerVersion == 0.18 && !application.IsMacOSArm) {
+            // As of 15/06/25 (v1.8) the existing ARM version does not cater for this file
+            if (this.CompilerVersion == 1.8 && !application.IsMacOSArm) {
                 compilerFileList.push(`relocateBB${platform}${extension}`);
             }
         }

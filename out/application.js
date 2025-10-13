@@ -91,7 +91,7 @@ exports.Description = vscode.extensions.getExtension(exports.Id).packageJSON.des
 exports.PreferencesSettingsExtensionPath = `${(exports.IsMacOS ? "Code" : "File")} -> Preferences -> Settings -> Extensions -> ${exports.DisplayName}`;
 exports.ChangeLogUri = vscode.Uri.parse(`https://marketplace.visualstudio.com/items/${exports.Id}/changelog`);
 exports.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE = 0.37;
-exports.BATARIBASIC_WASMTIME_RELEASE = 0.18;
+exports.BATARIBASIC_WASMTIME_RELEASE = 1.9;
 // -------------------------------------------------------------------------------------
 // Languages
 // -------------------------------------------------------------------------------------

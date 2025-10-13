@@ -172,7 +172,7 @@ export class BatariBasicCompiler extends CompilerBase {
         let compilerFileList = [command];
 
         // Validate if we are using an older version of bB
-        // support 0.12-0.18
+        // support 1.2-1.8
         if (this.CompilerVersion < application.BATARIBASIC_WASMTIME_RELEASE) {
             // Prepare
             let platform = "";
@@ -189,8 +189,8 @@ export class BatariBasicCompiler extends CompilerBase {
                 `preprocess${platform}${extension}`,
                 `dasm${platform}${extension}`]; 
             
-            // As of 15/06/25 (v0.18) the existing ARM version does not cater for this file
-            if (this.CompilerVersion == 0.18 && !application.IsMacOSArm) {
+            // As of 15/06/25 (v1.8) the existing ARM version does not cater for this file
+            if (this.CompilerVersion == 1.8 && !application.IsMacOSArm) {
                 compilerFileList.push(
                     `relocateBB${platform}${extension}`);
             }
