@@ -120,6 +120,10 @@ function activate(context) {
         vscode.workspace.onDidSaveTextDocument((document) => {
             tags.ScanDocumentForADSLanguageTag(document);
         }));
+        // Validate settins on save
+        context.subscriptions.push(vscode.workspace.onDidChangeConfiguration((event) => __awaiter(this, void 0, void 0, function* () {
+            yield configuration.ValidateCustomFoldersConfigurationEntry(event);
+        })));
         // Transfer old settings
         yield configuration.TransferFolderToCustomFolders(context);
         // Register the mouse-over hover providers

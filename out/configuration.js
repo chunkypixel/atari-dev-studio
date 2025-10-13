@@ -12,8 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransferFolderToCustomFolders = TransferFolderToCustomFolders;
 exports.GetCustomCompilerIdList = GetCustomCompilerIdList;
 exports.GetCustomCompilerPath = GetCustomCompilerPath;
+exports.ValidateCustomFoldersConfigurationEntry = ValidateCustomFoldersConfigurationEntry;
 const vscode = require("vscode");
 const application = require("./application");
+const seventyEightHundredCustomFoldersSection = 'compiler.7800basic.customFolders';
+const batariBasicCustomFoldersSection = 'compiler.batariBasic.customFolders';
 function TransferFolderToCustomFolders(context) {
     return __awaiter(this, void 0, void 0, function* () {
         // Validate if we have already done it?
@@ -27,14 +30,14 @@ function TransferFolderToCustomFolders(context) {
         if (existing7800BasicCustomFolder) {
             // Add
             const customFolder = { 'Custom': existing7800BasicCustomFolder };
-            yield config.update('compiler.7800basic.customFolders', customFolder, vscode.ConfigurationTarget.Global);
+            yield config.update(seventyEightHundredCustomFoldersSection, customFolder, vscode.ConfigurationTarget.Global);
         }
         // batariBasic
         const existingBatariBasicFolder = config.get('compiler.batariBasic.folder', null);
         if (existingBatariBasicFolder) {
             // Add
             const customFolder = { 'Custom': existingBatariBasicFolder };
-            yield config.update('compiler.batariBasic.customFolders', customFolder, vscode.ConfigurationTarget.Global);
+            yield config.update(batariBasicCustomFoldersSection, customFolder, vscode.ConfigurationTarget.Global);
         }
         // Set
         yield context.globalState.update(`${application.Name}.configuration.transferedFolderToCustomFolders`, true);
@@ -64,5 +67,52 @@ function GetCustomCompilerPath(languageId, compilerId) {
     }
     // Return result
     return path;
+}
+function ValidateCustomFoldersConfigurationEntry(event) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Prepare
+        const config = vscode.workspace.getConfiguration(application.Name);
+        // 7800basic?
+        if (event.affectsConfiguration(`${application.Name}.${seventyEightHundredCustomFoldersSection}`)) {
+            // Prepare
+            const customFolders = config.get(seventyEightHundredCustomFoldersSection, {});
+            const updatedCustomFolders = {};
+            let isChanged = false;
+            // Validate for spaces in Key and remove
+            for (const [key, value] of Object.entries(customFolders)) {
+                // Check key for required changes
+                const newKey = key.includes(' ') ? key.replace(/ /g, '').trim() : key;
+                if (newKey !== key) {
+                    isChanged = true;
+                }
+                updatedCustomFolders[newKey] = value;
+            }
+            // Changed?
+            if (isChanged) {
+                yield config.update(seventyEightHundredCustomFoldersSection, updatedCustomFolders, vscode.ConfigurationTarget.Global);
+            }
+        }
+        // batari Basic
+        if (event.affectsConfiguration(`${application.Name}.${batariBasicCustomFoldersSection}`)) {
+            // Prepare
+            let customFolders = config.get(batariBasicCustomFoldersSection, {});
+            const updatedCustomFolders = {};
+            let isChanged = false;
+            // Validate for spaces in Key and remove
+            for (const [key, value] of Object.entries(customFolders)) {
+                // Check key for required changes
+                const newKey = key.includes(' ') ? key.replace(/ /g, '').trim() : key;
+                if (newKey !== key) {
+                    isChanged = true;
+                }
+                updatedCustomFolders[newKey] = value;
+            }
+            // Changed?
+            if (isChanged) {
+                yield config.update(batariBasicCustomFoldersSection, updatedCustomFolders, vscode.ConfigurationTarget.Global);
+            }
+        }
+        ;
+    });
 }
 //# sourceMappingURL=configuration.js.map

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContextHelps = exports.ReferenceProviders = exports.DefinitionProviders = exports.DocumentSymbolProviders = exports.Foldings = exports.Completions = exports.Hovers = exports.Serials = exports.Emulators = exports.Compilers = exports.AdsTerminal = exports.CompilerOutputChannel = exports.BatariBasicLangaugeId = exports.SeventyEightHundredBasicLanguageId = exports.BATARIBASIC_WASMTIME_RELEASE = exports.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.IsMacOSArm = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSRelease = exports.OSArch = exports.OSPlatform = void 0;
+exports.ContextHelps = exports.ReferenceProviders = exports.DefinitionProviders = exports.DocumentSymbolProviders = exports.Foldings = exports.Completions = exports.Hovers = exports.Serials = exports.Emulators = exports.Compilers = exports.AdsTerminal = exports.CompilerOutputChannel = exports.BatariBasicLanguageId = exports.SeventyEightHundredBasicLanguageId = exports.BATARIBASIC_WASMTIME_RELEASE = exports.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.IsMacOSArm = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSRelease = exports.OSArch = exports.OSPlatform = void 0;
 exports.InitialiseAdsTerminalAsync = InitialiseAdsTerminalAsync;
 exports.RegisterHoverProvidersAsync = RegisterHoverProvidersAsync;
 exports.RegisterCompletionProvidersAsync = RegisterCompletionProvidersAsync;
@@ -96,7 +96,7 @@ exports.BATARIBASIC_WASMTIME_RELEASE = 1.9;
 // Languages
 // -------------------------------------------------------------------------------------
 exports.SeventyEightHundredBasicLanguageId = "7800basic";
-exports.BatariBasicLangaugeId = "batariBasic";
+exports.BatariBasicLanguageId = "batariBasic";
 // -------------------------------------------------------------------------------------
 // Channels
 // -------------------------------------------------------------------------------------

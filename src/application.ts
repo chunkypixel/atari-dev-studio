@@ -72,7 +72,7 @@ export const BATARIBASIC_WASMTIME_RELEASE = 1.9;
 // Languages
 // -------------------------------------------------------------------------------------
 export const SeventyEightHundredBasicLanguageId = "7800basic";
-export const BatariBasicLangaugeId = "batariBasic";
+export const BatariBasicLanguageId = "batariBasic";
 // -------------------------------------------------------------------------------------
 // Channels
 // -------------------------------------------------------------------------------------
