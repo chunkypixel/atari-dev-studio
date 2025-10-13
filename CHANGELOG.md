@@ -5,8 +5,13 @@ The following enhancements and changes have been made to Atari Dev Studio:
 ## 0.11.1
 
 * Updated batari Basic to v0.19 (wasm).  NOTE: this is now a cross-platform release that requires the **wasmtime** runtime to be installed on your computer.
-* Added ADS document tags: ;#ADSLanguage=**language** and ;#ADSCompiler=**compiler**.  These will configure your default document language and compiler settings otherwise the system will revert to use the existing Default Compiler option. As you type the system will offer the available language and compiler options.
-* Added transfer of old batariBasic & 7800basic custom folder settings into new Custom layout for each language (if any exist)
+* Added the following ADS definition tags:
+
+   - ;#ADSLanguage=**language** and ;#ADSCompiler=**compiler**
+
+   These will define the default language and compiler for your source files directly in your code. Definition tags are **IntelliSense-aware**, so you will receive auto-completion and suggestions as you type.
+* Added new **Custom Folders** lists to allow users to define multiple compilers for each language.
+* Added transfer of old batari Basic & 7800basic **Custom Folder** settings into the new **Custom Folders** list for each language (if any exist)
 * Added batari Basic code completion options
 * Fixed #ifconst, #else, #endif compiler directives in 7800basic
 * Updated 7800basic keyword lists
