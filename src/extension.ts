@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as application from './application';
+import * as browser from './browser';
 import * as wasmtime from './wasmtime';
 import * as tags from "./tags";
 import * as configuration from "./configuration";
@@ -47,15 +48,15 @@ export async function activate(context: vscode.ExtensionContext) {
 	// 2600 editors
 	const openPlayerPalPage = vscode.commands.registerCommand('extension.openPlayerPalPage', () => {
 		console.log('User activated command "extension.openPlayerPalPage"');
-	    application.OpenBrowserWindow('https://alienbill.com/2600/playerpalnext.html');
+	    browser.OpenUrlInBrowser('https://alienbill.com/2600/playerpalnext.html');
 	});
 	const openAtariBackgroundBuilderPage = vscode.commands.registerCommand('extension.openAtariBackgroundBuilderPage', () => {
 		console.log('User activated command "extension.openAtariBackgroundBuilderPage"');
-		application.OpenBrowserWindow('https://alienbill.com/2600/atari-background-builder');
+		browser.OpenUrlInBrowser('https://alienbill.com/2600/atari-background-builder');
 	});
 	const openRTbBSpriteEditorPage = vscode.commands.registerCommand('extension.openRTbBSpriteEditorPage', () => {
 		console.log('User activated command "extension.openRTbBSpriteEditorPage"');
-		application.OpenBrowserWindow('https://www.randomterrain.com/2600bbsprite.html');
+		browser.OpenUrlInBrowser('https://www.randomterrain.com/2600bbsprite.html');
 	});
 	// Build
 	// Note: apparently the fileUri can be supplied via the command line but we are not going to use it

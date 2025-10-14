@@ -14,6 +14,7 @@ const vscode = require("vscode");
 const path = require("path");
 const filesystem = require("../filesystem");
 const application = require("../application");
+const browser = require("../browser");
 class WelcomePage {
     constructor() {
         this.currentPanel = undefined;
@@ -128,27 +129,27 @@ class WelcomePage {
     }
     openBatariBasicForum() {
         console.log('debugger:WelcomePage.openBatariBasicForum');
-        application.OpenBrowserWindow("http://atariage.com/forums/forum/65-batari-basic/");
+        browser.OpenUrlInBrowser('http://atariage.com/forums/forum/65-batari-basic/');
     }
     open7800ProgrammingForum() {
         console.log('debugger:WelcomePage.open7800ProgrammingForum');
-        application.OpenBrowserWindow("http://atariage.com/forums/forum/52-atari-7800-programming/");
+        browser.OpenUrlInBrowser('http://atariage.com/forums/forum/52-atari-7800-programming/');
     }
     openBatariGuidePage() {
         console.log('debugger:WelcomePage.openBatariGuidePage');
-        application.OpenBrowserWindow("http://www.randomterrain.com/atari-2600-memories-batari-basic-commands.html");
+        browser.OpenUrlInBrowser('http://www.randomterrain.com/atari-2600-memories-batari-basic-commands.html');
     }
     open7800basicGuidePage() {
         console.log('debugger:WelcomePage.open7800basicGuidePage');
-        application.OpenBrowserWindow("http://www.randomterrain.com/7800basic.html");
+        browser.OpenUrlInBrowser('http://www.randomterrain.com/7800basic.html');
     }
     openDiscussionPage() {
         console.log('debugger:WelcomePage.openDiscussionPage');
-        application.OpenBrowserWindow("http://atariage.com/forums/topic/290365-atari-dev-studio-for-homebrew-development-release/");
+        browser.OpenUrlInBrowser('http://atariage.com/forums/topic/290365-atari-dev-studio-for-homebrew-development-release/');
     }
     openGitHubIssue() {
         console.log('debugger:WelcomePage.openGitHubIssue');
-        application.OpenBrowserWindow("https://github.com/chunkypixel/atari-dev-studio/issues");
+        browser.OpenUrlInBrowser('https://github.com/chunkypixel/atari-dev-studio/issues');
     }
 }
 exports.WelcomePage = WelcomePage;

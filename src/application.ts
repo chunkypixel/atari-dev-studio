@@ -1,6 +1,5 @@
 "use strict";
 import * as vscode from 'vscode';
-import open, {openApp, apps} from 'open';
 import { CompilerBase } from './compilers/compilerBase';
 import { BatariBasicCompiler } from './compilers/batariBasicCompiler';
 import { SeventyEightHundredBasicCompiler } from './compilers/seventyEightHundredBasicCompiler';
@@ -415,15 +414,6 @@ export function Delay(ms: number) {
 
 export function IsNumber(numStr: string) {
 	return !isNaN(parseFloat(numStr)) && !isNaN(+numStr)
-}
-
-export async function OpenBrowserWindow(path: string): Promise<void> {
-	await open(path, { app: 
-		{name: apps.browser} 
-	})
-    .catch((_: any) => {
-      vscode.window.showErrorMessage(`Open web browser failed!! Please check if you have Chrome, Firefox or Edge correctly installed!`);
-    });
 }
 
 export function CountTrailingZeros(str: string): number {
