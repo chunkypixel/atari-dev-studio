@@ -10,10 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransferFolderToCustomFolders = TransferFolderToCustomFolders;
-exports.GetCustomCompilerIdList = GetCustomCompilerIdList;
-exports.CustomFolderIdExists = CustomFolderIdExists;
-exports.GetCustomCompilerFolder = GetCustomCompilerFolder;
 exports.ValidateCustomFoldersConfigurationEntry = ValidateCustomFoldersConfigurationEntry;
+exports.GetCustomCompilerIdList = GetCustomCompilerIdList;
+exports.GetCustomCompilerFolder = GetCustomCompilerFolder;
 const vscode = require("vscode");
 const application = require("./application");
 const seventyEightHundredCustomFoldersSection = 'compiler.7800basic.customFolders';
@@ -28,14 +27,14 @@ function TransferFolderToCustomFolders(context) {
         const config = vscode.workspace.getConfiguration(application.Name);
         // 7800basic
         const existing7800BasicCustomFolder = config.get('compiler.7800basic.folder', null);
-        if (existing7800BasicCustomFolder) {
+        if (existing7800BasicCustomFolder && !CustomFolderExists(seventyEightHundredCustomFoldersSection, existing7800BasicCustomFolder)) {
             // Add
             const customFolder = { 'Custom': existing7800BasicCustomFolder };
             yield config.update(seventyEightHundredCustomFoldersSection, customFolder, vscode.ConfigurationTarget.Global);
         }
         // batariBasic
         const existingBatariBasicFolder = config.get('compiler.batariBasic.folder', null);
-        if (existingBatariBasicFolder) {
+        if (existingBatariBasicFolder && !CustomFolderExists(batariBasicCustomFoldersSection, existingBatariBasicFolder)) {
             // Add
             const customFolder = { 'Custom': existingBatariBasicFolder };
             yield config.update(batariBasicCustomFoldersSection, customFolder, vscode.ConfigurationTarget.Global);
@@ -43,46 +42,6 @@ function TransferFolderToCustomFolders(context) {
         // Set
         yield context.globalState.update(`${application.Name}.configuration.transferedFolderToCustomFolders`, true);
     });
-}
-function GetCustomCompilerIdList(languageId) {
-    var _a;
-    // Prepare
-    const config = vscode.workspace.getConfiguration(application.Name);
-    // Get
-    const customFolders = config.get(`compiler.${languageId}.customFolders`, {});
-    const compilerIdList = (_a = Object.keys(customFolders)) !== null && _a !== void 0 ? _a : [];
-    // Return
-    return compilerIdList;
-}
-function CustomFolderIdExists(languageId, id) {
-    // Prepare
-    const config = vscode.workspace.getConfiguration(application.Name);
-    const customFolders = config.get(`compiler.${languageId}.customFolders`, {});
-    let result = false;
-    // Scan
-    for (const [key, value] of Object.entries(customFolders)) {
-        if (key.toLowerCase() === id.toLowerCase()) {
-            result = true;
-            break;
-        }
-    }
-    // Return result
-    return result;
-}
-function GetCustomCompilerFolder(languageId, id) {
-    // Prepare
-    const config = vscode.workspace.getConfiguration(application.Name);
-    const customFolders = config.get(`compiler.${languageId}.customFolders`, {});
-    let folder = '';
-    // Scan
-    for (const [key, value] of Object.entries(customFolders)) {
-        if (key.toLowerCase() === id.toLowerCase()) {
-            folder = value;
-            break;
-        }
-    }
-    // Return result
-    return folder;
 }
 function ValidateCustomFoldersConfigurationEntry(event) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -108,7 +67,8 @@ function ValidateCustomFoldersConfigurationEntry(event) {
                 yield config.update(seventyEightHundredCustomFoldersSection, updatedCustomFolders, vscode.ConfigurationTarget.Global);
             }
         }
-        // batari Basic
+        ;
+        // batariBasic?
         if (event.affectsConfiguration(`${application.Name}.${batariBasicCustomFoldersSection}`)) {
             // Prepare
             let customFolders = config.get(batariBasicCustomFoldersSection, {});
@@ -130,5 +90,45 @@ function ValidateCustomFoldersConfigurationEntry(event) {
         }
         ;
     });
+}
+function GetCustomCompilerIdList(languageId) {
+    var _a;
+    // Prepare
+    const config = vscode.workspace.getConfiguration(application.Name);
+    // Get
+    const customFolders = config.get(`compiler.${languageId}.customFolders`, {});
+    const compilerIdList = (_a = Object.keys(customFolders)) !== null && _a !== void 0 ? _a : [];
+    // Return
+    return compilerIdList;
+}
+function GetCustomCompilerFolder(languageId, id) {
+    // Prepare
+    const config = vscode.workspace.getConfiguration(application.Name);
+    const customFolders = config.get(`compiler.${languageId}.customFolders`, {});
+    let folder = '';
+    // Scan
+    for (const [key, value] of Object.entries(customFolders)) {
+        if (key.toLowerCase() === id.toLowerCase()) {
+            folder = value;
+            break;
+        }
+    }
+    // Return result
+    return folder;
+}
+function CustomFolderExists(configurationSection, folder) {
+    // Prepare
+    const config = vscode.workspace.getConfiguration(application.Name);
+    const customFolders = config.get(configurationSection, {});
+    let result = false;
+    // Scan
+    for (const [key, value] of Object.entries(customFolders)) {
+        if (value.toLowerCase() === folder.toLowerCase()) {
+            result = true;
+            break;
+        }
+    }
+    // Return result
+    return result;
 }
 //# sourceMappingURL=configuration.js.map
