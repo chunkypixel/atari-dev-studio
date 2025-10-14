@@ -1,9 +1,10 @@
 "use strict";
+import * as application from '../application';
 import { DocumentSymbolProviderBase } from './documentSymbolProviderBase';
 
 export class SeventyEightHundredBasicDocumentSymbolProvider extends DocumentSymbolProviderBase {
     
     constructor() {
-        super("7800basic");
+        super(application.SeventyEightHundredBasicLanguageId);
     }
 }

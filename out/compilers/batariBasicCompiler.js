@@ -19,7 +19,7 @@ const compilerBase_1 = require("./compilerBase");
 class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     constructor() {
         // NOTE: '.ace' CompiledExtension requires all existing extensions to be stripped (-)
-        super("batariBasic", "batari Basic", [".bas", ".bb"], [".bin", "-.ace"], [".bin"], path.join(application.Path, "out", "bin", "compilers", "bB"), "Stella");
+        super(application.BatariBasicLanguageId, "batari Basic", [".bas", ".bb"], [".bin", "-.ace"], [".bin"], path.join(application.Path, "out", "bin", "compilers", "bB"), "Stella");
     }
     GetCompilerVersionAsync() {
         return __awaiter(this, void 0, void 0, function* () {

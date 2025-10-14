@@ -10,10 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SeventyEightHundredBasicContextHelp = void 0;
+const application = require("../application");
 const contextHelpBase_1 = require("./contextHelpBase");
 class SeventyEightHundredBasicContextHelp extends contextHelpBase_1.ContextHelpBase {
     constructor() {
-        super("7800basic", "https://randomterrain.com/7800basic.html");
+        super(application.SeventyEightHundredBasicLanguageId, "https://randomterrain.com/7800basic.html");
     }
     RegisterAsync(context) {
         return __awaiter(this, void 0, void 0, function* () {

@@ -53,7 +53,6 @@ export const IsMacOS: boolean = (os.platform() === 'darwin');
 export const Is32Bit: boolean = (os.arch() === 'x32');
 export const Is64Bit: boolean = (os.arch() === 'x64');
 export const IsMacOSArm: boolean = (os.platform() === 'darwin' && os.arch() === 'arm64')
-export const EnvironmentSummary: string = `Operating System: ${(IsWindows ? "Windows" : IsLinux ? "Linux" : IsMacOS ? "MacOS" : "Unknown")} (${OSArch}), VSCode Version: ${vscode.version}`;
 // -------------------------------------------------------------------------------------
 // Extension
 // -------------------------------------------------------------------------------------
@@ -66,6 +65,10 @@ export const DisplayName: string = vscode.extensions.getExtension(Id)!.packageJS
 export const Description: string = vscode.extensions.getExtension(Id)!.packageJSON.description;
 export const PreferencesSettingsExtensionPath: string = `${(IsMacOS ? "Code" : "File")} -> Preferences -> Settings -> Extensions -> ${DisplayName}`;
 export const ChangeLogUri: vscode.Uri = vscode.Uri.parse(`https://marketplace.visualstudio.com/items/${Id}/changelog`);
+// -------------------------------------------------------------------------------------
+// ENVIRONMENT
+// -------------------------------------------------------------------------------------
+export const EnvironmentSummary: string = `Operating System: ${(IsWindows ? "Windows" : IsLinux ? "Linux" : IsMacOS ? "MacOS" : "Unknown")} (${OSArch}), VSCode: v${vscode.version}, ${DisplayName}: v${Version}`;
 export const SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE = 0.37;
 export const BATARIBASIC_WASMTIME_RELEASE = 1.9;
 // -------------------------------------------------------------------------------------
@@ -389,7 +392,7 @@ export async function ShowStartupMessagesAsync(): Promise<void> {
 					// Show changelog
 					vscode.env.openExternal(ChangeLogUri);
 				} 
-				else if (selection = dontShowMeThisMessage) {
+				else if (selection === dontShowMeThisMessage) {
 					// Disable
 					configuration.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
 				}

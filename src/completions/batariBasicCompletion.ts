@@ -1,5 +1,6 @@
 "use strict";
 import * as vscode from 'vscode';
+import * as application from '../application';
 import { CompletionBase } from './completionBase';
 
 export class BatariBasicCompletion extends CompletionBase {
@@ -7,7 +8,7 @@ export class BatariBasicCompletion extends CompletionBase {
     //private _keywords: vscode.CompletionItem[] = [];
 
     constructor() {
-        super("batariBasic");
+        super(application.BatariBasicLanguageId);
     }
 
     public async RegisterAsync(context: vscode.ExtensionContext): Promise<void> {

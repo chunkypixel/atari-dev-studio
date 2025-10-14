@@ -1,9 +1,11 @@
 "use strict";
+import * as application from '../application';
 import { FoldingBase } from './foldingBase';
 
 export class BatariBasicFolding extends FoldingBase {
     
     constructor() {
-        super("batariBasic", ";[\\s]*#region[\\s]*(.*)", ";[\\s]*#endregion");
+        super(application.BatariBasicLanguageId, 
+            ";[\\s]*#region[\\s]*(.*)", ";[\\s]*#endregion");
     }
 }

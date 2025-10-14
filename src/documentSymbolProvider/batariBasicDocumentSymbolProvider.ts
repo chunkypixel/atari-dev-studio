@@ -1,9 +1,10 @@
 "use strict";
+import * as application from '../application';
 import { DocumentSymbolProviderBase } from './documentSymbolProviderBase';
 
 export class BatariBasicDocumentSymbolProvider extends DocumentSymbolProviderBase {
     
     constructor() {
-        super("batariBasic");
+        super(application.BatariBasicLanguageId);
     }
 }

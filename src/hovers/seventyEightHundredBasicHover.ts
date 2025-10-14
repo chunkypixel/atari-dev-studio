@@ -1,11 +1,12 @@
 "use strict";
 import * as vscode from 'vscode';
+import * as application from '../application';
 import { HoverBase } from './hoverBase';
 
 export class SeventyEightHundredBasicHover extends HoverBase {
 
     constructor() {
-        super("7800basic");
+        super(application.SeventyEightHundredBasicLanguageId);
     }
 
     public async RegisterAsync(context: vscode.ExtensionContext): Promise<void> {

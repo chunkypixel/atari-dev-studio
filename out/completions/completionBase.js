@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CompletionBase = void 0;
 const vscode = require("vscode");
 const path = require("path");
+const application = require("../application");
 const filesystem = require("../filesystem");
 const configuration = require("../configuration");
 class CompletionBase {
@@ -70,9 +71,9 @@ class CompletionBase {
                     const items = [];
                     // Create
                     // NOTE: sortText ensures an expected order rather than alphabetical
-                    let seventyEightHundredBasicCompletion = new vscode.CompletionItem("7800basic", vscode.CompletionItemKind.Enum);
+                    let seventyEightHundredBasicCompletion = new vscode.CompletionItem(application.SeventyEightHundredBasicLanguageId, vscode.CompletionItemKind.Enum);
                     seventyEightHundredBasicCompletion.sortText = "";
-                    let batariBasicCompletion = new vscode.CompletionItem("batariBasic", vscode.CompletionItemKind.Enum);
+                    let batariBasicCompletion = new vscode.CompletionItem(application.BatariBasicLanguageId, vscode.CompletionItemKind.Enum);
                     batariBasicCompletion.sortText = "b";
                     let makeCompletion = new vscode.CompletionItem("make", vscode.CompletionItemKind.Enum);
                     makeCompletion.sortText = "c";

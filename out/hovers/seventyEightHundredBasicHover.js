@@ -10,10 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SeventyEightHundredBasicHover = void 0;
+const application = require("../application");
 const hoverBase_1 = require("./hoverBase");
 class SeventyEightHundredBasicHover extends hoverBase_1.HoverBase {
     constructor() {
-        super("7800basic");
+        super(application.SeventyEightHundredBasicLanguageId);
     }
     RegisterAsync(context) {
         const _super = Object.create(null, {

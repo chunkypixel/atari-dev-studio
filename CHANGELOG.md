@@ -4,9 +4,10 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.11.2
 
- * Added Operating System and VSCode version information to output log
+ * Added Operating System, VSCode and ADS version information to output log
  * Cleanup areas of the compilation process including message wording and version validations
- * Updated minimum VSCode requirements to v1.103.2 or better
+ * Update Custom Folder transposition to also check for an existing folder entry (incase of profile syncing)
+ * Updated minimum VSCode requirements to v1.103.2 and removed old system dependency packages not required
 
 ## 0.11.1
 

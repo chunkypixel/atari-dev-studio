@@ -1,12 +1,13 @@
 "use strict";
+import * as application from '../application';
 import { ExtensionContext, Uri } from 'vscode';
 import { ContextHelpBase } from './contextHelpBase';
 
 export class SeventyEightHundredBasicContextHelp extends ContextHelpBase {
    
     constructor() {
-        super("7800basic",
-        "https://randomterrain.com/7800basic.html");
+        super(application.SeventyEightHundredBasicLanguageId,
+            "https://randomterrain.com/7800basic.html");
     }
 
     public async RegisterAsync(context: ExtensionContext): Promise<void> {

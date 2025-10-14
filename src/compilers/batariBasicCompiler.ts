@@ -10,7 +10,7 @@ export class BatariBasicCompiler extends CompilerBase {
     
     constructor() {
         // NOTE: '.ace' CompiledExtension requires all existing extensions to be stripped (-)
-        super("batariBasic",
+        super(application.BatariBasicLanguageId,
                 "batari Basic",
                 [".bas",".bb"],
                 [".bin","-.ace"],[".bin"],

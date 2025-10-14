@@ -9,7 +9,7 @@ import { CompilerBase } from "./compilerBase";
 export class SeventyEightHundredBasicCompiler extends CompilerBase {
 
     constructor() {
-        super("7800basic",
+        super(application.SeventyEightHundredBasicLanguageId,
                 "7800basic",
                 [".bas",".78b"],
                 [".a78",".bin",".bin.CC2",".bin.versa"],[".a78",".bin"],

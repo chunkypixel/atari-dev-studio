@@ -65,7 +65,7 @@ class WelcomePage {
             this.currentPanel.webview.onDidReceiveMessage(message => {
                 switch (message.command) {
                     case 'openNewFile':
-                        this.openNewFileDocument("batariBasic");
+                        this.openNewFileDocument(application.BatariBasicLanguageId);
                         return;
                     case 'openFolder':
                         const options = {

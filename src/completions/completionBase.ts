@@ -1,6 +1,7 @@
 "use strict";
 import * as vscode from 'vscode';
 import * as path from 'path';
+import * as application from '../application';
 import * as filesystem from '../filesystem';
 import * as configuration from '../configuration';
 
@@ -74,9 +75,9 @@ export abstract class CompletionBase {
                     const items: vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem>> = [];
                     // Create
                     // NOTE: sortText ensures an expected order rather than alphabetical
-                    let seventyEightHundredBasicCompletion = new vscode.CompletionItem("7800basic", vscode.CompletionItemKind.Enum);
+                    let seventyEightHundredBasicCompletion = new vscode.CompletionItem(application.SeventyEightHundredBasicLanguageId, vscode.CompletionItemKind.Enum);
                     seventyEightHundredBasicCompletion.sortText = "";
-                    let batariBasicCompletion = new vscode.CompletionItem("batariBasic", vscode.CompletionItemKind.Enum);
+                    let batariBasicCompletion = new vscode.CompletionItem(application.BatariBasicLanguageId, vscode.CompletionItemKind.Enum);
                     batariBasicCompletion.sortText = "b";
                     let makeCompletion = new vscode.CompletionItem("make", vscode.CompletionItemKind.Enum);
                     makeCompletion.sortText = "c";

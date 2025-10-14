@@ -1,11 +1,12 @@
 "use strict";
 import * as vscode from 'vscode';
+import * as application from '../application';
 import { HoverBase } from './hoverBase';
 
 export class BatariBasicHover extends HoverBase {
 
     constructor() {
-        super("batariBasic");
+        super(application.BatariBasicLanguageId);
     }
 
     public async RegisterAsync(context: vscode.ExtensionContext): Promise<void> {

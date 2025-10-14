@@ -69,7 +69,7 @@ export class WelcomePage implements vscode.Disposable {
             message => {
                 switch (message.command) {
                     case 'openNewFile':
-                        this.openNewFileDocument("batariBasic");
+                        this.openNewFileDocument(application.BatariBasicLanguageId);
                         return;
 
                     case 'openFolder':
