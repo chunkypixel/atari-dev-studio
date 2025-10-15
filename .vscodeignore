@@ -7,3 +7,4 @@ NOTES.txt
 OPENVSXRegistry.md
 tsconfig.json
 tslint.json
+**/Makefile
