@@ -73,6 +73,10 @@ class SamplesPage {
                     yield openSampleInFolder(context, cardItems[cardIndex]);
                 }
             }));
+            // Capture dispose
+            this.currentPanel.onDidDispose(() => {
+                this.currentPanel = undefined;
+            }, null);
         });
     }
 }

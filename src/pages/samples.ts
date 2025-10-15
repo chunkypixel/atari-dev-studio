@@ -77,6 +77,14 @@ export class SamplesPage implements vscode.Disposable {
             }
         );
 
+        // Capture dispose
+        this.currentPanel.onDidDispose(
+            () => {
+                this.currentPanel = undefined;
+            },
+            null
+        );
+
     }
 }
 
