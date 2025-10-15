@@ -1,0 +1,353 @@
+;RMTA - This line is required for 7800basic autodetection. Don't remove.
+; #### Frogger.rmta - converted by 7800rmt2asm 0.1 Jun  4 2023 10:24:34
+
+.RMTSTART SET .
+
+
+ ; #### RMT header...
+   .byte "RMT4"              ; magic
+   .byte $40             ; tracklen
+   .byte $06             ; song speed
+   .byte $01             ; player freq
+   .byte $01             ; format version number
+   .word (.RMTSTART+$0010)   ; pointer to instrument pointers
+   .word (.RMTSTART+$0018)   ; pointer to track pointers, lo
+   .word (.RMTSTART+$0052)   ; pointer to track pointers, hi
+   .word (.RMTSTART+$0d41)   ; pointer to song
+
+ ; #### Instrument Pointer Table...
+   .word (.RMTSTART+$008c) , (.RMTSTART+$00d5) , (.RMTSTART+$00e5) , (.RMTSTART+$010a) 
+
+ ; #### Track Pointer Table, Lo...
+ .byte <(.RMTSTART+$0153)
+ .byte <(.RMTSTART+$017a)
+ .byte <(.RMTSTART+$01a7)
+ .byte <(.RMTSTART+$01c0)
+ .byte <(.RMTSTART+$01d8)
+ .byte <(.RMTSTART+$01f3)
+ .byte <(.RMTSTART+$020d)
+ .byte <(.RMTSTART+$0221)
+ .byte <(.RMTSTART+$024f)
+ .byte <(.RMTSTART+$027b)
+ .byte <(.RMTSTART+$02a5)
+ .byte <(.RMTSTART+$02d1)
+ .byte <(.RMTSTART+$02e7)
+ .byte <(.RMTSTART+$0300)
+ .byte <(.RMTSTART+$0319)
+ .byte <(.RMTSTART+$033f)
+ .byte <(.RMTSTART+$0363)
+ .byte <(.RMTSTART+$0380)
+ .byte <(.RMTSTART+$03ab)
+ .byte <(.RMTSTART+$03db)
+ .byte <(.RMTSTART+$040b)
+ .byte <(.RMTSTART+$043b)
+ .byte <(.RMTSTART+$046b)
+ .byte <(.RMTSTART+$0496)
+ .byte <(.RMTSTART+$04a3)
+ .byte <(.RMTSTART+$04af)
+ .byte <(.RMTSTART+$0516)
+ .byte <(.RMTSTART+$057d)
+ .byte <(.RMTSTART+$05e4)
+ .byte <(.RMTSTART+$064a)
+ .byte <(.RMTSTART+$0656)
+ .byte <(.RMTSTART+$06eb)
+ .byte <(.RMTSTART+$0752)
+ .byte <(.RMTSTART+$07f6)
+ .byte <(.RMTSTART+$0899)
+ .byte <(.RMTSTART+$093c)
+ .byte <(.RMTSTART+$09de)
+ .byte <(.RMTSTART+$0a81)
+ .byte <(.RMTSTART+$0a97)
+ .byte <(.RMTSTART+$0abc)
+ .byte <(.RMTSTART+$0ae7)
+ .byte <(.RMTSTART+$0b0c)
+ .byte <(.RMTSTART+$0b31)
+ .byte <(.RMTSTART+$0b61)
+ .byte <(.RMTSTART+$0b87)
+ .byte <(.RMTSTART+$0bac)
+ .byte <(.RMTSTART+$0bdc)
+ .byte <(.RMTSTART+$0be2)
+ .byte <(.RMTSTART+$0be8)
+ .byte <(.RMTSTART+$0c00)
+ .byte <(.RMTSTART+$0c10)
+ .byte <(.RMTSTART+$0c20)
+ .byte <(.RMTSTART+$0c4d)
+ .byte <(.RMTSTART+$0c7d)
+ .byte <(.RMTSTART+$0cad)
+ .byte <(.RMTSTART+$0cdd)
+ .byte <(.RMTSTART+$0d0d)
+ .byte <(.RMTSTART+$0d3d)
+
+ ; #### Track Pointer Table, Hi...
+ .byte >(.RMTSTART+$0153)
+ .byte >(.RMTSTART+$017a)
+ .byte >(.RMTSTART+$01a7)
+ .byte >(.RMTSTART+$01c0)
+ .byte >(.RMTSTART+$01d8)
+ .byte >(.RMTSTART+$01f3)
+ .byte >(.RMTSTART+$020d)
+ .byte >(.RMTSTART+$0221)
+ .byte >(.RMTSTART+$024f)
+ .byte >(.RMTSTART+$027b)
+ .byte >(.RMTSTART+$02a5)
+ .byte >(.RMTSTART+$02d1)
+ .byte >(.RMTSTART+$02e7)
+ .byte >(.RMTSTART+$0300)
+ .byte >(.RMTSTART+$0319)
+ .byte >(.RMTSTART+$033f)
+ .byte >(.RMTSTART+$0363)
+ .byte >(.RMTSTART+$0380)
+ .byte >(.RMTSTART+$03ab)
+ .byte >(.RMTSTART+$03db)
+ .byte >(.RMTSTART+$040b)
+ .byte >(.RMTSTART+$043b)
+ .byte >(.RMTSTART+$046b)
+ .byte >(.RMTSTART+$0496)
+ .byte >(.RMTSTART+$04a3)
+ .byte >(.RMTSTART+$04af)
+ .byte >(.RMTSTART+$0516)
+ .byte >(.RMTSTART+$057d)
+ .byte >(.RMTSTART+$05e4)
+ .byte >(.RMTSTART+$064a)
+ .byte >(.RMTSTART+$0656)
+ .byte >(.RMTSTART+$06eb)
+ .byte >(.RMTSTART+$0752)
+ .byte >(.RMTSTART+$07f6)
+ .byte >(.RMTSTART+$0899)
+ .byte >(.RMTSTART+$093c)
+ .byte >(.RMTSTART+$09de)
+ .byte >(.RMTSTART+$0a81)
+ .byte >(.RMTSTART+$0a97)
+ .byte >(.RMTSTART+$0abc)
+ .byte >(.RMTSTART+$0ae7)
+ .byte >(.RMTSTART+$0b0c)
+ .byte >(.RMTSTART+$0b31)
+ .byte >(.RMTSTART+$0b61)
+ .byte >(.RMTSTART+$0b87)
+ .byte >(.RMTSTART+$0bac)
+ .byte >(.RMTSTART+$0bdc)
+ .byte >(.RMTSTART+$0be2)
+ .byte >(.RMTSTART+$0be8)
+ .byte >(.RMTSTART+$0c00)
+ .byte >(.RMTSTART+$0c10)
+ .byte >(.RMTSTART+$0c20)
+ .byte >(.RMTSTART+$0c4d)
+ .byte >(.RMTSTART+$0c7d)
+ .byte >(.RMTSTART+$0cad)
+ .byte >(.RMTSTART+$0cdd)
+ .byte >(.RMTSTART+$0d0d)
+ .byte >(.RMTSTART+$0d3d)
+
+ ; #### Track+Instrument+Song Data...
+   .byte $0c, $0c, $46, $46, $00, $00, $00, $00, $00, $00, $00, $00, $00, $ff, $0a, $00
+   .byte $ff, $0a, $00, $88, $0a, $00, $77, $0a, $00, $66, $0a, $00, $55, $0a, $00, $44
+   .byte $0a, $00, $44, $0a, $00, $44, $0a, $00, $44, $0a, $00, $44, $0a, $00, $44, $0a
+   .byte $00, $33, $0a, $00, $33, $0a, $00, $22, $0a, $00, $22, $0a, $00, $11, $0a, $00
+   .byte $11, $0a, $00, $11, $0a, $00, $00, $0a, $00, $0c, $0c, $0d, $0d, $00, $00, $00
+   .byte $00, $01, $01, $00, $00, $00, $22, $0a, $00, $0c, $0c, $22, $22, $00, $00, $60
+   .byte $40, $00, $00, $00, $00, $00, $ff, $0a, $00, $ff, $0a, $00, $88, $0a, $00, $77
+   .byte $0a, $00, $66, $0a, $00, $55, $0a, $00, $44, $0a, $00, $44, $0a, $00, $0c, $0c
+   .byte $46, $46, $00, $00, $00, $00, $01, $02, $00, $00, $00, $ff, $0a, $00, $ff, $0a
+   .byte $00, $88, $0a, $00, $77, $0a, $00, $66, $0a, $00, $55, $0a, $00, $44, $0a, $00
+   .byte $44, $0a, $00, $44, $0a, $00, $44, $0a, $00, $44, $0a, $00, $44, $0a, $00, $33
+   .byte $0a, $00, $33, $0a, $00, $22, $0a, $00, $22, $0a, $00, $11, $0a, $00, $11, $0a
+   .byte $00, $11, $0a, $00, $00, $0a, $00, $3f, $06, $d9, $02, $3e, $07, $d6, $02, $fe
+   .byte $d2, $02, $fe, $de, $02, $3e, $07, $dd, $02, $fe, $db, $02, $fe, $d9, $02, $3e
+   .byte $07, $de, $02, $fe, $d6, $02, $fe, $d9, $02, $fe, $d4, $02, $3e, $0b, $3e, $04
+   .byte $d9, $02, $fe, $d9, $02, $fe, $d9, $02, $fe, $d9, $02, $fe, $d6, $02, $fe, $d4
+   .byte $02, $fe, $d2, $02, $3e, $07, $de, $02, $fe, $de, $02, $fe, $de, $02, $fe, $e0
+   .byte $02, $fe, $de, $02, $fe, $dd, $02, $fe, $db, $02, $fe, $d9, $02, $fe, $d6, $02
+   .byte $3e, $07, $d6, $02, $fe, $de, $02, $3e, $07, $d6, $02, $3e, $07, $d9, $02, $fe
+   .byte $d4, $02, $3e, $1b, $3e, $04, $d6, $02, $fe, $d6, $02, $fe, $d7, $02, $fe, $d9
+   .byte $02, $fe, $db, $02, $fe, $dd, $02, $fe, $db, $02, $3e, $23, $d7, $02, $fe, $d7
+   .byte $02, $fe, $d9, $02, $fe, $db, $02, $3e, $07, $dd, $02, $fe, $de, $02, $fe, $dd
+   .byte $02, $3e, $1b, $d9, $02, $3e, $07, $de, $02, $3e, $0f, $dd, $02, $3e, $07, $db
+   .byte $02, $fe, $d9, $02, $fe, $dd, $02, $3e, $07, $db, $02, $3e, $0f, $db, $02, $3e
+   .byte $07, $d9, $02, $3e, $07, $e0, $02, $3e, $07, $de, $02, $3e, $07, $dd, $02, $3e
+   .byte $07, $de, $02, $3e, $1f, $de, $02, $fe, $de, $02, $fe, $e0, $02, $fe, $e2, $02
+   .byte $fe, $de, $02, $fe, $e2, $02, $fe, $e0, $02, $fe, $d9, $02, $fe, $de, $02, $fe
+   .byte $de, $02, $fe, $e0, $02, $fe, $e2, $02, $fe, $de, $02, $3e, $07, $dd, $02, $fe
+   .byte $d9, $02, $fe, $de, $02, $fe, $de, $02, $fe, $e0, $02, $fe, $e2, $02, $fe, $e3
+   .byte $02, $fe, $e2, $02, $fe, $e0, $02, $fe, $de, $02, $fe, $dd, $02, $fe, $d9, $02
+   .byte $fe, $db, $02, $fe, $dd, $02, $fe, $de, $02, $3e, $07, $de, $02, $3e, $07, $db
+   .byte $02, $fe, $dd, $02, $fe, $db, $02, $fe, $d9, $02, $fe, $db, $02, $fe, $dd, $02
+   .byte $fe, $de, $02, $3e, $07, $d9, $02, $fe, $db, $02, $fe, $d9, $02, $fe, $d7, $02
+   .byte $fe, $d6, $02, $3e, $07, $d9, $02, $3e, $07, $db, $02, $fe, $dd, $02, $fe, $db
+   .byte $02, $fe, $d9, $02, $fe, $db, $02, $fe, $dd, $02, $fe, $de, $02, $fe, $db, $02
+   .byte $fe, $d9, $02, $fe, $de, $02, $fe, $dd, $02, $fe, $e0, $02, $fe, $de, $02, $3e
+   .byte $07, $de, $02, $3e, $07, $3e, $1c, $d1, $02, $fe, $d6, $02, $3e, $07, $d6, $02
+   .byte $fe, $d9, $02, $fe, $dd, $02, $3e, $0b, $d1, $02, $fe, $d5, $02, $fe, $d1, $02
+   .byte $fe, $d5, $02, $fe, $d8, $02, $fe, $db, $02, $3e, $0b, $d1, $02, $fe, $d5, $02
+   .byte $3e, $04, $bf, $05, $d6, $02, $fe, $d1, $02, $fe, $d6, $02, $fe, $d9, $02, $fe
+   .byte $dd, $02, $3e, $0b, $d1, $02, $fe, $d6, $02, $3e, $04, $bf, $05, $d5, $02, $fe
+   .byte $d1, $02, $fe, $d5, $02, $fe, $d8, $02, $fe, $db, $02, $3e, $0b, $db, $02, $fe
+   .byte $db, $02, $fe, $db, $02, $fe, $dd, $02, $fe, $db, $02, $fe, $d9, $02, $fe, $d9
+   .byte $02, $bf, $1b, $d8, $02, $fe, $d8, $02, $fe, $d9, $02, $fe, $db, $02, $fe, $dd
+   .byte $02, $3e, $0f, $db, $02, $fe, $d9, $02, $fe, $d8, $02, $fe, $d1, $02, $3e, $07
+   .byte $d5, $02, $fe, $d6, $02, $3e, $07, $3e, $14, $d8, $02, $3e, $07, $da, $02, $fe
+   .byte $dc, $02, $fe, $dd, $02, $3e, $07, $e1, $02, $fe, $df, $02, $fe, $dd, $02, $3e
+   .byte $07, $d8, $02, $fe, $dd, $02, $fe, $dc, $02, $fe, $d8, $02, $3e, $0b, $d1, $02
+   .byte $fe, $d3, $02, $fe, $d5, $02, $fe, $d3, $02, $fe, $d6, $02, $fe, $d5, $02, $fe
+   .byte $d3, $02, $fe, $d1, $02, $fe, $d6, $02, $fe, $d8, $02, $fe, $da, $02, $fe, $d8
+   .byte $02, $fe, $db, $02, $fe, $da, $02, $fe, $d8, $02, $fe, $d6, $02, $fe, $d5, $02
+   .byte $fe, $d8, $02, $fe, $d1, $02, $fe, $d5, $02, $fe, $cc, $02, $fe, $d1, $02, $fe
+   .byte $c9, $02, $fe, $cc, $02, $fe, $d0, $02, $fe, $cc, $02, $fe, $d3, $02, $fe, $d0
+   .byte $02, $fe, $d8, $02, $fe, $d3, $02, $fe, $dc, $02, $fe, $d8, $02, $fe, $dd, $02
+   .byte $fe, $d8, $02, $fe, $d1, $02, $fe, $cc, $02, $fe, $c5, $02, $fe, $c0, $02, $fe
+   .byte $c5, $02, $fe, $c0, $02, $fe, $c0, $02, $fe, $c5, $02, $fe, $ca, $02, $fe, $c5
+   .byte $02, $fe, $ca, $02, $fe, $d1, $02, $fe, $d6, $02, $fe, $dd, $02, $fe, $e2, $02
+   .byte $fe, $e6, $02, $fe, $e9, $02, $fe, $ee, $02, $fe, $e9, $02, $fe, $e6, $02, $fe
+   .byte $e2, $02, $fe, $dd, $02, $fe, $dc, $02, $fe, $da, $02, $fe, $d8, $02, $fe, $da
+   .byte $02, $fe, $dc, $02, $fe, $dd, $02, $fe, $df, $02, $fe, $e2, $02, $fe, $e1, $02
+   .byte $fe, $df, $02, $fe, $dd, $02, $fe, $da, $02, $fe, $d8, $02, $fe, $d5, $02, $fe
+   .byte $d3, $02, $fe, $d1, $02, $fe, $d6, $02, $fe, $d8, $02, $fe, $da, $02, $fe, $dc
+   .byte $02, $fe, $dd, $02, $fe, $df, $02, $fe, $dd, $02, $fe, $da, $02, $fe, $dc, $02
+   .byte $fe, $da, $02, $fe, $d8, $02, $fe, $d6, $02, $fe, $d5, $02, $fe, $d3, $02, $fe
+   .byte $ce, $02, $fe, $d0, $02, $fe, $d1, $02, $3e, $0b, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $ff, $3f, $02, $3d, $00, $3f, $03, $7e, $3f, $02
+   .byte $7e, $bf, $04, $3f, $02, $cd, $07, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $d2, $07, $bf, $04, $3f, $02, $cd, $07, $3f, $03
+   .byte $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e
+   .byte $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f
+   .byte $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03
+   .byte $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e
+   .byte $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f
+   .byte $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $d4, $07, $bf
+   .byte $04, $3f, $02, $cd, $07, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $cf, $07, $bf, $04, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $d1, $07, $bf, $03, $3f, $02
+   .byte $cd, $07, $3f, $03, $7e, $3f, $02, $7e, $bf, $04, $3f, $02, $cd, $07, $3f, $03
+   .byte $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e
+   .byte $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f
+   .byte $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $cf, $07, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $d1, $07
+   .byte $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f
+   .byte $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03
+   .byte $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $bf, $00, $3f
+   .byte $02, $cf, $07, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $cd, $07, $bf, $04, $3f, $02, $3d, $00, $3f, $03, $7e, $3f, $02, $7e
+   .byte $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f
+   .byte $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03
+   .byte $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e
+   .byte $3f, $03, $7e, $3f, $02, $d1, $07, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $ce, $07, $bf, $04, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $d1, $07, $3f, $03, $7e, $3f, $02, $7e
+   .byte $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f
+   .byte $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03
+   .byte $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e
+   .byte $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f
+   .byte $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03
+   .byte $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $cc, $07, $bf, $03, $3f, $02, $7e
+   .byte $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f
+   .byte $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03
+   .byte $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e
+   .byte $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $d1, $07, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $ce, $07, $bf, $03
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $d0, $07
+   .byte $bf, $03, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e
+   .byte $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f
+   .byte $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02
+   .byte $d0, $07, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03
+   .byte $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e
+   .byte $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f
+   .byte $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03
+   .byte $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e
+   .byte $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f, $02, $7e, $3f, $03, $7e, $3f
+   .byte $02, $d1, $07, $bf, $03, $c6, $0a, $3e, $0f, $c3, $0a, $3e, $0f, $c1, $0a, $3e
+   .byte $0f, $c5, $0a, $3e, $07, $c3, $02, $fe, $c5, $02, $fe, $c6, $02, $fe, $ca, $02
+   .byte $fe, $c1, $02, $fe, $ca, $02, $fe, $c6, $02, $fe, $ca, $02, $fe, $c1, $02, $fe
+   .byte $ca, $02, $fe, $c6, $02, $fe, $cb, $02, $fe, $c3, $02, $fe, $cb, $02, $bf, $17
+   .byte $c6, $02, $fe, $ca, $02, $fe, $c1, $02, $fe, $ca, $02, $fe, $c6, $02, $fe, $ca
+   .byte $02, $fe, $c1, $02, $fe, $ca, $02, $fe, $c5, $02, $fe, $c8, $02, $fe, $c1, $02
+   .byte $fe, $c8, $02, $fe, $c3, $02, $fe, $c8, $02, $bf, $17, $c6, $02, $fe, $cb, $02
+   .byte $fe, $c3, $02, $fe, $cb, $02, $fe, $c6, $02, $fe, $cb, $02, $fe, $c3, $02, $fe
+   .byte $cb, $02, $fe, $c8, $02, $fe, $cd, $02, $fe, $c1, $02, $fe, $cd, $02, $bf, $17
+   .byte $c5, $02, $fe, $cb, $02, $fe, $c1, $02, $fe, $cb, $02, $fe, $c5, $02, $fe, $cb
+   .byte $02, $fe, $c1, $02, $fe, $cb, $02, $fe, $c6, $02, $fe, $ca, $02, $fe, $c1, $02
+   .byte $fe, $ca, $02, $bf, $17, $c6, $02, $fe, $ca, $02, $fe, $c1, $02, $fe, $ca, $02
+   .byte $fe, $c6, $02, $fe, $ca, $02, $fe, $c1, $02, $fe, $ca, $02, $fe, $c6, $02, $fe
+   .byte $ca, $02, $fe, $c1, $02, $fe, $ca, $02, $fe, $c6, $02, $fe, $ca, $02, $fe, $c8
+   .byte $02, $fe, $c1, $02, $fe, $c6, $02, $fe, $ca, $02, $fe, $c1, $02, $fe, $ca, $02
+   .byte $fe, $c6, $02, $fe, $cb, $02, $fe, $c3, $02, $fe, $cb, $02, $fe, $c5, $02, $fe
+   .byte $cd, $02, $fe, $c1, $02, $fe, $cd, $02, $fe, $bf, $00, $c6, $02, $fe, $cb, $02
+   .byte $fe, $c3, $02, $fe, $cb, $02, $fe, $c6, $02, $fe, $cb, $02, $fe, $c3, $02, $fe
+   .byte $cb, $02, $fe, $c6, $02, $fe, $ca, $02, $fe, $c1, $02, $fe, $ca, $02, $bf, $17
+   .byte $c6, $02, $fe, $cb, $02, $fe, $c3, $02, $fe, $cb, $02, $fe, $c6, $02, $fe, $cb
+   .byte $02, $fe, $c3, $02, $fe, $cb, $02, $fe, $c5, $02, $fe, $cb, $02, $fe, $c1, $02
+   .byte $fe, $cb, $02, $fe, $c6, $02, $fe, $ca, $02, $fe, $c1, $02, $fe, $ca, $02, $fe
+   .byte $ca, $0a, $3e, $07, $bf, $00, $c5, $0a, $3e, $07, $bf, $00, $c5, $0a, $3e, $07
+   .byte $c5, $0a, $3e, $07, $c5, $0a, $3e, $07, $c5, $0a, $3e, $07, $c3, $0a, $3e, $0f
+   .byte $c3, $0a, $3e, $0f, $c5, $0a, $3e, $0f, $c5, $0a, $3e, $0f, $c3, $0a, $3e, $0f
+   .byte $c5, $0a, $3e, $0f, $ca, $0a, $3e, $13, $c5, $0b, $3e, $0f, $c2, $0a, $3e, $0f
+   .byte $c0, $0a, $3e, $0b, $3e, $04, $c4, $0a, $3e, $07, $c2, $02, $fe, $c4, $02, $fe
+   .byte $c5, $02, $fe, $c9, $02, $fe, $c0, $02, $fe, $c9, $02, $fe, $c5, $02, $fe, $c9
+   .byte $02, $fe, $c0, $02, $fe, $c9, $02, $fe, $c5, $02, $fe, $ca, $02, $fe, $c2, $02
+   .byte $fe, $ca, $02, $fe, $c5, $02, $fe, $ca, $02, $fe, $c2, $02, $fe, $ca, $02, $fe
+   .byte $c5, $02, $fe, $c9, $02, $fe, $c0, $02, $fe, $c9, $02, $fe, $c5, $02, $fe, $c9
+   .byte $02, $fe, $c0, $02, $fe, $c9, $02, $fe, $c4, $02, $fe, $c7, $02, $fe, $c0, $02
+   .byte $fe, $c7, $02, $fe, $c2, $02, $fe, $c7, $02, $fe, $c4, $02, $fe, $c7, $02, $fe
+   .byte $c5, $02, $fe, $c9, $02, $fe, $c0, $02, $fe, $c9, $02, $fe, $c5, $0e, $fe, $c9
+   .byte $02, $fe, $c0, $02, $fe, $c9, $02, $fe, $c5, $02, $fe, $ca, $02, $fe, $c2, $02
+   .byte $fe, $ca, $02, $fe, $c5, $02, $fe, $ca, $02, $fe, $c2, $02, $fe, $ca, $02, $fe
+   .byte $c5, $02, $fe, $ca, $02, $fe, $c2, $02, $fe, $ca, $02, $fe, $c5, $02, $fe, $ca
+   .byte $02, $fe, $c2, $02, $fe, $ca, $02, $fe, $c7, $02, $fe, $cc, $02, $fe, $c0, $02
+   .byte $fe, $cc, $02, $fe, $c7, $02, $fe, $cc, $02, $fe, $c0, $02, $fe, $cc, $02, $fe
+   .byte $c5, $02, $fe, $c9, $02, $fe, $c0, $02, $fe, $c9, $02, $fe, $c5, $02, $fe, $c9
+   .byte $02, $fe, $c0, $02, $fe, $c9, $02, $fe, $c5, $02, $fe, $ca, $02, $fe, $c2, $02
+   .byte $fe, $ca, $02, $fe, $c5, $02, $fe, $ca, $02, $fe, $c2, $02, $fe, $ca, $02, $fe
+   .byte $c4, $02, $fe, $ca, $02, $fe, $c0, $02, $fe, $ca, $02, $fe, $c4, $02, $fe, $ca
+   .byte $02, $fe, $c0, $02, $fe, $ca, $02, $fe, $c5, $02, $fe, $c9, $02, $fe, $c0, $02
+   .byte $fe, $c9, $02, $fe, $ff, $00, $18, $25, $ff, $01, $19, $26, $ff, $02, $1a, $27
+   .byte $ff, $03, $1b, $26, $ff, $04, $1c, $28, $ff, $05, $1b, $26, $ff, $06, $19, $29
+   .byte $ff, $07, $1d, $2a, $ff, $08, $1e, $2b, $ff, $09, $1f, $2c, $ff, $0a, $1f, $2d
+   .byte $ff, $0b, $18, $2e, $ff, $0c, $18, $2f, $ff, $0d, $18, $2e, $ff, $0e, $18, $30
+   .byte $ff, $0f, $18, $31, $ff, $10, $18, $32, $ff, $11, $20, $33, $ff, $12, $21, $34
+   .byte $ff, $13, $22, $35, $ff, $14, $23, $36, $ff, $15, $22, $37, $ff, $16, $24, $38
+   .byte $ff, $17, $17, $39, $17, $fe, $00
+
+   .word (.RMTSTART+$0d41)   ; pointer to song

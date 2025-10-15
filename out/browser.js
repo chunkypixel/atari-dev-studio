@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OpenUrlInBrowser = OpenUrlInBrowser;
+exports.GenerateNonce = GenerateNonce;
 const vscode = require("vscode");
 const open_1 = require("open");
 function OpenUrlInBrowser(url) {
@@ -22,5 +23,12 @@ function OpenUrlInBrowser(url) {
             vscode.window.showErrorMessage(`Failed to open Web Browser. Please check if you have Chrome, Firefox or Edge correctly installed!`);
         }
     });
+}
+function GenerateNonce() {
+    const array = new Uint8Array(16); // 16 bytes for a secure nonce
+    crypto.getRandomValues(array); // Use Web Crypto API
+    // Convert to base64, removing padding and non-alphanumeric characters
+    const base64 = Buffer.from(array).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    return base64;
 }
 //# sourceMappingURL=browser.js.map

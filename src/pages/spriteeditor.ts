@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as filesystem from '../filesystem';
 import * as application from '../application';
+import * as browser from '../browser';
 import fs = require('fs');
 
 export class SpriteEditorPage implements vscode.Disposable {
@@ -47,12 +48,10 @@ export class SpriteEditorPage implements vscode.Disposable {
             // Content
             let startPagePath = vscode.Uri.joinPath(contentUri,'index.html');
             let content = await filesystem.ReadFileAsync(startPagePath.fsPath,'utf-8');
-            let nonce = this.getNonce();
-            
+            let nonce = browser.GenerateNonce();
             // Script
             let scriptJsPath = vscode.Uri.joinPath(contentUri, 'main.js');
             let scriptJsUri = this.currentPanel.webview.asWebviewUri(scriptJsPath);
-
             // Style
             let styleCssPath = vscode.Uri.joinPath(contentUri, 'main.css');
             let styleCssUri = this.currentPanel.webview.asWebviewUri(styleCssPath);
@@ -154,15 +153,6 @@ export class SpriteEditorPage implements vscode.Disposable {
             this.attemptToOpenProjectWindowOnStartup(); 
         }
 
-    }
-
-    private getNonce() {
-        let text = '';
-        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (let i = 0; i < 32; i++) {
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-        }
-        return text;
     }
 
     private replaceContentTag(content: string, tag: string, tagContent: any): string

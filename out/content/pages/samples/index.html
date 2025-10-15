@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${cspSource} 'nonce-${nonce}'; script-src ${cspSource} 'nonce-${nonce}'; img-src ${cspSource} https://picsum.photos https://fastly.picsum.photos; connect-src ${cspSource};">
+    <title>Album Example</title>
+    <link href="${styleCssUri}" rel="stylesheet">
+    <style nonce="${nonce}">
+        .card-title {
+            text-align: left;
+            font-size: 1.0rem;
+            margin-bottom: 0.5rem;
+        }
+        .card-img-top {
+            height: 180px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .card-text {
+            min-height: 72px;
+        }
+        .col {
+            margin-bottom: 1em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container py-5">
+            <div class="text-center">
+                <h1 class="fw-light">Atari Dev Studio Language Samples</h1>
+                <p class="lead text-muted">
+Start coding with <b>7800basic</b> through real examples that cover everything from graphics and sound to variables and data structures, giving you a solid foundation in Atari console development. Perfect for beginners and intermediate coders alike, these examples help you understand the language in action and inspire you to build your own projects.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="py-5">
+            <div class="container">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+
+${cardContent}
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script nonce="${nonce}" src="${scriptJsUri}"></script>
+    <script nonce="${nonce}">
+        // Initialize VSCode API
+        const vscode = acquireVsCodeApi();
+        // Add click event listeners to all View buttons
+        document.querySelectorAll('.btn-view').forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent default anchor behavior
+                const id = button.getAttribute('data-id');
+                // Send message to VSCode extension
+                vscode.postMessage({
+                    command: 'viewButtonClicked',
+                    id: id
+                });
+            });
+        });
+    </script>
+</body>
+</html>

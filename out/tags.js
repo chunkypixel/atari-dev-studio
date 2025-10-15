@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ScanDocumentForADSLanguageTag = ScanDocumentForADSLanguageTag;
 exports.ScanDocumentForADSCompilerTag = ScanDocumentForADSCompilerTag;
 const vscode = require("vscode");
+const application = require("./application");
 const configuration = require("./configuration");
 function ScanDocumentForADSLanguageTag(document) {
     // prepare
@@ -14,16 +15,36 @@ function ScanDocumentForADSLanguageTag(document) {
         const languageToken = match[1].toLowerCase();
         vscode.languages.getLanguages().then((languages) => {
             // search for wanted language
-            const matchingLanguage = languages.find((lang) => lang.toLowerCase() === languageToken.toLowerCase());
+            const matchingLanguage = languages.find((language) => language.toLowerCase() === languageToken.toLowerCase());
             // is the language available?
             if (matchingLanguage) {
                 // yes!
                 vscode.languages.setTextDocumentLanguage(document, matchingLanguage);
+                return;
             }
             ;
         });
     }
     ;
+    // Is in the samples folder? if so lets force it based on the subfolder
+    const documentFileName = document.fileName.toLowerCase();
+    if (documentFileName.includes("samples")) {
+        // Prepare
+        let matchingLanguage = '';
+        // Validate
+        if (documentFileName.includes(application.SeventyEightHundredBasicLanguageId)) {
+            matchingLanguage = application.SeventyEightHundredBasicLanguageId;
+        }
+        else if (documentFileName.includes(application.BatariBasicLanguageId)) {
+            matchingLanguage = application.BatariBasicLanguageId;
+        }
+        // is the language available?        
+        if (matchingLanguage) {
+            // yes!
+            vscode.languages.setTextDocumentLanguage(document, matchingLanguage);
+            return;
+        }
+    }
     // if tag or language not found let the system choose
 }
 function ScanDocumentForADSCompilerTag(languageId, document) {

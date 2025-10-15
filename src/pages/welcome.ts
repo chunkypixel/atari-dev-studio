@@ -41,7 +41,7 @@ export class WelcomePage implements vscode.Disposable {
             // Content
             let startPagePath = vscode.Uri.joinPath(contentUri, 'index.html');
             let content = await filesystem.ReadFileAsync(startPagePath.fsPath, 'utf-8');
-            let nonce = this.getNonce();
+            let nonce = browser.GenerateNonce();
             
             // Script
             let scriptJsPath = vscode.Uri.joinPath(contentUri, 'script.js');
@@ -125,15 +125,6 @@ export class WelcomePage implements vscode.Disposable {
             },
             null
         );
-    }
-
-    private getNonce() {
-        let text = '';
-        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (let i = 0; i < 32; i++) {
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-        }
-        return text;
     }
 
     private replaceContentTag(content: string, tag: string, tagContent: any) : string

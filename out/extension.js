@@ -21,6 +21,7 @@ const tags = require("./tags");
 const configuration = require("./configuration");
 const welcome_1 = require("./pages/welcome");
 const spriteeditor_1 = require("./pages/spriteeditor");
+const samples_1 = require("./pages/samples");
 require("./statusbar");
 // Activation Events
 // https://code.visualstudio.com/api/references/activation-events
@@ -34,6 +35,7 @@ function activate(context) {
         // Pages
         let welcomePage = new welcome_1.WelcomePage();
         let spriteEditorPage = new spriteeditor_1.SpriteEditorPage();
+        let samplesPage = new samples_1.SamplesPage();
         // Use the console to output diagnostic information (console.log) and errors (console.error)
         // This line of code will only be executed once when your extension is activated
         // Advise in compiler window we have started
@@ -52,6 +54,11 @@ function activate(context) {
         const openSpriteEditorPage = vscode.commands.registerCommand('extension.openSpriteEditorPage', () => {
             console.log('User activated command "extension.openSpriteEditorPage"');
             spriteEditorPage.openPage(context);
+        });
+        // Samples
+        const openSamplesPage = vscode.commands.registerCommand('extension.openSamplesPage', () => {
+            console.log('User activated command "extension.openSamplesPage"');
+            samplesPage.openPage(context);
         });
         // 2600 editors
         const openPlayerPalPage = vscode.commands.registerCommand('extension.openPlayerPalPage', () => {

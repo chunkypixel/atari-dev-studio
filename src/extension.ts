@@ -8,6 +8,7 @@ import * as tags from "./tags";
 import * as configuration from "./configuration";
 import { WelcomePage } from './pages/welcome';
 import { SpriteEditorPage } from './pages/spriteeditor';
+import { SamplesPage } from './pages/samples';
 import './statusbar';
 
 // Activation Events
@@ -22,6 +23,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Pages
 	let welcomePage = new WelcomePage();
 	let spriteEditorPage = new SpriteEditorPage();
+	let samplesPage = new SamplesPage();
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
@@ -44,6 +46,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	const openSpriteEditorPage = vscode.commands.registerCommand('extension.openSpriteEditorPage', () => {
 		console.log('User activated command "extension.openSpriteEditorPage"');
 		spriteEditorPage.openPage(context);
+	});
+	// Samples
+	const openSamplesPage = vscode.commands.registerCommand('extension.openSamplesPage', () => {
+		console.log('User activated command "extension.openSamplesPage"');
+		samplesPage.openPage(context);
 	});
 	// 2600 editors
 	const openPlayerPalPage = vscode.commands.registerCommand('extension.openPlayerPalPage', () => {

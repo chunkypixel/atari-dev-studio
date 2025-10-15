@@ -14,6 +14,7 @@ const vscode = require("vscode");
 const path = require("path");
 const filesystem = require("../filesystem");
 const application = require("../application");
+const browser = require("../browser");
 class SpriteEditorPage {
     constructor() {
         this.currentPanel = undefined;
@@ -48,7 +49,7 @@ class SpriteEditorPage {
                 // Content
                 let startPagePath = vscode.Uri.joinPath(contentUri, 'index.html');
                 let content = yield filesystem.ReadFileAsync(startPagePath.fsPath, 'utf-8');
-                let nonce = this.getNonce();
+                let nonce = browser.GenerateNonce();
                 // Script
                 let scriptJsPath = vscode.Uri.joinPath(contentUri, 'main.js');
                 let scriptJsUri = this.currentPanel.webview.asWebviewUri(scriptJsPath);
@@ -128,14 +129,6 @@ class SpriteEditorPage {
                 this.attemptToOpenProjectWindowOnStartup();
             }
         });
-    }
-    getNonce() {
-        let text = '';
-        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (let i = 0; i < 32; i++) {
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-        }
-        return text;
     }
     replaceContentTag(content, tag, tagContent) {
         tag = `%${tag}%`;
