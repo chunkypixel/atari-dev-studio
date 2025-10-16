@@ -135,7 +135,7 @@
 			"patterns": [
 			{
 				"name": "keyword.control.bb",
-				"match": "\\b(asm|callmacro|collision|const|dec|def|dim|else|end|for|gosub|goto|if|include|includesfile|inline|let|macro|next|on|pop|rand|reboot|return|sdata|set|sread|step|then|to|vblank)\\b",
+				"match": "\\b(asm|callmacro|collision|const|dec|def|dim|else|end|for|gosub|goto|if|include|includesfile|inline|let|macro|next|on|pop|rand|rerand|reboot|return|sdata|set|sread|step|then|to|vblank)\\b",
 				"comment": "control keywords"
 			},
 			{
