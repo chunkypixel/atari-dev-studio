@@ -63,6 +63,7 @@ Updates are regularly provided and you will be notified via VS Code when one has
 ### Compiling your program
 To display the available extension features press **CTRL+SHIFT+P** to display the **Command Palette**. From the **Command Palette** prompt type **ads** to short-list the available options:
 * ads: Open the Welcome page
+* ads: Open the Learning Center
 * ads: Compile source code (Shift+F5)
 * ads: Compile source code and run in emulator (F5)
 * ads: Kill build process
@@ -114,6 +115,7 @@ Prefer using scripts to build your dasm games? If you have chosen to override th
 Apart from using the **Command Palette** to select compilation, there are a number of short-cut buttons on the **Status Bar** allowing you to:
 * Display the extension version (might be useful at times)
 * Open Welcome page
+* Open the Learning Center
 * Compile source code (Shift+F5)
 * Compile source code and launch [via emulator or cart] (F5)
 * Open Sprite Editor
@@ -153,6 +155,14 @@ NOTE: from version 0.97 onwards I have attempted to rectify this issue with an i
 
 ### Debugging the extension
 During the development phase of the extension I've added some developer output to assist with any issues that may appear.  To view this output, open the VS Code **Developer Tools** by selecting **Help -> Toggle Developer Tools** from the menu, and in the debugger window ensure the **Console** tab is activated.  This information may help identify the area where the extension is failing to process as expected.
+
+### Learning Center
+
+Atari Dev Studio includes a learning center which provides access to all the Samples provided by 7800basic (batari Basic to follow).  
+
+![Learning Center](images/ataridevstudio-learningcenter.png)
+
+> Note: these samples will be replaced on each upgrade so DO NOT code within them!! Just open another copy of VSCode and transpose to your code if required. 
 
 ## Known Issues
 There are currently no known feature issues but if you find a problem please raise an issue on [GitHub](https://github.com/chunkypixel/atari-dev-studio/issues) or contact [mksmith](http://atariage.com/forums/user/66583-mksmith/) at the AtariAge community.
