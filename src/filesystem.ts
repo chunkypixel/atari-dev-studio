@@ -1,6 +1,7 @@
 "use strict";
 import * as vscode from 'vscode';
 import * as application from './application';
+import * as path from 'path';
 import * as fs from 'fs';
 
 export function FileExistsAsync(path: string): Promise<boolean> {
@@ -103,4 +104,8 @@ export function WorkspaceFolder(): string {
         return vscode.workspace.workspaceFolders[0].uri.fsPath;
     }
     return "";
+}
+
+export function GetFileExtension(uri: vscode.Uri): string {
+    return path.extname(uri.fsPath);
 }

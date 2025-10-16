@@ -10,8 +10,10 @@ exports.ChModAsync = ChModAsync;
 exports.ReadFileAsync = ReadFileAsync;
 exports.WriteFileAsync = WriteFileAsync;
 exports.WorkspaceFolder = WorkspaceFolder;
+exports.GetFileExtension = GetFileExtension;
 const vscode = require("vscode");
 const application = require("./application");
+const path = require("path");
 const fs = require("fs");
 function FileExistsAsync(path) {
     console.log('debugger:filesystem.FileExistsAsync PATH:' + path);
@@ -103,5 +105,8 @@ function WorkspaceFolder() {
         return vscode.workspace.workspaceFolders[0].uri.fsPath;
     }
     return "";
+}
+function GetFileExtension(uri) {
+    return path.extname(uri.fsPath);
 }
 //# sourceMappingURL=filesystem.js.map

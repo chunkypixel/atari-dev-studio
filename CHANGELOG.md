@@ -4,7 +4,7 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.11.3
 
- * Added Language Samples explorer (current 7800basic)
+ * Added Learning Center (currenty 7800basic).
 
 ## 0.11.2
 

@@ -1,23 +1,23 @@
 [
     {
         "Title": "Adventurer",
-        "Image": "https://picsum.photos/300/180?random=",
-        "Description": "Learn how to display a screen using alphadata with tilemaps and controller a player character using the joystick.",
+        "Image": "img/atari7800.consoleandgames.jpg",
+        "Description": "Learn how to display a screen using alphadata with tilemaps and control a player character using the joystick.",
         "Folder": "samples/7800basic/adventurer",
         "File": "adventurer.bas",
         "Language": "7800basic"
     },
     {
         "Title": "AtariVox Speech",
-        "Image": "https://picsum.photos/300/180?random=",
-        "Description": "Lean how to add speech using the AtariVox to your game.",
+        "Image": "img/atari7800.atarivox.jpg",
+        "Description": "Learn how to add speech using the AtariVox to your game.",
         "Folder": "samples/7800basic/atarivoxspeech",
         "File": "atarivoxspeech.bas",
         "Language": "7800basic"
     },
     {
         "Title": "Backup",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "7800basic has it's own built-in source-code backup feature.",
         "Folder": "samples/7800basic/backuptest",
         "File": "backuptest.bas",
@@ -25,15 +25,15 @@
     },
     {
         "Title": "Banksets",
-        "Image": "https://picsum.photos/300/180?random=",
-        "Description": "Banksets offers the ability to integrate an incredible amout of graphics into your game.",
+        "Image": "img/atari7800.consoleandgames.jpg",
+        "Description": "Banksets offers the ability to integrate an incredible amount of graphics into your game.",
         "Folder": "samples/7800basic/banksets",
         "File": "banksets.bas",
         "Language": "7800basic"
     },
     {
         "Title": "Banner Sprites",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn how to use plotbanner to display larger than normal sprites without the hassle of splitting your image.",
         "Folder": "samples/7800basic/banner",
         "File": "banner.bas",
@@ -41,23 +41,23 @@
     },
     {
         "Title": "Box Collisions",
-        "Image": "https://picsum.photos/300/180?random=",
-        "Description": "The 7800 has built-in collision detection but 7800basic includes a function that can assist!",
+        "Image": "img/atari7800.consoleandgames.jpg",
+        "Description": "The 7800 has no built-in collision detection but 7800basic includes a function that can assist!",
         "Folder": "samples/7800basic/boxcollision",
         "File": "boxcollision.bas",
         "Language": "7800basic"
     },
     {
         "Title": "Color Fades",
-        "Image": "https://picsum.photos/300/180?random=",
-        "Description": "Learn to you fade screen colors in and out to help with those fancy transitions.",
+        "Image": "img/atari7800.consoleandgames.jpg",
+        "Description": "Learn how to to fade screen colors in and out to help with those fancy transitions.",
         "Folder": "samples/7800basic/colorfade",
         "File": "colorfade.bas",
         "Language": "7800basic"
     },
     {
         "Title": "Double Buffering",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn about using double-buffering to display more objects on-screen!",
         "Folder": "samples/7800basic/doublebuffer",
         "File": "doublebuffer.bas",
@@ -65,7 +65,7 @@
     },
     {
         "Title": "Driving Controller",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.paddles.jpg",
         "Description": "Learn how to integrate and control your game using the driving controller.",
         "Folder": "samples/7800basic/drivingcontrol",
         "File": "drivingcontrol.bas",
@@ -73,7 +73,7 @@
     },
     {
         "Title": "Eighty-Six Sprites!",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn about using double-buffering to display a full-screen background with a large amount of sprites on-screen at once!",
         "Folder": "samples/7800basic/eightysix",
         "File": "eightysix.bas",
@@ -81,7 +81,7 @@
     },
     {
         "Title": "Font Check",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn how to display a large amount of text on-scren using RAM storage, alphadata and the plotmap functions.",
         "Folder": "samples/7800basic/fontcheck",
         "File": "fontcheck.bas",
@@ -89,15 +89,15 @@
     },
     {
         "Title": "Hello World!",
-        "Image": "https://picsum.photos/300/180?random=",
-        "Description": "The obligitory Hello World example! Learn how to display text on-screen.",
+        "Image": "img/atari7800.consoleandgames.jpg",
+        "Description": "The obligatory Hello World example! Learn how to display text on-screen.",
         "Folder": "samples/7800basic/helloworld",
         "File": "helloworld.bas",
         "Language": "7800basic"
     },
     {
         "Title": "Hi Score Table",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn how to integrate hi score support and display the generic hi score table.",
         "Folder": "samples/7800basic/hiscoretable",
         "File": "hiscoretable.bas",
@@ -105,7 +105,7 @@
     },
     {
         "Title": "Keypad Controller",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.gamepad.jpg",
         "Description": "Learn how to integrate and control your game using the keypad controller.",
         "Folder": "samples/7800basic/keypadcontrol",
         "File": "keypadcontrol.bas",
@@ -113,7 +113,7 @@
     },
     {
         "Title": "Mega7800 Controller",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.mega7800.jpg",
         "Description": "Learn how to integrate and control your game using the Mega7800 adapter and its multitude of compatible controllers.",
         "Folder": "samples/7800basic/mega7800controllers",
         "File": "mega7800controllers.bas",
@@ -121,15 +121,15 @@
     },
     {
         "Title": "Mouse Controller",
-        "Image": "https://picsum.photos/300/180?random=",
-        "Description": "Learn how to integrate and control your game using controllers such as mice and trakballs.",
+        "Image": "img/atari7800.trakball.jpg",
+        "Description": "Learn how to integrate and control your game using controllers such as trak-balls and mice.",
         "Folder": "samples/7800basic/mousedemo",
         "File": "mousedemo.bas",
         "Language": "7800basic"
     },
     {
         "Title": "Multi-Button Controller",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.mega7800.jpg",
         "Description": "Learn how to integrate and detect both the Mega7800 and SNES2Atari adapters dynamically.",
         "Folder": "samples/7800basic/multibuttoncontrollers",
         "File": "multibuttoncontrollers.bas",
@@ -137,7 +137,7 @@
     },
     {
         "Title": "Multi-Sprite",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn how to display many sprites on-screen without using double-buffering.",
         "Folder": "samples/7800basic/multisprite",
         "File": "multisprite.bas",
@@ -145,7 +145,7 @@
     },
     {
         "Title": "101!",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn about using double-buffering to display a huge amount of sprites on-screen at once!",
         "Folder": "samples/7800basic/onehundredandone",
         "File": "onehundredandone.bas",
@@ -153,7 +153,7 @@
     },
     {
         "Title": "Plotmapfile",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn how to incorporate and display a Tiled map in your game.",
         "Folder": "samples/7800basic/plotmapfile",
         "File": "plotmapfile.bas",
@@ -161,7 +161,7 @@
     },
     {
         "Title": "Pokey",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn the basics of how to create and play music using the Pokey.",
         "Folder": "samples/7800basic/pokey",
         "File": "pokey.bas",
@@ -169,7 +169,7 @@
     },
     {
         "Title": "RAM Charmap",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn the basics of how to create a simple platformer using charactersets.",
         "Folder": "samples/7800basic/ramcharmap",
         "File": "ramcharmap.bas",
@@ -177,7 +177,7 @@
     },
     {
         "Title": "RMT RAM with Compression Playback",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn the basics of how to compress and decompress RMT tunes into RAM for playback.",
         "Folder": "samples/7800basic/rmtramcompressiondemo",
         "File": "rmtramcompressiondemo.bas",
@@ -185,7 +185,7 @@
     },
     {
         "Title": "RMT RAM Playback",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn the basics of how to copy RMT tunes into RAM for playback.",
         "Folder": "samples/7800basic/rmtramdemo",
         "File": "rmtramdemo.bas",
@@ -193,15 +193,15 @@
     },
     {
         "Title": "RMT ROM Playback",
-        "Image": "https://picsum.photos/300/180?random=",
-        "Description": "LLearn the basics of including and playing multiple RMT tunes directly out of ROM.",
+        "Image": "img/atari7800.consoleandgames.jpg",
+        "Description": "Learn the basics of including and playing multiple RMT tunes directly out of ROM.",
         "Folder": "samples/7800basic/rmtromdemo",
         "File": "rmtromdemo.bas",
         "Language": "7800basic"
     },
     {
         "Title": "Rotational Controller",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.paddles.jpg",
         "Description": "Learn how to integrate and control your game using rotational controllers such as paddles, driving controls and mice.",
         "Folder": "samples/7800basic/rotationalcontrols",
         "File": "rotationalcontrols.bas",
@@ -209,15 +209,15 @@
     },
     {
         "Title": "Screen Safe Rendering",
-        "Image": "https://picsum.photos/300/180?random=",
-        "Description": "Adjusting the vertical height of your game to bigger than the default 192 pixels? This can have implications and how you game will display.",
+        "Image": "img/atari7800.consoleandgames.jpg",
+        "Description": "Adjusting the vertical height of your game to bigger than the default 192 pixels? This can have implications for how your game will display.",
         "Folder": "samples/7800basic/screensafe",
         "File": "screensafe.bas",
         "Language": "7800basic"
     },
     {
         "Title": "Simple",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "A very simple program showing you how to move a happy face around the screen using a joystick.",
         "Folder": "samples/7800basic/simple",
         "File": "simple.bas",
@@ -225,15 +225,15 @@
     },
     {
         "Title": "Smasteroids",
-        "Image": "https://picsum.photos/300/180?random=",
-        "Description": "A simple vertical shooter game which will show you the basic fundementals of movement and collision detection.",
+        "Image": "img/atari7800.consoleandgames.jpg",
+        "Description": "A simple vertical shooter game which will show you the basic fundamentals of player movement and collision detection.",
         "Folder": "samples/7800basic/smasteroids",
         "File": "smasteroids.bas",
         "Language": "7800basic"
     },
     {
         "Title": "SNES Controller",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.snes2atari.jpg",
         "Description": "Learn how to integrate and control your game using the SNES2Atari adapter and a SNES controller.",
         "Folder": "samples/7800basic/snescontrollers",
         "File": "snescontrollers.bas",
@@ -241,7 +241,7 @@
     },
     {
         "Title": "Sound Effects",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "A huge library of TIA sound effects at your fingertips ready to be plugged into your next game.",
         "Folder": "samples/7800basic/soundeffects",
         "File": "soundeffects.bas",
@@ -249,15 +249,15 @@
     },
     {
         "Title": "Space Physics",
-        "Image": "https://picsum.photos/300/180?random=",
-        "Description": "Want to create the next Asteroids or another game requiring thrust machanics? Learn the key concepts and fundamentals here!",
+        "Image": "img/atari7800.consoleandgames.jpg",
+        "Description": "Want to create the next Asteroids or another game requiring thrust mechanics? Learn the key concepts and fundamentals here!",
         "Folder": "samples/7800basic/spacephysics",
         "File": "spacephysics.bas",
         "Language": "7800basic"
     },
     {
         "Title": "Split-Mode (Bottom)",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn how to use the topscreenroutine and bottomscreenroutine to change screen mode and colors on the fly.",
         "Folder": "samples/7800basic/splitmodedemobottom",
         "File": "splitmodedemobottom.bas",
@@ -265,7 +265,7 @@
     },
     {
         "Title": "Split-Mode (Top)",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn how to use the topscreenroutine and bottomscreenroutine to change screen mode and colors on the fly.",
         "Folder": "samples/7800basic/splitmodedemotop",
         "File": "splitmodedemotop.bas",
@@ -273,7 +273,7 @@
     },
     {
         "Title": "Tracker Playback",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn the basics of how to create and play music using the TIA Music Tracker module.",
         "Folder": "samples/7800basic/trackertest",
         "File": "trackertest.bas",
@@ -281,7 +281,7 @@
     },
     {
         "Title": "Under the Hood",
-        "Image": "https://picsum.photos/300/180?random=",
+        "Image": "img/atari7800.consoleandgames.jpg",
         "Description": "Learn how to use assembly code to manipulate the 7800 Display List (DL) directly. Some prior understanding of the DL is recommended. (Advanced)",
         "Folder": "samples/7800basic/underthehood",
         "File": "underthehood.bas",

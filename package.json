@@ -171,8 +171,8 @@
                 "category": "ads"
             },
             {
-                "command": "extension.openSamplesPage",
-                "title": "Open the Language Samples",
+                "command": "extension.openLearningCenterPage",
+                "title": "Open the Learning Center",
                 "icon": "$(preview)",
                 "category": "ads"
             },

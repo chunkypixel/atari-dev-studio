@@ -2,6 +2,7 @@
 import * as vscode from 'vscode';
 import * as application from './application';
 import * as configuration from './configuration';
+import * as filesystem from './filesystem';
 
 export function ScanDocumentForADSLanguageTag(document: vscode.TextDocument) {
     // prepare
@@ -27,16 +28,17 @@ export function ScanDocumentForADSLanguageTag(document: vscode.TextDocument) {
         });
     };
 
-    // Is in the samples folder? if so lets force it based on the subfolder
-    const documentFileName = document.fileName.toLowerCase();
-    if (documentFileName.includes("samples")) {
+    // Is in the samples folder and a language document? if so determine which language to use
+    const fileName = document.fileName.toLowerCase();
+    const fileExtension = filesystem.GetFileExtension(document.uri).toLowerCase();
+    if (fileName.includes("samples") && fileExtension == ".bas") {
         // Prepare
         let matchingLanguage = '';
 
         // Validate
-        if (documentFileName.includes(application.SeventyEightHundredBasicLanguageId)) {
+        if (fileName.includes(application.SeventyEightHundredBasicLanguageId)) {
             matchingLanguage = application.SeventyEightHundredBasicLanguageId
-        } else if (documentFileName.includes(application.BatariBasicLanguageId)) {
+        } else if (fileName.includes(application.BatariBasicLanguageId)) {
             matchingLanguage = application.BatariBasicLanguageId
         }
 
