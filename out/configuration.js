@@ -18,8 +18,8 @@ exports.GetCustomCompilerIdList = GetCustomCompilerIdList;
 exports.GetCustomCompilerFolder = GetCustomCompilerFolder;
 const vscode = require("vscode");
 const application = require("./application");
-// Keys
-//export const OpenSampleFileOnRestartGlobalKey = `configuration.openSampleFileOnRestart`;
+const seventyEightHundredCustomFoldersSection = 'compiler.7800basic.customFolders';
+const batariBasicCustomFoldersSection = 'compiler.batariBasic.customFolders';
 function GetAtariDevStudioConfiguration() {
     return vscode.workspace.getConfiguration(application.Name, null);
 }
@@ -53,17 +53,17 @@ function TransferFolderToCustomFolders(context) {
         const config = GetAtariDevStudioConfiguration();
         // 7800basic
         const existing7800BasicCustomFolder = config.get('compiler.7800basic.folder', null);
-        if (existing7800BasicCustomFolder && !CustomFolderExists(`compiler.${application.SeventyEightHundredBasicLanguageId}.customFolders`, existing7800BasicCustomFolder)) {
+        if (existing7800BasicCustomFolder && !CustomFolderExists(seventyEightHundredCustomFoldersSection, existing7800BasicCustomFolder)) {
             // Add
             const customFolder = { 'Custom': existing7800BasicCustomFolder };
-            yield config.update(`compiler.${application.SeventyEightHundredBasicLanguageId}.customFolders`, customFolder, vscode.ConfigurationTarget.Global);
+            yield config.update(seventyEightHundredCustomFoldersSection, customFolder, vscode.ConfigurationTarget.Global);
         }
         // batariBasic
         const existingBatariBasicFolder = config.get('compiler.batariBasic.folder', null);
-        if (existingBatariBasicFolder && !CustomFolderExists(`compiler.${application.BatariBasicLanguageId}.customFolders`, existingBatariBasicFolder)) {
+        if (existingBatariBasicFolder && !CustomFolderExists(batariBasicCustomFoldersSection, existingBatariBasicFolder)) {
             // Add
             const customFolder = { 'Custom': existingBatariBasicFolder };
-            yield config.update(`compiler.${application.BatariBasicLanguageId}.customFolders`, customFolder, vscode.ConfigurationTarget.Global);
+            yield config.update(batariBasicCustomFoldersSection, customFolder, vscode.ConfigurationTarget.Global);
         }
         // Set
         yield context.globalState.update(`${application.Name}.configuration.transferedFolderToCustomFolders`, true);
@@ -74,9 +74,9 @@ function ValidateCustomFoldersConfigurationEntry(event) {
         // Prepare
         const config = GetAtariDevStudioConfiguration();
         // 7800basic?
-        if (event.affectsConfiguration(`${application.Name}.compiler.${application.SeventyEightHundredBasicLanguageId}.customFolders`)) {
+        if (event.affectsConfiguration(`${application.Name}.${seventyEightHundredCustomFoldersSection}`)) {
             // Prepare
-            const customFolders = config.get(`compiler.${application.SeventyEightHundredBasicLanguageId}.customFolders`, {});
+            const customFolders = config.get(seventyEightHundredCustomFoldersSection, {});
             const updatedCustomFolders = {};
             let isChanged = false;
             // Validate for spaces in Key and remove
@@ -90,14 +90,14 @@ function ValidateCustomFoldersConfigurationEntry(event) {
             }
             // Changed?
             if (isChanged) {
-                yield config.update(`compiler.${application.SeventyEightHundredBasicLanguageId}.customFolders`, updatedCustomFolders, vscode.ConfigurationTarget.Global);
+                yield config.update(seventyEightHundredCustomFoldersSection, updatedCustomFolders, vscode.ConfigurationTarget.Global);
             }
         }
         ;
         // batariBasic?
-        if (event.affectsConfiguration(`${application.Name}.compiler.${application.BatariBasicLanguageId}.customFolders`)) {
+        if (event.affectsConfiguration(`${application.Name}.${batariBasicCustomFoldersSection}`)) {
             // Prepare
-            let customFolders = config.get(`compiler.${application.BatariBasicLanguageId}.customFolders`, {});
+            let customFolders = config.get(batariBasicCustomFoldersSection, {});
             const updatedCustomFolders = {};
             let isChanged = false;
             // Validate for spaces in Key and remove
@@ -111,7 +111,7 @@ function ValidateCustomFoldersConfigurationEntry(event) {
             }
             // Changed?
             if (isChanged) {
-                yield config.update(`compiler.${application.BatariBasicLanguageId}.customFolders`, updatedCustomFolders, vscode.ConfigurationTarget.Global);
+                yield config.update(batariBasicCustomFoldersSection, updatedCustomFolders, vscode.ConfigurationTarget.Global);
             }
         }
         ;
@@ -142,9 +142,9 @@ function GetCustomCompilerIdList(languageId) {
 function GetCustomCompilerFolder(languageId, id) {
     // Prepare
     const config = GetAtariDevStudioConfiguration();
-    const customFolders = config.get(`compiler.${languageId}.customFolders`, {});
     let folder = '';
     // Scan
+    const customFolders = config.get(`compiler.${languageId}.customFolders`, {});
     for (const [key, value] of Object.entries(customFolders)) {
         if (key.toLowerCase() === id.toLowerCase()) {
             folder = value;
@@ -157,9 +157,9 @@ function GetCustomCompilerFolder(languageId, id) {
 function CustomFolderExists(configurationSection, folder) {
     // Prepare
     const config = GetAtariDevStudioConfiguration();
-    const customFolders = config.get(configurationSection, {});
     let result = false;
     // Scan
+    const customFolders = config.get(configurationSection, {});
     for (const [key, value] of Object.entries(customFolders)) {
         if (value.toLowerCase() === folder.toLowerCase()) {
             result = true;

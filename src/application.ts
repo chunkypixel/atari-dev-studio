@@ -348,21 +348,21 @@ export async function ValidateOpenDocumentsOnStartup(context: vscode.ExtensionCo
 
 export async function ShowStartupMessages(context: vscode.ExtensionContext): Promise<void> {
 	// Prepare
-	let config = configuration.GetAtariDevStudioConfiguration();
+	const config = configuration.GetAtariDevStudioConfiguration();
 
 	// Load settings
-	let showNewVersionMessage = config.get<string>(`application.configuration.showNewVersionMessage`);
+	const showNewVersionMessage = config.get<string>(`application.configuration.showNewVersionMessage`);
     let latestVersion = await context.globalState.get(`${Name}.configuration.latestVersion`, undefined)
 
 	// Process?
 	if (!showNewVersionMessage || latestVersion === Version) return;
 
 	// Set latest version
-    await context.globalState.update(`${Name}.configuration.latestVersion`, latestVersion);
+    await context.globalState.update(`${Name}.configuration.latestVersion`, Version);
 
 	// buttons
-	let latestChanges = "Learn more about the latest changes";
-	let dontShowMeThisMessage = "Don't show me this message again";
+	const latestChanges = "Learn more about the latest changes";
+	const dontShowMeThisMessage = "Don't show me this message again";
 
 	// Show prompt
 	await vscode.window.showInformationMessage(`Welcome to the new version of ${DisplayName}`,

@@ -358,22 +358,21 @@ function ValidateOpenDocumentsOnStartup(context) {
         }
     });
 }
-function ShowStartupMessages() {
+function ShowStartupMessages(context) {
     return __awaiter(this, void 0, void 0, function* () {
         // Prepare
-        let config = configuration.GetAtariDevStudioConfiguration();
+        const config = configuration.GetAtariDevStudioConfiguration();
         // Load settings
-        let showNewVersionMessage = config.get(`application.configuration.showNewVersionMessage`);
-        let latestVersion = config.get(`application.configuration.latestVersion`);
+        const showNewVersionMessage = config.get(`application.configuration.showNewVersionMessage`);
+        let latestVersion = yield context.globalState.get(`${exports.Name}.configuration.latestVersion`, undefined);
         // Process?
-        if (!showNewVersionMessage || latestVersion === exports.Version) {
+        if (!showNewVersionMessage || latestVersion === exports.Version)
             return;
-        }
-        // Update latest version
-        config.update(`application.configuration.latestVersion`, exports.Version, vscode.ConfigurationTarget.Global);
+        // Set latest version
+        yield context.globalState.update(`${exports.Name}.configuration.latestVersion`, exports.Version);
         // buttons
-        let latestChanges = "Learn more about the latest changes";
-        let dontShowMeThisMessage = "Don't show me this message again";
+        const latestChanges = "Learn more about the latest changes";
+        const dontShowMeThisMessage = "Don't show me this message again";
         // Show prompt
         yield vscode.window.showInformationMessage(`Welcome to the new version of ${exports.DisplayName}`, latestChanges, dontShowMeThisMessage)
             .then(selection => {

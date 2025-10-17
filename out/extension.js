@@ -142,7 +142,7 @@ function activate(context) {
         yield application.RegisterDefinitionProvidersAsync(context);
         yield application.RegisterReferenceProvidersAsync(context);
         yield application.RegisterCompletionProvidersAsync(context);
-        // Active Documents
+        // Check active documents
         // Transfer old settings
         yield configuration.TransferFolderToCustomFolders(context);
         // Opening a samples folder? (on restart)
@@ -153,7 +153,7 @@ function activate(context) {
         // install on startup (as required)
         yield wasmtime.ValidateAndInstallWasmtime();
         // Show welcome messages
-        yield application.ShowStartupMessages();
+        yield application.ShowStartupMessages(context);
     });
 }
 // this method is called when your extension is deactivated
