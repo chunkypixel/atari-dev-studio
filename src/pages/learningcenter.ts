@@ -75,13 +75,14 @@ export class LearningCenterPage implements vscode.Disposable {
                     switch (message.id) {
                         case application.SeventyEightHundredBasicLanguageId:
                         case application.BatariBasicLanguageId:
-                            await this.openAllSamplesInFolder(vscode.Uri.joinPath(contentUri, 'samples', message.id));
+                            // Open language root folder
+                            await this.openSampleFolder(vscode.Uri.joinPath(contentUri, 'samples', message.id));
                             break;
                         
                         default:
-                            // Get button index and open
-                            const cardIndex = parseInt(message.id, 10);
-                            await this.openSampleInFolder(contentUri, cardItems[cardIndex]);
+                            // Get button index and open language sample folder
+                            const cardItem = cardItems[parseInt(message.id, 10)];
+                            if (cardItem) await this.openSampleFolder(vscode.Uri.joinPath(contentUri, 'samples', cardItem.Folder));
                             break;
                     }
                 }
@@ -128,14 +129,9 @@ export class LearningCenterPage implements vscode.Disposable {
         return [];
     }
 
-    private async openAllSamplesInFolder(contentUri: vscode.Uri): Promise<void> {
-        // Open the root sample folder as the only workspace folder (force new window to replace existing)
+    private async openSampleFolder(contentUri: vscode.Uri): Promise<void> {
+        // Open the sample folder (root or sub) as the only workspace folder (force new window to replace existing)
         await vscode.commands.executeCommand('vscode.openFolder', contentUri, { forceNewWindow: false, forceReuseWindow: true });
-    }
-    private async openSampleInFolder(contentUri: vscode.Uri, item: CardItem): Promise<void> {
-        // Open the sample folder as the only workspace folder (force new window to replace existing)
-        const folderUri = vscode.Uri.joinPath(contentUri, item.Folder);
-        await vscode.commands.executeCommand('vscode.openFolder', folderUri, { forceNewWindow: false, forceReuseWindow: true });
     }
 }
 

@@ -73,12 +73,14 @@ class LearningCenterPage {
                     switch (message.id) {
                         case application.SeventyEightHundredBasicLanguageId:
                         case application.BatariBasicLanguageId:
-                            yield this.openAllSamplesInFolder(vscode.Uri.joinPath(contentUri, 'samples', message.id));
+                            // Open language root folder
+                            yield this.openSampleFolder(vscode.Uri.joinPath(contentUri, 'samples', message.id));
                             break;
                         default:
-                            // Get button index and open
-                            const cardIndex = parseInt(message.id, 10);
-                            yield this.openSampleInFolder(contentUri, cardItems[cardIndex]);
+                            // Get button index and open language sample folder
+                            const cardItem = cardItems[parseInt(message.id, 10)];
+                            if (cardItem)
+                                yield this.openSampleFolder(vscode.Uri.joinPath(contentUri, 'samples', cardItem.Folder));
                             break;
                     }
                 }
@@ -122,17 +124,10 @@ class LearningCenterPage {
             return [];
         });
     }
-    openAllSamplesInFolder(contentUri) {
+    openSampleFolder(contentUri) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Open the root sample folder as the only workspace folder (force new window to replace existing)
+            // Open the sample folder (root or sub) as the only workspace folder (force new window to replace existing)
             yield vscode.commands.executeCommand('vscode.openFolder', contentUri, { forceNewWindow: false, forceReuseWindow: true });
-        });
-    }
-    openSampleInFolder(contentUri, item) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // Open the sample folder as the only workspace folder (force new window to replace existing)
-            const folderUri = vscode.Uri.joinPath(contentUri, item.Folder);
-            yield vscode.commands.executeCommand('vscode.openFolder', folderUri, { forceNewWindow: false, forceReuseWindow: true });
         });
     }
 }
