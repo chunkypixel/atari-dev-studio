@@ -2,6 +2,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as application from '../application';
+import * as configuration from '../configuration';
 import { CompilerBase } from "./compilerBase";
 
 export class BatchCompiler extends CompilerBase {
@@ -27,7 +28,7 @@ export class BatchCompiler extends CompilerBase {
 
         // (Re)load
         // It appears you need to reload this each time incase of change
-        this.Configuration = application.GetConfiguration();
+        this.Configuration = configuration.GetAtariDevStudioConfiguration();
 
         // Configuration
         result = await this.LoadConfigurationAsync();

@@ -1,9 +1,40 @@
 "use strict";
 import * as vscode from 'vscode';
 import * as application from './application';
+import * as compiler from './compilers/compilerBase'
+
 
 const seventyEightHundredCustomFoldersSection = 'compiler.7800basic.customFolders';
 const batariBasicCustomFoldersSection = 'compiler.batariBasic.customFolders';
+
+export function GetAtariDevStudioConfiguration() : vscode.WorkspaceConfiguration {
+    return vscode.workspace.getConfiguration(application.Name, null);
+}
+
+export function GetChosenCompiler(document: vscode.TextDocument): compiler.CompilerBase | undefined {
+    // Prepare
+    const config = GetAtariDevStudioConfiguration();
+
+    // Find compiler (based on language of chosen file)
+    for (const compiler of application.Compilers) {
+        if (compiler.Id === document.languageId) {
+            return compiler;
+        }
+    }	
+
+    // Activate output window?
+    if (config!.get<boolean>(`editor.preserveCodeEditorFocus`))  {
+        application.CompilerOutputChannel.show();
+    }
+
+    // Clear output content?
+    if (config!.get<boolean>(`editor.clearPreviousOutput`))  {
+        application.CompilerOutputChannel.clear();
+    }
+
+    // Not found
+    return undefined;
+}
 
 export async function TransferFolderToCustomFolders(context: vscode.ExtensionContext): Promise<void> {
     // Validate if we have already done it?
@@ -11,7 +42,7 @@ export async function TransferFolderToCustomFolders(context: vscode.ExtensionCon
     if (transferedFolderToCustomFolders) return;
 
     // Prepare
-    const config = vscode.workspace.getConfiguration(application.Name);
+    const config = GetAtariDevStudioConfiguration();
 
     // 7800basic
     const existing7800BasicCustomFolder = config.get('compiler.7800basic.folder',null);
@@ -35,7 +66,7 @@ export async function TransferFolderToCustomFolders(context: vscode.ExtensionCon
 
 export async function ValidateCustomFoldersConfigurationEntry(event: vscode.ConfigurationChangeEvent): Promise<void> {
     // Prepare
-    const config = vscode.workspace.getConfiguration(application.Name);
+    const config = GetAtariDevStudioConfiguration();
 
     // 7800basic?
     if (event.affectsConfiguration(`${application.Name}.${seventyEightHundredCustomFoldersSection}`)) {
@@ -84,9 +115,20 @@ export async function ValidateCustomFoldersConfigurationEntry(event: vscode.Conf
     };
 }
 
+export async function ValidateOpenSamplesFileOnRestart(context: vscode.ExtensionContext): Promise<void> {
+    // Process?
+    const sampleFilePath: string | undefined = context.globalState.get(`${application.Name}.configuration.openSampleFileOnRestart`);
+    if (!sampleFilePath) return;
+
+    // Yes! Open the file
+    await vscode.workspace.openTextDocument(vscode.Uri.file(sampleFilePath))
+        .then((document: vscode.TextDocument) => vscode.window.showTextDocument(document, {preview: false, preserveFocus: true}))
+        .then(() => context.globalState.update(`${application.Name}.configuration.openSampleFileOnRestart`, undefined));
+}
+
 export function GetCustomCompilerIdList(languageId: string): string[] {
     // Prepare
-    const config = vscode.workspace.getConfiguration(application.Name);
+    const config = GetAtariDevStudioConfiguration();
 
     // Get
     const customFolders = config.get<Record<string,string>>(`compiler.${languageId}.customFolders`,{});
@@ -98,11 +140,11 @@ export function GetCustomCompilerIdList(languageId: string): string[] {
 
 export function GetCustomCompilerFolder(languageId: string, id: string): string {
     // Prepare
-    const config = vscode.workspace.getConfiguration(application.Name);
-    const customFolders = config.get<Record<string, string>>(`compiler.${languageId}.customFolders`,{});
+    const config = GetAtariDevStudioConfiguration();
     let folder = '';
 
     // Scan
+    const customFolders = config.get<Record<string, string>>(`compiler.${languageId}.customFolders`,{});
     for (const [key, value] of Object.entries(customFolders)) {
         if (key.toLowerCase() === id.toLowerCase()) {
             folder = value;
@@ -116,11 +158,11 @@ export function GetCustomCompilerFolder(languageId: string, id: string): string 
 
 function CustomFolderExists(configurationSection: string, folder: string): boolean {
     // Prepare
-    const config = vscode.workspace.getConfiguration(application.Name);
-    const customFolders = config.get<Record<string, string>>(configurationSection,{});
+    const config = GetAtariDevStudioConfiguration();
     let result = false;
 
     // Scan
+    const customFolders = config.get<Record<string, string>>(configurationSection,{});
     for (const [key, value] of Object.entries(customFolders)) {
         if (value.toLowerCase() === folder.toLowerCase()) {
             result = true;

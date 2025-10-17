@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.11.4
+
+ * Updated Learning Center so when you open a sample it's key document is also opened
+ * Minor internal re-organisation
+
 ## 0.11.3
 
  * Added Learning Center (currenty 7800basic).

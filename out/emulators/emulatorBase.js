@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmulatorBase = void 0;
 const application = require("../application");
+const configuration = require("../configuration");
 const filesystem = require("../filesystem");
 class EmulatorBase {
     constructor(id, name, folderOrPath) {
@@ -63,7 +64,7 @@ class EmulatorBase {
             this.Args = "";
             // (Re)load
             // It appears you need to reload this each time incase of change
-            this.Configuration = application.GetConfiguration();
+            this.Configuration = configuration.GetAtariDevStudioConfiguration();
             // Emulator
             let userEmulatorPath = this.Configuration.get(`emulator.${this.Id.toLowerCase()}.path`);
             if (userEmulatorPath) {

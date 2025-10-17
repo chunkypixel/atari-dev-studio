@@ -79,8 +79,17 @@ class LearningCenterPage {
                         default:
                             // Get button index and open language sample folder
                             const cardItem = cardItems[parseInt(message.id, 10)];
-                            if (cardItem)
-                                yield this.openSampleFolder(vscode.Uri.joinPath(contentUri, 'samples', cardItem.Folder));
+                            if (cardItem) {
+                                // Prepare
+                                const sampleFolderUri = vscode.Uri.joinPath(contentUri, 'samples', cardItem.Folder);
+                                const sampleFileToOpenUrl = cardItem.File ? vscode.Uri.joinPath(sampleFolderUri, cardItem.File) : undefined;
+                                // Do we also want to open a file once the workspace is loaded?
+                                // NOTE: as the entire workspace reloads we load file and set language
+                                if (sampleFileToOpenUrl)
+                                    yield context.globalState.update(`${application.Name}.configuration.openSampleFileOnRestart`, sampleFileToOpenUrl.path);
+                                // Open folder in Workspace
+                                yield this.openSampleFolder(sampleFolderUri);
+                            }
                             break;
                     }
                 }

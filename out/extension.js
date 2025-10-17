@@ -132,8 +132,6 @@ function activate(context) {
         context.subscriptions.push(vscode.workspace.onDidChangeConfiguration((event) => __awaiter(this, void 0, void 0, function* () {
             yield configuration.ValidateCustomFoldersConfigurationEntry(event);
         })));
-        // Transfer old settings
-        yield configuration.TransferFolderToCustomFolders(context);
         // Register the mouse-over hover providers
         yield application.RegisterHoverProvidersAsync(context);
         yield application.RegisterContextHelpsAsync(context);
@@ -144,10 +142,18 @@ function activate(context) {
         yield application.RegisterDefinitionProvidersAsync(context);
         yield application.RegisterReferenceProvidersAsync(context);
         yield application.RegisterCompletionProvidersAsync(context);
+        // Active Documents
+        // Transfer old settings
+        yield configuration.TransferFolderToCustomFolders(context);
+        // Opening a samples folder? (on restart)
+        yield configuration.ValidateOpenSamplesFileOnRestart(context);
+        // Validate any open documents (for setting language)
+        yield application.ValidateOpenDocumentsOnStartup(context);
+        // Housekeeping
         // install on startup (as required)
-        yield wasmtime.installAsync();
+        yield wasmtime.ValidateAndInstallWasmtime();
         // Show welcome messages
-        yield application.ShowStartupMessagesAsync();
+        yield application.ShowStartupMessages();
     });
 }
 // this method is called when your extension is deactivated

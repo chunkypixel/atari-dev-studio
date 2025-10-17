@@ -153,7 +153,7 @@ class CompilerBase {
             let result = true;
             // (Re)load
             // It appears you need to reload this each time incase of change
-            this.Configuration = application.GetConfiguration();
+            this.Configuration = configuration.GetAtariDevStudioConfiguration();
             // Clear output content?
             // Note: need to do this here otherwise output from configuration is lost
             if (this.Configuration.get(`editor.clearPreviousOutput`)) {
@@ -166,7 +166,7 @@ class CompilerBase {
                 return false;
             }
             // Configuration
-            result = yield this.LoadConfigurationAsync();
+            result = yield this.LoadConfigurationAndSettingsAsync();
             if (!result) {
                 return false;
             }
@@ -293,9 +293,9 @@ class CompilerBase {
     }
     ShowAnyCompilerWarnings() {
     }
-    LoadConfigurationAsync() {
+    LoadConfigurationAndSettingsAsync() {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:CompilerBase.LoadConfigurationAsync');
+            console.log('debugger:CompilerBase.LoadConfigurationAndSettingsAsync');
             // Reset
             this.CustomFolderOrPath = false;
             this.FolderOrPath = this.DefaultFolderOrPath;

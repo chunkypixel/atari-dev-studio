@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SeventyEightHundredGDSerial = void 0;
 const path = require("path");
 const application = require("../application");
+const configuration = require("../configuration");
 const execute = require("../execute");
 const serialBase_1 = require("./serialBase");
 class SeventyEightHundredGDSerial extends serialBase_1.SerialBase {
@@ -21,12 +22,11 @@ class SeventyEightHundredGDSerial extends serialBase_1.SerialBase {
     ExecuteSerialAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SeventyEightHundredGDSerial.ExecuteSerialAsync');
-            // Load
-            var configuration = application.GetConfiguration();
-            var comPort = configuration.get(`launch.emulatorOrCartComPort`, "Emulator").toLowerCase();
             // Prepare
-            application.WriteToCompilerTerminal('');
-            // Command
+            const config = configuration.GetAtariDevStudioConfiguration();
+            application.WriteToCompilerTerminal();
+            // Load
+            var comPort = config.get(`launch.emulatorOrCartComPort`, "Emulator").toLowerCase();
             let command = `"${this.FolderOrPath}"`;
             // Args
             let args = [
@@ -44,14 +44,12 @@ class SeventyEightHundredGDSerial extends serialBase_1.SerialBase {
                 var pattern = /[+][\b]+/gi;
                 stdout = stdout.replace(pattern, "");
                 // Result
-                //application.CompilerOutputChannel.append('' + stdout);
                 application.WriteToCompilerTerminal(stdout, false);
                 return result;
             }, (stderr) => {
                 // Prepare
                 let result = true;
                 // Result
-                //application.CompilerOutputChannel.append('' + stderr);
                 application.WriteToCompilerTerminal(stderr, false);
                 return result;
             });

@@ -2,6 +2,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as application from '../application';
+import * as configuration from '../configuration';
 import * as filesystem from '../filesystem';
 import * as browser from "../browser";
 
@@ -82,7 +83,18 @@ export class LearningCenterPage implements vscode.Disposable {
                         default:
                             // Get button index and open language sample folder
                             const cardItem = cardItems[parseInt(message.id, 10)];
-                            if (cardItem) await this.openSampleFolder(vscode.Uri.joinPath(contentUri, 'samples', cardItem.Folder));
+                            if (cardItem) {
+                                // Prepare
+                                const sampleFolderUri = vscode.Uri.joinPath(contentUri, 'samples', cardItem.Folder);
+                                const sampleFileToOpenUrl = cardItem.File ? vscode.Uri.joinPath(sampleFolderUri, cardItem.File) : undefined;
+
+                                // Do we also want to open a file once the workspace is loaded?
+                                // NOTE: as the entire workspace reloads we load file and set language
+                                if (sampleFileToOpenUrl) await context.globalState.update(`${application.Name}.configuration.openSampleFileOnRestart`, sampleFileToOpenUrl.path);
+
+                                // Open folder in Workspace
+                                await this.openSampleFolder(sampleFolderUri);
+                            }
                             break;
                     }
                 }

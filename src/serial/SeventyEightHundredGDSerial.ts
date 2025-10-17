@@ -1,6 +1,7 @@
 "use strict";
 import * as path from 'path';
 import * as application from '../application';
+import * as configuration from '../configuration';
 import * as execute from '../execute';
 import { SerialBase } from "./serialBase";
 
@@ -13,14 +14,13 @@ export class SeventyEightHundredGDSerial extends SerialBase {
     protected async ExecuteSerialAsync(): Promise<boolean> {
         console.log('debugger:SeventyEightHundredGDSerial.ExecuteSerialAsync');
 
-        // Load
-        var configuration = application.GetConfiguration();
-        var comPort = configuration.get<string>(`launch.emulatorOrCartComPort`,"Emulator").toLowerCase();
 
         // Prepare
-        application.WriteToCompilerTerminal(''); 
-         
-        // Command
+        const config = configuration.GetAtariDevStudioConfiguration(); 
+        application.WriteToCompilerTerminal();   
+        
+        // Load
+        var comPort = config.get<string>(`launch.emulatorOrCartComPort`,"Emulator").toLowerCase();
         let command = `"${this.FolderOrPath}"`;
 
         // Args
@@ -43,7 +43,6 @@ export class SeventyEightHundredGDSerial extends SerialBase {
                 stdout = stdout.replace(pattern,"");
 
                 // Result
-                //application.CompilerOutputChannel.append('' + stdout);
                 application.WriteToCompilerTerminal(stdout, false);
                 return result;
             },
@@ -52,7 +51,6 @@ export class SeventyEightHundredGDSerial extends SerialBase {
                 let result = true;
 
                 // Result
-                //application.CompilerOutputChannel.append('' + stderr);
                 application.WriteToCompilerTerminal(stderr, false);
                 return result;
             });

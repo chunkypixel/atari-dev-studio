@@ -112,7 +112,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(openSpriteEditorFile);
 	// Subscriptions (touchbar)
 	context.subscriptions.push(touchbarBuildGame);
-	context.subscriptions.push(touchbarBuildGameAndRun);	
+	context.subscriptions.push(touchbarBuildGameAndRun);
 	// Subscriptions (document)
 	context.subscriptions.push(
 		// scan for ADS definitions
@@ -126,16 +126,12 @@ export async function activate(context: vscode.ExtensionContext) {
 			tags.ScanDocumentForADSLanguageTag(document);
 		})
 	);
-
 	// Validate settins on save
 	context.subscriptions.push(
 		vscode.workspace.onDidChangeConfiguration(async (event) => {
 			await configuration.ValidateCustomFoldersConfigurationEntry(event);
 		})
 	);
-	
-	// Transfer old settings
-	await configuration.TransferFolderToCustomFolders(context);
 
 	// Register the mouse-over hover providers
 	await application.RegisterHoverProvidersAsync(context);
@@ -150,11 +146,19 @@ export async function activate(context: vscode.ExtensionContext) {
 	await application.RegisterReferenceProvidersAsync(context);
 	await application.RegisterCompletionProvidersAsync(context);
 
-	// install on startup (as required)
-	await wasmtime.installAsync();
+	// Check active documents
+	// Transfer old settings
+	await configuration.TransferFolderToCustomFolders(context);
+	// Opening a samples folder? (on restart)
+	await configuration.ValidateOpenSamplesFileOnRestart(context);
+	// Validate any open documents (for setting language)
+	await application.ValidateOpenDocumentsOnStartup(context);
 
+	// Housekeeping
+	// install on startup (as required)
+	await wasmtime.ValidateAndInstallWasmtime();
 	// Show welcome messages
-	await application.ShowStartupMessagesAsync();
+	await application.ShowStartupMessages(context);
 }
 
 // this method is called when your extension is deactivated

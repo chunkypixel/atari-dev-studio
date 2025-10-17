@@ -4,7 +4,7 @@ import * as application from './application';
 import * as configuration from './configuration';
 import * as filesystem from './filesystem';
 
-export function ScanDocumentForADSLanguageTag(document: vscode.TextDocument) {
+export function ScanDocumentForADSLanguageTag(document: vscode.TextDocument): void {
     // prepare
     const text = document.getText();
 

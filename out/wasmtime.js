@@ -9,17 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.installAsync = installAsync;
+exports.ValidateAndInstallWasmtime = ValidateAndInstallWasmtime;
 const util_1 = require("util");
 const application = require("./application");
+const configration = require("./configuration");
 const cp = require("child_process");
 // Promisify exec for async/await usage
 const execPromise = (0, util_1.promisify)(cp.exec);
-function installAsync() {
+function ValidateAndInstallWasmtime() {
     return __awaiter(this, void 0, void 0, function* () {
         // Process?
-        var configuration = application.GetConfiguration();
-        if (!configuration.get(`application.configuration.doWasmtimeCheck`)) {
+        var config = configration.GetAtariDevStudioConfiguration();
+        if (!config.get(`application.configuration.doWasmtimeCheck`)) {
             application.WriteToCompilerTerminal(`- Wasmtime validation has been turned off in the Settings.`);
             return;
         }

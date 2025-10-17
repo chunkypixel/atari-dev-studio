@@ -1,5 +1,7 @@
 "use strict";
 import * as vscode from 'vscode';
+import * as configuration from "./configuration";
+import * as tags from "./tags";
 import { CompilerBase } from './compilers/compilerBase';
 import { BatariBasicCompiler } from './compilers/batariBasicCompiler';
 import { SeventyEightHundredBasicCompiler } from './compilers/seventyEightHundredBasicCompiler';
@@ -36,8 +38,8 @@ import { SeventyEightHundredBasicContextHelp } from "./contexthelp/seventyEightH
 import { BatariBasicContextHelp } from "./contexthelp/batariBasicContextHelp";
 import { SeventyEightHundredGDSerial } from './serial/SeventyEightHundredGDSerial';
 import { SerialBase } from './serial/serialBase';
-import internal = require('stream');
 import { BatariBasicCompletion } from './completions/batariBasicCompletion';
+import internal = require('stream');
 const os = require("os");
 
 // -------------------------------------------------------------------------------------
@@ -260,7 +262,7 @@ export async function BuildGameAsync(): Promise<boolean> {
 	if (!document || document!.uri.scheme !== "file") { return false; }
 
 	// Find compiler
-	let compiler = getChosenCompiler(document);
+	let compiler = configuration.GetChosenCompiler(document);
 	if (compiler) { return await compiler.BuildGameAsync(document); }
 
 	// Result
@@ -273,7 +275,7 @@ export async function BuildGameAndRunAsync(): Promise<boolean> {
 	if (!document || document!.uri.scheme !== "file") { return false; }
 
 	// Find compiler
-	let compiler = getChosenCompiler(document);
+	let compiler = configuration.GetChosenCompiler(document);
 	if (compiler) { return await compiler.BuildGameAndRunAsync(document); }
 
 	// Result
@@ -333,48 +335,30 @@ export function ShowErrorPopup(message: string): void {
 	vscode.window.showErrorMessage(message);
 }
 
-export function GetConfiguration() : vscode.WorkspaceConfiguration {
-	return vscode.workspace.getConfiguration(Name, null);
+export async function ValidateOpenDocumentsOnStartup(context: vscode.ExtensionContext): Promise<void> {
+	// Validate all open documents
+	const openDocuments = vscode.workspace.textDocuments;
+	if (openDocuments.length > 0) {
+		// Scan/process each existing open document
+		openDocuments.forEach((document: vscode.TextDocument) => {
+			tags.ScanDocumentForADSLanguageTag(document)
+		});
+	}
 }
 
-function getChosenCompiler(document: vscode.TextDocument): CompilerBase | undefined {
+export async function ShowStartupMessages(context: vscode.ExtensionContext): Promise<void> {
 	// Prepare
-	let configuration = GetConfiguration();
-
-	// Find compiler (based on language of chosen file)
-	for (let compiler of Compilers) {
-		if (compiler.Id === document.languageId) {
-			return compiler;
-		}
-	}	
-
-	// Activate output window?
-	if (configuration!.get<boolean>(`editor.preserveCodeEditorFocus`))  {
-		CompilerOutputChannel.show();
-	}
-
-	// Clear output content?
-	if (configuration!.get<boolean>(`editor.clearPreviousOutput`))  {
-		CompilerOutputChannel.clear();
-	}
-
-	// Not found
-	return undefined;
-}
-
-export async function ShowStartupMessagesAsync(): Promise<void> {
-	// Prepare
-	let configuration = GetConfiguration();
+	let config = configuration.GetAtariDevStudioConfiguration();
 
 	// Load settings
-	let showNewVersionMessage = configuration.get<string>(`application.configuration.showNewVersionMessage`);
-	let latestVersion = configuration.get<string>(`application.configuration.latestVersion`);
+	let showNewVersionMessage = config.get<string>(`application.configuration.showNewVersionMessage`);
+    let latestVersion = await context.globalState.get(`${Name}.configuration.latestVersion`, undefined)
 
 	// Process?
-	if (!showNewVersionMessage || latestVersion === Version) { return; }
+	if (!showNewVersionMessage || latestVersion === Version) return;
 
-	// Update latest version
-	configuration.update(`application.configuration.latestVersion`, Version, vscode.ConfigurationTarget.Global);
+	// Set latest version
+    await context.globalState.update(`${Name}.configuration.latestVersion`, latestVersion);
 
 	// buttons
 	let latestChanges = "Learn more about the latest changes";
@@ -393,7 +377,7 @@ export async function ShowStartupMessagesAsync(): Promise<void> {
 				} 
 				else if (selection === dontShowMeThisMessage) {
 					// Disable
-					configuration.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
+					config.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
 				}
 			});
 }

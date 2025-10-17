@@ -1,15 +1,16 @@
 "use strict";
 import { promisify } from 'util';
 import * as application from './application';
+import * as configration from './configuration';
 const cp = require("child_process");
 
 // Promisify exec for async/await usage
 const execPromise = promisify(cp.exec);
 
-export async function installAsync() {
+export async function ValidateAndInstallWasmtime(): Promise<void> {
     // Process?
-    var configuration = application.GetConfiguration();
-    if (!configuration.get<boolean>(`application.configuration.doWasmtimeCheck`))  {
+    var config = configration.GetAtariDevStudioConfiguration();
+    if (!config.get<boolean>(`application.configuration.doWasmtimeCheck`))  {
         application.WriteToCompilerTerminal(`- Wasmtime validation has been turned off in the Settings.`);
         return;
     }

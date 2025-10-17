@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BatchCompiler = void 0;
 const path = require("path");
 const application = require("../application");
+const configuration = require("../configuration");
 const compilerBase_1 = require("./compilerBase");
 class BatchCompiler extends compilerBase_1.CompilerBase {
     // Features
@@ -27,7 +28,7 @@ class BatchCompiler extends compilerBase_1.CompilerBase {
             // Already running?
             // (Re)load
             // It appears you need to reload this each time incase of change
-            this.Configuration = application.GetConfiguration();
+            this.Configuration = configuration.GetAtariDevStudioConfiguration();
             // Configuration
             result = yield this.LoadConfigurationAsync();
             if (!result) {

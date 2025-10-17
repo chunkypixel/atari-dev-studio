@@ -2,17 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
 const application = require("./application");
+const configuration = require("./configuration");
 class StatusBar {
     constructor() {
         this.Initialise();
     }
     Initialise() {
         // Prepare
-        let configuration = application.GetConfiguration();
+        let config = configuration.GetAtariDevStudioConfiguration();
         // Github: https://github.com/chunkypixel/atari-dev-studio/issues/5
         //         Option to turn off/on
-        // Prepare
-        let command = (configuration.get('editor.statusBarCommands', 'Full'));
+        // Validate
+        let command = config.get('editor.statusBarCommands', 'Full');
         if (command === "None") {
             return;
         }

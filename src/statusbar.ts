@@ -1,6 +1,7 @@
 "use strict";
 import * as vscode from 'vscode';
 import * as application from './application';
+import * as configuration from './configuration';
 
 class StatusBar {
     
@@ -10,13 +11,13 @@ class StatusBar {
 
     private Initialise(): void {
         // Prepare
-	    let configuration = application.GetConfiguration();
+	    let config = configuration.GetAtariDevStudioConfiguration();
 
         // Github: https://github.com/chunkypixel/atari-dev-studio/issues/5
         //         Option to turn off/on
     
-        // Prepare
-        let command = (configuration.get<string>('editor.statusBarCommands','Full'));
+        // Validate
+        let command = config.get<string>('editor.statusBarCommands','Full');
         if (command === "None") { return; }
 
         // Spacer

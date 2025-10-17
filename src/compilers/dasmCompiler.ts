@@ -113,11 +113,11 @@ export class DasmCompiler extends CompilerBase {
         return executeResult;
     }
 
-    protected async LoadConfigurationAsync(): Promise<boolean> {
-        console.log('debugger:DasmCompiler.LoadConfigurationAsync');  
+    protected async LoadConfigurationAndSettingsAsync(): Promise<boolean> {
+        console.log('debugger:DasmCompiler.LoadConfigurationAndSettingsAsync');  
 
         // Base
-        let result = await super.LoadConfigurationAsync();
+        let result = await super.LoadConfigurationAndSettingsAsync();
         if (!result) { return false; }
 
         // Using a make process? if so we can skip some of the configuration

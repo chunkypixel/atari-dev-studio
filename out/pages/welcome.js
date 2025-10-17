@@ -114,10 +114,8 @@ class WelcomePage {
         return content.replace(new RegExp(tag, 'g'), tagContent);
     }
     openNewFileDocument(language, content = '') {
-        vscode.workspace.openTextDocument({ language: `${language}`, content: content }).then(doc => {
-            // Open
-            vscode.window.showTextDocument(doc);
-        });
+        vscode.workspace.openTextDocument({ language: `${language}`, content: content })
+            .then((document) => vscode.window.showTextDocument(document, { preview: false, preserveFocus: true }));
     }
     openBatariBasicForum() {
         console.log('debugger:WelcomePage.openBatariBasicForum');

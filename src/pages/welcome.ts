@@ -134,10 +134,8 @@ export class WelcomePage implements vscode.Disposable {
     }
 
     private openNewFileDocument(language: string, content: string = '') {
-        vscode.workspace.openTextDocument({language: `${language}`, content: content}).then(doc => {
-            // Open
-            vscode.window.showTextDocument(doc);
-        });
+        vscode.workspace.openTextDocument({language: `${language}`, content: content})
+            .then((document: vscode.TextDocument) => vscode.window.showTextDocument(document, {preview: false, preserveFocus: true}));
     }
 
     private openBatariBasicForum() {

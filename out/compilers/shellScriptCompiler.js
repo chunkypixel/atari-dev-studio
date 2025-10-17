@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ShellScriptCompiler = void 0;
 const path = require("path");
 const application = require("../application");
+const configuration = require("../configuration");
 const compilerBase_1 = require("./compilerBase");
 class ShellScriptCompiler extends compilerBase_1.CompilerBase {
     // Features
@@ -27,9 +28,9 @@ class ShellScriptCompiler extends compilerBase_1.CompilerBase {
             // Already running?
             // (Re)load
             // It appears you need to reload this each time incase of change
-            this.Configuration = application.GetConfiguration();
+            this.Configuration = configuration.GetAtariDevStudioConfiguration();
             // Configuration
-            result = yield this.LoadConfigurationAsync();
+            result = yield this.LoadConfigurationAndSettingsAsync();
             if (!result) {
                 return false;
             }
@@ -59,9 +60,9 @@ class ShellScriptCompiler extends compilerBase_1.CompilerBase {
             return true;
         });
     }
-    LoadConfigurationAsync() {
+    LoadConfigurationAndSettingsAsync() {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:ShellCompiler.LoadConfigurationAsync');
+            console.log('debugger:ShellCompiler.LoadConfigurationAndSettingsAsync');
             // System
             this.UsingShellScriptCompiler = true;
             this.FileName = path.basename(this.Document.fileName);

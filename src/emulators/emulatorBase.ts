@@ -1,6 +1,7 @@
 "use strict";
 import * as vscode from 'vscode';
 import * as application from '../application';
+import * as configuration from '../configuration';
 import * as filesystem from '../filesystem';
 
 export abstract class EmulatorBase implements vscode.Disposable {
@@ -62,7 +63,7 @@ export abstract class EmulatorBase implements vscode.Disposable {
 
         // (Re)load
         // It appears you need to reload this each time incase of change
-        this.Configuration = application.GetConfiguration();
+        this.Configuration = configuration.GetAtariDevStudioConfiguration();
 
         // Emulator
         let userEmulatorPath = this.Configuration.get<string>(`emulator.${this.Id.toLowerCase()}.path`);

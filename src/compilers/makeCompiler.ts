@@ -2,6 +2,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as application from '../application';
+import * as configuration from '../configuration';
 import { CompilerBase } from "./compilerBase";
 
 export class MakeCompiler extends CompilerBase {
@@ -27,10 +28,10 @@ export class MakeCompiler extends CompilerBase {
 
         // (Re)load
         // It appears you need to reload this each time incase of change
-        this.Configuration = application.GetConfiguration();
+        this.Configuration = configuration.GetAtariDevStudioConfiguration();
 
         // Configuration
-        result = await this.LoadConfigurationAsync();
+        result = await this.LoadConfigurationAndSettingsAsync();
         if (!result) { return false; }
 
         // Initialise terminal
@@ -63,8 +64,8 @@ export class MakeCompiler extends CompilerBase {
         return true;
     }
 
-    protected async LoadConfigurationAsync(): Promise<boolean> {
-        console.log('debugger:MakeCompiler.LoadConfigurationAsync'); 
+    protected async LoadConfigurationAndSettingsAsync(): Promise<boolean> {
+        console.log('debugger:MakeCompiler.LoadConfigurationAndSettingsAsync'); 
 
         // System
         this.UsingMakeFileCompiler = true;

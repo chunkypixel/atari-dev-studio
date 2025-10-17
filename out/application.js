@@ -27,8 +27,8 @@ exports.WriteEnvironmentSummaryToCompilerTerminal = WriteEnvironmentSummaryToCom
 exports.ShowWarningPopup = ShowWarningPopup;
 exports.ShowInformationPopup = ShowInformationPopup;
 exports.ShowErrorPopup = ShowErrorPopup;
-exports.GetConfiguration = GetConfiguration;
-exports.ShowStartupMessagesAsync = ShowStartupMessagesAsync;
+exports.ValidateOpenDocumentsOnStartup = ValidateOpenDocumentsOnStartup;
+exports.ShowStartupMessages = ShowStartupMessages;
 exports.GetActiveTextEditorDocumentAsync = GetActiveTextEditorDocumentAsync;
 exports.Delay = Delay;
 exports.IsNumber = IsNumber;
@@ -37,6 +37,8 @@ exports.TrimRight = TrimRight;
 exports.TrimLeft = TrimLeft;
 exports.ReplaceZerosTemplate = ReplaceZerosTemplate;
 const vscode = require("vscode");
+const configuration = require("./configuration");
+const tags = require("./tags");
 const batariBasicCompiler_1 = require("./compilers/batariBasicCompiler");
 const seventyEightHundredBasicCompiler_1 = require("./compilers/seventyEightHundredBasicCompiler");
 const dasmCompiler_1 = require("./compilers/dasmCompiler");
@@ -268,7 +270,7 @@ function BuildGameAsync() {
             return false;
         }
         // Find compiler
-        let compiler = getChosenCompiler(document);
+        let compiler = configuration.GetChosenCompiler(document);
         if (compiler) {
             return yield compiler.BuildGameAsync(document);
         }
@@ -284,7 +286,7 @@ function BuildGameAndRunAsync() {
             return false;
         }
         // Find compiler
-        let compiler = getChosenCompiler(document);
+        let compiler = configuration.GetChosenCompiler(document);
         if (compiler) {
             return yield compiler.BuildGameAndRunAsync(document);
         }
@@ -344,42 +346,31 @@ function ShowInformationPopup(message) {
 function ShowErrorPopup(message) {
     vscode.window.showErrorMessage(message);
 }
-function GetConfiguration() {
-    return vscode.workspace.getConfiguration(exports.Name, null);
-}
-function getChosenCompiler(document) {
-    // Prepare
-    let configuration = GetConfiguration();
-    // Find compiler (based on language of chosen file)
-    for (let compiler of exports.Compilers) {
-        if (compiler.Id === document.languageId) {
-            return compiler;
+function ValidateOpenDocumentsOnStartup(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Validate all open documents
+        const openDocuments = vscode.workspace.textDocuments;
+        if (openDocuments.length > 0) {
+            // Scan/process each existing open document
+            openDocuments.forEach((document) => {
+                tags.ScanDocumentForADSLanguageTag(document);
+            });
         }
-    }
-    // Activate output window?
-    if (configuration.get(`editor.preserveCodeEditorFocus`)) {
-        exports.CompilerOutputChannel.show();
-    }
-    // Clear output content?
-    if (configuration.get(`editor.clearPreviousOutput`)) {
-        exports.CompilerOutputChannel.clear();
-    }
-    // Not found
-    return undefined;
+    });
 }
-function ShowStartupMessagesAsync() {
+function ShowStartupMessages() {
     return __awaiter(this, void 0, void 0, function* () {
         // Prepare
-        let configuration = GetConfiguration();
+        let config = configuration.GetAtariDevStudioConfiguration();
         // Load settings
-        let showNewVersionMessage = configuration.get(`application.configuration.showNewVersionMessage`);
-        let latestVersion = configuration.get(`application.configuration.latestVersion`);
+        let showNewVersionMessage = config.get(`application.configuration.showNewVersionMessage`);
+        let latestVersion = config.get(`application.configuration.latestVersion`);
         // Process?
         if (!showNewVersionMessage || latestVersion === exports.Version) {
             return;
         }
         // Update latest version
-        configuration.update(`application.configuration.latestVersion`, exports.Version, vscode.ConfigurationTarget.Global);
+        config.update(`application.configuration.latestVersion`, exports.Version, vscode.ConfigurationTarget.Global);
         // buttons
         let latestChanges = "Learn more about the latest changes";
         let dontShowMeThisMessage = "Don't show me this message again";
@@ -395,7 +386,7 @@ function ShowStartupMessagesAsync() {
             }
             else if (selection === dontShowMeThisMessage) {
                 // Disable
-                configuration.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
+                config.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
             }
         });
     });

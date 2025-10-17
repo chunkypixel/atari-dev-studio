@@ -7,7 +7,6 @@ export abstract class SerialBase {
     public readonly Name: string;
     public FolderOrPath: string = "";
     protected FileName: string = "";  
-    protected Configuration: vscode.WorkspaceConfiguration | undefined;
 
     constructor(id:string, name:string, folderOrPath: string) {
         this.Id = id;

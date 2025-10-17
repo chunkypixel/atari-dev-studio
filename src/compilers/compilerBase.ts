@@ -8,7 +8,6 @@ import * as tags from '../tags';
 import * as configuration from '../configuration';
 
 export abstract class CompilerBase implements vscode.Disposable {
-
     // Features
     public IsRunning: boolean = false;
 
@@ -128,7 +127,7 @@ export abstract class CompilerBase implements vscode.Disposable {
 
         // (Re)load
         // It appears you need to reload this each time incase of change
-        this.Configuration = application.GetConfiguration();
+        this.Configuration = configuration.GetAtariDevStudioConfiguration();
 
         // Clear output content?
         // Note: need to do this here otherwise output from configuration is lost
@@ -144,7 +143,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         }
 
         // Configuration
-        result = await this.LoadConfigurationAsync();
+        result = await this.LoadConfigurationAndSettingsAsync();
         if (!result) { return false; }
         
         // Launch emulator or cart
@@ -280,8 +279,8 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected ShowAnyCompilerWarnings(): void {
     }
 
-    protected async LoadConfigurationAsync(): Promise<boolean> {
-        console.log('debugger:CompilerBase.LoadConfigurationAsync');  
+    protected async LoadConfigurationAndSettingsAsync(): Promise<boolean> {
+        console.log('debugger:CompilerBase.LoadConfigurationAndSettingsAsync');  
 
         // Reset
         this.CustomFolderOrPath = false;
