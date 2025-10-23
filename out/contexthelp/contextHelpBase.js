@@ -22,9 +22,10 @@ class ContextHelpBase {
     }
     LoadContextHelpFileAsync(context, filename) {
         return __awaiter(this, void 0, void 0, function* () {
+            // Prepare
             const filePath = vscode.Uri.file(path.join(context.extensionPath, 'contexthelp', filename));
-            const fileArrary = (yield filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/);
             // Process
+            const fileArrary = (yield filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).split(/\r?\n/);
             for (const line of fileArrary) {
                 // split (into 2) and validate length
                 var content = line.split("|");
@@ -39,14 +40,12 @@ class ContextHelpBase {
         return __awaiter(this, void 0, void 0, function* () {
             // validate if a range is selected
             let wordRange = document.getWordRangeAtPosition(position);
-            if (!wordRange) {
+            if (!wordRange)
                 return undefined;
-            }
             // get selected word
             let word = document.getText(wordRange);
-            if (!word) {
+            if (!word)
                 return undefined;
-            }
             // Find a match
             var content = this.links[word.toLowerCase()];
             if (content) {

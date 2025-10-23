@@ -155,7 +155,7 @@ export const Hovers:HoverBase[] = [
 ];
 
 export async function RegisterHoverProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
-	for (let hover of Hovers) {
+	for (const hover of Hovers) {
 		await hover.RegisterAsync(context);
 	}
 }
@@ -170,7 +170,7 @@ export const Completions:CompletionBase[] = [
 ];
 
 export async function RegisterCompletionProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
-	for (let completion of Completions) {
+	for (const completion of Completions) {
 		await completion.RegisterAsync(context);
 	}
 }
@@ -185,7 +185,7 @@ export const Foldings:FoldingBase[] = [
 ];
 
 export async function RegisterFoldingProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
-	for (let folding of Foldings) {
+	for (const folding of Foldings) {
 		await folding.RegisterAsync(context);
 	}
 }
@@ -201,7 +201,7 @@ export const DocumentSymbolProviders:DocumentSymbolProviderBase[] = [
 ];
 
 export async function RegisterDocumentSymbolProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
-	for (let documentSymbolProvider of DocumentSymbolProviders) {
+	for (const documentSymbolProvider of DocumentSymbolProviders) {
 		await documentSymbolProvider.RegisterAsync(context);
 	}
 }
@@ -217,7 +217,7 @@ export const DefinitionProviders:DefinitionProviderBase[] = [
 ];
 
 export async function RegisterDefinitionProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
-	for (let definitionProvider of DefinitionProviders) {
+	for (const definitionProvider of DefinitionProviders) {
 		await definitionProvider.RegisterAsync(context);
 	}
 }
@@ -233,7 +233,7 @@ export const ReferenceProviders:ReferenceProviderBase[] = [
 ];
 
 export async function RegisterReferenceProvidersAsync(context: vscode.ExtensionContext): Promise<void> {
-	for (let referenceProvider of ReferenceProviders) {
+	for (const referenceProvider of ReferenceProviders) {
 		await referenceProvider.RegisterAsync(context);
 	}
 }
@@ -248,7 +248,7 @@ export const ContextHelps:ContextHelpBase[] = [
 ];
 
 export async function RegisterContextHelpsAsync(context: vscode.ExtensionContext): Promise<void> {
-	for (let contextHelp of ContextHelps) {
+	for (const contextHelp of ContextHelps) {
 		await contextHelp.RegisterAsync(context);
 	}
 }
@@ -258,12 +258,12 @@ export async function RegisterContextHelpsAsync(context: vscode.ExtensionContext
 // -------------------------------------------------------------------------------------
 export async function BuildGameAsync(): Promise<boolean> {
 	// Get document
-	let document = await GetActiveTextEditorDocumentAsync();
-	if (!document || document!.uri.scheme !== "file") { return false; }
+	const document = await GetActiveTextEditorDocumentAsync();
+	if (!document || document.uri.scheme !== "file") return false;
 
 	// Find compiler
 	let compiler = configuration.GetChosenCompiler(document);
-	if (compiler) { return await compiler.BuildGameAsync(document); }
+	if (compiler) return await compiler.BuildGameAsync(document);
 
 	// Result
 	return false;
@@ -271,12 +271,12 @@ export async function BuildGameAsync(): Promise<boolean> {
 
 export async function BuildGameAndRunAsync(): Promise<boolean> {
 	// Get document
-	let document = await GetActiveTextEditorDocumentAsync();
-	if (!document || document!.uri.scheme !== "file") { return false; }
+	const document = await GetActiveTextEditorDocumentAsync();
+	if (!document || document.uri.scheme !== "file") return false;
 
 	// Find compiler
 	let compiler = configuration.GetChosenCompiler(document);
-	if (compiler) { return await compiler.BuildGameAndRunAsync(document); }
+	if (compiler) return await compiler.BuildGameAndRunAsync(document);
 
 	// Result
 	return false;
@@ -284,26 +284,23 @@ export async function BuildGameAndRunAsync(): Promise<boolean> {
 
 export function KillBuildGame(): void {
 	// Process all compilers
-	for (let compiler of Compilers) {
-		if (compiler.IsRunning) {
-			compiler.Kill();
-		}
+	for (const compiler of Compilers) {
+		if (compiler.IsRunning) compiler.Kill();
 	}		
 }
 
 export async function OpenContextHelp(): Promise<void> {
 	// Get active editor
-	var activeEditor = vscode.window.activeTextEditor;
-	if (!activeEditor) { return; }
+	const activeEditor = vscode.window.activeTextEditor;
+	if (!activeEditor) return;
 	
 	// Find context help (based on language of chosen file)
-	for (let contextHelp of ContextHelps) {
-		if (contextHelp.Id === activeEditor?.document.languageId) {
-			// Get position of cursor
-			var position = activeEditor.selection.start;
-			await contextHelp.OpenContextHelpAtCursorAsync(activeEditor.document, position);
-		}
-	}
+    const contextHelp = ContextHelps.find(h => h.Id === activeEditor.document.languageId);
+    if (!contextHelp) return;
+
+	// Open at cursor position
+    const position = activeEditor.selection.start;
+    await contextHelp.OpenContextHelpAtCursorAsync(activeEditor.document, position);
 }
 
 export function WriteToCompilerTerminal(message: string = '', lineFeed: boolean = true, writeToLog: boolean = false): void {
@@ -314,7 +311,7 @@ export function WriteToCompilerTerminal(message: string = '', lineFeed: boolean 
 		CompilerOutputChannel.append(message);
 	}
 	// Write to log?
-	if (writeToLog) { console.log(`debugger:${message}`); }        
+	if (writeToLog) console.log(`debugger:${message}`);   
 }
 
 export function WriteEnvironmentSummaryToCompilerTerminal(): void {
@@ -338,12 +335,10 @@ export function ShowErrorPopup(message: string): void {
 export async function ValidateOpenDocumentsOnStartup(context: vscode.ExtensionContext): Promise<void> {
 	// Validate all open documents
 	const openDocuments = vscode.workspace.textDocuments;
-	if (openDocuments.length > 0) {
+    for (const doc of openDocuments) {
 		// Scan/process each existing open document
-		openDocuments.forEach((document: vscode.TextDocument) => {
-			tags.ScanDocumentForADSLanguageTag(document)
-		});
-	}
+        tags.ScanDocumentForADSLanguageTag(doc);
+    }
 }
 
 export async function ShowStartupMessages(context: vscode.ExtensionContext): Promise<void> {
@@ -351,8 +346,8 @@ export async function ShowStartupMessages(context: vscode.ExtensionContext): Pro
 	const config = configuration.GetAtariDevStudioConfiguration();
 
 	// Load settings
-	const showNewVersionMessage = config.get<string>(`application.configuration.showNewVersionMessage`);
-    let latestVersion = await context.globalState.get(`${Name}.configuration.latestVersion`, undefined)
+	const showNewVersionMessage = config.get<boolean>(`application.configuration.showNewVersionMessage`, true);
+    const latestVersion = context.globalState.get(`${Name}.configuration.latestVersion`)
 
 	// Process?
 	if (!showNewVersionMessage || latestVersion === Version) return;
@@ -364,22 +359,15 @@ export async function ShowStartupMessages(context: vscode.ExtensionContext): Pro
 	const latestChanges = "Learn more about the latest changes";
 	const dontShowMeThisMessage = "Don't show me this message again";
 
-	// Show prompt
-	await vscode.window.showInformationMessage(`Welcome to the new version of ${DisplayName}`,
-			latestChanges,dontShowMeThisMessage)
-			.then(selection => {
-				if (selection === undefined) {
-					// Dismissed
-				}
-				else if (selection === latestChanges) {
-					// Show changelog
-					vscode.env.openExternal(ChangeLogUri);
-				} 
-				else if (selection === dontShowMeThisMessage) {
-					// Disable
-					config.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
-				}
-			});
+	// Show prompt and validate
+    const selection = await vscode.window.showInformationMessage(`Welcome to the new version of ${DisplayName}`, latestChanges, dontShowMeThisMessage);
+    if (selection === latestChanges) {
+        // Show changelog
+        await vscode.env.openExternal(ChangeLogUri);
+    } else if (selection === dontShowMeThisMessage) {
+        // Disable (await to ensure persisted)
+        await config.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
+    }
 }
 
 export async function GetActiveTextEditorDocumentAsync(): Promise<vscode.TextDocument | null> {
@@ -388,7 +376,9 @@ export async function GetActiveTextEditorDocumentAsync(): Promise<vscode.TextDoc
 
 	// Try current document
     let editor = vscode.window.activeTextEditor;
-    if (editor) { return editor.document; }
+    if (editor) return editor.document;
+
+	// Nothing
     return null;
 }
 

@@ -31,9 +31,8 @@ class ShellScriptCompiler extends compilerBase_1.CompilerBase {
             this.Configuration = configuration.GetAtariDevStudioConfiguration();
             // Configuration
             result = yield this.LoadConfigurationAndSettingsAsync();
-            if (!result) {
+            if (!result)
                 return false;
-            }
             // Initialise terminal
             yield application.InitialiseAdsTerminalAsync();
             // Activate output window?
@@ -43,9 +42,8 @@ class ShellScriptCompiler extends compilerBase_1.CompilerBase {
             // Clear output content? (not available for terminals)
             // Save files (based on user configuration)
             result = yield this.SaveAllFilesBeforeRun();
-            if (!result) {
+            if (!result)
                 return false;
-            }
             // Result
             return true;
         });

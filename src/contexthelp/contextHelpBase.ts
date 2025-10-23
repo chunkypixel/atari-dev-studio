@@ -18,10 +18,11 @@ export abstract class ContextHelpBase {
     public abstract RegisterAsync(context: vscode.ExtensionContext): Promise<void>
 
     protected async LoadContextHelpFileAsync(context: vscode.ExtensionContext, filename: string): Promise<void> {
+        // Prepare
 		const filePath: vscode.Uri = vscode.Uri.file(path.join(context.extensionPath, 'contexthelp', filename));
-		const fileArrary = (await filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/);
 
         // Process
+		const fileArrary = (await filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).split(/\r?\n/);
         for (const line of fileArrary) {
             // split (into 2) and validate length
             var content = line.split("|");
@@ -35,11 +36,11 @@ export abstract class ContextHelpBase {
     public async OpenContextHelpAtCursorAsync(document: vscode.TextDocument, position: vscode.Position): Promise<void> {
         // validate if a range is selected
         let wordRange = document.getWordRangeAtPosition(position);
-        if (!wordRange) { return undefined; }
+        if (!wordRange) return undefined;
 
         // get selected word
         let word = document.getText(wordRange);
-        if (!word) { return undefined; }
+        if (!word) return undefined;
 
         // Find a match
         var content = this.links[word.toLowerCase()];

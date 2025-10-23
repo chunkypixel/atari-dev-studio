@@ -1,5 +1,4 @@
 "use strict";
-import * as vscode from 'vscode';
 import * as path from 'path';
 import * as application from '../application';
 import * as configuration from '../configuration';
@@ -32,7 +31,7 @@ export class ShellScriptCompiler extends CompilerBase {
 
         // Configuration
         result = await this.LoadConfigurationAndSettingsAsync();
-        if (!result) { return false; }
+        if (!result) return false;
 
         // Initialise terminal
         await application.InitialiseAdsTerminalAsync();
@@ -46,7 +45,7 @@ export class ShellScriptCompiler extends CompilerBase {
 
         // Save files (based on user configuration)
         result = await this.SaveAllFilesBeforeRun()
-        if (!result) { return false; }
+        if (!result) return false;
 
          // Result
         return true;

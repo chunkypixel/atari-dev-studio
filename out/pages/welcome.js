@@ -25,8 +25,8 @@ class WelcomePage {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:WelcomePage.openPage');
             // Prepare
-            let contentUri = vscode.Uri.file(path.join(context.extensionPath, 'out', 'content', 'pages', 'welcome'));
-            let columnToShowIn = vscode.window.activeTextEditor
+            const contentUri = vscode.Uri.file(path.join(context.extensionPath, 'out', 'content', 'pages', 'welcome'));
+            const columnToShowIn = vscode.window.activeTextEditor
                 ? vscode.window.activeTextEditor.viewColumn
                 : undefined;
             // Open or create panel?
@@ -41,16 +41,16 @@ class WelcomePage {
                     localResourceRoots: [contentUri]
                 });
                 // Content
-                let startPagePath = vscode.Uri.joinPath(contentUri, 'index.html');
-                let content = yield filesystem.ReadFileAsync(startPagePath.fsPath, 'utf-8');
-                let nonce = browser.GenerateNonce();
+                const startPagePath = vscode.Uri.joinPath(contentUri, 'index.html');
+                const nonce = browser.GenerateNonce();
                 // Script
-                let scriptJsPath = vscode.Uri.joinPath(contentUri, 'script.js');
-                let scriptJsUri = this.currentPanel.webview.asWebviewUri(scriptJsPath);
+                const scriptJsPath = vscode.Uri.joinPath(contentUri, 'script.js');
+                const scriptJsUri = this.currentPanel.webview.asWebviewUri(scriptJsPath);
                 // Style
-                let styleCssPath = vscode.Uri.joinPath(contentUri, 'style.css');
-                let styleCssUri = this.currentPanel.webview.asWebviewUri(styleCssPath);
+                const styleCssPath = vscode.Uri.joinPath(contentUri, 'style.css');
+                const styleCssUri = this.currentPanel.webview.asWebviewUri(styleCssPath);
                 // Update tags in content
+                let content = yield filesystem.ReadFileAsync(startPagePath.fsPath, 'utf-8');
                 content = this.replaceContentTag(content, "APPDISPLAYNAME", application.DisplayName);
                 content = this.replaceContentTag(content, "APPDESCRIPTION", application.Description);
                 content = this.replaceContentTag(content, "APPVERSION", application.Version);
@@ -59,7 +59,7 @@ class WelcomePage {
                 content = this.replaceContentTag(content, "BASEPATHURI", contentUri.path + "/");
                 content = this.replaceContentTag(content, "SCRIPTJSURI", scriptJsUri);
                 content = this.replaceContentTag(content, "STYLECSSURI", styleCssUri);
-                // Set
+                // Display
                 this.currentPanel.webview.html = content;
             }
             // Capture command messages

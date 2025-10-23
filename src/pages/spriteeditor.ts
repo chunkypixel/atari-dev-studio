@@ -17,8 +17,8 @@ export class SpriteEditorPage implements vscode.Disposable {
         console.log('debugger:SpriteEditorPage.openPage');
         
         // Prepare
-        let contentUri = vscode.Uri.file(path.join(context.extensionPath, 'out', 'content', 'pages', 'spriteeditor'));
-        let columnToShowIn = vscode.window.activeTextEditor
+        const contentUri = vscode.Uri.file(path.join(context.extensionPath, 'out', 'content', 'pages', 'spriteeditor'));
+        const columnToShowIn = vscode.window.activeTextEditor
                                 ? vscode.window.activeTextEditor.viewColumn
                                 : undefined;
         let isOpen = false;
@@ -46,24 +46,23 @@ export class SpriteEditorPage implements vscode.Disposable {
             );
 
             // Content
-            let startPagePath = vscode.Uri.joinPath(contentUri,'index.html');
-            let content = await filesystem.ReadFileAsync(startPagePath.fsPath,'utf-8');
-            let nonce = browser.GenerateNonce();
+            const startPagePath = vscode.Uri.joinPath(contentUri,'index.html');
+            const nonce = browser.GenerateNonce();
             // Script
-            let scriptJsPath = vscode.Uri.joinPath(contentUri, 'main.js');
-            let scriptJsUri = this.currentPanel.webview.asWebviewUri(scriptJsPath);
+            const scriptJsPath = vscode.Uri.joinPath(contentUri, 'main.js');
+            const scriptJsUri = this.currentPanel.webview.asWebviewUri(scriptJsPath);
             // Style
-            let styleCssPath = vscode.Uri.joinPath(contentUri, 'main.css');
-            let styleCssUri = this.currentPanel.webview.asWebviewUri(styleCssPath);
-
+            const styleCssPath = vscode.Uri.joinPath(contentUri, 'main.css');
+            const styleCssUri = this.currentPanel.webview.asWebviewUri(styleCssPath);
             // Extension
             //let basePath = vscode.Uri.file(this.contentPath);
             //let basePathUri = basePath.with({ scheme: 'vscode-resource' }).toString() + '/';
 
             // Configuration
-            let configuration = await this.loadConfiguration(contentUri);
+            const configuration = await this.loadConfiguration(contentUri);
 
             // Update tags in content
+            let content = await filesystem.ReadFileAsync(startPagePath.fsPath,'utf-8');
             content = this.replaceContentTag(content, "APPNAME", "Sprite Editor");
             content = this.replaceContentTag(content, "NONCE", nonce);
             content = this.replaceContentTag(content, "CSPSOURCE", this.currentPanel.webview.cspSource);
@@ -71,7 +70,6 @@ export class SpriteEditorPage implements vscode.Disposable {
             content = this.replaceContentTag(content, "STYLECSSURI", styleCssUri);
             content = this.replaceContentTag(content, "BASEPATHURI", contentUri.path +"/");
             content = this.replaceContentTag(content, "CONFIGURATION", configuration);
-
             // Display
             this.currentPanel.webview.html = content;    
             
@@ -142,7 +140,7 @@ export class SpriteEditorPage implements vscode.Disposable {
         // Load provided file (via right-click popup in Explorer)?
         if (loadProjectUri) {
             // Put in a delay to ensure editor is fully loaded before importing project
-            let delay = (!isOpen ? 750 : 5);
+            const delay = (!isOpen ? 750 : 5);
 
              // Process
             await application.Delay(delay).then(_ =>
@@ -163,18 +161,18 @@ export class SpriteEditorPage implements vscode.Disposable {
 
     private async loadConfiguration(contentUri : vscode.Uri): Promise<string> {
         // Process
-        let configurationFileUri = vscode.Uri.joinPath(contentUri, 'spriteeditor.config');
-        let data = await filesystem.ReadFileAsync(configurationFileUri.fsPath,'utf-8');
+        const configurationFileUri = vscode.Uri.joinPath(contentUri, 'spriteeditor.config');
+        const data = await filesystem.ReadFileAsync(configurationFileUri.fsPath,'utf-8');
 
         // Return BASE64
-        if (data) { return Buffer.from(data).toString("base64"); }
+        if (data) return Buffer.from(data).toString("base64");
         return "";
     }
 
     private saveConfiguration(contentUri : vscode.Uri, message: any) {
         // Prepare
-        let data = message!.data;
-        let configurationFileUri = vscode.Uri.joinPath(contentUri, 'spriteeditor.config');
+        const data = message!.data;
+        const configurationFileUri = vscode.Uri.joinPath(contentUri, 'spriteeditor.config');
 
         // Process
         filesystem.WriteFileAsync(configurationFileUri.fsPath, data); 
@@ -185,13 +183,11 @@ export class SpriteEditorPage implements vscode.Disposable {
         // and send response back to webview
 
         // Prepare
-        let command = message!.command;
-
+        const command = message!.command;
         // Get current workspace
-        let defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
-
+        const defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
         // Options
-        let options: vscode.OpenDialogOptions = {
+        const options: vscode.OpenDialogOptions = {
             canSelectMany: false,
             openLabel: "Open",
             defaultUri: defaultUri,
@@ -217,15 +213,13 @@ export class SpriteEditorPage implements vscode.Disposable {
         // send response back to webview
 
         // Prepare
-        let command = message!.command;
-        let file = message!.file;
-        let data = message!.data;
-
+        const command = message!.command;
+        const file = message!.file;
+        const data = message!.data;
         // Set default path
-        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
-
+        const defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
         // Options
-        let options: vscode.SaveDialogOptions = {
+        const options: vscode.SaveDialogOptions = {
             defaultUri: defaultUri,
             saveLabel: "Save",
             filters: {
@@ -239,7 +233,7 @@ export class SpriteEditorPage implements vscode.Disposable {
             // Save?
             if (fileUri) {
                 // Prepare
-                let folder = path.dirname(fileUri.fsPath);
+                const folder = path.dirname(fileUri.fsPath);
 
                 // Save
                 filesystem.MkDirAsync(folder)
@@ -277,13 +271,11 @@ export class SpriteEditorPage implements vscode.Disposable {
         // and send response back to webview
 
         // Prepare
-        let command = message!.command;
-
+        const command = message!.command;
         // Get current workspace
-        let defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
-
+        const defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
         // Options
-        let options: vscode.OpenDialogOptions = {
+        const options: vscode.OpenDialogOptions = {
             canSelectMany: false,
             openLabel: "Import",
             defaultUri: defaultUri,
@@ -305,16 +297,14 @@ export class SpriteEditorPage implements vscode.Disposable {
 
     private exportAsPngFile(message: any) {
         // Prepare
-        let command = message!.command;
-        let file = message!.file;
-        let data = message!.data;
-
+        const command = message!.command;
+        const file = message!.file;
+        const data = message!.data;
         // Get default path
         // Assuiming file provided is the project file
-        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
-
+        const defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
         // Prompt user here
-        let options: vscode.SaveDialogOptions = {
+        const options: vscode.SaveDialogOptions = {
             defaultUri: defaultUri,
             saveLabel: "Export",
             filters: {
@@ -363,16 +353,14 @@ export class SpriteEditorPage implements vscode.Disposable {
 
     private exportAllAsPngFile(message: any) {
         // Prepare
-        let command = message!.command;
-        let file = message!.file;
-        let data = message!.data;
-
+        const command = message!.command;
+        const file = message!.file;
+        const data = message!.data;
         // Get default path
         // Assuiming file provided is the project file
-        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
-
+        const defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
         // Prompt user here
-        let options: vscode.OpenDialogOptions = {
+        const options: vscode.OpenDialogOptions = {
             canSelectMany: false,
             canSelectFolders: true,
             canSelectFiles: false,
@@ -388,7 +376,7 @@ export class SpriteEditorPage implements vscode.Disposable {
             // Save?
             if (folderUri) {
                 // Prepare
-                let folder = folderUri[0].fsPath;
+                const folder = folderUri[0].fsPath;
 
                 // Save
                 filesystem.MkDirAsync(folder)
@@ -397,8 +385,8 @@ export class SpriteEditorPage implements vscode.Disposable {
                         // NOTE: determine how many trailing zeros so we can build up a index replacement the size
                         //       requested by the user
                         let templateFileName = data.fileName;
-                        let totalZerosLength = application.CountTrailingZeros(templateFileName);
-                        let indexTemplate = '0'.repeat(totalZerosLength);
+                        const totalZerosLength = application.CountTrailingZeros(templateFileName);
+                        const indexTemplate = '0'.repeat(totalZerosLength);
                         // if we have trailing zeros strip them from the template name
                         if (totalZerosLength > 0) templateFileName = application.TrimLeft(templateFileName,templateFileName.length-totalZerosLength);
 
@@ -442,16 +430,14 @@ export class SpriteEditorPage implements vscode.Disposable {
 
     private exportAsBatariFile(message: any) {
         // Prepare
-        let command = message!.command;
-        let file = message!.file;
-        let data = message!.data;
-
+        const command = message!.command;
+        const file = message!.file;
+        const data = message!.data;
         // Get default path
         // Assuiming file provided is the project file
-        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
-
+        const defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
         // Prompt user here
-        let options: vscode.SaveDialogOptions = {
+        const options: vscode.SaveDialogOptions = {
             defaultUri: defaultUri,
             saveLabel: "Export",
             filters: {
@@ -464,7 +450,7 @@ export class SpriteEditorPage implements vscode.Disposable {
             // Save?
             if (fileUri) {
                 // Prepare
-                let folder = path.dirname(fileUri.fsPath);
+                const folder = path.dirname(fileUri.fsPath);
 
                 // Save
                 filesystem.MkDirAsync(folder)
@@ -499,16 +485,14 @@ export class SpriteEditorPage implements vscode.Disposable {
 
     private exportAsAssemblyFile(message: any) {
         // Prepare
-        let command = message!.command;
-        let file = message!.file;
-        let data = message!.data;
-
+        const command = message!.command;
+        const file = message!.file;
+        const data = message!.data;
         // Get default path
         // Assuiming file provided is the project file
-        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
-
+        const defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : path.dirname(file));
         // Prompt user here
-        let options: vscode.SaveDialogOptions = {
+        const options: vscode.SaveDialogOptions = {
             defaultUri: defaultUri,
             saveLabel: "Export",
             filters: {
@@ -521,7 +505,7 @@ export class SpriteEditorPage implements vscode.Disposable {
             // Save?
             if (fileUri) {
                 // Prepare
-                let folder = path.dirname(fileUri.fsPath);
+                const folder = path.dirname(fileUri.fsPath);
 
                 // Save
                 filesystem.MkDirAsync(folder)
@@ -558,13 +542,11 @@ export class SpriteEditorPage implements vscode.Disposable {
         // and send response back to webview
 
         // Prepare
-        let command = message!.command;
-
+        const command = message!.command;
         // Get default path
-        let defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
-
+        const defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
         // Options
-        let options: vscode.OpenDialogOptions = {
+        const options: vscode.OpenDialogOptions = {
             canSelectMany: false,
             openLabel: "Open",
             defaultUri: defaultUri,
@@ -588,15 +570,13 @@ export class SpriteEditorPage implements vscode.Disposable {
         // send response back to webview
 
         // Prepare
-        let command = message!.command;
-        let file = message!.file;
-        let data = message!.data;
-
+        const command = message!.command;
+        const file = message!.file;
+        const data = message!.data;
         // Get default path
-        let defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file);
-        
+        const defaultUri = vscode.Uri.file(!file ? filesystem.WorkspaceFolder() : file); 
         // Options
-        let options: vscode.SaveDialogOptions = {
+        const options: vscode.SaveDialogOptions = {
             defaultUri: defaultUri,
             saveLabel: "Save",
             filters: {
@@ -642,7 +622,8 @@ export class SpriteEditorPage implements vscode.Disposable {
         });
     }
 
-    private loadFileContent(command: string, fileUri: vscode.Uri, encoding:BufferEncoding | null) {
+    private loadFileContent(command: string, fileUri: vscode.Uri, encoding:BufferEncoding | undefined) {
+        // Process
         filesystem.ReadFileAsync(fileUri.fsPath, encoding)
             .then(data => {
                    // Result

@@ -3,65 +3,63 @@ import * as vscode from 'vscode';
 import * as application from './application';
 import * as compiler from './compilers/compilerBase'
 
-
 const seventyEightHundredCustomFoldersSection = 'compiler.7800basic.customFolders';
 const batariBasicCustomFoldersSection = 'compiler.batariBasic.customFolders';
 
 export function GetAtariDevStudioConfiguration() : vscode.WorkspaceConfiguration {
-    return vscode.workspace.getConfiguration(application.Name, null);
+    return vscode.workspace.getConfiguration(application.Name);
 }
 
 export function GetChosenCompiler(document: vscode.TextDocument): compiler.CompilerBase | undefined {
     // Prepare
     const config = GetAtariDevStudioConfiguration();
+    const editorConfig = vscode.workspace.getConfiguration('editor');
 
     // Find compiler (based on language of chosen file)
-    for (const compiler of application.Compilers) {
-        if (compiler.Id === document.languageId) {
-            return compiler;
-        }
-    }	
+    const foundCompiler = application.Compilers.find(c => c.Id === document.languageId);
+    if (foundCompiler) return foundCompiler;
 
     // Activate output window?
-    if (config!.get<boolean>(`editor.preserveCodeEditorFocus`))  {
+    if (editorConfig.get<boolean>('preserveCodeEditorFocus', false)) {
         application.CompilerOutputChannel.show();
     }
 
     // Clear output content?
-    if (config!.get<boolean>(`editor.clearPreviousOutput`))  {
+    if (editorConfig.get<boolean>('clearPreviousOutput', false)) {
         application.CompilerOutputChannel.clear();
     }
 
-    // Not found
+    // No result
     return undefined;
 }
 
 export async function TransferFolderToCustomFolders(context: vscode.ExtensionContext): Promise<void> {
-    // Validate if we have already done it?
-    const transferedFolderToCustomFolders = context.globalState.get(`${application.Name}.configuration.transferedFolderToCustomFolders`,false);
-    if (transferedFolderToCustomFolders) return;
-
     // Prepare
     const config = GetAtariDevStudioConfiguration();
+    const transferedFolderToCustomFoldersKey = `${application.Name}.configuration.transferedFolderToCustomFolders`;
+
+    // Validate if we have already done it?
+    const transferedFolderToCustomFolders = context.globalState.get<boolean>(transferedFolderToCustomFoldersKey,false);
+    if (transferedFolderToCustomFolders) return;
 
     // 7800basic
-    const existing7800BasicCustomFolder = config.get('compiler.7800basic.folder',null);
+    const existing7800BasicCustomFolder = config.get<string | null>('compiler.7800basic.folder',null);
     if (existing7800BasicCustomFolder && !CustomFolderExists(seventyEightHundredCustomFoldersSection, existing7800BasicCustomFolder)) {
         // Add
-        const customFolder = {'Custom': existing7800BasicCustomFolder};
+        const customFolder: Record<string, string> = {'Custom': existing7800BasicCustomFolder};
         await config.update(seventyEightHundredCustomFoldersSection, customFolder, vscode.ConfigurationTarget.Global);
     }
 
     // batariBasic
-    const existingBatariBasicFolder = config.get('compiler.batariBasic.folder',null);
+    const existingBatariBasicFolder = config.get<string | null>('compiler.batariBasic.folder',null);
     if (existingBatariBasicFolder && !CustomFolderExists(batariBasicCustomFoldersSection, existingBatariBasicFolder)) {
         // Add
-        const customFolder = {'Custom': existingBatariBasicFolder}; 
+        const customFolder: Record<string, string> = {'Custom': existingBatariBasicFolder}; 
         await config.update(batariBasicCustomFoldersSection, customFolder, vscode.ConfigurationTarget.Global);
     }
 
     // Set
-    await context.globalState.update(`${application.Name}.configuration.transferedFolderToCustomFolders`, true)
+    await context.globalState.update(transferedFolderToCustomFoldersKey, true)
 }
 
 export async function ValidateCustomFoldersConfigurationEntry(event: vscode.ConfigurationChangeEvent): Promise<void> {
@@ -70,106 +68,80 @@ export async function ValidateCustomFoldersConfigurationEntry(event: vscode.Conf
 
     // 7800basic?
     if (event.affectsConfiguration(`${application.Name}.${seventyEightHundredCustomFoldersSection}`)) {
-        // Prepare
-        const customFolders = config.get<Record<string, string>>(seventyEightHundredCustomFoldersSection,{});
-        const updatedCustomFolders: Record<string, string> = {};
-        let isChanged = false;
-
-        // Validate for spaces in Key and remove
-        for (const [key, value] of Object.entries(customFolders)) {
-            // Check key for required changes
-            const newKey = key.includes(' ') ? key.replace(/ /g, '').trim() : key;
-            if (newKey !== key) {
-                isChanged = true;
-            }
-            updatedCustomFolders[newKey] = value;
-        }
-
-        // Changed?
-        if (isChanged) {
-            await config.update(seventyEightHundredCustomFoldersSection, updatedCustomFolders, vscode.ConfigurationTarget.Global);
-        }
+        await sanitizeCustomFoldersEntry(seventyEightHundredCustomFoldersSection, config);
     };
     
     // batariBasic?
     if (event.affectsConfiguration(`${application.Name}.${batariBasicCustomFoldersSection}`)) {
-        // Prepare
-        let customFolders = config.get<Record<string, string>>(batariBasicCustomFoldersSection,{});
-        const updatedCustomFolders: Record<string, string> = {};
-        let isChanged = false;
-
-        // Validate for spaces in Key and remove
-        for (const [key, value] of Object.entries(customFolders)) {
-            // Check key for required changes
-            const newKey = key.includes(' ') ? key.replace(/ /g, '').trim() : key;
-            if (newKey !== key) {
-                isChanged = true;
-            }
-            updatedCustomFolders[newKey] = value;
-        }
-
-        // Changed?
-        if (isChanged) {
-            await config.update(batariBasicCustomFoldersSection, updatedCustomFolders, vscode.ConfigurationTarget.Global);
-        }
+        await sanitizeCustomFoldersEntry(batariBasicCustomFoldersSection, config);
     };
 }
 
+async function sanitizeCustomFoldersEntry(section: string, config: vscode.WorkspaceConfiguration): Promise<void> {
+    // Prepare
+    const customFolders = config.get<Record<string, string>>(section, {});
+    const updated: Record<string, string> = {};
+    let isChanged = false;
+
+    // Validate for spaces in Key and remove
+    for (const [key, value] of Object.entries(customFolders)) {
+        const newKey = key.replace(/\s+/g, '').trim();
+        if (newKey !== key) isChanged = true;
+        updated[newKey] = value;
+    }
+
+    // Changed?
+    if (isChanged) {
+        await config.update(section, updated, vscode.ConfigurationTarget.Global);
+    }
+}
+
 export async function ValidateOpenSamplesFileOnRestart(context: vscode.ExtensionContext): Promise<void> {
+    // Prepare
+    const openSampleFileOnRestartKey = `${application.Name}.configuration.openSampleFileOnRestart`;
+
     // Process?
-    const sampleFilePath: string | undefined = context.globalState.get(`${application.Name}.configuration.openSampleFileOnRestart`);
+    const sampleFilePath = context.globalState.get<string | undefined>(`${application.Name}.configuration.openSampleFileOnRestart`);
     if (!sampleFilePath) return;
 
     // Yes! Open the file
-    await vscode.workspace.openTextDocument(vscode.Uri.file(sampleFilePath))
-        .then((document: vscode.TextDocument) => vscode.window.showTextDocument(document, {preview: false, preserveFocus: true}))
-        .then(() => context.globalState.update(`${application.Name}.configuration.openSampleFileOnRestart`, undefined));
+    try {
+        const document = await vscode.workspace.openTextDocument(vscode.Uri.file(sampleFilePath));
+        await vscode.window.showTextDocument(document, { preview: false, preserveFocus: true });
+    } catch (error) {
+        // log or ignore — keep function resilient
+    }
+
+    // Clear
+    await context.globalState.update(openSampleFileOnRestartKey, undefined);
 }
 
 export function GetCustomCompilerIdList(languageId: string): string[] {
     // Prepare
     const config = GetAtariDevStudioConfiguration();
 
-    // Get
+    // Get and return result
     const customFolders = config.get<Record<string,string>>(`compiler.${languageId}.customFolders`,{});
-    const compilerIdList = Object.keys(customFolders) ?? [];
-    
-    // Return
-    return compilerIdList;
+    return Object.keys(customFolders);
 }
 
 export function GetCustomCompilerFolder(languageId: string, id: string): string {
     // Prepare
     const config = GetAtariDevStudioConfiguration();
-    let folder = '';
 
     // Scan
     const customFolders = config.get<Record<string, string>>(`compiler.${languageId}.customFolders`,{});
-    for (const [key, value] of Object.entries(customFolders)) {
-        if (key.toLowerCase() === id.toLowerCase()) {
-            folder = value;
-            break;
-        }
-    }
+    const found = Object.entries(customFolders).find(([key]) => key.toLowerCase() === id.toLowerCase());
 
     // Return result
-    return folder;
+    return found ? found[1] : '';
 }
 
 function CustomFolderExists(configurationSection: string, folder: string): boolean {
     // Prepare
     const config = GetAtariDevStudioConfiguration();
-    let result = false;
 
-    // Scan
+    // Scan and return result
     const customFolders = config.get<Record<string, string>>(configurationSection,{});
-    for (const [key, value] of Object.entries(customFolders)) {
-        if (value.toLowerCase() === folder.toLowerCase()) {
-            result = true;
-            break;
-        }
-    }
-
-    // Return result
-    return result;
+    return Object.values(customFolders).some(value => value.toLowerCase() === folder.toLowerCase());
 }

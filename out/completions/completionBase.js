@@ -28,9 +28,9 @@ class CompletionBase {
         return __awaiter(this, void 0, void 0, function* () {
             // prepare
             const filePath = vscode.Uri.file(path.join(context.extensionPath, 'completions', filename));
-            const fileArrary = (yield filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/);
             const autoCompletes = [];
             // process
+            const fileArrary = (yield filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).split(/\r?\n/);
             fileArrary.forEach((element) => {
                 if (element !== undefined) {
                     autoCompletes.push(new vscode.CompletionItem(element, vscode.CompletionItemKind.Keyword));

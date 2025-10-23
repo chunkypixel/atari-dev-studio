@@ -51,14 +51,14 @@ export class DasmCompiler extends CompilerBase {
         if (this.Format) { args.push(`${"-f"}${this.Format}`); }
         if (this.Verboseness) { args.push(`${"-v"}${this.Verboseness}`); }
         if (this.GenerateDebuggerFiles)  {
-            this.DebuggerExtensions.forEach((extension: string, arg: string) => {
+            for (const [arg, extension] of this.GetDebuggerFileList()) {
                 args.push(`${arg}"${this.FileName}${extension}"`);
-            });
+            };
         }
         if (this.Args) { args.push(`${this.Args}`); }
 
         // Environment
-        let env: Record<string, string> = {
+        const env: Record<string, string> = {
         };
 
         // Notify
@@ -105,9 +105,9 @@ export class DasmCompiler extends CompilerBase {
         this.IsRunning = false;
 
         // Finalise
-        if (executeResult) { executeResult = await this.VerifyCompiledFileSizeAsync(); }
+        if (executeResult) executeResult = await this.VerifyCompiledFileSizeAsync();
         await this.RemoveCompilationFilesAsync(executeResult);
-        if (executeResult) { executeResult = await this.MoveFilesToBinFolderAsync(); }
+        if (executeResult) executeResult = await this.MoveFilesToBinFolderAsync();
     
         // Result
         return executeResult;
@@ -118,22 +118,15 @@ export class DasmCompiler extends CompilerBase {
 
         // Base
         let result = await super.LoadConfigurationAndSettingsAsync();
-        if (!result) { return false; }
+        if (!result) return false;
 
         // Using a make process? if so we can skip some of the configuration
-        if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) { return true; }
+        if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) return true;
 
         // Default compiler
         if (!this.CustomFolderOrPath) {
              // dasm name (depends on OS)
-            let dasmName = "dasm.exe";
-            if (application.IsLinux) {
-                // Linux
-                dasmName = "dasm";
-            } else if (application.IsMacOS) {
-                // MacOS
-                dasmName = "dasm";
-            }
+            const dasmName = (application.IsLinux || application.IsMacOS ? "dasm" : "dasm.exe");
             // Append path (based on architecture and emulator name)
             this.FolderOrPath = path.join(this.DefaultFolderOrPath,application.OSPlatform,application.OSArch,dasmName);                
         }
@@ -145,9 +138,7 @@ export class DasmCompiler extends CompilerBase {
         // Emulator
         // User can select required emulator from settings
         let userDefaultEmulator = this.Configuration!.get<string>(`compiler.${this.Id}.defaultEmulator`);
-        if (userDefaultEmulator) {
-            this.Emulator = userDefaultEmulator;
-        }
+        if (userDefaultEmulator)  this.Emulator = userDefaultEmulator;
 
         // Result
         return true;
@@ -157,25 +148,25 @@ export class DasmCompiler extends CompilerBase {
         console.log('debugger:DasmCompiler.ValidateCustomCompilerLocationAsync');  
 
         // Validate for a folder
-        let customCompilerPath = this.Configuration!.get<string>(`compiler.${this.Id}.path`);
+        const customCompilerPath = this.Configuration!.get<string>(`compiler.${this.Id}.path`);
         if (!customCompilerPath) {
             // No custom compiler provided, revert
-            let message = `WARNING: You have chosen to use a custom ${this.Name} compiler but have not provided the location.\nReverting to the default compiler...`;
+            const message = `WARNING: You have chosen to use a custom ${this.Name} compiler but have not provided the location.\nReverting to the default compiler...`;
             application.WriteToCompilerTerminal(message);
             application.ShowWarningPopup(message);
 
         } else {
             // Validate custom compiler path exists
-            let result = await filesystem.FileExistsAsync(customCompilerPath);
+            const result = await filesystem.FileExistsAsync(customCompilerPath);
             if (!result) {
                 // Failed, revert
-                let message = `WARNING: Your custom ${this.Name} compiler location '${customCompilerPath}' cannot be found.\nReverting to the default compiler...`;
+                const message = `WARNING: Your custom ${this.Name} compiler location '${customCompilerPath}' cannot be found.\nReverting to the default compiler...`;
                 application.WriteToCompilerTerminal(message);
                 application.ShowWarningPopup(message);
 
             } else {
                 // Ok
-                application.WriteToCompilerTerminal(`Building using your custom ${this.Name} compiler.`);               
+                application.WriteToCompilerTerminal(`Building project using custom ${this.Name} compiler.`);               
                 application.WriteToCompilerTerminal(`Location: ${customCompilerPath}`);  
 
                 // Set
@@ -185,21 +176,20 @@ export class DasmCompiler extends CompilerBase {
         }
 
         // Finalise
-        application.WriteToCompilerTerminal("");
+        //application.WriteToCompilerTerminal("");
     }
 
     protected async RepairFilePermissionsAsync(): Promise<boolean> {
         console.log('debugger:DasmCompiler.RepairFilePermissionsAsync'); 
 
         // Validate
-        if (this.CustomFolderOrPath || application.IsWindows) { return true; }
+        if (this.CustomFolderOrPath || application.IsWindows) return true;
 
         // Github: https://github.com/chunkypixel/atari-dev-studio/issues/1
         //         Duplication of filename
         
         // Process
-        let result = await filesystem.ChModAsync(this.FolderOrPath);
-        return result;
+        return await filesystem.ChModAsync(this.FolderOrPath);
     }
 
     protected async RemoveCompilationFilesAsync(result: boolean): Promise<boolean> {
@@ -220,6 +210,13 @@ export class DasmCompiler extends CompilerBase {
 
         // Result
         return true;
+    }
+
+    protected GetDebuggerFileList(): Map<string, string> {
+        console.log('debugger:DasmCompiler.GetDebuggerFileList');
+
+        // Validate
+        return new Map([["-s",".sym"], ["-l",".lst"]]);
     }
 
 }

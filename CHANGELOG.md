@@ -4,8 +4,11 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.11.4
 
- * Updated Learning Center so when you open a sample it's key document is also opened
- * Minor internal re-organisation
+ * Updated Learning Center so when you open a sample it's **core** document is also opened
+ * Added a compiler warning to validate if your project folder or file contains spaces (can be turned off in the **Settings**)
+ * Re-organised and updated compiler messages
+ * Fixed issue with moving debugger files depending on the chosen batari Basic compiler (filenames have changed)
+ * Internal code re-organisation and optimisations
 
 ## 0.11.3
 

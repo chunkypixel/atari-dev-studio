@@ -1,4 +1,14 @@
+// ...existing code...
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileExistsAsync = FileExistsAsync;
 exports.RenameFileAsync = RenameFileAsync;
@@ -14,94 +24,110 @@ exports.GetFileExtension = GetFileExtension;
 const vscode = require("vscode");
 const application = require("./application");
 const path = require("path");
-const fs = require("fs");
-function FileExistsAsync(path) {
-    console.log('debugger:filesystem.FileExistsAsync PATH:' + path);
-    return new Promise((resolve, reject) => {
-        fs.access(path, fs.constants.F_OK, err => {
-            resolve(!err);
-        });
+const fs_1 = require("fs");
+function FileExistsAsync(filePath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield fs_1.promises.access(filePath);
+            return true;
+        }
+        catch (_a) {
+            return false;
+        }
     });
 }
 function RenameFileAsync(oldName, newName) {
-    console.log('debugger:filesystem.RenameFileAsync');
-    return new Promise((resolve, reject) => {
-        fs.rename(oldName, newName, err => {
-            resolve(!err);
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield fs_1.promises.rename(oldName, newName);
+            return true;
+        }
+        catch (_a) {
+            return false;
+        }
     });
 }
-function GetFileStatsAsync(path) {
-    console.log('debugger:filesystem.GetFileStatsAsync');
-    return new Promise((resolve, reject) => {
-        fs.stat(path, (err, stats) => {
-            if (!err) {
-                return resolve(stats);
-            }
-            resolve(undefined);
-        });
+function GetFileStatsAsync(filePath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const stats = yield fs_1.promises.stat(filePath);
+            return stats;
+        }
+        catch (_a) {
+            return undefined;
+        }
     });
 }
-function RemoveFileAsync(path) {
-    console.log('debugger:filesystem.RemoveFileAsync');
-    return new Promise((resolve, reject) => {
-        fs.unlink(path, err => {
-            resolve(!err);
-        });
+function RemoveFileAsync(filePath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield fs_1.promises.unlink(filePath);
+            return true;
+        }
+        catch (_a) {
+            return false;
+        }
     });
 }
 function FolderExistsAsync(folder) {
-    console.log('debugger:filesystem.FolderExistsAsync FOLDER:' + folder);
-    return new Promise((resolve, reject) => {
-        fs.access(folder, fs.constants.F_OK, err => {
-            resolve(!err);
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield fs_1.promises.access(folder);
+            return true;
+        }
+        catch (_a) {
+            return false;
+        }
     });
 }
 function MkDirAsync(folder) {
-    console.log('debugger:filesystem.MkDirAsync FOLDER:' + folder);
-    return new Promise((resolve, reject) => {
-        fs.mkdir(folder, err => {
-            if (err && err.code === 'EEXIST') {
-                return resolve(true);
-            }
-            resolve(!err);
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield fs_1.promises.mkdir(folder, { recursive: true });
+            return true;
+        }
+        catch (_a) {
+            return false;
+        }
     });
 }
-function ChModAsync(path, mode = '777') {
-    console.log('debugger:filesystem.ChModAsync');
-    return new Promise((resolve, reject) => {
-        fs.chmod(path, mode, err => {
-            if (err) {
-                application.WriteToCompilerTerminal(`- failed to set chmod permissions: ${err.message}`);
-            }
-            resolve(!err);
-        });
+function ChModAsync(filePath_1) {
+    return __awaiter(this, arguments, void 0, function* (filePath, mode = 0o777) {
+        var _a;
+        try {
+            yield fs_1.promises.chmod(filePath, mode);
+            return true;
+        }
+        catch (err) {
+            application.WriteToCompilerTerminal(`- failed to set chmod permissions: ${(_a = err === null || err === void 0 ? void 0 : err.message) !== null && _a !== void 0 ? _a : err}`, true, false);
+            return false;
+        }
     });
 }
-function ReadFileAsync(path, encoding) {
-    console.log('debugger:filesystem.ReadFileAsync');
-    return new Promise((resolve, reject) => {
-        fs.readFile(path, encoding, (err, data) => {
-            if (!err) {
-                return resolve(data);
-            }
-            resolve(undefined);
-        });
+function ReadFileAsync(filePath, encoding) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const data = yield fs_1.promises.readFile(filePath, encoding);
+            return data;
+        }
+        catch (_a) {
+            return undefined;
+        }
     });
 }
-function WriteFileAsync(path, data) {
-    console.log('debugger:filesystem.WriteFileAsync');
-    return new Promise((resolve, reject) => {
-        fs.writeFile(path, data, err => {
-            resolve(!err);
-        });
+function WriteFileAsync(filePath, data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield fs_1.promises.writeFile(filePath, data);
+            return true;
+        }
+        catch (_a) {
+            return false;
+        }
     });
 }
 function WorkspaceFolder() {
-    // Workspace 
-    if (vscode.workspace.workspaceFolders) {
+    if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0) {
         return vscode.workspace.workspaceFolders[0].uri.fsPath;
     }
     return "";

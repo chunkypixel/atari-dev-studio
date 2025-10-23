@@ -320,6 +320,12 @@
                     "description": "Whether to generate debugger files on compilation.",
                     "scope": "resource"
                 },
+                "atari-dev-studio.compiler.options.validateIfProjectFolderAndFileContainsSpaces": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Warn me if the project folder or file name contains spaces. Note: Spaces can sometimes cause issues, so it's best to avoid them.",
+                    "scope": "resource"
+                },
                 "atari-dev-studio.compiler.batariBasic.defaultCompiler": {
                     "type": "string",
                     "enum": [
@@ -492,10 +498,6 @@
                     "description": "Specify whether to activate the A7800 debugger",
                     "scope": "resource"
                 },
-                "atari-dev-studio.application.configuration.latestVersion": {
-                    "default": "",
-                    "scope": "resource"
-                },
                 "atari-dev-studio.application.configuration.showNewVersionMessage": {
                     "type": "boolean",
                     "default": true,
@@ -505,7 +507,7 @@
                "atari-dev-studio.application.configuration.doWasmtimeCheck": {
                     "type": "boolean",
                     "default": true,
-                    "description": "batari Basic and 7800basic requires the installation of Wasmtime. On startup of Atari Dev Studio validate the runtime is available and install (as required).",
+                    "description": "On startup of Atari Dev Studio validate the runtime is available and install (as required). Note: batari Basic and 7800basic requires Wasmtime to operate.",
                     "scope": "resource"
                 }
             }

@@ -161,7 +161,7 @@ exports.Hovers = [
 ];
 function RegisterHoverProvidersAsync(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        for (let hover of exports.Hovers) {
+        for (const hover of exports.Hovers) {
             yield hover.RegisterAsync(context);
         }
     });
@@ -176,7 +176,7 @@ exports.Completions = [
 ];
 function RegisterCompletionProvidersAsync(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        for (let completion of exports.Completions) {
+        for (const completion of exports.Completions) {
             yield completion.RegisterAsync(context);
         }
     });
@@ -191,7 +191,7 @@ exports.Foldings = [
 ];
 function RegisterFoldingProvidersAsync(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        for (let folding of exports.Foldings) {
+        for (const folding of exports.Foldings) {
             yield folding.RegisterAsync(context);
         }
     });
@@ -207,7 +207,7 @@ exports.DocumentSymbolProviders = [
 ];
 function RegisterDocumentSymbolProvidersAsync(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        for (let documentSymbolProvider of exports.DocumentSymbolProviders) {
+        for (const documentSymbolProvider of exports.DocumentSymbolProviders) {
             yield documentSymbolProvider.RegisterAsync(context);
         }
     });
@@ -223,7 +223,7 @@ exports.DefinitionProviders = [
 ];
 function RegisterDefinitionProvidersAsync(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        for (let definitionProvider of exports.DefinitionProviders) {
+        for (const definitionProvider of exports.DefinitionProviders) {
             yield definitionProvider.RegisterAsync(context);
         }
     });
@@ -239,7 +239,7 @@ exports.ReferenceProviders = [
 ];
 function RegisterReferenceProvidersAsync(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        for (let referenceProvider of exports.ReferenceProviders) {
+        for (const referenceProvider of exports.ReferenceProviders) {
             yield referenceProvider.RegisterAsync(context);
         }
     });
@@ -254,7 +254,7 @@ exports.ContextHelps = [
 ];
 function RegisterContextHelpsAsync(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        for (let contextHelp of exports.ContextHelps) {
+        for (const contextHelp of exports.ContextHelps) {
             yield contextHelp.RegisterAsync(context);
         }
     });
@@ -265,15 +265,13 @@ function RegisterContextHelpsAsync(context) {
 function BuildGameAsync() {
     return __awaiter(this, void 0, void 0, function* () {
         // Get document
-        let document = yield GetActiveTextEditorDocumentAsync();
-        if (!document || document.uri.scheme !== "file") {
+        const document = yield GetActiveTextEditorDocumentAsync();
+        if (!document || document.uri.scheme !== "file")
             return false;
-        }
         // Find compiler
         let compiler = configuration.GetChosenCompiler(document);
-        if (compiler) {
+        if (compiler)
             return yield compiler.BuildGameAsync(document);
-        }
         // Result
         return false;
     });
@@ -281,42 +279,37 @@ function BuildGameAsync() {
 function BuildGameAndRunAsync() {
     return __awaiter(this, void 0, void 0, function* () {
         // Get document
-        let document = yield GetActiveTextEditorDocumentAsync();
-        if (!document || document.uri.scheme !== "file") {
+        const document = yield GetActiveTextEditorDocumentAsync();
+        if (!document || document.uri.scheme !== "file")
             return false;
-        }
         // Find compiler
         let compiler = configuration.GetChosenCompiler(document);
-        if (compiler) {
+        if (compiler)
             return yield compiler.BuildGameAndRunAsync(document);
-        }
         // Result
         return false;
     });
 }
 function KillBuildGame() {
     // Process all compilers
-    for (let compiler of exports.Compilers) {
-        if (compiler.IsRunning) {
+    for (const compiler of exports.Compilers) {
+        if (compiler.IsRunning)
             compiler.Kill();
-        }
     }
 }
 function OpenContextHelp() {
     return __awaiter(this, void 0, void 0, function* () {
         // Get active editor
-        var activeEditor = vscode.window.activeTextEditor;
-        if (!activeEditor) {
+        const activeEditor = vscode.window.activeTextEditor;
+        if (!activeEditor)
             return;
-        }
         // Find context help (based on language of chosen file)
-        for (let contextHelp of exports.ContextHelps) {
-            if (contextHelp.Id === (activeEditor === null || activeEditor === void 0 ? void 0 : activeEditor.document.languageId)) {
-                // Get position of cursor
-                var position = activeEditor.selection.start;
-                yield contextHelp.OpenContextHelpAtCursorAsync(activeEditor.document, position);
-            }
-        }
+        const contextHelp = exports.ContextHelps.find(h => h.Id === activeEditor.document.languageId);
+        if (!contextHelp)
+            return;
+        // Open at cursor position
+        const position = activeEditor.selection.start;
+        yield contextHelp.OpenContextHelpAtCursorAsync(activeEditor.document, position);
     });
 }
 function WriteToCompilerTerminal(message = '', lineFeed = true, writeToLog = false) {
@@ -328,9 +321,8 @@ function WriteToCompilerTerminal(message = '', lineFeed = true, writeToLog = fal
         exports.CompilerOutputChannel.append(message);
     }
     // Write to log?
-    if (writeToLog) {
+    if (writeToLog)
         console.log(`debugger:${message}`);
-    }
 }
 function WriteEnvironmentSummaryToCompilerTerminal() {
     // Write
@@ -350,11 +342,9 @@ function ValidateOpenDocumentsOnStartup(context) {
     return __awaiter(this, void 0, void 0, function* () {
         // Validate all open documents
         const openDocuments = vscode.workspace.textDocuments;
-        if (openDocuments.length > 0) {
+        for (const doc of openDocuments) {
             // Scan/process each existing open document
-            openDocuments.forEach((document) => {
-                tags.ScanDocumentForADSLanguageTag(document);
-            });
+            tags.ScanDocumentForADSLanguageTag(doc);
         }
     });
 }
@@ -363,8 +353,8 @@ function ShowStartupMessages(context) {
         // Prepare
         const config = configuration.GetAtariDevStudioConfiguration();
         // Load settings
-        const showNewVersionMessage = config.get(`application.configuration.showNewVersionMessage`);
-        let latestVersion = yield context.globalState.get(`${exports.Name}.configuration.latestVersion`, undefined);
+        const showNewVersionMessage = config.get(`application.configuration.showNewVersionMessage`, true);
+        const latestVersion = context.globalState.get(`${exports.Name}.configuration.latestVersion`);
         // Process?
         if (!showNewVersionMessage || latestVersion === exports.Version)
             return;
@@ -373,21 +363,16 @@ function ShowStartupMessages(context) {
         // buttons
         const latestChanges = "Learn more about the latest changes";
         const dontShowMeThisMessage = "Don't show me this message again";
-        // Show prompt
-        yield vscode.window.showInformationMessage(`Welcome to the new version of ${exports.DisplayName}`, latestChanges, dontShowMeThisMessage)
-            .then(selection => {
-            if (selection === undefined) {
-                // Dismissed
-            }
-            else if (selection === latestChanges) {
-                // Show changelog
-                vscode.env.openExternal(exports.ChangeLogUri);
-            }
-            else if (selection === dontShowMeThisMessage) {
-                // Disable
-                config.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
-            }
-        });
+        // Show prompt and validate
+        const selection = yield vscode.window.showInformationMessage(`Welcome to the new version of ${exports.DisplayName}`, latestChanges, dontShowMeThisMessage);
+        if (selection === latestChanges) {
+            // Show changelog
+            yield vscode.env.openExternal(exports.ChangeLogUri);
+        }
+        else if (selection === dontShowMeThisMessage) {
+            // Disable (await to ensure persisted)
+            yield config.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
+        }
     });
 }
 function GetActiveTextEditorDocumentAsync() {
@@ -396,9 +381,9 @@ function GetActiveTextEditorDocumentAsync() {
         yield vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup');
         // Try current document
         let editor = vscode.window.activeTextEditor;
-        if (editor) {
+        if (editor)
             return editor.document;
-        }
+        // Nothing
         return null;
     });
 }

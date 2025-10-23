@@ -28,8 +28,6 @@ class CompilerBase {
     constructor(id, name, extensions, compiledExtensions, verifyCompiledExtensions, folderOrPath, emulator) {
         // Features
         this.IsRunning = false;
-        // Note: these need to be in reverse order compared to how they are read
-        this.DebuggerExtensions = new Map([["-s", ".sym"], ["-l", ".lst"]]);
         this.CustomFolderOrPath = false;
         this.FolderOrPath = "";
         this.Args = "";
@@ -40,6 +38,7 @@ class CompilerBase {
         this.CompiledSubFolderName = "bin";
         this.GenerateDebuggerFiles = true;
         this.CleanUpCompilationFiles = true;
+        this.CheckProjectFolderAndFileForSpaces = true;
         this.WorkspaceFolder = "";
         this.UsingMakeFileCompiler = false;
         this.UsingBatchCompiler = false;
@@ -64,12 +63,9 @@ class CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             // Set
             this.Document = document;
-            // Initialise
-            let result = yield this.InitialiseAsync();
-            if (!result) {
+            // Process
+            if (!(yield this.InitialiseAsync()))
                 return false;
-            }
-            // Execute
             return yield this.ExecuteCompilerAsync();
         });
     }
@@ -77,15 +73,13 @@ class CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             var _a, e_1, _b, _c, _d, e_2, _e, _f;
             // Process
-            let result = yield this.BuildGameAsync(document);
-            if (!result) {
+            const result = yield this.BuildGameAsync(document);
+            if (!result)
                 return false;
-            }
             // Does compiler have/use an emulator?
             // Make doesn't use an emulator - user must provide their own
-            if (this.Emulator === '' || (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler)) {
+            if (this.Emulator === '' || (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler))
                 return true;
-            }
             // Use/Try serial (windows only)
             if (this.LaunchEmulatorOrCartOption != "Emulator") {
                 // Validate
@@ -103,10 +97,10 @@ class CompilerBase {
                         for (var _g = true, _h = __asyncValues(application.Serials), _j; _j = yield _h.next(), _a = _j.done, !_a; _g = true) {
                             _c = _j.value;
                             _g = false;
-                            let serial = _c;
+                            const serial = _c;
                             if (serial.Id === this.LaunchEmulatorOrCartOption) {
                                 // Match
-                                let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                                const compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
                                 return yield serial.SendGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
                             }
                         }
@@ -125,10 +119,10 @@ class CompilerBase {
                 for (var _k = true, _l = __asyncValues(application.Emulators), _m; _m = yield _l.next(), _d = _m.done, !_d; _k = true) {
                     _f = _m.value;
                     _k = false;
-                    let emulator = _f;
+                    const emulator = _f;
                     if (emulator.Id === this.Emulator) {
                         // Note: first extension should be the one which is to be launched
-                        let compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                        const compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
                         return yield emulator.RunGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
                     }
                 }
@@ -165,11 +159,12 @@ class CompilerBase {
                 application.WriteToCompilerTerminal(`The ${this.Name} compiler is already running! If you need to cancel the compilation process use the 'ads: Kill build process' option from the Command Palette.`);
                 return false;
             }
+            // Write system and VSCode version to log
+            application.WriteEnvironmentSummaryToCompilerTerminal();
             // Configuration
             result = yield this.LoadConfigurationAndSettingsAsync();
-            if (!result) {
+            if (!result)
                 return false;
-            }
             // Launch emulator or cart
             this.LaunchEmulatorOrCartOption = this.Configuration.get(`launch.emulatorOrCart`, "Emulator");
             // Activate output window?
@@ -183,9 +178,8 @@ class CompilerBase {
             }
             // Save files (based on user configuration)
             result = yield this.SaveAllFilesBeforeRun();
-            if (!result) {
+            if (!result)
                 return false;
-            }
             // Remove old debugger files before build
             if (!this.UsingMakeFileCompiler && !this.UsingBatchCompiler && !this.UsingShellScriptCompiler) {
                 yield this.RemoveDebuggerFilesAsync(this.CompiledSubFolder);
@@ -223,7 +217,7 @@ class CompilerBase {
                     repeatCounter = repeatCounter + 1;
                     console.log(`debugger:CompilerBase.SaveFileBeforeRun.RepeatCounter=${repeatCounter}`);
                     if (repeatCounter > 4) {
-                        let message = "WARNING: It appears one or more of your unsaved documents did not save as expected.";
+                        const message = "WARNING: It appears one or more of your unsaved documents did not save as expected.";
                         application.WriteToCompilerTerminal(message);
                         console.log(`debugger:CompilerBase.SaveFileBeforeRun ${message}`);
                         return false;
@@ -240,13 +234,12 @@ class CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.VerifyCompilerFilesExistsAsync');
             // Prepare
-            let compilerFileList = this.GetCompilerFileList();
             let result = true;
             // Process
             application.WriteToCompilerTerminal(`Verifying compiler files exist...`);
-            for (let compilerFileName of compilerFileList) {
+            for (const compilerFileName of this.GetCompilerFileList()) {
                 // Prepare
-                let compilerFilePath = path.join(this.FolderOrPath, compilerFileName);
+                const compilerFilePath = path.join(this.FolderOrPath, compilerFileName);
                 // Validate
                 if (!(yield filesystem.FileExistsAsync(compilerFilePath))) {
                     // Not found
@@ -266,13 +259,12 @@ class CompilerBase {
                 return true;
             }
             // Prepare
-            let compilerFileList = this.GetCompilerFileList();
             let result = true;
             // Process
             application.WriteToCompilerTerminal(`Verifying file permissions...`);
-            for (let compilerFileName of compilerFileList) {
+            for (const compilerFileName of this.GetCompilerFileList()) {
                 // Prepare
-                let compilerFilePath = path.join(this.FolderOrPath, compilerFileName);
+                const compilerFilePath = path.join(this.FolderOrPath, compilerFileName);
                 // Validate
                 if (!(yield filesystem.ChModAsync(compilerFilePath))) {
                     // Not found
@@ -290,6 +282,9 @@ class CompilerBase {
     }
     GetCompilerFileList() {
         return [];
+    }
+    GetDebuggerFileList() {
+        return new Map();
     }
     ShowAnyCompilerWarnings() {
     }
@@ -311,18 +306,16 @@ class CompilerBase {
             const adsCompilerTag = tags.ScanDocumentForADSCompilerTag(this.Id, this.Document);
             // Get default chosen compiler
             console.log('debugger:CompilerBase.LoadConfigurationAsync.ValidateCompiler');
-            let chosenCompiler = this.Configuration.get(`compiler.${this.Id}.defaultCompiler`, '');
             // Override with document tag?
-            if (adsCompilerTag) {
+            let chosenCompiler = this.Configuration.get(`compiler.${this.Id}.defaultCompiler`, '');
+            if (adsCompilerTag)
                 chosenCompiler = adsCompilerTag;
-            }
             // Make?
             if (chosenCompiler === "Make") {
                 // Only working in dasm currently
                 // validate for one of the script files
-                if (!(yield this.ValidateTerminalMakeFileAvailableAysnc())) {
+                if (!(yield this.ValidateTerminalMakeFileAvailableAysnc()))
                     return false;
-                }
                 // Initialise terminal
                 yield application.InitialiseAdsTerminalAsync();
                 return true;
@@ -342,6 +335,7 @@ class CompilerBase {
             // Compilation
             this.GenerateDebuggerFiles = this.Configuration.get(`compiler.options.generateDebuggerFiles`, true);
             this.CleanUpCompilationFiles = this.Configuration.get(`compiler.options.cleanupCompilationFiles`, true);
+            this.CheckProjectFolderAndFileForSpaces = this.Configuration.get(`compiler.options.validateIfProjectFolderAndFileContainsSpaces`, true);
             // System
             this.CompiledSubFolder = path.join(this.WorkspaceFolder, this.CompiledSubFolderName);
             // Result
@@ -359,9 +353,8 @@ class CompilerBase {
             if (!this.UsingMakeFileCompiler) {
                 this.UsingMakeFileCompiler = yield this.FindTerminalMakeFileAsync("MAKEFILE");
             }
-            if (this.UsingMakeFileCompiler) {
+            if (this.UsingMakeFileCompiler)
                 return true;
-            }
             // Shell?
             this.UsingShellScriptCompiler = yield this.FindTerminalMakeFileAsync("makefile.sh");
             if (!this.UsingShellScriptCompiler) {
@@ -370,16 +363,14 @@ class CompilerBase {
             if (!this.UsingShellScriptCompiler) {
                 this.UsingShellScriptCompiler = yield this.FindTerminalMakeFileAsync("MAKEFILE.SH");
             }
-            if (this.UsingShellScriptCompiler) {
+            if (this.UsingShellScriptCompiler)
                 return true;
-            }
             // Bat?
             this.UsingBatchCompiler = yield this.FindTerminalMakeFileAsync("makefile.bat");
-            if (this.UsingBatchCompiler) {
+            if (this.UsingBatchCompiler)
                 return true;
-            }
             // Nothing found
-            let message = `ERROR: You have chosen to use the Make compiler for ${this.Id} but no makefile was not found in your root workspace folder.\nCreate a 'Makefile', 'makefile.bat' or 'makefile.sh' script...`;
+            const message = `ERROR: You have chosen to use the Make compiler for ${this.Id} but no makefile was not found in your root workspace folder.\nCreate a 'Makefile', 'makefile.bat' or 'makefile.sh' script...`;
             application.WriteToCompilerTerminal(message);
             application.ShowErrorPopup(message);
             // Exit
@@ -390,19 +381,19 @@ class CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.ValidateCustomCompilerLocationAsync');
             // Validate for a folder
-            let customCompilerFolder = configuration.GetCustomCompilerFolder(this.Id, customCompilerId);
+            const customCompilerFolder = configuration.GetCustomCompilerFolder(this.Id, customCompilerId);
             if (!customCompilerFolder) {
                 // No custom compiler provided, revert
-                let message = `WARNING: You have chosen to use a custom ${this.Name} compiler (${customCompilerId}) but you have not provided the location.\nReverting to the default compiler...`;
+                const message = `WARNING: You have chosen to use a custom ${this.Name} compiler (${customCompilerId}) but you have not provided the location.\nReverting to the default compiler...`;
                 application.WriteToCompilerTerminal(message);
                 //application.ShowWarningPopup(message);
             }
             else {
                 // Validate custom compiler path exists
-                let result = yield filesystem.FolderExistsAsync(customCompilerFolder);
+                const result = yield filesystem.FolderExistsAsync(customCompilerFolder);
                 if (!result) {
                     // Failed, revert
-                    let message = `WARNING: Your custom ${this.Name} compiler location '${customCompilerFolder}' cannot be found.\nReverting to the default compiler...`;
+                    const message = `WARNING: Your custom ${this.Name} compiler location '${customCompilerFolder}' cannot be found.\nReverting to the default compiler...`;
                     application.WriteToCompilerTerminal(message);
                     //application.ShowWarningPopup(message);
                 }
@@ -416,29 +407,40 @@ class CompilerBase {
                 }
             }
             // Finalise
-            application.WriteToCompilerTerminal("");
+            //application.WriteToCompilerTerminal("");
         });
+    }
+    ValidateIfProjectFolderAndFileContainsSpaces() {
+        console.log('debugger:CompilerBase.ValidateIfProjectFolderAndFileContainsSpaces');
+        // process?
+        if (this.CheckProjectFolderAndFileForSpaces) {
+            if (this.WorkspaceFolder.includes(' ')) {
+                application.WriteToCompilerTerminal(`WARNING: The path of your project contains spaces which can sometimes cause issues. It's a good idea to remove them to avoid potential problems.`);
+            }
+            else if (this.FileName.includes(' ')) {
+                application.WriteToCompilerTerminal(`WARNING: The filename of your project file contains spaces which can sometimes cause issues. It's a good idea to remove them to avoid potential problems.`);
+            }
+        }
     }
     VerifyCompiledFileSizeAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             var _a, e_3, _b, _c;
             console.log('debugger:CompilerBase.VerifyCompiledFileSize');
             // Validate
-            if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) {
+            if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler)
                 return true;
-            }
             // Verify created file(s)
             application.WriteToCompilerTerminal(`Verifying compiled file(s)...`);
             try {
                 for (var _d = true, _e = __asyncValues(this.VerifyCompiledExtensions), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
                     _c = _f.value;
                     _d = false;
-                    let extension = _c;
+                    const extension = _c;
                     // Prepare
-                    let compiledFileName = `${this.FileName}${extension}`;
-                    let compiledFilePath = path.join(this.WorkspaceFolder, compiledFileName);
+                    const compiledFileName = `${this.FileName}${extension}`;
+                    const compiledFilePath = path.join(this.WorkspaceFolder, compiledFileName);
                     // Validate
-                    let fileStats = yield filesystem.GetFileStatsAsync(compiledFilePath);
+                    const fileStats = yield filesystem.GetFileStatsAsync(compiledFilePath);
                     if (fileStats && fileStats.size > 0) {
                         continue;
                     }
@@ -464,9 +466,8 @@ class CompilerBase {
             // Note: generateDebuggerFile - there are different settings for each compiler
             console.log('debugger:CompilerBase.MoveFilesToBinFolder');
             // Validate
-            if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler) {
+            if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler)
                 return true;
-            }
             // Create directory?
             let result = yield filesystem.MkDirAsync(this.CompiledSubFolder);
             if (!result) {
@@ -484,15 +485,15 @@ class CompilerBase {
                     // Prepare
                     let compiledFileName = `${this.FileName}${extension}`;
                     // leading minus (-)? if so strip any existing extensions from filename before adding
-                    // There is a sepcific requirement for the 7800basic compiler
+                    // There is a specific requirement for the 7800basic compiler
                     if (extension.startsWith("-")) {
                         // remove minus (-)
                         extension = extension.slice(1);
                         compiledFileName = `${path.parse(this.FileName).name}${extension}`;
                     }
                     // set path
-                    let oldPath = path.join(this.WorkspaceFolder, compiledFileName);
-                    let newPath = path.join(this.CompiledSubFolder, compiledFileName);
+                    const oldPath = path.join(this.WorkspaceFolder, compiledFileName);
+                    const newPath = path.join(this.CompiledSubFolder, compiledFileName);
                     // Move compiled file
                     // Updated to check as we may now have optional files (7800basic - .CC2, bB - .ace)
                     if (yield filesystem.FileExistsAsync(oldPath)) {
@@ -515,18 +516,19 @@ class CompilerBase {
             }
             // Process?
             if (this.GenerateDebuggerFiles) {
-                // Move all debugger files?
+                // Prepare
                 application.WriteToCompilerTerminal(`Moving debugger file(s) to '${this.CompiledSubFolderName}' folder...`);
                 try {
-                    for (var _k = true, _l = __asyncValues(this.DebuggerExtensions), _m; _m = yield _l.next(), _d = _m.done, !_d; _k = true) {
+                    // Move all debugger files
+                    for (var _k = true, _l = __asyncValues(this.GetDebuggerFileList()), _m; _m = yield _l.next(), _d = _m.done, !_d; _k = true) {
                         _f = _m.value;
                         _k = false;
-                        let [arg, extension] = _f;
+                        const [arg, extension] = _f;
                         // Prepare
-                        let debuggerFileName = `${this.FileName}${extension}`;
+                        const debuggerFileName = `${this.FileName}${extension}`;
                         // Set path
-                        let oldPath = path.join(this.WorkspaceFolder, debuggerFileName);
-                        let newPath = path.join(this.CompiledSubFolder, debuggerFileName);
+                        const oldPath = path.join(this.WorkspaceFolder, debuggerFileName);
+                        const newPath = path.join(this.CompiledSubFolder, debuggerFileName);
                         // Move compiled file?
                         if (yield filesystem.FileExistsAsync(oldPath)) {
                             result = yield filesystem.RenameFileAsync(oldPath, newPath);
@@ -555,13 +557,13 @@ class CompilerBase {
             console.log('debugger:CompilerBase.RemoveDebuggerFilesAsync');
             try {
                 // Process
-                for (var _d = true, _e = __asyncValues(this.DebuggerExtensions), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
+                for (var _d = true, _e = __asyncValues(this.GetDebuggerFileList()), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
                     _c = _f.value;
                     _d = false;
-                    let [arg, extension] = _c;
+                    const [arg, extension] = _c;
                     // Prepare
-                    let debuggerFile = `${this.FileName}${extension}`;
-                    let debuggerFilePath = path.join(folder, debuggerFile);
+                    const debuggerFile = `${this.FileName}${extension}`;
+                    const debuggerFilePath = path.join(folder, debuggerFile);
                     // Process
                     if (yield filesystem.FileExistsAsync(debuggerFilePath)) {
                         yield filesystem.RemoveFileAsync(debuggerFilePath);
@@ -593,10 +595,9 @@ class CompilerBase {
     FindTerminalMakeFileAsync(fileName) {
         return __awaiter(this, void 0, void 0, function* () {
             // Scan for required makefile and store if found
-            let result = yield filesystem.FileExistsAsync(path.join(this.WorkspaceFolder, fileName));
-            if (result) {
+            const result = yield filesystem.FileExistsAsync(path.join(this.WorkspaceFolder, fileName));
+            if (result)
                 this.FileName = fileName;
-            }
             // Return
             return result;
         });
@@ -614,10 +615,9 @@ class CompilerBase {
         }
         // Workspace (last resort)
         if (vscode.workspace.workspaceFolders && uri) {
-            let workspaceFolder = vscode.workspace.getWorkspaceFolder(uri);
-            if (workspaceFolder) {
+            const workspaceFolder = vscode.workspace.getWorkspaceFolder(uri);
+            if (workspaceFolder)
                 return workspaceFolder.uri.fsPath;
-            }
             return vscode.workspace.workspaceFolders[0].uri.fsPath;
         }
         return "";

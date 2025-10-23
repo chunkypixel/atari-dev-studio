@@ -71,7 +71,7 @@ export abstract class HoverBase implements vscode.HoverProvider {
 		// Interate thru the file and pick out the keywords by keeping track of
 		// how many contigous blank lines that have passed by.  Since the keyword can be
 		// prefixed by markdown data we need to use a regex to just get the key.
-		const lines = (await filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).toString().split(/\r?\n/);
+		const lines = (await filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).split(/\r?\n/);
 		for (const line of lines) {
 			let match=line.match(keypattern);
 			// Do we something that looks like a key and also enough blanks passed by?
