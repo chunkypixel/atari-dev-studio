@@ -12,38 +12,32 @@ class DasmDefinitionProvider extends definitionProviderBase_1.DefinitionProvider
         let definitions = [];
         // validate if a range is selected
         let wordRange = document.getWordRangeAtPosition(position);
-        if (!wordRange) {
+        if (!wordRange)
             return undefined;
-        }
         // get selected word
         let word = document.getText(wordRange);
-        if (!word) {
+        if (!word)
             return undefined;
-        }
         // process
         for (var lineIndex = 0; lineIndex < document.lineCount; lineIndex++) {
             // get
             let line = document.lineAt(lineIndex);
             // validate
-            if (line.isEmptyOrWhitespace) {
+            if (line.isEmptyOrWhitespace)
                 continue;
-            }
-            if (line.text.startsWith(' ') || line.text.startsWith('\t')) {
+            if (line.text.startsWith(' ') || line.text.startsWith('\t'))
                 continue;
-            }
             // get line
             let lineText = line.text
                 .slice(line.firstNonWhitespaceCharacterIndex);
             // validate - remark
-            if (lineText.startsWith(';') || lineText.startsWith('*')) {
+            if (lineText.startsWith(';') || lineText.startsWith('*'))
                 continue;
-            }
             // get keywords
             // just get the first 3 to increase speed (<mainkeyword><space><secondarykeyword>)
             let keywords = lineText.split(/[\s\t]+/, 3);
-            if (keywords.length < 0) {
+            if (keywords.length < 0)
                 continue;
-            }
             // Notes:
             // for labels need to be the first word (no spaces)
             // Ensure we compare actual case

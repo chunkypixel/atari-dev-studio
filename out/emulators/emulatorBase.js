@@ -32,9 +32,8 @@ class EmulatorBase {
             this.FileName = fileName;
             // Process
             let result = yield this.InitialiseAsync();
-            if (!result) {
+            if (!result)
                 return false;
-            }
             return yield this.ExecuteEmulatorAsync();
         });
     }
@@ -42,12 +41,7 @@ class EmulatorBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:EmulatorBase.InitialiseAsync');
             // Configuration
-            let result = yield this.LoadConfigurationAsync();
-            if (!result) {
-                return false;
-            }
-            // Result
-            return true;
+            return yield this.LoadConfigurationAsync();
         });
     }
     RepairFilePermissionsAsync() {

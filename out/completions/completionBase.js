@@ -32,9 +32,8 @@ class CompletionBase {
             // process
             const fileArrary = (yield filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).split(/\r?\n/);
             fileArrary.forEach((element) => {
-                if (element !== undefined) {
+                if (element !== undefined)
                     autoCompletes.push(new vscode.CompletionItem(element, vscode.CompletionItemKind.Keyword));
-                }
             });
             // return
             return autoCompletes;

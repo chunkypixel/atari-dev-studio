@@ -29,9 +29,8 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
             console.log('debugger:StellaEmulator.LoadConfigurationAsync');
             // Base
             let result = yield _super.LoadConfigurationAsync.call(this);
-            if (!result) {
+            if (!result)
                 return false;
-            }
             // Emulator
             if (!this.CustomFolderOrPath) {
                 // Emulator name (depends on OS)
@@ -65,18 +64,16 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
             yield this.RepairFilePermissionsAsync();
             // Command
             let command = `"${this.FolderOrPath}"`;
-            if (application.IsMacOS) {
+            if (application.IsMacOS)
                 command = `open -a "${command}"`;
-            }
             // Args
             let args = [
                 this.Args,
                 `"${this.FileName}"`
             ];
             // Kill any existing process
-            if (this.AutoCloseExistingInstances) {
+            if (this.AutoCloseExistingInstances)
                 yield execute.KillProcessByNameAsync(this.Name);
-            }
             // Process
             application.WriteToCompilerTerminal(`Launching ${this.Name} emulator...`);
             // Launch
@@ -101,18 +98,15 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:StellaEmulator.RepairFilePermissionsAsync');
             // Validate
-            if (this.CustomFolderOrPath || application.IsWindows) {
+            if (this.CustomFolderOrPath || application.IsWindows)
                 return true;
-            }
             // Process
             let result = yield filesystem.ChModAsync(this.FolderOrPath);
             // Attempt to mark Stella as execute #19
-            if (result && application.IsMacOS) {
+            if (result && application.IsMacOS)
                 result = yield filesystem.ChModAsync(path.join(this.FolderOrPath, `Contents/MacOS/Stella`));
-            }
-            if (result && application.IsLinux) {
+            if (result && application.IsLinux)
                 result = yield filesystem.ChModAsync(this.FolderOrPath);
-            }
             // Result
             return result;
         });

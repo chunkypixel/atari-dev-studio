@@ -48,21 +48,18 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
                 `"${this.FileName}"`,
                 `-o"${this.FileName}${this.CompiledExtensions[0]}"`
             ];
-            if (this.Format) {
+            if (this.Format)
                 args.push(`${"-f"}${this.Format}`);
-            }
-            if (this.Verboseness) {
+            if (this.Verboseness)
                 args.push(`${"-v"}${this.Verboseness}`);
-            }
             if (this.GenerateDebuggerFiles) {
                 for (const [arg, extension] of this.GetDebuggerFileList()) {
                     args.push(`${arg}"${this.FileName}${extension}"`);
                 }
                 ;
             }
-            if (this.Args) {
+            if (this.Args)
                 args.push(`${this.Args}`);
-            }
             // Environment
             const env = {};
             // Notify

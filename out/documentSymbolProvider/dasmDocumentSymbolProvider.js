@@ -27,23 +27,20 @@ class DasmDocumentSymbolProvider extends documentSymbolProviderBase_1.DocumentSy
             // store (for expanding container)
             prevLine = line;
             // validate
-            if (line.isEmptyOrWhitespace) {
+            if (line.isEmptyOrWhitespace)
                 continue;
-            }
             // get line
             let lineText = line.text
                 .slice(line.firstNonWhitespaceCharacterIndex);
             // get keywords
             // just get the first 3 to increase speed (<mainkeyword><space><secondarykeyword>)
             let keywords = lineText.split(/[\s\t]+/, 3);
-            if (keywords.length < 0) {
+            if (keywords.length < 0)
                 continue;
-            }
             let mainKeyword = keywords[0].toLowerCase();
             // validate - remark
-            if (mainKeyword.startsWith(';') || mainKeyword.startsWith('*')) {
+            if (mainKeyword.startsWith(';') || mainKeyword.startsWith('*'))
                 continue;
-            }
             // prepare
             let symbolKind = undefined;
             let isContainer = false;
@@ -78,9 +75,8 @@ class DasmDocumentSymbolProvider extends documentSymbolProviderBase_1.DocumentSy
                 default:
                     // validate
                     // anything indented at this point does not get processed
-                    if (line.text.startsWith(' ') || line.text.startsWith('\t')) {
+                    if (line.text.startsWith(' ') || line.text.startsWith('\t'))
                         continue;
-                    }
                     // is variable?
                     let isVariable = false;
                     if (keywords.length > 1) {
@@ -96,24 +92,21 @@ class DasmDocumentSymbolProvider extends documentSymbolProviderBase_1.DocumentSy
                             }
                         }
                         // exit?
-                        if (isVariable) {
+                        if (isVariable)
                             continue;
-                        }
                     }
                     // get keyword
                     let keyword = keywords[0];
-                    if (keyword.endsWith(':')) {
+                    if (keyword.endsWith(':'))
                         keyword = keyword.substring(0, keyword.length - 1);
-                    }
                     // initialise
                     let isSubLabel = keyword.startsWith('.');
                     isContainer = !isSubLabel;
                     symbolName = keyword;
                     symbolKind = (isSubLabel ? vscode.SymbolKind.Field : vscode.SymbolKind.Method);
                     // subroutine (or other)?
-                    if (keywords.length > 1 && keywords[1].toUpperCase() === 'SUBROUTINE') {
+                    if (keywords.length > 1 && keywords[1].toUpperCase() === 'SUBROUTINE')
                         symbolName += ` ${keywords[1].toLowerCase()}`;
-                    }
                     // within container?
                     if (isContainer) {
                         while (containers.length > 0) {
@@ -138,9 +131,8 @@ class DasmDocumentSymbolProvider extends documentSymbolProviderBase_1.DocumentSy
                     symbols.push(symbol);
                 }
                 // is this a container?
-                if (isContainer) {
+                if (isContainer)
                     containers.push(symbol);
-                }
             }
         }
         // return result

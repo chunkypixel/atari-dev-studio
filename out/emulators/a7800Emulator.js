@@ -50,9 +50,8 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
             console.log('debugger:A7800Emulator.LoadConfigurationAsync');
             // Base
             let result = yield _super.LoadConfigurationAsync.call(this);
-            if (!result) {
+            if (!result)
                 return false;
-            }
             // Reset
             this.Region = "";
             this.Console = "";
@@ -65,9 +64,8 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
                 else if (application.IsLinux || application.IsMacOS) {
                     // Prepare
                     let architecture = "Linux";
-                    if (application.IsMacOS) {
+                    if (application.IsMacOS)
                         architecture = "Darwin";
-                    }
                     // Set
                     this.FolderOrPath = path.join(this.FolderOrPath, `a7800.${architecture}`);
                 }
@@ -144,9 +142,8 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:A7800Emulator.RepairFilePermissionsAsync');
             // Validate
-            if (this.CustomFolderOrPath || application.IsWindows) {
+            if (this.CustomFolderOrPath || application.IsWindows)
                 return true;
-            }
             // Process
             let result = yield filesystem.ChModAsync(this.FolderOrPath);
             return result;

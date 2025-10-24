@@ -45,23 +45,20 @@ class DocumentSymbolProviderBase {
             // store (for expanding container)
             prevLine = line;
             // validation
-            if (line.isEmptyOrWhitespace) {
+            if (line.isEmptyOrWhitespace)
                 continue;
-            }
             // get line
             let lineText = line.text
                 .slice(line.firstNonWhitespaceCharacterIndex);
             // get keywords
             // just get the first 3 to increase speed (<mainkeyword><space><secondarykeyword>)
             let keywords = lineText.split(/[\s\t]+/, 3);
-            if (keywords.length < 0) {
+            if (keywords.length < 0)
                 continue;
-            }
             let mainKeyword = keywords[0].toLowerCase();
             // validation - rem
-            if (mainKeyword.startsWith(';') || mainKeyword.startsWith('rem')) {
+            if (mainKeyword.startsWith(';') || mainKeyword.startsWith('rem'))
                 continue;
-            }
             // prepare
             let symbolKind = undefined;
             let isContainer = false;
@@ -80,9 +77,8 @@ class DocumentSymbolProviderBase {
                     isWithinFunctionOrMacro = false;
                     // set name (append bank number)
                     symbolName = mainKeyword;
-                    if (keywords.length > 1) {
+                    if (keywords.length > 1)
                         symbolName += ` ${keywords[1]}`;
-                    }
                     // reset container to root?
                     while (containers.length > 0) {
                         containers.pop();
@@ -164,12 +160,10 @@ class DocumentSymbolProviderBase {
                     isWithinFunctionOrMacro = false;
                     // set name (append hole number and noflow)
                     symbolName = mainKeyword;
-                    if (keywords[0].length > 1) {
+                    if (keywords[0].length > 1)
                         symbolName += ` ${keywords[1]}`;
-                    }
-                    if (keywords[0].length > 2) {
+                    if (keywords[0].length > 2)
                         symbolDetail = keywords[2];
-                    }
                     // reset container to root?
                     while (containers.length > (isWithinBank ? 1 : 0)) {
                         containers.pop();
@@ -178,22 +172,19 @@ class DocumentSymbolProviderBase {
                 default:
                     // validate
                     // anything indented at this point does not get processed
-                    if (line.text.startsWith(' ') || line.text.startsWith('\t')) {
+                    if (line.text.startsWith(' ') || line.text.startsWith('\t'))
                         continue;
-                    }
                     // is within data or asm? if so skip
-                    if (isWithinData || isWithinAsm) {
+                    if (isWithinData || isWithinAsm)
                         continue;
-                    }
                     // initialise
                     let isSubLabel = mainKeyword.startsWith('_');
                     isContainer = !isSubLabel;
                     symbolName = keywords[0];
                     // label or sub-label within label)
                     symbolKind = (isSubLabel ? vscode.SymbolKind.Field : vscode.SymbolKind.Method);
-                    if (isSubLabel) {
+                    if (isSubLabel)
                         symbolDetail = 'sub';
-                    }
                     // inside label (and not a sub-label)
                     if (isContainer && (isWithinLabel || isWithinFunctionOrMacro)) {
                         while (containers.length > (isWithinBank ? 1 : 0)) {
@@ -221,9 +212,8 @@ class DocumentSymbolProviderBase {
                     symbols.push(symbol);
                 }
                 // is this a container?
-                if (isContainer) {
+                if (isContainer)
                     containers.push(symbol);
-                }
             }
         }
         // return result

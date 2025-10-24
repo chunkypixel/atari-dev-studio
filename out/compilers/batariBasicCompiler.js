@@ -162,12 +162,10 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
         if (this.CompilerVersion < application.BATARIBASIC_WASMTIME_RELEASE) {
             // Prepare
             let platform = "";
-            if (application.IsLinux) {
+            if (application.IsLinux)
                 platform = ".Linux";
-            }
-            if (application.IsMacOS) {
+            if (application.IsMacOS)
                 platform = ".Darwin";
-            }
             const extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
             // Default items
             compilerFileList.push(`2600basic${platform}${extension}`, `bbfilter${platform}${extension}`, `optimize${platform}${extension}`, `postprocess${platform}${extension}`, `preprocess${platform}${extension}`, `dasm${platform}${extension}`);

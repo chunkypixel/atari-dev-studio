@@ -14,9 +14,8 @@ class StatusBar {
         //         Option to turn off/on
         // Validate
         let command = config.get('editor.statusBarCommands', 'Full');
-        if (command === "None") {
+        if (command === "None")
             return;
-        }
         // Spacer
         let itemOptions = [
             { text: `   ` },

@@ -30,12 +30,7 @@ class SerialBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SerialBase.InitialiseAsync');
             // Configuration
-            let result = yield this.LoadConfigurationAsync();
-            if (!result) {
-                return false;
-            }
-            // Result
-            return true;
+            return yield this.LoadConfigurationAsync();
         });
     }
     LoadConfigurationAsync() {

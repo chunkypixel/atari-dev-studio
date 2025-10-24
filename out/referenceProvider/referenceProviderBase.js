@@ -27,30 +27,26 @@ class ReferenceProviderBase {
         let definitions = [];
         // validate if a range is selected
         let wordRange = document.getWordRangeAtPosition(position);
-        if (!wordRange) {
+        if (!wordRange)
             return undefined;
-        }
         // get selected word
         let word = document.getText(wordRange);
-        if (!word) {
+        if (!word)
             return undefined;
-        }
         // process
         for (var lineIndex = 0; lineIndex < document.lineCount; lineIndex++) {
             // get
             let line = document.lineAt(lineIndex);
             // validate
-            if (line.isEmptyOrWhitespace) {
+            if (line.isEmptyOrWhitespace)
                 continue;
-            }
             // get line
             let lineText = line.text
                 .slice(line.firstNonWhitespaceCharacterIndex);
             // get keywords
             let keywords = lineText.split(/[\s\t]+/);
-            if (keywords.length < 0) {
+            if (keywords.length < 0)
                 continue;
-            }
             // validate
             for (var keywordIndex = 0; keywordIndex < keywords.length; keywordIndex++) {
                 // Prepare
@@ -64,15 +60,13 @@ class ReferenceProviderBase {
                         let position = keyword.indexOf(word);
                         let char = keyword.substring(position + word.length, position + word.length + 1);
                         if (char !== '' && char !== '=' && char !== ',' && char !== ':' && char !== ';' &&
-                            char !== '[' && char !== '{' && char !== '(') {
+                            char !== '[' && char !== '{' && char !== '(')
                             break;
-                        }
                     }
                     // position of word on line
                     let wordIndex = line.text.indexOf(keywords[keywordIndex]);
-                    if (wordIndex < 0) {
+                    if (wordIndex < 0)
                         wordIndex = 0;
-                    }
                     // store and exit for
                     definitions.push(new vscode.Location(document.uri, new vscode.Position(lineIndex, wordIndex)));
                 }

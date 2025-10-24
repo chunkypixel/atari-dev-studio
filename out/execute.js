@@ -19,9 +19,8 @@ const cp = require("child_process");
 function KillProcessByNameAsync(name) {
     return __awaiter(this, void 0, void 0, function* () {
         // Need to lowercase name
-        if (application.IsLinux || application.IsMacOS) {
+        if (application.IsLinux || application.IsMacOS)
             name = name.toLowerCase();
-        }
         // Search
         yield find('name', name)
             .then(function (list) {
@@ -36,9 +35,8 @@ function KillProcessByNameAsync(name) {
 }
 function KillProcessById(pid) {
     // Validate
-    if (pid === undefined) {
+    if (pid === undefined)
         return;
-    }
     // Process
     try {
         process.kill(pid, "SIGKILL"); // force
@@ -76,9 +74,8 @@ function Spawn(command, args, env, cwd, stdout, stderr) {
             let message = data.toString();
             // Send out
             var result = stdout(message);
-            if (!result) {
+            if (!result)
                 receivedError = true;
-            }
             // Notify
             console.log('- stdout ');
             console.log(message);
@@ -88,9 +85,8 @@ function Spawn(command, args, env, cwd, stdout, stderr) {
             let message = data.toString();
             // Send out
             var result = stderr(message);
-            if (!result) {
+            if (!result)
                 receivedError = true;
-            }
             // Notify
             console.log('- stderr ');
             console.log(message);
@@ -104,13 +100,11 @@ function Spawn(command, args, env, cwd, stdout, stderr) {
         ca.on("close", (e) => {
             // Validate
             let result = e;
-            if (receivedError && result === 0) {
+            if (receivedError && result === 0)
                 result = 1;
-            }
             // Exit code?
-            if (result !== 0) {
+            if (result !== 0)
                 stdout(`Exit code: ${result}`);
-            }
             // Finalise and exit
             return resolve(result === 0);
         });

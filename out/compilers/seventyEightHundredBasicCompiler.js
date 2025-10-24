@@ -169,12 +169,10 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
         if (this.CompilerVersion < application.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE) {
             // Prepare
             let platform = "";
-            if (application.IsLinux) {
+            if (application.IsLinux)
                 platform = ".Linux";
-            }
-            if (application.IsMacOS) {
+            if (application.IsMacOS)
                 platform = ".Darwin";
-            }
             const extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
             // Default items
             compilerFileList.push(`7800basic${platform}${extension}`, `7800filter${platform}${extension}`, `7800header${platform}${extension}`, `7800optimize${platform}${extension}`, `7800postprocess${platform}${extension}`, `7800preprocess${platform}${extension}`, `7800sign${platform}${extension}`, `7800makecc2${platform}${extension}`, `snip${platform}${extension}`);

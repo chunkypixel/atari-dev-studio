@@ -204,14 +204,15 @@ class CompilerBase {
             // Bloody annoying as you need to restart the compile process due to me checking the result
             // NOTE: if this doesn't fix it long term I'm going to remove the result validation
             do {
+                // Attempt to save
                 if ((_a = this.Configuration) === null || _a === void 0 ? void 0 : _a.get(`editor.saveAllFilesBeforeRun`)) {
                     result = yield vscode.workspace.saveAll();
                 }
                 else if ((_b = this.Configuration) === null || _b === void 0 ? void 0 : _b.get(`editor.saveFileBeforeRun`)) {
-                    if (this.Document) {
+                    if (this.Document)
                         result = yield this.Document.save();
-                    }
                 }
+                // Failed?
                 if (!result) {
                     // repeat up to 5 times
                     repeatCounter = repeatCounter + 1;
@@ -233,8 +234,6 @@ class CompilerBase {
     VerifyCompilerFilesExistsAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.VerifyCompilerFilesExistsAsync');
-            // Prepare
-            let result = true;
             // Process
             application.WriteToCompilerTerminal(`Verifying compiler files exist...`);
             for (const compilerFileName of this.GetCompilerFileList()) {
@@ -244,22 +243,19 @@ class CompilerBase {
                 if (!(yield filesystem.FileExistsAsync(compilerFilePath))) {
                     // Not found
                     application.WriteToCompilerTerminal(`ERROR: Unable to locate compiler file '${compilerFileName}'. `);
-                    result = false;
+                    return false;
                 }
             }
             // Result
-            return result;
+            return true;
         });
     }
     RepairFilePermissionsAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.RepairFilePermissionsAsync');
             // Validate
-            if (this.CustomFolderOrPath || application.IsWindows) {
+            if (this.CustomFolderOrPath || application.IsWindows)
                 return true;
-            }
-            // Prepare
-            let result = true;
             // Process
             application.WriteToCompilerTerminal(`Verifying file permissions...`);
             for (const compilerFileName of this.GetCompilerFileList()) {
@@ -269,11 +265,11 @@ class CompilerBase {
                 if (!(yield filesystem.ChModAsync(compilerFilePath))) {
                     // Not found
                     application.WriteToCompilerTerminal(`WARNING: Unable to set file permissions for compiler file '${compilerFileName}'. `);
-                    result = false;
+                    return false;
                 }
             }
             // Result
-            return result;
+            return true;
         });
     }
     GetCompilerVersionAsync() {
@@ -347,22 +343,18 @@ class CompilerBase {
             console.log('debugger:CompilerBase.ValidateTerminalMakeFileAvailableAysnc');
             // Makefile?
             this.UsingMakeFileCompiler = yield this.FindTerminalMakeFileAsync("makefile");
-            if (!this.UsingMakeFileCompiler) {
+            if (!this.UsingMakeFileCompiler)
                 this.UsingMakeFileCompiler = yield this.FindTerminalMakeFileAsync("Makefile");
-            }
-            if (!this.UsingMakeFileCompiler) {
+            if (!this.UsingMakeFileCompiler)
                 this.UsingMakeFileCompiler = yield this.FindTerminalMakeFileAsync("MAKEFILE");
-            }
             if (this.UsingMakeFileCompiler)
                 return true;
             // Shell?
             this.UsingShellScriptCompiler = yield this.FindTerminalMakeFileAsync("makefile.sh");
-            if (!this.UsingShellScriptCompiler) {
+            if (!this.UsingShellScriptCompiler)
                 this.UsingShellScriptCompiler = yield this.FindTerminalMakeFileAsync("Makefile.sh");
-            }
-            if (!this.UsingShellScriptCompiler) {
+            if (!this.UsingShellScriptCompiler)
                 this.UsingShellScriptCompiler = yield this.FindTerminalMakeFileAsync("MAKEFILE.SH");
-            }
             if (this.UsingShellScriptCompiler)
                 return true;
             // Bat?
@@ -415,10 +407,10 @@ class CompilerBase {
         // process?
         if (this.CheckProjectFolderAndFileForSpaces) {
             if (this.WorkspaceFolder.includes(' ')) {
-                application.WriteToCompilerTerminal(`WARNING: The path of your project contains spaces which can sometimes cause issues. It's a good idea to remove them to avoid potential problems.`);
+                application.WriteToCompilerTerminal(`WARNING: The path of your project contains spaces which can sometimes cause issues. It's recommended to remove them to avoid potential problems.`);
             }
             else if (this.FileName.includes(' ')) {
-                application.WriteToCompilerTerminal(`WARNING: The filename of your project file contains spaces which can sometimes cause issues. It's a good idea to remove them to avoid potential problems.`);
+                application.WriteToCompilerTerminal(`WARNING: The filename of your project file contains spaces which can sometimes cause issues. It's recommended to remove them to avoid potential problems.`);
             }
         }
     }
@@ -441,9 +433,8 @@ class CompilerBase {
                     const compiledFilePath = path.join(this.WorkspaceFolder, compiledFileName);
                     // Validate
                     const fileStats = yield filesystem.GetFileStatsAsync(compiledFilePath);
-                    if (fileStats && fileStats.size > 0) {
+                    if (fileStats && fileStats.size > 0)
                         continue;
-                    }
                     // Failed
                     application.WriteToCompilerTerminal(`ERROR: Failed to create compiled file '${compiledFileName}'.`);
                     return false;
@@ -610,9 +601,8 @@ class CompilerBase {
         //        of the chosen workspace
         // Document
         let uri = (_a = this.Document) === null || _a === void 0 ? void 0 : _a.uri;
-        if (this.Document) {
+        if (this.Document)
             return path.dirname(this.Document.fileName);
-        }
         // Workspace (last resort)
         if (vscode.workspace.workspaceFolders && uri) {
             const workspaceFolder = vscode.workspace.getWorkspaceFolder(uri);
