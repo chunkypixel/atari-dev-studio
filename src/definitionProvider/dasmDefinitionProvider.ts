@@ -14,11 +14,11 @@ export class DasmDefinitionProvider extends DefinitionProviderBase {
 
         // validate if a range is selected
         let wordRange = document.getWordRangeAtPosition(position);
-        if (!wordRange) { return undefined; }
+        if (!wordRange) return undefined;
 
         // get selected word
         let word = document.getText(wordRange);
-        if (!word) { return undefined; }
+        if (!word) return undefined;
 
         // process
         for (var lineIndex = 0; lineIndex < document.lineCount; lineIndex++) {
@@ -26,20 +26,20 @@ export class DasmDefinitionProvider extends DefinitionProviderBase {
             let line:vscode.TextLine = document.lineAt(lineIndex);
             
             // validate
-            if (line.isEmptyOrWhitespace) { continue; }
-            if (line.text.startsWith(' ') || line.text.startsWith('\t')) { continue; }
+            if (line.isEmptyOrWhitespace) continue;
+            if (line.text.startsWith(' ') || line.text.startsWith('\t')) continue;
 
             // get line
             let lineText:string = line.text
             .slice(line.firstNonWhitespaceCharacterIndex);
 
             // validate - remark
-            if (lineText.startsWith(';') || lineText.startsWith('*')) { continue; }
+            if (lineText.startsWith(';') || lineText.startsWith('*')) continue;
 
             // get keywords
             // just get the first 3 to increase speed (<mainkeyword><space><secondarykeyword>)
             let keywords: string[] = lineText.split(/[\s\t]+/,3);
-            if (keywords.length < 0) { continue; }
+            if (keywords.length < 0) continue;
 
             // Notes:
             // for labels need to be the first word (no spaces)

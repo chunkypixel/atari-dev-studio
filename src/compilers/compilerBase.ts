@@ -188,14 +188,15 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Bloody annoying as you need to restart the compile process due to me checking the result
         // NOTE: if this doesn't fix it long term I'm going to remove the result validation
         do {
+            // Attempt to save
             if (this.Configuration?.get<boolean>(`editor.saveAllFilesBeforeRun`))  {
                 result = await vscode.workspace.saveAll();
     
             } else if (this.Configuration?.get<boolean>(`editor.saveFileBeforeRun`)) {
-                if (this.Document) { 
-                    result = await this.Document.save(); 
-                }
+                if (this.Document)  result = await this.Document.save(); 
             }
+
+            // Failed?
             if (!result) { 
                 // repeat up to 5 times
                 repeatCounter = repeatCounter+1
@@ -218,9 +219,6 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected async VerifyCompilerFilesExistsAsync(): Promise<boolean> {
         console.log('debugger:CompilerBase.VerifyCompilerFilesExistsAsync');
 
-        // Prepare
-        let result = true;
-
         // Process
         application.WriteToCompilerTerminal(`Verifying compiler files exist...`);
         for (const compilerFileName of this.GetCompilerFileList()) {
@@ -231,22 +229,19 @@ export abstract class CompilerBase implements vscode.Disposable {
             if (!await filesystem.FileExistsAsync(compilerFilePath)) {
                 // Not found
                 application.WriteToCompilerTerminal(`ERROR: Unable to locate compiler file '${compilerFileName}'. `);  
-                result = false; 
+                return false; 
             }
         }
 
         // Result
-        return result;
+        return true;
     }
 
     protected async RepairFilePermissionsAsync(): Promise<boolean> {
         console.log('debugger:CompilerBase.RepairFilePermissionsAsync'); 
 
         // Validate
-        if (this.CustomFolderOrPath || application.IsWindows) { return true; }
-
-        // Prepare
-        let result = true;
+        if (this.CustomFolderOrPath || application.IsWindows) return true;
 
         // Process
         application.WriteToCompilerTerminal(`Verifying file permissions...`);
@@ -258,12 +253,12 @@ export abstract class CompilerBase implements vscode.Disposable {
             if (!await filesystem.ChModAsync(compilerFilePath)) {
                 // Not found
                 application.WriteToCompilerTerminal(`WARNING: Unable to set file permissions for compiler file '${compilerFileName}'. `);  
-                result = false; 
+                return false; 
             }
         }
      
         // Result
-        return result;
+        return true;
     }
 
     protected async GetCompilerVersionAsync(): Promise<void> { 
@@ -350,14 +345,14 @@ export abstract class CompilerBase implements vscode.Disposable {
 
         // Makefile?
         this.UsingMakeFileCompiler = await this.FindTerminalMakeFileAsync("makefile");
-        if (!this.UsingMakeFileCompiler) { this.UsingMakeFileCompiler = await this.FindTerminalMakeFileAsync("Makefile"); }
-        if (!this.UsingMakeFileCompiler) { this.UsingMakeFileCompiler = await this.FindTerminalMakeFileAsync("MAKEFILE"); }
+        if (!this.UsingMakeFileCompiler) this.UsingMakeFileCompiler = await this.FindTerminalMakeFileAsync("Makefile");
+        if (!this.UsingMakeFileCompiler) this.UsingMakeFileCompiler = await this.FindTerminalMakeFileAsync("MAKEFILE");
         if (this.UsingMakeFileCompiler) return true;
     
         // Shell?
         this.UsingShellScriptCompiler = await this.FindTerminalMakeFileAsync("makefile.sh"); 
-        if (!this.UsingShellScriptCompiler) { this.UsingShellScriptCompiler = await this.FindTerminalMakeFileAsync("Makefile.sh"); }
-        if (!this.UsingShellScriptCompiler) { this.UsingShellScriptCompiler = await this.FindTerminalMakeFileAsync("MAKEFILE.SH"); }
+        if (!this.UsingShellScriptCompiler) this.UsingShellScriptCompiler = await this.FindTerminalMakeFileAsync("Makefile.sh");
+        if (!this.UsingShellScriptCompiler) this.UsingShellScriptCompiler = await this.FindTerminalMakeFileAsync("MAKEFILE.SH");
         if (this.UsingShellScriptCompiler) return true;
 
         // Bat?
@@ -436,7 +431,7 @@ export abstract class CompilerBase implements vscode.Disposable {
 
             // Validate
             const fileStats = await filesystem.GetFileStatsAsync(compiledFilePath);
-            if (fileStats && fileStats.size > 0) { continue; }
+            if (fileStats && fileStats.size > 0) continue;
 
             // Failed
             application.WriteToCompilerTerminal(`ERROR: Failed to create compiled file '${compiledFileName}'.`);     
@@ -573,7 +568,7 @@ export abstract class CompilerBase implements vscode.Disposable {
 
         // Document
         let uri = this.Document?.uri;
-        if (this.Document) { return path.dirname(this.Document.fileName); }
+        if (this.Document) return path.dirname(this.Document.fileName);
 
         // Workspace (last resort)
         if (vscode.workspace.workspaceFolders && uri) {

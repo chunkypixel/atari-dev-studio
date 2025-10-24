@@ -6,7 +6,7 @@ const cp = require("child_process");
 
 export async function KillProcessByNameAsync(name:string): Promise<void> {
     // Need to lowercase name
-    if (application.IsLinux || application.IsMacOS) { name = name.toLowerCase(); }
+    if (application.IsLinux || application.IsMacOS) name = name.toLowerCase();
 
     // Search
     await find('name', name)
@@ -22,7 +22,7 @@ export async function KillProcessByNameAsync(name:string): Promise<void> {
 
 export function KillProcessById(pid:any): void {
     // Validate
-    if (pid === undefined) { return; }
+    if (pid === undefined) return;
 
     // Process
     try {
@@ -64,7 +64,7 @@ export function Spawn(command:string, args:string[] | null, env: { [key: string]
             
             // Send out
             var result = stdout(message);
-            if (!result) { receivedError = true; }
+            if (!result) receivedError = true;
 
             // Notify
             console.log('- stdout ');
@@ -76,7 +76,7 @@ export function Spawn(command:string, args:string[] | null, env: { [key: string]
 
             // Send out
             var result = stderr(message);
-            if (!result) { receivedError = true; }
+            if (!result) receivedError = true;
 
             // Notify
             console.log('- stderr ');
@@ -93,10 +93,10 @@ export function Spawn(command:string, args:string[] | null, env: { [key: string]
         ca.on("close", (e: any) => {
             // Validate
             let result = e;
-            if (receivedError && result === 0) { result = 1; }
+            if (receivedError && result === 0) result = 1;
 
             // Exit code?
-            if (result !== 0) { stdout(`Exit code: ${result}`); }
+            if (result !== 0) stdout(`Exit code: ${result}`);
 
             // Finalise and exit
             return resolve(result === 0);

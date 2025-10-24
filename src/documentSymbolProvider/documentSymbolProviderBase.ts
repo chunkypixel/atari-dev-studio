@@ -46,7 +46,7 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
             prevLine = line;
 
             // validation
-            if (line.isEmptyOrWhitespace) { continue; }
+            if (line.isEmptyOrWhitespace) continue;
 
             // get line
             let lineText: string = line.text
@@ -55,11 +55,11 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
             // get keywords
             // just get the first 3 to increase speed (<mainkeyword><space><secondarykeyword>)
             let keywords: string[] = lineText.split(/[\s\t]+/,3);
-            if (keywords.length < 0) { continue; }
+            if (keywords.length < 0) continue;
             let mainKeyword: string = keywords[0].toLowerCase();
 
             // validation - rem
-            if (mainKeyword.startsWith(';') || mainKeyword.startsWith('rem')) { continue; }
+            if (mainKeyword.startsWith(';') || mainKeyword.startsWith('rem')) continue;
 
             // prepare
             let symbolKind: vscode.SymbolKind | undefined = undefined;
@@ -81,7 +81,7 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
 
                     // set name (append bank number)
                     symbolName = mainKeyword;
-                    if (keywords.length > 1) { symbolName += ` ${keywords[1]}`; }
+                    if (keywords.length > 1) symbolName += ` ${keywords[1]}`;
 
                     // reset container to root?
                     while (containers.length > 0) {
@@ -167,8 +167,8 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
 
                     // set name (append hole number and noflow)
                     symbolName = mainKeyword;
-                    if (keywords[0].length > 1) { symbolName += ` ${keywords[1]}`; }
-                    if (keywords[0].length > 2) { symbolDetail = keywords[2]; }
+                    if (keywords[0].length > 1) symbolName += ` ${keywords[1]}`;
+                    if (keywords[0].length > 2) symbolDetail = keywords[2];
                     
                     // reset container to root?
                     while (containers.length > (isWithinBank ? 1 : 0)) {
@@ -178,9 +178,9 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
                 default:
                     // validate
                     // anything indented at this point does not get processed
-                    if (line.text.startsWith(' ') || line.text.startsWith('\t')) { continue; }
+                    if (line.text.startsWith(' ') || line.text.startsWith('\t')) continue;
                     // is within data or asm? if so skip
-                    if (isWithinData || isWithinAsm) { continue; }
+                    if (isWithinData || isWithinAsm) continue;
 
                     // initialise
                     let isSubLabel: boolean = mainKeyword.startsWith('_');
@@ -188,7 +188,7 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
                     symbolName = keywords[0];
                     // label or sub-label within label)
                     symbolKind = (isSubLabel ? vscode.SymbolKind.Field : vscode.SymbolKind.Method);
-                    if (isSubLabel) { symbolDetail = 'sub'; }
+                    if (isSubLabel) symbolDetail = 'sub';
 
                     // inside label (and not a sub-label)
                     if (isContainer && (isWithinLabel || isWithinFunctionOrMacro)) 
@@ -227,7 +227,7 @@ export abstract class DocumentSymbolProviderBase implements vscode.DocumentSymbo
                 }
 
                 // is this a container?
-                if (isContainer) { containers.push(symbol); }
+                if (isContainer) containers.push(symbol);
             }
 
         }

@@ -66,11 +66,11 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         // Additional for Linux or MacOS?
         if (application.IsLinux || application.IsMacOS) env["PATH"] += `${path.delimiter}/bin${path.delimiter}/usr/bin`;
 
-        // Spacer
-        application.WriteToCompilerTerminal();
-
         // Check for spaces in folder and file name
         this.ValidateIfProjectFolderAndFileContainsSpaces();
+
+        // Spacer
+        application.WriteToCompilerTerminal();
 
         // TODO: These might need checking for the new WASMTIME build??
 
@@ -186,8 +186,8 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         if (this.CompilerVersion < application.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE) {
             // Prepare
             let platform = "";
-            if (application.IsLinux) { platform = ".Linux"; }
-            if (application.IsMacOS) { platform = ".Darwin"; }
+            if (application.IsLinux) platform = ".Linux";
+            if (application.IsMacOS) platform = ".Darwin";
             const extension = (application.IsWindows ? ".exe" : `.${application.OSArch}`);
 
             // Default items

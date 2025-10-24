@@ -41,7 +41,7 @@ export class A7800Emulator extends EmulatorBase {
 
         // Base
         let result = await super.LoadConfigurationAsync();
-        if (!result) { return false; }
+        if (!result) return false;
 
         // Reset
         this.Region = "";
@@ -56,7 +56,7 @@ export class A7800Emulator extends EmulatorBase {
             else if (application.IsLinux || application.IsMacOS) {
                 // Prepare
                 let architecture = "Linux";
-                if (application.IsMacOS) { architecture = "Darwin"; }
+                if (application.IsMacOS) architecture = "Darwin";
             
                 // Set
                 this.FolderOrPath = path.join(this.FolderOrPath,`a7800.${architecture}`);
@@ -101,7 +101,6 @@ export class A7800Emulator extends EmulatorBase {
 
         // Command
         let command = `"${this.FolderOrPath}"`;
-        
         // Args
         // Make sure we send nodebug where config is being saved
         let args = [
@@ -111,7 +110,7 @@ export class A7800Emulator extends EmulatorBase {
             (this.Debugger ? `-debug` : "-nodebug"),
             this.Args
         ];
-
+    
         // NOTE: This may need to be moved before compilation as it appears MAME is holding onto the launched file.
         //       Also need to confirm actual name to search for.
         // Kill any existing process
@@ -147,7 +146,7 @@ export class A7800Emulator extends EmulatorBase {
         console.log('debugger:A7800Emulator.RepairFilePermissionsAsync'); 
 
         // Validate
-        if (this.CustomFolderOrPath || application.IsWindows) { return true; }
+        if (this.CustomFolderOrPath || application.IsWindows) return true;
 
         // Process
         let result = await filesystem.ChModAsync(this.FolderOrPath);

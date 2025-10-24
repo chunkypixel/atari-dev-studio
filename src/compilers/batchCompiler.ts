@@ -32,7 +32,7 @@ export class BatchCompiler extends CompilerBase {
 
         // Configuration
         result = await this.LoadConfigurationAsync();
-        if (!result) { return false; }
+        if (!result) return false;
 
         // Initialise terminal
         await application.InitialiseAdsTerminalAsync();
@@ -46,10 +46,9 @@ export class BatchCompiler extends CompilerBase {
 
         // Save files (based on user configuration)
         result = await this.SaveAllFilesBeforeRun()
-        if (!result) { return false; }
 
          // Result
-        return true;
+        return result;
     }
 
     protected async ExecuteCompilerAsync(): Promise<boolean> {

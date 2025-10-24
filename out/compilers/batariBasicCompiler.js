@@ -64,10 +64,10 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             // Additional for Linux or MacOS?
             if (application.IsLinux || application.IsMacOS)
                 env["PATH"] += `${path.delimiter}/bin${path.delimiter}/usr/bin`;
-            // Spacer
-            application.WriteToCompilerTerminal();
             // Check for spaces in folder and file name
             this.ValidateIfProjectFolderAndFileContainsSpaces();
+            // Spacer
+            application.WriteToCompilerTerminal();
             // TODO: These might need checking for the new WASMTIME build??
             // Compile
             this.IsRunning = true;

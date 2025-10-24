@@ -27,11 +27,11 @@ export abstract class HoverBase implements vscode.HoverProvider {
 		const line = String(document.lineAt(position.line).text);
 		
 		// Find beginning of the hower-word
-		while (p > 0 && validchars.indexOf(line[p]) !== -1) { p--; }
+		while (p > 0 && validchars.indexOf(line[p]) !== -1) p--;
 		// Skip leading invalid character
-		if (validchars.indexOf(line[p]) === -1) { p++; }
+		if (validchars.indexOf(line[p]) === -1) p++;
 		// Collect string until an invalid character is encountered
-		while (p < line.length && validchars.indexOf(line[p]) !== -1) { word += line[p++]; }
+		while (p < line.length && validchars.indexOf(line[p]) !== -1) word += line[p++];
 
 		// Found something to check for?
 		if (word) { 
@@ -77,7 +77,7 @@ export abstract class HoverBase implements vscode.HoverProvider {
 			// Do we something that looks like a key and also enough blanks passed by?
 			if (match && match[2] && blanks<=0) {  				
 				// Store if already have some lines collected
-				if (info !== '') { this.hoverText[key] = info; } 
+				if (info !== '') this.hoverText[key] = info;
 				// Hold the next key, start concatenating info from scratch and reset the blank counter
 				key=match[2];    
 				info='';         
@@ -96,7 +96,7 @@ export abstract class HoverBase implements vscode.HoverProvider {
 		}
 
 		// Add eventual final key entry (happens when file is not ending with enough blank lines)
-		if (info.trim() !== '') { this.hoverText[key] = info; }
+		if (info.trim() !== '') this.hoverText[key] = info;
 
 	}
 

@@ -28,7 +28,7 @@ export abstract class CompletionBase {
         // process
         const fileArrary = (await filesystem.ReadFileAsync(filePath.fsPath, 'utf-8')).split(/\r?\n/);
         fileArrary.forEach((element: string) => {
-            if (element !== undefined) { autoCompletes.push(new vscode.CompletionItem(element,vscode.CompletionItemKind.Keyword)); }
+            if (element !== undefined) autoCompletes.push(new vscode.CompletionItem(element,vscode.CompletionItemKind.Keyword));
         });
 
         // return

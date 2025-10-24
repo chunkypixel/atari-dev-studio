@@ -18,7 +18,7 @@ class StatusBar {
     
         // Validate
         let command = config.get<string>('editor.statusBarCommands','Full');
-        if (command === "None") { return; }
+        if (command === "None") return;
 
         // Spacer
         let itemOptions = [

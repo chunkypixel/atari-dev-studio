@@ -28,11 +28,7 @@ export abstract class SerialBase {
         console.log('debugger:SerialBase.InitialiseAsync');
 
         // Configuration
-        let result = await this.LoadConfigurationAsync();
-        if (!result) { return false; }
-
-        // Result
-        return true;
+        return await this.LoadConfigurationAsync();
     }
 
     protected async LoadConfigurationAsync(): Promise<boolean> {

@@ -23,17 +23,17 @@ export abstract class DefinitionProviderBase implements vscode.DefinitionProvide
 
         // validate if a range is selected
         let wordRange = document.getWordRangeAtPosition(position);
-        if (!wordRange) { return undefined; }
+        if (!wordRange) return undefined;
 
         // get selected word
         let word = document.getText(wordRange);
-        if (!word) { return undefined; }
+        if (!word) return undefined;
 
         // process
         for (var lineIndex = 0; lineIndex < document.lineCount; lineIndex++) {
             // validate
             let line:vscode.TextLine = document.lineAt(lineIndex);
-            if (line.isEmptyOrWhitespace) { continue; }
+            if (line.isEmptyOrWhitespace) continue;
 
             // get line
 			let lineText:string = line.text
@@ -42,7 +42,7 @@ export abstract class DefinitionProviderBase implements vscode.DefinitionProvide
             // get keywords
             // just get the first 3 to increase speed (<mainkeyword><space><secondarykeyword>)
             let keywords: string[] = lineText.split(/[\s\t]+/,3);
-            if (keywords.length < 0) { continue; }
+            if (keywords.length < 0) continue;
             let mainKeyword: string = keywords[0].toLowerCase();
 
             // Notes:
@@ -56,7 +56,7 @@ export abstract class DefinitionProviderBase implements vscode.DefinitionProvide
                         // Prepare
                         // remmarks may appear later in line too
                         var keyword = keywords[keywordIndex];
-                        if (keyword === '=' || keyword.startsWith(';') || keyword.startsWith('rem')) { break; }
+                        if (keyword === '=' || keyword.startsWith(';') || keyword.startsWith('rem')) break;
 
                         // match?
                         if (keyword.includes(word)) {
@@ -66,12 +66,12 @@ export abstract class DefinitionProviderBase implements vscode.DefinitionProvide
                                 // we need to verify this to get exact matches where line is NOT spaced between fields
                                 let position = keyword.indexOf(word);
                                 let char = keyword.substring(position + word.length, position + word.length + 1);
-                                if (char !== '' && char !== '=' && char !== ':' && char !== '[' && char !== '{' && char !== '(') { break; }
+                                if (char !== '' && char !== '=' && char !== ':' && char !== '[' && char !== '{' && char !== '(') break;
                             }
 
                             // position of word on line
                             let wordIndex = line.text.indexOf(keywords[keywordIndex]);
-                            if (wordIndex < 0) { wordIndex = 0; }
+                            if (wordIndex < 0) wordIndex = 0;
 
                             // store and exit for
                             definitions.push(new vscode.Location(document.uri, new vscode.Position(lineIndex, wordIndex)));

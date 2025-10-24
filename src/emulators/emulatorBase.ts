@@ -32,7 +32,7 @@ export abstract class EmulatorBase implements vscode.Disposable {
 
         // Process
         let result = await this.InitialiseAsync();
-        if (!result) { return false; }
+        if (!result) return false;
         return await this.ExecuteEmulatorAsync();
     }
 
@@ -42,11 +42,7 @@ export abstract class EmulatorBase implements vscode.Disposable {
         console.log('debugger:EmulatorBase.InitialiseAsync');
 
         // Configuration
-        let result = await this.LoadConfigurationAsync();
-        if (!result) { return false; }
-
-        // Result
-        return true;
+        return await this.LoadConfigurationAsync();
     }
 
     protected async RepairFilePermissionsAsync(): Promise<boolean> {

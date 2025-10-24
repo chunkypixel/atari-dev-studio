@@ -399,7 +399,7 @@ class CompilerBase {
                 }
                 else {
                     // Ok
-                    application.WriteToCompilerTerminal(`Building using your custom ${this.Name} compiler (${customCompilerId}).`);
+                    application.WriteToCompilerTerminal(`Building project using custom ${this.Name} compiler (${customCompilerId}).`);
                     application.WriteToCompilerTerminal(`Location: ${customCompilerFolder}`);
                     // Set
                     this.FolderOrPath = customCompilerFolder;

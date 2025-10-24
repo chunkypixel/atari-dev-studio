@@ -162,7 +162,7 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
                 }
                 else {
                     // Ok
-                    application.WriteToCompilerTerminal(`Building using your custom ${this.Name} compiler.`);
+                    application.WriteToCompilerTerminal(`Building project using custom ${this.Name} compiler.`);
                     application.WriteToCompilerTerminal(`Location: ${customCompilerPath}`);
                     // Set
                     this.FolderOrPath = customCompilerPath;

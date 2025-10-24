@@ -19,7 +19,7 @@ export class StellaEmulator extends EmulatorBase {
 
         // Base
         let result = await super.LoadConfigurationAsync();
-        if (!result) { return false; }
+        if (!result) return false;
         
         // Emulator
         if (!this.CustomFolderOrPath) {
@@ -60,7 +60,7 @@ export class StellaEmulator extends EmulatorBase {
 
         // Command
         let command = `"${this.FolderOrPath}"`;
-        if (application.IsMacOS) { command = `open -a "${command}"`; }
+        if (application.IsMacOS) command = `open -a "${command}"`;
 
         // Args
         let args = [
@@ -69,7 +69,7 @@ export class StellaEmulator extends EmulatorBase {
         ];
 
         // Kill any existing process
-        if (this.AutoCloseExistingInstances) { await execute.KillProcessByNameAsync(this.Name); }
+        if (this.AutoCloseExistingInstances) await execute.KillProcessByNameAsync(this.Name);
 
         // Process
         application.WriteToCompilerTerminal(`Launching ${this.Name} emulator...`);         
@@ -101,13 +101,13 @@ export class StellaEmulator extends EmulatorBase {
         console.log('debugger:StellaEmulator.RepairFilePermissionsAsync'); 
 
         // Validate
-        if (this.CustomFolderOrPath || application.IsWindows) { return true; }
+        if (this.CustomFolderOrPath || application.IsWindows) return true;
 
         // Process
         let result = await filesystem.ChModAsync(this.FolderOrPath);
         // Attempt to mark Stella as execute #19
-        if (result && application.IsMacOS) { result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`Contents/MacOS/Stella`)); }
-        if (result && application.IsLinux) { result = await filesystem.ChModAsync(this.FolderOrPath); }
+        if (result && application.IsMacOS) result = await filesystem.ChModAsync(path.join(this.FolderOrPath,`Contents/MacOS/Stella`));
+        if (result && application.IsLinux) result = await filesystem.ChModAsync(this.FolderOrPath);
         
         // Result
         return result;
