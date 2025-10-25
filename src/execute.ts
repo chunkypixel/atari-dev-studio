@@ -1,107 +1,130 @@
 "use strict";
 import * as application from './application';
-import find = require("find-process");
-const cp = require("child_process");
+import findProcess = require('find-process');
+import { spawn, ChildProcess } from 'child_process';
 
+let lastSpawnedProcess: ChildProcess | null = null;
 
-export async function KillProcessByNameAsync(name:string): Promise<void> {
-    // Need to lowercase name
-    if (application.IsLinux || application.IsMacOS) name = name.toLowerCase();
+export async function KillProcessByNameAsync(name: string): Promise<void> {
+    // Normalize name on POSIX
+    const searchName = (application.IsLinux || application.IsMacOS) ? name.toLowerCase() : name;
 
-    // Search
-    await find('name', name)
-        .then(function (list:any) {
-            console.log(list);
-            for (let process of list) {
-                KillProcessById(process?.id);
-            }	
-        }, function (err:any) {
-            console.log(err.stack || err);
-        });
+    try {
+        const list: Array<{ pid?: number | string }> = await findProcess('name', searchName);
+        for (const proc of list) {
+            if (proc?.pid !== undefined) {
+                KillProcessById(proc.pid);
+            }
+        }
+    } catch (err: unknown) {
+        console.log('KillProcessByNameAsync failed', err);
+    }
 }
 
-export function KillProcessById(pid:any): void {
-    // Validate
-    if (pid === undefined) return;
+export function KillProcessById(pid: number | string | undefined): void {
+    if (pid === undefined || pid === null) return;
 
-    // Process
     try {
-        process.kill(pid,"SIGKILL"); // force
-        console.log(`Process ${pid} terminated.`);  
+        // Ensure number
+        const numericPid = typeof pid === 'string' ? Number(pid) : pid;
+        if (Number.isNaN(numericPid)) return;
+
+        // Best-effort kill
+        process.kill(numericPid, 'SIGKILL');
+        console.log(`Process ${numericPid} terminated.`);
     } catch (error: unknown) {
         if (error instanceof Error) {
-            console.log(`Failed to kill process ${pid}`); 
+            console.log(`Failed to kill process ${pid}: ${error.message}`);
         } else {
-            console.log(`Unknow error occurred while killing process ${pid}`);            
-        } 
+            console.log(`Unknown error occurred while killing process ${pid}`);
+        }
     }
 }
 
 export function KillSpawnProcess(): void {
-    // Process
-    KillProcessById(cp?._process?.id);
+    if (lastSpawnedProcess && typeof lastSpawnedProcess.pid === 'number') {
+        KillProcessById(lastSpawnedProcess.pid);
+    }
 }
 
-export function Spawn(command:string, args:string[] | null, env: { [key: string]: string | null } | null, cwd: string, stdout:any, stderr:any) : Promise<boolean> {
+export function Spawn(
+    command: string,
+    args?: string[] | null,
+    env?: NodeJS.ProcessEnv | null,
+    cwd?: string,
+    stdout?: (msg: string) => boolean,
+    stderr?: (msg: string) => boolean
+): Promise<boolean> {
     console.log('debugger:execute.ExecuteCommand');
 
-    // Process
-    return new Promise((resolve, reject) => {
-        // prepare
+    return new Promise((resolve) => {
         let receivedError = false;
 
-        // Spawn compiler
-        let ca = cp.spawn(command, args, {
-            shell: true, 
-            env: env,
-            cwd: cwd
+        const child = spawn(command, args ?? [], {
+            shell: true,
+            env: env ?? process.env,
+            cwd: cwd ?? process.cwd()
         });
 
-        // Capture output
-        ca.stdout.on('data', (data: { toString: () => ""; }) => {
-            // Prepare
-            let message = data.toString();
-            
-            // Send out
-            var result = stdout(message);
-            if (!result) receivedError = true;
+        // keep reference for external kill
+        lastSpawnedProcess = child;
 
-            // Notify
-            console.log('- stdout ');
-            console.log(message);
+        if (child.stdout) {
+            child.stdout.on('data', (data: Buffer | string) => {
+                const message = data.toString();
+                try {
+                    if (stdout) {
+                        const ok = stdout(message);
+                        if (!ok) receivedError = true;
+
+                        // Notify
+                        console.log('- stdout ');
+                        console.log(message);   
+                    }
+                } catch {
+                    receivedError = true;
+                }
+            });
+        }
+
+        if (child.stderr) {
+            child.stderr.on('data', (data: Buffer | string) => {
+                const message = data.toString();
+                try {
+                    if (stderr) {
+                        const ok = stderr(message);
+                        if (!ok) receivedError = true;
+
+                        // Notify
+                        console.log('- stderr ');
+                        console.log(message);
+                    } else {
+                        // default to marking as error if no handler provided
+                        receivedError = true;
+                    }
+                } catch {
+                    receivedError = true;
+                }
+            });
+        }
+
+        child.on('error', (err: unknown) => {
+            console.log('- spawn error', err);
+            resolve(false);
         });
-        ca.stderr.on('data', (data: { toString: () => ""; }) => {
-            // Prepare
-            let message = data.toString();
 
-            // Send out
-            var result = stderr(message);
-            if (!result) receivedError = true;
+        child.on('close', (code: number | null) => {
+            // clear reference
+            lastSpawnedProcess = null;
 
-            // Notify
-            console.log('- stderr ');
-            console.log(message);
+            const exitCode = code ?? 1;
+            const finalCode = (receivedError && exitCode === 0) ? 1 : exitCode;
+
+            if (finalCode !== 0 && stdout) {
+                try { stdout(`Exit code: ${finalCode}`); } catch {}
+            }
+
+            resolve(finalCode === 0);
         });
-
-        // Error?
-        ca.on('error', (err: any) => {
-            console.log(`- error '${err}'`);
-            return resolve(false);
-        });
-
-        // Complete
-        ca.on("close", (e: any) => {
-            // Validate
-            let result = e;
-            if (receivedError && result === 0) result = 1;
-
-            // Exit code?
-            if (result !== 0) stdout(`Exit code: ${result}`);
-
-            // Finalise and exit
-            return resolve(result === 0);
-        });
-
     });
-    
 }
