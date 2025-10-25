@@ -52,9 +52,10 @@ export class BatariBasicCompiler extends CompilerBase {
         const command = `"${path.join(this.FolderOrPath, commandName)}"`;
         // Args
         const args = [
-            `"${this.FileName}"`,
-            this.Args
+            `"${this.FileName}"`
         ];
+        if (this.Args) args.push(this.Args);
+
         // Environment
         const env: Record<string, string> = {
             PATH: (process.env.PATH + ";" || '') + this.FolderOrPath,

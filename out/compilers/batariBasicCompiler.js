@@ -53,9 +53,10 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             const command = `"${path.join(this.FolderOrPath, commandName)}"`;
             // Args
             const args = [
-                `"${this.FileName}"`,
-                this.Args
+                `"${this.FileName}"`
             ];
+            if (this.Args)
+                args.push(this.Args);
             // Environment
             const env = {
                 PATH: (process.env.PATH + ";" || '') + this.FolderOrPath,
