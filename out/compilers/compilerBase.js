@@ -407,10 +407,10 @@ class CompilerBase {
         // process?
         if (this.CheckProjectFolderAndFileForSpaces) {
             if (this.WorkspaceFolder.includes(' ')) {
-                application.WriteToCompilerTerminal(`WARNING: The path of your project contains spaces which can sometimes cause issues. It's recommended to remove them to avoid potential problems.`);
+                application.WriteToCompilerTerminal(`WARNING: The path of your project contains spaces which can potentially cause compilation issues.`);
             }
             else if (this.FileName.includes(' ')) {
-                application.WriteToCompilerTerminal(`WARNING: The filename of your project file contains spaces which can sometimes cause issues. It's recommended to remove them to avoid potential problems.`);
+                application.WriteToCompilerTerminal(`WARNING: The filename of your project file contains spaces which can potentially cause compilation issues.`);
             }
         }
     }
