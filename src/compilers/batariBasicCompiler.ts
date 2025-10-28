@@ -206,8 +206,7 @@ export class BatariBasicCompiler extends CompilerBase {
         console.log('debugger:BatariBasicCompiler.GetDebuggerFileList');
 
         // Validate
-        if (this.CompilerVersion < application.BATARIBASIC_WASMTIME_RELEASE) return new Map([["-s",".sym"], ["-l",".lst"]]);
-        return new Map<string, string>([["-s",".symbol.txt"],["-l",".list.txt"]]);;
+        return new Map([["-s",".sym"], ["-l",".lst"]]);
     }
 
     protected async VerifyCompilerFilesExistsAsync(): Promise<boolean> {
