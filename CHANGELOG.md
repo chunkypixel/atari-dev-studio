@@ -2,6 +2,15 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.11.6
+
+ * Fixed issue where sometimes compilation issues didn't always cleanup files (batari Basic and 7800basic)
+
+## 0.11.5
+
+ * Fix for spaces in paths and filenames in batari Basic compilation (Linux/MacOS)
+ * Internal code re-organisation and optimisations
+ 
 ## 0.11.4
 
  * Updated Learning Center so when you open a sample it's **core** document is also opened

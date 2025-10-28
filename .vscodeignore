@@ -1,10 +1,10 @@
 .vscode/**
-.vscode-test/**
+.gitattributes
 .gitignore
-vsc-extension-quickstart.md
-src/
 NOTES.txt
 OPENVSXRegistry.md
 tsconfig.json
-tslint.json
+src/
+**/*.map
+**/*.ts
 **/Makefile
