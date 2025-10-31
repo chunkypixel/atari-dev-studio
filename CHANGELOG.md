@@ -4,7 +4,8 @@ The following enhancements and changes have been made to Atari Dev Studio:
 
 ## 0.11.7
 
- * Added stowatch timer for batari Basic and 7800basic build compilation
+ * Restored file permission validation for Linux & macOS regardless of whether using included or custom compilers (just in case)
+ * Added stopwatch timer for batari Basic and 7800basic build compilation
 
 ## 0.11.6
 

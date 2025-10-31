@@ -254,7 +254,7 @@ class CompilerBase {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:CompilerBase.RepairFilePermissionsAsync');
             // Validate
-            if (this.CustomFolderOrPath || application.IsWindows)
+            if (application.IsWindows)
                 return true;
             // Process
             application.WriteToCompilerTerminal(`Verifying file permissions...`);

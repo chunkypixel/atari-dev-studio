@@ -241,7 +241,7 @@ export abstract class CompilerBase implements vscode.Disposable {
         console.log('debugger:CompilerBase.RepairFilePermissionsAsync'); 
 
         // Validate
-        if (this.CustomFolderOrPath || application.IsWindows) return true;
+        if (application.IsWindows) return true;
 
         // Process
         application.WriteToCompilerTerminal(`Verifying file permissions...`);
