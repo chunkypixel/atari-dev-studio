@@ -38,7 +38,7 @@ export class StopWatch {
 
     // Format message
     let finalMessage = message;
-    if (minutes > 0) finalMessage += `${minutes} minute${minutes > 1 ? 's' : ''} and `;
+    if (minutes > 0) finalMessage += `${minutes} minute${minutes !== 1 ? 's' : ''} and `;
     finalMessage += `${this.pad(seconds, (minutes > 0 ? 2 : 1))} second${seconds !== 1 ? 's' : ''}`;
 
     // Output
