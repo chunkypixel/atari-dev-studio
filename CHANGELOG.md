@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.11.7
+
+ * Added stowatch timer for batari Basic and 7800basic build compilation
+
 ## 0.11.6
 
  * Restored batari Basic debugger extensions to previous (.lst, .sym)
