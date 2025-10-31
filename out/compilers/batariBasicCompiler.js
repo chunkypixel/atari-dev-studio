@@ -15,6 +15,7 @@ const path = require("path");
 const application = require("../application");
 const filesystem = require("../filesystem");
 const execute = require("../execute");
+const stopwatch_1 = require("../stopwatch");
 const compilerBase_1 = require("./compilerBase");
 class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     constructor() {
@@ -69,6 +70,9 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
             this.ValidateIfProjectFolderAndFileContainsSpaces();
             // Spacer
             application.WriteToCompilerTerminal();
+            // Start stopwatch
+            const sw = new stopwatch_1.StopWatch();
+            sw.Start();
             // TODO: These might need checking for the new WASMTIME build??
             // Compile
             this.IsRunning = true;
@@ -119,6 +123,8 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
                 return result;
             });
             this.IsRunning = false;
+            // Finalise and output result
+            sw.Stop();
             // Spacer
             application.WriteToCompilerTerminal();
             // Finalise

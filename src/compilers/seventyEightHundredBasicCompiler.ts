@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as application from '../application';
 import * as filesystem from '../filesystem';
 import * as execute from '../execute';
+import { StopWatch } from '../stopwatch';
 import { CompilerBase } from "./compilerBase";
 
 export class SeventyEightHundredBasicCompiler extends CompilerBase {
@@ -73,6 +74,10 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         // Spacer
         application.WriteToCompilerTerminal();
 
+        // Start stopwatch
+        const sw = new StopWatch();
+        sw.Start();
+
         // TODO: These might need checking for the new WASMTIME build??
 
         // Compile
@@ -127,6 +132,9 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
             });
         this.IsRunning = false;
 
+        // Finalise and output result
+        sw.Stop();
+        
         // Spacer
         application.WriteToCompilerTerminal(); 
 
