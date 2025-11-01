@@ -498,6 +498,10 @@ gsl_nextSongLine
   txa
   tay
   lda (ptrSongLines),y
+;* Check for special song line commands. Track numbers >= $FE are not real
+;* tracks, but control flow commands:
+;* $FE = Jump to a new song line pointer.
+;* $FF = Empty track line (handled in this 7800 port by setting a max pause).
   cmp #$fe             ;* check for "goto line"
   bcs gsl_GotoOrEmpty  ;* and handle it.
   ;* (A) = Real track #
@@ -573,11 +577,12 @@ gtl_loopTracks
 
 oo1i
   ldy trackn_idx,x
-  ;* Get a track data point
-  ;* 0 - 60 = Note, instr and volume data
-  ;* 61 - Volume only
-  ;* 62 = Pause/empty line
-  ;* 63 - Speed, go loop or end
+;* Get a track data point. The track data stream is a sequence of commands
+;* encoded by the first byte's value:
+;* 0-60 ($00-$3C): A new note. The next byte contains instrument/volume.
+;* 61   ($3D):      Volume-only change for the current note.
+;* 62   ($3E):      Pause. The next byte specifies duration.
+;* 63   ($3F):      Control command (e.g., change speed, loop, or end track).
   lda (_ns),y
   sta rmtreg1
   iny
@@ -606,6 +611,10 @@ oo1i
   sta trackn_instrx2,x
 
 gtl_ProcessVolumeData
+;* The note/instrument/volume data is packed into two bytes to save space.
+;* Byte 1: [vvnnnnnn] (v=volume bits 3&2, n=note)
+;* Byte 2: [iiiiii vv] (i=instrument, v=volume bits 1&0)
+;* This sequence unpacks the 4-bit volume from the two bytes.
   lda rmtreg2
   lsr 
   ror rmtreg1
@@ -671,6 +680,15 @@ p2x2
   bne p2x1
   rts
 
+;* rmt_play:
+;*   This is the main player entry point, intended to be called once per frame
+;*   It orchestrates all player state updates.
+;*   The timing is controlled by two counters:
+;*   1. v_aspeed: Ticks per song line. When it reaches zero, a new line of
+;*      track data is read by GetTrackLine. This is the "song tempo".
+;*   2. smc_silence_instrspeed: Ticks per instrument step. When it reaches
+;*      zero, the instrument envelopes/effects are processed. 
+;*
 rmt_play
 rmt_p0
   jsr SetPokey
@@ -759,6 +777,17 @@ returnfromInstrumentsEffects
   lda rmtreg2
   sta trackn_command,x
   and #$70
+;* This is the main instrument command dispatcher. The command number (0-7)
+;* is stored in the 3 bits of reg2 ($70 mask).
+;* The original player used self-modifying code here (sta jmx+1) to jump
+;* to the correct command handler. 
+;* For a ROM-based system like the 7800:
+;*   the jump has been changed to use a table of addresses (rts_tab). The code
+;*   pushes the correct handler's address-1 onto the stack and executes an RTS,
+;*   effectively performing a calculated JMP.
+;* For a RAM-based system:
+;*   the jump uses self-modifying code to branch to the desired JMP 
+;*   instruction. 
   lsr 
   lsr 
   IF ROM_BASED
@@ -998,6 +1027,15 @@ qq0   ora trackn_audctl,x
    dex
    bpl qq0
    sta v_audctl
+;* This section handles advanced audio effects that require multiple POKEY
+;* channels. The priority system:
+;* 1. Filters (highest priority): If a track enables a filter, it will
+;*    override the channel it needs (e.g., track 0 filter uses channel 2),
+;*    silencing whatever was playing there.
+;* 2. 16-bit Bass (medium priority): If a filter is not active on a needed
+;*    channel, 16-bit bass can use it (e.g., track 1 bass uses channel 0).
+;* 3. Normal Track Playback (lowest priority).
+;* The code first checks for and applies filters, then checks for 16-bit bass.
 qq1
    ldx v_audctl
   ELSE

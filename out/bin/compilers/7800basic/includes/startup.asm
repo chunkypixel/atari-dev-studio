@@ -136,6 +136,37 @@ storeAinhsdevice
          jsr silenceavoxvoice
      endif
 
+ ifconst MULTIBUTTON
+ ifnconst HSSUPPORT
+min_detectatarivoxeeprom
+         jsr i2c_startwrite
+         bcc min_no_eeprom_error
+         lda #$ff
+         jmp min_avoxdetect_done
+min_no_eeprom_error
+         lda #$30
+         jsr i2c_txbyte
+         lda #$00
+         jsr i2c_txbyte
+         jsr i2c_stopwrite
+min_avoxdetect_done
+         eor #$FF
+         sta avoxdetected
+         jmp min_detectatarivoxeepromdone
+         include "i2c7800.inc"
+         I2C_SUBS temp9
+min_detectatarivoxeepromdone
+ endif ; HSSUPPORT
+ endif ; MULTIBUTTON
+
+ ifconst MULTIBUTTON
+         lda avoxdetected
+         beq skipassignavox
+         lda #10
+         sta port1control ; designate port 1 as atarivox so multibutton won't disturb it.
+skipassignavox
+ endif ; MULTIBUTTON
+
      ifconst RMT
          ifconst RMTVOLUME
              lda #$F0 ; default to full RMT volume
