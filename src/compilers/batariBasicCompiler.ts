@@ -177,7 +177,6 @@ export class BatariBasicCompiler extends CompilerBase {
 
         // Prepare
         const command = (application.IsWindows ? "2600bas.bat" : "2600basic.sh");
-
         // for Wasmtime we only need to validate the script file by the looks from my testing...
         let compilerFileList = [command];
 
