@@ -39,11 +39,8 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
     protected async ExecuteCompilerAsync(): Promise<boolean> {
         console.log('debugger:SeventyEightHundredBasicCompiler.ExecuteCompilerAsync');
 
-        // Validate compiler files
-        if (!await this.VerifyCompilerFilesExistsAsync()) return false;
-
-        // Premissions
-        await this.RepairFilePermissionsAsync();
+        // Validate compiler files and permissions
+        if (!await this.VerifyCompilerFilesAndPermissionsExistsAsync()) return false;
 
         // Compiler options
         let commandName = "7800bas.bat";
@@ -246,12 +243,14 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         return new Map<string, string>([["-s",".symbol.txt"],["-l",".list.txt"]]);;
     }
 
-    protected async VerifyCompilerFilesExistsAsync(): Promise<boolean> {
-        console.log('debugger:SeventyEightHundredBasicCompiler.VerifyCompilerFilesExistsAsync');
+    protected async VerifyCompilerFilesAndPermissionsExistsAsync(): Promise<boolean> {
+        console.log('debugger:SeventyEightHundredBasicCompiler.VerifyCompilerFilesAndPermissionsExistsAsync');
 
-        // Verfiy
-        const result = super.VerifyCompilerFilesExistsAsync(); 
-        if (!result && this.CompilerVersion < application.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE) {
+        // Verify
+        const result = super.VerifyCompilerFilesAndPermissionsExistsAsync(); 
+
+        // Is windows and older version?
+        if (!result && application.IsWindows && this.CompilerVersion < application.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE) {
             const message = "NOTE: your anti-virus software may have quarantined one or more files related to the compiler due to a false/positive test and where this is the case please ensure you whitelist to allow these files to used.  Alternatively try re-installing the extension.";
             application.WriteToCompilerTerminal(message);  
         }

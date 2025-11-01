@@ -231,41 +231,29 @@ class CompilerBase {
             return true;
         });
     }
-    VerifyCompilerFilesExistsAsync() {
+    VerifyCompilerFilesAndPermissionsExistsAsync() {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:CompilerBase.VerifyCompilerFilesExistsAsync');
+            console.log('debugger:CompilerBase.VerifyCompilerFilesAndPermissionsExistsAsync');
             // Process
-            application.WriteToCompilerTerminal(`Verifying compiler files exist...`);
+            application.WriteToCompilerTerminal(`Verifying compiler files and permissions...`);
             for (const compilerFileName of this.GetCompilerFileList()) {
                 // Prepare
                 const compilerFilePath = path.join(this.FolderOrPath, compilerFileName);
-                // Validate
+                // Validate exists
                 if (!(yield filesystem.FileExistsAsync(compilerFilePath))) {
                     // Not found
                     application.WriteToCompilerTerminal(`ERROR: Unable to locate compiler file '${compilerFileName}'. `);
                     return false;
                 }
-            }
-            // Result
-            return true;
-        });
-    }
-    RepairFilePermissionsAsync() {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:CompilerBase.RepairFilePermissionsAsync');
-            // Validate
-            if (application.IsWindows)
-                return true;
-            // Process
-            application.WriteToCompilerTerminal(`Verifying file permissions...`);
-            for (const compilerFileName of this.GetCompilerFileList()) {
-                // Prepare
-                const compilerFilePath = path.join(this.FolderOrPath, compilerFileName);
-                // Validate
+                // Continue??
+                if (application.IsWindows)
+                    continue;
+                // Validate permissions? (not windows)
                 if (!(yield filesystem.ChModAsync(compilerFilePath))) {
                     // Not found
                     application.WriteToCompilerTerminal(`WARNING: Unable to set file permissions for compiler file '${compilerFileName}'. `);
-                    return false;
+                    // NOTE: don't fail here as it may still work... (an error will be shown if the script cannot access)  
+                    //return false; 
                 }
             }
             // Result

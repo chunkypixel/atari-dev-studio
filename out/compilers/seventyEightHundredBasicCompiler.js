@@ -41,11 +41,9 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
     ExecuteCompilerAsync() {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('debugger:SeventyEightHundredBasicCompiler.ExecuteCompilerAsync');
-            // Validate compiler files
-            if (!(yield this.VerifyCompilerFilesExistsAsync()))
+            // Validate compiler files and permissions
+            if (!(yield this.VerifyCompilerFilesAndPermissionsExistsAsync()))
                 return false;
-            // Premissions
-            yield this.RepairFilePermissionsAsync();
             // Compiler options
             let commandName = "7800bas.bat";
             if (application.IsLinux || application.IsMacOS) {
@@ -212,15 +210,16 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
         return new Map([["-s", ".symbol.txt"], ["-l", ".list.txt"]]);
         ;
     }
-    VerifyCompilerFilesExistsAsync() {
+    VerifyCompilerFilesAndPermissionsExistsAsync() {
         const _super = Object.create(null, {
-            VerifyCompilerFilesExistsAsync: { get: () => super.VerifyCompilerFilesExistsAsync }
+            VerifyCompilerFilesAndPermissionsExistsAsync: { get: () => super.VerifyCompilerFilesAndPermissionsExistsAsync }
         });
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:SeventyEightHundredBasicCompiler.VerifyCompilerFilesExistsAsync');
-            // Verfiy
-            const result = _super.VerifyCompilerFilesExistsAsync.call(this);
-            if (!result && this.CompilerVersion < application.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE) {
+            console.log('debugger:SeventyEightHundredBasicCompiler.VerifyCompilerFilesAndPermissionsExistsAsync');
+            // Verify
+            const result = _super.VerifyCompilerFilesAndPermissionsExistsAsync.call(this);
+            // Is windows and older version?
+            if (!result && application.IsWindows && this.CompilerVersion < application.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE) {
                 const message = "NOTE: your anti-virus software may have quarantined one or more files related to the compiler due to a false/positive test and where this is the case please ensure you whitelist to allow these files to used.  Alternatively try re-installing the extension.";
                 application.WriteToCompilerTerminal(message);
             }

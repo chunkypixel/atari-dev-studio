@@ -216,47 +216,34 @@ export abstract class CompilerBase implements vscode.Disposable {
         return true;
     }
 
-    protected async VerifyCompilerFilesExistsAsync(): Promise<boolean> {
-        console.log('debugger:CompilerBase.VerifyCompilerFilesExistsAsync');
+    protected async VerifyCompilerFilesAndPermissionsExistsAsync(): Promise<boolean> {
+        console.log('debugger:CompilerBase.VerifyCompilerFilesAndPermissionsExistsAsync');
 
         // Process
-        application.WriteToCompilerTerminal(`Verifying compiler files exist...`);
+        application.WriteToCompilerTerminal(`Verifying compiler files and permissions...`);
         for (const compilerFileName of this.GetCompilerFileList()) {
             // Prepare
             const compilerFilePath = path.join(this.FolderOrPath, compilerFileName);
 
-            // Validate
+            // Validate exists
             if (!await filesystem.FileExistsAsync(compilerFilePath)) {
                 // Not found
                 application.WriteToCompilerTerminal(`ERROR: Unable to locate compiler file '${compilerFileName}'. `);  
                 return false; 
             }
-        }
 
-        // Result
-        return true;
-    }
+            // Continue??
+            if (application.IsWindows) continue;
 
-    protected async RepairFilePermissionsAsync(): Promise<boolean> {
-        console.log('debugger:CompilerBase.RepairFilePermissionsAsync'); 
-
-        // Validate
-        if (application.IsWindows) return true;
-
-        // Process
-        application.WriteToCompilerTerminal(`Verifying file permissions...`);
-        for (const compilerFileName of this.GetCompilerFileList()) {
-            // Prepare
-            const compilerFilePath = path.join(this.FolderOrPath, compilerFileName);
-
-            // Validate
+            // Validate permissions? (not windows)
             if (!await filesystem.ChModAsync(compilerFilePath)) {
                 // Not found
-                application.WriteToCompilerTerminal(`WARNING: Unable to set file permissions for compiler file '${compilerFileName}'. `);  
-                return false; 
+                application.WriteToCompilerTerminal(`WARNING: Unable to set file permissions for compiler file '${compilerFileName}'. `);
+                // NOTE: don't fail here as it may still work... (an error will be shown if the script cannot access)  
+                //return false; 
             }
         }
-     
+
         // Result
         return true;
     }

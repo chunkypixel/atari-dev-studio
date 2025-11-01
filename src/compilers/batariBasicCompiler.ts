@@ -37,10 +37,7 @@ export class BatariBasicCompiler extends CompilerBase {
         console.log('debugger:BatariBasicCompiler.ExecuteCompilerAsync');
 
         // Validate compiler files
-        if (!await this.VerifyCompilerFilesExistsAsync()) return false;
-
-        // Premissions
-        await this.RepairFilePermissionsAsync();
+        if (!await this.VerifyCompilerFilesAndPermissionsExistsAsync()) return false;
 
         // Compiler options
         let commandName = "2600bas.bat"; 
@@ -218,12 +215,14 @@ export class BatariBasicCompiler extends CompilerBase {
         return new Map([["-s",".sym"], ["-l",".lst"]]);
     }
 
-    protected async VerifyCompilerFilesExistsAsync(): Promise<boolean> {
-        console.log('debugger:BatariBasicCompiler.VerifyCompilerFilesExistsAsync');
+    protected async VerifyCompilerFilesAndPermissionsExistsAsync(): Promise<boolean> {
+        console.log('debugger:BatariBasicCompiler.VerifyCompilerFilesAndPermissionsExistsAsync');
 
-        // Verfiy
-        let result = super.VerifyCompilerFilesExistsAsync(); 
-        if (!result && this.CompilerVersion < application.BATARIBASIC_WASMTIME_RELEASE) {
+        // Verify
+        let result = super.VerifyCompilerFilesAndPermissionsExistsAsync();
+
+        // Is windows and older version?
+        if (!result && application.IsWindows && this.CompilerVersion < application.BATARIBASIC_WASMTIME_RELEASE) {
             const message = "NOTE: your anti-virus software may have quarantined one or more files related to the compiler due to a false/positive test and where this is the case please ensure you whitelist to allow these files to used.  Alternatively try re-installing the extension.";
             application.WriteToCompilerTerminal(message);  
         }
