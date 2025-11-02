@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.11.8
+
+ * Updated 7800basic to v0.39 (wasm)
+ * Updated validation of compiler tags and folders
+ * Fixed issue validating the **Default** compiler tag with casing
+ 
 ## 0.11.7
 
  * Updated 7800basic to v0.39 (wasm)

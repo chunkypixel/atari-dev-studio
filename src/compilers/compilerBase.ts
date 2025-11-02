@@ -287,29 +287,26 @@ export abstract class CompilerBase implements vscode.Disposable {
         let chosenCompiler = this.Configuration!.get<string>(`compiler.${this.Id}.defaultCompiler`,'');
         if (adsCompilerTag) chosenCompiler = adsCompilerTag;
 
-        // Make?
-        if (chosenCompiler === "Make") {
-            // Only working in dasm currently
-
-            // validate for one of the script files
-            if (!await this.ValidateTerminalMakeFileAvailableAysnc()) return false;
-
-            // Initialise terminal
-            await application.InitialiseAdsTerminalAsync();
-            return true;
-        }
-
-        // Default/Custom/Other
-        switch (chosenCompiler)
+        // Validate chosen compiler
+        switch (chosenCompiler.toLowerCase())
         {
-            case "Default":
+            case "make":
+                // Only working in dasm currently
+
+                // validate for one of the script files
+                const result = await this.ValidateTerminalMakeFileAvailableAysnc();
+                if (result) await application.InitialiseAdsTerminalAsync();
+                return result;   
+
+            case "default":
                 // do nothing
                 break;
 
             default:
                 // custom or everything else
                 // bB and 7800basic check for a folder, dasm checks for a path
-                await this.ValidateCustomCompilerLocationAsync(chosenCompiler);                   
+                await this.ValidateCustomCompilerLocationAsync(chosenCompiler);
+                break;                   
         }
 
         // Compiler (other)
@@ -358,36 +355,41 @@ export abstract class CompilerBase implements vscode.Disposable {
     protected async ValidateCustomCompilerLocationAsync(customCompilerId: string) : Promise<void> {
         console.log('debugger:CompilerBase.ValidateCustomCompilerLocationAsync');  
 
-        // Validate for a folder
-        const customCompilerFolder = configuration.GetCustomCompilerFolder(this.Id, customCompilerId);
-        if (!customCompilerFolder) {
-            // No custom compiler provided, revert
-            const message = `WARNING: You have chosen to use a custom ${this.Name} compiler (${customCompilerId}) but you have not provided the location.\nReverting to the default compiler...`;
+        // Validate for custom compiler tag
+        const customCompilerTagExists = configuration.ContainsCustomCompilerTag(this.Id, customCompilerId);
+        if (!customCompilerTagExists) {
+            // No tag found, revert
+            const message = `WARNING: Unable to find your selected custom ${this.Name} compiler (${customCompilerId}) in the settings.\nReverting to the default compiler...`;
             application.WriteToCompilerTerminal(message);
-            //application.ShowWarningPopup(message);
-
-        } else {
-            // Validate custom compiler path exists
-            const result = await filesystem.FolderExistsAsync(customCompilerFolder);
-            if (!result) {
-                // Failed, revert
-                const message = `WARNING: Your custom ${this.Name} compiler location '${customCompilerFolder}' cannot be found.\nReverting to the default compiler...`;
-                application.WriteToCompilerTerminal(message);
-                //application.ShowWarningPopup(message);
-
-            } else {
-                // Ok
-                application.WriteToCompilerTerminal(`Building project using custom ${this.Name} compiler (${customCompilerId}).`);               
-                application.WriteToCompilerTerminal(`Location: ${customCompilerFolder}`);  
-
-                // Set
-                this.FolderOrPath = customCompilerFolder;
-                this.CustomFolderOrPath = true;
-            }
+            return;
         }
 
-        // Finalise
-        //application.WriteToCompilerTerminal("");
+        // Get the folder to the custom compiler
+        const customCompilerFolder = configuration.GetCustomCompilerFolder(this.Id, customCompilerId);
+
+        // Validate if folder provided exists
+        if (!customCompilerFolder) {
+            // No, revert
+            const message = `WARNING: The path of your selected custom ${this.Name} compiler (${customCompilerId}) has not been configured in the settings.\nReverting to the default compiler...`;
+            application.WriteToCompilerTerminal(message);
+            return;
+        }
+
+        // Validate custom compiler path exists
+        const result = await filesystem.FolderExistsAsync(customCompilerFolder);
+        if (!result) {
+            // No, revert
+            const message = `WARNING: The path of your selected custom ${this.Name} compiler (${customCompilerId}) cannot be found '${customCompilerFolder}'.\nReverting to the default compiler...`;
+            application.WriteToCompilerTerminal(message);
+            return;
+        }
+
+        // Success!
+        application.WriteToCompilerTerminal(`Building project using custom ${this.Name} compiler (${customCompilerId}).`);
+
+        // Set
+        this.FolderOrPath = customCompilerFolder;
+        this.CustomFolderOrPath = true;
     }
 
     protected ValidateIfProjectFolderAndFileContainsSpaces(): void {

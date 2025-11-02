@@ -213,7 +213,7 @@ export class BatariBasicCompiler extends CompilerBase {
         // Validate
         return new Map([["-s",".sym"], ["-l",".lst"]]);
     }
-
+    
     protected async VerifyCompilerFilesAndPermissionsExistsAsync(): Promise<boolean> {
         console.log('debugger:BatariBasicCompiler.VerifyCompilerFilesAndPermissionsExistsAsync');
 

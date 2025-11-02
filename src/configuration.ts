@@ -137,6 +137,18 @@ export function GetCustomCompilerFolder(languageId: string, id: string): string 
     return found ? found[1] : '';
 }
 
+export function ContainsCustomCompilerTag(languageId: string, id: string): boolean {
+    // Prepare
+    const config = GetAtariDevStudioConfiguration();
+
+        // Scan
+    const customFolders = config.get<Record<string, string>>(`compiler.${languageId}.customFolders`,{});
+    const found = Object.entries(customFolders).find(([key]) => key.toLowerCase() === id.toLowerCase());
+
+    // Return result
+    return found ? true : false;
+}
+
 function CustomFolderExists(configurationSection: string, folder: string): boolean {
     // Prepare
     const config = GetAtariDevStudioConfiguration();
@@ -145,3 +157,4 @@ function CustomFolderExists(configurationSection: string, folder: string): boole
     const customFolders = config.get<Record<string, string>>(configurationSection,{});
     return Object.values(customFolders).some(value => value.toLowerCase() === folder.toLowerCase());
 }
+

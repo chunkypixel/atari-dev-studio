@@ -16,6 +16,7 @@ exports.ValidateCustomFoldersConfigurationEntry = ValidateCustomFoldersConfigura
 exports.ValidateOpenSamplesFileOnRestart = ValidateOpenSamplesFileOnRestart;
 exports.GetCustomCompilerIdList = GetCustomCompilerIdList;
 exports.GetCustomCompilerFolder = GetCustomCompilerFolder;
+exports.ContainsCustomCompilerTag = ContainsCustomCompilerTag;
 const vscode = require("vscode");
 const application = require("./application");
 const seventyEightHundredCustomFoldersSection = 'compiler.7800basic.customFolders';
@@ -139,6 +140,15 @@ function GetCustomCompilerFolder(languageId, id) {
     const found = Object.entries(customFolders).find(([key]) => key.toLowerCase() === id.toLowerCase());
     // Return result
     return found ? found[1] : '';
+}
+function ContainsCustomCompilerTag(languageId, id) {
+    // Prepare
+    const config = GetAtariDevStudioConfiguration();
+    // Scan
+    const customFolders = config.get(`compiler.${languageId}.customFolders`, {});
+    const found = Object.entries(customFolders).find(([key]) => key.toLowerCase() === id.toLowerCase());
+    // Return result
+    return found ? true : false;
 }
 function CustomFolderExists(configurationSection, folder) {
     // Prepare
