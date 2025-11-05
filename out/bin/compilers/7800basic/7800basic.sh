@@ -8,12 +8,19 @@ fi
 
 wasmtime --version 2>&1 > /dev/null
 if [ ! $? = 0 ] ; then
-    echo "### WARNING: wasmtime isn't in your PATH."
-    echo "    You can install it as follows:"
-    echo "      macOS/Linux: curl https://wasmtime.dev/install.sh -sSf | bash"
-    echo "    See https://wasmtime.dev for other installation options."
-    exit 1
+    if [ -r "$bas7800dir"/7800basic ] ; then
+        echo "### WARNING: wasmtime is missing. Compiling with native executables."
+        7800basic.native.sh $*
+        exit $?
+    else
+        echo "### WARNING: wasmtime isn't in your PATH."
+        echo "    You can install it as follows:"
+        echo "      macOS/Linux: curl https://wasmtime.dev/install.sh -sSf | bash"
+        echo "    See https://wasmtime.dev for other installation options."
+        exit 1
+    fi
 fi
+
 
 echo "  basic version:  "$(wasmtime $bas7800dir/7800basic.wasm -v 2>/dev/null)
 
