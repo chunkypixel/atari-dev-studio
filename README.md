@@ -83,9 +83,9 @@ To change a language you can click on the Status Bar **Language selector** and a
 
 ![Language Selector](images/ataridevstudio-languageselector.png)
 
-### Language Definition Tags (Available from v0.11.1)
+### Language Definition Tags
 
-Starting with **v0.11.1**, you can define the default language and compiler for your source files using **definition tags** directly in your code. This allows you to override the default behavior of relying on file extensions and other options.
+Starting from release **v0.11.1**, you can define the default language and compiler for your source files using **definition tags** directly in your code. This allows you to override the default behavior of relying on file extensions and other options.
 
 ![Language Definition Tags](images/ataridevstudio-languagedefinitiontags.png)
 
@@ -170,7 +170,7 @@ There are currently no known feature issues but if you find a problem please rai
 ### Virus capture of compiler files
 With the introduction of the WASM releases of batari Basic and 7800basic you should no longer encounter issues with the language compiler files being captured by your virus software due to false/positives.  Be aware that if you revert to using prior releases built specifically for Microsoft Windows this may still continue.  
 
-Consult your manual on how to release/restore the required file(s) where this happens.
+Consult your virus manual on how to release/restore the required file(s) where this happens.
 
 
 ## Acknowlegments
