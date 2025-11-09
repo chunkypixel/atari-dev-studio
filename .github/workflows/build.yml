@@ -37,5 +37,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: atari-dev-studio-$VERSION-vsix
+          name: atari-dev-studio-${{ env.VERSION }}-vsix
           path: atari-dev-studio-*.vsix  # Wildcard matches the versioned file
