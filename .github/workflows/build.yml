@@ -29,6 +29,7 @@ jobs:
         run: npm install --save-dev @vscode/vsce
 
       - name: Get version from package.json
+        shell: bash
         run: echo "VERSION=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
 
       - name: Run Makefile to compile and package
