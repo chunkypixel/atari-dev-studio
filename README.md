@@ -83,9 +83,9 @@ To change a language you can click on the Status Bar **Language selector** and a
 
 ![Language Selector](images/ataridevstudio-languageselector.png)
 
-### Language Definition Tags (Available from v0.11.1)
+### Language Definition Tags
 
-Starting with **v0.11.1**, you can define the default language and compiler for your source files using **definition tags** directly in your code. This allows you to override the default behavior of relying on file extensions and other options.
+Starting from release **v0.11.1**, you can define the default language and compiler for your source files using **definition tags** directly in your code. This allows you to override the default behavior of relying on file extensions and other options.
 
 ![Language Definition Tags](images/ataridevstudio-languagedefinitiontags.png)
 
@@ -170,7 +170,7 @@ There are currently no known feature issues but if you find a problem please rai
 ### Virus capture of compiler files
 With the introduction of the WASM releases of batari Basic and 7800basic you should no longer encounter issues with the language compiler files being captured by your virus software due to false/positives.  Be aware that if you revert to using prior releases built specifically for Microsoft Windows this may still continue.  
 
-Consult your manual on how to release/restore the required file(s) where this happens.
+Consult your virus manual on how to release/restore the required file(s) where this happens.
 
 
 ## Acknowlegments
@@ -194,7 +194,7 @@ batari Basic created by Fred 'batari' Quimby is a BASIC-like language used in th
 
 batari Basic is an external project is kindly currently maintained by Mike Saarna (RevEng) and can be downloaded separately [here](https://github.com/batari-Basic/batari-Basic).  Further information is about this release is available here at [AtariAge](https://atariage.com/forums/topic/300856-official-home-for-batari-basic).
 
-### 7800basic (release 0.39 - 20251031 [WASM])
+### 7800basic (release 0.40 - 20251105 [WASM])
 7800basic is a BASIC-like language for creating Atari 7800 games.  It is a compiled language that runs on a computer, and it creates a binary file that can be run with an Atari 7800 emulator, or the binary file may be used to make a cartridge that will operate on a real Atari 7800. 7800basic is derived from batari basic, a BASIC-like language for creating Atari 2600 games. Special thanks to the bB creator, Fred Quimby, and all of the the bB contributors!
 
 7800basic is included as part of this extension with many thanks to Mike Saarna (RevEng).  7800basic is an external project and can be downloaded separately [here](https://github.com/7800-devtools/7800basic).  Further information about this release is available here at [AtariAge](http://atariage.com/forums/topic/222638-7800basic-beta-the-release-thread).
