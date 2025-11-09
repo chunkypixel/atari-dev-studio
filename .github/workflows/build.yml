@@ -5,6 +5,12 @@ on:
     branches: [ main ]  # Or your default branch, e.g., master
   pull_request:
     branches: [ main ]
+  workflow_dispatch:  # Enables manual triggers
+      inputs:
+        environment:  # Optional input example
+          description: 'Environment to build for (e.g., dev, prod)'
+          required: false
+          default: 'prod'
 
 jobs:
   build:
