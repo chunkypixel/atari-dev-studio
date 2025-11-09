@@ -32,7 +32,7 @@ jobs:
         run: make  # This executes the 'all' target by default
 
       - name: Upload artifact
-          uses: actions/upload-artifact@v4
-          with:
-            name: extension-vsix
-            path: atari-dev-studio.vsix  # Match the --out from your Makefile
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-vsix
+          path: atari-dev-studio.vsix  # Match the --out from your Makefile
