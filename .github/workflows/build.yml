@@ -32,7 +32,7 @@ jobs:
         run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
       - name: Run Makefile to compile and package
-        run: make VERSION=VERSION  # This executes the 'all' target by default
+        run: make VERSION=$VERSION  # This executes the 'all' target by default
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
