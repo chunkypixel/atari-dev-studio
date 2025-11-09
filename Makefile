@@ -7,4 +7,5 @@ compile:
 	npm run compile  # Run your compile script from package.json (e.g., tsc for TypeScript)
 
 package: compile
-	npx vsce package --out atari-dev-studio.vsix  # Package into a .vsix file; replace 'my-extension' with your extension name
+  version=$$(node -p "require('./package.json').version"); \
+	npx vsce package --out atari-dev-studio-$${version}.vsix  # Package into a .vsix file; replace 'my-extension' with your extension name

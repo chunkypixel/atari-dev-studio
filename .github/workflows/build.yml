@@ -28,11 +28,14 @@ jobs:
       - name: Install VSCE
         run: npm install --save-dev @vscode/vsce
 
+      - name: Get version from package.json
+        run: echo "VERSION=$(node -p)"require('./package.json').version")" >> $GITHUB_ENV
+
       - name: Run Makefile to compile and package
         run: make  # This executes the 'all' target by default
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: extension-vsix
-          path: atari-dev-studio.vsix  # Match the --out from your Makefile
+          name: atari-dev-studio-${VERSION}-vsix
+          path: atari-dev-studio-*.vsix  # Wildcard matches the versioned file
