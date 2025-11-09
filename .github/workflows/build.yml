@@ -1,0 +1,29 @@
+name: Build Atari Dev Studio (VS Code Extension) in Github
+
+on:
+  push:
+    branches: [ main ]  # Or your default branch, e.g., master
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Linux is fine for Node.js-based extensions; use matrix for multi-OS if needed
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  # Required to access your repo files, including the Makefile
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'  # Use a recent LTS version; match your local setup
+
+      - name: Run Makefile to compile and package
+        run: make  # This executes the 'all' target by default
+
+      - name: Upload artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: atari-dev-studio-vsix
+            path: atari-dev-studio.vsix  # Match the --out from your Makefile
