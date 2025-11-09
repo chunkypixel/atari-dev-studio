@@ -1,5 +1,7 @@
 .PHONY: all compile package
 
+VERSION ?= dev
+
 all: package
 
 compile:
@@ -7,5 +9,4 @@ compile:
 	npm run compile  # Run your compile script from package.json (e.g., tsc for TypeScript)
 
 package: compile
-  version=$$(node -p "require('./package.json').version"); \
-	npx vsce package --out atari-dev-studio-$${version}.vsix  # Package into a .vsix file; replace 'my-extension' with your extension name
+	npx vsce package --out atari-dev-studio-$(VERSION).vsix  # Package into a .vsix file; replace 'my-extension' with your extension name
