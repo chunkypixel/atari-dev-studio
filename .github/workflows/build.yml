@@ -2,9 +2,9 @@ name: Build Atari Dev Studio (VS Code Extension) in Github
 
 on:
   push:
-    branches: [ main ]  # Or your default branch, e.g., master
+    branches: [ master ]  # Or your default branch, e.g., master
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch:  # Enables manual triggers
       inputs:
         environment:  # Optional input example
@@ -37,5 +37,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: atari-dev-studio-{{ env.VERSION }}-vsix
+          name: atari-dev-studio-$VERSION-vsix
           path: atari-dev-studio-*.vsix  # Wildcard matches the versioned file
