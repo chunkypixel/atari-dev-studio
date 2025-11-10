@@ -67,11 +67,13 @@ export const Description: string = vscode.extensions.getExtension(Id)!.packageJS
 export const PreferencesSettingsExtensionPath: string = `${(IsMacOS ? "Code" : "File")} -> Preferences -> Settings -> Extensions -> ${DisplayName}`;
 export const ChangeLogUri: vscode.Uri = vscode.Uri.parse(`https://marketplace.visualstudio.com/items/${Id}/changelog`);
 // -------------------------------------------------------------------------------------
-// ENVIRONMENT
+// Environment
 // -------------------------------------------------------------------------------------
 export const EnvironmentSummary: string = `Operating System: ${(IsWindows ? "Windows" : IsLinux ? "Linux" : IsMacOS ? "MacOS" : "Unknown")} (${OSArch}), VSCode: v${vscode.version}, ${DisplayName}: v${Version}`;
 export const SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE = 0.37;
 export const BATARIBASIC_WASMTIME_RELEASE = 1.9;
+export const AtariDevStudioCompilerWindowName = "ADS Compiler";
+export const AtariDevStudioTerminalWindowName = "ADS Terminal";
 // -------------------------------------------------------------------------------------
 // Languages
 // -------------------------------------------------------------------------------------
@@ -80,7 +82,7 @@ export const BatariBasicLanguageId = "batariBasic";
 // -------------------------------------------------------------------------------------
 // Channels
 // -------------------------------------------------------------------------------------
-export const CompilerOutputChannel: vscode.OutputChannel = vscode.window.createOutputChannel("Atari Compiler"); 
+export const CompilerOutputChannel: vscode.OutputChannel = vscode.window.createOutputChannel(AtariDevStudioCompilerWindowName); 
 
 // -------------------------------------------------------------------------------------
 // Terminal
@@ -103,7 +105,17 @@ export async function InitialiseAdsTerminalAsync() {
 	}
 
 	// Create
-	AdsTerminal = vscode.window.createTerminal(`${Name}`);
+	if (IsWindows) {
+		// For windows we need to create a CMD window
+		// NOTE: by default VSCode uses powershell
+		AdsTerminal = vscode.window.createTerminal({
+			name: AtariDevStudioTerminalWindowName,
+			shellPath: "C:\\Windows\\System32\\cmd.exe"
+		});
+	} else {
+		// Let system choose
+		AdsTerminal = vscode.window.createTerminal(AtariDevStudioTerminalWindowName);
+	}
 
 	// User closed a terminal? if so verify it's ours and clear the reference
 	vscode.window.onDidCloseTerminal((terminal) => {

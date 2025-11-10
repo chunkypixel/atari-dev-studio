@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ContextHelps = exports.ReferenceProviders = exports.DefinitionProviders = exports.DocumentSymbolProviders = exports.Foldings = exports.Completions = exports.Hovers = exports.Serials = exports.Emulators = exports.Compilers = exports.AdsTerminal = exports.CompilerOutputChannel = exports.BatariBasicLanguageId = exports.SeventyEightHundredBasicLanguageId = exports.BATARIBASIC_WASMTIME_RELEASE = exports.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE = exports.EnvironmentSummary = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.IsMacOSArm = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSRelease = exports.OSArch = exports.OSPlatform = void 0;
+exports.ContextHelps = exports.ReferenceProviders = exports.DefinitionProviders = exports.DocumentSymbolProviders = exports.Foldings = exports.Completions = exports.Hovers = exports.Serials = exports.Emulators = exports.Compilers = exports.AdsTerminal = exports.CompilerOutputChannel = exports.BatariBasicLanguageId = exports.SeventyEightHundredBasicLanguageId = exports.AtariDevStudioTerminalWindowName = exports.AtariDevStudioCompilerWindowName = exports.BATARIBASIC_WASMTIME_RELEASE = exports.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE = exports.EnvironmentSummary = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.IsMacOSArm = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSRelease = exports.OSArch = exports.OSPlatform = void 0;
 exports.InitialiseAdsTerminalAsync = InitialiseAdsTerminalAsync;
 exports.RegisterHoverProvidersAsync = RegisterHoverProvidersAsync;
 exports.RegisterCompletionProvidersAsync = RegisterCompletionProvidersAsync;
@@ -92,11 +92,13 @@ exports.Description = vscode.extensions.getExtension(exports.Id).packageJSON.des
 exports.PreferencesSettingsExtensionPath = `${(exports.IsMacOS ? "Code" : "File")} -> Preferences -> Settings -> Extensions -> ${exports.DisplayName}`;
 exports.ChangeLogUri = vscode.Uri.parse(`https://marketplace.visualstudio.com/items/${exports.Id}/changelog`);
 // -------------------------------------------------------------------------------------
-// ENVIRONMENT
+// Environment
 // -------------------------------------------------------------------------------------
 exports.EnvironmentSummary = `Operating System: ${(exports.IsWindows ? "Windows" : exports.IsLinux ? "Linux" : exports.IsMacOS ? "MacOS" : "Unknown")} (${exports.OSArch}), VSCode: v${vscode.version}, ${exports.DisplayName}: v${exports.Version}`;
 exports.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE = 0.37;
 exports.BATARIBASIC_WASMTIME_RELEASE = 1.9;
+exports.AtariDevStudioCompilerWindowName = "ADS Compiler";
+exports.AtariDevStudioTerminalWindowName = "ADS Terminal";
 // -------------------------------------------------------------------------------------
 // Languages
 // -------------------------------------------------------------------------------------
@@ -105,7 +107,7 @@ exports.BatariBasicLanguageId = "batariBasic";
 // -------------------------------------------------------------------------------------
 // Channels
 // -------------------------------------------------------------------------------------
-exports.CompilerOutputChannel = vscode.window.createOutputChannel("Atari Compiler");
+exports.CompilerOutputChannel = vscode.window.createOutputChannel(exports.AtariDevStudioCompilerWindowName);
 function InitialiseAdsTerminalAsync() {
     return __awaiter(this, void 0, void 0, function* () {
         // Already have a terminal?
@@ -114,7 +116,18 @@ function InitialiseAdsTerminalAsync() {
             return;
         }
         // Create
-        exports.AdsTerminal = vscode.window.createTerminal(`${exports.Name}`);
+        if (exports.IsWindows) {
+            // For windows we need to create a CMD window
+            // NOTE: by default VSCode uses powershell
+            exports.AdsTerminal = vscode.window.createTerminal({
+                name: exports.AtariDevStudioTerminalWindowName,
+                shellPath: "C:\\Windows\\System32\\cmd.exe"
+            });
+        }
+        else {
+            // Let system choose
+            exports.AdsTerminal = vscode.window.createTerminal(exports.AtariDevStudioTerminalWindowName);
+        }
         // User closed a terminal? if so verify it's ours and clear the reference
         vscode.window.onDidCloseTerminal((terminal) => {
             if (terminal.name === exports.Name) {

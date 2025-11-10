@@ -55,8 +55,8 @@ export class MakeCompiler extends CompilerBase {
         console.log('debugger:MakeCompiler.ExecuteCompilerAsync');
 
         // Launch and exit
-        // note: we cannot wait for a result
-        application.AdsTerminal?.sendText(`make -f ${this.FileName}`);
+        // NOTE: we cannot wait for a result
+        application.AdsTerminal?.sendText(`make -f .\\${this.FileName}`);
         return true;
     }
 

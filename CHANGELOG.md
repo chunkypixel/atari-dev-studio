@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.11.9
+
+ * Updated **Make** Terminal to create a **Command Window** on Windows rather than rely on the default (which is Powershell)
+ * Updated the make call to prefix the filename with .\ (thanks lucienEn)
+ * Relabled the the **Atari Compiler** window to **ADS Compiler** and the **atari-dev-studio** Terminal window to **ADS Terminal** for consistency.
+
 ## 0.11.8
 
  * Updated 7800basic to v0.40 (wasm)

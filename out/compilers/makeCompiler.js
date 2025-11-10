@@ -53,8 +53,8 @@ class MakeCompiler extends compilerBase_1.CompilerBase {
             var _a;
             console.log('debugger:MakeCompiler.ExecuteCompilerAsync');
             // Launch and exit
-            // note: we cannot wait for a result
-            (_a = application.AdsTerminal) === null || _a === void 0 ? void 0 : _a.sendText(`make -f ${this.FileName}`);
+            // NOTE: we cannot wait for a result
+            (_a = application.AdsTerminal) === null || _a === void 0 ? void 0 : _a.sendText(`make -f .\\${this.FileName}`);
             return true;
         });
     }
