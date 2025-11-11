@@ -61,6 +61,7 @@ class CompilerBase {
     }
     BuildGameAsync(document) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('debugger:CompilerBase.BuildGameAsync');
             // Set
             this.Document = document;
             // Process
@@ -69,9 +70,11 @@ class CompilerBase {
             return yield this.ExecuteCompilerAsync();
         });
     }
+    // NOTE: reflect any changes here in seventyEightHundredBasicCompiler.ts
     BuildGameAndRunAsync(document) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a, e_1, _b, _c, _d, e_2, _e, _f;
+            var _a, e_1, _b, _c;
+            console.log('debugger:CompilerBase.BuildGameAndRunAsync');
             // Process
             const result = yield this.BuildGameAsync(document);
             if (!result)
@@ -80,46 +83,12 @@ class CompilerBase {
             // Make doesn't use an emulator - user must provide their own
             if (this.Emulator === '' || (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler))
                 return true;
-            // Use/Try serial (windows only)
-            if (this.LaunchEmulatorOrCartOption != "Emulator") {
-                // Validate
-                if (!this.LaunchEmulatorOrCartOptionAvailable) {
-                    // NOT AVAILABLE FOR LANGUAGE - Advise
-                    application.WriteToCompilerTerminal(`Warning: Launching to 7800GD cart is not available for the ${this.Name} language - reverting to emulator...`);
-                }
-                else if (!application.IsWindows) {
-                    // WINDOWS ONLY - Advise
-                    application.WriteToCompilerTerminal(`Warning: Launching to 7800GD cart is currently only available for Windows - reverting to emulator...`);
-                }
-                else {
-                    try {
-                        // Find
-                        for (var _g = true, _h = __asyncValues(application.Serials), _j; _j = yield _h.next(), _a = _j.done, !_a; _g = true) {
-                            _c = _j.value;
-                            _g = false;
-                            const serial = _c;
-                            if (serial.Id === this.LaunchEmulatorOrCartOption) {
-                                // Match
-                                const compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
-                                return yield serial.SendGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
-                            }
-                        }
-                    }
-                    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                    finally {
-                        try {
-                            if (!_g && !_a && (_b = _h.return)) yield _b.call(_h);
-                        }
-                        finally { if (e_1) throw e_1.error; }
-                    }
-                }
-            }
             try {
                 // Try emulator
-                for (var _k = true, _l = __asyncValues(application.Emulators), _m; _m = yield _l.next(), _d = _m.done, !_d; _k = true) {
-                    _f = _m.value;
-                    _k = false;
-                    const emulator = _f;
+                for (var _d = true, _e = __asyncValues(application.Emulators), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
+                    _c = _f.value;
+                    _d = false;
+                    const emulator = _c;
                     if (emulator.Id === this.Emulator) {
                         // Note: first extension should be the one which is to be launched
                         const compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
@@ -127,12 +96,12 @@ class CompilerBase {
                     }
                 }
             }
-            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (!_k && !_d && (_e = _l.return)) yield _e.call(_l);
+                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
-                finally { if (e_2) throw e_2.error; }
+                finally { if (e_1) throw e_1.error; }
             }
             // Not found
             application.WriteToCompilerTerminal(`Unable to find emulator '${this.Emulator}' to launch game.`);
@@ -404,7 +373,7 @@ class CompilerBase {
     }
     VerifyCompiledFileSizeAsync() {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a, e_3, _b, _c;
+            var _a, e_2, _b, _c;
             console.log('debugger:CompilerBase.VerifyCompiledFileSize');
             // Validate
             if (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler)
@@ -428,12 +397,12 @@ class CompilerBase {
                     return false;
                 }
             }
-            catch (e_3_1) { e_3 = { error: e_3_1 }; }
+            catch (e_2_1) { e_2 = { error: e_2_1 }; }
             finally {
                 try {
                     if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
-                finally { if (e_3) throw e_3.error; }
+                finally { if (e_2) throw e_2.error; }
             }
             // Result
             return true;
@@ -441,7 +410,7 @@ class CompilerBase {
     }
     MoveFilesToBinFolderAsync() {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a, e_4, _b, _c, _d, e_5, _e, _f;
+            var _a, e_3, _b, _c, _d, e_4, _e, _f;
             // Note: generateDebuggerFile - there are different settings for each compiler
             console.log('debugger:CompilerBase.MoveFilesToBinFolder');
             // Validate
@@ -486,12 +455,12 @@ class CompilerBase {
                     }
                 }
             }
-            catch (e_4_1) { e_4 = { error: e_4_1 }; }
+            catch (e_3_1) { e_3 = { error: e_3_1 }; }
             finally {
                 try {
                     if (!_g && !_a && (_b = _h.return)) yield _b.call(_h);
                 }
-                finally { if (e_4) throw e_4.error; }
+                finally { if (e_3) throw e_3.error; }
             }
             // Process?
             if (this.GenerateDebuggerFiles) {
@@ -518,12 +487,12 @@ class CompilerBase {
                         }
                     }
                 }
-                catch (e_5_1) { e_5 = { error: e_5_1 }; }
+                catch (e_4_1) { e_4 = { error: e_4_1 }; }
                 finally {
                     try {
                         if (!_k && !_d && (_e = _l.return)) yield _e.call(_l);
                     }
-                    finally { if (e_5) throw e_5.error; }
+                    finally { if (e_4) throw e_4.error; }
                 }
             }
             // Return
@@ -532,7 +501,7 @@ class CompilerBase {
     }
     RemoveDebuggerFilesAsync(folder) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a, e_6, _b, _c;
+            var _a, e_5, _b, _c;
             console.log('debugger:CompilerBase.RemoveDebuggerFilesAsync');
             try {
                 // Process
@@ -549,12 +518,12 @@ class CompilerBase {
                     }
                 }
             }
-            catch (e_6_1) { e_6 = { error: e_6_1 }; }
+            catch (e_5_1) { e_5 = { error: e_5_1 }; }
             finally {
                 try {
                     if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
-                finally { if (e_6) throw e_6.error; }
+                finally { if (e_5) throw e_5.error; }
             }
             // Result
             return true;

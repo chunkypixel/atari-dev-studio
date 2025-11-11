@@ -286,5 +286,53 @@
         "Folder": "7800basic/underthehood",
         "File": "underthehood.bas",
         "Language": "7800basic"
-    }
+    },
+    {
+        "Title": "64k",
+        "Image": "img/atari2600.console.jpg",
+        "Description": "Learn about how to access multiple banks larger bankswitching ROM formats.",
+        "Folder": "batariBasic/64kbb",
+        "File": "64kbb.bas",
+        "Language": "batariBasic"
+    },
+    {
+        "Title": "64K (SC)",
+        "Image": "img/atari2600.console.jpg",
+        "Description": "Learn about how to access multiple banks in the Superchip ROM formats.",
+        "Folder": "batariBasic/64ksc",
+        "File": "64ksc.bas",
+        "Language": "batariBasic"
+    },
+    {
+        "Title": "Starfield",
+        "Image": "img/atari2600.console.jpg",
+        "Description": "Demonstration of how to re-create the Cosmic Ark starfield effect.",
+        "Folder": "batariBasic/bbstarfield",
+        "File": "bbstarfield.bas",
+        "Language": "batariBasic"
+    },
+    {
+        "Title": "PFRead (dpc+)",
+        "Image": "img/atari2600.console.jpg",
+        "Description": "Learn how to access the playfield to determine whether pixels are turned off or on.",
+        "Folder": "batariBasic/dpcpfread",
+        "File": "dpcpfread.bas",
+        "Language": "batariBasic"
+    },
+    {
+        "Title": "Multi-Sprite (dpc+)",
+        "Image": "img/atari2600.console.jpg",
+        "Description": "Learn how to display many sprites on-screen and understand how virtual sprites and the flicker fixer works.",
+        "Folder": "batariBasic/msdpc",
+        "File": "msdpc.bas",
+        "Language": "batariBasic"
+    },
+    {
+        "Title": "Zombie Chase",
+        "Image": "img/atari2600.console.jpg",
+        "Description": "A fun game that may help you learn some of the basics of batari Basic!",
+        "Folder": "batariBasic/zombiechase",
+        "File": "zombie_chase.bas",
+        "Language": "batariBasic"
+    }    
 ]

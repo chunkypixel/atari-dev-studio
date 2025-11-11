@@ -24,6 +24,7 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     }
     GetCompilerVersionAsync() {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('debugger:BatariBasicCompiler.GetCompilerVersionAsync');
             // Prepare
             const filePath = vscode.Uri.file(path.join(this.FolderOrPath, 'release.dat'));
             this.CompilerVersion = application.BATARIBASIC_WASMTIME_RELEASE;

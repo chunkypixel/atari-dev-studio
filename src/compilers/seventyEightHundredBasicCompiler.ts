@@ -21,7 +21,53 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         this.LaunchEmulatorOrCartOptionAvailable = true;
     }
     
+    public async BuildGameAndRunAsync(document: vscode.TextDocument): Promise<boolean> {
+        console.log('debugger:SeventyEightHundredBasicCompiler.BuildGameAndRunAsync');
+
+        // Process
+        const result = await this.BuildGameAsync(document);
+        if (!result) return false;
+
+        // Does compiler have/use an emulator?
+        // Make doesn't use an emulator - user must provide their own
+        if (this.Emulator === '' || (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler)) return true;
+
+        // Use/Try serial?
+        if (this.LaunchEmulatorOrCartOption == "7800GD") {
+            // Validate
+            if (!application.IsWindows) {
+                // WINDOWS ONLY - Advise
+                application.WriteToCompilerTerminal('Warning: Launching to 7800GD cart is currently only available for Windows - reverting to emulator...');
+
+            } else {
+                // Find
+                for await (const serial of application.Serials) {    
+                    if (serial.Id === this.LaunchEmulatorOrCartOption) {
+                        // Match
+                        const compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                        return await serial.SendGameAsync(path.join(this.CompiledSubFolder,compiledFileName));
+                    }
+                }
+            }
+        }
+
+        // Try emulator
+        for await (const emulator of application.Emulators) {
+            if (emulator.Id === this.Emulator) {
+                // Note: first extension should be the one which is to be launched
+                const compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                return await emulator.RunGameAsync(path.join(this.CompiledSubFolder,compiledFileName));
+            }
+        }
+
+        // Not found
+        application.WriteToCompilerTerminal(`Unable to find emulator '${this.Emulator}' to launch game.`);
+        return false;
+    }
+
     protected async GetCompilerVersionAsync(): Promise<void> {
+        console.log('debugger:SeventyEightHundredBasicCompiler.GetCompilerVersionAsync');
+
 		// Prepare
         const filePath: vscode.Uri = vscode.Uri.file(path.join(this.FolderOrPath, 'release.dat'));
         // Note: v0.21 and earlier didn't include the 'release.dat' file so we cannot support them properly unless file is manually added

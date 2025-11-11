@@ -59,6 +59,8 @@ export abstract class CompilerBase implements vscode.Disposable {
     }
 
     public async BuildGameAsync(document: vscode.TextDocument): Promise<boolean> {
+        console.log('debugger:CompilerBase.BuildGameAsync');
+
         // Set
         this.Document = document;
 
@@ -67,7 +69,10 @@ export abstract class CompilerBase implements vscode.Disposable {
         return await this.ExecuteCompilerAsync();
     }
 
+    // NOTE: reflect any changes here in seventyEightHundredBasicCompiler.ts
     public async BuildGameAndRunAsync(document: vscode.TextDocument): Promise<boolean> {
+        console.log('debugger:CompilerBase.BuildGameAndRunAsync');
+
         // Process
         const result = await this.BuildGameAsync(document);
         if (!result) return false;
@@ -75,29 +80,6 @@ export abstract class CompilerBase implements vscode.Disposable {
         // Does compiler have/use an emulator?
         // Make doesn't use an emulator - user must provide their own
         if (this.Emulator === '' || (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler)) return true;
-
-        // Use/Try serial (windows only)
-        if (this.LaunchEmulatorOrCartOption != "Emulator") {
-            // Validate
-            if (!this.LaunchEmulatorOrCartOptionAvailable) {
-                // NOT AVAILABLE FOR LANGUAGE - Advise
-                application.WriteToCompilerTerminal(`Warning: Launching to 7800GD cart is not available for the ${this.Name} language - reverting to emulator...`);
-            
-            } else if (!application.IsWindows) {
-                // WINDOWS ONLY - Advise
-                application.WriteToCompilerTerminal(`Warning: Launching to 7800GD cart is currently only available for Windows - reverting to emulator...`);
-
-            } else {
-                // Find
-                for await (const serial of application.Serials) {    
-                    if (serial.Id === this.LaunchEmulatorOrCartOption) {
-                        // Match
-                        const compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
-                        return await serial.SendGameAsync(path.join(this.CompiledSubFolder,compiledFileName));
-                    }
-                }
-            }
-        }
 
         // Try emulator
         for await (const emulator of application.Emulators) {

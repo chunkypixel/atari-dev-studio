@@ -61,8 +61,10 @@ class LearningCenterPage {
                     .replace(/\${scriptJsUri}/g, scriptJsUri)
                     .replace(/\${styleCssUri}/g, styleCssUri);
                 // Language content
-                const cardContent = cardItems.map((card, index) => this.getCardTemplate(contentUri, card, index)).join('');
-                content = content.replace(/\${cardContent}/g, cardContent);
+                const batariBasicCardContent = cardItems.filter(item => item.Language === application.BatariBasicLanguageId).map((card) => this.getCardTemplate(contentUri, card)).join('');
+                content = content.replace(/\${batariBasicCardContent}/g, batariBasicCardContent);
+                const seventyEightHundredBasicCardContent = cardItems.filter(item => item.Language === application.SeventyEightHundredBasicLanguageId).map((card) => this.getCardTemplate(contentUri, card)).join('');
+                content = content.replace(/\${7800basicCardContent}/g, seventyEightHundredBasicCardContent);
                 // Display
                 this.currentPanel.webview.html = content;
             }
@@ -100,7 +102,7 @@ class LearningCenterPage {
             }, null);
         });
     }
-    getCardTemplate(contentUri, card, index) {
+    getCardTemplate(contentUri, card) {
         var _a;
         return `                    
             <div class="col">
@@ -113,7 +115,7 @@ class LearningCenterPage {
                         </p>
                         <div class="d-flex justify-content-between align-items-center"> 
                             <div class="btn-group">
-                                <a class="btn btn-sm btn-outline-primary btn-view" data-id="${index}">Open</a>
+                                <a class="btn btn-sm btn-outline-primary btn-view" data-id="${card.Index}">Open</a>
                             </div>
                             <small class="text-body-secondary">${card.Language}</small>
                         </div>
@@ -129,7 +131,8 @@ class LearningCenterPage {
             const content = yield filesystem.ReadFileAsync(languageContentPath.fsPath, 'utf-8');
             // process and return result
             if (content)
-                return JSON.parse(content);
+                return JSON.parse(content).map((item, Index) => (Object.assign(Object.assign({}, item), { Index })));
+            // Nothing
             return [];
         });
     }

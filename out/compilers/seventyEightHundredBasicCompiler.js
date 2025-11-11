@@ -8,6 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SeventyEightHundredBasicCompiler = void 0;
 const vscode = require("vscode");
@@ -23,8 +30,76 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
         // Launch options
         this.LaunchEmulatorOrCartOptionAvailable = true;
     }
+    BuildGameAndRunAsync(document) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a, e_1, _b, _c, _d, e_2, _e, _f;
+            console.log('debugger:SeventyEightHundredBasicCompiler.BuildGameAndRunAsync');
+            // Process
+            const result = yield this.BuildGameAsync(document);
+            if (!result)
+                return false;
+            // Does compiler have/use an emulator?
+            // Make doesn't use an emulator - user must provide their own
+            if (this.Emulator === '' || (this.UsingMakeFileCompiler || this.UsingBatchCompiler || this.UsingShellScriptCompiler))
+                return true;
+            // Use/Try serial?
+            if (this.LaunchEmulatorOrCartOption == "7800GD") {
+                // Validate
+                if (!application.IsWindows) {
+                    // WINDOWS ONLY - Advise
+                    application.WriteToCompilerTerminal('Warning: Launching to 7800GD cart is currently only available for Windows - reverting to emulator...');
+                }
+                else {
+                    try {
+                        // Find
+                        for (var _g = true, _h = __asyncValues(application.Serials), _j; _j = yield _h.next(), _a = _j.done, !_a; _g = true) {
+                            _c = _j.value;
+                            _g = false;
+                            const serial = _c;
+                            if (serial.Id === this.LaunchEmulatorOrCartOption) {
+                                // Match
+                                const compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                                return yield serial.SendGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
+                            }
+                        }
+                    }
+                    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                    finally {
+                        try {
+                            if (!_g && !_a && (_b = _h.return)) yield _b.call(_h);
+                        }
+                        finally { if (e_1) throw e_1.error; }
+                    }
+                }
+            }
+            try {
+                // Try emulator
+                for (var _k = true, _l = __asyncValues(application.Emulators), _m; _m = yield _l.next(), _d = _m.done, !_d; _k = true) {
+                    _f = _m.value;
+                    _k = false;
+                    const emulator = _f;
+                    if (emulator.Id === this.Emulator) {
+                        // Note: first extension should be the one which is to be launched
+                        const compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                        return yield emulator.RunGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
+                    }
+                }
+            }
+            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            finally {
+                try {
+                    if (!_k && !_d && (_e = _l.return)) yield _e.call(_l);
+                }
+                finally { if (e_2) throw e_2.error; }
+            }
+            // Not found
+            application.WriteToCompilerTerminal(`Unable to find emulator '${this.Emulator}' to launch game.`);
+            return false;
+        });
+    }
     GetCompilerVersionAsync() {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('debugger:SeventyEightHundredBasicCompiler.GetCompilerVersionAsync');
             // Prepare
             const filePath = vscode.Uri.file(path.join(this.FolderOrPath, 'release.dat'));
             // Note: v0.21 and earlier didn't include the 'release.dat' file so we cannot support them properly unless file is manually added

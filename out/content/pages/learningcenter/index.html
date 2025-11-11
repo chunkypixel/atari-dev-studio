@@ -38,17 +38,32 @@ Start coding through real examples that cover everything from graphics and sound
     </header>
 
     <main>
-        <div class="container">
+        <div class="container py-3">
+            <h2 class="fw-light">batari Basic</h2>
+            <p>batari Basic is a compiled programming language based on BASIC, designed for developing games on the Atari 2600. Created by Fred "batari" Quimby in the mid-2000s, it lets developers write code on modern systems and compile it into 6502 assembly-based ROMs for use on emulators or original hardware. Its built-in kernel handles the console’s strict timing and graphics routines, simplifying development and allowing creators to focus on gameplay.</p>
+            <p>Accessible to beginners yet powerful enough for advanced users, batari Basic supports key game features like sprites, playfields, sound, and input. As a result, it has become a vital part of the Atari 2600 homebrew scene, helping to revive interest in the platform and enabling a wide range of creative game projects.</p>
+            <div class="d-flex justify-content-between align-items-center py-2">
+                <h3 class="fw-light">Samples</h3>
+                <a class="btn btn-sm btn-primary btn-view" data-id="batariBasic">Open all samples</a>
+            </div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+
+${batariBasicCardContent}
+
+            </div>
+        </div>
+        
+        <div class="container py-3">
             <h2 class="fw-light">7800basic</h2>
             <p>7800basic is a compiled programming language modeled after BASIC, designed specifically for developing games on the Atari 7800 console. It allows developers to write code on modern computers and compile it into binary ROM files that can be run on emulators like A7800, or on original hardware using flash cartridges. Built on the foundation of batari BASIC (used for Atari 2600 development), 7800basic simplifies low-level 6502 assembly programming by managing key hardware components such as the MARIA graphics chip, TIA and POKEY sound chips, and various input devices.</p>
             <p>This makes 7800basic highly accessible for beginners while still offering advanced features like inline assembly for experienced programmers. Developers can create a wide range of games—from simple demos to complex platformers and shooters—and share them within the vibrant homebrew community. Its abstraction of hardware details, combined with powerful features like sprite handling, tilemaps, and sound integration, makes it a practical and enjoyable tool for retro game development.</p>
             <div class="d-flex justify-content-between align-items-center py-2">
                 <h3 class="fw-light">Samples</h3>
-                <a class="btn btn-sm btn-primary btn-view" data-id="7800basic">Show me everything</a>
+                <a class="btn btn-sm btn-primary btn-view" data-id="7800basic">Open all samples</a>
             </div>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
 
-${cardContent}
+${7800basicCardContent}
 
             </div>
         </div>

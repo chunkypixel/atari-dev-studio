@@ -61,8 +61,10 @@ export class LearningCenterPage implements vscode.Disposable {
                 .replace(/\${styleCssUri}/g, styleCssUri);
 
             // Language content
-            const cardContent = cardItems.map((card: CardItem, index: number) => this.getCardTemplate(contentUri, card, index)).join('');
-            content = content.replace(/\${cardContent}/g, cardContent)
+            const batariBasicCardContent = cardItems.filter(item => item.Language === application.BatariBasicLanguageId).map((card: CardItem) => this.getCardTemplate(contentUri, card)).join('');
+            content = content.replace(/\${batariBasicCardContent}/g, batariBasicCardContent)
+            const seventyEightHundredBasicCardContent = cardItems.filter(item => item.Language === application.SeventyEightHundredBasicLanguageId).map((card: CardItem) => this.getCardTemplate(contentUri, card)).join('');
+            content = content.replace(/\${7800basicCardContent}/g, seventyEightHundredBasicCardContent)
 
             // Display
             this.currentPanel.webview.html = content;  
@@ -110,7 +112,7 @@ export class LearningCenterPage implements vscode.Disposable {
         );
     }
 
-    private getCardTemplate(contentUri: vscode.Uri, card: CardItem, index: number): string {
+    private getCardTemplate(contentUri: vscode.Uri, card: CardItem): string {
         return `                    
             <div class="col">
                 <h2 class="card-title">${card.Title}</h2>
@@ -122,7 +124,7 @@ export class LearningCenterPage implements vscode.Disposable {
                         </p>
                         <div class="d-flex justify-content-between align-items-center"> 
                             <div class="btn-group">
-                                <a class="btn btn-sm btn-outline-primary btn-view" data-id="${index}">Open</a>
+                                <a class="btn btn-sm btn-outline-primary btn-view" data-id="${card.Index}">Open</a>
                             </div>
                             <small class="text-body-secondary">${card.Language}</small>
                         </div>
@@ -137,7 +139,11 @@ export class LearningCenterPage implements vscode.Disposable {
         const languageContentPath = vscode.Uri.joinPath(contentUri,'samples.json');
         const content = await filesystem.ReadFileAsync(languageContentPath.fsPath, 'utf-8');
         // process and return result
-        if (content) return JSON.parse(content) as CardItem[];
+        if (content) return JSON.parse(content).map((item: CardItem, Index: number) => ({
+                                ...item,
+                                Index,
+                            }));
+        // Nothing
         return [];
     }
 
@@ -149,6 +155,7 @@ export class LearningCenterPage implements vscode.Disposable {
 
 // Interface to define the structure of the JSON data
 interface CardItem {
+    Index: number,
     Title: string;
     Image: string;
     Description: string;
