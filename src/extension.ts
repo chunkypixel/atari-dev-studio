@@ -86,6 +86,12 @@ export async function activate(context: vscode.ExtensionContext) {
 		spriteEditorPage.openPage(context, fileUri);
 	});
 
+	// Launcher
+	const launchBinaryFileTo7800GD = vscode.commands.registerCommand('extension.launchBinaryFileTo7800GD', async (fileUri: vscode.Uri) => {
+		console.log('User activated command "extension.launchBinaryFileTo7800GD"');
+		await application.LaunchBinaryFileTo7800GDAsync(fileUri);
+	});
+
 	// Build (touchbar)
 	// Note: apparently the fileUri can be supplied via the command line but we are not going to use it
 	const touchbarBuildGame = vscode.commands.registerCommand('extension.touchbar.buildGame', async (fileUri: vscode.Uri) => {

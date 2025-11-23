@@ -294,6 +294,25 @@ export async function BuildGameAndRunAsync(): Promise<boolean> {
 	return false;
 }
 
+export async function LaunchBinaryFileTo7800GDAsync(fileUri: vscode.Uri): Promise<boolean> {
+	// Validate
+	if (!IsWindows) {
+		// WINDOWS ONLY - Advise
+		WriteToCompilerTerminal('Warning: Sending to 7800GD cart is currently only available for Windows.');
+
+	} else {
+		// Find
+		var serial = Serials.find(s => s.Id === "7800GD");
+		if (serial) {
+			CompilerOutputChannel.clear();
+			return await serial.SendGameAsync(fileUri.fsPath);
+		}
+	}
+
+	// Result
+	return false;
+}
+
 export function KillBuildGame(): void {
 	// Process all compilers
 	for (const compiler of Compilers) {

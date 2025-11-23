@@ -32,7 +32,7 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
     }
     BuildGameAndRunAsync(document) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a, e_1, _b, _c, _d, e_2, _e, _f;
+            var _a, e_1, _b, _c;
             console.log('debugger:SeventyEightHundredBasicCompiler.BuildGameAndRunAsync');
             // Process
             const result = yield this.BuildGameAsync(document);
@@ -47,37 +47,24 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
                 // Validate
                 if (!application.IsWindows) {
                     // WINDOWS ONLY - Advise
-                    application.WriteToCompilerTerminal('Warning: Launching to 7800GD cart is currently only available for Windows - reverting to emulator...');
+                    application.WriteToCompilerTerminal('Warning: Sending to 7800GD cart is currently only available for Windows - reverting to emulator...');
                 }
                 else {
-                    try {
-                        // Find
-                        for (var _g = true, _h = __asyncValues(application.Serials), _j; _j = yield _h.next(), _a = _j.done, !_a; _g = true) {
-                            _c = _j.value;
-                            _g = false;
-                            const serial = _c;
-                            if (serial.Id === this.LaunchEmulatorOrCartOption) {
-                                // Match
-                                const compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
-                                return yield serial.SendGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
-                            }
-                        }
-                    }
-                    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                    finally {
-                        try {
-                            if (!_g && !_a && (_b = _h.return)) yield _b.call(_h);
-                        }
-                        finally { if (e_1) throw e_1.error; }
+                    // Find
+                    var serial = application.Serials.find(s => s.Id === this.LaunchEmulatorOrCartOption);
+                    if (serial) {
+                        // Match
+                        const compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                        return yield serial.SendGameAsync(path.join(this.CompiledSubFolder, compiledFileName));
                     }
                 }
             }
             try {
                 // Try emulator
-                for (var _k = true, _l = __asyncValues(application.Emulators), _m; _m = yield _l.next(), _d = _m.done, !_d; _k = true) {
-                    _f = _m.value;
-                    _k = false;
-                    const emulator = _f;
+                for (var _d = true, _e = __asyncValues(application.Emulators), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
+                    _c = _f.value;
+                    _d = false;
+                    const emulator = _c;
                     if (emulator.Id === this.Emulator) {
                         // Note: first extension should be the one which is to be launched
                         const compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
@@ -85,12 +72,12 @@ class SeventyEightHundredBasicCompiler extends compilerBase_1.CompilerBase {
                     }
                 }
             }
-            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (!_k && !_d && (_e = _l.return)) yield _e.call(_l);
+                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
-                finally { if (e_2) throw e_2.error; }
+                finally { if (e_1) throw e_1.error; }
             }
             // Not found
             application.WriteToCompilerTerminal(`Unable to find emulator '${this.Emulator}' to launch game.`);

@@ -2,7 +2,7 @@
     "name": "atari-dev-studio",
     "displayName": "Atari Dev Studio",
     "description": "Homebrew game creation for the Atari 8-bit consoles",
-    "version": "0.11.9",
+    "version": "0.12.0",
     "icon": "images/icon.png",
     "preview": false,
     "author": "mksmith",
@@ -81,6 +81,15 @@
                 "extensions": [
                     ".spe"
                 ]
+            },
+            {
+                "id": "a78",
+                "aliases": [
+                    "Atari 7800 Binary File"
+                ],
+                "extensions": [
+                    ".a78"
+                ]
             }
         ],
         "grammars": [
@@ -153,6 +162,12 @@
                 "category": "hidden"
             },
             {
+                "command": "extension.launchBinaryFileTo7800GD",
+                "title": "Send binary to 7800GD",
+                "icon": "$(rocket)",
+                "category": "hidden"
+            },            
+            {
                 "command": "extension.openPlayerPalPage",
                 "title": "Open PlayerPal Editor (2600)",
                 "icon": "$(globe)",
@@ -220,6 +235,11 @@
                 {
                     "when": "resourceLangId == spe",
                     "command": "extension.openSpriteEditorFile",
+                    "group": "navigation"
+                },
+                                {
+                    "when": "resourceLangId == a78",
+                    "command": "extension.launchBinaryFileTo7800GD",
                     "group": "navigation"
                 }
             ],

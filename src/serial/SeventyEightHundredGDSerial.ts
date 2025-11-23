@@ -14,7 +14,6 @@ export class SeventyEightHundredGDSerial extends SerialBase {
     protected async ExecuteSerialAsync(): Promise<boolean> {
         console.log('debugger:SeventyEightHundredGDSerial.ExecuteSerialAsync');
 
-
         // Prepare
         const config = configuration.GetAtariDevStudioConfiguration(); 
         application.WriteToCompilerTerminal();   

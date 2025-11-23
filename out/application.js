@@ -20,6 +20,7 @@ exports.RegisterReferenceProvidersAsync = RegisterReferenceProvidersAsync;
 exports.RegisterContextHelpsAsync = RegisterContextHelpsAsync;
 exports.BuildGameAsync = BuildGameAsync;
 exports.BuildGameAndRunAsync = BuildGameAndRunAsync;
+exports.LaunchBinaryFileTo7800GDAsync = LaunchBinaryFileTo7800GDAsync;
 exports.KillBuildGame = KillBuildGame;
 exports.OpenContextHelp = OpenContextHelp;
 exports.WriteToCompilerTerminal = WriteToCompilerTerminal;
@@ -299,6 +300,25 @@ function BuildGameAndRunAsync() {
         let compiler = configuration.GetChosenCompiler(document);
         if (compiler)
             return yield compiler.BuildGameAndRunAsync(document);
+        // Result
+        return false;
+    });
+}
+function LaunchBinaryFileTo7800GDAsync(fileUri) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Validate
+        if (!exports.IsWindows) {
+            // WINDOWS ONLY - Advise
+            WriteToCompilerTerminal('Warning: Sending to 7800GD cart is currently only available for Windows.');
+        }
+        else {
+            // Find
+            var serial = exports.Serials.find(s => s.Id === "7800GD");
+            if (serial) {
+                exports.CompilerOutputChannel.clear();
+                return yield serial.SendGameAsync(fileUri.fsPath);
+            }
+        }
         // Result
         return false;
     });

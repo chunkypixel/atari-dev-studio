@@ -37,16 +37,15 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
             // Validate
             if (!application.IsWindows) {
                 // WINDOWS ONLY - Advise
-                application.WriteToCompilerTerminal('Warning: Launching to 7800GD cart is currently only available for Windows - reverting to emulator...');
+                application.WriteToCompilerTerminal('Warning: Sending to 7800GD cart is currently only available for Windows - reverting to emulator...');
 
             } else {
                 // Find
-                for await (const serial of application.Serials) {    
-                    if (serial.Id === this.LaunchEmulatorOrCartOption) {
-                        // Match
-                        const compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
-                        return await serial.SendGameAsync(path.join(this.CompiledSubFolder,compiledFileName));
-                    }
+                var serial = application.Serials.find(s => s.Id === this.LaunchEmulatorOrCartOption);
+                if (serial) {
+                    // Match
+                    const compiledFileName = `${this.FileName}${this.CompiledExtensions[0]}`;
+                    return await serial.SendGameAsync(path.join(this.CompiledSubFolder,compiledFileName));
                 }
             }
         }
