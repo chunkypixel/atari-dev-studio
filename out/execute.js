@@ -1,38 +1,60 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KillProcessByNameAsync = KillProcessByNameAsync;
 exports.KillProcessById = KillProcessById;
 exports.KillSpawnProcess = KillSpawnProcess;
 exports.Spawn = Spawn;
-const application = require("./application");
+const application = __importStar(require("./application"));
 const findProcess = require("find-process");
 const child_process_1 = require("child_process");
 let lastSpawnedProcess = null;
-function KillProcessByNameAsync(name) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Normalize name on POSIX
-        const searchName = (application.IsLinux || application.IsMacOS) ? name.toLowerCase() : name;
-        try {
-            const list = yield findProcess('name', searchName);
-            for (const proc of list) {
-                if ((proc === null || proc === void 0 ? void 0 : proc.pid) !== undefined) {
-                    KillProcessById(proc.pid);
-                }
+async function KillProcessByNameAsync(name) {
+    // Normalize name on POSIX
+    const searchName = (application.IsLinux || application.IsMacOS) ? name.toLowerCase() : name;
+    try {
+        const list = await findProcess('name', searchName);
+        for (const proc of list) {
+            if (proc?.pid !== undefined) {
+                KillProcessById(proc.pid);
             }
         }
-        catch (err) {
-            console.log('KillProcessByNameAsync failed', err);
-        }
-    });
+    }
+    catch (err) {
+        console.log('KillProcessByNameAsync failed', err);
+    }
 }
 function KillProcessById(pid) {
     if (pid === undefined || pid === null)
@@ -64,10 +86,10 @@ function Spawn(command, args, env, cwd, stdout, stderr) {
     console.log('debugger:execute.ExecuteCommand');
     return new Promise((resolve) => {
         let receivedError = false;
-        const child = (0, child_process_1.spawn)(command, args !== null && args !== void 0 ? args : [], {
+        const child = (0, child_process_1.spawn)(command, args ?? [], {
             shell: true,
-            env: env !== null && env !== void 0 ? env : process.env,
-            cwd: cwd !== null && cwd !== void 0 ? cwd : process.cwd()
+            env: env ?? process.env,
+            cwd: cwd ?? process.cwd()
         });
         // keep reference for external kill
         lastSpawnedProcess = child;
@@ -84,7 +106,7 @@ function Spawn(command, args, env, cwd, stdout, stderr) {
                         console.log(message);
                     }
                 }
-                catch (_a) {
+                catch {
                     receivedError = true;
                 }
             });
@@ -106,7 +128,7 @@ function Spawn(command, args, env, cwd, stdout, stderr) {
                         receivedError = true;
                     }
                 }
-                catch (_a) {
+                catch {
                     receivedError = true;
                 }
             });
@@ -118,13 +140,13 @@ function Spawn(command, args, env, cwd, stdout, stderr) {
         child.on('close', (code) => {
             // clear reference
             lastSpawnedProcess = null;
-            const exitCode = code !== null && code !== void 0 ? code : 1;
+            const exitCode = code ?? 1;
             const finalCode = (receivedError && exitCode === 0) ? 1 : exitCode;
             if (finalCode !== 0 && stdout) {
                 try {
                     stdout(`Exit code: ${finalCode}`);
                 }
-                catch (_a) { }
+                catch { }
             }
             resolve(finalCode === 0);
         });

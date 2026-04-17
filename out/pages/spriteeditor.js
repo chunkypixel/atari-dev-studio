@@ -1,149 +1,169 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpriteEditorPage = void 0;
-const vscode = require("vscode");
-const path = require("path");
-const filesystem = require("../filesystem");
-const application = require("../application");
-const browser = require("../browser");
+const vscode = __importStar(require("vscode"));
+const path = __importStar(require("path"));
+const filesystem = __importStar(require("../filesystem"));
+const application = __importStar(require("../application"));
+const browser = __importStar(require("../browser"));
 class SpriteEditorPage {
     constructor() {
         this.currentPanel = undefined;
     }
     dispose() {
     }
-    openPage(context, loadProjectUri) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:SpriteEditorPage.openPage');
-            // Prepare
-            const contentUri = vscode.Uri.file(path.join(context.extensionPath, 'out', 'content', 'pages', 'spriteeditor'));
-            const columnToShowIn = vscode.window.activeTextEditor
-                ? vscode.window.activeTextEditor.viewColumn
-                : undefined;
-            let isOpen = false;
-            // Open or create panel?
-            if (this.currentPanel) {
-                // Open
-                this.currentPanel.reveal(columnToShowIn);
-                isOpen = true;
-                // loading project file?
-                if (loadProjectUri)
-                    this.loadFileContent("loadProject", loadProjectUri, 'utf-8');
-            }
-            else {
-                // Create
-                this.currentPanel = vscode.window.createWebviewPanel('webpage', 'Sprite Editor', columnToShowIn || vscode.ViewColumn.One, {
-                    enableScripts: true,
-                    retainContextWhenHidden: true,
-                    localResourceRoots: [contentUri],
-                });
-                // Content
-                const startPagePath = vscode.Uri.joinPath(contentUri, 'index.html');
-                const nonce = browser.GenerateNonce();
-                // Script
-                const scriptJsPath = vscode.Uri.joinPath(contentUri, 'main.js');
-                const scriptJsUri = this.currentPanel.webview.asWebviewUri(scriptJsPath);
-                // Style
-                const styleCssPath = vscode.Uri.joinPath(contentUri, 'main.css');
-                const styleCssUri = this.currentPanel.webview.asWebviewUri(styleCssPath);
-                // Extension
-                //let basePath = vscode.Uri.file(this.contentPath);
-                //let basePathUri = basePath.with({ scheme: 'vscode-resource' }).toString() + '/';
-                // Configuration
-                const configuration = yield this.loadConfiguration(contentUri);
-                // Update tags in content
-                let content = yield filesystem.ReadFileAsync(startPagePath.fsPath, 'utf-8');
-                content = this.replaceContentTag(content, "APPNAME", "Sprite Editor");
-                content = this.replaceContentTag(content, "NONCE", nonce);
-                content = this.replaceContentTag(content, "CSPSOURCE", this.currentPanel.webview.cspSource);
-                content = this.replaceContentTag(content, "SCRIPTJSURI", scriptJsUri);
-                content = this.replaceContentTag(content, "STYLECSSURI", styleCssUri);
-                content = this.replaceContentTag(content, "BASEPATHURI", contentUri.path + "/");
-                content = this.replaceContentTag(content, "CONFIGURATION", configuration);
-                // Display
-                this.currentPanel.webview.html = content;
-                // Events
-                // NOTE: we only need to configure these once otherwise we get multiple events called
-                // Capture command messages
-                this.currentPanel.webview.onDidReceiveMessage(message => {
-                    switch (message.command) {
-                        case 'loadProject':
-                            this.loadProject(message);
-                            break;
-                        case 'saveProject':
-                            this.saveProject(message);
-                            break;
-                        case 'importAsPngFile':
-                            this.importAsPngFile(message);
-                            break;
-                        case 'exportAsPngFile':
-                            this.exportAsPngFile(message);
-                            break;
-                        case 'exportAllAsPngFile':
-                            this.exportAllAsPngFile(message);
-                            break;
-                        case 'exportAsBatariFile':
-                            this.exportAsBatariFile(message);
-                            break;
-                        case 'exportAsAssemblyFile':
-                            this.exportAsAssemblyFile(message);
-                            break;
-                        case 'configuration':
-                            this.saveConfiguration(contentUri, message);
-                            break;
-                        case 'loadPalette':
-                            this.loadPalette(message);
-                            break;
-                        case 'savePalette':
-                            this.savePalette(message);
-                            break;
-                        default:
-                            // Unknown call - flag
-                            console.log(`debugger:SpriteEditorPage: Unknown command called: ${message.command}`);
-                            break;
-                    }
-                });
-                // Capture dispose
-                this.currentPanel.onDidDispose(() => {
-                    this.currentPanel = undefined;
-                }, null);
-            }
-            // Load provided file (via right-click popup in Explorer)?
-            if (loadProjectUri) {
-                // Put in a delay to ensure editor is fully loaded before importing project
-                const delay = (!isOpen ? 750 : 5);
-                // Process
-                yield application.Delay(delay).then(_ => this.loadFileContent("loadProject", loadProjectUri, 'utf-8'));
-            }
-            else {
-                // normal opening - show project if chosen by user
-                this.attemptToOpenProjectWindowOnStartup();
-            }
-        });
+    async openPage(context, loadProjectUri) {
+        console.log('debugger:SpriteEditorPage.openPage');
+        // Prepare
+        const contentUri = vscode.Uri.file(path.join(context.extensionPath, 'out', 'content', 'pages', 'spriteeditor'));
+        const columnToShowIn = vscode.window.activeTextEditor
+            ? vscode.window.activeTextEditor.viewColumn
+            : undefined;
+        let isOpen = false;
+        // Open or create panel?
+        if (this.currentPanel) {
+            // Open
+            this.currentPanel.reveal(columnToShowIn);
+            isOpen = true;
+            // loading project file?
+            if (loadProjectUri)
+                this.loadFileContent("loadProject", loadProjectUri, 'utf-8');
+        }
+        else {
+            // Create
+            this.currentPanel = vscode.window.createWebviewPanel('webpage', 'Sprite Editor', columnToShowIn || vscode.ViewColumn.One, {
+                enableScripts: true,
+                retainContextWhenHidden: true,
+                localResourceRoots: [contentUri],
+            });
+            // Content
+            const startPagePath = vscode.Uri.joinPath(contentUri, 'index.html');
+            const nonce = browser.GenerateNonce();
+            // Script
+            const scriptJsPath = vscode.Uri.joinPath(contentUri, 'main.js');
+            const scriptJsUri = this.currentPanel.webview.asWebviewUri(scriptJsPath);
+            // Style
+            const styleCssPath = vscode.Uri.joinPath(contentUri, 'main.css');
+            const styleCssUri = this.currentPanel.webview.asWebviewUri(styleCssPath);
+            // Extension
+            //let basePath = vscode.Uri.file(this.contentPath);
+            //let basePathUri = basePath.with({ scheme: 'vscode-resource' }).toString() + '/';
+            // Configuration
+            const configuration = await this.loadConfiguration(contentUri);
+            // Update tags in content
+            let content = await filesystem.ReadFileAsync(startPagePath.fsPath, 'utf-8');
+            content = this.replaceContentTag(content, "APPNAME", "Sprite Editor");
+            content = this.replaceContentTag(content, "NONCE", nonce);
+            content = this.replaceContentTag(content, "CSPSOURCE", this.currentPanel.webview.cspSource);
+            content = this.replaceContentTag(content, "SCRIPTJSURI", scriptJsUri);
+            content = this.replaceContentTag(content, "STYLECSSURI", styleCssUri);
+            content = this.replaceContentTag(content, "BASEPATHURI", contentUri.path + "/");
+            content = this.replaceContentTag(content, "CONFIGURATION", configuration);
+            // Display
+            this.currentPanel.webview.html = content;
+            // Events
+            // NOTE: we only need to configure these once otherwise we get multiple events called
+            // Capture command messages
+            this.currentPanel.webview.onDidReceiveMessage(message => {
+                switch (message.command) {
+                    case 'loadProject':
+                        this.loadProject(message);
+                        break;
+                    case 'saveProject':
+                        this.saveProject(message);
+                        break;
+                    case 'importAsPngFile':
+                        this.importAsPngFile(message);
+                        break;
+                    case 'exportAsPngFile':
+                        this.exportAsPngFile(message);
+                        break;
+                    case 'exportAllAsPngFile':
+                        this.exportAllAsPngFile(message);
+                        break;
+                    case 'exportAsBatariFile':
+                        this.exportAsBatariFile(message);
+                        break;
+                    case 'exportAsAssemblyFile':
+                        this.exportAsAssemblyFile(message);
+                        break;
+                    case 'configuration':
+                        this.saveConfiguration(contentUri, message);
+                        break;
+                    case 'loadPalette':
+                        this.loadPalette(message);
+                        break;
+                    case 'savePalette':
+                        this.savePalette(message);
+                        break;
+                    default:
+                        // Unknown call - flag
+                        console.log(`debugger:SpriteEditorPage: Unknown command called: ${message.command}`);
+                        break;
+                }
+            });
+            // Capture dispose
+            this.currentPanel.onDidDispose(() => {
+                this.currentPanel = undefined;
+            }, null);
+        }
+        // Load provided file (via right-click popup in Explorer)?
+        if (loadProjectUri) {
+            // Put in a delay to ensure editor is fully loaded before importing project
+            const delay = (!isOpen ? 750 : 5);
+            // Process
+            await application.Delay(delay).then(_ => this.loadFileContent("loadProject", loadProjectUri, 'utf-8'));
+        }
+        else {
+            // normal opening - show project if chosen by user
+            this.attemptToOpenProjectWindowOnStartup();
+        }
     }
     replaceContentTag(content, tag, tagContent) {
         tag = `%${tag}%`;
         return content.replace(new RegExp(tag, 'g'), tagContent);
     }
-    loadConfiguration(contentUri) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // Process
-            const configurationFileUri = vscode.Uri.joinPath(contentUri, 'spriteeditor.config');
-            const data = yield filesystem.ReadFileAsync(configurationFileUri.fsPath, 'utf-8');
-            // Return BASE64
-            if (data)
-                return Buffer.from(data).toString("base64");
-            return "";
-        });
+    async loadConfiguration(contentUri) {
+        // Process
+        const configurationFileUri = vscode.Uri.joinPath(contentUri, 'spriteeditor.config');
+        const data = await filesystem.ReadFileAsync(configurationFileUri.fsPath, 'utf-8');
+        // Return BASE64
+        if (data)
+            return Buffer.from(data).toString("base64");
+        return "";
     }
     saveConfiguration(contentUri, message) {
         // Prepare

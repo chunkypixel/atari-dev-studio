@@ -1,70 +1,86 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BatchCompiler = void 0;
-const path = require("path");
-const application = require("../application");
-const configuration = require("../configuration");
+const path = __importStar(require("path"));
+const application = __importStar(require("../application"));
+const configuration = __importStar(require("../configuration"));
 const compilerBase_1 = require("./compilerBase");
 class BatchCompiler extends compilerBase_1.CompilerBase {
     // Features
     constructor() {
         super("bat", "Batch", ["bat"], [""], [""], "", "");
     }
-    InitialiseAsync() {
-        return __awaiter(this, void 0, void 0, function* () {
-            var _a;
-            console.log('debugger:BatchCompiler.InitialiseAsync');
-            // Prepare
-            let result = true;
-            // Already running?
-            // (Re)load
-            // It appears you need to reload this each time incase of change
-            this.Configuration = configuration.GetAtariDevStudioConfiguration();
-            // Configuration
-            result = yield this.LoadConfigurationAsync();
-            if (!result)
-                return false;
-            // Initialise terminal
-            yield application.InitialiseAdsTerminalAsync();
-            // Activate output window?
-            if (!this.Configuration.get(`editor.preserveCodeEditorFocus`)) {
-                (_a = application.AdsTerminal) === null || _a === void 0 ? void 0 : _a.show();
-            }
-            // Clear output content? (not available for terminals)
-            // Save files (based on user configuration)
-            result = yield this.SaveAllFilesBeforeRun();
-            // Result
-            return result;
-        });
+    async InitialiseAsync() {
+        console.log('debugger:BatchCompiler.InitialiseAsync');
+        // Prepare
+        let result = true;
+        // Already running?
+        // (Re)load
+        // It appears you need to reload this each time incase of change
+        this.Configuration = configuration.GetAtariDevStudioConfiguration();
+        // Configuration
+        result = await this.LoadConfigurationAsync();
+        if (!result)
+            return false;
+        // Initialise terminal
+        await application.InitialiseAdsTerminalAsync();
+        // Activate output window?
+        if (!this.Configuration.get(`editor.preserveCodeEditorFocus`)) {
+            application.AdsTerminal?.show();
+        }
+        // Clear output content? (not available for terminals)
+        // Save files (based on user configuration)
+        result = await this.SaveAllFilesBeforeRun();
+        // Result
+        return result;
     }
-    ExecuteCompilerAsync() {
-        return __awaiter(this, void 0, void 0, function* () {
-            var _a;
-            console.log('debugger:BatchCompiler.ExecuteCompilerAsync');
-            // Launch and exit
-            // note: we cannot wait for a result
-            (_a = application.AdsTerminal) === null || _a === void 0 ? void 0 : _a.sendText(`${this.FileName}`);
-            return true;
-        });
+    async ExecuteCompilerAsync() {
+        console.log('debugger:BatchCompiler.ExecuteCompilerAsync');
+        // Launch and exit
+        // note: we cannot wait for a result
+        application.AdsTerminal?.sendText(`${this.FileName}`);
+        return true;
     }
-    LoadConfigurationAsync() {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log('debugger:BatchCompiler.LoadConfigurationAsync');
-            // System
-            this.UsingBatchCompiler = true;
-            this.FileName = path.basename(this.Document.fileName);
-            // Result
-            return true;
-        });
+    async LoadConfigurationAsync() {
+        console.log('debugger:BatchCompiler.LoadConfigurationAsync');
+        // System
+        this.UsingBatchCompiler = true;
+        this.FileName = path.basename(this.Document.fileName);
+        // Result
+        return true;
     }
 }
 exports.BatchCompiler = BatchCompiler;

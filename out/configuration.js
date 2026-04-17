@@ -1,13 +1,37 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetAtariDevStudioConfiguration = GetAtariDevStudioConfiguration;
 exports.GetChosenCompiler = GetChosenCompiler;
@@ -17,8 +41,8 @@ exports.ValidateOpenSamplesFileOnRestart = ValidateOpenSamplesFileOnRestart;
 exports.GetCustomCompilerIdList = GetCustomCompilerIdList;
 exports.GetCustomCompilerFolder = GetCustomCompilerFolder;
 exports.ContainsCustomCompilerTag = ContainsCustomCompilerTag;
-const vscode = require("vscode");
-const application = require("./application");
+const vscode = __importStar(require("vscode"));
+const application = __importStar(require("./application"));
 const seventyEightHundredCustomFoldersSection = 'compiler.7800basic.customFolders';
 const batariBasicCustomFoldersSection = 'compiler.batariBasic.customFolders';
 function GetAtariDevStudioConfiguration() {
@@ -43,87 +67,79 @@ function GetChosenCompiler(document) {
     // No result
     return undefined;
 }
-function TransferFolderToCustomFolders(context) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Prepare
-        const config = GetAtariDevStudioConfiguration();
-        const transferedFolderToCustomFoldersKey = `${application.Name}.configuration.transferedFolderToCustomFolders`;
-        // Validate if we have already done it?
-        const transferedFolderToCustomFolders = context.globalState.get(transferedFolderToCustomFoldersKey, false);
-        if (transferedFolderToCustomFolders)
-            return;
-        // 7800basic
-        const existing7800BasicCustomFolder = config.get('compiler.7800basic.folder', null);
-        if (existing7800BasicCustomFolder && !CustomFolderExists(seventyEightHundredCustomFoldersSection, existing7800BasicCustomFolder)) {
-            // Add
-            const customFolder = { 'Custom': existing7800BasicCustomFolder };
-            yield config.update(seventyEightHundredCustomFoldersSection, customFolder, vscode.ConfigurationTarget.Global);
-        }
-        // batariBasic
-        const existingBatariBasicFolder = config.get('compiler.batariBasic.folder', null);
-        if (existingBatariBasicFolder && !CustomFolderExists(batariBasicCustomFoldersSection, existingBatariBasicFolder)) {
-            // Add
-            const customFolder = { 'Custom': existingBatariBasicFolder };
-            yield config.update(batariBasicCustomFoldersSection, customFolder, vscode.ConfigurationTarget.Global);
-        }
-        // Set
-        yield context.globalState.update(transferedFolderToCustomFoldersKey, true);
-    });
+async function TransferFolderToCustomFolders(context) {
+    // Prepare
+    const config = GetAtariDevStudioConfiguration();
+    const transferedFolderToCustomFoldersKey = `${application.Name}.configuration.transferedFolderToCustomFolders`;
+    // Validate if we have already done it?
+    const transferedFolderToCustomFolders = context.globalState.get(transferedFolderToCustomFoldersKey, false);
+    if (transferedFolderToCustomFolders)
+        return;
+    // 7800basic
+    const existing7800BasicCustomFolder = config.get('compiler.7800basic.folder', null);
+    if (existing7800BasicCustomFolder && !CustomFolderExists(seventyEightHundredCustomFoldersSection, existing7800BasicCustomFolder)) {
+        // Add
+        const customFolder = { 'Custom': existing7800BasicCustomFolder };
+        await config.update(seventyEightHundredCustomFoldersSection, customFolder, vscode.ConfigurationTarget.Global);
+    }
+    // batariBasic
+    const existingBatariBasicFolder = config.get('compiler.batariBasic.folder', null);
+    if (existingBatariBasicFolder && !CustomFolderExists(batariBasicCustomFoldersSection, existingBatariBasicFolder)) {
+        // Add
+        const customFolder = { 'Custom': existingBatariBasicFolder };
+        await config.update(batariBasicCustomFoldersSection, customFolder, vscode.ConfigurationTarget.Global);
+    }
+    // Set
+    await context.globalState.update(transferedFolderToCustomFoldersKey, true);
 }
-function ValidateCustomFoldersConfigurationEntry(event) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Prepare
-        const config = GetAtariDevStudioConfiguration();
-        // 7800basic?
-        if (event.affectsConfiguration(`${application.Name}.${seventyEightHundredCustomFoldersSection}`)) {
-            yield sanitizeCustomFoldersEntry(seventyEightHundredCustomFoldersSection, config);
-        }
-        ;
-        // batariBasic?
-        if (event.affectsConfiguration(`${application.Name}.${batariBasicCustomFoldersSection}`)) {
-            yield sanitizeCustomFoldersEntry(batariBasicCustomFoldersSection, config);
-        }
-        ;
-    });
+async function ValidateCustomFoldersConfigurationEntry(event) {
+    // Prepare
+    const config = GetAtariDevStudioConfiguration();
+    // 7800basic?
+    if (event.affectsConfiguration(`${application.Name}.${seventyEightHundredCustomFoldersSection}`)) {
+        await sanitizeCustomFoldersEntry(seventyEightHundredCustomFoldersSection, config);
+    }
+    ;
+    // batariBasic?
+    if (event.affectsConfiguration(`${application.Name}.${batariBasicCustomFoldersSection}`)) {
+        await sanitizeCustomFoldersEntry(batariBasicCustomFoldersSection, config);
+    }
+    ;
 }
-function sanitizeCustomFoldersEntry(section, config) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Prepare
-        const customFolders = config.get(section, {});
-        const updated = {};
-        let isChanged = false;
-        // Validate for spaces in Key and remove
-        for (const [key, value] of Object.entries(customFolders)) {
-            const newKey = key.replace(/\s+/g, '').trim();
-            if (newKey !== key)
-                isChanged = true;
-            updated[newKey] = value;
-        }
-        // Changed?
-        if (isChanged) {
-            yield config.update(section, updated, vscode.ConfigurationTarget.Global);
-        }
-    });
+async function sanitizeCustomFoldersEntry(section, config) {
+    // Prepare
+    const customFolders = config.get(section, {});
+    const updated = {};
+    let isChanged = false;
+    // Validate for spaces in Key and remove
+    for (const [key, value] of Object.entries(customFolders)) {
+        const newKey = key.replace(/\s+/g, '').trim();
+        if (newKey !== key)
+            isChanged = true;
+        updated[newKey] = value;
+    }
+    // Changed?
+    if (isChanged) {
+        await config.update(section, updated, vscode.ConfigurationTarget.Global);
+    }
 }
-function ValidateOpenSamplesFileOnRestart(context) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Prepare
-        const openSampleFileOnRestartKey = `${application.Name}.configuration.openSampleFileOnRestart`;
-        // Process?
-        const sampleFilePath = context.globalState.get(`${application.Name}.configuration.openSampleFileOnRestart`);
-        if (!sampleFilePath)
-            return;
-        // Yes! Open the file
-        try {
-            const document = yield vscode.workspace.openTextDocument(vscode.Uri.file(sampleFilePath));
-            yield vscode.window.showTextDocument(document, { preview: false, preserveFocus: true });
-        }
-        catch (error) {
-            // log or ignore — keep function resilient
-        }
-        // Clear
-        yield context.globalState.update(openSampleFileOnRestartKey, undefined);
-    });
+async function ValidateOpenSamplesFileOnRestart(context) {
+    // Prepare
+    const openSampleFileOnRestartKey = `${application.Name}.configuration.openSampleFileOnRestart`;
+    // Process?
+    const sampleFilePath = context.globalState.get(`${application.Name}.configuration.openSampleFileOnRestart`);
+    if (!sampleFilePath)
+        return;
+    // Yes! Open the file
+    try {
+        const document = await vscode.workspace.openTextDocument(vscode.Uri.file(sampleFilePath));
+        await vscode.window.showTextDocument(document, { preview: false, preserveFocus: true });
+    }
+    catch (error) {
+        // log or ignore — keep function resilient
+    }
+    // Clear
+    await context.globalState.update(openSampleFileOnRestartKey, undefined);
 }
 function GetCustomCompilerIdList(languageId) {
     // Prepare

@@ -1,13 +1,37 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContextHelps = exports.ReferenceProviders = exports.DefinitionProviders = exports.DocumentSymbolProviders = exports.Foldings = exports.Completions = exports.Hovers = exports.Serials = exports.Emulators = exports.Compilers = exports.AdsTerminal = exports.CompilerOutputChannel = exports.BatariBasicLanguageId = exports.SeventyEightHundredBasicLanguageId = exports.AtariDevStudioTerminalWindowName = exports.AtariDevStudioCompilerWindowName = exports.BATARIBASIC_WASMTIME_RELEASE = exports.SEVENTYEIGHTHUNDREDBASIC_WASMTIME_RELEASE = exports.EnvironmentSummary = exports.ChangeLogUri = exports.PreferencesSettingsExtensionPath = exports.Description = exports.DisplayName = exports.Version = exports.Publisher = exports.Name = exports.Path = exports.Id = exports.IsMacOSArm = exports.Is64Bit = exports.Is32Bit = exports.IsMacOS = exports.IsLinux = exports.IsWindows = exports.OSRelease = exports.OSArch = exports.OSPlatform = void 0;
 exports.InitialiseAdsTerminalAsync = InitialiseAdsTerminalAsync;
@@ -37,9 +61,9 @@ exports.CountTrailingZeros = CountTrailingZeros;
 exports.TrimRight = TrimRight;
 exports.TrimLeft = TrimLeft;
 exports.ReplaceZerosTemplate = ReplaceZerosTemplate;
-const vscode = require("vscode");
-const configuration = require("./configuration");
-const tags = require("./tags");
+const vscode = __importStar(require("vscode"));
+const configuration = __importStar(require("./configuration"));
+const tags = __importStar(require("./tags"));
 const batariBasicCompiler_1 = require("./compilers/batariBasicCompiler");
 const seventyEightHundredBasicCompiler_1 = require("./compilers/seventyEightHundredBasicCompiler");
 const dasmCompiler_1 = require("./compilers/dasmCompiler");
@@ -109,32 +133,30 @@ exports.BatariBasicLanguageId = "batariBasic";
 // Channels
 // -------------------------------------------------------------------------------------
 exports.CompilerOutputChannel = vscode.window.createOutputChannel(exports.AtariDevStudioCompilerWindowName);
-function InitialiseAdsTerminalAsync() {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Already have a terminal?
-        if (exports.AdsTerminal !== undefined && (yield exports.AdsTerminal.processId)) {
-            exports.AdsTerminal === null || exports.AdsTerminal === void 0 ? void 0 : exports.AdsTerminal.show(true);
-            return;
-        }
-        // Create
-        if (exports.IsWindows) {
-            // For windows we need to create a CMD window
-            // NOTE: by default VSCode uses powershell
-            exports.AdsTerminal = vscode.window.createTerminal({
-                name: exports.AtariDevStudioTerminalWindowName,
-                shellPath: "C:\\Windows\\System32\\cmd.exe"
-            });
-        }
-        else {
-            // Let system choose
-            exports.AdsTerminal = vscode.window.createTerminal(exports.AtariDevStudioTerminalWindowName);
-        }
-        // User closed a terminal? if so verify it's ours and clear the reference
-        vscode.window.onDidCloseTerminal((terminal) => {
-            if (terminal.name === exports.Name) {
-                exports.AdsTerminal = undefined;
-            }
+async function InitialiseAdsTerminalAsync() {
+    // Already have a terminal?
+    if (exports.AdsTerminal !== undefined && await exports.AdsTerminal.processId) {
+        exports.AdsTerminal?.show(true);
+        return;
+    }
+    // Create
+    if (exports.IsWindows) {
+        // For windows we need to create a CMD window
+        // NOTE: by default VSCode uses powershell
+        exports.AdsTerminal = vscode.window.createTerminal({
+            name: exports.AtariDevStudioTerminalWindowName,
+            shellPath: "C:\\Windows\\System32\\cmd.exe"
         });
+    }
+    else {
+        // Let system choose
+        exports.AdsTerminal = vscode.window.createTerminal(exports.AtariDevStudioTerminalWindowName);
+    }
+    // User closed a terminal? if so verify it's ours and clear the reference
+    vscode.window.onDidCloseTerminal((terminal) => {
+        if (terminal.name === exports.Name) {
+            exports.AdsTerminal = undefined;
+        }
     });
 }
 // -------------------------------------------------------------------------------------
@@ -173,12 +195,10 @@ exports.Hovers = [
     new batariBasicHover_1.BatariBasicHover(),
     new seventyEightHundredBasicHover_1.SeventyEightHundredBasicHover()
 ];
-function RegisterHoverProvidersAsync(context) {
-    return __awaiter(this, void 0, void 0, function* () {
-        for (const hover of exports.Hovers) {
-            yield hover.RegisterAsync(context);
-        }
-    });
+async function RegisterHoverProvidersAsync(context) {
+    for (const hover of exports.Hovers) {
+        await hover.RegisterAsync(context);
+    }
 }
 // -------------------------------------------------------------------------------------
 // Completion
@@ -188,12 +208,10 @@ exports.Completions = [
     new seventyEightHundredBasicCompletion_1.SeventyEightHundredBasicCompletion(),
     new batariBasicCompletion_1.BatariBasicCompletion()
 ];
-function RegisterCompletionProvidersAsync(context) {
-    return __awaiter(this, void 0, void 0, function* () {
-        for (const completion of exports.Completions) {
-            yield completion.RegisterAsync(context);
-        }
-    });
+async function RegisterCompletionProvidersAsync(context) {
+    for (const completion of exports.Completions) {
+        await completion.RegisterAsync(context);
+    }
 }
 // -------------------------------------------------------------------------------------
 // Region Folding
@@ -203,12 +221,10 @@ exports.Foldings = [
     new batariBasicFolding_1.BatariBasicFolding(),
     new seventyEightHundredBasicFolding_1.SeventyEightHundredBasicFolding()
 ];
-function RegisterFoldingProvidersAsync(context) {
-    return __awaiter(this, void 0, void 0, function* () {
-        for (const folding of exports.Foldings) {
-            yield folding.RegisterAsync(context);
-        }
-    });
+async function RegisterFoldingProvidersAsync(context) {
+    for (const folding of exports.Foldings) {
+        await folding.RegisterAsync(context);
+    }
 }
 // -------------------------------------------------------------------------------------
 // DocumentSymbolProviders
@@ -219,12 +235,10 @@ exports.DocumentSymbolProviders = [
     new seventyEightHundredBasicDocumentSymbolProvider_1.SeventyEightHundredBasicDocumentSymbolProvider(),
     new dasmDocumentSymbolProvider_1.DasmDocumentSymbolProvider()
 ];
-function RegisterDocumentSymbolProvidersAsync(context) {
-    return __awaiter(this, void 0, void 0, function* () {
-        for (const documentSymbolProvider of exports.DocumentSymbolProviders) {
-            yield documentSymbolProvider.RegisterAsync(context);
-        }
-    });
+async function RegisterDocumentSymbolProvidersAsync(context) {
+    for (const documentSymbolProvider of exports.DocumentSymbolProviders) {
+        await documentSymbolProvider.RegisterAsync(context);
+    }
 }
 // -------------------------------------------------------------------------------------
 // DefinitionProviders
@@ -235,12 +249,10 @@ exports.DefinitionProviders = [
     new seventyEightHundredBasicDefinitionProvider_1.SeventyEightHundredBasicDefinitionProvider(),
     new dasmDefinitionProvider_1.DasmDefinitionProvider()
 ];
-function RegisterDefinitionProvidersAsync(context) {
-    return __awaiter(this, void 0, void 0, function* () {
-        for (const definitionProvider of exports.DefinitionProviders) {
-            yield definitionProvider.RegisterAsync(context);
-        }
-    });
+async function RegisterDefinitionProvidersAsync(context) {
+    for (const definitionProvider of exports.DefinitionProviders) {
+        await definitionProvider.RegisterAsync(context);
+    }
 }
 // -------------------------------------------------------------------------------------
 // ReferenceProviders
@@ -251,12 +263,10 @@ exports.ReferenceProviders = [
     new seventyEightHundredBasicReferenceProvider_1.SeventyEightHundredBasicReferenceProvider(),
     new dasmReferenceProvider_1.DasmReferenceProvider()
 ];
-function RegisterReferenceProvidersAsync(context) {
-    return __awaiter(this, void 0, void 0, function* () {
-        for (const referenceProvider of exports.ReferenceProviders) {
-            yield referenceProvider.RegisterAsync(context);
-        }
-    });
+async function RegisterReferenceProvidersAsync(context) {
+    for (const referenceProvider of exports.ReferenceProviders) {
+        await referenceProvider.RegisterAsync(context);
+    }
 }
 // -------------------------------------------------------------------------------------
 // ContextHelp
@@ -266,62 +276,54 @@ exports.ContextHelps = [
     new batariBasicContextHelp_1.BatariBasicContextHelp(),
     new seventyEightHundredBasicContextHelp_1.SeventyEightHundredBasicContextHelp()
 ];
-function RegisterContextHelpsAsync(context) {
-    return __awaiter(this, void 0, void 0, function* () {
-        for (const contextHelp of exports.ContextHelps) {
-            yield contextHelp.RegisterAsync(context);
-        }
-    });
+async function RegisterContextHelpsAsync(context) {
+    for (const contextHelp of exports.ContextHelps) {
+        await contextHelp.RegisterAsync(context);
+    }
 }
 // -------------------------------------------------------------------------------------
 // Functions
 // -------------------------------------------------------------------------------------
-function BuildGameAsync() {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Get document
-        const document = yield GetActiveTextEditorDocumentAsync();
-        if (!document || document.uri.scheme !== "file")
-            return false;
-        // Find compiler
-        let compiler = configuration.GetChosenCompiler(document);
-        if (compiler)
-            return yield compiler.BuildGameAsync(document);
-        // Result
+async function BuildGameAsync() {
+    // Get document
+    const document = await GetActiveTextEditorDocumentAsync();
+    if (!document || document.uri.scheme !== "file")
         return false;
-    });
+    // Find compiler
+    let compiler = configuration.GetChosenCompiler(document);
+    if (compiler)
+        return await compiler.BuildGameAsync(document);
+    // Result
+    return false;
 }
-function BuildGameAndRunAsync() {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Get document
-        const document = yield GetActiveTextEditorDocumentAsync();
-        if (!document || document.uri.scheme !== "file")
-            return false;
-        // Find compiler
-        let compiler = configuration.GetChosenCompiler(document);
-        if (compiler)
-            return yield compiler.BuildGameAndRunAsync(document);
-        // Result
+async function BuildGameAndRunAsync() {
+    // Get document
+    const document = await GetActiveTextEditorDocumentAsync();
+    if (!document || document.uri.scheme !== "file")
         return false;
-    });
+    // Find compiler
+    let compiler = configuration.GetChosenCompiler(document);
+    if (compiler)
+        return await compiler.BuildGameAndRunAsync(document);
+    // Result
+    return false;
 }
-function LaunchBinaryFileTo7800GDAsync(fileUri) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Validate
-        if (!exports.IsWindows) {
-            // WINDOWS ONLY - Advise
-            WriteToCompilerTerminal('Warning: Sending to 7800GD cart is currently only available for Windows.');
+async function LaunchBinaryFileTo7800GDAsync(fileUri) {
+    // Validate
+    if (!exports.IsWindows) {
+        // WINDOWS ONLY - Advise
+        WriteToCompilerTerminal('Warning: Sending to 7800GD cart is currently only available for Windows.');
+    }
+    else {
+        // Find
+        var serial = exports.Serials.find(s => s.Id === "7800GD");
+        if (serial) {
+            exports.CompilerOutputChannel.clear();
+            return await serial.SendGameAsync(fileUri.fsPath);
         }
-        else {
-            // Find
-            var serial = exports.Serials.find(s => s.Id === "7800GD");
-            if (serial) {
-                exports.CompilerOutputChannel.clear();
-                return yield serial.SendGameAsync(fileUri.fsPath);
-            }
-        }
-        // Result
-        return false;
-    });
+    }
+    // Result
+    return false;
 }
 function KillBuildGame() {
     // Process all compilers
@@ -330,20 +332,18 @@ function KillBuildGame() {
             compiler.Kill();
     }
 }
-function OpenContextHelp() {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Get active editor
-        const activeEditor = vscode.window.activeTextEditor;
-        if (!activeEditor)
-            return;
-        // Find context help (based on language of chosen file)
-        const contextHelp = exports.ContextHelps.find(h => h.Id === activeEditor.document.languageId);
-        if (!contextHelp)
-            return;
-        // Open at cursor position
-        const position = activeEditor.selection.start;
-        yield contextHelp.OpenContextHelpAtCursorAsync(activeEditor.document, position);
-    });
+async function OpenContextHelp() {
+    // Get active editor
+    const activeEditor = vscode.window.activeTextEditor;
+    if (!activeEditor)
+        return;
+    // Find context help (based on language of chosen file)
+    const contextHelp = exports.ContextHelps.find(h => h.Id === activeEditor.document.languageId);
+    if (!contextHelp)
+        return;
+    // Open at cursor position
+    const position = activeEditor.selection.start;
+    await contextHelp.OpenContextHelpAtCursorAsync(activeEditor.document, position);
 }
 function WriteToCompilerTerminal(message = '', lineFeed = true, writeToLog = false) {
     // Output
@@ -371,54 +371,48 @@ function ShowInformationPopup(message) {
 function ShowErrorPopup(message) {
     vscode.window.showErrorMessage(message);
 }
-function ValidateOpenDocumentsOnStartup(context) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Validate all open documents
-        const openDocuments = vscode.workspace.textDocuments;
-        for (const doc of openDocuments) {
-            // Scan/process each existing open document
-            tags.ScanDocumentForADSLanguageTag(doc);
-        }
-    });
+async function ValidateOpenDocumentsOnStartup(context) {
+    // Validate all open documents
+    const openDocuments = vscode.workspace.textDocuments;
+    for (const doc of openDocuments) {
+        // Scan/process each existing open document
+        tags.ScanDocumentForADSLanguageTag(doc);
+    }
 }
-function ShowStartupMessages(context) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Prepare
-        const config = configuration.GetAtariDevStudioConfiguration();
-        // Load settings
-        const showNewVersionMessage = config.get(`application.configuration.showNewVersionMessage`, true);
-        const latestVersion = context.globalState.get(`${exports.Name}.configuration.latestVersion`);
-        // Process?
-        if (!showNewVersionMessage || latestVersion === exports.Version)
-            return;
-        // Set latest version
-        yield context.globalState.update(`${exports.Name}.configuration.latestVersion`, exports.Version);
-        // buttons
-        const latestChanges = "Learn more about the latest changes";
-        const dontShowMeThisMessage = "Don't show me this message again";
-        // Show prompt and validate
-        const selection = yield vscode.window.showInformationMessage(`Welcome to the new version of ${exports.DisplayName}`, latestChanges, dontShowMeThisMessage);
-        if (selection === latestChanges) {
-            // Show changelog
-            yield vscode.env.openExternal(exports.ChangeLogUri);
-        }
-        else if (selection === dontShowMeThisMessage) {
-            // Disable (await to ensure persisted)
-            yield config.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
-        }
-    });
+async function ShowStartupMessages(context) {
+    // Prepare
+    const config = configuration.GetAtariDevStudioConfiguration();
+    // Load settings
+    const showNewVersionMessage = config.get(`application.configuration.showNewVersionMessage`, true);
+    const latestVersion = context.globalState.get(`${exports.Name}.configuration.latestVersion`);
+    // Process?
+    if (!showNewVersionMessage || latestVersion === exports.Version)
+        return;
+    // Set latest version
+    await context.globalState.update(`${exports.Name}.configuration.latestVersion`, exports.Version);
+    // buttons
+    const latestChanges = "Learn more about the latest changes";
+    const dontShowMeThisMessage = "Don't show me this message again";
+    // Show prompt and validate
+    const selection = await vscode.window.showInformationMessage(`Welcome to the new version of ${exports.DisplayName}`, latestChanges, dontShowMeThisMessage);
+    if (selection === latestChanges) {
+        // Show changelog
+        await vscode.env.openExternal(exports.ChangeLogUri);
+    }
+    else if (selection === dontShowMeThisMessage) {
+        // Disable (await to ensure persisted)
+        await config.update(`application.configuration.showNewVersionMessage`, false, vscode.ConfigurationTarget.Global);
+    }
 }
-function GetActiveTextEditorDocumentAsync() {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Ensure coding area active before reading current document
-        yield vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup');
-        // Try current document
-        let editor = vscode.window.activeTextEditor;
-        if (editor)
-            return editor.document;
-        // Nothing
-        return null;
-    });
+async function GetActiveTextEditorDocumentAsync() {
+    // Ensure coding area active before reading current document
+    await vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup');
+    // Try current document
+    let editor = vscode.window.activeTextEditor;
+    if (editor)
+        return editor.document;
+    // Nothing
+    return null;
 }
 function Delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
