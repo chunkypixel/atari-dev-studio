@@ -23,7 +23,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'  # Use a recent LTS version; match your local setup
+          node-version: '24'  # Aligned with your local v24.18.0 upgrade
+          cache: 'npm'
+
+      - name: Install Project Dependencies
+        run: npm ci
 
       - name: Install VSCE
         run: npm install --save-dev @vscode/vsce
