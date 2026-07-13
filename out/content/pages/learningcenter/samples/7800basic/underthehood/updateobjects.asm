@@ -7,6 +7,8 @@
 ;   in the display lists, given the zone number (Y) and the number of the 
 ;   object in that zone. (X)
 ;   
+; updated 20260417 - double-buffer support added
+;   
 ; updated 20200529 - clean-up for release, renaming and changing of routines
 ; to macros, support for different zone heights in DisableObject and 
 ; EnableObject.  Addition of SetObjectX and SetObjectY macros.
@@ -112,10 +114,21 @@ SetObjectPointer ; called with X=object_X Y=object_Y
  clc
  lda ZONESTARTLO,y
  adc x5table,x
+ ifconst DOUBLEBUFFER
+     adc doublebufferdloffset
+     ; we should be safe from overflow despite the 2 adc's.
+     ; a page full of objects is 51 objects, which is too many to render.
+ endif ; DOUBLEBUFFER
  sta temp1 
  lda ZONESTARTHI,y
  adc #0
  sta temp2
+ ifconst DOUBLEBUFFER
+    ; force a background object sync to the new working buffer
+    ; after the next flip...
+    lda #1
+    sta doublebufferbufferdirty
+ endif ; DOUBLEBUFFER
  rts
 
 x5table ; enough entries to support 40 objects per dl
