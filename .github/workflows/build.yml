@@ -39,7 +39,7 @@ jobs:
         run: make VERSION=$VERSION  # This executes the 'all' target by default
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4  # As of 13/7/26 this is still pre-release according to google ai
         with:
           name: atari-dev-studio-${{ env.VERSION }}-vsix
           path: atari-dev-studio-*.vsix  # Wildcard matches the versioned file
