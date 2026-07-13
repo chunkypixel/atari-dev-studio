@@ -40,31 +40,31 @@ const filesystem = __importStar(require("../filesystem"));
 const execute = __importStar(require("../execute"));
 const emulatorBase_1 = require("./emulatorBase");
 class A7800Emulator extends emulatorBase_1.EmulatorBase {
+    // Features
+    Region = "";
+    Console = "";
+    Debugger = false;
+    // Lists (to match settings)
+    // Hopefully one-day I'll work out how to hot-load into settings
+    // so we can dynamically configure
+    RegionList = new Map([
+        ["Atari 7800 (NTSC) Cool", "a7800u1"],
+        ["Atari 7800 (NTSC) Warm", "a7800"],
+        ["Atari 7800 (NTSC) Hot", "a7800u2"],
+        ["Atari 7800 (NTSC) Developer Mode", "a7800dev"],
+        ["Atari 7800 (PAL) Cool", "a7800pu1"],
+        ["Atari 7800 (PAL) Warm", "a7800p"],
+        ["Atari 7800 (PAL) Hot", "a7800pu2"],
+        ["Atari 7800 (PAL) Developer Mode", "a7800pdev"]
+    ]);
+    ConsoleList = new Map([
+        ["Standard Console", ""],
+        ["High Score Cartridge", "hiscore"],
+        ["XBoarD Expansion", "xboard"],
+        ["XM Expansion Module", "xm"]
+    ]);
     constructor() {
         super("A7800", "A7800", path.join(application.Path, "out", "bin", "emulators", "a7800"));
-        // Features
-        this.Region = "";
-        this.Console = "";
-        this.Debugger = false;
-        // Lists (to match settings)
-        // Hopefully one-day I'll work out how to hot-load into settings
-        // so we can dynamically configure
-        this.RegionList = new Map([
-            ["Atari 7800 (NTSC) Cool", "a7800u1"],
-            ["Atari 7800 (NTSC) Warm", "a7800"],
-            ["Atari 7800 (NTSC) Hot", "a7800u2"],
-            ["Atari 7800 (NTSC) Developer Mode", "a7800dev"],
-            ["Atari 7800 (PAL) Cool", "a7800pu1"],
-            ["Atari 7800 (PAL) Warm", "a7800p"],
-            ["Atari 7800 (PAL) Hot", "a7800pu2"],
-            ["Atari 7800 (PAL) Developer Mode", "a7800pdev"]
-        ]);
-        this.ConsoleList = new Map([
-            ["Standard Console", ""],
-            ["High Score Cartridge", "hiscore"],
-            ["XBoarD Expansion", "xboard"],
-            ["XM Expansion Module", "xm"]
-        ]);
     }
     async LoadConfigurationAsync() {
         console.log('debugger:A7800Emulator.LoadConfigurationAsync');
@@ -166,4 +166,3 @@ class A7800Emulator extends emulatorBase_1.EmulatorBase {
     }
 }
 exports.A7800Emulator = A7800Emulator;
-//# sourceMappingURL=a7800Emulator.js.map

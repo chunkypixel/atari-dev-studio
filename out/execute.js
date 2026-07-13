@@ -152,4 +152,3 @@ function Spawn(command, args, env, cwd, stdout, stderr) {
         });
     });
 }
-//# sourceMappingURL=execute.js.map

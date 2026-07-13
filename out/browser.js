@@ -56,4 +56,3 @@ function GenerateNonce() {
     const base64 = Buffer.from(array).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
     return base64;
 }
-//# sourceMappingURL=browser.js.map

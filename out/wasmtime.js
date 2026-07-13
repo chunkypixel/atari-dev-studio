@@ -112,4 +112,3 @@ async function ValidateAndInstallWasmtime() {
         }
     }
 }
-//# sourceMappingURL=wasmtime.js.map

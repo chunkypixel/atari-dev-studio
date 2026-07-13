@@ -36,10 +36,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StopWatch = void 0;
 const application = __importStar(require("./application"));
 class StopWatch {
+    startTime = 0;
+    elapsedTime = 0;
+    running = false;
     constructor() {
-        this.startTime = 0;
-        this.elapsedTime = 0;
-        this.running = false;
     }
     Start() {
         if (this.running)
@@ -79,4 +79,3 @@ class StopWatch {
     }
 }
 exports.StopWatch = StopWatch;
-//# sourceMappingURL=stopwatch.js.map

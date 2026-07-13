@@ -42,4 +42,3 @@ class SeventyEightHundredBasicDefinitionProvider extends definitionProviderBase_
     }
 }
 exports.SeventyEightHundredBasicDefinitionProvider = SeventyEightHundredBasicDefinitionProvider;
-//# sourceMappingURL=seventyEightHundredBasicDefinitionProvider.js.map

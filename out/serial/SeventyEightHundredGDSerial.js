@@ -81,4 +81,3 @@ class SeventyEightHundredGDSerial extends serialBase_1.SerialBase {
     }
 }
 exports.SeventyEightHundredGDSerial = SeventyEightHundredGDSerial;
-//# sourceMappingURL=SeventyEightHundredGDSerial.js.map

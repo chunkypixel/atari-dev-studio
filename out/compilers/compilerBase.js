@@ -42,26 +42,35 @@ const execute = __importStar(require("../execute"));
 const tags = __importStar(require("../tags"));
 const configuration = __importStar(require("../configuration"));
 class CompilerBase {
+    // Features
+    IsRunning = false;
+    Id;
+    Name;
+    Extensions;
+    CompiledExtensions;
+    VerifyCompiledExtensions;
+    CustomFolderOrPath = false;
+    DefaultFolderOrPath;
+    FolderOrPath = "";
+    Args = "";
+    Emulator = "";
+    DefaultEmulator;
+    Configuration;
+    Document;
+    CompilerVersion = 0.0;
+    FileName = "";
+    CompiledSubFolder = "";
+    CompiledSubFolderName = "bin";
+    GenerateDebuggerFiles = true;
+    CleanUpCompilationFiles = true;
+    CheckProjectFolderAndFileForSpaces = true;
+    WorkspaceFolder = "";
+    UsingMakeFileCompiler = false;
+    UsingBatchCompiler = false;
+    UsingShellScriptCompiler = false;
+    LaunchEmulatorOrCartOption = "";
+    LaunchEmulatorOrCartOptionAvailable = false;
     constructor(id, name, extensions, compiledExtensions, verifyCompiledExtensions, folderOrPath, emulator) {
-        // Features
-        this.IsRunning = false;
-        this.CustomFolderOrPath = false;
-        this.FolderOrPath = "";
-        this.Args = "";
-        this.Emulator = "";
-        this.CompilerVersion = 0.0;
-        this.FileName = "";
-        this.CompiledSubFolder = "";
-        this.CompiledSubFolderName = "bin";
-        this.GenerateDebuggerFiles = true;
-        this.CleanUpCompilationFiles = true;
-        this.CheckProjectFolderAndFileForSpaces = true;
-        this.WorkspaceFolder = "";
-        this.UsingMakeFileCompiler = false;
-        this.UsingBatchCompiler = false;
-        this.UsingShellScriptCompiler = false;
-        this.LaunchEmulatorOrCartOption = "";
-        this.LaunchEmulatorOrCartOptionAvailable = false;
         this.Id = id;
         this.Name = name;
         this.Extensions = extensions;
@@ -495,4 +504,3 @@ class CompilerBase {
     }
 }
 exports.CompilerBase = CompilerBase;
-//# sourceMappingURL=compilerBase.js.map

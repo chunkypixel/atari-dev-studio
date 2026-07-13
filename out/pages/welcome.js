@@ -40,9 +40,7 @@ const filesystem = __importStar(require("../filesystem"));
 const application = __importStar(require("../application"));
 const browser = __importStar(require("../browser"));
 class WelcomePage {
-    constructor() {
-        this.currentPanel = undefined;
-    }
+    currentPanel = undefined;
     dispose() {
     }
     async openPage(context) {
@@ -165,4 +163,3 @@ class WelcomePage {
     }
 }
 exports.WelcomePage = WelcomePage;
-//# sourceMappingURL=welcome.js.map

@@ -13,7 +13,8 @@
         "url": "https://github.com/chunkypixel/atari-dev-studio.git"
     },
     "engines": {
-        "vscode": "^1.103.2"
+        "vscode": "^1.103.0",
+        "node": ">=24.0.0"
     },
     "categories": [
         "Programming Languages",
@@ -237,7 +238,7 @@
                     "command": "extension.openSpriteEditorFile",
                     "group": "navigation"
                 },
-                                {
+                {
                     "when": "resourceLangId == a78",
                     "command": "extension.launchBinaryFileTo7800GD",
                     "group": "navigation"
@@ -371,7 +372,7 @@
                     },
                     "description": "Don't wish to use the included version of the batari Basic compiler? Specify multiple folder locations for your custom compilers:",
                     "scope": "resource"
-                }, 
+                },
                 "atari-dev-studio.compiler.7800basic.defaultCompiler": {
                     "type": "string",
                     "enum": [
@@ -397,7 +398,7 @@
                     },
                     "description": "Don't wish to use the included version of the 7800basic compiler? Specify multiple folder locations for your custom compilers:",
                     "scope": "resource"
-                },           
+                },
                 "atari-dev-studio.compiler.dasm.defaultCompiler": {
                     "type": "string",
                     "enum": [
@@ -544,13 +545,13 @@
     },
     "dependencies": {
         "find-process": "^1.4.10",
-        "open": "^10.2.0"
+        "open": "^8.4.2"
     },
     "devDependencies": {
         "@types/mocha": "^10.0.10",
-        "@types/node": "^24.7.2",
-        "@types/vscode": "^1.103.2",
+        "@types/node": "^24.0.0",
+        "@types/vscode": "^1.103.0",
         "eslint": "^9.37.0",
-        "typescript": "^5.9.3"
+        "typescript": "^7.0.2"
     }
 }

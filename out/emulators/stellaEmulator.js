@@ -40,10 +40,10 @@ const filesystem = __importStar(require("../filesystem"));
 const execute = __importStar(require("../execute"));
 const emulatorBase_1 = require("./emulatorBase");
 class StellaEmulator extends emulatorBase_1.EmulatorBase {
+    // Features
+    AutoCloseExistingInstances = true;
     constructor() {
         super("Stella", "Stella", path.join(application.Path, "out", "bin", "emulators", "stella"));
-        // Features
-        this.AutoCloseExistingInstances = true;
     }
     async LoadConfigurationAsync() {
         console.log('debugger:StellaEmulator.LoadConfigurationAsync');
@@ -128,4 +128,3 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
     }
 }
 exports.StellaEmulator = StellaEmulator;
-//# sourceMappingURL=stellaEmulator.js.map

@@ -40,6 +40,7 @@ const application = __importStar(require("../application"));
 const filesystem = __importStar(require("../filesystem"));
 const configuration = __importStar(require("../configuration"));
 class CompletionBase {
+    Id;
     constructor(id) {
         this.Id = id;
     }
@@ -146,4 +147,3 @@ class CompletionBase {
     }
 }
 exports.CompletionBase = CompletionBase;
-//# sourceMappingURL=completionBase.js.map

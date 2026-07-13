@@ -185,4 +185,3 @@ async function activate(context) {
 }
 // this method is called when your extension is deactivated
 function deactivate() { }
-//# sourceMappingURL=extension.js.map

@@ -222,4 +222,3 @@ class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     }
 }
 exports.BatariBasicCompiler = BatariBasicCompiler;
-//# sourceMappingURL=batariBasicCompiler.js.map

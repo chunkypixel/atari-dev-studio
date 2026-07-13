@@ -443,4 +443,3 @@ function ReplaceZerosTemplate(template, num) {
     }
     return template.slice(0, template.length - numStr.length) + numStr;
 }
-//# sourceMappingURL=application.js.map

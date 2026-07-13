@@ -38,8 +38,9 @@ const vscode = __importStar(require("vscode"));
 const path = __importStar(require("path"));
 const filesystem = __importStar(require("../filesystem"));
 class HoverBase {
+    Id;
+    hoverText = {};
     constructor(id) {
-        this.hoverText = {};
         this.Id = id;
     }
     async RegisterAsync(context) {
@@ -125,4 +126,3 @@ class HoverBase {
     }
 }
 exports.HoverBase = HoverBase;
-//# sourceMappingURL=hoverBase.js.map

@@ -2,9 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SerialBase = void 0;
 class SerialBase {
+    Id;
+    Name;
+    FolderOrPath = "";
+    FileName = "";
     constructor(id, name, folderOrPath) {
-        this.FolderOrPath = "";
-        this.FileName = "";
         this.Id = id;
         this.Name = name;
         this.FolderOrPath = folderOrPath;
@@ -27,4 +29,3 @@ class SerialBase {
     }
 }
 exports.SerialBase = SerialBase;
-//# sourceMappingURL=serialBase.js.map

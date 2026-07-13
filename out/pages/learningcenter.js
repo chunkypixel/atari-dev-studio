@@ -40,9 +40,7 @@ const application = __importStar(require("../application"));
 const filesystem = __importStar(require("../filesystem"));
 const browser = __importStar(require("../browser"));
 class LearningCenterPage {
-    constructor() {
-        this.currentPanel = undefined;
-    }
+    currentPanel = undefined;
     dispose() {
     }
     async openPage(context) {
@@ -164,4 +162,3 @@ class LearningCenterPage {
     }
 }
 exports.LearningCenterPage = LearningCenterPage;
-//# sourceMappingURL=learningcenter.js.map

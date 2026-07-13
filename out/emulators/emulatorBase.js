@@ -38,11 +38,16 @@ const application = __importStar(require("../application"));
 const configuration = __importStar(require("../configuration"));
 const filesystem = __importStar(require("../filesystem"));
 class EmulatorBase {
+    // Features
+    Id;
+    Name;
+    CustomFolderOrPath = false;
+    DefaultFolderOrPath;
+    FolderOrPath = "";
+    Args = "";
+    FileName = "";
+    Configuration;
     constructor(id, name, folderOrPath) {
-        this.CustomFolderOrPath = false;
-        this.FolderOrPath = "";
-        this.Args = "";
-        this.FileName = "";
         this.Id = id;
         this.Name = name;
         this.DefaultFolderOrPath = folderOrPath;
@@ -105,4 +110,3 @@ class EmulatorBase {
     }
 }
 exports.EmulatorBase = EmulatorBase;
-//# sourceMappingURL=emulatorBase.js.map

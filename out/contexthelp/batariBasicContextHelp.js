@@ -46,4 +46,3 @@ class BatariBasicContextHelp extends contextHelpBase_1.ContextHelpBase {
     }
 }
 exports.BatariBasicContextHelp = BatariBasicContextHelp;
-//# sourceMappingURL=batariBasicContextHelp.js.map

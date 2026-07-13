@@ -85,4 +85,3 @@ class DasmDefinitionProvider extends definitionProviderBase_1.DefinitionProvider
     }
 }
 exports.DasmDefinitionProvider = DasmDefinitionProvider;
-//# sourceMappingURL=dasmDefinitionProvider.js.map

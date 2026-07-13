@@ -49,4 +49,3 @@ class BatariBasicHover extends hoverBase_1.HoverBase {
     }
 }
 exports.BatariBasicHover = BatariBasicHover;
-//# sourceMappingURL=batariBasicHover.js.map

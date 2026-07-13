@@ -40,9 +40,7 @@ const filesystem = __importStar(require("../filesystem"));
 const application = __importStar(require("../application"));
 const browser = __importStar(require("../browser"));
 class SpriteEditorPage {
-    constructor() {
-        this.currentPanel = undefined;
-    }
+    currentPanel = undefined;
     dispose() {
     }
     async openPage(context, loadProjectUri) {
@@ -610,4 +608,3 @@ class SpriteEditorPage {
     }
 }
 exports.SpriteEditorPage = SpriteEditorPage;
-//# sourceMappingURL=spriteeditor.js.map

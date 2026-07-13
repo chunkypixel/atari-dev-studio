@@ -40,11 +40,11 @@ const filesystem = __importStar(require("../filesystem"));
 const execute = __importStar(require("../execute"));
 const compilerBase_1 = require("./compilerBase");
 class DasmCompiler extends compilerBase_1.CompilerBase {
+    // Features
+    Format = "";
+    Verboseness = "";
     constructor() {
         super("dasm", "dasm", [".dasm", ".asm", ".a", ".h"], [".bin"], [".bin"], path.join(application.Path, "out", "bin", "compilers", "dasm"), "Stella");
-        // Features
-        this.Format = "";
-        this.Verboseness = "";
     }
     async ExecuteCompilerAsync() {
         console.log('debugger:DasmCompiler.ExecuteCompilerAsync');
@@ -217,4 +217,3 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
     }
 }
 exports.DasmCompiler = DasmCompiler;
-//# sourceMappingURL=dasmCompiler.js.map

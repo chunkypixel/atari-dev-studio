@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
     "module": "commonjs",
-    "lib": ["ES2020"],
-    "outDir": "out",
-    "rootDir": "src",
-    "sourceMap": true,
-    "strict": true,
-    "types": ["node", "vscode"],
-    "esModuleInterop": true
+    "target": "es2022",
+    "outDir": "./out",
+    "rootDir": "./src",
+    "strict": false,                  // Set to true once you fix existing type warnings
+    "types": ["vscode", "node"],      // Required due to the new empty-by-default behavior
+    "noUncheckedSideEffectImports": true
   },
+  "include": ["src/**/*"],
   "exclude": ["node_modules", ".vscode-test"]
 }

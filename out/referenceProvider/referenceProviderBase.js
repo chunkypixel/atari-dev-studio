@@ -36,6 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReferenceProviderBase = void 0;
 const vscode = __importStar(require("vscode"));
 class ReferenceProviderBase {
+    Id;
     constructor(id) {
         this.Id = id;
     }
@@ -99,4 +100,3 @@ class ReferenceProviderBase {
     }
 }
 exports.ReferenceProviderBase = ReferenceProviderBase;
-//# sourceMappingURL=referenceProviderBase.js.map

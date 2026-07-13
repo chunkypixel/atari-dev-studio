@@ -36,6 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DocumentSymbolProviderBase = void 0;
 const vscode = __importStar(require("vscode"));
 class DocumentSymbolProviderBase {
+    Id;
     constructor(id) {
         this.Id = id;
     }
@@ -243,4 +244,3 @@ class DocumentSymbolProviderBase {
     }
 }
 exports.DocumentSymbolProviderBase = DocumentSymbolProviderBase;
-//# sourceMappingURL=documentSymbolProviderBase.js.map

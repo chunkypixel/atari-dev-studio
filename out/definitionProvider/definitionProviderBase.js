@@ -36,6 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefinitionProviderBase = void 0;
 const vscode = __importStar(require("vscode"));
 class DefinitionProviderBase {
+    Id;
     constructor(id) {
         this.Id = id;
     }
@@ -119,4 +120,3 @@ class DefinitionProviderBase {
     }
 }
 exports.DefinitionProviderBase = DefinitionProviderBase;
-//# sourceMappingURL=definitionProviderBase.js.map

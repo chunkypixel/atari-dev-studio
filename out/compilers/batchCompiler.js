@@ -84,4 +84,3 @@ class BatchCompiler extends compilerBase_1.CompilerBase {
     }
 }
 exports.BatchCompiler = BatchCompiler;
-//# sourceMappingURL=batchCompiler.js.map

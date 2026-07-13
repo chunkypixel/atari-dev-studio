@@ -50,4 +50,3 @@ class SeventyEightHundredBasicHover extends hoverBase_1.HoverBase {
     }
 }
 exports.SeventyEightHundredBasicHover = SeventyEightHundredBasicHover;
-//# sourceMappingURL=seventyEightHundredBasicHover.js.map

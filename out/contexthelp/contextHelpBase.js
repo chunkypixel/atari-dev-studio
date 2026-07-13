@@ -39,8 +39,10 @@ const path = __importStar(require("path"));
 const browser = __importStar(require("../browser"));
 const filesystem = __importStar(require("../filesystem"));
 class ContextHelpBase {
+    Id;
+    Url;
+    links = {};
     constructor(id, url) {
-        this.links = {};
         this.Id = id;
         this.Url = url;
     }
@@ -77,4 +79,3 @@ class ContextHelpBase {
     }
 }
 exports.ContextHelpBase = ContextHelpBase;
-//# sourceMappingURL=contextHelpBase.js.map

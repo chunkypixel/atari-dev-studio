@@ -140,4 +140,3 @@ function WorkspaceFolder() {
 function GetFileExtension(uri) {
     return path.extname(uri.fsPath);
 }
-//# sourceMappingURL=filesystem.js.map

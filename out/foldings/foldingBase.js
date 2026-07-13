@@ -36,6 +36,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FoldingBase = void 0;
 const vscode = __importStar(require("vscode"));
 class FoldingBase {
+    Id;
+    RegionPattern;
     constructor(id, regionStartRegEx, regionEndRegEx) {
         this.Id = id;
         this.RegionPattern = { startRegEx: regionStartRegEx, endRegEx: regionEndRegEx };
@@ -79,4 +81,3 @@ class FoldingBase {
     }
 }
 exports.FoldingBase = FoldingBase;
-//# sourceMappingURL=foldingBase.js.map
