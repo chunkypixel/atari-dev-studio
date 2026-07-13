@@ -64,9 +64,7 @@ snes2atari_signal_go
          jsr SNES2ATARI_SIGNAL
 snes2atari_signal_skip
 
-         lda CTLSWA
-         and SWCHA_DIRMASK+1,x ; preserve other nibble
-         ora SNES_CTLSWA_MASK,x
+         lda SNES_CTLSWA_MASK,x
          sta CTLSWA ; enable pins UP/DOWN to work as outputs
 
          lda SWCHA
@@ -111,9 +109,7 @@ SNES2ATARILOOP
          jmp SNES_STOP_CLOCK
 SNES_STOP_CLOCK
          sta SWCHA ; clock low
-         lda CTLSWA
-         and SWCHA_DIRMASK+1,x ; preserve other nibble
-         ;ora SNES_CLOCK_PORT_BIT,x
+         lda #0
          sta CTLSWA ; set port bits to input avoid conflict with other drivers
          ifconst MULTIBUTTON
              lda snesdetected0,x
@@ -170,9 +166,7 @@ snesjoypadloop
          rts
 SNES2ATARI_SIGNAL
          ; signal to SNES2ATARI++ that we want SNES mode...
-         lda CTLSWA
-         and SWCHA_DIRMASK+1,x ; preserve other nibble
-         ora SNES_CTLSWA_SIGNAL,x
+         lda SNES_CTLSWA_SIGNAL,x
          sta CTLSWA 
          lda SWCHA
          and SWCHA_DIRMASK+1,x ; preserve other nibble

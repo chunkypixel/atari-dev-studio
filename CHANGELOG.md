@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.12.1
+
+ * Updated 7800basic to v0.41 (wasm)
+
 ## 0.12.0
 
  * Added right-click **Send binary to 7800GD** pop-up option to send compiled 7800 binaries (.a78) directly to 7800GD from the Explorer window
