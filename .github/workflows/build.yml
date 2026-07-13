@@ -18,10 +18,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  # Required to access your repo files, including the Makefile
+        uses: actions/checkout@v5  # Required to access your repo files, including the Makefile
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '24'  # Aligned with your local v24.18.0 upgrade
           cache: 'npm'
@@ -39,7 +39,7 @@ jobs:
         run: make VERSION=$VERSION  # This executes the 'all' target by default
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: atari-dev-studio-${{ env.VERSION }}-vsix
           path: atari-dev-studio-*.vsix  # Wildcard matches the versioned file
