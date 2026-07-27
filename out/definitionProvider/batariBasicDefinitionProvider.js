@@ -42,3 +42,4 @@ class BatariBasicDefinitionProvider extends definitionProviderBase_1.DefinitionP
     }
 }
 exports.BatariBasicDefinitionProvider = BatariBasicDefinitionProvider;
+//# sourceMappingURL=batariBasicDefinitionProvider.js.map

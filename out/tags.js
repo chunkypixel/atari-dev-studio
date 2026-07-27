@@ -123,3 +123,4 @@ function ScanDocumentForADSCompilerTag(languageId, document) {
     // return result
     return compiler;
 }
+//# sourceMappingURL=tags.js.map

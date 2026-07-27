@@ -42,3 +42,4 @@ class BatariBasicFolding extends foldingBase_1.FoldingBase {
     }
 }
 exports.BatariBasicFolding = BatariBasicFolding;
+//# sourceMappingURL=batariBasicFolding.js.map

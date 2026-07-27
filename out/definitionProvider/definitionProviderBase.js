@@ -120,3 +120,4 @@ class DefinitionProviderBase {
     }
 }
 exports.DefinitionProviderBase = DefinitionProviderBase;
+//# sourceMappingURL=definitionProviderBase.js.map

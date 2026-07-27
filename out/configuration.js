@@ -173,3 +173,4 @@ function CustomFolderExists(configurationSection, folder) {
     const customFolders = config.get(configurationSection, {});
     return Object.values(customFolders).some(value => value.toLowerCase() === folder.toLowerCase());
 }
+//# sourceMappingURL=configuration.js.map

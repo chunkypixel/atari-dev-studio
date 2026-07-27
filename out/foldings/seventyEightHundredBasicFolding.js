@@ -42,3 +42,4 @@ class SeventyEightHundredBasicFolding extends foldingBase_1.FoldingBase {
     }
 }
 exports.SeventyEightHundredBasicFolding = SeventyEightHundredBasicFolding;
+//# sourceMappingURL=seventyEightHundredBasicFolding.js.map

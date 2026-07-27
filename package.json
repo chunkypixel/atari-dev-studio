@@ -167,7 +167,7 @@
                 "title": "Send binary to 7800GD",
                 "icon": "$(rocket)",
                 "category": "hidden"
-            },            
+            },
             {
                 "command": "extension.openPlayerPalPage",
                 "title": "Open PlayerPal Editor (2600)",
@@ -205,6 +205,12 @@
                 "icon": "$(rocket)",
                 "category": "touchbar",
                 "enablement": "isMac"
+            },
+            {
+                "command": "extension.convertPngsInFolderFromExplorer",
+                "title": "Convert PNGs to 7800basic format",
+                "icon": "$(replace-all)",
+                "category": "ads"
             }
         ],
         "menus": {
@@ -242,6 +248,11 @@
                     "when": "resourceLangId == a78",
                     "command": "extension.launchBinaryFileTo7800GD",
                     "group": "navigation"
+                },
+                {
+                    "when": "explorerResourceIsFolder",
+                    "command": "extension.convertPngsInFolderFromExplorer",
+                    "group": "7_modification@100"
                 }
             ],
             "commandPalette": [
@@ -525,7 +536,7 @@
                     "description": "Show welcome message after installing a new release of Atari Dev Studio.",
                     "scope": "resource"
                 },
-               "atari-dev-studio.application.configuration.doWasmtimeCheck": {
+                "atari-dev-studio.application.configuration.doWasmtimeCheck": {
                     "type": "boolean",
                     "default": true,
                     "description": "On startup of Atari Dev Studio validate the runtime is available and install (as required). Note: batari Basic and 7800basic requires Wasmtime to operate.",
@@ -545,7 +556,8 @@
     },
     "dependencies": {
         "find-process": "^1.4.10",
-        "open": "^8.4.2"
+        "open": "^8.4.2",
+        "pako": "^3.0.1"
     },
     "devDependencies": {
         "@types/mocha": "^10.0.10",

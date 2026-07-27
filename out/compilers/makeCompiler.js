@@ -86,3 +86,4 @@ class MakeCompiler extends compilerBase_1.CompilerBase {
     }
 }
 exports.MakeCompiler = MakeCompiler;
+//# sourceMappingURL=makeCompiler.js.map

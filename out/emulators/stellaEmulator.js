@@ -128,3 +128,4 @@ class StellaEmulator extends emulatorBase_1.EmulatorBase {
     }
 }
 exports.StellaEmulator = StellaEmulator;
+//# sourceMappingURL=stellaEmulator.js.map

@@ -5,8 +5,10 @@
     "outDir": "./out",
     "rootDir": "./src",
     "strict": false,                  // Set to true once you fix existing type warnings
+    "sourceMap": true,
     "types": ["vscode", "node"],      // Required due to the new empty-by-default behavior
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "allowJs": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", ".vscode-test"]

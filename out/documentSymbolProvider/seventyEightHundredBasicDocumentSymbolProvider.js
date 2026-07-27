@@ -42,3 +42,4 @@ class SeventyEightHundredBasicDocumentSymbolProvider extends documentSymbolProvi
     }
 }
 exports.SeventyEightHundredBasicDocumentSymbolProvider = SeventyEightHundredBasicDocumentSymbolProvider;
+//# sourceMappingURL=seventyEightHundredBasicDocumentSymbolProvider.js.map

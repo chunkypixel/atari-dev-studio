@@ -29,3 +29,4 @@ class SerialBase {
     }
 }
 exports.SerialBase = SerialBase;
+//# sourceMappingURL=serialBase.js.map

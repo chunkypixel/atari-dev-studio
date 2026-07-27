@@ -217,3 +217,4 @@ class DasmCompiler extends compilerBase_1.CompilerBase {
     }
 }
 exports.DasmCompiler = DasmCompiler;
+//# sourceMappingURL=dasmCompiler.js.map

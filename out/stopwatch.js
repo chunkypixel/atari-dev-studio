@@ -79,3 +79,4 @@ class StopWatch {
     }
 }
 exports.StopWatch = StopWatch;
+//# sourceMappingURL=stopwatch.js.map

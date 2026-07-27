@@ -42,3 +42,4 @@ class BatariBasicReferenceProvider extends referenceProviderBase_1.ReferenceProv
     }
 }
 exports.BatariBasicReferenceProvider = BatariBasicReferenceProvider;
+//# sourceMappingURL=batariBasicReferenceProvider.js.map

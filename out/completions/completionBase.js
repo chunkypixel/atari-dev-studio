@@ -147,3 +147,4 @@ class CompletionBase {
     }
 }
 exports.CompletionBase = CompletionBase;
+//# sourceMappingURL=completionBase.js.map

@@ -86,3 +86,4 @@ class ShellScriptCompiler extends compilerBase_1.CompilerBase {
     }
 }
 exports.ShellScriptCompiler = ShellScriptCompiler;
+//# sourceMappingURL=shellScriptCompiler.js.map

@@ -38,6 +38,7 @@ const vscode = __importStar(require("vscode"));
 const path = __importStar(require("path"));
 const filesystem = __importStar(require("../filesystem"));
 const application = __importStar(require("../application"));
+const converter = __importStar(require("../converter"));
 const browser = __importStar(require("../browser"));
 class SpriteEditorPage {
     currentPanel = undefined;
@@ -126,6 +127,9 @@ class SpriteEditorPage {
                         break;
                     case 'savePalette':
                         this.savePalette(message);
+                        break;
+                    case 'getPathForPngConversion':
+                        this.getPathForPngConversion(message);
                         break;
                     default:
                         // Unknown call - flag
@@ -606,5 +610,31 @@ class SpriteEditorPage {
             status: 'ok'
         });
     }
+    getPathForPngConversion(message) {
+        // Prompt user here, get selected file content
+        // and send response back to webview
+        // Prepare
+        const command = message.command;
+        // Get current workspace
+        const defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
+        // Options
+        const options = {
+            canSelectMany: false,
+            canSelectFiles: false,
+            canSelectFolders: true,
+            openLabel: "Select Folder",
+            defaultUri: defaultUri
+        };
+        // Process
+        vscode.window.showOpenDialog(options).then(async (folderUri) => {
+            if (folderUri && folderUri[0]) {
+                // Converter
+                await converter.PromptUserToProcessPngsInFolder(folderUri[0]);
+            }
+        });
+        // Result
+        return true;
+    }
 }
 exports.SpriteEditorPage = SpriteEditorPage;
+//# sourceMappingURL=spriteeditor.js.map

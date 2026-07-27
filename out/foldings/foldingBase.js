@@ -81,3 +81,4 @@ class FoldingBase {
     }
 }
 exports.FoldingBase = FoldingBase;
+//# sourceMappingURL=foldingBase.js.map

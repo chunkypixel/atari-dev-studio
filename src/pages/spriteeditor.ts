@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as filesystem from '../filesystem';
 import * as application from '../application';
+import * as converter from '../converter';
 import * as browser from '../browser';
 import fs = require('fs');
 
@@ -118,6 +119,10 @@ export class SpriteEditorPage implements vscode.Disposable {
                         
                         case 'savePalette':
                             this.savePalette(message);
+                            break;
+
+                        case 'getPathForPngConversion':
+                            this.getPathForPngConversion(message);
                             break;
 
                         default:
@@ -648,5 +653,34 @@ export class SpriteEditorPage implements vscode.Disposable {
             command: "attemptToOpenProjectWindowOnStartup",
             status: 'ok'
         }); 
+    }
+
+    private getPathForPngConversion(message: any) {
+        // Prompt user here, get selected file content
+        // and send response back to webview
+
+        // Prepare
+        const command = message!.command;
+        // Get current workspace
+        const defaultUri = vscode.Uri.file(filesystem.WorkspaceFolder());
+        // Options
+        const options: vscode.OpenDialogOptions = {
+            canSelectMany: false,
+            canSelectFiles: false,
+            canSelectFolders: true,
+            openLabel: "Select Folder",
+            defaultUri: defaultUri
+        };
+
+        // Process
+        vscode.window.showOpenDialog(options).then(async folderUri => {
+            if (folderUri  && folderUri[0]) { 
+                // Converter
+                await converter.PromptUserToProcessPngsInFolder(folderUri[0]);
+            }
+        });
+
+        // Result
+        return true;
     }
 }

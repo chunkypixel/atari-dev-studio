@@ -176,3 +176,4 @@ class BatariBasicCompletion extends completionBase_1.CompletionBase {
     }
 }
 exports.BatariBasicCompletion = BatariBasicCompletion;
+//# sourceMappingURL=batariBasicCompletion.js.map

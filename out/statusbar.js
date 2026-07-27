@@ -88,3 +88,4 @@ class StatusBar {
 }
 const statusbar = new StatusBar();
 exports.default = statusbar;
+//# sourceMappingURL=statusbar.js.map

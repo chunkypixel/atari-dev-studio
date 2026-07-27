@@ -2,6 +2,11 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.12.2 [upcoming]
+
+ * Added a right-click **Convert PNGs to 7800basic format** pop-up option when you select a folder in the Explorer window
+ * In the Sprite Editor added a **Convert PNGs to 7800basic format** tool option
+ 
 ## 0.12.1
 
  * Updated 7800basic to v0.41 (wasm)

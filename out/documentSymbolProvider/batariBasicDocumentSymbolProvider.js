@@ -42,3 +42,4 @@ class BatariBasicDocumentSymbolProvider extends documentSymbolProviderBase_1.Doc
     }
 }
 exports.BatariBasicDocumentSymbolProvider = BatariBasicDocumentSymbolProvider;
+//# sourceMappingURL=batariBasicDocumentSymbolProvider.js.map

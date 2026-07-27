@@ -173,3 +173,4 @@ class DasmDocumentSymbolProvider extends documentSymbolProviderBase_1.DocumentSy
     }
 }
 exports.DasmDocumentSymbolProvider = DasmDocumentSymbolProvider;
+//# sourceMappingURL=dasmDocumentSymbolProvider.js.map

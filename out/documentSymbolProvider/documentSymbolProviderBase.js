@@ -244,3 +244,4 @@ class DocumentSymbolProviderBase {
     }
 }
 exports.DocumentSymbolProviderBase = DocumentSymbolProviderBase;
+//# sourceMappingURL=documentSymbolProviderBase.js.map

@@ -100,3 +100,4 @@ class ReferenceProviderBase {
     }
 }
 exports.ReferenceProviderBase = ReferenceProviderBase;
+//# sourceMappingURL=referenceProviderBase.js.map

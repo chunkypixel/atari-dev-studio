@@ -110,3 +110,4 @@ class EmulatorBase {
     }
 }
 exports.EmulatorBase = EmulatorBase;
+//# sourceMappingURL=emulatorBase.js.map

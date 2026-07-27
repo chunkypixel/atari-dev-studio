@@ -163,3 +163,4 @@ class WelcomePage {
     }
 }
 exports.WelcomePage = WelcomePage;
+//# sourceMappingURL=welcome.js.map

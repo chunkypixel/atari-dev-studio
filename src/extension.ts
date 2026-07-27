@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as application from './application';
+import * as converter from './converter';
 import * as browser from './browser';
 import * as wasmtime from './wasmtime';
 import * as tags from "./tags";
@@ -90,6 +91,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	const launchBinaryFileTo7800GD = vscode.commands.registerCommand('extension.launchBinaryFileTo7800GD', async (fileUri: vscode.Uri) => {
 		console.log('User activated command "extension.launchBinaryFileTo7800GD"');
 		await application.LaunchBinaryFileTo7800GDAsync(fileUri);
+	});
+	// Conversion
+	const convertPngsInFolderFromExplorer = vscode.commands.registerCommand('extension.convertPngsInFolderFromExplorer', async (uri: vscode.Uri) => {
+		console.log('User activated command "extension.convertPngsInFolderFromExplorer"');
+		await converter.PromptUserToProcessPngsInFolder(uri);
 	});
 
 	// Build (touchbar)

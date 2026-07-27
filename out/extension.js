@@ -39,6 +39,7 @@ exports.deactivate = deactivate;
 // Import the module and reference it with the alias vscode in your code below
 const vscode = __importStar(require("vscode"));
 const application = __importStar(require("./application"));
+const converter = __importStar(require("./converter"));
 const browser = __importStar(require("./browser"));
 const wasmtime = __importStar(require("./wasmtime"));
 const tags = __importStar(require("./tags"));
@@ -120,6 +121,11 @@ async function activate(context) {
         console.log('User activated command "extension.launchBinaryFileTo7800GD"');
         await application.LaunchBinaryFileTo7800GDAsync(fileUri);
     });
+    // Conversion
+    const convertPngsInFolderFromExplorer = vscode.commands.registerCommand('extension.convertPngsInFolderFromExplorer', async (uri) => {
+        console.log('User activated command "extension.convertPngsInFolderFromExplorer"');
+        await converter.PromptUserToProcessPngsInFolder(uri);
+    });
     // Build (touchbar)
     // Note: apparently the fileUri can be supplied via the command line but we are not going to use it
     const touchbarBuildGame = vscode.commands.registerCommand('extension.touchbar.buildGame', async (fileUri) => {
@@ -185,3 +191,4 @@ async function activate(context) {
 }
 // this method is called when your extension is deactivated
 function deactivate() { }
+//# sourceMappingURL=extension.js.map

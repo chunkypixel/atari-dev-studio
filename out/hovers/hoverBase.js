@@ -126,3 +126,4 @@ class HoverBase {
     }
 }
 exports.HoverBase = HoverBase;
+//# sourceMappingURL=hoverBase.js.map
