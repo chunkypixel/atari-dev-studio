@@ -38,6 +38,7 @@ class StatusBar {
         if (command === "Full" || command === "Minimum") {
             let itemOptions = [
                 { tooltip: 'Welcome', text: '$(home)', command: 'extension.openWelcomePage' },
+                { tooltip: 'Atari Dev Studio Settings', text: '$(settings-gear)', command: 'extension.openAtariDevStudioSettings' },
                 { tooltip: 'Learning Center', text: '$(preview)', command: 'extension.openLearningCenterPage' },
                 { tooltip: 'Compile source code (Shift+F5)', text: '$(play)', command: 'extension.buildGame' },
                 { tooltip: 'Compile source code and launch [via emulator or cart] (F5)', text: '$(rocket)', command: 'extension.buildGameAndRun'},

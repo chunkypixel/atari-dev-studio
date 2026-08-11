@@ -121,6 +121,11 @@ async function activate(context) {
         console.log('User activated command "extension.launchBinaryFileTo7800GD"');
         await application.LaunchBinaryFileTo7800GDAsync(fileUri);
     });
+    // Settings
+    const openAtariDevStudioSettings = vscode.commands.registerCommand('extension.openAtariDevStudioSettings', async (fileUri) => {
+        console.log('User activated command "extension.openAtariDevStudioSettings"');
+        vscode.commands.executeCommand('workbench.action.openSettings', '@ext:chunkypixel.atari-dev-studio');
+    });
     // Conversion
     const convertPngsInFolderFromExplorer = vscode.commands.registerCommand('extension.convertPngsInFolderFromExplorer', async (uri) => {
         console.log('User activated command "extension.convertPngsInFolderFromExplorer"');
@@ -148,6 +153,8 @@ async function activate(context) {
     context.subscriptions.push(buildGameAndRun);
     context.subscriptions.push(killBuildGame);
     context.subscriptions.push(openSpriteEditorFile);
+    context.subscriptions.push(launchBinaryFileTo7800GD);
+    context.subscriptions.push(openAtariDevStudioSettings);
     // Subscriptions (touchbar)
     context.subscriptions.push(touchbarBuildGame);
     context.subscriptions.push(touchbarBuildGameAndRun);

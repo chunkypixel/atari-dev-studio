@@ -169,6 +169,11 @@
                 "category": "hidden"
             },
             {
+                "command": "extension.openAtariDevStudioSettings",
+                "title": "Atari Dev Studio Settings",
+                "icon": "$(settings-gear)"
+            },
+            {
                 "command": "extension.openPlayerPalPage",
                 "title": "Open PlayerPal Editor (2600)",
                 "icon": "$(globe)",
@@ -236,6 +241,11 @@
                     "command": "extension.buildGameAndRun",
                     "when": "resourceLangId == 7800basic || resourceLangId == batariBasic || resourceLangId == dasm || resourceLangId == makefile ||resourceLangId == bat || resourceLangId == shellscript",
                     "group": "1_run@20"
+                },
+                {
+                    "command": "extension.openAtariDevStudioSettings",
+                    "group": "navigation",
+                    "when": "resourceLangId == 7800basic || resourceLangId == batariBasic" 
                 }
             ],
             "explorer/context": [
