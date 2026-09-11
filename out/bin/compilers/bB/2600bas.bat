@@ -8,9 +8,15 @@ if X"%bB%"==X goto nobasic
 REM --- Check if wasmtime is available ---
 wasmtime --version >nul 2>&1
 if errorlevel 1 (
-    echo.
-    echo ### ERROR: Wasmtime is not installed or not in PATH.
-    exit /b 1
+    if exist "%bB%\2600basic.exe" (
+        REM Wasmtime not found, but native executable exists. Fallback.
+        call "%~dp0\2600bas.native.bat" %*
+        exit /b %errorlevel%
+    ) else (
+        echo.
+        echo ### ERROR: Wasmtime is not installed or not in PATH.
+        exit /b 1
+    )
 )
 
 echo Using bB=%bB%
@@ -61,6 +67,17 @@ wasmtime run --dir . --dir "%srcdir%" --dir "%bB%\includes" ^
 REM --- Create an ACE file if the binary is DPC+ ---
 wasmtime run --dir "%CD%::/" --dir "%bB%::/bB" "%bB%\relocateBB.wasm" "%~nx1.bin"
 
+REM --- Create a .elf file to flash PXE games to Chameleon Cart
+if not defined PXE_VENDOR_UUID (
+    for /F "delims=" %%A IN ('powershell -command [guid]::NewGuid(^).ToString(^)') DO (
+        SET "PXE_VENDOR_UUID=%%A"
+    )
+)
+FOR /F "delims=" %%A IN ('powershell -command [guid]::NewGuid(^).ToString(^)') DO (
+    SET "GameGuid=%%A"
+)
+wasmtime run --dir . --dir "%srcdir%" --dir "%bB%\includes::/bbincludes" "%bB%\pxebin2ccelf.wasm" "%~nx1.bin" "/bbincludes/PXE_CC_pre.arm" "/bbincludes/PXE_CC_post.arm" "%PXE_VENDOR_UUID%" "%GameGuid%"
+
 goto end
 
 :basicerror
@@ -76,5 +93,4 @@ exit /b 1
 :end
 endlocal
 exit /b 0
-
 

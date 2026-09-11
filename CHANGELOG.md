@@ -2,6 +2,10 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.12.3
+
+ * Updated batari Basic to the most recent version of PXE compiled by @ZackAttack (Zachary Scolaro) [sitting on existing batari Basic 1.9 base]
+
 ## 0.12.2
 
  * Updated minimum version of VSCode to 1.125.0

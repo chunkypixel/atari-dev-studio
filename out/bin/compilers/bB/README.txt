@@ -1,4 +1,4 @@
-Batari BASIC v1.9 - a Basic Compiler for the Atari 2600
+Batari BASIC v1.9-PXE-beta-45 - a Basic Compiler for the Atari 2600
 
 	Copyright 2005-2013 by Fred Quimby
 	Additional code contributions and fixes by various

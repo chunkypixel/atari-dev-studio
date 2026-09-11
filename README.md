@@ -188,8 +188,10 @@ This extension is only available due to the great people of the AtariAge communi
 ## Languages
 Atari Dev Studio includes the following programming languages:
 
-### batari Basic (release 1.9 - 20251013 [WASM])
+### batari Basic (release v1.9-PXE-beta-45 - 20260624 [WASM])
 batari Basic created by Fred 'batari' Quimby is a BASIC-like language used in the creation of Atari 2600 games. batari Basic is compiled to generate a binary file that can by used on actual Atari 2600 VCS hardware via cartridge (such as a Harmony or UNO cart) or by using an Atari 2600 VCS emulator such as Stella.
+
+> NOTE: the current version includes the most recent version of PXE compiled by @ZackAttack (Zachary Scolaro) sitting on the batari Basic 1.9 base.
 
 batari Basic is an external project is kindly currently maintained by Mike Saarna (RevEng) and can be downloaded separately [here](https://github.com/batari-Basic/batari-Basic).  Further information is about this release is available here at [AtariAge](https://atariage.com/forums/topic/300856-official-home-for-batari-basic).
 
