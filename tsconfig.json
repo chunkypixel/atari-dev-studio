@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2022",
+    "target": "es2024",
     "outDir": "./out",
     "rootDir": "./src",
     "strict": false,                  // Set to true once you fix existing type warnings
     "sourceMap": true,
     "types": ["vscode", "node"],      // Required due to the new empty-by-default behavior
     "noUncheckedSideEffectImports": true,
-    "allowJs": true
+    "allowJs": true,        // Instructs TypeScript to parse and accept your existing .js files
+    "checkJs": false,       // Prevents the strict TS compiler from throwing red errors inside raw .js code
+    "esModuleInterop": true,            // Ensures clean imports between modern and legacy packages
+    "skipLibCheck": true                // Speeds up compile times by skipping type checks of your node_modules
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", ".vscode-test"]

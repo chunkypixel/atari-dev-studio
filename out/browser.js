@@ -32,21 +32,17 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OpenUrlInBrowser = OpenUrlInBrowser;
 exports.GenerateNonce = GenerateNonce;
 const vscode = __importStar(require("vscode"));
-const open_1 = __importDefault(require("open"));
 async function OpenUrlInBrowser(url) {
     console.log('debugger:Browser.OpenUrlInBrowser');
-    try {
-        await (0, open_1.default)(url);
-    }
-    catch (error) {
-        vscode.window.showErrorMessage(`Failed to open Web Browser. Please check if you have Chrome, Firefox or Edge correctly installed!`);
+    const uri = vscode.Uri.parse(url);
+    // This will open the URL directly in the user's default system browser
+    const success = await vscode.env.openExternal(uri);
+    if (!success) {
+        vscode.window.showErrorMessage('Failed to open the browser link.');
     }
 }
 function GenerateNonce() {

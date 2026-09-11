@@ -35,6 +35,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ScanDocumentForADSLanguageTag = ScanDocumentForADSLanguageTag;
 exports.ScanDocumentForADSCompilerTag = ScanDocumentForADSCompilerTag;
+exports.ScanDocumentForADSProjectTag = ScanDocumentForADSProjectTag;
 const vscode = __importStar(require("vscode"));
 const application = __importStar(require("./application"));
 const configuration = __importStar(require("./configuration"));
@@ -122,5 +123,21 @@ function ScanDocumentForADSCompilerTag(languageId, document) {
     ;
     // return result
     return compiler;
+}
+function ScanDocumentForADSProjectTag(languageId, document) {
+    // prepare
+    const text = document.getText();
+    let filename = '';
+    // language
+    let projectTagMatch = text.match(/#ADSProject=([^;\n\r]*)/);
+    if (projectTagMatch && projectTagMatch[1]) {
+        // is valid?
+        const projectFilename = projectTagMatch[1];
+        // Check workspace folder for file
+        //var workspaceFolderUri = vscode.Uri.joinPath(filesystem.WorkspaceFolder, projectFilename)
+    }
+    ;
+    // return result
+    return filename;
 }
 //# sourceMappingURL=tags.js.map

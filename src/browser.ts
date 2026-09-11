@@ -1,14 +1,15 @@
 "use strict";
 import * as vscode from 'vscode';
-import open, {openApp, apps} from 'open';
 
 export async function OpenUrlInBrowser(url: string): Promise<void> {
   console.log('debugger:Browser.OpenUrlInBrowser');
 
-  try {
-    await open(url);
-  } catch (error: unknown) {
-    vscode.window.showErrorMessage(`Failed to open Web Browser. Please check if you have Chrome, Firefox or Edge correctly installed!`);
+  const uri = vscode.Uri.parse(url);
+  
+  // This will open the URL directly in the user's default system browser
+  const success = await vscode.env.openExternal(uri);
+  if (!success) {
+      vscode.window.showErrorMessage('Failed to open the browser link.');
   }
 }
 

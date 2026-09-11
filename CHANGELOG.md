@@ -2,11 +2,16 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
-## 0.12.2 [upcoming]
+## 0.12.2
 
+ * Updated minimum version of VSCode to 1.125.0
+ * Updated system packages to latest releases and removed one as no longer required 
+ * Added the ability to open the **Atari Dev Studio** settings page by clicking the ** Settings** icon on either the active ADS document window (top-right) or via the status bar.
+
+ ### PNG Files
  * Added a right-click **Convert PNGs to 7800basic format** pop-up option when you select a folder in the Explorer window
- * Added the ability to open the **Atari Dev Studio** settings page by clicking the ** Settings** icon on either the active ADS document window (top-right) or via the status bar. 
  * In the Sprite Editor added a **Convert PNGs to 7800basic format** tool option
+ > Note: png files generally still need to be <= 2-bit for this process to be successful but it will at least try and process the image to align the palette index to the expected left->right, top->bottom format used by 7800basic. (essentially it uses the export process from the Sprite Editor).
  
 ## 0.12.1
 

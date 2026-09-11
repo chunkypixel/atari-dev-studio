@@ -1,6 +1,5 @@
-"use strict";
 import * as application from './application';
-import findProcess = require('find-process');
+import findProcess from 'find-process';
 import { spawn, ChildProcess } from 'child_process';
 
 let lastSpawnedProcess: ChildProcess | null = null;
@@ -10,7 +9,8 @@ export async function KillProcessByNameAsync(name: string): Promise<void> {
     const searchName = (application.IsLinux || application.IsMacOS) ? name.toLowerCase() : name;
 
     try {
-        const list: Array<{ pid?: number | string }> = await findProcess('name', searchName);
+        // v2 automatically types 'list' properly with native numbers for PIDs
+        const list = await findProcess('name', searchName);
         for (const proc of list) {
             if (proc?.pid !== undefined) {
                 KillProcessById(proc.pid);

@@ -32,20 +32,24 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KillProcessByNameAsync = KillProcessByNameAsync;
 exports.KillProcessById = KillProcessById;
 exports.KillSpawnProcess = KillSpawnProcess;
 exports.Spawn = Spawn;
 const application = __importStar(require("./application"));
-const findProcess = require("find-process");
+const find_process_1 = __importDefault(require("find-process"));
 const child_process_1 = require("child_process");
 let lastSpawnedProcess = null;
 async function KillProcessByNameAsync(name) {
     // Normalize name on POSIX
     const searchName = (application.IsLinux || application.IsMacOS) ? name.toLowerCase() : name;
     try {
-        const list = await findProcess('name', searchName);
+        // v2 automatically types 'list' properly with native numbers for PIDs
+        const list = await (0, find_process_1.default)('name', searchName);
         for (const proc of list) {
             if (proc?.pid !== undefined) {
                 KillProcessById(proc.pid);

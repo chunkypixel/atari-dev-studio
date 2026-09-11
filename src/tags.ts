@@ -98,3 +98,21 @@ export function ScanDocumentForADSCompilerTag(languageId: string, document: vsco
     // return result
     return compiler;
 }
+
+export function ScanDocumentForADSProjectTag(languageId: string, document: vscode.TextDocument): string {
+    // prepare
+    const text = document.getText();
+    let filename = '';
+
+    // language
+    let projectTagMatch = text.match(/#ADSProject=([^;\n\r]*)/);
+    if (projectTagMatch && projectTagMatch[1]) {
+        // is valid?
+        const projectFilename = projectTagMatch[1];
+        // Check workspace folder for file
+        //var workspaceFolderUri = vscode.Uri.joinPath(filesystem.WorkspaceFolder, projectFilename)
+    };
+
+    // return result
+    return filename;
+}
