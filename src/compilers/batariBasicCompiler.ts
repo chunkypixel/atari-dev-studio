@@ -10,11 +10,11 @@ import { CompilerBase } from "./compilerBase";
 export class BatariBasicCompiler extends CompilerBase {
     
     constructor() {
-        // NOTE: '.ace' CompiledExtension requires all existing extensions to be stripped (-)
+        // NOTE: '.ace' CompiledExtension requires all existing extensions to be stripped (--)
         super(application.BatariBasicLanguageId,
                 "batari Basic",
                 [".bas",".bb"],
-                [".bin","-.ace"],[".bin"],
+                [".bin","--.ace","-cc.elf"],[".bin"],
                 path.join(application.Path,"out","bin","compilers","bB"),
                 "Stella");
     }

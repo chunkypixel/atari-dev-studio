@@ -434,11 +434,11 @@ export abstract class CompilerBase implements vscode.Disposable {
             // Prepare
             let compiledFileName = `${this.FileName}${extension}`;
 
-            // leading minus (-)? if so strip any existing extensions from filename before adding
-            // There is a specific requirement for the 7800basic compiler
-            if (extension.startsWith("-")) {
-                // remove minus (-)
-                extension = extension.slice(1);
+            // leading minuses (--)? if so strip any existing extensions from filename before adding
+            // There is a specific requirement for the bB compiler
+            if (extension.startsWith("--")) {
+                // remove minus (--)
+                extension = extension.slice(2);
                 compiledFileName = `${path.parse(this.FileName).name}${extension}`;
             }
 

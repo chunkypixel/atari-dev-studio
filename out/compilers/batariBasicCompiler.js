@@ -43,8 +43,8 @@ const stopwatch_1 = require("../stopwatch");
 const compilerBase_1 = require("./compilerBase");
 class BatariBasicCompiler extends compilerBase_1.CompilerBase {
     constructor() {
-        // NOTE: '.ace' CompiledExtension requires all existing extensions to be stripped (-)
-        super(application.BatariBasicLanguageId, "batari Basic", [".bas", ".bb"], [".bin", "-.ace"], [".bin"], path.join(application.Path, "out", "bin", "compilers", "bB"), "Stella");
+        // NOTE: '.ace' CompiledExtension requires all existing extensions to be stripped (--)
+        super(application.BatariBasicLanguageId, "batari Basic", [".bas", ".bb"], [".bin", "--.ace", "-cc.elf"], [".bin"], path.join(application.Path, "out", "bin", "compilers", "bB"), "Stella");
     }
     async GetCompilerVersionAsync() {
         console.log('debugger:BatariBasicCompiler.GetCompilerVersionAsync');
