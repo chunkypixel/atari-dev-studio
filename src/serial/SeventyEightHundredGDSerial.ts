@@ -8,7 +8,7 @@ import { SerialBase } from "./serialBase";
 export class SeventyEightHundredGDSerial extends SerialBase {
 
     constructor() {
-        super("7800GD","7800GD",path.join(application.Path,"out","bin","serial","7800gd","7800cmd.exe"));
+        super("7800GD","7800GD",path.join(application.Path,"out","bin","serial","7800gd"));
     }
 
     protected async ExecuteSerialAsync(): Promise<boolean> {
@@ -19,8 +19,9 @@ export class SeventyEightHundredGDSerial extends SerialBase {
         application.WriteToCompilerTerminal();   
         
         // Load
+        var seventyEightHundredGDCmdAppFileName = `7800cmd${application.OSPlatform === "win32" ? ".exe" : ""}`;
         var comPort = config.get<string>(`launch.emulatorOrCartComPort`,"Emulator").toLowerCase();
-        let command = `"${this.FolderOrPath}"`;
+        let command = `"${path.join(this.FolderOrPath,application.OSPlatform,seventyEightHundredGDCmdAppFileName)}"`;
 
         // Args
         let args = [
@@ -38,7 +39,7 @@ export class SeventyEightHundredGDSerial extends SerialBase {
 
                 // Sanitize output
                 // need to remove +\b from messages (looks a bit nicer)
-                var pattern = /[+][\b]+/gi;
+                var pattern = /.\*/g;
                 stdout = stdout.replace(pattern,"");
 
                 // Result

@@ -41,7 +41,7 @@ const execute = __importStar(require("../execute"));
 const serialBase_1 = require("./serialBase");
 class SeventyEightHundredGDSerial extends serialBase_1.SerialBase {
     constructor() {
-        super("7800GD", "7800GD", path.join(application.Path, "out", "bin", "serial", "7800gd", "7800cmd.exe"));
+        super("7800GD", "7800GD", path.join(application.Path, "out", "bin", "serial", "7800gd"));
     }
     async ExecuteSerialAsync() {
         console.log('debugger:SeventyEightHundredGDSerial.ExecuteSerialAsync');
@@ -49,8 +49,9 @@ class SeventyEightHundredGDSerial extends serialBase_1.SerialBase {
         const config = configuration.GetAtariDevStudioConfiguration();
         application.WriteToCompilerTerminal();
         // Load
+        var seventyEightHundredGDCmdAppFileName = `7800cmd${application.OSPlatform === "win32" ? ".exe" : ""}`;
         var comPort = config.get(`launch.emulatorOrCartComPort`, "Emulator").toLowerCase();
-        let command = `"${this.FolderOrPath}"`;
+        let command = `"${path.join(this.FolderOrPath, application.OSPlatform, seventyEightHundredGDCmdAppFileName)}"`;
         // Args
         let args = [
             `-com ${comPort}`,
@@ -64,7 +65,7 @@ class SeventyEightHundredGDSerial extends serialBase_1.SerialBase {
             let result = true;
             // Sanitize output
             // need to remove +\b from messages (looks a bit nicer)
-            var pattern = /[+][\b]+/gi;
+            var pattern = /.\*/g;
             stdout = stdout.replace(pattern, "");
             // Result
             application.WriteToCompilerTerminal(stdout, false);

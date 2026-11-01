@@ -35,9 +35,9 @@ export class SeventyEightHundredBasicCompiler extends CompilerBase {
         // Use/Try serial?
         if (this.LaunchEmulatorOrCartOption == "7800GD") {
             // Validate
-            if (!application.IsWindows) {
-                // WINDOWS ONLY - Advise
-                application.WriteToCompilerTerminal('Warning: Sending to 7800GD cart is currently only available for Windows - reverting to emulator...');
+            if (application.IsLinux && application.OSArch !== "x64") {
+                // Linux x64 ONLY
+                application.WriteToCompilerTerminal('Warning: Sending to 7800GD cart is currently only available for Linux (x64) - reverting to emulator...');
 
             } else {
                 // Find
