@@ -295,20 +295,23 @@ export async function BuildGameAndRunAsync(): Promise<boolean> {
 }
 
 export async function LaunchBinaryFileTo7800GDAsync(fileUri: vscode.Uri): Promise<boolean> {
-	// Validate
-	if (!IsWindows) {
-		// WINDOWS ONLY - Advise
-		WriteToCompilerTerminal('Warning: Sending to 7800GD cart is currently only available for Windows.');
-
-	} else {
-		// Find
-		var serial = Serials.find(s => s.Id === "7800GD");
-		if (serial) {
-			CompilerOutputChannel.clear();
-			return await serial.SendGameAsync(fileUri.fsPath);
-		}
+	// Find
+	var serial = Serials.find(s => s.Id === "7800GD");
+	if (serial) {
+		CompilerOutputChannel.clear();
+		return await serial.SendGameAsync(fileUri.fsPath);
 	}
+	// Result
+	return false;
+}
 
+export async function LaunchBinaryFileToA7800EmulatorAsync(fileUri: vscode.Uri): Promise<boolean> {
+	// Find emulator
+	var emulator = Emulators.find(e => e.Id === "A7800");
+	if (emulator) {
+		CompilerOutputChannel.clear();
+		return await emulator.RunGameAsync(fileUri.fsPath);
+	}
 	// Result
 	return false;
 }

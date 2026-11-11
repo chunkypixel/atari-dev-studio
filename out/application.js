@@ -45,6 +45,7 @@ exports.RegisterContextHelpsAsync = RegisterContextHelpsAsync;
 exports.BuildGameAsync = BuildGameAsync;
 exports.BuildGameAndRunAsync = BuildGameAndRunAsync;
 exports.LaunchBinaryFileTo7800GDAsync = LaunchBinaryFileTo7800GDAsync;
+exports.LaunchBinaryFileToA7800EmulatorAsync = LaunchBinaryFileToA7800EmulatorAsync;
 exports.KillBuildGame = KillBuildGame;
 exports.OpenContextHelp = OpenContextHelp;
 exports.WriteToCompilerTerminal = WriteToCompilerTerminal;
@@ -309,18 +310,21 @@ async function BuildGameAndRunAsync() {
     return false;
 }
 async function LaunchBinaryFileTo7800GDAsync(fileUri) {
-    // Validate
-    if (!exports.IsWindows) {
-        // WINDOWS ONLY - Advise
-        WriteToCompilerTerminal('Warning: Sending to 7800GD cart is currently only available for Windows.');
+    // Find
+    var serial = exports.Serials.find(s => s.Id === "7800GD");
+    if (serial) {
+        exports.CompilerOutputChannel.clear();
+        return await serial.SendGameAsync(fileUri.fsPath);
     }
-    else {
-        // Find
-        var serial = exports.Serials.find(s => s.Id === "7800GD");
-        if (serial) {
-            exports.CompilerOutputChannel.clear();
-            return await serial.SendGameAsync(fileUri.fsPath);
-        }
+    // Result
+    return false;
+}
+async function LaunchBinaryFileToA7800EmulatorAsync(fileUri) {
+    // Find emulator
+    var emulator = exports.Emulators.find(e => e.Id === "A7800");
+    if (emulator) {
+        exports.CompilerOutputChannel.clear();
+        return await emulator.RunGameAsync(fileUri.fsPath);
     }
     // Result
     return false;

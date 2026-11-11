@@ -2,6 +2,12 @@
 
 The following enhancements and changes have been made to Atari Dev Studio:
 
+## 0.12.4
+
+ * Added right-click **Send binary to A7800 Emulator** pop-up option to send compiled 7800 binaries (.a78) directly to the A7800 Emulator from the Explorer window
+ * Generated (using Claude Code) Linux and MacOs executables for the 7800GD to send binaries to the 7800GD cart using the Debug port (to be fully tested)
+ * In the Atari Dev Studio **Settings** updated the **When launching your build to the 7800GD specify which COM port your cart is communicating on** list to include **Auto** (will try and detect the presense of the 7800GD) and a number of generic options across Windows, Linux and MacOs.
+
 ## 0.12.3
 
  * Updated batari Basic to the most recent version of PXE compiled by @ZackAttack (Zachary Scolaro) [sitting on existing batari Basic 1.9 base]

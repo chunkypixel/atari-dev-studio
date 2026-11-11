@@ -19,10 +19,24 @@ export class SeventyEightHundredGDSerial extends SerialBase {
         application.WriteToCompilerTerminal();   
         
         // Load
-        var seventyEightHundredGDCmdAppFileName = `7800cmd${application.OSPlatform === "win32" ? ".exe" : ""}`;
-        var comPort = config.get<string>(`launch.emulatorOrCartComPort`,"Emulator").toLowerCase();
+        var seventyEightHundredGDCmdAppFileName = `7800cmd${application.IsWindows ? ".exe" : ""}`;
         let command = `"${path.join(this.FolderOrPath,application.OSPlatform,seventyEightHundredGDCmdAppFileName)}"`;
 
+        // Either use selected of attempt to find (if selected)
+        var comPort = config.get<string>(`launch.emulatorOrCartComPort`,"Emulator").toLowerCase();
+        if (!comPort || comPort.toLowerCase() === 'auto') {
+            const detected = await this.AutoDetectComPort();
+            if (detected) {
+                comPort = detected;
+                application.WriteToCompilerTerminal(`7800GD Auto-detected: ${comPort}`);
+            } else {
+                // Ultimate fallback rule if nothing is responding to programmatic scans
+                comPort = application.IsWindows ? 'COM3' : 
+                                application.IsMacOS ? '/dev/cu.usbserial-110' : '/dev/ttyUSB0';      
+                application.WriteToCompilerTerminal(`- Guessing fallback: ${comPort}`);
+            }
+        }
+        
         // Args
         let args = [
             `-com ${comPort}`,
@@ -57,6 +71,5 @@ export class SeventyEightHundredGDSerial extends SerialBase {
 
         // Result
         return executeResult;
-
     }
 }
